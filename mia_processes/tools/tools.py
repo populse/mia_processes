@@ -5,7 +5,6 @@ from nipype.interfaces.base import traits
 
 # MIA import
 from populse_mia.project.filter import Filter
-
 from mia_processes.process_mia import Process_Mia
 
                         ### Bricks/classes in this file: ###
