@@ -1,0 +1,52 @@
+*************************************************
+* Smooth: 3D Gaussian smoothing of image volumes.
+*************************************************
+
+
+From nipype:
+-----------
+
+Smooth <=> Smooth [-> nipype name <=> SPM name]
+
+    * Inputs parameters:
+
+        # output_directory: Directory where the .m file, which are generated in the flight by nipype, will be saved)
+            (ex. /home/econdami/Git_Projects/populse_mia/python/populse_mia/projects)
+
+        # data_type: (an integer (int or long)). Data type of the output images. 0: same as the original images, 2: UINT8 (unsigned char), 4: INT16 (signed short), 6 INT32 (signed int): , 8: FLOAT32 (single prec. float), 10: FLOAT64 (double prec. float), Undefined = 0 ?
+            (ex. <undefined> (= 0 ?) nipype default value)
+
+        # fwhm: Specify  the  full-width at half maximum (FWHM) of the Gaussian smoothing kernel in mm. Three values should be entered, denoting the FWHM in the x, y and z directions. (a list of from 3 to 3 items which are a float or a float) 3-list of fwhm for each dimension
+            (ex. [6,6,6])
+
+        # implicit_masking: (a boolean) A mask implied by a particular voxel value (0 for images with integer type, NaN for float images). If set to True, the implicit masking of the input image is preserved in the smoothed image.
+            (ex. False)
+
+        # in_files: list of files to smooth. A list of items which are an existing, uncompressed file valid extensions: [.img, .nii, .hdr].
+            (ex. /tmp/tmpa7n8pku6/data/raw_data/alej170316_test24042018-IRM_Fonct._+_perfusion-2016-03-17_08-34-44-04-01-BOLD_CVR_7_53sl_ModeratePNS_SENSE-FEEPI-00-12-12.000.nii)
+
+        # matlab_cmd: A unicode string. matlab command to use.
+            (ex1. '/home/econdami/SPM12standalone/SPM12_r7219_MCR_R2017b/spm12/run_spm12.sh /usr/local/MATLAB/MATLAB_Runtime/v93 script', for SPM's matlab common runtime, in this case use_mcr=True)
+            (ex2. '/usr/local/MATLAB/R2017b/bin/matlab', for matlab with license, in this case use_mcr=False)
+
+        # paths: Paths to add to matlabpath. Concretely, this is the spm directory (for the matlab path)
+            (ex. ['/home/econdami/spm12']
+
+Parameters with default value:
+
+    * Inputs parameters:
+
+        # synchronize: An integer or a long. The synchronize parameter synchronizes the iterables lists. See https://nipype.readthedocs.io/en/latest/users/joinnode_and_itersource.html
+            (ex. 0, capsul/nipype default value)
+
+        # mfile: A boolean. Run m-code using m-file.
+            (ex. True, nipype default value)
+
+        # out_prefix: Specify  the string to be prepended to the filenames of the smoothed image file(s). (a string).
+            (ex. s, capsul/nipype default value)
+
+		# use_mcr: A boolean, Run m-code using SPM MCR (MCR = MATLAB Compiler Runtime)
+            (ex. False)
+
+        # use_V8struct: A boolean. Generate SPM8 and higher compatible jobs.nipype default value: True)
+            (ex. True, nipype default value)
