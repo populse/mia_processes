@@ -11,14 +11,12 @@ scripts = []
 pkgdata = {
     # format is:
     # <python module>: <file extensions list>
-    # e.g:
-    'populse_mia.sources_images': ['*.png', '*.jpeg', '*.jpg']
 }
 
-# Read the info.py file in populse_mia module
+# Read the info.py file in mia_processes module
 release_info = {}
 python_dir = os.path.join(os.path.dirname(__file__), 'python')
-with open(os.path.join(python_dir, 'populse_mia', 'info.py')) as f:
+with open(os.path.join(python_dir, 'mia_processes', 'info.py')) as f:
     code = f.read()
     exec(code, release_info)
 
