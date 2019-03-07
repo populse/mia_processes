@@ -13,7 +13,7 @@ __version__ = "{0}.{1}.{2}".format(version_major, version_minor, version_micro)
 # Expected by setup.py: the status of the project
 CLASSIFIERS = ['Development Status :: 5 - Production/Stable',
                'Intended Audience :: Developers',
-               'License :: OSI Approved :: MIT License',
+               'License :: OSI Approved :: CEA CNRS Inria Logiciel Libre License, version 2.1 (CeCILL-2.1)',
                'Topic :: Software Development :: Libraries :: Python Modules',
                'Operating System :: OS Independent',
                'Programming Language :: Python',
@@ -40,7 +40,7 @@ AUTHOR = 'Populse team'
 AUTHOR_EMAIL = 'populse-support@univ-grenoble-alpes.fr'
 URL = 'http://populse.github.io/mia_processes'
 DOWNLOAD_URL = 'http://populse.github.io/mia_processes'
-LICENSE = 'MIT'
+LICENSE = 'CeCILL'
 VERSION = __version__
 CLASSIFIERS = CLASSIFIERS
 PLATFORMS = 'OS Independent'
