@@ -6,4 +6,4 @@
 # for details.
 ##########################################################################
 
-from .tools import Files_To_List
+from .tools import Files_To_List, Input_Filter
