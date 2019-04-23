@@ -12,7 +12,6 @@ import os
 from nipype.interfaces.base import traits
 
 # MIA import
-from populse_mia.project.filter import Filter
 from mia_processes.process_mia import Process_Mia
 
                         ### Bricks/classes in this file: ###
@@ -121,3 +120,13 @@ class Input_Filter(Process_Mia):
 
     def run_process_mia(self):
         return
+
+
+    
+#####################################################################################
+# Populse_MIA imports ## !To break a circular dependency import:!
+                      ## The easiest way to fix circular dependency imports is to move the path import
+                      ## to the end of the module. http://effbot.org/zone/import-confusion.htm
+                      ## This not desirable, to be modified if possible during
+                      ## the switch to the VMC architecture!
+from populse_mia.project.filter import Filter
