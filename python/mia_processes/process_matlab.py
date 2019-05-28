@@ -12,7 +12,7 @@ import subprocess
 
 # Populse_MIA imports
 from mia_processes.process_mia import Process_Mia
-from populse_mia.software_properties.config import Config
+from populse_mia.software_properties import Config
 
 
 class ProcessMatlab(Process_Mia):
