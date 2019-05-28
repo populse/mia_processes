@@ -16,7 +16,11 @@ CLASSIFIERS = ['Development Status :: 5 - Production/Stable',
                'License :: OSI Approved :: CEA CNRS Inria Logiciel Libre License, version 2.1 (CeCILL-2.1)',
                'Topic :: Software Development :: Libraries :: Python Modules',
                'Operating System :: OS Independent',
-               'Programming Language :: Python',
+               'Programming Language :: Python :: 3.5',
+               'Programming Language :: Python :: 3.6',
+               'Programming Language :: Python :: 3.7',
+               'Programming Language :: Python :: 3.8',
+               'Programming Language :: Python :: 3 :: Only',
                'Topic :: Scientific/Engineering',
                'Topic :: Utilities']
 
@@ -45,6 +49,7 @@ VERSION = __version__
 CLASSIFIERS = CLASSIFIERS
 PLATFORMS = 'OS Independent'
 REQUIRES = [
+    'populse_mia'
 ]
 EXTRA_REQUIRES = {
     'doc': [
@@ -55,4 +60,4 @@ EXTRA_REQUIRES = {
 brainvisa_build_model = 'pure_python'
 
 # tests to run
-test_commands = ['%s -m mia_processes.test' % sys.executable]
+#test_commands = ['%s -m mia_processes.test' % sys.executable]
