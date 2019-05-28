@@ -39,5 +39,6 @@ setup(
     platforms=release_info["PLATFORMS"],
     install_requires=release_info["REQUIRES"],
     extras_require=release_info["EXTRA_REQUIRES"],
-    scripts=scripts
+    scripts=scripts,
+    zip_safe=False
 )
