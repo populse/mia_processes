@@ -10,8 +10,7 @@ import os
 from traits.api import Undefined
 
 # Populse_MIA imports
-from populse_mia.pipeline_manager.process_mia import ProcessMIA
-
+from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 
 class Process_Mia(ProcessMIA):
     """Class overriding the ProcessMIA class, in order to personalize the run in MIA
