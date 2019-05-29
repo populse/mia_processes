@@ -26,15 +26,17 @@ class Files_To_List(Process_Mia):
 *** From 2 file names, generating a list containing all theses file names ***
     '/home/ArthurBlair/data/raw_data/Anat.nii ' + '/home/ArthurBlair/data/raw_data/Func.nii' -> Files_To_List ->
     ['/home/ArthurBlair/data/raw_data/Anat.nii', '/home/ArthurBlair/data/raw_data/Func.nii']
+    If only file1 is specified, returns a list containing file1 only.
     * Input parameters:
         * file1: a string corresponding to an existing path file (traits.File)
             <ex. /home/ArthurBlair/data/raw_data/Anat.nii>
-        * file2: a string corresponding to an existing path file (traits.File)
+        * file2: an optional string corresponding to an existing path file (traits.File)
             <ex. /home/ArthurBlair/data/raw_data/Func.nii>
     * Output parameters:
         * file_list: a list (traits.List)
             <ex. ['/home/ArthurBlair/data/raw_data/Anat.nii',
                  '/home/ArthurBlair/data/Func.nii']>
+
     """
 
     def __init__(self):
@@ -42,7 +44,7 @@ class Files_To_List(Process_Mia):
 
         # Inputs description
         file1_desc = 'A string corresponding to an existing path file.'
-        file2_desc = 'A string corresponding to an existing path file.'
+        file2_desc = 'An optional string corresponding to an existing path file.'
 
         # Outputs description
         file_list_desc = 'A list of items which are an existing file name.'
@@ -54,7 +56,7 @@ class Files_To_List(Process_Mia):
         
         self.add_trait("file2",
                        traits.File(output=False,
-                                   desc=file2_desc))
+                                   desc=file2_desc, optional=True))
 
         # Outputs traits
         self.add_trait("file_list",
@@ -63,11 +65,23 @@ class Files_To_List(Process_Mia):
 
     def list_outputs(self):
         super(Files_To_List, self).list_outputs()
-        out_list = [self.file1, self.file2]
+
+        if not self.file2 or self.file2 in ["<undefined>", traits.Undefined]:
+            out_list = [self.file1]
+            
+        else:
+            out_list = [self.file1, self.file2]
+            
         return {'file_list': out_list}, {}
 
     def run_process_mia(self):
-        out_list = [self.file1, self.file2]
+        
+        if not self.file2 or self.file2 in ["<undefined>", traits.Undefined]:
+            out_list = [self.file1]
+            
+        else:
+            out_list = [self.file1, self.file2]
+            
         self.file_list = out_list
 
 class Input_Filter(Process_Mia):
