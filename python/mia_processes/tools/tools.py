@@ -199,4 +199,4 @@ class List_Duplicate(Process_Mia):
                       ## to the end of the module. http://effbot.org/zone/import-confusion.htm
                       ## This not desirable, to be modified if possible during
                       ## the switch to the VMC architecture!
-from populse_mia.project.filter import Filter
+#from populse_mia.project.filter import Filter
