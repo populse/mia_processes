@@ -6,22 +6,29 @@
 # for details.
 ##########################################################################
 
-import os
+# mia_processes import
+from mia_processes.process_mia import Process_Mia
 
-# Trait import
+# nipype import
 from nipype.interfaces.base import traits
 
-# MIA import
-from mia_processes.process_mia import Process_Mia
+# Other import
+import os
+
+# populse_mia import
+from populse_mia.data_manager.filter import Filter
+
 
                         ### Bricks/classes in this file: ###
                         # - Files_To_List                  #
                         # - Input_Filter                   #
+                        # - List_Duplicate                 #
                         ####################################
                         # No function in this files        #
                         ####################################
 
 class Files_To_List(Process_Mia):
+
     """ Files_To_List (mia_processes.tools.tools.Files_To_List)
 *** From 2 file names, generating a list containing all theses file names ***
     '/home/ArthurBlair/data/raw_data/Anat.nii ' + '/home/ArthurBlair/data/raw_data/Func.nii' -> Files_To_List ->
@@ -85,6 +92,7 @@ class Files_To_List(Process_Mia):
         self.file_list = out_list
 
 class Input_Filter(Process_Mia):
+
     """
 -  Input_Filter (mia_processes.tools.tools.Input_Filter)
 *** Process (brick) used to filter the content of the Data Browser tab, to provide an input for another brick. ***
@@ -135,6 +143,54 @@ class Input_Filter(Process_Mia):
     def run_process_mia(self):
         return
 
+class List_Duplicate(Process_Mia):
+    
+    """
+- List_Duplicate (mia_processes.tools.tools.List_Duplicate)
+*** From a file name, generating a list containing this file name and the file name itself ***
+    '/home/ArthurBlair/Anat.nii' -> List_Duplicate -> ['/home/ArthurBlair/Anat.nii'] + '/home/ArthurBlair/Anat.nii'
+    * Input parameters:
+        * file_name: a string corresponding to an existing path file (traits.File)
+            <ex. /home/ArthurBlair/data/Func.nii>
+    * Output parameters:
+        * out_file: a string corresponding to an existing path file (traits.File)
+            <ex. /home/ArthurBlair/data/Func.nii>
+        * out_list: a list with one string element corresponding to an existing path file (traits.List)
+            <ex. ['/home/ArthurBlair/data/Func.nii']>
+
+    """
+
+    def __init__(self):
+        super(List_Duplicate, self).__init__()
+
+        # Inputs description
+        file_name_desc = 'A string corresponding to an existing path file.'
+
+        # Outputs description
+        out_file_desc = 'A string corresponding to an existing path file.'
+        out_list_desc = 'A list with one string element corresponding to an existing path file.'
+        
+        # Inputs traits
+        self.add_trait("file_name",
+                       traits.File(output=False,
+                                   desc=file_name_desc))
+
+        # Outputs traits
+        self.add_trait("out_file",
+                       traits.File(output=True,
+                                   desc=out_file_desc))
+        
+        self.add_trait("out_list",
+                       traits.List(output=True,
+                                   desc=out_list_desc))
+
+    def list_outputs(self):
+        super(List_Duplicate, self).list_outputs()
+        return {"out_list": [self.file_name], "out_file": self.file_name}, {}
+
+    def run_process_mia(self):
+        self.out_list = [self.file_name]
+        self.out_file = self.file_name
 
     
 #####################################################################################
