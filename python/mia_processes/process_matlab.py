@@ -17,7 +17,7 @@ from populse_mia.software_properties import Config
 
 class ProcessMatlab(Process_Mia):
     """
-    Class overriding the ProcessMIA class, in order to use Matlab
+    Class overriding the Process_MIA class, in order to use Matlab
 
     Attributes:
         - project: current project in the software
