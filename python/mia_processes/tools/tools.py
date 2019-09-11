@@ -34,6 +34,7 @@ class Files_To_List(Process_Mia):
     '/home/ArthurBlair/data/raw_data/Anat.nii ' + '/home/ArthurBlair/data/raw_data/Func.nii' -> Files_To_List ->
     ['/home/ArthurBlair/data/raw_data/Anat.nii', '/home/ArthurBlair/data/raw_data/Func.nii']
     If only file1 is specified, returns a list containing file1 only.
+    * Dependencies: Use_Matlab: False; Use_SPM: False
     * Input parameters:
         * file1: a string corresponding to an existing path file (traits.File)
             <ex. /home/ArthurBlair/data/raw_data/Anat.nii>
@@ -97,6 +98,7 @@ class Input_Filter(Process_Mia):
 -  Input_Filter (mia_processes.tools.tools.Input_Filter)
 *** Process (brick) used to filter the content of the Data Browser tab, to provide an input for another brick. ***
     [Preselected data (or not) from the Data Browser] -> ['/home/ArthurBlair/data/raw_data/Anat.nii']
+    * Dependencies: Use_Matlab: False; Use_SPM: False
     * Input parameters:
         * input: a list corresponding to the preselected data (or not) from the Data Browser (traits.List)
             <ex. ['/home/ArthurBlair/data/raw_data/Anat.nii', '/home/ArthurBlair/data/Func.nii']>
@@ -149,6 +151,7 @@ class List_Duplicate(Process_Mia):
 - List_Duplicate (mia_processes.tools.tools.List_Duplicate)
 *** From a file name, generating a list containing this file name and the file name itself ***
     '/home/ArthurBlair/Anat.nii' -> List_Duplicate -> ['/home/ArthurBlair/Anat.nii'] + '/home/ArthurBlair/Anat.nii'
+    * Dependencies: Use_Matlab: False; Use_SPM: False
     * Input parameters:
         * file_name: a string corresponding to an existing path file (traits.File)
             <ex. /home/ArthurBlair/data/Func.nii>
