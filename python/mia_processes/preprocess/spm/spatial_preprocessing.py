@@ -16,11 +16,11 @@ from populse_mia.software_properties import Config
 
 
                         ### Bricks/classes in this module: ###
-                        # - Coregister    Vu                 #
-                        # - NewSegment    Vu                 #
-                        # - Normalize     Vu                 #
-                        # - Realign       Vu                 #
-                        # - Smooth        Vu                 #
+                        # - Coregister                       #
+                        # - NewSegment                       #
+                        # - Normalize                        #
+                        # - Realign                          #
+                        # - Smooth        Check: OK          #
                         ######################################
                         ###   No functions in this module   ##
                         ######################################
