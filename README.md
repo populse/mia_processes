@@ -34,10 +34,6 @@ The documentation is available on mia_processes's website here: [https://populse
     
 * From PyPI
 
-  
-  
-        pip3 --version
-  
   * [Install the latest version of mia_processes and its dependencies from the Python Packaging Index:](https://docs.python.org/3/installing/index.html):
   
         pip3 install mia_processes # depending of the setup, it could be necessary to add --user option
