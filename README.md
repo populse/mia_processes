@@ -12,12 +12,13 @@ The documentation is available on mia_processes's website here: [https://populse
 
 # Installation
 
- * Note: depending on your Python setup and OS, the “python3” command can be use as the default Python command.
-     Try:
- 
-       python -V
-       
-     If it returns `Python 3.x.x`, replace all the `python3` commands below by `python`.
+* A compatible version of Python (3.x.x) and [pip](https://packaging.python.org/guides/tool-recommendations/) must be installed.
+* Depending on your Python setup and OS, the “python3” command can be use as the default Python command.
+    Try:
+        `python -V`
+    If it returns `Python 3.x.x`, replace all the `python3` commands below by `python`.
+    Try:
+        `pip -V`
 
 * From PyPI
 
@@ -31,7 +32,7 @@ The documentation is available on mia_processes's website here: [https://populse
 
 * From source, for Linux distributions
 
-  * A compatible version of Python must be installed
+  
   
   * Install a Version Control System, for example [git](https://git-scm.com/book/en/v2/Getting-Started-About-Version-Control). Depending of your distribution, [package management system](https://en.wikipedia.org/wiki/Package_manager) can be different
   
