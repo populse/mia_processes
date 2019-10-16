@@ -12,11 +12,12 @@ The documentation is available on mia_processes's website here: [https://populse
 
 # Installation
 
- * Note: depending on your Python setup and OS, the “python3” command can be use as the default Python command. Try:
+ * Note: depending on your Python setup and OS, the “python3” command can be use as the default Python command.
+     Try:
  
        python -V
        
-   if it returns `Python 3.x.x`, replace all the `python3` commands below by `python`.
+     If it returns `Python 3.x.x`, replace all the `python3` commands below by `python`.
 
 * From PyPI
 
