@@ -8,44 +8,58 @@
 
 # Documentation
 
-The documentation is available on mia_processes's website here: [https://populse.github.io/mia_processes](https://populse.github.io/mia_processes)
+The documentation is available on mia_processes's website here: [https://populse.github.io/mia_processes](https://populse.github.io/mia_processes).
 
 # Installation
 
- * Note: depending on your Python setup and OS, the “python3” command can be use as the default Python command. Try “python -V”, if it returns “Python 3.x.x” replace all the “python3” commands below by “python”.
+* A compatible version of [Python](https://www.python.org/) (>= 3.5) and [pip](https://packaging.python.org/guides/tool-recommendations/) must be installed.
 
+* Depending on your Python setup and OS, the “python3” command can be use as the default Python command.
+
+    Try:
+        `python -V`
+	
+    If it returns `Python 3.x.x`, replace all the `python3` commands below by `python`.
+    
+    If not installed, install it ...
+ 
+ * Make sure to have pip installed.
+ 
+    Try:
+        `pip -V`
+
+    If it returns a path including `/python3.x/`, replace all the `pip3` commands below by `pip`.
+    
+    If not installed, install it ...
+    
 * From PyPI
 
-  * Make sure to have pip3 installed. You can verify it by typing the following in a command line:
-  pip3 --version
+  * [Install the latest version of mia_processes and its dependencies from the Python Packaging Index](https://docs.python.org/3/installing/index.html):
   
-  * (Install the latest version of mia_processes and its dependencies from the Python Packaging Index:)[https://docs.python.org/3/installing/index.html]
-  python3 -m pip install mia_processes
+        pip3 install mia_processes # depending of the setup, it could be necessary to add --user option
 
-* From source, for Linux distributions
+* From source, for Linux distributions.
 
-  * A compatible version of Python must be installed
-  
-  * Install a Version Control System, for example [git](https://git-scm.com/book/en/v2/Getting-Started-About-Version-Control). Depending of your distribution, [package management system](https://en.wikipedia.org/wiki/Package_manager) can be different
+  * Install a Version Control System, for example [git](https://git-scm.com/book/en/v2/Getting-Started-About-Version-Control). Depending of your distribution, [package management system](https://en.wikipedia.org/wiki/Package_manager) can be different:
   
         sudo apt-get install git # Debian like
         sudo dnf install git # Fedora 22 and later
         # etc.
 	
-  * Clone the source codes
+  * Clone the source codes.
 
-    * Get source codes from Github. Replace [mia_processes_install_dir] with a directory of your choice
+    * Get source codes from Github. Replace [mia_processes_install_dir] with a directory of your choice:
 
           git clone https://github.com/populse/mia_processes.git [mia_processes_install_dir]
 
-    * Or download the zip file (mia_processes-master.zip) of the project ([green button "Clone or download"](https://github.com/populse/mia_processes)), then extract the data in the directory of your choice [mia_processes_install_dir]
+    * Or download the zip file (mia_processes-master.zip) of the project ([green button "Clone or download"](https://github.com/populse/mia_processes)), then extract the data in the directory of your choice [mia_processes_install_dir]:
 
           unzip mia_processes-master.zip -d [mia_processes_install_dir]  # In this case [mia_processes_install_dir] becomes [mia_processes_install_dir]/mia_processes-master
 	
-  * Install the Python module distribution
+  * Install the Python module distribution:
 
         cd [mia_processes_install_dir]  
-        python3 setup.py install --user # Ensure that you use python >= 3.5 (use python3.x to be sure)  
+        python3 setup.py install # depending of the setup, it could be necessary to add --user option
 
   * Remove the [mia_processes_install_dir] directory:
 
@@ -54,9 +68,9 @@ The documentation is available on mia_processes's website here: [https://populse
 
 # License
 
-* The whole populse project is open source
-* mia_processes is precisely released under the CeCILL software license
-* You can find all the details on the license [here](http://www.cecill.info/licences/Licence_CeCILL_V2.1-en.html), or refer to the license file [here](https://github.com/populse/mia_processes/blob/master/LICENSE)
+* The whole populse project is open source.
+* mia_processes is precisely released under the CeCILL software license.
+* You can find all the details on the license [here](http://www.cecill.info/licences/Licence_CeCILL_V2.1-en.html), or refer to the license file [here](https://github.com/populse/mia_processes/blob/master/LICENSE).
 
 # Support and Communication
 
