@@ -16,7 +16,7 @@ The documentation is available on mia_processes's website here: [https://populse
  
        python -V
        
-   if it returns *Python 3.x.x* replace all the *python3* commands below by *python*.
+   if it returns `Python 3.x.x`, replace all the `python3` commands below by `python`.
 
 * From PyPI
 
