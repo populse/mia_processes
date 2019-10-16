@@ -19,8 +19,8 @@ The documentation is available on mia_processes's website here: [https://populse
   * Make sure to have pip3 installed. You can verify it by typing the following in a command line:
   pip3 --version
   
-  * (Install the latest version of mia_processes and its dependencies from the Python Packaging Index:)[https://docs.python.org/3/installing/index.html]
-  python3 -m pip install mia_processes
+  * [Install the latest version of mia_processes and its dependencies from the Python Packaging Index:](https://docs.python.org/3/installing/index.html)
+      python3 -m pip install mia_processes
 
 * From source, for Linux distributions
 
