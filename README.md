@@ -20,7 +20,8 @@ The documentation is available on mia_processes's website here: [https://populse
         `python -V`
 	
     If it returns `Python 3.x.x`, replace all the `python3` commands below by `python`.
-    if not installed, install it ...
+    
+    If not installed, install it ...
  
  * Make sure to have pip installed.
  
@@ -28,7 +29,8 @@ The documentation is available on mia_processes's website here: [https://populse
         `pip -V`
 
     If it returns a path including `/python3.x/`, replace all the `pip3` commands below by `pip`.
-    if not installed, install it ...
+    
+    If not installed, install it ...
     
 * From PyPI
 
