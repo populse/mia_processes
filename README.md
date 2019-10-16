@@ -14,12 +14,17 @@ The documentation is available on mia_processes's website here: [https://populse
 
 * A compatible version of Python (3.x.x) and [pip](https://packaging.python.org/guides/tool-recommendations/) must be installed.
 * Depending on your Python setup and OS, the “python3” command can be use as the default Python command.
+
     Try:
         `python -V`
+	
     If it returns `Python 3.x.x`, replace all the `python3` commands below by `python`.
+    
     Try:
         `pip -V`
 
+    If it returns a path including `/python3.x/`, replace all the `pip3` commands below by `pip`.
+    
 * From PyPI
 
   * Make sure to have pip3 installed. You can verify it by typing the following in a command line:
