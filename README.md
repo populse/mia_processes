@@ -33,7 +33,7 @@ The documentation is available on mia_processes's website here: [https://populse
   
   * [Install the latest version of mia_processes and its dependencies from the Python Packaging Index:](https://docs.python.org/3/installing/index.html)
   
-        python3 -m pip install mia_processes
+        pip3 install mia_processes
 
 * From source, for Linux distributions
 
