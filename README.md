@@ -12,7 +12,7 @@ The documentation is available on mia_processes's website here: [https://populse
 
 # Installation
 
-* A compatible version of [Python](https://www.python.org/) (3.x.x) and [pip](https://packaging.python.org/guides/tool-recommendations/) must be installed.
+* A compatible version of [Python](https://www.python.org/) (>= 3.5) and [pip](https://packaging.python.org/guides/tool-recommendations/) must be installed.
 * Depending on your Python setup and OS, the “python3” command can be use as the default Python command.
 
     Try:
@@ -33,7 +33,7 @@ The documentation is available on mia_processes's website here: [https://populse
   
   * [Install the latest version of mia_processes and its dependencies from the Python Packaging Index:](https://docs.python.org/3/installing/index.html):
   
-        pip3 install mia_processes
+        pip3 install mia_processes # depending of the setup, it could be necessary to add --user option
 
 * From source, for Linux distributions.
 
@@ -56,7 +56,7 @@ The documentation is available on mia_processes's website here: [https://populse
   * Install the Python module distribution:
 
         cd [mia_processes_install_dir]  
-        python3 setup.py install --user # Ensure that you use python >= 3.5 (use python3.x to be sure)  
+        python3 setup.py install # depending of the setup, it could be necessary to add --user option
 
   * Remove the [mia_processes_install_dir] directory:
 
