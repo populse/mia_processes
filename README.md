@@ -12,7 +12,7 @@ The documentation is available on mia_processes's website here: [https://populse
 
 # Installation
 
-* A compatible version of Python (3.x.x) and [pip](https://packaging.python.org/guides/tool-recommendations/) must be installed.
+* A compatible version of [Python](https://www.python.org/) (3.x.x) and [pip](https://packaging.python.org/guides/tool-recommendations/) must be installed.
 * Depending on your Python setup and OS, the “python3” command can be use as the default Python command.
 
     Try:
