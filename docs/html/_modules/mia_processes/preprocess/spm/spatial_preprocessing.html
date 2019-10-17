@@ -1,0 +1,276 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>mia_processes.preprocess.spm.spatial_preprocessing &#8212; mia_processes 1.3.0 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
+          <span>mia_processes 1.3.0 documentation</span></a></h1>
+        <h2 class="heading"><span>mia_processes.preprocess.spm.spatial_preprocessing</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <h1>Source code for mia_processes.preprocess.spm.spatial_preprocessing</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*- #</span>
+
+<span class="sd">&quot;&quot;&quot;The spm preprocess library of the mia_processes package.</span>
+
+<span class="sd">The purpose of this module is to customise the main spm preprocessing bricks</span>
+<span class="sd">provided by nipype and to correct some things that do not work directly in</span>
+<span class="sd">populse_mia.</span>
+
+<span class="sd">:Contains:</span>
+<span class="sd">    :Class:</span>
+<span class="sd">        - Smooth</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1">##########################################################################</span>
+<span class="c1"># mia_processes - Copyright (C) IRMaGe/CEA, 2018</span>
+<span class="c1"># Distributed under the terms of the CeCILL license, as published by</span>
+<span class="c1"># the CEA-CNRS-INRIA. Refer to the LICENSE file or to</span>
+<span class="c1"># http://www.cecill.info/licences/Licence_CeCILL_V2.1-en.html</span>
+<span class="c1"># for details.</span>
+<span class="c1">##########################################################################</span>
+
+<span class="c1"># mia_processes import</span>
+<span class="kn">from</span> <span class="nn">mia_processes.process_mia</span> <span class="k">import</span> <span class="n">Process_Mia</span>
+<span class="c1">#from .nipype_extension import NewSegmentMia</span>
+
+<span class="c1"># nipype import</span>
+<span class="kn">from</span> <span class="nn">nipype.interfaces</span> <span class="k">import</span> <span class="n">spm</span>
+<span class="kn">from</span> <span class="nn">nipype.interfaces.base</span> <span class="k">import</span> <span class="n">OutputMultiPath</span><span class="p">,</span> <span class="n">InputMultiPath</span><span class="p">,</span> <span class="n">File</span><span class="p">,</span> <span class="n">traits</span>
+<span class="kn">from</span> <span class="nn">nipype.interfaces.spm.base</span> <span class="k">import</span> <span class="n">ImageFileSPM</span>
+
+<span class="c1"># Other import</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="c1">#from traits.api import Float</span>
+
+<span class="c1"># populse_mia import</span>
+<span class="c1">#from populse_mia.software_properties import Config</span>
+
+
+<div class="viewcode-block" id="Smooth"><a class="viewcode-back" href="../../../../mia_processes.preprocess.spm.html#mia_processes.preprocess.spm.spatial_preprocessing.Smooth">[docs]</a><span class="k">class</span> <span class="nc">Smooth</span><span class="p">(</span><span class="n">Process_Mia</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Smooth (from mia_processes.preprocess.spm.spatial_preprocessing) &lt;=&gt;</span>
+<span class="sd">                                                           Smooth (SPM12 names).</span>
+<span class="sd">*** Smooth: 3D Gaussian smoothing of image volumes ***</span>
+<span class="sd">    * Inputs parameters:</span>
+<span class="sd">        # in_files &lt;=&gt; data: List of files to smooth. A list of items which are</span>
+<span class="sd">                             an existing, uncompressed file (valid extensions:</span>
+<span class="sd">                             [.img, .nii, .hdr]).</span>
+<span class="sd">            &lt;ex. [&#39;/home/ArthurBlair/data/raw_data/Func.nii&#39;]&gt;</span>
+<span class="sd">        # fwhm &lt;=&gt; fwhm: Specify  the  full-width at half maximum (FWHM) of the</span>
+<span class="sd">                         Gaussian smoothing kernel in mm. Three values should be</span>
+<span class="sd">                         entered, denoting the FWHM in the x, y and z</span>
+<span class="sd">                         directions. A list of 3 items which are a float of fwhm</span>
+<span class="sd">                          for each dimension.</span>
+<span class="sd">            &lt;ex. [6, 6, 6]&gt;</span>
+<span class="sd">        # data_type &lt;=&gt; dtype: Data type of the output images (an integer </span>
+<span class="sd">                               [int or long]).</span>
+<span class="sd">                               0: same as the original images</span>
+<span class="sd">                               2: UINT8 (unsigned char)</span>
+<span class="sd">                               4: INT16 (signed short)</span>
+<span class="sd">                               6: INT32 (signed int)</span>
+<span class="sd">                               8: FLOAT32 (single prec. float)</span>
+<span class="sd">                              10: FLOAT64 (double prec. float)</span>
+<span class="sd">                              &lt;undefined&gt; = 0 ?</span>
+<span class="sd">            &lt;ex. 0, MIA_processes default value&gt;</span>
+<span class="sd">        # implicit_masking &lt;=&gt; im: A mask implied by a particular voxel value</span>
+<span class="sd">                                   (a boolean). If set to True, the implicit</span>
+<span class="sd">                                   masking of the input image is preserved in</span>
+<span class="sd">                                   the smoothed image.</span>
+<span class="sd">            &lt;ex. False&gt;</span>
+<span class="sd">        # out_prefix &lt;=&gt; prefix: Specify the string to be prepended to the</span>
+<span class="sd">                                 filenames of the smoothed image file(s)</span>
+<span class="sd">                                 (a string).</span>
+<span class="sd">            &lt;ex. s, capsul/nipype default value&gt;</span>
+<span class="sd">    * Outputs parameters:</span>
+<span class="sd">        # smoothed_files: Smoothed files (a list of items which are an existing</span>
+<span class="sd">                          file name).</span>
+<span class="sd">            &lt;ex. /home/ArthurBlair/data/raw_data/sFunc.nii&gt;</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    
+<div class="viewcode-block" id="Smooth.__init__"><a class="viewcode-back" href="../../../../mia_processes.preprocess.spm.html#mia_processes.preprocess.spm.spatial_preprocessing.Smooth.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instanciation.</span>
+<span class="sd">        </span>
+<span class="sd">        The input and output plugs are defined here. The special</span>
+<span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
+<span class="sd">        third-party products necessary for the running of the brick.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># initialisation of the objects needed for the launch of the brick</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Smooth</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;matlab&#39;</span><span class="p">,</span> <span class="s1">&#39;spm&#39;</span><span class="p">]</span>
+
+
+        <span class="c1"># Inputs description</span>
+        <span class="n">in_files_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;List of files to smooth. A list of items which are &#39;</span>
+                         <span class="s1">&#39;an existing, uncompressed file &#39;</span>
+                         <span class="s1">&#39;(valid extensions: [.img, .nii, .hdr]).&#39;</span><span class="p">)</span>
+        <span class="n">fwhm_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Full-width at half maximum (FWHM) of the Gaussian &#39;</span>
+                     <span class="s1">&#39;smoothing kernel in mm. A list of 3 items which are a &#39;</span>
+                     <span class="s1">&#39;float of fwhm for each dimension.&#39;</span><span class="p">)</span>
+        <span class="n">data_type_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Data type of the output images &#39;</span>
+                          <span class="s1">&#39;(an integer [int or long]).&#39;</span><span class="p">)</span>
+        <span class="n">implicit_masking_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;A mask implied by a particular voxel value &#39;</span>
+                                 <span class="s1">&#39;(a boolean).&#39;</span><span class="p">)</span>
+        <span class="n">out_prefix_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Specify the string to be prepended to the &#39;</span>
+                           <span class="s1">&#39;filenames of the smoothed image file(s) &#39;</span>
+                           <span class="s1">&#39;(a string).&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Outputs description</span>
+        <span class="n">smoothed_files_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;The smoothed files (a list of items which are &#39;</span>
+                               <span class="s1">&#39;an existing file name).&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Input traits </span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;in_files&quot;</span><span class="p">,</span>
+                       <span class="n">InputMultiPath</span><span class="p">(</span><span class="n">ImageFileSPM</span><span class="p">(),</span>
+                                      <span class="n">copyfile</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                      <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                      <span class="n">desc</span><span class="o">=</span><span class="n">in_files_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;fwhm&quot;</span><span class="p">,</span>
+                       <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
+                                     <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
+                                                 <span class="n">minlen</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">maxlen</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span>
+                                     <span class="n">default</span><span class="o">=</span><span class="p">[</span><span class="mf">6.0</span><span class="p">,</span><span class="mf">6.0</span><span class="p">,</span><span class="mf">6.0</span><span class="p">],</span>
+                                     <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                     <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                     <span class="n">desc</span><span class="o">=</span> <span class="n">fwhm_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;data_type&quot;</span><span class="p">,</span>
+                       <span class="n">traits</span><span class="o">.</span><span class="n">Int</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                  <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                  <span class="n">desc</span><span class="o">=</span><span class="n">data_type_desc</span><span class="p">))</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;implicit_masking&quot;</span><span class="p">,</span>
+                       <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                   <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                   <span class="n">desc</span><span class="o">=</span><span class="n">implicit_masking_desc</span><span class="p">))</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;out_prefix&quot;</span><span class="p">,</span>
+                       <span class="n">traits</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">,</span>
+                                     <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                     <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                     <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                     <span class="n">desc</span><span class="o">=</span><span class="n">out_prefix_desc</span><span class="p">))</span>
+
+        <span class="c1"># Output traits </span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;smoothed_files&quot;</span><span class="p">,</span>
+                       <span class="n">OutputMultiPath</span><span class="p">(</span><span class="n">File</span><span class="p">(),</span>
+                                       <span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                       <span class="n">desc</span><span class="o">=</span><span class="n">smoothed_files_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span> <span class="o">=</span> <span class="n">spm</span><span class="o">.</span><span class="n">Smooth</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">change_dir</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="Smooth.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.preprocess.spm.html#mia_processes.preprocess.spm.spatial_preprocessing.Smooth.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+
+<span class="sd">        The main objective of this method is to produce the outputs of the</span>
+<span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
+<span class="sd">        if defined here. To work properly this method must return </span>
+<span class="sd">        self.make_initResult() object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Smooth</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+
+        <span class="c1"># Outputs definition and tags inheritance (optional)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_files</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">in_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_files</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">out_prefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;smoothed_files&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">_list_outputs</span><span class="p">()[</span>
+                                                               <span class="s1">&#39;smoothed_files&#39;</span><span class="p">]</span>
+
+        <span class="sd">&quot;&quot;&quot;raw_data_folder = os.path.join(&quot;data&quot;, &quot;raw_data&quot;)</span>
+<span class="sd">        derived_data_folder = os.path.join(&quot;data&quot;, &quot;derived_data&quot;)</span>
+<span class="sd">        for out_name, out_value in outputs.items():</span>
+<span class="sd">            if type(out_value) is list:</span>
+<span class="sd">                for idx, element in enumerate(out_value):</span>
+<span class="sd">                    # To change the raw_data_folder to the derived_data_folder</span>
+<span class="sd">                    element = element.replace(raw_data_folder, derived_data_folder)</span>
+<span class="sd">                    outputs[out_name][idx] = element</span>
+<span class="sd">                    self.smoothed_files = outputs[&quot;smoothed_files&quot;]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
+        
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            
+                <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;smoothed_files&quot;</span><span class="p">:</span>
+                
+                    <span class="k">for</span> <span class="n">fullname</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
+                        <span class="n">path</span><span class="p">,</span> <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">fullname</span><span class="p">)</span>
+                    
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span><span class="p">:</span>
+                            <span class="n">filename_without_prefix</span> <span class="o">=</span> <span class="n">filename</span><span class="p">[</span>
+                                                          <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span><span class="p">):]</span>
+                        
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">filename_without_prefix</span> <span class="o">=</span> <span class="n">filename</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">):]</span>
+
+                        <span class="k">if</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
+                                         <span class="n">filename_without_prefix</span><span class="p">)</span>
+                              <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_files</span><span class="p">):</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="n">fullname</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
+                                                        <span class="n">filename_without_prefix</span><span class="p">)</span>
+        
+        <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
+    
+<div class="viewcode-block" id="Smooth.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.preprocess.spm.html#mia_processes.preprocess.spm.spatial_preprocessing.Smooth.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Smooth</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+        
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">element</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_files</span><span class="p">):</span>
+            <span class="n">full_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">relpath</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">in_files</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">full_path</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">in_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_files</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">fwhm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fwhm</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">data_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">implicit_masking</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">implicit_masking</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">out_prefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">()</span></div></div>
+</pre></div>
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, populse.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+    </div>
+  </body>
+</html>
