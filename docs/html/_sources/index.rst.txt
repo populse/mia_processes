@@ -12,7 +12,7 @@
 Purpose
 ==================
 
-`Populse_mia <https://github.com/populse/populse_mia>`_ ,is an ergonomic image processing environment. In this environment, a process pipeline can be easily built by sequentially linking a succession of atomic computation (a brick).
+`Populse_mia <https://github.com/populse/populse_mia>`_, is an ergonomic image processing environment. In this environment, a process pipeline can be easily built by sequentially linking a succession of atomic computation (a brick).
 
 By default, populse_mia offers in its Pipeline Manager (an interface including all the libraries known by populse_mia), two brick libraries, `nipype <https://github.com/nipy/nipype>`_ and `mia_processes <https://github.com/populse/mia_processes>`_.
 
