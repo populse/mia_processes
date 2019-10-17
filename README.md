@@ -52,7 +52,7 @@ The documentation is available on mia_processes's website here: [https://populse
 
           git clone https://github.com/populse/mia_processes.git [mia_processes_install_dir]
 
-    * Or download the zip file (mia_processes-master.zip) of the project ([green button "Clone or download"](https://github.com/populse/mia_processes)), then extract the data in the directory of your choice [mia_processes_install_dir]:
+    * Or download the zip file (mia_processes-master.zip) of the project ([green button "Clone or download"](https://github.com/populse/mia_processes)), then extract the data in the directory of your choice ([mia_processes_install_dir]):
 
           unzip mia_processes-master.zip -d [mia_processes_install_dir]  # In this case [mia_processes_install_dir] becomes [mia_processes_install_dir]/mia_processes-master
 	
