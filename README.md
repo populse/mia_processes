@@ -8,7 +8,7 @@
 
 # Documentation
 
-The documentation is available on mia_processes's website here: [https://populse.github.io/mia_processes](https://populse.github.io/mia_processes).
+[The documentation is available on mia_processes's website](https://populse.github.io/mia_processes).
 
 # Installation
 
