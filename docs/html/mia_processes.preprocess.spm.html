@@ -74,26 +74,19 @@ populse_mia.</p>
 <dt>Inputs parameters:</dt>
 <dd><dl class="first last docutils">
 <dt># in_files &lt;=&gt; data: List of files to smooth. A list of items which are</dt>
-<dd><blockquote class="first">
-<div><p>an existing, uncompressed file (valid extensions:
-[.img, .nii, .hdr]).</p>
-</div></blockquote>
-<p class="last">&lt;ex. [‘/home/ArthurBlair/data/raw_data/Func.nii’]&gt;</p>
+<dd><p class="first last">an existing, uncompressed file (valid extensions:
+[.img, .nii, .hdr]).
+&lt;ex. [‘/home/ArthurBlair/data/raw_data/Func.nii’]&gt;</p>
 </dd>
 <dt># fwhm &lt;=&gt; fwhm: Specify  the  full-width at half maximum (FWHM) of the</dt>
-<dd><blockquote class="first">
-<div><p>Gaussian smoothing kernel in mm. Three values should be
+<dd><p class="first last">Gaussian smoothing kernel in mm. Three values should be
 entered, denoting the FWHM in the x, y and z
-directions. A list of 3 items which are a float of fwhm</p>
-<blockquote>
-<div><p>for each dimension.</p>
-</div></blockquote>
-</div></blockquote>
-<p class="last">&lt;ex. [6, 6, 6]&gt;</p>
+directions. A list of 3 items which are a float of fwhm
+for each dimension.
+&lt;ex. [6, 6, 6]&gt;</p>
 </dd>
 <dt># data_type &lt;=&gt; dtype: Data type of the output images (an integer </dt>
 <dd><blockquote class="first">
-<div><blockquote>
 <div><p>[int or long]).
 0: same as the original images
 2: UINT8 (unsigned char)
@@ -101,25 +94,20 @@ directions. A list of 3 items which are a float of fwhm</p>
 6: INT32 (signed int)
 8: FLOAT32 (single prec. float)</p>
 </div></blockquote>
-<p>10: FLOAT64 (double prec. float)
-&lt;undefined&gt; = 0 ?</p>
-</div></blockquote>
-<p class="last">&lt;ex. 0, MIA_processes default value&gt;</p>
+<p class="last">10: FLOAT64 (double prec. float)
+&lt;undefined&gt; = 0 ?
+&lt;ex. 0, MIA_processes default value&gt;</p>
 </dd>
 <dt># implicit_masking &lt;=&gt; im: A mask implied by a particular voxel value</dt>
-<dd><blockquote class="first">
-<div><p>(a boolean). If set to True, the implicit
+<dd><p class="first last">(a boolean). If set to True, the implicit
 masking of the input image is preserved in
-the smoothed image.</p>
-</div></blockquote>
-<p class="last">&lt;ex. False&gt;</p>
+the smoothed image.
+&lt;ex. False&gt;</p>
 </dd>
 <dt># out_prefix &lt;=&gt; prefix: Specify the string to be prepended to the</dt>
-<dd><blockquote class="first">
-<div><p>filenames of the smoothed image file(s)
-(a string).</p>
-</div></blockquote>
-<p class="last">&lt;ex. s, capsul/nipype default value&gt;</p>
+<dd><p class="first last">filenames of the smoothed image file(s)
+(a string).
+&lt;ex. s, capsul/nipype default value&gt;</p>
 </dd>
 </dl>
 </dd>
@@ -129,10 +117,8 @@ the smoothed image.</p>
 <dt>Outputs parameters:</dt>
 <dd><dl class="first last docutils">
 <dt># smoothed_files: Smoothed files (a list of items which are an existing</dt>
-<dd><blockquote class="first">
-<div><p>file name).</p>
-</div></blockquote>
-<p class="last">&lt;ex. /home/ArthurBlair/data/raw_data/sFunc.nii&gt;</p>
+<dd><p class="first last">file name).
+&lt;ex. /home/ArthurBlair/data/raw_data/sFunc.nii&gt;</p>
 </dd>
 </dl>
 </dd>
