@@ -45,13 +45,13 @@ class Smooth(Process_Mia):
         # in_files <=> data: List of files to smooth. A list of items which are
                              an existing, uncompressed file (valid extensions:
                              [.img, .nii, .hdr]).
-            <ex. ['/home/ArthurBlair/data/raw_data/Func.nii']>
+                             <ex. ['/home/ArthurBlair/data/raw_data/Func.nii']>
         # fwhm <=> fwhm: Specify  the  full-width at half maximum (FWHM) of the
                          Gaussian smoothing kernel in mm. Three values should be
                          entered, denoting the FWHM in the x, y and z
                          directions. A list of 3 items which are a float of fwhm
-                          for each dimension.
-            <ex. [6, 6, 6]>
+                         for each dimension.
+                         <ex. [6, 6, 6]>
         # data_type <=> dtype: Data type of the output images (an integer 
                                [int or long]).
                                0: same as the original images
@@ -61,20 +61,20 @@ class Smooth(Process_Mia):
                                8: FLOAT32 (single prec. float)
                               10: FLOAT64 (double prec. float)
                               <undefined> = 0 ?
-            <ex. 0, MIA_processes default value>
+                              <ex. 0, MIA_processes default value>
         # implicit_masking <=> im: A mask implied by a particular voxel value
                                    (a boolean). If set to True, the implicit
                                    masking of the input image is preserved in
                                    the smoothed image.
-            <ex. False>
+                                   <ex. False>
         # out_prefix <=> prefix: Specify the string to be prepended to the
                                  filenames of the smoothed image file(s)
                                  (a string).
-            <ex. s, capsul/nipype default value>
+                                 <ex. s, capsul/nipype default value>
     * Outputs parameters:
         # smoothed_files: Smoothed files (a list of items which are an existing
                           file name).
-            <ex. /home/ArthurBlair/data/raw_data/sFunc.nii>
+                          <ex. /home/ArthurBlair/data/raw_data/sFunc.nii>
 
     """
 
