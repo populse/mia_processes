@@ -8,5 +8,4 @@
 # for details.
 ##########################################################################
 
-from .spatial_preprocessing import (Coregister, NewSegment, Normalize, Realign,
-                                    Smooth)
+from .spatial_preprocessing_1 import Spatial_preprocessing_1
