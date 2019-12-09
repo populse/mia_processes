@@ -28,6 +28,9 @@ populse_mia.
 from mia_processes.process_mia import Process_Mia
 from .nipype_extension import NewSegmentMia
 
+# populse_mia import
+from populse_mia.software_properties import Config
+
 # nipype import
 from nipype.interfaces import spm
 from nipype.interfaces.base import OutputMultiPath, InputMultiPath, File, traits
@@ -35,12 +38,8 @@ from nipype.interfaces.spm.base import ImageFileSPM
 
 # Other import
 import os
-from traits.api import Float    # a verifier si on peu tpas passer avec traits de nipype.interfaces.base
+from traits.api import Undefined, Float
 
-# populse_mia import
-from populse_mia.software_properties import Config
-
-from traits.api import Undefined
 
 class Coregister(Process_Mia):
     """
