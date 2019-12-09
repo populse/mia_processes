@@ -1,0 +1,67 @@
+:orphan:
+
+.. toctree::
+
++-----------------------------+-------------------------------------------+----------------------------------------------------+
+|`Home <../../../index.html>`_|`Documentation <../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
++-----------------------------+-------------------------------------------+----------------------------------------------------+
+
+============
+Smooth brick
+============
+
+3D Gaussian smoothing of image volumes
+--------------------------------------
+
+(From mia_processes/preprocess/spm/spatial_preprocessing.py module)
+
+mia_processes Smooth <=> SPM12 Smooth
+
+**Inputs parameters:** [#label]_
+
+- *in_files <=> data*
+    List of files to smooth. A list of items which are an existing, uncompressed
+    file (valid extensions: [.img, .nii, .hdr])::
+      <ex. ['/home/ArthurBlair/data/raw_data/Func.nii']>
+	    
+- *fwhm <=> fwhm*
+    Specify the full-width at half maximum (FWHM) of the Gaussian smoothing
+    kernel in mm. Three values can be entered, indicating the FWHM in the x,
+    y and z directions, or one value only, indicating the same FWHM in all
+    three directions. A list of 3 items which are a float of fwhm for each
+    dimension::
+      <ex. [6, 6, 6]>
+
+- *data_type <=> dtype*
+    Data type of the output images (an integer [int or long]).
+    0: same as the original images
+    2: UINT8 (unsigned char)
+    4: INT16 (signed short)
+    6: INT32 (signed int)
+    8: FLOAT32 (single prec. float)
+    10: FLOAT64 (double prec. float)
+    <undefined> = 0 ?::
+     <ex. 0, MIA_processes default value>
+
+- *implicit_masking <=> im*
+    A mask implied by a particular voxel value (a boolean). If set to True,
+    the implicit masking of the input image is preserved in the smoothed image::
+      <ex. False>
+
+ - *out_prefix <=> prefix*
+    Specify the string to be prepended to the filenames of the smoothed image
+    file(s) (a string)::
+      <ex. s, capsul/nipype default value>
+
+**Outputs parameters:** [#label]_
+
+- *smoothed_files*
+    Smoothed files (a list of items which are an existing file name)::
+      <ex. /home/ArthurBlair/data raw_data/sFunc.nii>
+
+-------------
+
+.. [#label] Syntax: mia_processes/nipype Smooth <=> SPM12 Smooth.
+	    Usefull links:
+	    `SPM12 Smooth <https://www.fil.ion.ucl.ac.uk/spm/doc/manual.pdf#page=57>`_, 
+	    `nipype <https://nipype.readthedocs.io/en/latest/interfaces/generated/interfaces.spm/preprocess.html#smooth>`_
