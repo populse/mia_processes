@@ -1,24 +1,22 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>mia_processes.preprocess.spm package &#8212; mia_processes 1.3.0 documentation</title>
+    <meta charset="utf-8" />
+    <title>mia_processes.preprocess.spm package &#8212; mia_processes 1.3.1 documentation</title>
     <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="index.html">
-          <span>mia_processes 1.3.0 documentation</span></a></h1>
+          <span>mia_processes 1.3.1 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.preprocess.spm package</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -28,7 +26,7 @@
         </p>
 
       </div>
-      <div class="content">
+      <div class="content" role="main">
         
         
   <div class="section" id="module-mia_processes.preprocess.spm">
@@ -42,51 +40,648 @@
 <p>The purpose of this module is to customise the main spm preprocessing bricks
 provided by nipype and to correct some things that do not work directly in
 populse_mia.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Contains:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Class:</th><td class="field-body"><ul class="first last simple">
-<li>Smooth</li>
+<dl class="field-list simple">
+<dt class="field-odd">Contains</dt>
+<dd class="field-odd"><dl class="field-list simple">
+<dt class="field-odd">Class</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>Coregister</p></li>
+<li><p>NewSegment</p></li>
+<li><p>Normalize</p></li>
+<li><p>Realign</p></li>
+<li><p>Smooth</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="class">
+<dt id="mia_processes.preprocess.spm.spatial_preprocessing.Coregister">
+<em class="property">class </em><code class="sig-prename descclassname">mia_processes.preprocess.spm.spatial_preprocessing.</code><code class="sig-name descname">Coregister</code><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Coregister"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Coregister" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="mia_processes.html#mia_processes.process_mia.Process_Mia" title="mia_processes.process_mia.Process_Mia"><code class="xref py py-class docutils literal notranslate"><span class="pre">mia_processes.process_mia.Process_Mia</span></code></a></p>
+<ul class="simple">
+<li><p>Coregister (mia_processes.preprocess.spm.spatial_preprocessing.Coregister) &lt;=&gt; Coregister (SPM12 names).</p></li>
+</ul>
+<dl>
+<dt><strong>* Realignment through different modalities: Align together scans of different modalities *</strong> </dt><dd><ul>
+<li><dl>
+<dt>Input parameters:</dt><dd><ul>
+<li><dl>
+<dt>target &lt;=&gt; estimate.ref: The reference file to register to.</dt><dd><blockquote>
+<div><p>An existing, uncompressed file (valid extensions: [.img, .nii, .hdr]).</p>
+</div></blockquote>
+<p>&lt;ex. /home/ArthurBlair/data/downloaded_data/meanFunc.nii&gt;</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>source &lt;=&gt; estimate.source: The image that is jiggled about to best match the target image.</dt><dd><blockquote>
+<div><p>A list of items which are an existing, uncompressed file
+(valid extensions: [.img, .nii, .hdr]).</p>
+</div></blockquote>
+<p>&lt;ex. [‘/home/ArthurBlair/data/raw_data/Anat.nii’]&gt;</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>apply_to_files &lt;=&gt; estimate.other: These are any images that need to remain in alignment with the</dt><dd><blockquote>
+<div><p>source image (a list of items which are an existing file name).</p>
+</div></blockquote>
+<p>&lt;ex. [‘/home/ArthurBlair/data/raw_data/Func.nii’]&gt;</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>jobtype: One of ‘estwrite’ or ‘estimate’ or ‘write’. If ‘estimate’ is selected, the registration</dt><dd><blockquote>
+<div><p>parameters are stored in the headers of the ‘source’ and the ‘apply_to_files’ images. If
+‘write’ is selected, the resliced images are named the same as the originals except that
+they are prefixed by out_prefix.</p>
+</div></blockquote>
+<p>&lt;ex. write&gt;</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>cost_function &lt;=&gt; estimate.eoptions.cost_fun: One of ‘mi’ or ‘nmi’ or ‘ecc’ or ‘ncc’. Registration</dt><dd><blockquote>
+<div><p>involves finding parameters that either maximise or
+minimise some objective function. For inter-modal
+registration, use ‘Mutual Information’,
+‘Normalised Mutual Information’ or
+‘Entropy Correlation Coefficient’.
+For within modality, you could also use Normalised
+Cross Correlation.
+‘mi’: Mutual Information.
+‘nmi’: Normalised Mutual Information.
+‘ecc’: Entropy Correlation Coefficient.
+‘ncc’: Normalised Cross Correlation.</p>
+</div></blockquote>
+<p>&lt;ex. nmi&gt;</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>separation &lt;=&gt; estimate.eoptions.sep: A list of items which are a float. The average distance between</dt><dd><blockquote>
+<div><p>sampled points (in mm). Can be a vector to allow a coarse
+registration followed by increasingly fine ones.</p>
+</div></blockquote>
+<p>&lt;ex. [4, 2]&gt;</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>tolerance &lt;=&gt; estimate.eoptions.tol: A list of 12 items which are a float. The acceptable tolerance</dt><dd><blockquote>
+<div><p>for each of 12 params. Iterations stop when differences
+between successive estimates are less than the required tolerance.</p>
+</div></blockquote>
+<p>&lt;ex. [0.02, 0.02, 0.02, 0.001, 0.001, 0.001, 0.01, 0.01, 0.01, 0.001, 0.001, 0.001]&gt;</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>fwhm &lt;=&gt; estimate.eoptions.fwhm: A list of 2 items which are a float. Kernel of gaussian smooth to</dt><dd><blockquote>
+<div><p>apply to the 256*256 joint histogram.</p>
+</div></blockquote>
+<p>&lt;ex. [7, 7]&gt;</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>out_prefix &lt;=&gt; roptions.prefix: Specify the string to be prepended to the</dt><dd><blockquote>
+<div><p>filenames of the coregisterd image file(s)
+(a string).</p>
+</div></blockquote>
+<p>&lt;ex. r, capsul/nipype default value&gt;</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>Outputs parameters:</dt><dd><dl>
+<dt># coregistered_source: A list of items which are an existing file name. Coregistered source files,</dt><dd><blockquote>
+<div><p>corresponding to ‘source’ images.</p>
+</div></blockquote>
+<p>&lt;ex. /home/ArthurBlair/data/raw_data/Anat.nii&gt;</p>
+</dd>
+<dt># coregistered_files: A list of items which are an existing file name. Coregistered other files,</dt><dd><blockquote>
+<div><p>corresponding to ‘apply_to_files’ images.</p>
+</div></blockquote>
+<p>&lt;ex. /home/ArthurBlair/data/raw_data/Func.nii&gt;</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Type ‘Coregister.help()’ for a full description of this process parameters.</p></li>
+<li><p>Type ‘&lt;Coregister&gt;.get_input_spec()’ for a full description of this process input trait types.</p></li>
+<li><p>Type ‘&lt;Coregister&gt;.get_output_spec()’ for a full description of this process output trait types.</p></li>
+</ul>
+</div>
+<dl class="method">
+<dt id="mia_processes.preprocess.spm.spatial_preprocessing.Coregister.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Coregister.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Coregister.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the attributes initialisation / instanciation.</p>
+<p>The input and output plugs are defined here. The special
+‘self.requirement’ attribute (optional) is used to define the
+third-party products necessary for the running of the brick.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mia_processes.preprocess.spm.spatial_preprocessing.Coregister.list_outputs">
+<code class="sig-name descname">list_outputs</code><span class="sig-paren">(</span><em class="sig-param">is_plugged=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Coregister.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Coregister.list_outputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the initialisation step of the brick.</p>
+<p>The main objective of this method is to produce the outputs of the
+bricks (self.outputs) and the associated tags (self.inheritance_dic),
+if defined here. To work properly this method must return 
+self.make_initResult() object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mia_processes.preprocess.spm.spatial_preprocessing.Coregister.run_process_mia">
+<code class="sig-name descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Coregister.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Coregister.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used for Matlab’s config parameters.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="mia_processes.preprocess.spm.spatial_preprocessing.NewSegment">
+<em class="property">class </em><code class="sig-prename descclassname">mia_processes.preprocess.spm.spatial_preprocessing.</code><code class="sig-name descname">NewSegment</code><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#NewSegment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.NewSegment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="mia_processes.html#mia_processes.process_mia.Process_Mia" title="mia_processes.process_mia.Process_Mia"><code class="xref py py-class docutils literal notranslate"><span class="pre">mia_processes.process_mia.Process_Mia</span></code></a></p>
+<ul class="simple">
+<li><p>NewSegment (mia_processes.preprocess.spm.spatial_preprocessing.NewSegment) &lt;=&gt; Segment (SPM12 names).
+The warp.fwhm, warp.cleanup and warp.mrf of SPM12 are not used in the NewSegment brick.</p></li>
+</ul>
+<dl>
+<dt><strong>* Segmentation: Segments,  bias  corrects  and  spatially normalises - all in the same model *</strong> </dt><dd><ul>
+<li><dl>
+<dt>Input parameters:</dt><dd><ul>
+<li><p>affine_regularization &lt;=&gt; warp.affreg : Standard space for affine registration (‘mni’ or ‘eastern’ or ‘subj’ or ‘none’). &lt;ex. mni&gt;.</p></li>
+<li><dl class="simple">
+<dt>channel_files &lt;=&gt; channel.vol<span class="classifier">Path of the scans for processing (valid extensions, .img, .nii, .hdr).</span></dt><dd><p>&lt;ex. [‘/home/ArthurBlair/data/raw_data/Anat.nii’]&gt;.</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>channel_info: A tuple with the following values: - Bias reguralisation -a float [0-10]-</dt><dd><blockquote>
+<div><blockquote>
+<div><ul class="simple">
+<li><p>Bias FWHM -a float-</p></li>
+<li><p>Which maps to save -a tuple of two boolean values (Field, Corrected)-.</p></li>
+</ul>
+</div></blockquote>
+<ul>
+<li><dl class="simple">
+<dt>Bias regularisation &lt;=&gt; channel.biasreg: 0 Noregularisation, 0.00001 extremely light regularisation,  … ,</dt><dd><p>1 very heavy regularisation, 10 extremely heavy regularisation.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Bias FWHM (Full Width at Half Maximum) &lt;=&gt; channel.biasfwhm: 30 (mm cutoff), 40 (mm cutoff), …,</dt><dd><p>150 (mm cutoff), inf (no correction).</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>Which maps to save (Field, Bias Corrected) &lt;=&gt; channel.write: For save a bias corrected version of the estimated</dt><dd><blockquote>
+<div><p>bias field or/and the processed image:</p>
+</div></blockquote>
+<p>(False, False) Save Nothing, (False, True) save Bias corrected image only, etc.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<p>&lt;ex. (0.0001, 60, (False, True)&gt;.</p>
+</dd>
+</dl>
+</li>
+<li><p>sampling_distance &lt;=&gt; warp.samp: Approximate distance between sampled points when estimating the model parameters. a float &lt;ex. 3&gt;</p></li>
+<li><dl>
+<dt>tissues &lt;=&gt; tissue: A list of tuples with the following values for each tissue types; Grey Matter,</dt><dd><blockquote>
+<div><blockquote>
+<div><p>White Matter, CerebroSpinal Flux, Bone tissue, Soft tissue, AirBackground:
+[((tissue probability map (4D), 1-based index to frame),  number of gaussians,</p>
+<blockquote>
+<div><p>(which maps to save [Native, DARTEL]), (which maps to save [Unmodulated, Modulated])), …].</p>
+</div></blockquote>
+<p>Typically, the order of tissues is grey matter, white matter, CSF, bone,
+soft tissue and iar/background (if using tpm/TPM.nii).</p>
+</div></blockquote>
+<ul>
+<li><p>tissue probability map &lt;=&gt; tisue(x).tpm with x in [1, 2, 3, 4, 5, 6]: The tissue probability image [.img, .nii, .hdr].</p></li>
+<li><p>1-based index to frame: index for the 4th dimension of the tissue probability map and then tissue type selection.</p></li>
+<li><dl class="simple">
+<dt>number of gaussians &lt;=&gt; tissue(x).ngaus: Typical numbers of Gaussians could be two for GM, WM, CSF, three for bone,</dt><dd><p>four for other soft tissues and two for air / background):
+[1,2,3,4,5,6,7,8,inf - Non parametric-].</p>
+</dd>
+</dl>
+</li>
+<li><p>which maps to save [Native, DARTEL] &lt;=&gt; tissue(x).native:
+The native space option allows you to produce a tissue class image (c*) that is in alignment with the original.
+It can also be used for importing into a form that can be used with the Dartel toobox (rc*):
+(False, False) Save Nothing, (True, False) save native only. etc.</p></li>
+<li><p>which maps to save [Unmodulated, Modulated] &lt;=&gt; tissue(x).warped:
+To produces spatially normalised versions of the tissue class, both with (mcw*) and without (wc*)</p>
+<blockquote>
+<div><p>modulation: (False, False) Save Nothing, (True, False) save unmodulated only. etc.</p>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+<dl class="simple">
+<dt>&lt;ex. [((‘/home/ArthurBlair/spm/spm12/tpm/TPM.nii’, 1), 2, (True, False), (False, False)),</dt><dd><p>((‘/home/ArthurBlair/spm/spm12/tpm/TPM.nii’, 2), 2, (True, False), (False, False)), 
+((‘/home/ArthurBlair/spm/spm12/tpm/TPM.nii’, 3), 2, (True, False), (False, False)),
+((‘/home/ArthurBlair/spm/spm12/tpm/TPM.nii’, 4), 3, (True, False), (False, False)),
+((‘/home/ArthurBlair/spm/spm12/tpm/TPM.nii’, 5), 4, (True, False), (False, False)),
+((‘/home/ArthurBlair/spm/spm12/tpm/TPM.nii’, 6), 2, (True, False), (False, False))]&gt;.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>warping_regularization &lt;=&gt; warp.reg: The measure of the roughness of the deformations for registration, involve the sum of</dt><dd><blockquote>
+<div><p>5 elements. Floats or list of floats. (the latter is required by SPM12).</p>
+</div></blockquote>
+<p>&lt;ex. [0, 0.001, 0.5, 0.05, 0.2]&gt;</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>write_deformation_fields &lt;=&gt; warp.write: Deformation fields can be saved to disk, and used by the deformation utility.</dt><dd><p>A list of 2 booleans for which deformation fields to write, [Inverse, Forward]:
+[False, False] Save nothing, [True, False] save Inverse only. &lt;ex. [False, True]&gt;</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Output parameters:</dt><dd><ul class="simple">
+<li><p>forward_deformation_field: Forward deformation field. &lt;ex. /home/ArthurBlair/data/raw_data/y_Anat.nii&gt;.</p></li>
+<li><p>bias_field_images: Bias field images. &lt;ex. /home/ArthurBlair/data/raw_data/BiasField_Anat.nii&gt;</p></li>
+<li><p>bias_corrected_images: Bias corrected images. &lt;ex. /home/ArthurBlair/data/raw_data/mAnat.nii</p></li>
+<li><dl class="simple">
+<dt>native_class_images: Native space probability maps. &lt;ex. [[‘/home/ArthurBlair/data/raw_data/c1Anat.nii’],</dt><dd><p>[‘/home/ArthurBlair/data/raw_data/c2Anat.nii’],
+[‘/home/ArthurBlair/data/raw_data/c3Anat.nii’],
+[‘/home/ArthurBlair/data/raw_data/c4Anat.nii’],
+[‘/home/ArthurBlair/data/raw_data/c5Anat.nii’]]&gt;</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Type ‘NewSegment.help()’ for a full description of this process parameters.</p></li>
+<li><p>Type ‘&lt;NewSegment&gt;.get_input_spec()’ for a full description of this process input trait types.</p></li>
+<li><p>Type ‘&lt;NewSegment&gt;.get_output_spec()’ for a full description of this process output trait types.</p></li>
+</ul>
+</div>
+<dl class="method">
+<dt id="mia_processes.preprocess.spm.spatial_preprocessing.NewSegment.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#NewSegment.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.NewSegment.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the attributes initialisation / instanciation.</p>
+<p>The input and output plugs are defined here. The special
+‘self.requirement’ attribute (optional) is used to define the
+third-party products necessary for the running of the brick.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mia_processes.preprocess.spm.spatial_preprocessing.NewSegment.list_outputs">
+<code class="sig-name descname">list_outputs</code><span class="sig-paren">(</span><em class="sig-param">is_plugged=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#NewSegment.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.NewSegment.list_outputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the initialisation step of the brick.</p>
+<p>The main objective of this method is to produce the outputs of the
+bricks (self.outputs) and the associated tags (self.inheritance_dic),
+if defined here. To work properly this method must return 
+self.make_initResult() object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mia_processes.preprocess.spm.spatial_preprocessing.NewSegment.run_process_mia">
+<code class="sig-name descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#NewSegment.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.NewSegment.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used for Matlab’s config parameters.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="mia_processes.preprocess.spm.spatial_preprocessing.Normalize">
+<em class="property">class </em><code class="sig-prename descclassname">mia_processes.preprocess.spm.spatial_preprocessing.</code><code class="sig-name descname">Normalize</code><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Normalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Normalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="mia_processes.html#mia_processes.process_mia.Process_Mia" title="mia_processes.process_mia.Process_Mia"><code class="xref py py-class docutils literal notranslate"><span class="pre">mia_processes.process_mia.Process_Mia</span></code></a></p>
+<ul class="simple">
+<li><p>Normalize (mia_processes.preprocess.spm.spatial_preprocessing.Normalize) &lt;=&gt; Normalise (SPM12 names).</p></li>
+</ul>
+<p><strong>* Spatial normalisation: Computes the warp that best aligns the template (atlas) to the individual’s image, so one *</strong>
+<strong>* location in the individual’s image corresponds to the same location in another subject’s brain scan.             *</strong></p>
+<blockquote>
+<div><ul>
+<li><dl>
+<dt>Input parameters:</dt><dd><ul>
+<li><dl>
+<dt>apply_to_files &lt;=&gt; subj.resample: Files to apply transformation to. They can be any images that are in</dt><dd><blockquote>
+<div><p>register with the image used to generate the deformation. A list of
+items which are an existing, uncompressed file
+(valid extensions: [.img, .nii, .hdr]).</p>
+</div></blockquote>
+<p>&lt;ex. [‘/home/ArthurBlair/data/raw_data/Anat.nii’]&gt;</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>deformation_file &lt;=&gt; subj.def: File y_*.nii containing 3 deformation fields for the deformation in x, y</dt><dd><blockquote>
+<div><p>and z dimension. A uncompressed file (valid extensions: [.img, .nii, .hdr])).</p>
+</div></blockquote>
+<p>&lt;ex. /home/ArthurBlair/data/downloaded_data/y_Anat.nii&gt;</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>jobtype: One of ‘estwrite’ or ‘estimate’ or ‘write’.</dt><dd><p>&lt;ex. write&gt;</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>write_bounding_box &lt;=&gt; woptions.bb: A list of 2 items which are a list of items which are a float. This is</dt><dd><blockquote>
+<div><p>the bounding box (in mm) of the volume which is to be written (relative
+to the anterior commissure).</p>
+</div></blockquote>
+<p>&lt;ex. [[-78, -112, -50], [78, 76, 85]]&gt;</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>write_voxel_sizes &lt;=&gt; woptions.vox: A list of 3 items which are a float. This is the voxel sizes of the written normalised images.</dt><dd><p>&lt;ex. [1, 1, 1]&gt;</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>write_interp  &lt;=&gt; woptions.interp: This is the  method by which the images are sampled when being written</dt><dd><blockquote>
+<div><p>in a different space (0 &lt;= a long integer &lt;= 7).
+0: Nearest neighbour, 1: Trilinear, 2: 2nd Degree B-spline, …,
+7: 7nd Degree B-spline.</p>
+</div></blockquote>
+<p>&lt;ex. 1&gt;</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>out_prefix &lt;=&gt; woptions.prefix: Specify the string to be prepended to the</dt><dd><blockquote>
+<div><p>filenames of the normalised image file(s)
+(a string).</p>
+</div></blockquote>
+<p>&lt;ex. w, capsul/nipype default value&gt;</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Output parameters:</dt><dd><ul class="simple">
+<li><dl class="simple">
+<dt>normalized_file &lt;=&gt; Normalised other files. (a list of items which are an existing file name)</dt><dd><p>&lt;ex. /home/ArthurBlair/data/raw_data/wAnat.nii&gt;</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Type ‘Normalize.help()’ for a full description of this process parameters.</p></li>
+<li><p>Type ‘&lt;Normalize&gt;.get_input_spec()’ for a full description of this process input trait types.</p></li>
+<li><p>Type ‘&lt;Normalize&gt;.get_output_spec()’ for a full description of this process output trait types.</p></li>
+</ul>
+</div>
+<dl class="method">
+<dt id="mia_processes.preprocess.spm.spatial_preprocessing.Normalize.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Normalize.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Normalize.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the attributes initialisation / instanciation.</p>
+<p>The input and output plugs are defined here. The special
+‘self.requirement’ attribute (optional) is used to define the
+third-party products necessary for the running of the brick.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mia_processes.preprocess.spm.spatial_preprocessing.Normalize.list_outputs">
+<code class="sig-name descname">list_outputs</code><span class="sig-paren">(</span><em class="sig-param">is_plugged=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Normalize.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Normalize.list_outputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the initialisation step of the brick.</p>
+<p>The main objective of this method is to produce the outputs of the
+bricks (self.outputs) and the associated tags (self.inheritance_dic),
+if defined here. To work properly this method must return 
+self.make_initResult() object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mia_processes.preprocess.spm.spatial_preprocessing.Normalize.run_process_mia">
+<code class="sig-name descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Normalize.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Normalize.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used for Matlab’s config parameters.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="mia_processes.preprocess.spm.spatial_preprocessing.Realign">
+<em class="property">class </em><code class="sig-prename descclassname">mia_processes.preprocess.spm.spatial_preprocessing.</code><code class="sig-name descname">Realign</code><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Realign"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Realign" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="mia_processes.html#mia_processes.process_mia.Process_Mia" title="mia_processes.process_mia.Process_Mia"><code class="xref py py-class docutils literal notranslate"><span class="pre">mia_processes.process_mia.Process_Mia</span></code></a></p>
+<ul class="simple">
+<li><p>Realign (mia_processes.preprocess.spm.spatial_preprocessing.Realign) &lt;=&gt; Realign (SPM12 names).</p></li>
+</ul>
+<p><strong>* Realign: Realigns a time-series of images acquired from the same subject using a least squares approach and *</strong>
+<strong>* a 6 parameters (rigid body) spatial transformation                                                          *</strong></p>
+<blockquote>
+<div><ul>
+<li><dl>
+<dt>Inputs parameters:</dt><dd><dl>
+<dt># in_files &lt;=&gt; data: A list of items which are an existing, uncompressed file (valid extensions: [.img, .nii, .hdr]).</dt><dd><p>&lt;ex. [‘/home/ArthurBlair/data/raw_data/Func.nii’]&gt;</p>
+</dd>
+<dt># jobtype: One of ‘estwrite’ or ‘estimate’ or ‘write’.</dt><dd><blockquote>
+<div><p>estimate: generates realignment_parameters and modified_in_files
+write: with write_which == [2, 0] or [1, 0] generates realigned_files</p>
+<blockquote>
+<div><p>with write_which == [2, 1] generates mean_image and realigned_files
+with write_which == [0, 1] generates mean_image</p>
+</div></blockquote>
+<dl class="simple">
+<dt>estwrite: with write_which == [2, 0] or [1, 0] generates realignment_parameters, modified_in_files and realigned_files</dt><dd><p>with write_which == [2, 1] generates realignment_parameters, modified_in_file, mean_image and realigned_files
+with write_which == [0, 1] generates realignment_parameters, modified_in_file and mean_image</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>&lt;ex. estwrite&gt;</p>
+</dd>
+<dt># quality &lt;=&gt; eoptions.quality: Quality versus speed trade-off (0.0 &lt;= a floating point number &lt;= 1.0). Highest quality (1)</dt><dd><p>gives most precise results, whereas lower qualities gives faster realignment. &lt;ex. 0.9&gt;</p>
+</dd>
+<dt># separation &lt;=&gt; eoptions.sep: Sampling separation in mm in the reference image (a floating point number &gt;= 0.0). Smaller</dt><dd><p>sampling distances gives more accurate results, but will be slower. &lt;ex. 4.0&gt;</p>
+</dd>
+<dt># fwhm &lt;=&gt; eoptions.fwhm: The gaussian smoothing kernel width (mm, a floating point number &gt;= 0.0) applied to the images</dt><dd><p>before estimating the realignment parameters. &lt;ex. 5.0&gt;</p>
+</dd>
+<dt># register_to_mean &lt;=&gt; eoptions.rtm: Indicate whether realignment is done to the mean image (True) or to the first</dt><dd><p>image (False). &lt;ex. True&gt;</p>
+</dd>
+<dt># interp &lt;=&gt; eoptions.interp: Degree of b-spline (1 &lt;= a long integer &lt;= 7) used for interpolation. Higher degree</dt><dd><p>interpolation methods provide the better interpolation, but they are slower because they use
+more neighbouring voxels. &lt;ex. 2&gt;</p>
+</dd>
+<dt># wrap &lt;=&gt; eoptions.wrap: Check if interpolation should wrap in [x,y,z] (a list of 3 items which are integer int or long).</dt><dd><blockquote>
+<div><p>For example, in MRI scans, the images wrap around in the phase encode direction, so the subject’s
+nose may poke into the back of the subject’s head. These are typically:
+- No wrapping [0, 0, 0]: for PET or images that have already been spatially transformed. (Also the</p>
+<blockquote>
+<div><p>recommended option if you are not really sure).</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>Wrap in Y [0, 1, 0], for (un-resliced) MRI where phase encoding is in the Y direction (voxel space).</p></li>
+</ul>
+</div></blockquote>
+<p>&lt;ex. [0, 0, 0]&gt;</p>
+</dd>
+<dt># weight_img &lt;=&gt; eoptions.weight: Filename of optional weighting image, to weight each voxel of the reference image differently</dt><dd><blockquote>
+<div><p>when estimating the realignment parameters. This would be used, for example, when there is a
+lot of extra-brain motion or when there are serious artifacts in a particular region of the
+images.</p>
+</div></blockquote>
+<p>&lt;ex. ‘’&gt;</p>
+</dd>
+<dt># write_which &lt;=&gt; roptions.which: Determines which images to reslice (a list of items which are a value of class ‘int’).</dt><dd><blockquote>
+<div><dl class="simple">
+<dt>[2,0]: Reslices all the images (1..n), including the first image selected, which will remain in</dt><dd><p>its original position.</p>
+</dd>
+<dt>[1,0]: Reslices images (2..n) only. Useful for if you wish to reslice (for example) a PET image to</dt><dd><p>fit a structural MRI, without creating a second identical MRI volume.</p>
+</dd>
+<dt>[2,1]: All Images + Mean Image.  In addition to reslicing the images, it also creates a mean of</dt><dd><p>the resliced image.</p>
+</dd>
+</dl>
+<p>[0,1]: Mean Image Only. Creates the mean resliced image only.</p>
+</div></blockquote>
+<p>&lt;ex. [2, 1]&gt;</p>
+</dd>
+<dt># write_interp &lt;=&gt; roptions.interp: 0 &lt;= a long integer &lt;= 7.</dt><dd><p>The method by which the images are sampled when being written in a different space. Nearest
+neighbour is fastest, but not recommended for image realignment. Trilinear Interpolation is
+probably OK for PET, but not so suitable for fMRI because higher degree interpolation
+generally gives better results. Although higher degree methods provide better interpolation,
+but they are slower because they use more neighbouring voxels. (0 &lt;= a long integer &lt;= 7).
+Voxel sizes must all be identical and isotropic. 0: Nearest neighbour, 1: Trilinear,
+2: 2nd Degree B-Spline, 3: 3rd Degree B-Spline … 7: 7th Degree B-Spline. &lt;ex. 4&gt;</p>
+</dd>
+<dt># write_wrap &lt;=&gt; roptions.wrap: A list of from 3 items which are an integer (int or long). See the wrap parameter that is used if</dt><dd><p>the jobtype parameter is equal to estimate. [0, 0, 0]: No wrap; [1, 0, 0]: wrap X; [0, 1, 0]: wrap Y;
+[0, 0, 1]: Wrap Z; [1, 1, 1]: Wrap X, Y &amp; Z; … &lt;ex. [0, 0, 0]&gt;</p>
+</dd>
+<dt># write_mask &lt;=&gt; roptions.mask: Mask output image (a boolean). Because of subject motion, different images are likely to have</dt><dd><p>different patterns of zeros from where it was not possible to sample data. With masking enabled,
+the program searches through the whole time series looking for voxels which need to be sampled
+from outside the original images. Where this occurs, that voxel is set to zero for the whole set
+of images. &lt;ex. True&gt;</p>
+</dd>
+</dl>
+<p># out_prefix &lt;=&gt; roptions.prefix: Realigned output prefix (a string). &lt;ex. r&gt;</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>Outputs parameters:</dt><dd><dl>
+<dt># realigned_files: If the write_which parameter is equal to [2, 0], [1, 0] or [2, 1] and jobtype parameter is equal to write or estwrite,</dt><dd><blockquote>
+<div><p>these will be the resliced files (a list of items which are a list of items which are a pathlike object or string
+representing an existing file or a pathlike object or string representing an existing file).</p>
+</div></blockquote>
+<p>&lt;ex. /home/ArthurBlair/data/raw_data/rFunc.nii&gt;</p>
+</dd>
+<dt># modified_in_files: If the jobtype parameter is equal to estimate or estwrite, these will be copies of the in_files with a rewritten</dt><dd><blockquote>
+<div><p>header (a list of items which are a list of items which are a pathlike object or string representing an existing
+file or a pathlike object or string representing an existing file).</p>
+</div></blockquote>
+<p>&lt;ex./home/ArthurBlair/data/raw_data/Func.nii&gt;</p>
+</dd>
+<dt># mean_image: If the write_which parameter is equal to [2, 1] or [0, 1] and jobtype parameter is equal to write or estwrite, this will</dt><dd><blockquote>
+<div><p>be the Mean image file from the realignment (a pathlike object or string representing an existing file).</p>
+</div></blockquote>
+<p>&lt;ex. /home/ArthurBlair/data/raw_data/meanFunc.nii&gt;</p>
+</dd>
+<dt># realignment_parameters: If the jobtype parameter is equal to estimate or estwrite, this will be the Estimated translation and rotation</dt><dd><blockquote>
+<div><p>parameters (a list of items which are a pathlike object or string representing an existing file).</p>
+</div></blockquote>
+<p>&lt;ex. /home/ArthurBlair/data/raw_data/rp_Func.txt&gt;</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Type ‘Realign.help()’ for a full description of this process parameters.</p></li>
+<li><p>Type ‘&lt;Realign&gt;.get_input_spec()’ for a full description of this process input trait types.</p></li>
+<li><p>Type ‘&lt;Realign&gt;.get_output_spec()’ for a full description of this process output trait types.</p></li>
+</ul>
+</div>
+<dl class="method">
+<dt id="mia_processes.preprocess.spm.spatial_preprocessing.Realign.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Realign.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Realign.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the attributes initialisation / instanciation.</p>
+<p>The input and output plugs are defined here. The special
+‘self.requirement’ attribute (optional) is used to define the
+third-party products necessary for the running of the brick.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mia_processes.preprocess.spm.spatial_preprocessing.Realign.list_outputs">
+<code class="sig-name descname">list_outputs</code><span class="sig-paren">(</span><em class="sig-param">is_plugged=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Realign.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Realign.list_outputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the initialisation step of the brick.</p>
+<p>The main objective of this method is to produce the outputs of the
+bricks (self.outputs) and the associated tags (self.inheritance_dic),
+if defined here. To work properly this method must return 
+self.make_initResult() object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mia_processes.preprocess.spm.spatial_preprocessing.Realign.run_process_mia">
+<code class="sig-name descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Realign.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Realign.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the process launch step of the brick.</p>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="class">
 <dt id="mia_processes.preprocess.spm.spatial_preprocessing.Smooth">
-<em class="property">class </em><code class="descclassname">mia_processes.preprocess.spm.spatial_preprocessing.</code><code class="descname">Smooth</code><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Smooth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Smooth" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">mia_processes.preprocess.spm.spatial_preprocessing.</code><code class="sig-name descname">Smooth</code><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Smooth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Smooth" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="mia_processes.html#mia_processes.process_mia.Process_Mia" title="mia_processes.process_mia.Process_Mia"><code class="xref py py-class docutils literal notranslate"><span class="pre">mia_processes.process_mia.Process_Mia</span></code></a></p>
-<dl class="docutils">
-<dt>Smooth (from mia_processes.preprocess.spm.spatial_preprocessing) &lt;=&gt;</dt>
-<dd>Smooth (SPM12 names).</dd>
-<dt><strong>* Smooth: 3D Gaussian smoothing of image volumes *</strong></dt>
-<dd><ul class="first last">
-<li><dl class="first docutils">
-<dt>Inputs parameters:</dt>
-<dd><dl class="first last docutils">
-<dt># in_files &lt;=&gt; data: List of files to smooth. A list of items which are</dt>
-<dd><p class="first last">an existing, uncompressed file (valid extensions:
+<dl>
+<dt>Smooth (from mia_processes.preprocess.spm.spatial_preprocessing) &lt;=&gt;</dt><dd><p>Smooth (SPM12 names).</p>
+</dd>
+<dt><strong>* Smooth: 3D Gaussian smoothing of image volumes *</strong></dt><dd><ul>
+<li><dl>
+<dt>Inputs parameters:</dt><dd><dl>
+<dt># in_files &lt;=&gt; data: List of files to smooth. A list of items which are</dt><dd><p>an existing, uncompressed file (valid extensions:
 [.img, .nii, .hdr]).
 &lt;ex. [‘/home/ArthurBlair/data/raw_data/Func.nii’]&gt;</p>
 </dd>
-<dt># fwhm &lt;=&gt; fwhm: Specify  the  full-width at half maximum (FWHM) of the</dt>
-<dd><p class="first last">Gaussian smoothing kernel in mm. Three values should be
+<dt># fwhm &lt;=&gt; fwhm: Specify  the  full-width at half maximum (FWHM) of the</dt><dd><p>Gaussian smoothing kernel in mm. Three values should be
 entered, denoting the FWHM in the x, y and z
 directions. A list of 3 items which are a float of fwhm
 for each dimension.
 &lt;ex. [6, 6, 6]&gt;</p>
 </dd>
-<dt># data_type &lt;=&gt; dtype: Data type of the output images (an integer </dt>
-<dd><blockquote class="first">
+<dt># data_type &lt;=&gt; dtype: Data type of the output images (an integer </dt><dd><blockquote>
 <div><p>[int or long]).
 0: same as the original images
 2: UINT8 (unsigned char)
@@ -94,18 +689,16 @@ for each dimension.
 6: INT32 (signed int)
 8: FLOAT32 (single prec. float)</p>
 </div></blockquote>
-<p class="last">10: FLOAT64 (double prec. float)
+<p>10: FLOAT64 (double prec. float)
 &lt;undefined&gt; = 0 ?
 &lt;ex. 0, MIA_processes default value&gt;</p>
 </dd>
-<dt># implicit_masking &lt;=&gt; im: A mask implied by a particular voxel value</dt>
-<dd><p class="first last">(a boolean). If set to True, the implicit
+<dt># implicit_masking &lt;=&gt; im: A mask implied by a particular voxel value</dt><dd><p>(a boolean). If set to True, the implicit
 masking of the input image is preserved in
 the smoothed image.
 &lt;ex. False&gt;</p>
 </dd>
-<dt># out_prefix &lt;=&gt; prefix: Specify the string to be prepended to the</dt>
-<dd><p class="first last">filenames of the smoothed image file(s)
+<dt># out_prefix &lt;=&gt; prefix: Specify the string to be prepended to the</dt><dd><p>filenames of the smoothed image file(s)
 (a string).
 &lt;ex. s, capsul/nipype default value&gt;</p>
 </dd>
@@ -113,11 +706,9 @@ the smoothed image.
 </dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>Outputs parameters:</dt>
-<dd><dl class="first last docutils">
-<dt># smoothed_files: Smoothed files (a list of items which are an existing</dt>
-<dd><p class="first last">file name).
+<li><dl class="simple">
+<dt>Outputs parameters:</dt><dd><dl class="simple">
+<dt># smoothed_files: Smoothed files (a list of items which are an existing</dt><dd><p>file name).
 &lt;ex. /home/ArthurBlair/data/raw_data/sFunc.nii&gt;</p>
 </dd>
 </dl>
@@ -128,16 +719,16 @@ the smoothed image.
 </dd>
 </dl>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<ul class="last simple">
-<li>Type ‘Smooth.help()’ for a full description of this process parameters.</li>
-<li>Type ‘&lt;Smooth&gt;.get_input_spec()’ for a full description of this process input trait types.</li>
-<li>Type ‘&lt;Smooth&gt;.get_output_spec()’ for a full description of this process output trait types.</li>
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Type ‘Smooth.help()’ for a full description of this process parameters.</p></li>
+<li><p>Type ‘&lt;Smooth&gt;.get_input_spec()’ for a full description of this process input trait types.</p></li>
+<li><p>Type ‘&lt;Smooth&gt;.get_output_spec()’ for a full description of this process output trait types.</p></li>
 </ul>
 </div>
 <dl class="method">
 <dt id="mia_processes.preprocess.spm.spatial_preprocessing.Smooth.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Smooth.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Smooth.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Smooth.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Smooth.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the attributes initialisation / instanciation.</p>
 <p>The input and output plugs are defined here. The special
 ‘self.requirement’ attribute (optional) is used to define the
@@ -146,7 +737,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="method">
 <dt id="mia_processes.preprocess.spm.spatial_preprocessing.Smooth.list_outputs">
-<code class="descname">list_outputs</code><span class="sig-paren">(</span><em>is_plugged=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Smooth.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Smooth.list_outputs" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">list_outputs</code><span class="sig-paren">(</span><em class="sig-param">is_plugged=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Smooth.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Smooth.list_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -156,7 +747,7 @@ self.make_initResult() object.</p>
 
 <dl class="method">
 <dt id="mia_processes.preprocess.spm.spatial_preprocessing.Smooth.run_process_mia">
-<code class="descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Smooth.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Smooth.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Smooth.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Smooth.run_process_mia" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the process launch step of the brick.</p>
 </dd></dl>
 
@@ -177,7 +768,7 @@ self.make_initResult() object.</p>
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, populse.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.
     </div>
   </body>
 </html>
