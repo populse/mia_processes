@@ -35,11 +35,12 @@ from nipype.interfaces.spm.base import ImageFileSPM
 
 # Other import
 import os
-from traits.api import Float
+from traits.api import Float    # a verifier si on peu tpas passer avec traits de nipype.interfaces.base
 
 # populse_mia import
 from populse_mia.software_properties import Config
 
+from traits.api import Undefined
 
 class Coregister(Process_Mia):
     """
@@ -74,9 +75,6 @@ class Coregister(Process_Mia):
 		                                        'ecc': Entropy Correlation Coefficient.
 		                                        'ncc': Normalised Cross Correlation.
             <ex. nmi>
-        * fwhm <=> estimate.eoptions.fwhm: A list of 2 items which are a float. Kernel of gaussian smooth to
-                                           apply to the 256*256 joint histogram.
-            <ex. [7, 7]>
         * separation <=> estimate.eoptions.sep: A list of items which are a float. The average distance between
                                                 sampled points (in mm). Can be a vector to allow a coarse
                                                 registration followed by increasingly fine ones.
@@ -85,6 +83,9 @@ class Coregister(Process_Mia):
                                                for each of 12 params. Iterations stop when differences
                                                between successive estimates are less than the required tolerance.
             <ex. [0.02, 0.02, 0.02, 0.001, 0.001, 0.001, 0.01, 0.01, 0.01, 0.001, 0.001, 0.001]>
+        * fwhm <=> estimate.eoptions.fwhm: A list of 2 items which are a float. Kernel of gaussian smooth to
+                                           apply to the 256*256 joint histogram.
+            <ex. [7, 7]>
         * out_prefix <=> roptions.prefix: Specify the string to be prepended to the
                                           filenames of the coregisterd image file(s)
                                           (a string).
@@ -118,9 +119,9 @@ class Coregister(Process_Mia):
         apply_to_files_desc = 'Files to apply transformation to (a list of items which are an existing file name, (valid extensions: [.img, .nii, .hdr]).'
         jobtype_desc = "One of 'estwrite' or 'estimate' or 'write'."
         cost_function_desc = "One of 'mi' or 'nmi' or 'ecc' or 'ncc'."
-        fwhm_desc = 'Gaussian smoothing kernel width (mm) applied to the 256*256 joint histogram (a list of 2 items which are a float).'
         separation_desc = 'Sampling separation in mm (a list of items which are a float).'
         tolerance_desc = 'The acceptable tolerance for each of 12 params (a list of items which are a float).'
+        fwhm_desc = 'Gaussian smoothing kernel width (mm) applied to the 256*256 joint histogram (a list of 2 items which are a float).'
         out_prefix_desc = 'Coregisterd output prefix (a string).'
         
         # Outputs description
@@ -154,15 +155,6 @@ class Coregister(Process_Mia):
                                    output=False,
                                    optional=True,
                                    desc=jobtype_desc))
-        
-        self.add_trait("cost_function",
-                       traits.Enum('nmi',
-                                   'mi',
-                                   'ecc',
-                                   'ncc',
-                                   output=False,
-                                   optional=True,
-                                   desc=cost_function_desc))
 
         # self.add_trait("fwhm", traits.List(traits.Float(), output=False, optional=True))
         self.add_trait("fwhm",
@@ -184,6 +176,15 @@ class Coregister(Process_Mia):
                                    output=False,
                                    optional=True,
                                    desc=tolerance_desc))
+
+        self.add_trait("cost_function",
+                       traits.Enum('nmi',
+                                   'mi',
+                                   'ecc',
+                                   'ncc',
+                                   output=False,
+                                   optional=True,
+                                   desc=cost_function_desc))
 
         self.add_trait("out_prefix",
                        traits.String('r',
@@ -238,55 +239,50 @@ class Coregister(Process_Mia):
                 if key == "coregistered_source":
 
                     for fullname in values:
-                        path, filename = os.path.split(fullname)
+                        path, filename_out = os.path.split(fullname)
 
                         if not self.jobtype == "estimate":
 
                             if self.out_prefix:
-                                filename_without_prefix = filename[
-                                                          len(self.out_prefix):]
+                                filename_in = filename_out[len(self.out_prefix):]
                         
                             else:
-                                filename_without_prefix = filename[len('r'):]
+                                filename_in = filename_out[len('r'):]
 
                         else:
-                            filename_without_prefix = filename
+                            filename_in = filename_out
     
                         if (os.path.join(path,
-                                         filename_without_prefix)
+                                         filename_in)
                               in self.source):
                             self.inheritance_dict[fullname] = os.path.join(path,
-                                                        filename_without_prefix)
+                                                                           filename_in)
 
                 if key == "coregistered_files" and not values in ["<undefined>", traits.Undefined]:
 
                     for fullname in values:
-                        path, filename = os.path.split(fullname)
+                        path, filename_out = os.path.split(fullname)
 
                         if not self.jobtype == "estimate":
                     
                             if self.out_prefix:
-                                filename_without_prefix = filename[
-                                                          len(self.out_prefix):]
+                                filename_in = filename_out[len(self.out_prefix):]
                         
                             else:
-                                filename_without_prefix = filename[len('r'):]
+                                filename_in = filename_out[len('r'):]
 
                         else:
-                            filename_without_prefix = filename
+                            filename_in = filename_out
 
                         if (os.path.join(path,
-                                         filename_without_prefix)
+                                         filename_in)
                               in self.apply_to_files):
                             self.inheritance_dict[fullname] = os.path.join(path,
-                                                        filename_without_prefix)
+                                                                           filename_in)
 
         return self.make_initResult()
         #return outputs, {}
-
-
-
-                
+              
         """
             
         if not self.target:
@@ -818,59 +814,82 @@ class Realign(Process_Mia):
     * Inputs parameters:
         # in_files <=> data: A list of items which are an existing, uncompressed file (valid extensions: [.img, .nii, .hdr]).
             <ex. ['/home/ArthurBlair/data/raw_data/Func.nii']>
+        # jobtype: One of 'estwrite' or 'estimate' or 'write'.
+                   estimate: generates realignment_parameters and modified_in_files
+                   write: with write_which == [2, 0] or [1, 0] generates realigned_files
+                          with write_which == [2, 1] generates mean_image and realigned_files
+                          with write_which == [0, 1] generates mean_image
+                   estwrite: with write_which == [2, 0] or [1, 0] generates realignment_parameters, modified_in_files and realigned_files
+                             with write_which == [2, 1] generates realignment_parameters, modified_in_file, mean_image and realigned_files
+                             with write_which == [0, 1] generates realignment_parameters, modified_in_file and mean_image
+            <ex. estwrite>
+        # quality <=> eoptions.quality: Quality versus speed trade-off (0.0 <= a floating point number <= 1.0). Highest quality (1)
+                                        gives most precise results, whereas lower qualities gives faster realignment. <ex. 0.9>
+        # separation <=> eoptions.sep: Sampling separation in mm in the reference image (a floating point number >= 0.0). Smaller
+                                       sampling distances gives more accurate results, but will be slower. <ex. 4.0>
         # fwhm <=> eoptions.fwhm: The gaussian smoothing kernel width (mm, a floating point number >= 0.0) applied to the images
                                   before estimating the realignment parameters. <ex. 5.0>
+        # register_to_mean <=> eoptions.rtm: Indicate whether realignment is done to the mean image (True) or to the first
+                                             image (False). <ex. True>
         # interp <=> eoptions.interp: Degree of b-spline (1 <= a long integer <= 7) used for interpolation. Higher degree
                                       interpolation methods provide the better interpolation, but they are slower because they use
                                       more neighbouring voxels. <ex. 2>
-        # jobtype: One of 'estwrite' or 'estimate' or 'write'. <ex. estwrite>
-        # out_prefix <=> roptions.prefix: Realigned output prefix (a string). <ex. r>
-        # quality <=> eoptions.quality: Quality versus speed trade-off (0.0 <= a floating point number <= 1.0). Highest quality (1)
-                                        gives most precise results, whereas lower qualities gives faster realignment. <ex. 0.9>
-        # register_to_mean <=> eoptions.rtm: Indicate whether realignment is done to the mean image (True) or to the first
-                                             image (False). <ex. True>
-        # separation <=> eoptions.sep: Sampling separation in mm in the reference image (a floating point number >= 0.0). Smaller
-                                       sampling distances gives more accurate results, but will be slower. <ex. 4.0>
         # wrap <=> eoptions.wrap: Check if interpolation should wrap in [x,y,z] (a list of 3 items which are integer int or long).
                                   For example, in MRI scans, the images wrap around in the phase encode direction, so the subject's
                                   nose may poke into the back of the subject's head. These are typically:
-                                  - No wrapping: for PET or images that have already been spatially transformed. (Also the recommended
-                                                 option if you are not really sure).
-                                  - Wrap in Y, for (un-resliced) MRI where phase encoding is in the Y direction (voxel space).
+                                  - No wrapping [0, 0, 0]: for PET or images that have already been spatially transformed. (Also the
+                                    recommended option if you are not really sure).
+                                  - Wrap in Y [0, 1, 0], for (un-resliced) MRI where phase encoding is in the Y direction (voxel space).
             <ex. [0, 0, 0]>
+        # weight_img <=> eoptions.weight: Filename of optional weighting image, to weight each voxel of the reference image differently
+                                          when estimating the realignment parameters. This would be used, for example, when there is a
+                                          lot of extra-brain motion or when there are serious artifacts in a particular region of the
+                                          images.
+            <ex. ''>
+        # write_which <=> roptions.which: Determines which images to reslice (a list of items which are a value of class 'int').
+                                          [2,0]: Reslices all the images (1..n), including the first image selected, which will remain in
+                                                 its original position.
+                                          [1,0]: Reslices images (2..n) only. Useful for if you wish to reslice (for example) a PET image to
+                                                 fit a structural MRI, without creating a second identical MRI volume.
+                                          [2,1]: All Images + Mean Image.  In addition to reslicing the images, it also creates a mean of
+                                                 the resliced image.
+                                          [0,1]: Mean Image Only. Creates the mean resliced image only.                             
+            <ex. [2, 1]>
         # write_interp <=> roptions.interp: 0 <= a long integer <= 7.
                                             The method by which the images are sampled when being written in a different space. Nearest
-                                            Neighbour is fastest, but not recommended for image realignment. Trilinear Interpolation is
+                                            neighbour is fastest, but not recommended for image realignment. Trilinear Interpolation is
                                             probably OK for PET, but not so suitable for fMRI because higher degree interpolation
                                             generally gives better results. Although higher degree methods provide better interpolation,
                                             but they are slower because they use more neighbouring voxels. (0 <= a long integer <= 7).
                                             Voxel sizes must all be identical and isotropic. 0: Nearest neighbour, 1: Trilinear,
                                             2: 2nd Degree B-Spline, 3: 3rd Degree B-Spline ... 7: 7th Degree B-Spline. <ex. 4>
+        # write_wrap <=> roptions.wrap: A list of from 3 items which are an integer (int or long). See the wrap parameter that is used if
+                                        the jobtype parameter is equal to estimate. [0, 0, 0]: No wrap; [1, 0, 0]: wrap X; [0, 1, 0]: wrap Y;
+                                        [0, 0, 1]: Wrap Z; [1, 1, 1]: Wrap X, Y & Z; ... <ex. [0, 0, 0]>
         # write_mask <=> roptions.mask: Mask output image (a boolean). Because of subject motion, different images are likely to have
                                         different patterns of zeros from where it was not possible to sample data. With masking enabled,
                                         the program searches through the whole time series looking for voxels which need to be sampled
                                         from outside the original images. Where this occurs, that voxel is set to zero for the whole set
                                         of images. <ex. True>
-        # write_which <=> roptions.which: Determines which images to reslice (a list of items which are a value of class 'int').
-                                          [0,1]: Creates the mean resliced image only.
-                                          [2,0]: Reslices all the images (1..n), including the first image selected, which will remain in
-                                                 its original position.
-                                          [1,0]: Reslices images 2..n only. Useful for if you wish to reslice (for example) a PET image to
-                                                 fit a structural MRI, without creating a second identical MRI volume.
-                                          [2,1]: All Images + Mean Image : In addition to reslicing the images, it also creates a mean of
-                                                 the resliced image.
-            <ex. [2, 1]>
-        # write_wrap <=> roptions.wrap: A list of from 3 items which are an integer (int or long). [0, 0, 0]: No wrap, [1, 0, 0]: wrap X, 
-                                       [0, 1, 0]: wrap Y, [0, 0, 1]: Wrap Z, [1, 1, 1]: Wrap X, Y & Z, ... <ex. [0, 0, 0]>
+        # out_prefix <=> roptions.prefix: Realigned output prefix (a string). <ex. r>
     * Outputs parameters:
-        # realigned_file: a list of items which are a list of items which are an existing file name. If jobtype is write or estwrite, these
-                          will be the resliced files. Otherwise, they will be copies of in_files that have had their headers rewritten.
+        # realigned_files: If the write_which parameter is equal to [2, 0], [1, 0] or [2, 1] and jobtype parameter is equal to write or estwrite,
+                           these will be the resliced files (a list of items which are a list of items which are a pathlike object or string
+                           representing an existing file or a pathlike object or string representing an existing file).
             <ex. /home/ArthurBlair/data/raw_data/rFunc.nii>
-        # mean_image: Mean image file from the realignment (an existing file name). <ex. /home/ArthurBlair/data/raw_data/meanFunc.nii>
-        # realignment parameters: Estimated translation and rotation parameters (a list of items which are an existing file name).
+        # modified_in_files: If the jobtype parameter is equal to estimate or estwrite, these will be copies of the in_files with a rewritten
+                             header (a list of items which are a list of items which are a pathlike object or string representing an existing
+                             file or a pathlike object or string representing an existing file).
+           <ex./home/ArthurBlair/data/raw_data/Func.nii>
+        # mean_image: If the write_which parameter is equal to [2, 1] or [0, 1] and jobtype parameter is equal to write or estwrite, this will
+                      be the Mean image file from the realignment (a pathlike object or string representing an existing file).
+           <ex. /home/ArthurBlair/data/raw_data/meanFunc.nii>
+        # realignment_parameters: If the jobtype parameter is equal to estimate or estwrite, this will be the Estimated translation and rotation
+                                  parameters (a list of items which are a pathlike object or string representing an existing file).
             <ex. /home/ArthurBlair/data/raw_data/rp_Func.txt>
-    """
 
+    """
+    
     def __init__(self):
         """Dedicated to the attributes initialisation / instanciation.
         
@@ -885,141 +904,192 @@ class Realign(Process_Mia):
         self.requirement = ['matlab', 'spm']
         
         # Inputs description
-        in_files_desc = 'A list  of items with string elements corresponding to existing path files.'
-        fwhm_desc = 'The gaussian smoothing kernel width (mm, a floating point number >= 0.0) applied to the images before estimating '\
-                    'the realignment parameters.'
-        interp_desc = 'Degree of b-spline (1 <= a long integer <= 7) used for interpolation.'
+        in_files_desc = ('A list  of items with string elements corresponding'
+                         ' to existing path files.')
         jobtype_desc = 'One of "estwrite" or "estimate" or "write".'
-        out_prefix_desc = 'Realigned output prefix (a string).'
-        quality_desc = 'Quality versus speed trade-off (0.0 <= a floating point number <= 1.0).'
-        register_to_mean_desc = 'Indicate whether realignment is done to the mean image (True) or to the first image (False).'
-        separation_desc = 'Sampling separation in mm in the reference image (a floating point number >= 0.0).'
-        wrap_desc = 'Check if interpolation should wrap in [x,y,z] (a list of 3 items which are integer int or long).'
-        write_interp_desc = '0 <= a long integer <= 7. The method by which the images are sampled when being written in a different space.'
+        quality_desc = ('Quality versus speed trade-off (0.0 <= a floating'
+                        'point number <= 1.0).')
+        separation_desc = ('Sampling separation (in mm) in the reference image'
+                           '(a floating point number >= 0.0).')
+        fwhm_desc = ('The gaussian smoothing kernel width (mm, a floating point'
+                     ' number >= 0.0) applied to the images before estimating'
+                    ' the realignment parameters.')
+        register_to_mean_desc = ('Indicate whether realignment is done to the'
+                                 ' mean image (True) or to the first image'
+                                 ' (False).')
+        interp_desc = ('Degree of b-spline (1 <= a long integer <= 7) used for'
+                       ' interpolation.')
+        wrap_desc = ('Check if interpolation should wrap in [x,y,z] (a list of'
+                     ' 3 items which are integer int or long).')
+        weight_img_desc = ('File name of the weighting image, to weight each'
+                           ' voxel of the reference image.')
+        write_which_desc = ('Determines which images to reslice (a list of'
+                            ' items which are a value of class "int").')
+        write_interp_desc = ('0 <= a long integer <= 7. The method by which the'
+                             ' images are sampled when being written in a'
+                             ' different space.')
+        write_wrap_desc = ('A list of from 3 to 3 items which are an integer'
+                           ' (int or long).')
         write_mask_desc = 'Mask output image (a boolean)'
-        write_which_desc = 'Determines which images to reslice (a list of items which are a value of class "int").'
-        write_wrap_desc = 'A list of from 3 to 3 items which are an integer (int or long).'
+        out_prefix_desc = 'Realigned output prefix (a string).'
 
         # Outputs description
-        realigned_files_desc = '(A list of items which are a list of items which are an existing file name). If jobtype is write or estwrite, '\
-                               'these will be the resliced files.'
-        mean_image_desc = 'Mean image file from the realignment (an existing file name).'
-        realignment_parameters_desc = 'Estimated translation and rotation parameters (a list of items which are an existing file name).'
+        realigned_files_desc = ('If write_which is [2, 0], [1, 0] or [2, 1] and'
+                                ' jobtype is write or estwrite, these will be'
+                                ' the resliced files (a list of items which are'
+                                ' a list of items which are an existing file'
+                                ' name).')
+        modified_in_files_desc = ('If the jobtype parameter is estimate or'
+                                  ' estwrite, these will be copies of the'
+                                  ' in_files with a rewritten header (a list of'
+                                  ' items which are a list of items which are'
+                                  ' an existing file name).')
+        mean_image_desc = ('If write_which is [2, 1] or [0, 1] and jobtype is'
+                           ' write or estwrite, this will be the mean image'
+                           ' file from the realignment (an existing file'
+                           ' name).')
+        realignment_parameters_desc = ('If the jobtype parameter is estimate'
+                                       ' or estwrite, this will be the'
+                                       ' estimated translation and rotation'
+                                       ' parameters (a list of items which are'
+                                       ' an existing file name).')
         
-        # Inputs traits 
-        #self.add_trait("in_files", InputMultiPath(traits.Either(
-        #    ImageFileSPM(exists=True), traits.List(ImageFileSPM(exists=True)), output=False, copyfile=True)))
-        self.add_trait("in_files",
+        # Inputs traits
+
+        self.add_trait('in_files',
                        InputMultiPath(traits.Either(ImageFileSPM(),
-                                                    traits.List(ImageFileSPM())),
+                                                    traits.List(ImageFileSPM()),
+                                                    Undefined),
+                                      value=[Undefined],
+                                      mandatory=True,
                                       output=False,
                                       copyfile=True,
                                       desc=in_files_desc))
-
-        """self.add_trait("fwhm",
-                       traits.Range(low=0.0, output=False, optional=True))"""
-        self.add_trait("fwhm",
-                       traits.Float(5.0,
-                                    output=False,
-                                    optional=True,
-                                    desc=fwhm_desc))
-
-        # self.add_trait("interp", traits.Range(low=0, high=7, output=False, optional=True))
-        self.add_trait("interp",
-                       traits.Int(2,
-                                  output=False,
-                                  optional=True,
-                                  desc=interp_desc))
-
+        
         self.add_trait("jobtype",
                        traits.Enum('estwrite',
                                    'estimate',
                                    'write',
-                                   usedefault=True,
                                    output=False,
                                    optional=True,
                                    desc=jobtype_desc))
-        
-        self.add_trait("out_prefix",
-                       traits.String('r',
-                                     output=False,
-                                     optional=True,
-                                     desc=out_prefix_desc))
-        
-        # self.add_trait("quality", traits.Range(low=0.0, high=1.0, output=False, optional=True))
-        # self.add_trait("quality", traits.Float(output=False, optional=True))
+
         self.add_trait("quality",
-                       traits.Float(0.9,
+                       traits.Range(value=0.9,
+                                    low=0.0,
+                                    high=1.0,
                                     output=False,
                                     optional=True,
                                     desc=quality_desc))
 
-        # self.add_trait("register_to_mean", traits.Bool(output=False, optional=True))
+        self.add_trait("separation",
+                       traits.Range(value=4.0,
+                                    low=0.0,
+                                    high=None,
+                                    output=False,
+                                    optional=True,
+                                    desc=separation_desc))
+
+        self.add_trait("fwhm",
+                       traits.Range(value=5.0,
+                                    low=0.0,
+                                    high=None,
+                                    output=False,
+                                    optional=True,
+                                    desc=fwhm_desc))
+
         self.add_trait("register_to_mean",
                        traits.Bool(True,
                                    output=False,
                                    optional=True,
                                    desc=register_to_mean_desc))
 
-        # self.add_trait("separation", traits.Range(low=0.0, output=False, optional=True))
-        # self.add_trait("separation", traits.Float(output=False, optional=True))
-        self.add_trait("separation",
-                       traits.Float(4.0,
+        self.add_trait("interp",
+                       traits.Range(value=2,
+                                    low=0,
+                                    high=7,
                                     output=False,
                                     optional=True,
-                                    desc=separation_desc))
+                                    desc=interp_desc))
 
-        # self.add_trait("weight_img", File(output=False, optional=True))
-
-        # self.add_trait("wrap", traits.List(traits.Int(), output=False, optional=True))
         self.add_trait("wrap",
-                       traits.List([0, 0, 0],
+                       traits.List(value=[0, 0, 0],
+                                   trait=traits.Range(low=0, high=1),
+                                   minlen=3,
+                                   maxlen=3,
                                    output=False,
                                    optional=True,
                                    desc=wrap_desc))
 
-        # self.add_trait("write_interp", traits.Range(low=0, high=7, output=False, optional=True))
-        # self.add_trait("write_interp", traits.Int(output=False, optional=True))
-        self.add_trait("write_interp",
-                       traits.Int(4,
-                                  output=False,
-                                  optional=True,
-                                  desc=write_interp_desc))
+        self.add_trait("weight_img",
+                       traits.File(value=Undefined,
+                                   output=False,
+                                   optional=True,
+                                   desc=weight_img_desc))
 
-        # self.add_trait("write_mask", traits.Bool(output=False, optional=True))
+        self.add_trait('write_which',
+                       traits.Enum([2, 1],
+                                   [1, 0],
+                                   [2, 0],
+                                   [0, 1],
+                                   output=False,
+                                   optional=True,
+                                   desc=write_which_desc))
+ 
+        self.add_trait("write_interp",
+                       traits.Range(value=4,
+                                    low=0,
+                                    high=7,
+                                    output=False,
+                                    optional=True,
+                                    desc=write_interp_desc))
+
+        self.add_trait("write_wrap",
+                       traits.List(value=[0, 0, 0],
+                                   trait=traits.Range(low=0, high=1),
+                                   minlen=3,
+                                   maxlen=3,
+                                   output=False,
+                                   optional=True,
+                                   desc=write_wrap_desc))
+
         self.add_trait("write_mask",
-                       traits.Bool(True,
+                       traits.Bool(default_value=True,
                                    output=False,
                                    optional=True,
                                    desc=write_mask_desc))
 
-        self.add_trait("write_which",
-                       traits.ListInt([2, 1],
-                                      usedefault=True,
-                                      output=False,
-                                      optional=True,
-                                      desc=write_which_desc))
-        #self.add_trait("write_wrap", traits.Range(traits.Int(), output=False, optional=True))
-        self.add_trait("write_wrap",
-                       traits.ListInt([0, 0, 0],
-                                      output=False,
-                                      optional=True,
-                                      desc=write_wrap_desc))
+        self.add_trait("out_prefix",
+                       traits.String(value='r',
+                                     output=False,
+                                     optional=True,
+                                     desc=out_prefix_desc))
 
         # Output traits
         self.add_trait("realigned_files",
                        OutputMultiPath(traits.Either(traits.List(File()),
                                                      File()),
                                        output=True,
+                                       optional=True,
                                        desc=realigned_files_desc))
-        
+
+        self.add_trait("modified_in_files",
+                       OutputMultiPath(traits.Either(traits.List(File()),
+                                                     File()),
+                                       output=True,
+                                       optional=True,
+                                       desc=modified_in_files_desc))
+
         self.add_trait("mean_image",
                        File(output=True,
+                            optional=True,
                             desc=mean_image_desc))
         
         self.add_trait("realignment_parameters",
-                       File(output=True,
-                            desc=realignment_parameters_desc))  # rp_
+                       OutputMultiPath(File(),
+                                       output=True,
+                                       optional=True,
+                                       desc=realignment_parameters_desc))  # rp_
 
         self.process = spm.Realign()
         self.change_dir = True
@@ -1035,60 +1105,93 @@ class Realign(Process_Mia):
         # Using the inheritance to ProcessMIA class, list_outputs method
         super(Realign, self).list_outputs()
         
-        # Outputs definition and tags inheritance (optional)
+        # Outputs definition and tags inheritance (optional)         
         if self.in_files:
             self.process.inputs.in_files = self.in_files
 
             if self.out_prefix:
                 self.process.inputs.out_prefix = self.out_prefix
-                
+
             self.outputs = self.process._list_outputs()
 
         if self.outputs:
 
             for key, values in self.outputs.items():
-            
+
                 if key == 'realigned_files':
-                
-                    for fullname in values:
-                        path, filename = os.path.split(fullname)
 
-                        if self.out_prefix:
-                            filename_without_prefix = filename[
-                                                          len(self.out_prefix):]
-                        
-                        else:
-                            filename_without_prefix = filename[len('r'):]
+                    if ((self.jobtype == 'estimate') or
+                    (self.write_which == [0, 1] and
+                     (self.jobtype == 'write' or  self.jobtype == 'estwrite'))):
+                        self.outputs['realigned_files'] = Undefined
 
-                        if (os.path.join(path,
-                                         filename_without_prefix)
-                              in self.in_files):
-                            self.inheritance_dict[fullname] = os.path.join(path,
-                                                        filename_without_prefix)
+                    else:
+
+                        for fullname in values:
+                            path, filename = os.path.split(fullname)
+
+                            if self.out_prefix:
+                                filename_without_prefix = filename[len(
+                                                              self.out_prefix):]
+
+                            else:
+                                filename_without_prefix = filename[len('r'):]
+
+                                if (os.path.join(path,
+                                                 filename_without_prefix)
+                                               in self.in_files):
+                                    self.inheritance_dict[fullname] = (
+                                        os.path.join(path,
+                                                     filename_without_prefix)
+                                                                       )
+
+                if key == 'modified_in_files':
+
+                    if self.jobtype == 'write':
+                        self.outputs['modified_in_files'] = Undefined
 
                 if key == 'mean_image':
-                
-                    for fullname in values:
-                        path, filename = os.path.split(fullname)
-                        filename_without_prefix = filename[len('mean'):]
 
-                        if (os.path.join(path,
-                                         filename_without_prefix)
-                              in self.in_files):
-                            self.inheritance_dict[fullname] = os.path.join(path,
-                                                        filename_without_prefix)
+                    if (
+                      (self.jobtype == 'estimate') or
+                    ((self.write_which == [2, 0] or self.write_which == [1, 0])
+                                             and
+                     (self.jobtype == 'write' or  self.jobtype == 'estwrite'))
+                       ):
+                        self.outputs['mean_image'] = Undefined
+
+                    else:
+
+                        for fullname in values:
+                            path, filename = os.path.split(fullname)
+                            filename_without_prefix = filename[len('mean'):]
+
+                            if (os.path.join(path,
+                                             filename_without_prefix)
+                                           in self.in_files):
+                                self.inheritance_dict[fullname] = (
+                                    os.path.join(path,
+                                                 filename_without_prefix)
+                                                                  )
 
                 if key == 'realignment_parameters':
-                
-                    for fullname in values:
-                        path, filename = os.path.split(fullname)
-                        filename_without_prefix = filename[len('rp_'):]
 
-                        if (os.path.join(path,
-                                         filename_without_prefix)
-                              in self.in_files):
-                            self.inheritance_dict[fullname] = os.path.join(path,
-                                                        filename_without_prefix)
+                    if self.jobtype == 'write':
+                        self.outputs['realignment_parameters'] = Undefined
+
+                    else:
+
+                        for fullname in values:
+                            path, filename = os.path.split(fullname)
+                            filename_without_prefix = filename[len('rp_'):]
+
+                            if (os.path.join(path,
+                                             filename_without_prefix)
+                                           in self.in_files):
+                                self.inheritance_dict[fullname] = (
+                                    os.path.join(path,
+                                                 filename_without_prefix)
+                                                                  )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -1097,20 +1200,19 @@ class Realign(Process_Mia):
         """Dedicated to the process launch step of the brick."""
         super(Realign, self).run_process_mia()
         self.process.inputs.in_files = self.in_files
-        self.process.inputs.fwhm = self.fwhm
-        self.process.inputs.interp = self.interp
         self.process.inputs.jobtype = self.jobtype
-        self.process.inputs.out_prefix = self.out_prefix
         self.process.inputs.quality = self.quality
-        self.process.inputs.register_to_mean = self.register_to_mean
         self.process.inputs.separation = self.separation
-        #seg.inputs.weight_img = self.weight_img
+        self.process.inputs.fwhm = self.fwhm
+        self.process.inputs.register_to_mean = self.register_to_mean
+        self.process.inputs.interp = self.interp
         self.process.inputs.wrap = self.wrap
-        self.process.inputs.write_interp = self.write_interp
-        self.process.inputs.write_mask = self.write_mask
+        self.process.inputs.weight_img = self.weight_img
         self.process.inputs.write_which = self.write_which
+        self.process.inputs.write_interp = self.write_interp
         self.process.inputs.write_wrap = self.write_wrap
-
+        self.process.inputs.write_mask = self.write_mask
+        self.process.inputs.out_prefix = self.out_prefix
         self.process.run()
 
         
