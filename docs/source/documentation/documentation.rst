@@ -14,4 +14,5 @@ Mia_processes's documentation
   - **spm**
 
     - `Smooth <preprocess/spm/Smooth.html>`_
+    - `Realign <preprocess/spm/Realign.html>`_
 
