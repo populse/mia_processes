@@ -48,13 +48,16 @@
 <h1>Smooth brick<a class="headerlink" href="#smooth-brick" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="d-gaussian-smoothing-of-image-volumes">
 <h2>3D Gaussian smoothing of image volumes<a class="headerlink" href="#d-gaussian-smoothing-of-image-volumes" title="Permalink to this headline">¶</a></h2>
-<p>(From mia_processes/preprocess/spm/spatial_preprocessing.py module)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">mia_processes.preprocess.spm</span> <span class="k">import</span> <span class="n">Smooth</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Smooth</span><span class="o">.</span><span class="n">help</span><span class="p">()</span>
+</pre></div>
+</div>
 <p><strong>Inputs parameters:</strong> <a class="footnote-reference brackets" href="#label" id="id1">1</a></p>
 <ul>
 <li><dl>
 <dt><em>in_files &lt;=&gt; data</em></dt><dd><p>List of files to smooth. A list of items which are an existing, uncompressed
-file (valid extensions: [.img, .nii, .hdr]):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/Func.nii&#39;</span><span class="p">]</span><span class="o">&gt;</span>
+file (valid extensions: [.img, .nii, .hdr]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/Func.nii&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 </dd>
@@ -64,8 +67,8 @@ file (valid extensions: [.img, .nii, .hdr]):</p>
 <dt><em>fwhm &lt;=&gt; fwhm</em></dt><dd><p>Specify the full-width at half maximum (FWHM) of the Gaussian smoothing
 kernel in mm. Three values can be entered, indicating the FWHM in the x,
 y and z directions, or one value only, indicating the same FWHM in all
-three directions. A list of 3 items which are a float:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span><span class="o">&gt;</span>
+three directions. A list of 3 items which are a float.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
 </pre></div>
 </div>
 </dd>
@@ -81,10 +84,10 @@ three directions. A list of 3 items which are a float:</p>
 <div class="line">6: INT32 (signed int)</div>
 <div class="line">8: FLOAT32 (single prec. float)</div>
 <div class="line">10: FLOAT64 (double prec. float)</div>
+<div class="line">&lt;undefined&gt; = 0 ?</div>
 </div>
 </div>
-<p>&lt;undefined&gt; = 0 ?:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">ex</span><span class="o">.</span> <span class="mi">0</span><span class="p">,</span> <span class="n">MIA_processes</span> <span class="n">default</span> <span class="n">value</span><span class="o">&gt;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">0</span><span class="p">,</span> <span class="n">MIA_processes</span> <span class="n">default</span> <span class="n">value</span>
 </pre></div>
 </div>
 </dd>
@@ -92,8 +95,8 @@ three directions. A list of 3 items which are a float:</p>
 </li>
 <li><dl>
 <dt><em>implicit_masking &lt;=&gt; im</em></dt><dd><p>A mask implied by a particular voxel value (a boolean). If set to True,
-the implicit masking of the input image is preserved in the smoothed image:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span><span class="o">&gt;</span>
+the implicit masking of the input image is preserved in the smoothed image.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
 </pre></div>
 </div>
 </dd>
@@ -101,8 +104,8 @@ the implicit masking of the input image is preserved in the smoothed image:</p>
 </li>
 <li><dl>
 <dt><em>out_prefix &lt;=&gt; prefix</em></dt><dd><p>Specify the string to be prepended to the filenames of the smoothed image
-file(s) (a string):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">ex</span><span class="o">.</span> <span class="n">s</span><span class="p">,</span> <span class="n">capsul</span><span class="o">/</span><span class="n">nipype</span> <span class="n">default</span> <span class="n">value</span><span class="o">&gt;</span>
+file(s) (a string).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="n">s</span><span class="p">,</span> <span class="n">capsul</span><span class="o">/</span><span class="n">nipype</span> <span class="n">default</span> <span class="n">value</span>
 </pre></div>
 </div>
 </dd>
@@ -112,8 +115,8 @@ file(s) (a string):</p>
 <p><strong>Outputs parameters:</strong> <a class="footnote-reference brackets" href="#label" id="id2">1</a></p>
 <ul>
 <li><dl>
-<dt><em>smoothed_files</em></dt><dd><p>Smoothed files (a list of items which are an existing file name):</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span> <span class="n">raw_data</span><span class="o">/</span><span class="n">sFunc</span><span class="o">.</span><span class="n">nii</span><span class="o">&gt;</span>
+<dt><em>smoothed_files</em></dt><dd><p>Smoothed files (a list of items which are an existing file name).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span> <span class="n">raw_data</span><span class="o">/</span><span class="n">sFunc</span><span class="o">.</span><span class="n">nii</span>
 </pre></div>
 </div>
 </dd>
@@ -123,8 +126,8 @@ file(s) (a string):</p>
 <hr class="docutils" />
 <dl class="footnote brackets">
 <dt class="label" id="label"><span class="brackets">1</span><span class="fn-backref">(<a href="#id1">1</a>,<a href="#id2">2</a>)</span></dt>
-<dd><p>Syntax: mia_processes/nipype Smooth &lt;=&gt; SPM12 Smooth.
-Usefull links:
+<dd><p>Syntax: mia_processes/nipype Smooth &lt;=&gt; SPM12 Smooth.</p>
+<p>Usefull links:
 <a class="reference external" href="https://www.fil.ion.ucl.ac.uk/spm/doc/manual.pdf#page=57">SPM12 Smooth</a>,
 <a class="reference external" href="https://nipype.readthedocs.io/en/latest/interfaces/generated/interfaces.spm/preprocess.html#smooth">nipype</a></p>
 </dd>
