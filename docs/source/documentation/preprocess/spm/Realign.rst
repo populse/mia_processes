@@ -211,7 +211,7 @@ Realigns a time-series of images acquired from the same subject using a least sq
 
     ::
 
-      ex./home/ArthurBlair/data/raw_data/Func.nii
+      ex. /home/ArthurBlair/data/raw_data/Func.nii
 
 - *mean_image*
     If the write_which parameter is equal to [2, 1] or [0, 1] and jobtype parameter is equal to write or estwrite, this will be the Mean image
