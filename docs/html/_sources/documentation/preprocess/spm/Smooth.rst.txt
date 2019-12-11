@@ -19,18 +19,16 @@ Smooth brick
 **Inputs parameters:** [#label]_
 
 - *in_files <=> data*
-    List of files to smooth. A list of items which are an existing, uncompressed
-    file (valid extensions: [.img, .nii, .hdr]).
+    List of files to smooth. A list of items which are an existing, uncompressed file (valid extensions: [.img, .nii, .hdr]).
 
     ::
 
       ex. ['/home/ArthurBlair/data/raw_data/Func.nii']
 
 - *fwhm <=> fwhm*
-    Specify the full-width at half maximum (FWHM) of the Gaussian smoothing
-    kernel in mm. Three values can be entered, indicating the FWHM in the x,
-    y and z directions, or one value only, indicating the same FWHM in all
-    three directions. A list of 3 items which are a float.
+    Specify the full-width at half maximum (FWHM) of the Gaussian smoothing kernel in mm. Three values can be entered, indicating
+    the FWHM in the x, y and z directions, or one value only, indicating the same FWHM in all three directions. A list of 3 items which are a
+    float.
 
     ::
 
@@ -51,16 +49,15 @@ Smooth brick
       ex. 0, MIA_processes default value
 
 - *implicit_masking <=> im*
-    A mask implied by a particular voxel value (a boolean). If set to True,
-    the implicit masking of the input image is preserved in the smoothed image.
+    A mask implied by a particular voxel value (a boolean). If set to True, the implicit masking of the input image is preserved in the
+    smoothed image.
 
     ::
 
       ex. False
 
 - *out_prefix <=> prefix*
-    Specify the string to be prepended to the filenames of the smoothed image
-    file(s) (a string).
+    Specify the string to be prepended to the filenames of the smoothed image file(s) (a string).
 
     ::
 
