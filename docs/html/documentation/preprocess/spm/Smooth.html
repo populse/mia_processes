@@ -55,8 +55,7 @@
 <p><strong>Inputs parameters:</strong> <a class="footnote-reference brackets" href="#label" id="id1">1</a></p>
 <ul>
 <li><dl>
-<dt><em>in_files &lt;=&gt; data</em></dt><dd><p>List of files to smooth. A list of items which are an existing, uncompressed
-file (valid extensions: [.img, .nii, .hdr]).</p>
+<dt><em>in_files &lt;=&gt; data</em></dt><dd><p>List of files to smooth. A list of items which are an existing, uncompressed file (valid extensions: [.img, .nii, .hdr]).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/Func.nii&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -64,10 +63,9 @@ file (valid extensions: [.img, .nii, .hdr]).</p>
 </dl>
 </li>
 <li><dl>
-<dt><em>fwhm &lt;=&gt; fwhm</em></dt><dd><p>Specify the full-width at half maximum (FWHM) of the Gaussian smoothing
-kernel in mm. Three values can be entered, indicating the FWHM in the x,
-y and z directions, or one value only, indicating the same FWHM in all
-three directions. A list of 3 items which are a float.</p>
+<dt><em>fwhm &lt;=&gt; fwhm</em></dt><dd><p>Specify the full-width at half maximum (FWHM) of the Gaussian smoothing kernel in mm. Three values can be entered, indicating
+the FWHM in the x, y and z directions, or one value only, indicating the same FWHM in all three directions. A list of 3 items which are a
+float.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -94,8 +92,8 @@ three directions. A list of 3 items which are a float.</p>
 </dl>
 </li>
 <li><dl>
-<dt><em>implicit_masking &lt;=&gt; im</em></dt><dd><p>A mask implied by a particular voxel value (a boolean). If set to True,
-the implicit masking of the input image is preserved in the smoothed image.</p>
+<dt><em>implicit_masking &lt;=&gt; im</em></dt><dd><p>A mask implied by a particular voxel value (a boolean). If set to True, the implicit masking of the input image is preserved in the
+smoothed image.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
 </pre></div>
 </div>
@@ -103,8 +101,7 @@ the implicit masking of the input image is preserved in the smoothed image.</p>
 </dl>
 </li>
 <li><dl>
-<dt><em>out_prefix &lt;=&gt; prefix</em></dt><dd><p>Specify the string to be prepended to the filenames of the smoothed image
-file(s) (a string).</p>
+<dt><em>out_prefix &lt;=&gt; prefix</em></dt><dd><p>Specify the string to be prepended to the filenames of the smoothed image file(s) (a string).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="n">s</span><span class="p">,</span> <span class="n">capsul</span><span class="o">/</span><span class="n">nipype</span> <span class="n">default</span> <span class="n">value</span>
 </pre></div>
 </div>
