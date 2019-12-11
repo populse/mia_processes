@@ -839,85 +839,11 @@
 
 <div class="viewcode-block" id="Realign"><a class="viewcode-back" href="../../../../mia_processes.preprocess.spm.html#mia_processes.preprocess.spm.spatial_preprocessing.Realign">[docs]</a><span class="k">class</span> <span class="nc">Realign</span><span class="p">(</span><span class="n">Process_Mia</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">- Realign (mia_processes.preprocess.spm.spatial_preprocessing.Realign) &lt;=&gt; Realign (SPM12 names).</span>
-<span class="sd">*** Realign: Realigns a time-series of images acquired from the same subject using a least squares approach and ***</span>
-<span class="sd">*** a 6 parameters (rigid body) spatial transformation                                                          *** </span>
-<span class="sd">    * Inputs parameters:</span>
-<span class="sd">        # in_files &lt;=&gt; data: A list of items which are an existing, uncompressed file (valid extensions: [.img, .nii, .hdr]).</span>
-<span class="sd">            &lt;ex. [&#39;/home/ArthurBlair/data/raw_data/Func.nii&#39;]&gt;</span>
-<span class="sd">        # jobtype: One of &#39;estwrite&#39; or &#39;estimate&#39; or &#39;write&#39;.</span>
-<span class="sd">                   estimate: generates realignment_parameters and modified_in_files</span>
-<span class="sd">                   write: with write_which == [2, 0] or [1, 0] generates realigned_files</span>
-<span class="sd">                          with write_which == [2, 1] generates mean_image and realigned_files</span>
-<span class="sd">                          with write_which == [0, 1] generates mean_image</span>
-<span class="sd">                   estwrite: with write_which == [2, 0] or [1, 0] generates realignment_parameters, modified_in_files and realigned_files</span>
-<span class="sd">                             with write_which == [2, 1] generates realignment_parameters, modified_in_file, mean_image and realigned_files</span>
-<span class="sd">                             with write_which == [0, 1] generates realignment_parameters, modified_in_file and mean_image</span>
-<span class="sd">            &lt;ex. estwrite&gt;</span>
-<span class="sd">        # quality &lt;=&gt; eoptions.quality: Quality versus speed trade-off (0.0 &lt;= a floating point number &lt;= 1.0). Highest quality (1)</span>
-<span class="sd">                                        gives most precise results, whereas lower qualities gives faster realignment. &lt;ex. 0.9&gt;</span>
-<span class="sd">        # separation &lt;=&gt; eoptions.sep: Sampling separation in mm in the reference image (a floating point number &gt;= 0.0). Smaller</span>
-<span class="sd">                                       sampling distances gives more accurate results, but will be slower. &lt;ex. 4.0&gt;</span>
-<span class="sd">        # fwhm &lt;=&gt; eoptions.fwhm: The gaussian smoothing kernel width (mm, a floating point number &gt;= 0.0) applied to the images</span>
-<span class="sd">                                  before estimating the realignment parameters. &lt;ex. 5.0&gt;</span>
-<span class="sd">        # register_to_mean &lt;=&gt; eoptions.rtm: Indicate whether realignment is done to the mean image (True) or to the first</span>
-<span class="sd">                                             image (False). &lt;ex. True&gt;</span>
-<span class="sd">        # interp &lt;=&gt; eoptions.interp: Degree of b-spline (1 &lt;= a long integer &lt;= 7) used for interpolation. Higher degree</span>
-<span class="sd">                                      interpolation methods provide the better interpolation, but they are slower because they use</span>
-<span class="sd">                                      more neighbouring voxels. &lt;ex. 2&gt;</span>
-<span class="sd">        # wrap &lt;=&gt; eoptions.wrap: Check if interpolation should wrap in [x,y,z] (a list of 3 items which are integer int or long).</span>
-<span class="sd">                                  For example, in MRI scans, the images wrap around in the phase encode direction, so the subject&#39;s</span>
-<span class="sd">                                  nose may poke into the back of the subject&#39;s head. These are typically:</span>
-<span class="sd">                                  - No wrapping [0, 0, 0]: for PET or images that have already been spatially transformed. (Also the</span>
-<span class="sd">                                    recommended option if you are not really sure).</span>
-<span class="sd">                                  - Wrap in Y [0, 1, 0], for (un-resliced) MRI where phase encoding is in the Y direction (voxel space).</span>
-<span class="sd">            &lt;ex. [0, 0, 0]&gt;</span>
-<span class="sd">        # weight_img &lt;=&gt; eoptions.weight: Filename of optional weighting image, to weight each voxel of the reference image differently</span>
-<span class="sd">                                          when estimating the realignment parameters. This would be used, for example, when there is a</span>
-<span class="sd">                                          lot of extra-brain motion or when there are serious artifacts in a particular region of the</span>
-<span class="sd">                                          images.</span>
-<span class="sd">            &lt;ex. &#39;&#39;&gt;</span>
-<span class="sd">        # write_which &lt;=&gt; roptions.which: Determines which images to reslice (a list of items which are a value of class &#39;int&#39;).</span>
-<span class="sd">                                          [2,0]: Reslices all the images (1..n), including the first image selected, which will remain in</span>
-<span class="sd">                                                 its original position.</span>
-<span class="sd">                                          [1,0]: Reslices images (2..n) only. Useful for if you wish to reslice (for example) a PET image to</span>
-<span class="sd">                                                 fit a structural MRI, without creating a second identical MRI volume.</span>
-<span class="sd">                                          [2,1]: All Images + Mean Image.  In addition to reslicing the images, it also creates a mean of</span>
-<span class="sd">                                                 the resliced image.</span>
-<span class="sd">                                          [0,1]: Mean Image Only. Creates the mean resliced image only.                             </span>
-<span class="sd">            &lt;ex. [2, 1]&gt;</span>
-<span class="sd">        # write_interp &lt;=&gt; roptions.interp: 0 &lt;= a long integer &lt;= 7.</span>
-<span class="sd">                                            The method by which the images are sampled when being written in a different space. Nearest</span>
-<span class="sd">                                            neighbour is fastest, but not recommended for image realignment. Trilinear Interpolation is</span>
-<span class="sd">                                            probably OK for PET, but not so suitable for fMRI because higher degree interpolation</span>
-<span class="sd">                                            generally gives better results. Although higher degree methods provide better interpolation,</span>
-<span class="sd">                                            but they are slower because they use more neighbouring voxels. (0 &lt;= a long integer &lt;= 7).</span>
-<span class="sd">                                            Voxel sizes must all be identical and isotropic. 0: Nearest neighbour, 1: Trilinear,</span>
-<span class="sd">                                            2: 2nd Degree B-Spline, 3: 3rd Degree B-Spline ... 7: 7th Degree B-Spline. &lt;ex. 4&gt;</span>
-<span class="sd">        # write_wrap &lt;=&gt; roptions.wrap: A list of from 3 items which are an integer (int or long). See the wrap parameter that is used if</span>
-<span class="sd">                                        the jobtype parameter is equal to estimate. [0, 0, 0]: No wrap; [1, 0, 0]: wrap X; [0, 1, 0]: wrap Y;</span>
-<span class="sd">                                        [0, 0, 1]: Wrap Z; [1, 1, 1]: Wrap X, Y &amp; Z; ... &lt;ex. [0, 0, 0]&gt;</span>
-<span class="sd">        # write_mask &lt;=&gt; roptions.mask: Mask output image (a boolean). Because of subject motion, different images are likely to have</span>
-<span class="sd">                                        different patterns of zeros from where it was not possible to sample data. With masking enabled,</span>
-<span class="sd">                                        the program searches through the whole time series looking for voxels which need to be sampled</span>
-<span class="sd">                                        from outside the original images. Where this occurs, that voxel is set to zero for the whole set</span>
-<span class="sd">                                        of images. &lt;ex. True&gt;</span>
-<span class="sd">        # out_prefix &lt;=&gt; roptions.prefix: Realigned output prefix (a string). &lt;ex. r&gt;</span>
-<span class="sd">    * Outputs parameters:</span>
-<span class="sd">        # realigned_files: If the write_which parameter is equal to [2, 0], [1, 0] or [2, 1] and jobtype parameter is equal to write or estwrite,</span>
-<span class="sd">                           these will be the resliced files (a list of items which are a list of items which are a pathlike object or string</span>
-<span class="sd">                           representing an existing file or a pathlike object or string representing an existing file).</span>
-<span class="sd">            &lt;ex. /home/ArthurBlair/data/raw_data/rFunc.nii&gt;</span>
-<span class="sd">        # modified_in_files: If the jobtype parameter is equal to estimate or estwrite, these will be copies of the in_files with a rewritten</span>
-<span class="sd">                             header (a list of items which are a list of items which are a pathlike object or string representing an existing</span>
-<span class="sd">                             file or a pathlike object or string representing an existing file).</span>
-<span class="sd">           &lt;ex./home/ArthurBlair/data/raw_data/Func.nii&gt;</span>
-<span class="sd">        # mean_image: If the write_which parameter is equal to [2, 1] or [0, 1] and jobtype parameter is equal to write or estwrite, this will</span>
-<span class="sd">                      be the Mean image file from the realignment (a pathlike object or string representing an existing file).</span>
-<span class="sd">           &lt;ex. /home/ArthurBlair/data/raw_data/meanFunc.nii&gt;</span>
-<span class="sd">        # realignment_parameters: If the jobtype parameter is equal to estimate or estwrite, this will be the Estimated translation and rotation</span>
-<span class="sd">                                  parameters (a list of items which are a pathlike object or string representing an existing file).</span>
-<span class="sd">            &lt;ex. /home/ArthurBlair/data/raw_data/rp_Func.txt&gt;</span>
+<span class="sd">    **Realigns a time-series of images acquired from the same subject using a least squares approach and</span>
+<span class="sd">    a 6 parameters (rigid body) spatial transformation**</span>
+
+<span class="sd">    Please, see the complete documention for the `Realign brick in the populse.mia_processes web site</span>
+<span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/preprocess/spm/Realign.html&gt;`_</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     
@@ -1248,47 +1174,14 @@
 
         
 <div class="viewcode-block" id="Smooth"><a class="viewcode-back" href="../../../../mia_processes.preprocess.spm.html#mia_processes.preprocess.spm.spatial_preprocessing.Smooth">[docs]</a><span class="k">class</span> <span class="nc">Smooth</span><span class="p">(</span><span class="n">Process_Mia</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Smooth (from mia_processes.preprocess.spm.spatial_preprocessing) &lt;=&gt;</span>
-<span class="sd">                                                           Smooth (SPM12 names).</span>
-<span class="sd">*** Smooth: 3D Gaussian smoothing of image volumes ***</span>
-<span class="sd">    * Inputs parameters:</span>
-<span class="sd">        # in_files &lt;=&gt; data: List of files to smooth. A list of items which are</span>
-<span class="sd">                             an existing, uncompressed file (valid extensions:</span>
-<span class="sd">                             [.img, .nii, .hdr]).</span>
-<span class="sd">                             &lt;ex. [&#39;/home/ArthurBlair/data/raw_data/Func.nii&#39;]&gt;</span>
-<span class="sd">        # fwhm &lt;=&gt; fwhm: Specify  the  full-width at half maximum (FWHM) of the</span>
-<span class="sd">                         Gaussian smoothing kernel in mm. Three values should be</span>
-<span class="sd">                         entered, denoting the FWHM in the x, y and z</span>
-<span class="sd">                         directions. A list of 3 items which are a float of fwhm</span>
-<span class="sd">                         for each dimension.</span>
-<span class="sd">                         &lt;ex. [6, 6, 6]&gt;</span>
-<span class="sd">        # data_type &lt;=&gt; dtype: Data type of the output images (an integer </span>
-<span class="sd">                               [int or long]).</span>
-<span class="sd">                               0: same as the original images</span>
-<span class="sd">                               2: UINT8 (unsigned char)</span>
-<span class="sd">                               4: INT16 (signed short)</span>
-<span class="sd">                               6: INT32 (signed int)</span>
-<span class="sd">                               8: FLOAT32 (single prec. float)</span>
-<span class="sd">                              10: FLOAT64 (double prec. float)</span>
-<span class="sd">                              &lt;undefined&gt; = 0 ?</span>
-<span class="sd">                              &lt;ex. 0, MIA_processes default value&gt;</span>
-<span class="sd">        # implicit_masking &lt;=&gt; im: A mask implied by a particular voxel value</span>
-<span class="sd">                                   (a boolean). If set to True, the implicit</span>
-<span class="sd">                                   masking of the input image is preserved in</span>
-<span class="sd">                                   the smoothed image.</span>
-<span class="sd">                                   &lt;ex. False&gt;</span>
-<span class="sd">        # out_prefix &lt;=&gt; prefix: Specify the string to be prepended to the</span>
-<span class="sd">                                 filenames of the smoothed image file(s)</span>
-<span class="sd">                                 (a string).</span>
-<span class="sd">                                 &lt;ex. s, capsul/nipype default value&gt;</span>
-<span class="sd">    * Outputs parameters:</span>
-<span class="sd">        # smoothed_files: Smoothed files (a list of items which are an existing</span>
-<span class="sd">                          file name).</span>
-<span class="sd">                          &lt;ex. /home/ArthurBlair/data/raw_data/sFunc.nii&gt;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **3D Gaussian smoothing of image volumes**</span>
+
+<span class="sd">    Please, see the complete documention for the `Smooth brick in the populse.mia_processes web site</span>
+<span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/preprocess/spm/Smooth.html&gt;`_</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    
 <div class="viewcode-block" id="Smooth.__init__"><a class="viewcode-back" href="../../../../mia_processes.preprocess.spm.html#mia_processes.preprocess.spm.spatial_preprocessing.Smooth.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instanciation.</span>
 <span class="sd">        </span>
