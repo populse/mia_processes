@@ -1031,7 +1031,7 @@ class Realign(Process_Mia):
         super(Realign, self).list_outputs()
         
         # Outputs definition and tags inheritance (optional)         
-        if self.in_files:
+        if self.in_files and self.in_files != [Undefined]:
             self.process.inputs.in_files = self.in_files
 
             if self.out_prefix:
@@ -1046,7 +1046,7 @@ class Realign(Process_Mia):
                 if key == 'realigned_files':
 
                     if ((self.jobtype == 'estimate') or
-                    (self.write_which == [0, 1] and
+                     (self.write_which == [0, 1] and
                      (self.jobtype == 'write' or  self.jobtype == 'estwrite'))):
                         self.outputs['realigned_files'] = Undefined
 
@@ -1062,13 +1062,11 @@ class Realign(Process_Mia):
                             else:
                                 filename_without_prefix = filename[len('r'):]
 
-                                if (os.path.join(path,
-                                                 filename_without_prefix)
-                                               in self.in_files):
-                                    self.inheritance_dict[fullname] = (
-                                        os.path.join(path,
-                                                     filename_without_prefix)
-                                                                       )
+                            if (os.path.join(path,
+                                             filename_without_prefix)
+                                                 in self.in_files):
+                                self.inheritance_dict[fullname] = (
+                                    os.path.join(path, filename_without_prefix))
 
                 if key == 'modified_in_files':
 
@@ -1087,6 +1085,9 @@ class Realign(Process_Mia):
 
                     else:
 
+                        if isinstance(values, str):
+                            values = [values]
+
                         for fullname in values:
                             path, filename = os.path.split(fullname)
                             filename_without_prefix = filename[len('mean'):]
@@ -1098,7 +1099,6 @@ class Realign(Process_Mia):
                                     os.path.join(path,
                                                  filename_without_prefix)
                                                                   )
-
                 if key == 'realignment_parameters':
 
                     if self.jobtype == 'write':
@@ -1106,9 +1106,16 @@ class Realign(Process_Mia):
 
                     else:
 
+                        if isinstance(values, str):
+                            values = [values]
+
                         for fullname in values:
                             path, filename = os.path.split(fullname)
                             filename_without_prefix = filename[len('rp_'):]
+
+                            if filename_without_prefix [-4:] == '.txt':
+                                filename_without_prefix = (
+                                          filename_without_prefix[:-4] + '.nii')
 
                             if (os.path.join(path,
                                              filename_without_prefix)
