@@ -46,22 +46,22 @@ class Coregister(Process_Mia):
 - Coregister (mia_processes.preprocess.spm.spatial_preprocessing.Coregister) <=> Coregister (SPM12 names).
 *** Realignment through different modalities: Align together scans of different modalities *** 
     * Input parameters:
-        * target <=> estimate.ref: The reference file to register to.
+        * target <=> ref: The reference file (remains stationary) while the source image is moved to match it.
                                    An existing, uncompressed file (valid extensions: [.img, .nii, .hdr]).
             <ex. /home/ArthurBlair/data/downloaded_data/meanFunc.nii>
-        * source <=> estimate.source: The image that is jiggled about to best match the target image.
+        * source <=> source: The image that is jiggled about to best match the target image.
                                       A list of items which are an existing, uncompressed file
                                       (valid extensions: [.img, .nii, .hdr]).
             <ex. ['/home/ArthurBlair/data/raw_data/Anat.nii']>
-        * apply_to_files <=> estimate.other: These are any images that need to remain in alignment with the
+        * apply_to_files <=> other: These are any images that need to remain in alignment with the
                                              source image (a list of items which are an existing file name).
             <ex. ['/home/ArthurBlair/data/raw_data/Func.nii']>
         * jobtype: One of 'estwrite' or 'estimate' or 'write'. If 'estimate' is selected, the registration
                    parameters are stored in the headers of the 'source' and the 'apply_to_files' images. If
                    'write' is selected, the resliced images are named the same as the originals except that
                    they are prefixed by out_prefix.
-            <ex. write>
-        * cost_function <=> estimate.eoptions.cost_fun: One of 'mi' or 'nmi' or 'ecc' or 'ncc'. Registration
+            <ex. estimate>
+        * cost_function <=> eoptions.cost_fun: One of 'mi' or 'nmi' or 'ecc' or 'ncc'. Registration
                                                         involves finding parameters that either maximise or
                                                         minimise some objective function. For inter-modal
                                                         registration, use 'Mutual Information',
@@ -74,21 +74,50 @@ class Coregister(Process_Mia):
 		                                        'ecc': Entropy Correlation Coefficient.
 		                                        'ncc': Normalised Cross Correlation.
             <ex. nmi>
-        * separation <=> estimate.eoptions.sep: A list of items which are a float. The average distance between
+        * separation <=> eoptions.sep: A list of items which are a float. The average distance between
                                                 sampled points (in mm). Can be a vector to allow a coarse
                                                 registration followed by increasingly fine ones.
             <ex. [4, 2]>
-        * tolerance <=> estimate.eoptions.tol: A list of 12 items which are a float. The acceptable tolerance
+        * tolerance <=> eoptions.tol: A list of 12 items which are a float. The acceptable tolerance
                                                for each of 12 params. Iterations stop when differences
                                                between successive estimates are less than the required tolerance.
             <ex. [0.02, 0.02, 0.02, 0.001, 0.001, 0.001, 0.01, 0.01, 0.01, 0.001, 0.001, 0.001]>
-        * fwhm <=> estimate.eoptions.fwhm: A list of 2 items which are a float. Kernel of gaussian smooth to
+        * fwhm <=> eoptions.fwhm: A list of 2 items which are a float. Kernel of gaussian smooth to
                                            apply to the 256*256 joint histogram.
             <ex. [7, 7]>
+        * write_interp <=> roptions.interp: The method by which the images are sampled when being written in a different space.
+                                                  Nearest neighbour is fastest, but not recommended for image realignment. Trilinear
+                                                  Interpolation is probably OK for PET, or realigned and re-sliced fMRI, but not so
+                                                  suitable for fMRI with subject movemen because higher degree interpolation generally
+                                                  gives better results. Although higher degree methods provide better interpolation,
+                                                  but they are slower because they use more neighbouring voxels. (0 <= a long integer <= 7).
+                                                  Voxel sizes must all be identical and isotropic.
+
+                                                  - 0: Nearest neighbour
+                                                  - 1: Trilinear
+                                                  - 2: 2nd Degree B-Spline
+                                                  - 3: 3rd Degree B-Spline
+                                                  …
+                                                  - 7: 7th Degree B-Spline
+            <ex. 4>
+        * write_wrap <=> roptions.wrap: Check if interpolation should wrap in [x,y,z] (a list of 3 items which are integer int or long).
+                                        For example, in MRI scans, the images wrap around in the phase encode direction, so the subject’s 
+                                        nose may poke into the back of the subject’s head. These are typically:
+
+                                        - No wrapping [0, 0, 0]: for PET or images that have already been spatially transformed. (Also the recommended option if
+                                                                 you are not really sure).
+                                        - Wrap in Y [0, 1, 0], for (un-resliced) MRI where phase encoding is in the Y direction (voxel space).
+           <ex. [0 0 0]>
+        * write_mask <=> roptions.mask: Mask output image (a boolean). Because of subject motion, different images are likely to have different
+                                        patterns of zeros from where it was not possible to sample data. With masking enabled, the program
+                                        searches through the whole time series looking for voxels which need to be sampled from outside the
+                                        original images. Where this occurs, that voxel is set to zero for the whole set of images.
+          <ex. False>
+
         * out_prefix <=> roptions.prefix: Specify the string to be prepended to the
                                           filenames of the coregisterd image file(s)
                                           (a string).
-            <ex. r, capsul/nipype default value>
+          <ex. r, capsul/nipype default value>
     * Outputs parameters:
         # coregistered_source: A list of items which are an existing file name. Coregistered source files,
                                corresponding to 'source' images.
@@ -112,69 +141,70 @@ class Coregister(Process_Mia):
         self.requirement = ['matlab', 'spm']
 
         # Inputs description
-        target_desc = 'The reference file to register to. An existing, uncompressed file (valid extensions: [.img, .nii, .hdr]).'
-        source_desc = 'File to register to target image. A list of items which are an existing, uncompressed file '\
-                      '(valid extensions: [.img, .nii, .hdr]).'
-        apply_to_files_desc = 'Files to apply transformation to (a list of items which are an existing file name, (valid extensions: [.img, .nii, .hdr]).'
+        target_desc = ('The reference file to register to. An existing,'
+                       ' uncompressed file (valid extensions:'
+                       ' [.img, .nii, .hdr]).')
+        source_desc = ('File to register to target image. A list of items which'
+                       ' are an existing, uncompressed file (valid extensions:'
+                       ' [.img, .nii, .hdr]).')
+        apply_to_files_desc = ('Files to apply transformation to (a list of'
+                               ' items which are an existing file name, (valid'
+                               ' extensions: [.img, .nii, .hdr]).')
         jobtype_desc = "One of 'estwrite' or 'estimate' or 'write'."
         cost_function_desc = "One of 'mi' or 'nmi' or 'ecc' or 'ncc'."
-        separation_desc = 'Sampling separation in mm (a list of items which are a float).'
-        tolerance_desc = 'The acceptable tolerance for each of 12 params (a list of items which are a float).'
-        fwhm_desc = 'Gaussian smoothing kernel width (mm) applied to the 256*256 joint histogram (a list of 2 items which are a float).'
+        separation_desc = ('Sampling separation in mm (a list of items which'
+                           ' are a float).')
+        tolerance_desc = ('The acceptable tolerance for each of 12 params (a'
+                          ' list of items which are a float).')
+        fwhm_desc = ('Gaussian smoothing kernel width (mm) applied to the'
+                     ' 256*256 joint histogram (a list of 2 items which are'
+                     ' a float).')
+        write_interp_desc = ('0 <= a long integer <= 7. The method by which the'
+                             ' images are sampled when being written in a'
+                             ' different space.')
+        write_wrap_desc = ('A list of from 3 to 3 items which are an integer'
+                           ' (int or long).')
+        write_mask_desc = 'Mask output image (a boolean)'
         out_prefix_desc = 'Coregisterd output prefix (a string).'
         
         # Outputs description
-        coregistered_source_desc = "Coregistered source files, corresponding to 'source' images."
-        coregistered_files_desc = "Coregistered other files, corresponding to 'apply_to_files'."
+        coregistered_source_desc = ("Coregistered source files, corresponding"
+                                    " to 'source' images.")
+        coregistered_files_desc = ("Coregistered other files, corresponding"
+                                   " to 'apply_to_files'.")
 
         # Inputs traits 
         self.add_trait("target",
-                       ImageFileSPM(output=False,
-                                    copyfile=False,
+                       ImageFileSPM(copyfile=False,
+                                    output=False,
+                                    optional=False,
                                     desc=target_desc))
         
         self.add_trait("source",
-                       InputMultiPath(ImageFileSPM(),
-                                      output=False,
+                       InputMultiPath(traits.Either(ImageFileSPM(),
+                                                    Undefined),
+                                      value=[Undefined],
                                       copyfile=True,
+                                      output=False,
+                                      optional=False,
                                       desc=source_desc))
         
         self.add_trait("apply_to_files",
-                       InputMultiPath(File(),
-                                      output=False,
+                       InputMultiPath(traits.Either(File(),
+                                                    Undefined),
+                                      value=[Undefined],
                                       copyfile=True,
+                                      output=False,
                                       optional=True,
-                                      desc=apply_to_files_desc)) # Optional for Nipype
+                                      desc=apply_to_files_desc))
 
         self.add_trait("jobtype",
                        traits.Enum('estimate',
                                    'estwrite',
                                    'write',
-                                   usedefault=True,
                                    output=False,
                                    optional=True,
                                    desc=jobtype_desc))
-
-        # self.add_trait("fwhm", traits.List(traits.Float(), output=False, optional=True))
-        self.add_trait("fwhm",
-                       traits.List([7, 7],
-                                   output=False,
-                                   optional=True,
-                                   desc=fwhm_desc))
-
-        # self.add_trait("separation", traits.List(traits.Float(), output=False, optional=True))
-        self.add_trait("separation",
-                       traits.List([4, 2],
-                                   output=False,
-                                   optional=True,
-                                   desc=separation_desc))
-
-        # self.add_trait("tolerance", traits.List(traits.Float(), output=False, optional=True))
-        self.add_trait("tolerance",
-                       traits.List([.02, .02, .02, 0.001, 0.001, 0.001, .01, .01, .01, 0.001, 0.001, 0.001],
-                                   output=False,
-                                   optional=True,
-                                   desc=tolerance_desc))
 
         self.add_trait("cost_function",
                        traits.Enum('nmi',
@@ -184,6 +214,56 @@ class Coregister(Process_Mia):
                                    output=False,
                                    optional=True,
                                    desc=cost_function_desc))
+
+        self.add_trait("separation",
+                       traits.List(value=[4.0, 2.0],
+                                   trait=traits.Range(low=0.0, high=None),
+                                   minlen=1,
+                                   maxlen=32,
+                                   output=False,
+                                   optional=True,
+                                   desc=separation_desc))
+
+        self.add_trait("tolerance",
+                       traits.List(value=[.02, .02, .02, 0.001, 0.001, 0.001, .01, .01, .01, 0.001, 0.001, 0.001],
+                                   trait=traits.Range(low=0.0, high=None),
+                                   minlen=12,
+                                   maxlen=12,
+                                   output=False,
+                                   optional=True,
+                                   desc=tolerance_desc))
+
+        self.add_trait("fwhm",
+                       traits.List(value=[7.0, 7.0],
+                                   trait=traits.Range(low=0.0, high=None),
+                                   minlen=2,
+                                   maxlen=2,
+                                   output=False,
+                                   optional=True,
+                                   desc=fwhm_desc))
+
+        self.add_trait("write_interp",
+                       traits.Range(value=4,
+                                    low=0,
+                                    high=7,
+                                    output=False,
+                                    optional=True,
+                                    desc=write_interp_desc))
+
+        self.add_trait("write_wrap",
+                       traits.List(value=[0, 0, 0],
+                                   trait=traits.Range(low=0, high=1),
+                                   minlen=3,
+                                   maxlen=3,
+                                   output=False,
+                                   optional=True,
+                                   desc=write_wrap_desc))
+
+        self.add_trait("write_mask",
+                       traits.Bool(default_value=False,
+                                   output=False,
+                                   optional=True,
+                                   desc=write_mask_desc))
 
         self.add_trait("out_prefix",
                        traits.String('r',
@@ -196,7 +276,7 @@ class Coregister(Process_Mia):
                        OutputMultiPath(File(),
                                        output=True,
                                        desc=coregistered_source_desc))
-        
+
         self.add_trait("coregistered_files",
                        OutputMultiPath(File(),
                                        output=True,
@@ -886,9 +966,9 @@ class Realign(Process_Mia):
                                                     traits.List(ImageFileSPM()),
                                                     Undefined),
                                       value=[Undefined],
-                                      mandatory=True,
-                                      output=False,
                                       copyfile=True,
+                                      output=False,
+                                      optional=False,
                                       desc=in_files_desc))
         
         self.add_trait("jobtype",
@@ -1191,9 +1271,12 @@ class Smooth(Process_Mia):
 
         # Input traits 
         self.add_trait("in_files",
-                       InputMultiPath(ImageFileSPM(),
+                       InputMultiPath(traits.Either(ImageFileSPM(),
+                                                    Undefined),
+                                      value=[Undefined],
                                       copyfile=False,
                                       output=False,
+                                      optional=False,
                                       desc=in_files_desc))
         self.add_trait("fwhm",
                        traits.Either(traits.Float(),
@@ -1242,7 +1325,7 @@ class Smooth(Process_Mia):
         super(Smooth, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
-        if self.in_files:
+        if self.in_files and self.in_files != [Undefined]:
             self.process.inputs.in_files = self.in_files
 
             if self.out_prefix:
