@@ -78,22 +78,22 @@
 <span class="sd">- Coregister (mia_processes.preprocess.spm.spatial_preprocessing.Coregister) &lt;=&gt; Coregister (SPM12 names).</span>
 <span class="sd">*** Realignment through different modalities: Align together scans of different modalities *** </span>
 <span class="sd">    * Input parameters:</span>
-<span class="sd">        * target &lt;=&gt; estimate.ref: The reference file to register to.</span>
+<span class="sd">        * target &lt;=&gt; ref: The reference file (remains stationary) while the source image is moved to match it.</span>
 <span class="sd">                                   An existing, uncompressed file (valid extensions: [.img, .nii, .hdr]).</span>
 <span class="sd">            &lt;ex. /home/ArthurBlair/data/downloaded_data/meanFunc.nii&gt;</span>
-<span class="sd">        * source &lt;=&gt; estimate.source: The image that is jiggled about to best match the target image.</span>
+<span class="sd">        * source &lt;=&gt; source: The image that is jiggled about to best match the target image.</span>
 <span class="sd">                                      A list of items which are an existing, uncompressed file</span>
 <span class="sd">                                      (valid extensions: [.img, .nii, .hdr]).</span>
 <span class="sd">            &lt;ex. [&#39;/home/ArthurBlair/data/raw_data/Anat.nii&#39;]&gt;</span>
-<span class="sd">        * apply_to_files &lt;=&gt; estimate.other: These are any images that need to remain in alignment with the</span>
+<span class="sd">        * apply_to_files &lt;=&gt; other: These are any images that need to remain in alignment with the</span>
 <span class="sd">                                             source image (a list of items which are an existing file name).</span>
 <span class="sd">            &lt;ex. [&#39;/home/ArthurBlair/data/raw_data/Func.nii&#39;]&gt;</span>
 <span class="sd">        * jobtype: One of &#39;estwrite&#39; or &#39;estimate&#39; or &#39;write&#39;. If &#39;estimate&#39; is selected, the registration</span>
 <span class="sd">                   parameters are stored in the headers of the &#39;source&#39; and the &#39;apply_to_files&#39; images. If</span>
 <span class="sd">                   &#39;write&#39; is selected, the resliced images are named the same as the originals except that</span>
 <span class="sd">                   they are prefixed by out_prefix.</span>
-<span class="sd">            &lt;ex. write&gt;</span>
-<span class="sd">        * cost_function &lt;=&gt; estimate.eoptions.cost_fun: One of &#39;mi&#39; or &#39;nmi&#39; or &#39;ecc&#39; or &#39;ncc&#39;. Registration</span>
+<span class="sd">            &lt;ex. estimate&gt;</span>
+<span class="sd">        * cost_function &lt;=&gt; eoptions.cost_fun: One of &#39;mi&#39; or &#39;nmi&#39; or &#39;ecc&#39; or &#39;ncc&#39;. Registration</span>
 <span class="sd">                                                        involves finding parameters that either maximise or</span>
 <span class="sd">                                                        minimise some objective function. For inter-modal</span>
 <span class="sd">                                                        registration, use &#39;Mutual Information&#39;,</span>
@@ -106,21 +106,50 @@
 <span class="sd">		                                        &#39;ecc&#39;: Entropy Correlation Coefficient.</span>
 <span class="sd">		                                        &#39;ncc&#39;: Normalised Cross Correlation.</span>
 <span class="sd">            &lt;ex. nmi&gt;</span>
-<span class="sd">        * separation &lt;=&gt; estimate.eoptions.sep: A list of items which are a float. The average distance between</span>
+<span class="sd">        * separation &lt;=&gt; eoptions.sep: A list of items which are a float. The average distance between</span>
 <span class="sd">                                                sampled points (in mm). Can be a vector to allow a coarse</span>
 <span class="sd">                                                registration followed by increasingly fine ones.</span>
 <span class="sd">            &lt;ex. [4, 2]&gt;</span>
-<span class="sd">        * tolerance &lt;=&gt; estimate.eoptions.tol: A list of 12 items which are a float. The acceptable tolerance</span>
+<span class="sd">        * tolerance &lt;=&gt; eoptions.tol: A list of 12 items which are a float. The acceptable tolerance</span>
 <span class="sd">                                               for each of 12 params. Iterations stop when differences</span>
 <span class="sd">                                               between successive estimates are less than the required tolerance.</span>
 <span class="sd">            &lt;ex. [0.02, 0.02, 0.02, 0.001, 0.001, 0.001, 0.01, 0.01, 0.01, 0.001, 0.001, 0.001]&gt;</span>
-<span class="sd">        * fwhm &lt;=&gt; estimate.eoptions.fwhm: A list of 2 items which are a float. Kernel of gaussian smooth to</span>
+<span class="sd">        * fwhm &lt;=&gt; eoptions.fwhm: A list of 2 items which are a float. Kernel of gaussian smooth to</span>
 <span class="sd">                                           apply to the 256*256 joint histogram.</span>
 <span class="sd">            &lt;ex. [7, 7]&gt;</span>
+<span class="sd">        * write_interp &lt;=&gt; roptions.interp: The method by which the images are sampled when being written in a different space.</span>
+<span class="sd">                                                  Nearest neighbour is fastest, but not recommended for image realignment. Trilinear</span>
+<span class="sd">                                                  Interpolation is probably OK for PET, or realigned and re-sliced fMRI, but not so</span>
+<span class="sd">                                                  suitable for fMRI with subject movemen because higher degree interpolation generally</span>
+<span class="sd">                                                  gives better results. Although higher degree methods provide better interpolation,</span>
+<span class="sd">                                                  but they are slower because they use more neighbouring voxels. (0 &lt;= a long integer &lt;= 7).</span>
+<span class="sd">                                                  Voxel sizes must all be identical and isotropic.</span>
+
+<span class="sd">                                                  - 0: Nearest neighbour</span>
+<span class="sd">                                                  - 1: Trilinear</span>
+<span class="sd">                                                  - 2: 2nd Degree B-Spline</span>
+<span class="sd">                                                  - 3: 3rd Degree B-Spline</span>
+<span class="sd">                                                  …</span>
+<span class="sd">                                                  - 7: 7th Degree B-Spline</span>
+<span class="sd">            &lt;ex. 4&gt;</span>
+<span class="sd">        * write_wrap &lt;=&gt; roptions.wrap: Check if interpolation should wrap in [x,y,z] (a list of 3 items which are integer int or long).</span>
+<span class="sd">                                        For example, in MRI scans, the images wrap around in the phase encode direction, so the subject’s </span>
+<span class="sd">                                        nose may poke into the back of the subject’s head. These are typically:</span>
+
+<span class="sd">                                        - No wrapping [0, 0, 0]: for PET or images that have already been spatially transformed. (Also the recommended option if</span>
+<span class="sd">                                                                 you are not really sure).</span>
+<span class="sd">                                        - Wrap in Y [0, 1, 0], for (un-resliced) MRI where phase encoding is in the Y direction (voxel space).</span>
+<span class="sd">           &lt;ex. [0 0 0]&gt;</span>
+<span class="sd">        * write_mask &lt;=&gt; roptions.mask: Mask output image (a boolean). Because of subject motion, different images are likely to have different</span>
+<span class="sd">                                        patterns of zeros from where it was not possible to sample data. With masking enabled, the program</span>
+<span class="sd">                                        searches through the whole time series looking for voxels which need to be sampled from outside the</span>
+<span class="sd">                                        original images. Where this occurs, that voxel is set to zero for the whole set of images.</span>
+<span class="sd">          &lt;ex. False&gt;</span>
+
 <span class="sd">        * out_prefix &lt;=&gt; roptions.prefix: Specify the string to be prepended to the</span>
 <span class="sd">                                          filenames of the coregisterd image file(s)</span>
 <span class="sd">                                          (a string).</span>
-<span class="sd">            &lt;ex. r, capsul/nipype default value&gt;</span>
+<span class="sd">          &lt;ex. r, capsul/nipype default value&gt;</span>
 <span class="sd">    * Outputs parameters:</span>
 <span class="sd">        # coregistered_source: A list of items which are an existing file name. Coregistered source files,</span>
 <span class="sd">                               corresponding to &#39;source&#39; images.</span>
@@ -144,69 +173,70 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;matlab&#39;</span><span class="p">,</span> <span class="s1">&#39;spm&#39;</span><span class="p">]</span>
 
         <span class="c1"># Inputs description</span>
-        <span class="n">target_desc</span> <span class="o">=</span> <span class="s1">&#39;The reference file to register to. An existing, uncompressed file (valid extensions: [.img, .nii, .hdr]).&#39;</span>
-        <span class="n">source_desc</span> <span class="o">=</span> <span class="s1">&#39;File to register to target image. A list of items which are an existing, uncompressed file &#39;</span>\
-                      <span class="s1">&#39;(valid extensions: [.img, .nii, .hdr]).&#39;</span>
-        <span class="n">apply_to_files_desc</span> <span class="o">=</span> <span class="s1">&#39;Files to apply transformation to (a list of items which are an existing file name, (valid extensions: [.img, .nii, .hdr]).&#39;</span>
+        <span class="n">target_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;The reference file to register to. An existing,&#39;</span>
+                       <span class="s1">&#39; uncompressed file (valid extensions:&#39;</span>
+                       <span class="s1">&#39; [.img, .nii, .hdr]).&#39;</span><span class="p">)</span>
+        <span class="n">source_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;File to register to target image. A list of items which&#39;</span>
+                       <span class="s1">&#39; are an existing, uncompressed file (valid extensions:&#39;</span>
+                       <span class="s1">&#39; [.img, .nii, .hdr]).&#39;</span><span class="p">)</span>
+        <span class="n">apply_to_files_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Files to apply transformation to (a list of&#39;</span>
+                               <span class="s1">&#39; items which are an existing file name, (valid&#39;</span>
+                               <span class="s1">&#39; extensions: [.img, .nii, .hdr]).&#39;</span><span class="p">)</span>
         <span class="n">jobtype_desc</span> <span class="o">=</span> <span class="s2">&quot;One of &#39;estwrite&#39; or &#39;estimate&#39; or &#39;write&#39;.&quot;</span>
         <span class="n">cost_function_desc</span> <span class="o">=</span> <span class="s2">&quot;One of &#39;mi&#39; or &#39;nmi&#39; or &#39;ecc&#39; or &#39;ncc&#39;.&quot;</span>
-        <span class="n">separation_desc</span> <span class="o">=</span> <span class="s1">&#39;Sampling separation in mm (a list of items which are a float).&#39;</span>
-        <span class="n">tolerance_desc</span> <span class="o">=</span> <span class="s1">&#39;The acceptable tolerance for each of 12 params (a list of items which are a float).&#39;</span>
-        <span class="n">fwhm_desc</span> <span class="o">=</span> <span class="s1">&#39;Gaussian smoothing kernel width (mm) applied to the 256*256 joint histogram (a list of 2 items which are a float).&#39;</span>
+        <span class="n">separation_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Sampling separation in mm (a list of items which&#39;</span>
+                           <span class="s1">&#39; are a float).&#39;</span><span class="p">)</span>
+        <span class="n">tolerance_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;The acceptable tolerance for each of 12 params (a&#39;</span>
+                          <span class="s1">&#39; list of items which are a float).&#39;</span><span class="p">)</span>
+        <span class="n">fwhm_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Gaussian smoothing kernel width (mm) applied to the&#39;</span>
+                     <span class="s1">&#39; 256*256 joint histogram (a list of 2 items which are&#39;</span>
+                     <span class="s1">&#39; a float).&#39;</span><span class="p">)</span>
+        <span class="n">write_interp_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;0 &lt;= a long integer &lt;= 7. The method by which the&#39;</span>
+                             <span class="s1">&#39; images are sampled when being written in a&#39;</span>
+                             <span class="s1">&#39; different space.&#39;</span><span class="p">)</span>
+        <span class="n">write_wrap_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;A list of from 3 to 3 items which are an integer&#39;</span>
+                           <span class="s1">&#39; (int or long).&#39;</span><span class="p">)</span>
+        <span class="n">write_mask_desc</span> <span class="o">=</span> <span class="s1">&#39;Mask output image (a boolean)&#39;</span>
         <span class="n">out_prefix_desc</span> <span class="o">=</span> <span class="s1">&#39;Coregisterd output prefix (a string).&#39;</span>
         
         <span class="c1"># Outputs description</span>
-        <span class="n">coregistered_source_desc</span> <span class="o">=</span> <span class="s2">&quot;Coregistered source files, corresponding to &#39;source&#39; images.&quot;</span>
-        <span class="n">coregistered_files_desc</span> <span class="o">=</span> <span class="s2">&quot;Coregistered other files, corresponding to &#39;apply_to_files&#39;.&quot;</span>
+        <span class="n">coregistered_source_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;Coregistered source files, corresponding&quot;</span>
+                                    <span class="s2">&quot; to &#39;source&#39; images.&quot;</span><span class="p">)</span>
+        <span class="n">coregistered_files_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;Coregistered other files, corresponding&quot;</span>
+                                   <span class="s2">&quot; to &#39;apply_to_files&#39;.&quot;</span><span class="p">)</span>
 
         <span class="c1"># Inputs traits </span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;target&quot;</span><span class="p">,</span>
-                       <span class="n">ImageFileSPM</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                                    <span class="n">copyfile</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                       <span class="n">ImageFileSPM</span><span class="p">(</span><span class="n">copyfile</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                    <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                    <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                                     <span class="n">desc</span><span class="o">=</span><span class="n">target_desc</span><span class="p">))</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;source&quot;</span><span class="p">,</span>
-                       <span class="n">InputMultiPath</span><span class="p">(</span><span class="n">ImageFileSPM</span><span class="p">(),</span>
-                                      <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                       <span class="n">InputMultiPath</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span><span class="n">ImageFileSPM</span><span class="p">(),</span>
+                                                    <span class="n">Undefined</span><span class="p">),</span>
+                                      <span class="n">value</span><span class="o">=</span><span class="p">[</span><span class="n">Undefined</span><span class="p">],</span>
                                       <span class="n">copyfile</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                      <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                      <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                                       <span class="n">desc</span><span class="o">=</span><span class="n">source_desc</span><span class="p">))</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;apply_to_files&quot;</span><span class="p">,</span>
-                       <span class="n">InputMultiPath</span><span class="p">(</span><span class="n">File</span><span class="p">(),</span>
-                                      <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                       <span class="n">InputMultiPath</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span><span class="n">File</span><span class="p">(),</span>
+                                                    <span class="n">Undefined</span><span class="p">),</span>
+                                      <span class="n">value</span><span class="o">=</span><span class="p">[</span><span class="n">Undefined</span><span class="p">],</span>
                                       <span class="n">copyfile</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                      <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                                       <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                      <span class="n">desc</span><span class="o">=</span><span class="n">apply_to_files_desc</span><span class="p">))</span> <span class="c1"># Optional for Nipype</span>
+                                      <span class="n">desc</span><span class="o">=</span><span class="n">apply_to_files_desc</span><span class="p">))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;jobtype&quot;</span><span class="p">,</span>
                        <span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="s1">&#39;estimate&#39;</span><span class="p">,</span>
                                    <span class="s1">&#39;estwrite&#39;</span><span class="p">,</span>
                                    <span class="s1">&#39;write&#39;</span><span class="p">,</span>
-                                   <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                    <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                                    <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                    <span class="n">desc</span><span class="o">=</span><span class="n">jobtype_desc</span><span class="p">))</span>
-
-        <span class="c1"># self.add_trait(&quot;fwhm&quot;, traits.List(traits.Float(), output=False, optional=True))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;fwhm&quot;</span><span class="p">,</span>
-                       <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">([</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">],</span>
-                                   <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                                   <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                   <span class="n">desc</span><span class="o">=</span><span class="n">fwhm_desc</span><span class="p">))</span>
-
-        <span class="c1"># self.add_trait(&quot;separation&quot;, traits.List(traits.Float(), output=False, optional=True))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;separation&quot;</span><span class="p">,</span>
-                       <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">([</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
-                                   <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                                   <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                   <span class="n">desc</span><span class="o">=</span><span class="n">separation_desc</span><span class="p">))</span>
-
-        <span class="c1"># self.add_trait(&quot;tolerance&quot;, traits.List(traits.Float(), output=False, optional=True))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;tolerance&quot;</span><span class="p">,</span>
-                       <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">([</span><span class="o">.</span><span class="mi">02</span><span class="p">,</span> <span class="o">.</span><span class="mi">02</span><span class="p">,</span> <span class="o">.</span><span class="mi">02</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="o">.</span><span class="mi">01</span><span class="p">,</span> <span class="o">.</span><span class="mi">01</span><span class="p">,</span> <span class="o">.</span><span class="mi">01</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">],</span>
-                                   <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                                   <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                   <span class="n">desc</span><span class="o">=</span><span class="n">tolerance_desc</span><span class="p">))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;cost_function&quot;</span><span class="p">,</span>
                        <span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="s1">&#39;nmi&#39;</span><span class="p">,</span>
@@ -216,6 +246,56 @@
                                    <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                                    <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                    <span class="n">desc</span><span class="o">=</span><span class="n">cost_function_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;separation&quot;</span><span class="p">,</span>
+                       <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="p">[</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">],</span>
+                                   <span class="n">trait</span><span class="o">=</span><span class="n">traits</span><span class="o">.</span><span class="n">Range</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="kc">None</span><span class="p">),</span>
+                                   <span class="n">minlen</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                   <span class="n">maxlen</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+                                   <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                   <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                   <span class="n">desc</span><span class="o">=</span><span class="n">separation_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;tolerance&quot;</span><span class="p">,</span>
+                       <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="p">[</span><span class="o">.</span><span class="mi">02</span><span class="p">,</span> <span class="o">.</span><span class="mi">02</span><span class="p">,</span> <span class="o">.</span><span class="mi">02</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="o">.</span><span class="mi">01</span><span class="p">,</span> <span class="o">.</span><span class="mi">01</span><span class="p">,</span> <span class="o">.</span><span class="mi">01</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">],</span>
+                                   <span class="n">trait</span><span class="o">=</span><span class="n">traits</span><span class="o">.</span><span class="n">Range</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="kc">None</span><span class="p">),</span>
+                                   <span class="n">minlen</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
+                                   <span class="n">maxlen</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
+                                   <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                   <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                   <span class="n">desc</span><span class="o">=</span><span class="n">tolerance_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;fwhm&quot;</span><span class="p">,</span>
+                       <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="p">[</span><span class="mf">7.0</span><span class="p">,</span> <span class="mf">7.0</span><span class="p">],</span>
+                                   <span class="n">trait</span><span class="o">=</span><span class="n">traits</span><span class="o">.</span><span class="n">Range</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="kc">None</span><span class="p">),</span>
+                                   <span class="n">minlen</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                                   <span class="n">maxlen</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                                   <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                   <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                   <span class="n">desc</span><span class="o">=</span><span class="n">fwhm_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;write_interp&quot;</span><span class="p">,</span>
+                       <span class="n">traits</span><span class="o">.</span><span class="n">Range</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+                                    <span class="n">low</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                                    <span class="n">high</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span>
+                                    <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                    <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                    <span class="n">desc</span><span class="o">=</span><span class="n">write_interp_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;write_wrap&quot;</span><span class="p">,</span>
+                       <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                                   <span class="n">trait</span><span class="o">=</span><span class="n">traits</span><span class="o">.</span><span class="n">Range</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+                                   <span class="n">minlen</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                                   <span class="n">maxlen</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                                   <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                   <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                   <span class="n">desc</span><span class="o">=</span><span class="n">write_wrap_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;write_mask&quot;</span><span class="p">,</span>
+                       <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span><span class="n">default_value</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                   <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                   <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                   <span class="n">desc</span><span class="o">=</span><span class="n">write_mask_desc</span><span class="p">))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;out_prefix&quot;</span><span class="p">,</span>
                        <span class="n">traits</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">,</span>
@@ -228,7 +308,7 @@
                        <span class="n">OutputMultiPath</span><span class="p">(</span><span class="n">File</span><span class="p">(),</span>
                                        <span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                        <span class="n">desc</span><span class="o">=</span><span class="n">coregistered_source_desc</span><span class="p">))</span>
-        
+
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;coregistered_files&quot;</span><span class="p">,</span>
                        <span class="n">OutputMultiPath</span><span class="p">(</span><span class="n">File</span><span class="p">(),</span>
                                        <span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -918,9 +998,9 @@
                                                     <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">ImageFileSPM</span><span class="p">()),</span>
                                                     <span class="n">Undefined</span><span class="p">),</span>
                                       <span class="n">value</span><span class="o">=</span><span class="p">[</span><span class="n">Undefined</span><span class="p">],</span>
-                                      <span class="n">mandatory</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                      <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                                       <span class="n">copyfile</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                      <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                      <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                                       <span class="n">desc</span><span class="o">=</span><span class="n">in_files_desc</span><span class="p">))</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;jobtype&quot;</span><span class="p">,</span>
@@ -1063,7 +1143,7 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">Realign</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
         
         <span class="c1"># Outputs definition and tags inheritance (optional)         </span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_files</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_files</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_files</span> <span class="o">!=</span> <span class="p">[</span><span class="n">Undefined</span><span class="p">]:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">in_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_files</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span><span class="p">:</span>
@@ -1078,7 +1158,7 @@
                 <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;realigned_files&#39;</span><span class="p">:</span>
 
                     <span class="k">if</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">==</span> <span class="s1">&#39;estimate&#39;</span><span class="p">)</span> <span class="ow">or</span>
-                    <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">write_which</span> <span class="o">==</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="ow">and</span>
+                     <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">write_which</span> <span class="o">==</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="ow">and</span>
                      <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">==</span> <span class="s1">&#39;write&#39;</span> <span class="ow">or</span>  <span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">==</span> <span class="s1">&#39;estwrite&#39;</span><span class="p">))):</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;realigned_files&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Undefined</span>
 
@@ -1094,13 +1174,11 @@
                             <span class="k">else</span><span class="p">:</span>
                                 <span class="n">filename_without_prefix</span> <span class="o">=</span> <span class="n">filename</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">):]</span>
 
-                                <span class="k">if</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
-                                                 <span class="n">filename_without_prefix</span><span class="p">)</span>
-                                               <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_files</span><span class="p">):</span>
-                                    <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="n">fullname</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-                                        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
-                                                     <span class="n">filename_without_prefix</span><span class="p">)</span>
-                                                                       <span class="p">)</span>
+                            <span class="k">if</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
+                                             <span class="n">filename_without_prefix</span><span class="p">)</span>
+                                                 <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_files</span><span class="p">):</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="n">fullname</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">filename_without_prefix</span><span class="p">))</span>
 
                 <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;modified_in_files&#39;</span><span class="p">:</span>
 
@@ -1119,6 +1197,9 @@
 
                     <span class="k">else</span><span class="p">:</span>
 
+                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                            <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">values</span><span class="p">]</span>
+
                         <span class="k">for</span> <span class="n">fullname</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
                             <span class="n">path</span><span class="p">,</span> <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">fullname</span><span class="p">)</span>
                             <span class="n">filename_without_prefix</span> <span class="o">=</span> <span class="n">filename</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="s1">&#39;mean&#39;</span><span class="p">):]</span>
@@ -1130,7 +1211,6 @@
                                     <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
                                                  <span class="n">filename_without_prefix</span><span class="p">)</span>
                                                                   <span class="p">)</span>
-
                 <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;realignment_parameters&#39;</span><span class="p">:</span>
 
                     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">==</span> <span class="s1">&#39;write&#39;</span><span class="p">:</span>
@@ -1138,9 +1218,16 @@
 
                     <span class="k">else</span><span class="p">:</span>
 
+                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                            <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">values</span><span class="p">]</span>
+
                         <span class="k">for</span> <span class="n">fullname</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
                             <span class="n">path</span><span class="p">,</span> <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">fullname</span><span class="p">)</span>
                             <span class="n">filename_without_prefix</span> <span class="o">=</span> <span class="n">filename</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="s1">&#39;rp_&#39;</span><span class="p">):]</span>
+
+                            <span class="k">if</span> <span class="n">filename_without_prefix</span> <span class="p">[</span><span class="o">-</span><span class="mi">4</span><span class="p">:]</span> <span class="o">==</span> <span class="s1">&#39;.txt&#39;</span><span class="p">:</span>
+                                <span class="n">filename_without_prefix</span> <span class="o">=</span> <span class="p">(</span>
+                                          <span class="n">filename_without_prefix</span><span class="p">[:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;.nii&#39;</span><span class="p">)</span>
 
                             <span class="k">if</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
                                              <span class="n">filename_without_prefix</span><span class="p">)</span>
@@ -1216,9 +1303,12 @@
 
         <span class="c1"># Input traits </span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;in_files&quot;</span><span class="p">,</span>
-                       <span class="n">InputMultiPath</span><span class="p">(</span><span class="n">ImageFileSPM</span><span class="p">(),</span>
+                       <span class="n">InputMultiPath</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span><span class="n">ImageFileSPM</span><span class="p">(),</span>
+                                                    <span class="n">Undefined</span><span class="p">),</span>
+                                      <span class="n">value</span><span class="o">=</span><span class="p">[</span><span class="n">Undefined</span><span class="p">],</span>
                                       <span class="n">copyfile</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                                       <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                      <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                                       <span class="n">desc</span><span class="o">=</span><span class="n">in_files_desc</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;fwhm&quot;</span><span class="p">,</span>
                        <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
@@ -1267,7 +1357,7 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">Smooth</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="c1"># Outputs definition and tags inheritance (optional)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_files</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_files</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_files</span> <span class="o">!=</span> <span class="p">[</span><span class="n">Undefined</span><span class="p">]:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">in_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_files</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span><span class="p">:</span>
