@@ -15,4 +15,4 @@ Mia_processes's documentation
 
     - `Smooth <preprocess/spm/Smooth.html>`_
     - `Realign <preprocess/spm/Realign.html>`_
-
+    - `Coregister <preprocess/spm/Coregister.html>`_
