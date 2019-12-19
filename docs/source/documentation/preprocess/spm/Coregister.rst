@@ -54,112 +54,89 @@ ATTENTION: Below is in progress
 
 **Inputs parameters:** [#label]_
 
-- *in_files <=> data*
-    A list of items which are an existing, uncompressed file (valid extensions: [.img, .nii, .hdr]).
+- *target <=> ref*
+    The reference file (remains stationary) while the source image is moved to match it. An existing, uncompressed file (valid extensions:
+    [.img, .nii, .hdr]).
 
+    ::
+
+      ex. /home/ArthurBlair/data/downloaded_data/meanFunc.nii
+
+- *source <=> source*
+    The image that is jiggled about to best match the target image. A list of items which are an existing, uncompressed file (valid
+    extensions: [.img, .nii, .hdr]).
+
+    ::
+
+      ex. ['/home/ArthurBlair/data/raw_data/Anat.nii']
+
+- *apply_to_files <=> other*
+    These are any images that need to remain in alignment with the source image (a list of items which are an existing file name).
+    
     ::
 
       ex. ['/home/ArthurBlair/data/raw_data/Func.nii']
 
+
+
 - *jobtype*
-    One of 'estwrite', 'estimate' or 'write':
-
-      | - estimate: generates realignment_parameters and modified_in_files
-      | - write: |ws4| |ws4| |ws4| with write_which == [2, 0] or [1, 0] generates realigned_files
-      | |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| with write_which == [2, 1] generates mean_image and realigned_files
-      | |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| with write_which == [0, 1] generates mean_image
-      | - estwrite:|ws4| with write_which == [2, 0] or [1, 0] generates realignment_parameters, modified_in_files and realigned_files
-      | |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| with write_which == [2, 1] generates realignment_parameters, modified_in_file, mean_image and realigned_files
-      | |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| with write_which == [0, 1] generates realignment_parameters, modified_in_file and mean_image
+    One of 'estwrite' or 'estimate' or 'write'. If 'estimate' is selected, the registration parameters are stored in the headers of the 'source'
+    and the 'apply_to_files' images. If 'write' is selected, the resliced images are named the same as the originals except that they are
+    prefixed by out_prefix.
 
     ::
 
-      ex. estwrite
+       ex. estimate
 
-- *quality <=> eoptions.quality*
-    Quality versus speed trade-off (0.0 <= a floating point number <= 1.0). Highest quality (1) gives most precise results, whereas lower
-    qualities gives faster realignment.
+- *cost_function <=> eoptions.cost_fun*
+    One of 'mi' or 'nmi' or 'ecc' or 'ncc'. Registration involves finding parameters that either maximise or minimise some objective
+    function. For inter-modal registration,  use 'Mutual Information', 'Normalised Mutual Information' or 'Entropy Correlation Coefficient'. For
+    within modality, you could also use Normalised Cross Correlation.      
+
+      | \- 'mi': Mutual Information
+      | \- 'nmi': Normalised Mutual Information
+      | \- 'ecc': Entropy Correlation Coefficient
+      | \- 'ncc': Normalised Cross Correlation
 
     ::
 
-     ex. 0.9
+      ex. nmi
 
 - *separation <=> eoptions.sep*
-    Sampling separation in mm in the reference image (a floating point number >= 0.0). Smaller sampling distances gives more accurate
-    results, but will be slower.
+    A list of items which are a float. The average distance between sampled points (in mm). Can be a vector to allow a coarse registration
+    followed by increasingly fine ones.
 
     ::
 
-      ex. 4.0
+      ex. [4, 2]
+
+- *tolerance <=> eoptions.tol*
+    A list of 12 items which are a float. The acceptable tolerance for each of 12 params. Iterations stop when differences between
+    successive estimates are less than the required tolerance.
+
+    ::
+
+      ex. [0.02, 0.02, 0.02, 0.001, 0.001, 0.001, 0.01, 0.01, 0.01, 0.001, 0.001, 0.001]
 
 - *fwhm <=> eoptions.fwhm*
-    The gaussian smoothing kernel width (mm, a floating point number >= 0.0) applied to the images before estimating the realignment
-    parameters.
+    A list of 2 items which are a float. Kernel of gaussian smooth to apply to the 256*256 joint histogram.
 
     ::
 
-      ex. 5.0
-
-- *register_to_mean <=> eoptions.rtm*
-    Indicate whether realignment is done to the mean image (True) or to the first image (False).
-
-    ::
-
-      ex. True
-
-- *interp <=> eoptions.interp*
-    Degree of b-spline (1 <= a long integer <= 7) used for interpolation. Higher degree interpolation methods provide the better
-    interpolation, but they are slower because they use more neighbouring voxels.
-
-    ::
-
-      ex. 2
-
-- *wrap <=> eoptions.wrap*
-    Check if interpolation should wrap in [x,y,z] (a list of 3 items which are integer int or long). For example, in MRI scans, the images wrap
-    around in the phase encode direction, so the subject's nose may poke into the back of the subject's head. These are typically:
-
-      | \- No wrapping [0, 0, 0]: for PET or images that have already been spatially transformed. (Also the recommended option if
-      | |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| you are not really sure).
-      | \- Wrap in Y [0, 1, 0], for (un-resliced) MRI where phase encoding is in the Y direction (voxel space).
-
-    ::
-
-      ex. [0, 0, 0]
-
-- *weight_img <=> eoptions.weight*
-    Filename of optional weighting image, to weight each voxel of the reference image differently when estimating the realignment
-    parameters. This would be used, for example, when there is a lot of extra-brain motion or when there are serious artifacts in a
-    particular region of the images.
-
-    ::
-
-      ex. ''
-
-- *write_which <=> roptions.which*
-    Determines which images to reslice (a list of items which are a value of class 'int'):
-    
-      | \- [2,0]: Reslices all the images (1..n), including the first image selected, which will remain in its original position.
-      | \- [1,0]: Reslices images (2..n) only. Useful for if you wish to reslice (for example) a PET image to fit a structural MRI, without
-      | |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| creating a second identical MRI volume.
-      | \- [2,1]: All Images + Mean Image. In addition to reslicing the images, it also creates a mean of the resliced image.
-      | \- [0,1]: Mean Image Only. Creates the mean resliced image only.
-
-    ::
-
-      ex. [2, 1]
+      ex. [7, 7] 
 
 - *write_interp <=> roptions.interp*
     The method by which the images are sampled when being written in a different space. Nearest neighbour is fastest, but not
-    recommended for image realignment. Trilinear Interpolation is probably OK for PET, but not so suitable for fMRI because higher degree
-    interpolation generally gives better results. Although higher degree methods provide better interpolation, but they are slower because
-    they use more neighbouring voxels. (0 <= a long integer <= 7). Voxel sizes must all be identical and isotropic.
+    recommended for image realignment. Trilinear Interpolation is probably OK for PET, or realigned and re-sliced fMRI, but not so suitable
+    for fMRI with subject movemen because higher degree interpolation generally gives better results. Although higher degree methods
+    provide better interpolation, but they are slower because they use more neighbouring voxels. (0 <= a long integer <= 7). Voxel sizes
+    must all be identical and isotropic.
 
       | \- 0: Nearest neighbour
       | \- 1: Trilinear
       | \- 2: 2nd Degree B-Spline
       | \- 3: 3rd Degree B-Spline
-      | \...
+      | …
       | \- 7: 7th Degree B-Spline
 
     ::
@@ -167,19 +144,16 @@ ATTENTION: Below is in progress
       ex. 4
 
 - *write_wrap <=> roptions.wrap*
-    A list of from 3 items which are an integer (int or long). See the wrap parameter that is used if the jobtype parameter is equal to
-    estimate.
+    Check if interpolation should wrap in [x,y,z] (a list of 3 items which are integer int or long). For example, in MRI scans, the images wrap
+    around in the phase encode direction, so the subject’s nose may poke into the back of the subject’s head. These are typically:
 
-      | \- [0, 0, 0]: No wrap
-      | \- [1, 0, 0]: wrap X
-      | \- [0, 1, 0]: wrap Y
-      | \- [0, 0, 1]: Wrap Z
-      | \- [1, 1, 1]: Wrap X, Y & Z
-      | \...
+      | \- No wrapping [0, 0, 0]: for PET or images that have already been spatially transformed (Also the recommended option if
+      | |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| you are not really sure)
+      | \- Wrap in Y [0, 1, 0], for (un-resliced) MRI where phase encoding is in the Y direction (voxel space)
 
     ::
-     
-      ex. [0, 0, 0]
+
+        ex. [0 0 0]
 
 - *write_mask <=> roptions.mask*
     Mask output image (a boolean). Because of subject motion, different images are likely to have different patterns of zeros from where it
@@ -188,55 +162,35 @@ ATTENTION: Below is in progress
 
     ::
 
-      ex. True
- 
+      ex. False
+
 - *out_prefix <=> roptions.prefix*
-    Realigned output prefix (a string).
+    Specify the string to be prepended to the filenames of the coregisterd image file(s).
 
     ::
 
-      ex. r
+      ex. r, capsul/nipype default value
 
 **Outputs parameters:** [#label]_
 
-- *realigned_files*
-    If the write_which parameter is equal to [2, 0], [1, 0] or [2, 1] and jobtype parameter is equal to write or estwrite, these will be the
-    resliced files (a list of items which are a list of items which are a pathlike object or string representing an existing file or a pathlike
-    object or string representing an existing file).
+- *coregistered_source*
+    A list of items which are an existing file name. Coregistered source files, corresponding to 'source' images.
 
     ::
 
-      ex. /home/ArthurBlair/data/raw_data/rFunc.nii
+      ex. /home/ArthurBlair/data/raw_data/Anat.nii
 
-- *modified_in_files*
-    If the jobtype parameter is equal to estimate or estwrite, these will be copies of the in_files with a rewritten header (a list of items
-    which are a list of items which are a pathlike object or string representing an existing file or a pathlike object or string representing an
-    existing file).
+- *coregistered_files*
+    A list of items which are an existing file name. Coregistered other files, corresponding to 'apply_to_files' images.
 
     ::
 
       ex. /home/ArthurBlair/data/raw_data/Func.nii
 
-- *mean_image*
-    If the write_which parameter is equal to [2, 1] or [0, 1] and jobtype parameter is equal to write or estwrite, this will be the Mean image
-    file from the realignment (a pathlike object or string representing an existing file).
-
-    ::
-
-      ex. /home/ArthurBlair/data/raw_data/meanFunc.nii
-
-- *realignment_parameters*
-    If the jobtype parameter is equal to estimate or estwrite, this will be the Estimated translation and rotation parameters (a list of items
-    which are a pathlike object or string representing an existing file).
-
-    ::
-
-      ex. /home/ArthurBlair/data/raw_data/rp_Func.txt
-
 -------------
 
-.. [#label] Syntax: mia_processes/nipype Realign <=> SPM12 Realign.
+.. [#label] Syntax: mia_processes/nipype Coregister <=> SPM12 Coregister.
 	    
 	    Usefull links:
-	    `SPM12 Realign <https://www.fil.ion.ucl.ac.uk/spm/doc/manual.pdf#page=25>`_, 
-	    `nipype <https://nipype.readthedocs.io/en/latest/interfaces/generated/interfaces.spm/preprocess.html#realign>`_
+	    `SPM12 Realign <https://www.fil.ion.ucl.ac.uk/spm/doc/manual.pdf#page=39>`_, 
+	    `nipype <https://nipype.readthedocs.io/en/latest/interfaces/generated/interfaces.spm/preprocess.html#coregister>`_
