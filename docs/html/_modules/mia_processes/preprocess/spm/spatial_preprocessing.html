@@ -75,90 +75,13 @@
 
 <div class="viewcode-block" id="Coregister"><a class="viewcode-back" href="../../../../mia_processes.preprocess.spm.html#mia_processes.preprocess.spm.spatial_preprocessing.Coregister">[docs]</a><span class="k">class</span> <span class="nc">Coregister</span><span class="p">(</span><span class="n">Process_Mia</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">- Coregister (mia_processes.preprocess.spm.spatial_preprocessing.Coregister) &lt;=&gt; Coregister (SPM12 names).</span>
-<span class="sd">*** Realignment through different modalities: Align together scans of different modalities *** </span>
-<span class="sd">    * Input parameters:</span>
-<span class="sd">        * target &lt;=&gt; ref: The reference file (remains stationary) while the source image is moved to match it.</span>
-<span class="sd">                                   An existing, uncompressed file (valid extensions: [.img, .nii, .hdr]).</span>
-<span class="sd">            &lt;ex. /home/ArthurBlair/data/downloaded_data/meanFunc.nii&gt;</span>
-<span class="sd">        * source &lt;=&gt; source: The image that is jiggled about to best match the target image.</span>
-<span class="sd">                                      A list of items which are an existing, uncompressed file</span>
-<span class="sd">                                      (valid extensions: [.img, .nii, .hdr]).</span>
-<span class="sd">            &lt;ex. [&#39;/home/ArthurBlair/data/raw_data/Anat.nii&#39;]&gt;</span>
-<span class="sd">        * apply_to_files &lt;=&gt; other: These are any images that need to remain in alignment with the</span>
-<span class="sd">                                             source image (a list of items which are an existing file name).</span>
-<span class="sd">            &lt;ex. [&#39;/home/ArthurBlair/data/raw_data/Func.nii&#39;]&gt;</span>
-<span class="sd">        * jobtype: One of &#39;estwrite&#39; or &#39;estimate&#39; or &#39;write&#39;. If &#39;estimate&#39; is selected, the registration</span>
-<span class="sd">                   parameters are stored in the headers of the &#39;source&#39; and the &#39;apply_to_files&#39; images. If</span>
-<span class="sd">                   &#39;write&#39; is selected, the resliced images are named the same as the originals except that</span>
-<span class="sd">                   they are prefixed by out_prefix.</span>
-<span class="sd">            &lt;ex. estimate&gt;</span>
-<span class="sd">        * cost_function &lt;=&gt; eoptions.cost_fun: One of &#39;mi&#39; or &#39;nmi&#39; or &#39;ecc&#39; or &#39;ncc&#39;. Registration</span>
-<span class="sd">                                                        involves finding parameters that either maximise or</span>
-<span class="sd">                                                        minimise some objective function. For inter-modal</span>
-<span class="sd">                                                        registration, use &#39;Mutual Information&#39;,</span>
-<span class="sd">                                                        &#39;Normalised Mutual Information&#39; or</span>
-<span class="sd">                                                        &#39;Entropy Correlation Coefficient&#39;.</span>
-<span class="sd">                                                        For within modality, you could also use Normalised</span>
-<span class="sd">                                                        Cross Correlation.</span>
-<span class="sd">                                                        &#39;mi&#39;: Mutual Information.</span>
-<span class="sd">		                                        &#39;nmi&#39;: Normalised Mutual Information.</span>
-<span class="sd">		                                        &#39;ecc&#39;: Entropy Correlation Coefficient.</span>
-<span class="sd">		                                        &#39;ncc&#39;: Normalised Cross Correlation.</span>
-<span class="sd">            &lt;ex. nmi&gt;</span>
-<span class="sd">        * separation &lt;=&gt; eoptions.sep: A list of items which are a float. The average distance between</span>
-<span class="sd">                                                sampled points (in mm). Can be a vector to allow a coarse</span>
-<span class="sd">                                                registration followed by increasingly fine ones.</span>
-<span class="sd">            &lt;ex. [4, 2]&gt;</span>
-<span class="sd">        * tolerance &lt;=&gt; eoptions.tol: A list of 12 items which are a float. The acceptable tolerance</span>
-<span class="sd">                                               for each of 12 params. Iterations stop when differences</span>
-<span class="sd">                                               between successive estimates are less than the required tolerance.</span>
-<span class="sd">            &lt;ex. [0.02, 0.02, 0.02, 0.001, 0.001, 0.001, 0.01, 0.01, 0.01, 0.001, 0.001, 0.001]&gt;</span>
-<span class="sd">        * fwhm &lt;=&gt; eoptions.fwhm: A list of 2 items which are a float. Kernel of gaussian smooth to</span>
-<span class="sd">                                           apply to the 256*256 joint histogram.</span>
-<span class="sd">            &lt;ex. [7, 7]&gt;</span>
-<span class="sd">        * write_interp &lt;=&gt; roptions.interp: The method by which the images are sampled when being written in a different space.</span>
-<span class="sd">                                                  Nearest neighbour is fastest, but not recommended for image realignment. Trilinear</span>
-<span class="sd">                                                  Interpolation is probably OK for PET, or realigned and re-sliced fMRI, but not so</span>
-<span class="sd">                                                  suitable for fMRI with subject movemen because higher degree interpolation generally</span>
-<span class="sd">                                                  gives better results. Although higher degree methods provide better interpolation,</span>
-<span class="sd">                                                  but they are slower because they use more neighbouring voxels. (0 &lt;= a long integer &lt;= 7).</span>
-<span class="sd">                                                  Voxel sizes must all be identical and isotropic.</span>
+<span class="sd">    ** Realignment through different modalities: Align together scans of different modalities **</span>
 
-<span class="sd">                                                  - 0: Nearest neighbour</span>
-<span class="sd">                                                  - 1: Trilinear</span>
-<span class="sd">                                                  - 2: 2nd Degree B-Spline</span>
-<span class="sd">                                                  - 3: 3rd Degree B-Spline</span>
-<span class="sd">                                                  …</span>
-<span class="sd">                                                  - 7: 7th Degree B-Spline</span>
-<span class="sd">            &lt;ex. 4&gt;</span>
-<span class="sd">        * write_wrap &lt;=&gt; roptions.wrap: Check if interpolation should wrap in [x,y,z] (a list of 3 items which are integer int or long).</span>
-<span class="sd">                                        For example, in MRI scans, the images wrap around in the phase encode direction, so the subject’s </span>
-<span class="sd">                                        nose may poke into the back of the subject’s head. These are typically:</span>
-
-<span class="sd">                                        - No wrapping [0, 0, 0]: for PET or images that have already been spatially transformed. (Also the recommended option if</span>
-<span class="sd">                                                                 you are not really sure).</span>
-<span class="sd">                                        - Wrap in Y [0, 1, 0], for (un-resliced) MRI where phase encoding is in the Y direction (voxel space).</span>
-<span class="sd">           &lt;ex. [0 0 0]&gt;</span>
-<span class="sd">        * write_mask &lt;=&gt; roptions.mask: Mask output image (a boolean). Because of subject motion, different images are likely to have different</span>
-<span class="sd">                                        patterns of zeros from where it was not possible to sample data. With masking enabled, the program</span>
-<span class="sd">                                        searches through the whole time series looking for voxels which need to be sampled from outside the</span>
-<span class="sd">                                        original images. Where this occurs, that voxel is set to zero for the whole set of images.</span>
-<span class="sd">          &lt;ex. False&gt;</span>
-
-<span class="sd">        * out_prefix &lt;=&gt; roptions.prefix: Specify the string to be prepended to the</span>
-<span class="sd">                                          filenames of the coregisterd image file(s)</span>
-<span class="sd">                                          (a string).</span>
-<span class="sd">          &lt;ex. r, capsul/nipype default value&gt;</span>
-<span class="sd">    * Outputs parameters:</span>
-<span class="sd">        # coregistered_source: A list of items which are an existing file name. Coregistered source files,</span>
-<span class="sd">                               corresponding to &#39;source&#39; images.</span>
-<span class="sd">		    &lt;ex. /home/ArthurBlair/data/raw_data/Anat.nii&gt;</span>
-<span class="sd">        # coregistered_files: A list of items which are an existing file name. Coregistered other files,</span>
-<span class="sd">                              corresponding to &#39;apply_to_files&#39; images.</span>
-<span class="sd">            &lt;ex. /home/ArthurBlair/data/raw_data/Func.nii&gt;</span>
+<span class="sd">    Please, see the complete documention for the `Coregister brick in the populse.mia_processes web site</span>
+<span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/preprocess/spm/Coregister.html&gt;`_</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="Coregister.__init__"><a class="viewcode-back" href="../../../../mia_processes.preprocess.spm.html#mia_processes.preprocess.spm.spatial_preprocessing.Coregister.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instanciation.</span>
 <span class="sd">        </span>
