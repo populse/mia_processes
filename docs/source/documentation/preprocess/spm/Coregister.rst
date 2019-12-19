@@ -6,10 +6,6 @@
 |`Home <../../../index.html>`_|`Documentation <../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +-----------------------------+-------------------------------------------+----------------------------------------------------+
 
-
-
-
-
 .. line break
 .. |br| raw:: html
 
@@ -47,10 +43,6 @@ Realignment through different modalities: Align together scans of different moda
 
 >>> from mia_processes.preprocess.spm import Coregister
 >>> Coregister.help()
-
-
-ATTENTION: Below is in progress
-*****************************************************************
 
 **Inputs parameters:** [#label]_
 
