@@ -298,11 +298,15 @@ class List_Duplicate(Process_Mia):
         # Outputs traits
         self.add_trait("out_file",
                        traits.File(output=True,
-                                   desc=out_file_desc))
+                                   desc=out_file_desc,
+                                   input_filename=False,
+                                   optional=True))
         
         self.add_trait("out_list",
                        traits.List(output=True,
-                                   desc=out_list_desc))
+                                   desc=out_list_desc,
+                                   input_filename=False,
+                                   optional=True))
 
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.

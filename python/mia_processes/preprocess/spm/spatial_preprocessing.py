@@ -406,6 +406,8 @@ class Coregister(Process_Mia):
 
         super(Coregister, self).run_process_mia()
 
+        if self.output_directory is Undefined:
+            self.output_directory = self.study_config.output_directory
         self.process.inputs.target = self.target
         self.process.inputs.source = self.source
         self.process.inputs.apply_to_files = self.apply_to_files
