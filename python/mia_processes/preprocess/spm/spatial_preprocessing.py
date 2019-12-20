@@ -43,7 +43,7 @@ from traits.api import Undefined, Float
 
 class Coregister(Process_Mia):
     """
-    ** Realignment through different modalities: Align together scans of different modalities **
+    *Realignment through different modalities: Align together scans of different modalities*
 
     Please, see the complete documention for the `Coregister brick in the populse.mia_processes web site
     <https://populse.github.io/mia_processes/html/documentation/preprocess/spm/Coregister.html>`_
@@ -148,7 +148,8 @@ class Coregister(Process_Mia):
                                    desc=separation_desc))
 
         self.add_trait("tolerance",
-                       traits.List(value=[.02, .02, .02, 0.001, 0.001, 0.001, .01, .01, .01, 0.001, 0.001, 0.001],
+                       traits.List(value=[.02, .02, .02, 0.001, 0.001, 0.001,
+                                          .01, .01, .01, 0.001, 0.001, 0.001],
                                    trait=traits.Range(low=0.0, high=None),
                                    minlen=12,
                                    maxlen=12,
@@ -221,13 +222,17 @@ class Coregister(Process_Mia):
         super(Coregister, self).list_outputs()
         
         # Outputs definition and tags inheritance (optional)
-        if self.target and self.source and self.jobtype:
+        if (self.target and self.source and
+              self.source != [Undefined] and self.jobtype):
             self.process.inputs.target = self.target
             self.process.inputs.source = self.source
             self.process.inputs.jobtype = self.jobtype
 
-            if self.apply_to_files:
+            if self.apply_to_files and self.apply_to_files != [Undefined]:
                 self.process.inputs.apply_to_files = self.apply_to_files
+
+            else:
+                self.apply_to_files = Undefined
 
             if self.out_prefix:
                 self.process.inputs.out_prefix = self.out_prefix
@@ -235,18 +240,22 @@ class Coregister(Process_Mia):
             self.outputs = self.process._list_outputs()
 
         if self.outputs:
+            outputs_coregsource = None
+            outputs_coregfiles = None
         
             for key, values in self.outputs.items():
 
                 if key == "coregistered_source":
-
+                    outputs_coregsource = values.copy()
+                    
                     for fullname in values:
                         path, filename_out = os.path.split(fullname)
 
                         if not self.jobtype == "estimate":
 
                             if self.out_prefix:
-                                filename_in = filename_out[len(self.out_prefix):]
+                                filename_in = filename_out[
+                                                  len(self.out_prefix):]
                         
                             else:
                                 filename_in = filename_out[len('r'):]
@@ -254,76 +263,64 @@ class Coregister(Process_Mia):
                         else:
                             filename_in = filename_out
     
-                        if (os.path.join(path,
-                                         filename_in)
-                              in self.source):
-                            self.inheritance_dict[fullname] = os.path.join(path,
-                                                                           filename_in)
+                        if os.path.join(path, filename_in) in self.source:
+                            self.inheritance_dict[
+                                           fullname] = os.path.join(path,
+                                                                    filename_in)
 
-                if key == "coregistered_files" and not values in ["<undefined>", traits.Undefined]:
+                        if self.jobtype == "estwrite":
 
+                            if isinstance(outputs_coregsource, list):
+                                outputs_coregsource.append(
+                                                os.path.join(path, filename_in))
+                                self.inheritance_dict[os.path.join(path,
+                                                                   filename_in)
+                                                     ] = os.path.join(path,
+                                                                    filename_in)
+                                
+                if (key == "coregistered_files" and
+                    not values in ["<undefined>", traits.Undefined]):
+                    outputs_coregfiles = values.copy()
+                    
                     for fullname in values:
                         path, filename_out = os.path.split(fullname)
 
                         if not self.jobtype == "estimate":
-                    
+
                             if self.out_prefix:
-                                filename_in = filename_out[len(self.out_prefix):]
-                        
+                                filename_in = filename_out[
+                                                  len(self.out_prefix):]
+
                             else:
                                 filename_in = filename_out[len('r'):]
 
                         else:
                             filename_in = filename_out
 
-                        if (os.path.join(path,
-                                         filename_in)
-                              in self.apply_to_files):
-                            self.inheritance_dict[fullname] = os.path.join(path,
-                                                                           filename_in)
+                        if os.path.join(path,
+                                        filename_in) in self.apply_to_files:
+                            self.inheritance_dict[
+                                           fullname] = os.path.join(path,
+                                                                    filename_in)
 
+                        if self.jobtype == "estwrite":
+
+                            if isinstance(outputs_coregfiles, list):
+                                outputs_coregfiles.append(
+                                               os.path.join(path, filename_in))
+                                self.inheritance_dict[os.path.join(path,
+                                                                   filename_in)
+                                                     ] = os.path.join(path,
+                                                                    filename_in)
+
+        if outputs_coregsource:
+            self.outputs["coregistered_source"] = outputs_coregsource
+
+        if outputs_coregfiles:
+            self.outputs["coregistered_files"] = outputs_coregfiles
+
+        # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
-        #return outputs, {}
-              
-        """
-            
-        if not self.target:
-            return {}
-        else:
-            self.process.inputs.target = self.target
-
-        if not self.source:
-            return {}
-        else:
-            self.process.inputs.source = self.source
-            
-#        if not self.apply_to_files:
-#            return {}
-#        else:
-#            self.process.inputs.apply_to_files = self.apply_to_files
-
-        if self.apply_to_files:
-            self.process.inputs.apply_to_files = self.apply_to_files
-
-        if not self.jobtype:
-            return {}
-        else:
-            self.process.inputs.jobtype = self.jobtype
-
-        outputs = self.process._list_outputs()
-
-#        if self.jobtype == "estimate":
-
-#            if self.source and not self.apply_to_files:
-                
-#                if isinstance(self.source, list):
-#                    outputs["coregistered_files"] = [self.source[0]]  # see for mutli-element in each list !
-
-#            elif self.source and self.apply_to_files:
-
-#                if isinstance(self.source, list) and isinstance(self.apply_to_files, list):
-#                    outputs["coregistered_files"] = [self.source[0], self.apply_to_files[0]] # see for mutli-element in each list !
-        """
 
     def run_process_mia(self):
 

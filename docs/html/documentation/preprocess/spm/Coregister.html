@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Coregister brick &#8212; mia_processes 1.3.1 documentation</title>
+    <title>Coregister brick &#8212; mia_processes 1.4.0 documentation</title>
     <link rel="stylesheet" href="../../../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
@@ -16,7 +16,7 @@
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
-          <span>mia_processes 1.3.1 documentation</span></a></h1>
+          <span>mia_processes 1.4.0 documentation</span></a></h1>
         <h2 class="heading"><span>Coregister brick</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -83,7 +83,9 @@ extensions: [.img, .nii, .hdr]).</p>
 <li><dl>
 <dt><em>jobtype</em></dt><dd><p>One of ‘estwrite’ or ‘estimate’ or ‘write’. If ‘estimate’ is selected, the registration parameters are stored in the headers of the ‘source’
 and the ‘apply_to_files’ images. If ‘write’ is selected, the resliced images are named the same as the originals except that they are
-prefixed by out_prefix.</p>
+prefixed by out_prefix. if ‘estwrite’ is selected, the described procedures for ‘estimate’ and ‘write’ are performed and the output parameter
+(coregistered_source and/or coregistered_files) contains the resliced images and the one whose header has been rewritten. If it is necessary
+to choose one or the other for a subsequent calculation in a pipeline, the Auto_Filter_List brick (mia_processes library) can be used.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="n">estimate</span>
 </pre></div>
 </div>
@@ -215,7 +217,7 @@ need to be sampled from outside the original images. Where this occurs, that vox
 <dt class="label" id="label"><span class="brackets">1</span><span class="fn-backref">(<a href="#id1">1</a>,<a href="#id2">2</a>)</span></dt>
 <dd><p>Syntax: mia_processes/nipype Coregister &lt;=&gt; SPM12 Coregister.</p>
 <p>Usefull links:
-<a class="reference external" href="https://www.fil.ion.ucl.ac.uk/spm/doc/manual.pdf#page=39">SPM12 Realign</a>,
+<a class="reference external" href="https://www.fil.ion.ucl.ac.uk/spm/doc/manual.pdf#page=39">SPM12 Coregister</a>,
 <a class="reference external" href="https://nipype.readthedocs.io/en/latest/interfaces/generated/interfaces.spm/preprocess.html#coregister">nipype</a></p>
 </dd>
 </dl>

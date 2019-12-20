@@ -34,9 +34,9 @@
 
    &nbsp;
 
-===============
+================
 Coregister brick
-===============
+================
 
 Realignment through different modalities: Align together scans of different modalities
 --------------------------------------------------------------------------------------
@@ -74,7 +74,9 @@ Realignment through different modalities: Align together scans of different moda
 - *jobtype*
     One of 'estwrite' or 'estimate' or 'write'. If 'estimate' is selected, the registration parameters are stored in the headers of the 'source'
     and the 'apply_to_files' images. If 'write' is selected, the resliced images are named the same as the originals except that they are
-    prefixed by out_prefix.
+    prefixed by out_prefix. if 'estwrite' is selected, the described procedures for 'estimate' and 'write' are performed and the output parameter
+    (coregistered_source and/or coregistered_files) contains the resliced images and the one whose header has been rewritten. If it is necessary
+    to choose one or the other for a subsequent calculation in a pipeline, the Auto_Filter_List brick (mia_processes library) can be used.
 
     ::
 
@@ -83,7 +85,7 @@ Realignment through different modalities: Align together scans of different moda
 - *cost_function <=> eoptions.cost_fun*
     One of 'mi' or 'nmi' or 'ecc' or 'ncc'. Registration involves finding parameters that either maximise or minimise some objective
     function. For inter-modal registration,  use 'Mutual Information', 'Normalised Mutual Information' or 'Entropy Correlation Coefficient'. For
-    within modality, you could also use Normalised Cross Correlation.      
+    within modality, you could also use Normalised Cross Correlation. 
 
       | \- 'mi': Mutual Information
       | \- 'nmi': Normalised Mutual Information
@@ -184,5 +186,5 @@ Realignment through different modalities: Align together scans of different moda
 .. [#label] Syntax: mia_processes/nipype Coregister <=> SPM12 Coregister.
 	    
 	    Usefull links:
-	    `SPM12 Realign <https://www.fil.ion.ucl.ac.uk/spm/doc/manual.pdf#page=39>`_, 
+	    `SPM12 Coregister <https://www.fil.ion.ucl.ac.uk/spm/doc/manual.pdf#page=39>`_, 
 	    `nipype <https://nipype.readthedocs.io/en/latest/interfaces/generated/interfaces.spm/preprocess.html#coregister>`_

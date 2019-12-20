@@ -35,6 +35,138 @@ from populse_mia.data_manager.project import COLLECTION_CURRENT
 import os
 
 
+class Auto_Filter_List(Process_Mia):
+    """ Auto_Filter_List (from mia_processes.tools.tools)
+*** Selects one or more (slicing) elements from a list ***
+    ['/home/ArthurBlair/data/raw_data/Anat.nii ',
+     '/home/ArthurBlair/data/raw_data/Func.nii',]
+                -> Auto_Filter_List ->
+    ['/home/ArthurBlair/data/raw_data/Func.nii']
+    * Input parameters:
+        * in_list: the list of elements to be filtered (traits.List)
+            <ex. ['/home/ArthurBlair/data/raw_data/Anat.nii',
+                  '/home/ArthurBlair/data/raw_data/Func.nii',
+                  '/home/ArthurBlair/data/raw_data/rp_Func.txt',
+                  '/home/ArthurBlair/data/raw_data/meanFunc.nii']>
+        * index_filter: a list of 0 to 2 index for filtering (traits.List).
+                        If no index, take the first element of in_list.
+                        If there is one index, takes the element at that
+                        position in in_list. If two indexes, selects the
+                        elements between the first and the second index (the
+                        index corresponds to the actual position in the list,
+                        i.e. there is no index 0 as in python).
+            <ex. [2, 4]>
+    * Output parameters:
+        * filtered_list: the corresponding filtering result (traits.List)
+            <ex. ['/home/ArthurBlair/data/Func.nii',
+                  '/home/ArthurBlair/data/raw_data/rp_Func.txt',
+                  '/home/ArthurBlair/data/raw_data/meanFunc.nii']
+
+    """
+
+    
+    def __init__(self):
+        """Dedicated to the attributes initialisation / instanciation.
+        
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # initialisation of the objects needed for the launch of the brick
+        super(Auto_Filter_List, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = [] # no need of third party software!
+
+        # Inputs description
+        in_list_desc = 'The list of elements to be filtered.'
+        index_filter_desc = 'A list of 0 to 2 indexes for filtering.'
+
+        # Outputs description
+        filtered_list_desc = 'The corresponding filtering result (a list).'
+        
+        # Inputs traits
+        self.add_trait("in_list",
+                        traits.List(output=False,
+                                   desc=in_list_desc))
+        
+        self.add_trait("index_filter",
+                       traits.List(value=[1],
+                                   trait=traits.Range(low=1, high=None),
+                                   minlen=0,
+                                   maxlen=2,
+                                   output=False,
+                                   optional=True,
+                                   desc=index_filter_desc))
+
+        # Outputs traits
+        self.add_trait("filtered_list",
+                       traits.List(output=True,
+                                   desc=filtered_list_desc))
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. To work properly this method must return 
+        self.make_initResult() object.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(Auto_Filter_List, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if (self.in_list and
+               not self.in_list in ["<undefined>", traits.Undefined]):
+
+            if not self.index_filter:
+                self.outputs['filtered_list'] = [self.in_list[0]]
+
+            if len(self.index_filter) is 1:
+
+                if self.index_filter[0] <= len(self.in_list):
+                    self.outputs['filtered_list'] = [self.in_list[
+                                                        self.index_filter[0]-1]]
+
+                else:
+                    print('\nThe initialisation of the Auto_Filter_List brick'
+                          ' failed because the index_filter parameter is greater'
+                          ' than the length of the in_list parameter ...\n')
+
+            if len(self.index_filter) is 2:
+
+                if self.index_filter[0] < self.index_filter[1]:
+
+                    if self.index_filter[0] <= len(self.in_list):
+
+                        if self.index_filter[1] <= len(self.in_list):
+                            self.outputs['filtered_list'] = self.in_list[
+                                    self.index_filter[0]-1:self.index_filter[1]]
+
+                        else:
+                            print('\nThe initialisation of the Auto_Filter_List'
+                                  ' brick failed because the second value of'
+                                  ' the index_filter parameter is greater than'
+                                  ' the length of the in_list parameter ...\n')
+
+                    else:
+                        print('\nThe initialisation of the Auto_Filter_List'
+                              ' brick failed because the first value of the'
+                              ' index_filter parameter is greater than the'
+                              ' length of the in_list parameter ...\n')
+
+                else:
+                     print('\nThe initialisation of the Auto_Filter_List brick'
+                           ' failed because the first value of the index_filter'
+                           ' parameter is greater than the second ...\n')
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        return
+
 class Files_To_List(Process_Mia):
     """ Files_To_List (from mia_processes.tools.tools)
 *** From 2 file names, generating a list containing all theses file names ***
