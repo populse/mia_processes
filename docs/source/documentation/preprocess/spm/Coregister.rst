@@ -44,9 +44,9 @@ Realignment through different modalities: Align together scans of different moda
 >>> from mia_processes.preprocess.spm import Coregister
 >>> Coregister.help()
 
-**Inputs parameters:** [#label]_
+**Inputs parameters:**
 
-- *target <=> ref*
+- *target <=> ref* [#label]_
     The reference file (remains stationary) while the source image is moved to match it. An existing, uncompressed file (valid extensions:
     [.img, .nii, .hdr]).
 
@@ -54,7 +54,7 @@ Realignment through different modalities: Align together scans of different moda
 
       ex. /home/ArthurBlair/data/downloaded_data/meanFunc.nii
 
-- *source <=> source*
+- *source <=> source* [#label]_
     The image that is jiggled about to best match the target image. A list of items which are an existing, uncompressed file (valid
     extensions: [.img, .nii, .hdr]).
 
@@ -62,7 +62,7 @@ Realignment through different modalities: Align together scans of different moda
 
       ex. ['/home/ArthurBlair/data/raw_data/Anat.nii']
 
-- *apply_to_files <=> other*
+- *apply_to_files <=> other* [#label]_
     These are any images that need to remain in alignment with the source image (a list of items which are an existing file name).
     
     ::
@@ -71,7 +71,7 @@ Realignment through different modalities: Align together scans of different moda
 
 
 
-- *jobtype*
+- *jobtype* [#label]_
     One of 'estwrite' or 'estimate' or 'write'. If 'estimate' is selected, the registration parameters are stored in the headers of the 'source'
     and the 'apply_to_files' images. If 'write' is selected, the resliced images are named the same as the originals except that they are
     prefixed by out_prefix. if 'estwrite' is selected, the described procedures for 'estimate' and 'write' are performed and the output parameter
@@ -82,7 +82,7 @@ Realignment through different modalities: Align together scans of different moda
 
        ex. estimate
 
-- *cost_function <=> eoptions.cost_fun*
+- *cost_function <=> eoptions.cost_fun* [#label]_
     One of 'mi' or 'nmi' or 'ecc' or 'ncc'. Registration involves finding parameters that either maximise or minimise some objective
     function. For inter-modal registration,  use 'Mutual Information', 'Normalised Mutual Information' or 'Entropy Correlation Coefficient'. For
     within modality, you could also use Normalised Cross Correlation. 
@@ -96,7 +96,7 @@ Realignment through different modalities: Align together scans of different moda
 
       ex. nmi
 
-- *separation <=> eoptions.sep*
+- *separation <=> eoptions.sep* [#label]_
     A list of items which are a float. The average distance between sampled points (in mm). Can be a vector to allow a coarse registration
     followed by increasingly fine ones.
 
@@ -104,7 +104,7 @@ Realignment through different modalities: Align together scans of different moda
 
       ex. [4, 2]
 
-- *tolerance <=> eoptions.tol*
+- *tolerance <=> eoptions.tol* [#label]_
     A list of 12 items which are a float. The acceptable tolerance for each of 12 params. Iterations stop when differences between
     successive estimates are less than the required tolerance.
 
@@ -112,14 +112,14 @@ Realignment through different modalities: Align together scans of different moda
 
       ex. [0.02, 0.02, 0.02, 0.001, 0.001, 0.001, 0.01, 0.01, 0.01, 0.001, 0.001, 0.001]
 
-- *fwhm <=> eoptions.fwhm*
+- *fwhm <=> eoptions.fwhm* [#label]_
     A list of 2 items which are a float. Kernel of gaussian smooth to apply to the 256*256 joint histogram.
 
     ::
 
       ex. [7, 7] 
 
-- *write_interp <=> roptions.interp*
+- *write_interp <=> roptions.interp* [#label]_
     The method by which the images are sampled when being written in a different space. Nearest neighbour is fastest, but not
     recommended for image realignment. Trilinear Interpolation is probably OK for PET, or realigned and re-sliced fMRI, but not so suitable
     for fMRI with subject movemen because higher degree interpolation generally gives better results. Although higher degree methods
@@ -137,7 +137,7 @@ Realignment through different modalities: Align together scans of different moda
 
       ex. 4
 
-- *write_wrap <=> roptions.wrap*
+- *write_wrap <=> roptions.wrap* [#label]_
     Check if interpolation should wrap in [x,y,z] (a list of 3 items which are integer int or long). For example, in MRI scans, the images wrap
     around in the phase encode direction, so the subject’s nose may poke into the back of the subject’s head. These are typically:
 
@@ -149,7 +149,7 @@ Realignment through different modalities: Align together scans of different moda
 
         ex. [0 0 0]
 
-- *write_mask <=> roptions.mask*
+- *write_mask <=> roptions.mask* [#label]_
     Mask output image (a boolean). Because of subject motion, different images are likely to have different patterns of zeros from where it
     was not possible to sample data. With masking enabled, the program searches through the whole time series looking for voxels which
     need to be sampled from outside the original images. Where this occurs, that voxel is set to zero for the whole set of images.
@@ -158,14 +158,14 @@ Realignment through different modalities: Align together scans of different moda
 
       ex. False
 
-- *out_prefix <=> roptions.prefix*
+- *out_prefix <=> roptions.prefix* [#label]_
     Specify the string to be prepended to the filenames of the coregisterd image file(s).
 
     ::
 
       ex. r, capsul/nipype default value
 
-**Outputs parameters:** [#label]_
+**Outputs parameters:**
 
 - *coregistered_source*
     A list of items which are an existing file name. Coregistered source files, corresponding to 'source' images.
@@ -186,5 +186,7 @@ Realignment through different modalities: Align together scans of different moda
 .. [#label] Syntax: mia_processes/nipype Coregister <=> SPM12 Coregister.
 	    
 	    Usefull links:
-	    `SPM12 Coregister <https://www.fil.ion.ucl.ac.uk/spm/doc/manual.pdf#page=39>`_, 
-	    `nipype <https://nipype.readthedocs.io/en/latest/interfaces/generated/interfaces.spm/preprocess.html#coregister>`_
+	    `SPM12 Coregister <https://www.fil.ion.ucl.ac.uk/spm/doc/manual.pdf#page=39>`_,
+	    `nipype Coregister <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.spm.preprocess.html#coregister>`_
+..
+  `nipype <https://nipype.readthedocs.io/en/latest/interfaces/generated/interfaces.spm/preprocess.html#coregister>`_
