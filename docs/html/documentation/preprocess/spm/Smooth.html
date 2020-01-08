@@ -52,10 +52,10 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Smooth</span><span class="o">.</span><span class="n">help</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Inputs parameters:</strong> <a class="footnote-reference brackets" href="#label" id="id1">1</a></p>
+<p><strong>Inputs parameters:</strong></p>
 <ul>
 <li><dl>
-<dt><em>in_files &lt;=&gt; data</em></dt><dd><p>List of files to smooth. A list of items which are an existing, uncompressed file (valid extensions: [.img, .nii, .hdr]).</p>
+<dt><em>in_files &lt;=&gt; data</em> <a class="footnote-reference brackets" href="#label" id="id1">1</a></dt><dd><p>List of files to smooth. A list of items which are an existing, uncompressed file (valid extensions: [.img, .nii, .hdr]).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/Func.nii&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -63,7 +63,7 @@
 </dl>
 </li>
 <li><dl>
-<dt><em>fwhm &lt;=&gt; fwhm</em></dt><dd><p>Specify the full-width at half maximum (FWHM) of the Gaussian smoothing kernel in mm. Three values can be entered, indicating
+<dt><em>fwhm &lt;=&gt; fwhm</em> <a class="footnote-reference brackets" href="#label" id="id2">1</a></dt><dd><p>Specify the full-width at half maximum (FWHM) of the Gaussian smoothing kernel in mm. Three values can be entered, indicating
 the FWHM in the x, y and z directions, or one value only, indicating the same FWHM in all three directions. A list of 3 items which are a
 float.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
@@ -73,7 +73,7 @@ float.</p>
 </dl>
 </li>
 <li><dl>
-<dt><em>data_type &lt;=&gt; dtype</em></dt><dd><div class="line-block">
+<dt><em>data_type &lt;=&gt; dtype</em> <a class="footnote-reference brackets" href="#label" id="id3">1</a></dt><dd><div class="line-block">
 <div class="line">Data type of the output images (an integer [int or long]).</div>
 <div class="line-block">
 <div class="line">0: same as the original images</div>
@@ -92,7 +92,7 @@ float.</p>
 </dl>
 </li>
 <li><dl>
-<dt><em>implicit_masking &lt;=&gt; im</em></dt><dd><p>A mask implied by a particular voxel value (a boolean). If set to True, the implicit masking of the input image is preserved in the
+<dt><em>implicit_masking &lt;=&gt; im</em> <a class="footnote-reference brackets" href="#label" id="id4">1</a></dt><dd><p>A mask implied by a particular voxel value (a boolean). If set to True, the implicit masking of the input image is preserved in the
 smoothed image.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
 </pre></div>
@@ -101,7 +101,7 @@ smoothed image.</p>
 </dl>
 </li>
 <li><dl>
-<dt><em>out_prefix &lt;=&gt; prefix</em></dt><dd><p>Specify the string to be prepended to the filenames of the smoothed image file(s) (a string).</p>
+<dt><em>out_prefix &lt;=&gt; prefix</em> <a class="footnote-reference brackets" href="#label" id="id5">1</a></dt><dd><p>Specify the string to be prepended to the filenames of the smoothed image file(s) (a string).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="n">s</span><span class="p">,</span> <span class="n">capsul</span><span class="o">/</span><span class="n">nipype</span> <span class="n">default</span> <span class="n">value</span>
 </pre></div>
 </div>
@@ -109,7 +109,7 @@ smoothed image.</p>
 </dl>
 </li>
 </ul>
-<p><strong>Outputs parameters:</strong> <a class="footnote-reference brackets" href="#label" id="id2">1</a></p>
+<p><strong>Outputs parameters:</strong></p>
 <ul>
 <li><dl>
 <dt><em>smoothed_files</em></dt><dd><p>Smoothed files (a list of items which are an existing file name).</p>
@@ -122,11 +122,11 @@ smoothed image.</p>
 </ul>
 <hr class="docutils" />
 <dl class="footnote brackets">
-<dt class="label" id="label"><span class="brackets">1</span><span class="fn-backref">(<a href="#id1">1</a>,<a href="#id2">2</a>)</span></dt>
+<dt class="label" id="label"><span class="brackets">1</span><span class="fn-backref">(<a href="#id1">1</a>,<a href="#id2">2</a>,<a href="#id3">3</a>,<a href="#id4">4</a>,<a href="#id5">5</a>)</span></dt>
 <dd><p>Syntax: mia_processes/nipype Smooth &lt;=&gt; SPM12 Smooth.</p>
 <p>Usefull links:
 <a class="reference external" href="https://www.fil.ion.ucl.ac.uk/spm/doc/manual.pdf#page=57">SPM12 Smooth</a>,
-<a class="reference external" href="https://nipype.readthedocs.io/en/latest/interfaces/generated/interfaces.spm/preprocess.html#smooth">nipype</a></p>
+<a class="reference external" href="https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.spm.preprocess.html#smooth">nipype Smooth</a></p>
 </dd>
 </dl>
 </div>
