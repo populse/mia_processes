@@ -344,27 +344,28 @@ class NewSegment(Process_Mia):
   The warp.fwhm, warp.cleanup and warp.mrf of SPM12 are not used in the NewSegment brick.
 *** Segmentation: Segments,  bias  corrects  and  spatially normalises - all in the same model *** 
     * Input parameters:
-        * affine_regularization <=> warp.affreg : Standard space for affine registration ('mni' or 'eastern' or 'subj' or 'none'). <ex. mni>.
-        * channel_files <=> channel.vol : Path of the scans for processing (valid extensions, .img, .nii, .hdr).
+        * channel_files <=> channel.vols : Path of the scans for processing (valid extensions, .img, .nii, .hdr).
             <ex. ['/home/ArthurBlair/data/raw_data/Anat.nii']>.
-        * channel_info: A tuple with the following values: - Bias reguralisation -a float [0-10]-
-                                                           - Bias FWHM -a float-
-                                                           - Which maps to save -a tuple of two boolean values (Field, Corrected)-.
-                * Bias regularisation <=> channel.biasreg: 0 Noregularisation, 0.00001 extremely light regularisation,  ... ,
-                                                           1 very heavy regularisation, 10 extremely heavy regularisation.
-                * Bias FWHM (Full Width at Half Maximum) <=> channel.biasfwhm: 30 (mm cutoff), 40 (mm cutoff), ...,
-                                                                               150 (mm cutoff), inf (no correction).
-                * Which maps to save (Field, Bias Corrected) <=> channel.write: For save a bias corrected version of the estimated
-                                                                                bias field or/and the processed image:
-                                                           (False, False) Save Nothing, (False, True) save Bias corrected image only, etc.
+        * channel_info <=> (channel.biasreg, channel.biasfwhm, channel.write): A tuple with the following fields:
+                - bias reguralisation (a float between 0 and 10): The goal is to model, by different tissue classes, the intensity variations that arise due to different tissues, while model, with a bias field, those that occur because of the bias artifact due to the physics of MRI imaging. If the data have very little intensity non-uniformity artifact, then bias control should be increased. This effectively tells the algorithm that there is very little bias in your data, so it doesn't try to model it.
+                    - 0 Noregularisation
+                    - 0.00001 extremely light regularisation
+                    -  ...
+                    - 1 very heavy regularisation
+                    - 10 extremely heavy regularisation.
+                - bias FWHM (a float between 20 and infinity): Full Width at Half Maximum of Gaussian smoothness of bias. Smoother bias fields need fewer parameters to describe them. This means that the algorithm is faster for smoother intensity non-uniformities (e.g. 150 mm cutoff gives faster results than 20 mm cutoff).
+                - which maps to save (a tuple of two boolean values; (Field, Corrected)): For save the estimated bias field or/and the bias corrected version of the processed image.
+                    - (False, False) save Nothing
+                    - (False, True) save bias corrected image only
+                    - (True, False) save estimated bias field only
+                    - (True, True) save estimated bias field and bias corrected image
             <ex. (0.0001, 60, (False, True)>.
-        * sampling_distance <=> warp.samp: Approximate distance between sampled points when estimating the model parameters. a float <ex. 3>
-        * tissues <=> tissue: A list of tuples with the following values for each tissue types; Grey Matter,
+        * tissues <=> [((tissue(i).tpm, tissue(i).ngaus, (tissue(i).native), (tissue(i).warped)),((tissue(i+1).tpm, tissue(i+1).ngaus, (tissue(i+1).native), (tissue(i+1).warped)), ...]: A list of tuples with the following values for each tissue types; Grey Matter,
                               White Matter, CerebroSpinal Flux, Bone tissue, Soft tissue, AirBackground:
                               [((tissue probability map (4D), 1-based index to frame),  number of gaussians,
                                 (which maps to save [Native, DARTEL]), (which maps to save [Unmodulated, Modulated])), ...].
                               Typically, the order of tissues is grey matter, white matter, CSF, bone,
-                              soft tissue and iar/background (if using tpm/TPM.nii).
+                              soft tissue and aiar/background (if using tpm/TPM.nii).
                 * tissue probability map <=> tisue(x).tpm with x in [1, 2, 3, 4, 5, 6]: The tissue probability image [.img, .nii, .hdr].
                 * 1-based index to frame: index for the 4th dimension of the tissue probability map and then tissue type selection.
                 * number of gaussians <=> tissue(x).ngaus: Typical numbers of Gaussians could be two for GM, WM, CSF, three for bone,
@@ -383,6 +384,11 @@ class NewSegment(Process_Mia):
                    (('/home/ArthurBlair/spm/spm12/tpm/TPM.nii', 4), 3, (True, False), (False, False)),
                    (('/home/ArthurBlair/spm/spm12/tpm/TPM.nii', 5), 4, (True, False), (False, False)),
                    (('/home/ArthurBlair/spm/spm12/tpm/TPM.nii', 6), 2, (True, False), (False, False))]>.
+        * affine_regularization <=> warp.affreg : Standard space for affine registration ('mni' or 'eastern' or 'subj' or 'none'). <ex. mni>.
+
+
+        * sampling_distance <=> warp.samp: Approximate distance between sampled points when estimating the model parameters. a float <ex. 3>
+
         * warping_regularization <=> warp.reg: The measure of the roughness of the deformations for registration, involve the sum of
                                                5 elements. Floats or list of floats. (the latter is required by SPM12).
             <ex. [0, 0.001, 0.5, 0.05, 0.2]>
@@ -414,11 +420,12 @@ class NewSegment(Process_Mia):
         self.requirement = ['matlab', 'spm']
 
         # Inputs description
-        affine_regularization_desc = 'Standard space for affine registration ("mni" or "eastern" or "subj" or "none").'
+        
         channel_files_desc = 'Path of the scans for processing, valid extensions: [.img, .nii, .hdr]. A list with one '\
                              'string element corresponding to an existing path file'
-        channel_info_desc = 'A tuple with the following values:(Bias reguralisation -a float [0-10]-, Bias FWHM ' \
-                            '-a float-, Which maps to save -a tuple of two boolean values (Field, Corrected)-)'
+        channel_info_desc = 'A tuple with the following values:(bias reguralisation -a float between 0 and 10-, bias FWHM ' \
+                            '-a float between 20 and infinity-, which maps to save -a tuple of two boolean values (Field, Corrected)-)'
+        affine_regularization_desc = 'Standard space for affine registration ("mni" or "eastern" or "subj" or "none").'
         sampling_distance_desc = 'Approximate distance between sampled points when estimating the model parameters' \
                                  ' -a float-'
         tissues_desc = 'A list of tuples with the following values for each tissue types (grey matter, white matter, ' \
@@ -448,6 +455,32 @@ class NewSegment(Process_Mia):
                         ((tpm_path, 6), 2, (True, False), (False, False))]
 
         # Inputs traits
+        self.add_trait("channel_files",
+                       InputMultiPath(output=False,
+                                      optional=False,
+                                      desc=channel_files_desc))
+        self.add_trait("channel_info",
+                       traits.Tuple(traits.Range(value=0.0001,
+                                                 low=0.,
+                                                 high=10.),
+                                    traits.Range(value=60.,
+                                                 low=20.,
+                                                 high=None),
+                                    traits.Tuple(traits.Bool(False),
+                                                 traits.Bool(True)),
+                                    output=False,
+                                    optional=True,
+                                    desc=channel_info_desc))
+        self.add_trait("tissues",
+                          traits.List(traits.Tuple(traits.Tuple(ImageFileSPM(exists=True),
+                                                                traits.Int()),
+                                                   traits.Int(),
+                                                   traits.Tuple(traits.Bool, traits.Bool),
+                                                   traits.Tuple(traits.Bool, traits.Bool)),
+                                      value=tissues_list,
+                                      output=False,
+                                      optional=True,
+                                      desc=tissues_desc))
         self.add_trait("affine_regularization",
                        traits.Enum('mni',
                                    'eastern',
@@ -457,39 +490,13 @@ class NewSegment(Process_Mia):
                                    optional=True,
                                    desc=affine_regularization_desc))
         
-        self.add_trait("channel_files",
-                       InputMultiPath(output=False,
-                                      optional=False,
-                                      desc=channel_files_desc))
-        """self.add_trait("channel_info", traits.Tuple(traits.Float(), traits.Float(),
-                                                    traits.Tuple(traits.Bool, traits.Bool(True)),
-                                                    output=False, optional=True))"""
-        
-        self.add_trait("channel_info",
-                       traits.Tuple(traits.Range(value=0.0001,
-                                                 low=0.,
-                                                 high=10.),
-                                    traits.Enum(60, 30, 40, 50, 70, 80, 90, 100, 110, 120, 130, 140, 150, 'inf'),
-                                    traits.Tuple(traits.Bool(False), traits.Bool(False)),
-                                    output=False,
-                                    optional=True,
-                                    desc=channel_info_desc))
-        
         self.add_trait("sampling_distance",
                        Float(3.0,
                              output=False,
                              optional=True,
                              desc=sampling_distance_desc))
         
-        self.add_trait("tissues",
-                       traits.List(tissues_list,
-                                   output=False,
-                                   optional=True,
-                                   desc=tissues_desc))
-        """self.add_trait("tissues", traits.List(traits.Tuple(
-            traits.Tuple(ImageFileSPM(exists=True), traits.Int()),
-            traits.Int(), traits.Tuple(traits.Bool, traits.Bool),
-            traits.Tuple(traits.Bool, traits.Bool)), output=False, optional=True))"""
+
 
         self.add_trait("warping_regularization",
                        traits.List(traits.Float(),
