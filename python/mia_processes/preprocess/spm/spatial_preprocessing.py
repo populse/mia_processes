@@ -323,9 +323,8 @@ class Coregister(Process_Mia):
         return self.make_initResult()
 
     def run_process_mia(self):
-
+        """Dedicated to the process launch step of the brick."""
         super(Coregister, self).run_process_mia()
-
         self.process.inputs.target = self.target
         self.process.inputs.source = self.source
         self.process.inputs.apply_to_files = self.apply_to_files
@@ -341,14 +340,14 @@ class Coregister(Process_Mia):
 class NewSegment(Process_Mia):
     """
 - NewSegment (mia_processes.preprocess.spm.spatial_preprocessing.NewSegment) <=> Segment (SPM12 names).
-  The warp.fwhm, warp.cleanup and warp.mrf of SPM12 are not used in the NewSegment brick.
+  The warp.mrf, warp.cleanup and warp.fwhm, from  SPM12 are not used in this NewSegment brick.
 *** Segmentation: Segments,  bias  corrects  and  spatially normalises - all in the same model *** 
     * Input parameters:
         * channel_files <=> channel.vols : Path of the scans for processing (valid extensions, .img, .nii, .hdr).
             <ex. ['/home/ArthurBlair/data/raw_data/Anat.nii']>.
         * channel_info <=> (channel.biasreg, channel.biasfwhm, channel.write): A tuple with the following fields:
                 - bias reguralisation (a float between 0 and 10): The goal is to model, by different tissue classes, the intensity variations that arise due to different tissues, while model, with a bias field, those that occur because of the bias artifact due to the physics of MRI imaging. If the data have very little intensity non-uniformity artifact, then bias control should be increased. This effectively tells the algorithm that there is very little bias in your data, so it doesn't try to model it.
-                    - 0 Noregularisation
+                    - 0 No regularisation
                     - 0.00001 extremely light regularisation
                     -  ...
                     - 1 very heavy regularisation
@@ -360,38 +359,28 @@ class NewSegment(Process_Mia):
                     - (True, False) save estimated bias field only
                     - (True, True) save estimated bias field and bias corrected image
             <ex. (0.0001, 60, (False, True)>.
-        * tissues <=> [((tissue(i).tpm, tissue(i).ngaus, (tissue(i).native), (tissue(i).warped)),((tissue(i+1).tpm, tissue(i+1).ngaus, (tissue(i+1).native), (tissue(i+1).warped)), ...]: A list of tuples with the following values for each tissue types; Grey Matter,
-                              White Matter, CerebroSpinal Flux, Bone tissue, Soft tissue, AirBackground:
-                              [((tissue probability map (4D), 1-based index to frame),  number of gaussians,
-                                (which maps to save [Native, DARTEL]), (which maps to save [Unmodulated, Modulated])), ...].
-                              Typically, the order of tissues is grey matter, white matter, CSF, bone,
-                              soft tissue and aiar/background (if using tpm/TPM.nii).
-                * tissue probability map <=> tisue(x).tpm with x in [1, 2, 3, 4, 5, 6]: The tissue probability image [.img, .nii, .hdr].
-                * 1-based index to frame: index for the 4th dimension of the tissue probability map and then tissue type selection.
-                * number of gaussians <=> tissue(x).ngaus: Typical numbers of Gaussians could be two for GM, WM, CSF, three for bone,
-                                                           four for other soft tissues and two for air / background):
-                                                           [1,2,3,4,5,6,7,8,inf - Non parametric-].
-                * which maps to save [Native, DARTEL] <=> tissue(x).native:
-                  The native space option allows you to produce a tissue class image (c*) that is in alignment with the original.
-                  It can also be used for importing into a form that can be used with the Dartel toobox (rc*):
-                  (False, False) Save Nothing, (True, False) save native only. etc.
-                * which maps to save [Unmodulated, Modulated] <=> tissue(x).warped:
-                  To produces spatially normalised versions of the tissue class, both with (mcw*) and without (wc*)
-                   modulation: (False, False) Save Nothing, (True, False) save unmodulated only. etc.
+        * tissues <=> [((tissue(i).tpm), tissue(i).ngaus, (tissue(i).native), (tissue(i).warped)),((tissue(i+1).tpm), tissue(i+1).ngaus, (tissue(i+1).native), (tissue(i+1).warped)), ...]: A list of tuples (one per tissue, i from 1 to 6) with parameter values for each tissue types. Typically, the order of tissues is grey matter (i=1), white matter (i=2), CSF (i=3), bone (i=4), soft tissue (i=5) and air/background (i=6), if using tpm/TPM.nii from spm12. Each tuple consists of the following fields:
+                              [((tissue probability map (4D), 1-based index to frame),  number of gaussians, (which maps to save [Native, DARTEL]), (which maps to save [Unmodulated, Modulated])), ...].
+                              
+                * tissue probability map <=> tissue(i).tpm with i in [1, 2, 3, 4, 5, 6]: The tissue probability image [.img, .nii, .hdr].
+                * 1-based index to frame: Index for the 4th dimension of the tissue probability map and then tissue type selection (in [1 to 6]).
+                * number of gaussians <=> tissue(i).ngaus: Typical numbers of Gaussians could be two for GM, WM, CSF, three for bone,
+                                                           four for other soft tissues and two for air / background ( in [1, 2, 3, 4, 5,6 , 7, 8, inf -Non parametric-]).
+                * which maps to save [Native, DARTEL] <=> tissue(i).native: To produce a tissue class image that is in alignment with the original (ci) or that can be used with the Dartel toobox (rci) ((False, False) Save Nothing, (True, False) save native only, (False, True ) save DARTEL only, etc.).
+                * which maps to save [Unmodulated, Modulated] <=> tissue(i).warped: To produces spatially normalised versions of the tissue class, with (mcwi) and without (wci) modulation ((False, False) Save Nothing, (True, False) save unmodulated only, (False, True ) save modulated only, etc.).
              <ex. [(('/home/ArthurBlair/spm/spm12/tpm/TPM.nii', 1), 2, (True, False), (False, False)),
                    (('/home/ArthurBlair/spm/spm12/tpm/TPM.nii', 2), 2, (True, False), (False, False)), 
                    (('/home/ArthurBlair/spm/spm12/tpm/TPM.nii', 3), 2, (True, False), (False, False)),
                    (('/home/ArthurBlair/spm/spm12/tpm/TPM.nii', 4), 3, (True, False), (False, False)),
                    (('/home/ArthurBlair/spm/spm12/tpm/TPM.nii', 5), 4, (True, False), (False, False)),
                    (('/home/ArthurBlair/spm/spm12/tpm/TPM.nii', 6), 2, (True, False), (False, False))]>.
-        * affine_regularization <=> warp.affreg : Standard space for affine registration ('mni' or 'eastern' or 'subj' or 'none'). <ex. mni>.
-
-
+        * warping_regularization <=> warp.reg: The measure of the roughness of the deformations for registration, involve the sum of
+                                               5 elements. Floats or list of floats (the latter is required by SPM12).
+            <ex. [0, 0.001, 0.5, 0.05, 0.2]>  
+        * affine_regularization <=> warp.affreg : Standard space for affine registration ('mni' or 'eastern' or 'subj' or 'none'). <ex. mni>.  
         * sampling_distance <=> warp.samp: Approximate distance between sampled points when estimating the model parameters. a float <ex. 3>
 
-        * warping_regularization <=> warp.reg: The measure of the roughness of the deformations for registration, involve the sum of
-                                               5 elements. Floats or list of floats. (the latter is required by SPM12).
-            <ex. [0, 0.001, 0.5, 0.05, 0.2]>
+
         * write_deformation_fields <=> warp.write: Deformation fields can be saved to disk, and used by the deformation utility.
                                                    A list of 2 booleans for which deformation fields to write, [Inverse, Forward]:
                                                    [False, False] Save nothing, [True, False] save Inverse only. <ex. [False, True]>
@@ -425,14 +414,17 @@ class NewSegment(Process_Mia):
                              'string element corresponding to an existing path file'
         channel_info_desc = 'A tuple with the following values:(bias reguralisation -a float between 0 and 10-, bias FWHM ' \
                             '-a float between 20 and infinity-, which maps to save -a tuple of two boolean values (Field, Corrected)-)'
-        affine_regularization_desc = 'Standard space for affine registration ("mni" or "eastern" or "subj" or "none").'
-        sampling_distance_desc = 'Approximate distance between sampled points when estimating the model parameters' \
-                                 ' -a float-'
         tissues_desc = 'A list of tuples with the following values for each tissue types (grey matter, white matter, ' \
                        'etc): [((tissue probability map (4D), 1-based index to frame), number of gaussians, ' \
                        '(which maps to save [Native, DARTEL]), (which maps to save [Unmodulated, Modulated])), ...].'
         warping_regularization_desc = 'The measure of the roughness of the deformations for registration, involve ' \
                                       'the sum of 5 elements. -floats or list of floats-'
+        affine_regularization_desc = 'Standard space for affine registration ("mni" or "eastern" or "subj" or "none").'
+
+        sampling_distance_desc = 'Approximate distance between sampled points when estimating the model parameters' \
+                                 ' -a float-'
+        
+
         write_deformation_fields = 'Deformation fields can be saved to disk, and used by the deformation utility. A ' \
                                    'list of 2 booleans for which deformation fields to write: [Inverse, Forward]: ' \
                                    '[False, False] Save nothing, [True, False] save Inverse only.'
@@ -459,6 +451,7 @@ class NewSegment(Process_Mia):
                        InputMultiPath(output=False,
                                       optional=False,
                                       desc=channel_files_desc))
+
         self.add_trait("channel_info",
                        traits.Tuple(traits.Range(value=0.0001,
                                                  low=0.,
@@ -471,6 +464,7 @@ class NewSegment(Process_Mia):
                                     output=False,
                                     optional=True,
                                     desc=channel_info_desc))
+
         self.add_trait("tissues",
                           traits.List(traits.Tuple(traits.Tuple(ImageFileSPM(exists=True),
                                                                 traits.Int()),
@@ -481,22 +475,6 @@ class NewSegment(Process_Mia):
                                       output=False,
                                       optional=True,
                                       desc=tissues_desc))
-        self.add_trait("affine_regularization",
-                       traits.Enum('mni',
-                                   'eastern',
-                                   'subj',
-                                   'none',
-                                   output=False,
-                                   optional=True,
-                                   desc=affine_regularization_desc))
-        
-        self.add_trait("sampling_distance",
-                       Float(3.0,
-                             output=False,
-                             optional=True,
-                             desc=sampling_distance_desc))
-        
-
 
         self.add_trait("warping_regularization",
                        traits.List(traits.Float(),
@@ -511,6 +489,21 @@ class NewSegment(Process_Mia):
             traits.Float(), output=False))"""
         """self.add_trait("warping_regularization",
             traits.List(traits.Float(), output=False, optional=True))"""
+        
+        self.add_trait("affine_regularization",
+                       traits.Enum('mni',
+                                   'eastern',
+                                   'subj',
+                                   'none',
+                                   output=False,
+                                   optional=True,
+                                   desc=affine_regularization_desc))
+        
+        self.add_trait("sampling_distance",
+                       Float(3.0,
+                             output=False,
+                             optional=True,
+                             desc=sampling_distance_desc))
 
         self.add_trait("write_deformation_fields",
                        traits.List(traits.Bool(),
@@ -615,9 +608,8 @@ class NewSegment(Process_Mia):
         return self.make_initResult()
     
     def run_process_mia(self):
-
+        """Dedicated to the process launch step of the brick."""
         super(NewSegment, self).run_process_mia()
-
         self.process.inputs.affine_regularization = self.affine_regularization
         self.process.inputs.channel_files = self.channel_files
         self.process.inputs.channel_info = self.channel_info
@@ -625,8 +617,8 @@ class NewSegment(Process_Mia):
         self.process.inputs.tissues = self.tissues
         self.process.inputs.warping_regularization = self.warping_regularization
         self.process.inputs.write_deformation_fields = self.write_deformation_fields
-
         self.process.run()
+
 
 class Normalize(Process_Mia):
     """
@@ -800,17 +792,16 @@ class Normalize(Process_Mia):
         return self.make_initResult()
 
     def run_process_mia(self):
-
+        """Dedicated to the process launch step of the brick."""
         super(Normalize, self).run_process_mia()
-
         self.process.inputs.apply_to_files = self.apply_to_files
         self.process.inputs.deformation_file = self.deformation_file
         self.process.inputs.jobtype = self.jobtype
         self.process.inputs.write_bounding_box = self.write_bounding_box
         self.process.inputs.write_voxel_sizes = self.write_voxel_sizes
         self.process.inputs.write_interp = self.write_interp
-
         self.process.run()
+
 
 class Realign(Process_Mia):
     """
@@ -887,7 +878,6 @@ class Realign(Process_Mia):
                                        ' an existing file name).')
         
         # Inputs traits
-
         self.add_trait('in_files',
                        InputMultiPath(traits.Either(ImageFileSPM(),
                                                     traits.List(ImageFileSPM()),
@@ -1205,6 +1195,7 @@ class Smooth(Process_Mia):
                                       output=False,
                                       optional=False,
                                       desc=in_files_desc))
+
         self.add_trait("fwhm",
                        traits.Either(traits.Float(),
                                      traits.List(traits.Float(),

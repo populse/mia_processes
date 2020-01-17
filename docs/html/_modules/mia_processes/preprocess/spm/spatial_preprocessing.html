@@ -355,9 +355,8 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Coregister.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.preprocess.spm.html#mia_processes.preprocess.spm.spatial_preprocessing.Coregister.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-
+        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Coregister</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">apply_to_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span>
@@ -373,42 +372,34 @@
 <div class="viewcode-block" id="NewSegment"><a class="viewcode-back" href="../../../../mia_processes.preprocess.spm.html#mia_processes.preprocess.spm.spatial_preprocessing.NewSegment">[docs]</a><span class="k">class</span> <span class="nc">NewSegment</span><span class="p">(</span><span class="n">Process_Mia</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">- NewSegment (mia_processes.preprocess.spm.spatial_preprocessing.NewSegment) &lt;=&gt; Segment (SPM12 names).</span>
-<span class="sd">  The warp.fwhm, warp.cleanup and warp.mrf of SPM12 are not used in the NewSegment brick.</span>
+<span class="sd">  The warp.mrf, warp.cleanup and warp.fwhm, from  SPM12 are not used in this NewSegment brick.</span>
 <span class="sd">*** Segmentation: Segments,  bias  corrects  and  spatially normalises - all in the same model *** </span>
 <span class="sd">    * Input parameters:</span>
-<span class="sd">        * affine_regularization &lt;=&gt; warp.affreg : Standard space for affine registration (&#39;mni&#39; or &#39;eastern&#39; or &#39;subj&#39; or &#39;none&#39;). &lt;ex. mni&gt;.</span>
-<span class="sd">        * channel_files &lt;=&gt; channel.vol : Path of the scans for processing (valid extensions, .img, .nii, .hdr).</span>
+<span class="sd">        * channel_files &lt;=&gt; channel.vols : Path of the scans for processing (valid extensions, .img, .nii, .hdr).</span>
 <span class="sd">            &lt;ex. [&#39;/home/ArthurBlair/data/raw_data/Anat.nii&#39;]&gt;.</span>
-<span class="sd">        * channel_info: A tuple with the following values: - Bias reguralisation -a float [0-10]-</span>
-<span class="sd">                                                           - Bias FWHM -a float-</span>
-<span class="sd">                                                           - Which maps to save -a tuple of two boolean values (Field, Corrected)-.</span>
-<span class="sd">                * Bias regularisation &lt;=&gt; channel.biasreg: 0 Noregularisation, 0.00001 extremely light regularisation,  ... ,</span>
-<span class="sd">                                                           1 very heavy regularisation, 10 extremely heavy regularisation.</span>
-<span class="sd">                * Bias FWHM (Full Width at Half Maximum) &lt;=&gt; channel.biasfwhm: 30 (mm cutoff), 40 (mm cutoff), ...,</span>
-<span class="sd">                                                                               150 (mm cutoff), inf (no correction).</span>
-<span class="sd">                * Which maps to save (Field, Bias Corrected) &lt;=&gt; channel.write: For save a bias corrected version of the estimated</span>
-<span class="sd">                                                                                bias field or/and the processed image:</span>
-<span class="sd">                                                           (False, False) Save Nothing, (False, True) save Bias corrected image only, etc.</span>
+<span class="sd">        * channel_info &lt;=&gt; (channel.biasreg, channel.biasfwhm, channel.write): A tuple with the following fields:</span>
+<span class="sd">                - bias reguralisation (a float between 0 and 10): The goal is to model, by different tissue classes, the intensity variations that arise due to different tissues, while model, with a bias field, those that occur because of the bias artifact due to the physics of MRI imaging. If the data have very little intensity non-uniformity artifact, then bias control should be increased. This effectively tells the algorithm that there is very little bias in your data, so it doesn&#39;t try to model it.</span>
+<span class="sd">                    - 0 No regularisation</span>
+<span class="sd">                    - 0.00001 extremely light regularisation</span>
+<span class="sd">                    -  ...</span>
+<span class="sd">                    - 1 very heavy regularisation</span>
+<span class="sd">                    - 10 extremely heavy regularisation.</span>
+<span class="sd">                - bias FWHM (a float between 20 and infinity): Full Width at Half Maximum of Gaussian smoothness of bias. Smoother bias fields need fewer parameters to describe them. This means that the algorithm is faster for smoother intensity non-uniformities (e.g. 150 mm cutoff gives faster results than 20 mm cutoff).</span>
+<span class="sd">                - which maps to save (a tuple of two boolean values; (Field, Corrected)): For save the estimated bias field or/and the bias corrected version of the processed image.</span>
+<span class="sd">                    - (False, False) save Nothing</span>
+<span class="sd">                    - (False, True) save bias corrected image only</span>
+<span class="sd">                    - (True, False) save estimated bias field only</span>
+<span class="sd">                    - (True, True) save estimated bias field and bias corrected image</span>
 <span class="sd">            &lt;ex. (0.0001, 60, (False, True)&gt;.</span>
-<span class="sd">        * sampling_distance &lt;=&gt; warp.samp: Approximate distance between sampled points when estimating the model parameters. a float &lt;ex. 3&gt;</span>
-<span class="sd">        * tissues &lt;=&gt; tissue: A list of tuples with the following values for each tissue types; Grey Matter,</span>
-<span class="sd">                              White Matter, CerebroSpinal Flux, Bone tissue, Soft tissue, AirBackground:</span>
-<span class="sd">                              [((tissue probability map (4D), 1-based index to frame),  number of gaussians,</span>
-<span class="sd">                                (which maps to save [Native, DARTEL]), (which maps to save [Unmodulated, Modulated])), ...].</span>
-<span class="sd">                              Typically, the order of tissues is grey matter, white matter, CSF, bone,</span>
-<span class="sd">                              soft tissue and iar/background (if using tpm/TPM.nii).</span>
-<span class="sd">                * tissue probability map &lt;=&gt; tisue(x).tpm with x in [1, 2, 3, 4, 5, 6]: The tissue probability image [.img, .nii, .hdr].</span>
-<span class="sd">                * 1-based index to frame: index for the 4th dimension of the tissue probability map and then tissue type selection.</span>
-<span class="sd">                * number of gaussians &lt;=&gt; tissue(x).ngaus: Typical numbers of Gaussians could be two for GM, WM, CSF, three for bone,</span>
-<span class="sd">                                                           four for other soft tissues and two for air / background):</span>
-<span class="sd">                                                           [1,2,3,4,5,6,7,8,inf - Non parametric-].</span>
-<span class="sd">                * which maps to save [Native, DARTEL] &lt;=&gt; tissue(x).native:</span>
-<span class="sd">                  The native space option allows you to produce a tissue class image (c*) that is in alignment with the original.</span>
-<span class="sd">                  It can also be used for importing into a form that can be used with the Dartel toobox (rc*):</span>
-<span class="sd">                  (False, False) Save Nothing, (True, False) save native only. etc.</span>
-<span class="sd">                * which maps to save [Unmodulated, Modulated] &lt;=&gt; tissue(x).warped:</span>
-<span class="sd">                  To produces spatially normalised versions of the tissue class, both with (mcw*) and without (wc*)</span>
-<span class="sd">                   modulation: (False, False) Save Nothing, (True, False) save unmodulated only. etc.</span>
+<span class="sd">        * tissues &lt;=&gt; [((tissue(i).tpm), tissue(i).ngaus, (tissue(i).native), (tissue(i).warped)),((tissue(i+1).tpm), tissue(i+1).ngaus, (tissue(i+1).native), (tissue(i+1).warped)), ...]: A list of tuples (one per tissue, i from 1 to 6) with parameter values for each tissue types. Typically, the order of tissues is grey matter (i=1), white matter (i=2), CSF (i=3), bone (i=4), soft tissue (i=5) and air/background (i=6), if using tpm/TPM.nii from spm12. Each tuple consists of the following fields:</span>
+<span class="sd">                              [((tissue probability map (4D), 1-based index to frame),  number of gaussians, (which maps to save [Native, DARTEL]), (which maps to save [Unmodulated, Modulated])), ...].</span>
+<span class="sd">                              </span>
+<span class="sd">                * tissue probability map &lt;=&gt; tissue(i).tpm with i in [1, 2, 3, 4, 5, 6]: The tissue probability image [.img, .nii, .hdr].</span>
+<span class="sd">                * 1-based index to frame: Index for the 4th dimension of the tissue probability map and then tissue type selection (in [1 to 6]).</span>
+<span class="sd">                * number of gaussians &lt;=&gt; tissue(i).ngaus: Typical numbers of Gaussians could be two for GM, WM, CSF, three for bone,</span>
+<span class="sd">                                                           four for other soft tissues and two for air / background ( in [1, 2, 3, 4, 5,6 , 7, 8, inf -Non parametric-]).</span>
+<span class="sd">                * which maps to save [Native, DARTEL] &lt;=&gt; tissue(i).native: To produce a tissue class image that is in alignment with the original (ci) or that can be used with the Dartel toobox (rci) ((False, False) Save Nothing, (True, False) save native only, (False, True ) save DARTEL only, etc.).</span>
+<span class="sd">                * which maps to save [Unmodulated, Modulated] &lt;=&gt; tissue(i).warped: To produces spatially normalised versions of the tissue class, with (mcwi) and without (wci) modulation ((False, False) Save Nothing, (True, False) save unmodulated only, (False, True ) save modulated only, etc.).</span>
 <span class="sd">             &lt;ex. [((&#39;/home/ArthurBlair/spm/spm12/tpm/TPM.nii&#39;, 1), 2, (True, False), (False, False)),</span>
 <span class="sd">                   ((&#39;/home/ArthurBlair/spm/spm12/tpm/TPM.nii&#39;, 2), 2, (True, False), (False, False)), </span>
 <span class="sd">                   ((&#39;/home/ArthurBlair/spm/spm12/tpm/TPM.nii&#39;, 3), 2, (True, False), (False, False)),</span>
@@ -416,8 +407,12 @@
 <span class="sd">                   ((&#39;/home/ArthurBlair/spm/spm12/tpm/TPM.nii&#39;, 5), 4, (True, False), (False, False)),</span>
 <span class="sd">                   ((&#39;/home/ArthurBlair/spm/spm12/tpm/TPM.nii&#39;, 6), 2, (True, False), (False, False))]&gt;.</span>
 <span class="sd">        * warping_regularization &lt;=&gt; warp.reg: The measure of the roughness of the deformations for registration, involve the sum of</span>
-<span class="sd">                                               5 elements. Floats or list of floats. (the latter is required by SPM12).</span>
-<span class="sd">            &lt;ex. [0, 0.001, 0.5, 0.05, 0.2]&gt;</span>
+<span class="sd">                                               5 elements. Floats or list of floats (the latter is required by SPM12).</span>
+<span class="sd">            &lt;ex. [0, 0.001, 0.5, 0.05, 0.2]&gt;  </span>
+<span class="sd">        * affine_regularization &lt;=&gt; warp.affreg : Standard space for affine registration (&#39;mni&#39; or &#39;eastern&#39; or &#39;subj&#39; or &#39;none&#39;). &lt;ex. mni&gt;.  </span>
+<span class="sd">        * sampling_distance &lt;=&gt; warp.samp: Approximate distance between sampled points when estimating the model parameters. a float &lt;ex. 3&gt;</span>
+
+
 <span class="sd">        * write_deformation_fields &lt;=&gt; warp.write: Deformation fields can be saved to disk, and used by the deformation utility.</span>
 <span class="sd">                                                   A list of 2 booleans for which deformation fields to write, [Inverse, Forward]:</span>
 <span class="sd">                                                   [False, False] Save nothing, [True, False] save Inverse only. &lt;ex. [False, True]&gt;</span>
@@ -446,18 +441,22 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;matlab&#39;</span><span class="p">,</span> <span class="s1">&#39;spm&#39;</span><span class="p">]</span>
 
         <span class="c1"># Inputs description</span>
-        <span class="n">affine_regularization_desc</span> <span class="o">=</span> <span class="s1">&#39;Standard space for affine registration (&quot;mni&quot; or &quot;eastern&quot; or &quot;subj&quot; or &quot;none&quot;).&#39;</span>
+        
         <span class="n">channel_files_desc</span> <span class="o">=</span> <span class="s1">&#39;Path of the scans for processing, valid extensions: [.img, .nii, .hdr]. A list with one &#39;</span>\
                              <span class="s1">&#39;string element corresponding to an existing path file&#39;</span>
-        <span class="n">channel_info_desc</span> <span class="o">=</span> <span class="s1">&#39;A tuple with the following values:(Bias reguralisation -a float [0-10]-, Bias FWHM &#39;</span> \
-                            <span class="s1">&#39;-a float-, Which maps to save -a tuple of two boolean values (Field, Corrected)-)&#39;</span>
-        <span class="n">sampling_distance_desc</span> <span class="o">=</span> <span class="s1">&#39;Approximate distance between sampled points when estimating the model parameters&#39;</span> \
-                                 <span class="s1">&#39; -a float-&#39;</span>
+        <span class="n">channel_info_desc</span> <span class="o">=</span> <span class="s1">&#39;A tuple with the following values:(bias reguralisation -a float between 0 and 10-, bias FWHM &#39;</span> \
+                            <span class="s1">&#39;-a float between 20 and infinity-, which maps to save -a tuple of two boolean values (Field, Corrected)-)&#39;</span>
         <span class="n">tissues_desc</span> <span class="o">=</span> <span class="s1">&#39;A list of tuples with the following values for each tissue types (grey matter, white matter, &#39;</span> \
                        <span class="s1">&#39;etc): [((tissue probability map (4D), 1-based index to frame), number of gaussians, &#39;</span> \
                        <span class="s1">&#39;(which maps to save [Native, DARTEL]), (which maps to save [Unmodulated, Modulated])), ...].&#39;</span>
         <span class="n">warping_regularization_desc</span> <span class="o">=</span> <span class="s1">&#39;The measure of the roughness of the deformations for registration, involve &#39;</span> \
                                       <span class="s1">&#39;the sum of 5 elements. -floats or list of floats-&#39;</span>
+        <span class="n">affine_regularization_desc</span> <span class="o">=</span> <span class="s1">&#39;Standard space for affine registration (&quot;mni&quot; or &quot;eastern&quot; or &quot;subj&quot; or &quot;none&quot;).&#39;</span>
+
+        <span class="n">sampling_distance_desc</span> <span class="o">=</span> <span class="s1">&#39;Approximate distance between sampled points when estimating the model parameters&#39;</span> \
+                                 <span class="s1">&#39; -a float-&#39;</span>
+        
+
         <span class="n">write_deformation_fields</span> <span class="o">=</span> <span class="s1">&#39;Deformation fields can be saved to disk, and used by the deformation utility. A &#39;</span> \
                                    <span class="s1">&#39;list of 2 booleans for which deformation fields to write: [Inverse, Forward]: &#39;</span> \
                                    <span class="s1">&#39;[False, False] Save nothing, [True, False] save Inverse only.&#39;</span>
@@ -480,48 +479,34 @@
                         <span class="p">((</span><span class="n">tpm_path</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">))]</span>
 
         <span class="c1"># Inputs traits</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;affine_regularization&quot;</span><span class="p">,</span>
-                       <span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="s1">&#39;mni&#39;</span><span class="p">,</span>
-                                   <span class="s1">&#39;eastern&#39;</span><span class="p">,</span>
-                                   <span class="s1">&#39;subj&#39;</span><span class="p">,</span>
-                                   <span class="s1">&#39;none&#39;</span><span class="p">,</span>
-                                   <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                                   <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                   <span class="n">desc</span><span class="o">=</span><span class="n">affine_regularization_desc</span><span class="p">))</span>
-        
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;channel_files&quot;</span><span class="p">,</span>
                        <span class="n">InputMultiPath</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                                       <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                                       <span class="n">desc</span><span class="o">=</span><span class="n">channel_files_desc</span><span class="p">))</span>
-        <span class="sd">&quot;&quot;&quot;self.add_trait(&quot;channel_info&quot;, traits.Tuple(traits.Float(), traits.Float(),</span>
-<span class="sd">                                                    traits.Tuple(traits.Bool, traits.Bool(True)),</span>
-<span class="sd">                                                    output=False, optional=True))&quot;&quot;&quot;</span>
-        
+
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;channel_info&quot;</span><span class="p">,</span>
                        <span class="n">traits</span><span class="o">.</span><span class="n">Tuple</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Range</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span>
                                                  <span class="n">low</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
                                                  <span class="n">high</span><span class="o">=</span><span class="mf">10.</span><span class="p">),</span>
-                                    <span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">110</span><span class="p">,</span> <span class="mi">120</span><span class="p">,</span> <span class="mi">130</span><span class="p">,</span> <span class="mi">140</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="s1">&#39;inf&#39;</span><span class="p">),</span>
-                                    <span class="n">traits</span><span class="o">.</span><span class="n">Tuple</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">),</span> <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">)),</span>
+                                    <span class="n">traits</span><span class="o">.</span><span class="n">Range</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">60.</span><span class="p">,</span>
+                                                 <span class="n">low</span><span class="o">=</span><span class="mf">20.</span><span class="p">,</span>
+                                                 <span class="n">high</span><span class="o">=</span><span class="kc">None</span><span class="p">),</span>
+                                    <span class="n">traits</span><span class="o">.</span><span class="n">Tuple</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">),</span>
+                                                 <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">)),</span>
                                     <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                                     <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                     <span class="n">desc</span><span class="o">=</span><span class="n">channel_info_desc</span><span class="p">))</span>
-        
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;sampling_distance&quot;</span><span class="p">,</span>
-                       <span class="n">Float</span><span class="p">(</span><span class="mf">3.0</span><span class="p">,</span>
-                             <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                             <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                             <span class="n">desc</span><span class="o">=</span><span class="n">sampling_distance_desc</span><span class="p">))</span>
-        
+
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;tissues&quot;</span><span class="p">,</span>
-                       <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">tissues_list</span><span class="p">,</span>
-                                   <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                                   <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                   <span class="n">desc</span><span class="o">=</span><span class="n">tissues_desc</span><span class="p">))</span>
-        <span class="sd">&quot;&quot;&quot;self.add_trait(&quot;tissues&quot;, traits.List(traits.Tuple(</span>
-<span class="sd">            traits.Tuple(ImageFileSPM(exists=True), traits.Int()),</span>
-<span class="sd">            traits.Int(), traits.Tuple(traits.Bool, traits.Bool),</span>
-<span class="sd">            traits.Tuple(traits.Bool, traits.Bool)), output=False, optional=True))&quot;&quot;&quot;</span>
+                          <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Tuple</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Tuple</span><span class="p">(</span><span class="n">ImageFileSPM</span><span class="p">(</span><span class="n">exists</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+                                                                <span class="n">traits</span><span class="o">.</span><span class="n">Int</span><span class="p">()),</span>
+                                                   <span class="n">traits</span><span class="o">.</span><span class="n">Int</span><span class="p">(),</span>
+                                                   <span class="n">traits</span><span class="o">.</span><span class="n">Tuple</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">),</span>
+                                                   <span class="n">traits</span><span class="o">.</span><span class="n">Tuple</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">)),</span>
+                                      <span class="n">value</span><span class="o">=</span><span class="n">tissues_list</span><span class="p">,</span>
+                                      <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                      <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                      <span class="n">desc</span><span class="o">=</span><span class="n">tissues_desc</span><span class="p">))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;warping_regularization&quot;</span><span class="p">,</span>
                        <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
@@ -536,6 +521,21 @@
 <span class="sd">            traits.Float(), output=False))&quot;&quot;&quot;</span>
         <span class="sd">&quot;&quot;&quot;self.add_trait(&quot;warping_regularization&quot;,</span>
 <span class="sd">            traits.List(traits.Float(), output=False, optional=True))&quot;&quot;&quot;</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;affine_regularization&quot;</span><span class="p">,</span>
+                       <span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="s1">&#39;mni&#39;</span><span class="p">,</span>
+                                   <span class="s1">&#39;eastern&#39;</span><span class="p">,</span>
+                                   <span class="s1">&#39;subj&#39;</span><span class="p">,</span>
+                                   <span class="s1">&#39;none&#39;</span><span class="p">,</span>
+                                   <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                   <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                   <span class="n">desc</span><span class="o">=</span><span class="n">affine_regularization_desc</span><span class="p">))</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;sampling_distance&quot;</span><span class="p">,</span>
+                       <span class="n">Float</span><span class="p">(</span><span class="mf">3.0</span><span class="p">,</span>
+                             <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                             <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                             <span class="n">desc</span><span class="o">=</span><span class="n">sampling_distance_desc</span><span class="p">))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;write_deformation_fields&quot;</span><span class="p">,</span>
                        <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(),</span>
@@ -640,9 +640,8 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
     
 <div class="viewcode-block" id="NewSegment.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.preprocess.spm.html#mia_processes.preprocess.spm.spatial_preprocessing.NewSegment.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-
+        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">NewSegment</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">affine_regularization</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">affine_regularization</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">channel_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_files</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">channel_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_info</span>
@@ -650,8 +649,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">tissues</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tissues</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">warping_regularization</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">warping_regularization</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">write_deformation_fields</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_deformation_fields</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">()</span></div></div>
+
 
 <div class="viewcode-block" id="Normalize"><a class="viewcode-back" href="../../../../mia_processes.preprocess.spm.html#mia_processes.preprocess.spm.spatial_preprocessing.Normalize">[docs]</a><span class="k">class</span> <span class="nc">Normalize</span><span class="p">(</span><span class="n">Process_Mia</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -825,17 +824,16 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Normalize.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.preprocess.spm.html#mia_processes.preprocess.spm.spatial_preprocessing.Normalize.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-
+        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Normalize</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">apply_to_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">deformation_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">deformation_file</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">write_bounding_box</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_bounding_box</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">write_voxel_sizes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_voxel_sizes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">write_interp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_interp</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">()</span></div></div>
+
 
 <div class="viewcode-block" id="Realign"><a class="viewcode-back" href="../../../../mia_processes.preprocess.spm.html#mia_processes.preprocess.spm.spatial_preprocessing.Realign">[docs]</a><span class="k">class</span> <span class="nc">Realign</span><span class="p">(</span><span class="n">Process_Mia</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -912,7 +910,6 @@
                                        <span class="s1">&#39; an existing file name).&#39;</span><span class="p">)</span>
         
         <span class="c1"># Inputs traits</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;in_files&#39;</span><span class="p">,</span>
                        <span class="n">InputMultiPath</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span><span class="n">ImageFileSPM</span><span class="p">(),</span>
                                                     <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">ImageFileSPM</span><span class="p">()),</span>
@@ -1230,6 +1227,7 @@
                                       <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                                       <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                                       <span class="n">desc</span><span class="o">=</span><span class="n">in_files_desc</span><span class="p">))</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;fwhm&quot;</span><span class="p">,</span>
                        <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
                                      <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
