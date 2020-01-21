@@ -138,8 +138,7 @@ Segmentation: Segments,  bias  corrects  and  spatially normalises - all in the 
             (('/home/ArthurBlair/spm/spm12/tpm/TPM.nii', 6), 2, (True, False), (False, False))]
 
 - *warping_regularization <=> warp.reg* [#label]_
-    The measure of the roughness of the deformations for registration. Involve the sum of 5 elements (floats or list of floats; the latter is
-    required by SPM12).
+    The measure of the roughness of the deformations for registration. Involve the sum of 5 elements (floats or list of floats; the latter isrequired by SPM12).
 
     ::
 
@@ -160,13 +159,13 @@ Segmentation: Segments,  bias  corrects  and  spatially normalises - all in the 
       ex. 3
 
 - *write_deformation_fields <=> warp.write* [#label]_
-     Deformation fields can be saved to disk, and used by the deformation utility (a list of 2 booleans for which deformation
-     fields to write; Inverse, Forward).
+    Deformation fields can be saved to disk, and used by the deformation utility (a list of 2 booleans for which deformation
+    fields to write; Inverse, Forward).
 
-       | \- [False, False] Save nothing
-       | \- [True, False] save Inverse only
-       | \- [False, True] save Forward only
-       | \- etc.
+        | \- [False, False] Save nothing
+        | \- [True, False] save Inverse only
+        | \- [False, True] save Forward only
+        | \- etc.
 
     ::
 
@@ -174,7 +173,73 @@ Segmentation: Segments,  bias  corrects  and  spatially normalises - all in the 
 
 **Outputs parameters:**
 
-coming soon !
+- *bias_corrected_images*
+    The bias corrected images (a list of items which are a pathlike object or string representing an existing file).
+
+    ::
+
+      ex. /home/ArthurBlair/data/raw_data/mAnat.nii
+
+- *bias_field_images*
+    The estimated bias field (a list of items which are a pathlike object or string representing an existing file).
+
+    ::
+
+      ex /home/ArthurBlair/data/raw_data/BiasField_Anat.nii
+
+- *native_class_images*
+    Native space probability maps (a list of items which are a list of items which are a pathlike object or string representing an existing file).
+
+    ::
+
+      ex. [['/home/ArthurBlair/data/raw_data/c1Anat.nii'],
+          ['/home/ArthurBlair/data/raw_data/c2Anat.nii'],
+          ['/home/ArthurBlair/data/raw_data/c3Anat.nii'],
+          ['/home/ArthurBlair/data/raw_data/c4Anat.nii'],
+          ['/home/ArthurBlair/data/raw_data/c5Anat.nii']]
+
+- *dartel_input_images*
+    "Imported" class images into a form that can be used with the Dartel toolbox (a list of items which are a list of items which are a pathlike object or string representing an existing file).
+
+    ::
+
+      ex.
+
+- *modulated_class_images*
+    Modulated and normalised class images (a list of items which are a list of items which are a pathlike object or string representing an existing file).
+
+    ::
+
+      ex
+
+- *normalized_class_images*
+    Normalised class images, without modulation (a list of items which are a list of items which are a pathlike object or string representing an existing file).
+
+    ::
+
+      ex
+
+- *inverse_deformation_field*
+    (a list of items which are a pathlike object or string representing an existing file).
+
+    ::
+
+      ex
+
+- *forward_deformation_field*
+    Forward deformation field (a list of items which are a pathlike object or string representing an existing file).
+
+    ::
+
+      ex /home/ArthurBlair/data/raw_data/y_Anat.nii
+
+
+- *transformation_mat*
+   Normalization transformation (a list of items which are a pathlike object or string representing an existing file).
+ 
+    ::
+
+      ex
 
 -------------
 
