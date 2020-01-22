@@ -138,7 +138,8 @@ Segmentation: Segments,  bias  corrects  and  spatially normalises - all in the 
             (('/home/ArthurBlair/spm/spm12/tpm/TPM.nii', 6), 2, (True, False), (False, False))]
 
 - *warping_regularization <=> warp.reg* [#label]_
-    The measure of the roughness of the deformations for registration. Involve the sum of 5 elements (floats or list of floats; the latter isrequired by SPM12).
+    The measure of the roughness of the deformations for registration. Involve the sum of 5 elements (floats or list of floats; the latter is
+    required by SPM12).
 
     ::
 
@@ -185,10 +186,11 @@ Segmentation: Segments,  bias  corrects  and  spatially normalises - all in the 
 
     ::
 
-      ex /home/ArthurBlair/data/raw_data/BiasField_Anat.nii
+      ex. /home/ArthurBlair/data/raw_data/BiasField_Anat.nii
 
 - *native_class_images*
-    Native space probability maps (a list of items which are a list of items which are a pathlike object or string representing an existing file).
+    Native space probability maps (a list of items which are a list of items which are a pathlike object or string representing an existing
+    file).
 
     ::
 
@@ -210,36 +212,36 @@ Segmentation: Segments,  bias  corrects  and  spatially normalises - all in the 
 
     ::
 
-      ex
+      ex.
 
 - *normalized_class_images*
     Normalised class images, without modulation (a list of items which are a list of items which are a pathlike object or string representing an existing file).
 
     ::
 
-      ex
+      ex.
 
 - *inverse_deformation_field*
-    (a list of items which are a pathlike object or string representing an existing file).
+    Inverse deformation field. Could be used for spatially normalising surface files as GIFTI i (a list of items which are a pathlike object or
+    string representing an existing file).
 
     ::
 
-      ex
+      ex.
 
 - *forward_deformation_field*
-    Forward deformation field (a list of items which are a pathlike object or string representing an existing file).
+    Forward deformation field. Could be used for spatially normalising images to MNI space (a list of items which are a pathlike object or
 
     ::
 
-      ex /home/ArthurBlair/data/raw_data/y_Anat.nii
-
+      ex. /home/ArthurBlair/data/raw_data/y_Anat.nii
 
 - *transformation_mat*
-   Normalization transformation (a list of items which are a pathlike object or string representing an existing file).
- 
+    Normalisation transformation (a list of items which are a pathlike object or string representing an existing file).
+
     ::
 
-      ex
+      ex.
 
 -------------
 

@@ -371,60 +371,11 @@
 
 <div class="viewcode-block" id="NewSegment"><a class="viewcode-back" href="../../../../mia_processes.preprocess.spm.html#mia_processes.preprocess.spm.spatial_preprocessing.NewSegment">[docs]</a><span class="k">class</span> <span class="nc">NewSegment</span><span class="p">(</span><span class="n">Process_Mia</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">- NewSegment (mia_processes.preprocess.spm.spatial_preprocessing.NewSegment) &lt;=&gt; Segment (SPM12 names).</span>
-<span class="sd">  The warp.mrf, warp.cleanup and warp.fwhm, from  SPM12 are not used in this NewSegment brick.</span>
-<span class="sd">*** Segmentation: Segments,  bias  corrects  and  spatially normalises - all in the same model *** </span>
-<span class="sd">    * Input parameters:</span>
-<span class="sd">        * channel_files &lt;=&gt; channel.vols : Path of the scans for processing (valid extensions, .img, .nii, .hdr).</span>
-<span class="sd">            &lt;ex. [&#39;/home/ArthurBlair/data/raw_data/Anat.nii&#39;]&gt;.</span>
-<span class="sd">        * channel_info &lt;=&gt; (channel.biasreg, channel.biasfwhm, channel.write): A tuple with the following fields:</span>
-<span class="sd">                - bias reguralisation (a float between 0 and 10): The goal is to model, by different tissue classes, the intensity variations that arise due to different tissues, while model, with a bias field, those that occur because of the bias artifact due to the physics of MRI imaging. If the data have very little intensity non-uniformity artifact, then bias control should be increased. This effectively tells the algorithm that there is very little bias in your data, so it doesn&#39;t try to model it.</span>
-<span class="sd">                    - 0 No regularisation</span>
-<span class="sd">                    - 0.00001 extremely light regularisation</span>
-<span class="sd">                    -  ...</span>
-<span class="sd">                    - 1 very heavy regularisation</span>
-<span class="sd">                    - 10 extremely heavy regularisation.</span>
-<span class="sd">                - bias FWHM (a float between 20 and infinity): Full Width at Half Maximum of Gaussian smoothness of bias. Smoother bias fields need fewer parameters to describe them. This means that the algorithm is faster for smoother intensity non-uniformities (e.g. 150 mm cutoff gives faster results than 20 mm cutoff).</span>
-<span class="sd">                - which maps to save (a tuple of two boolean values; (Field, Corrected)): For save the estimated bias field or/and the bias corrected version of the processed image.</span>
-<span class="sd">                    - (False, False) save Nothing</span>
-<span class="sd">                    - (False, True) save bias corrected image only</span>
-<span class="sd">                    - (True, False) save estimated bias field only</span>
-<span class="sd">                    - (True, True) save estimated bias field and bias corrected image</span>
-<span class="sd">            &lt;ex. (0.0001, 60, (False, True)&gt;.</span>
-<span class="sd">        * tissues &lt;=&gt; [((tissue(i).tpm), tissue(i).ngaus, (tissue(i).native), (tissue(i).warped)),((tissue(i+1).tpm), tissue(i+1).ngaus, (tissue(i+1).native), (tissue(i+1).warped)), ...]: A list of tuples (one per tissue, i from 1 to 6) with parameter values for each tissue types. Typically, the order of tissues is grey matter (i=1), white matter (i=2), CSF (i=3), bone (i=4), soft tissue (i=5) and air/background (i=6), if using tpm/TPM.nii from spm12. Each tuple consists of the following fields:</span>
-<span class="sd">                              [((tissue probability map (4D), 1-based index to frame),  number of gaussians, (which maps to save [Native, DARTEL]), (which maps to save [Unmodulated, Modulated])), ...].</span>
-<span class="sd">                              </span>
-<span class="sd">                * tissue probability map &lt;=&gt; tissue(i).tpm with i in [1, 2, 3, 4, 5, 6]: The tissue probability image [.img, .nii, .hdr].</span>
-<span class="sd">                * 1-based index to frame: Index for the 4th dimension of the tissue probability map and then tissue type selection (in [1 to 6]).</span>
-<span class="sd">                * number of gaussians &lt;=&gt; tissue(i).ngaus: Typical numbers of Gaussians could be two for GM, WM, CSF, three for bone,</span>
-<span class="sd">                                                           four for other soft tissues and two for air / background ( in [1, 2, 3, 4, 5,6 , 7, 8, inf -Non parametric-]).</span>
-<span class="sd">                * which maps to save [Native, DARTEL] &lt;=&gt; tissue(i).native: To produce a tissue class image that is in alignment with the original (ci) or that can be used with the Dartel toobox (rci) ((False, False) Save Nothing, (True, False) save native only, (False, True ) save DARTEL only, etc.).</span>
-<span class="sd">                * which maps to save [Unmodulated, Modulated] &lt;=&gt; tissue(i).warped: To produces spatially normalised versions of the tissue class, with (mcwi) and without (wci) modulation ((False, False) Save Nothing, (True, False) save unmodulated only, (False, True ) save modulated only, etc.).</span>
-<span class="sd">             &lt;ex. [((&#39;/home/ArthurBlair/spm/spm12/tpm/TPM.nii&#39;, 1), 2, (True, False), (False, False)),</span>
-<span class="sd">                   ((&#39;/home/ArthurBlair/spm/spm12/tpm/TPM.nii&#39;, 2), 2, (True, False), (False, False)), </span>
-<span class="sd">                   ((&#39;/home/ArthurBlair/spm/spm12/tpm/TPM.nii&#39;, 3), 2, (True, False), (False, False)),</span>
-<span class="sd">                   ((&#39;/home/ArthurBlair/spm/spm12/tpm/TPM.nii&#39;, 4), 3, (True, False), (False, False)),</span>
-<span class="sd">                   ((&#39;/home/ArthurBlair/spm/spm12/tpm/TPM.nii&#39;, 5), 4, (True, False), (False, False)),</span>
-<span class="sd">                   ((&#39;/home/ArthurBlair/spm/spm12/tpm/TPM.nii&#39;, 6), 2, (True, False), (False, False))]&gt;.</span>
-<span class="sd">        * warping_regularization &lt;=&gt; warp.reg: The measure of the roughness of the deformations for registration, involve the sum of</span>
-<span class="sd">                                               5 elements. Floats or list of floats (the latter is required by SPM12).</span>
-<span class="sd">            &lt;ex. [0, 0.001, 0.5, 0.05, 0.2]&gt;  </span>
-<span class="sd">        * affine_regularization &lt;=&gt; warp.affreg : Standard space for affine registration (&#39;mni&#39; or &#39;eastern&#39; or &#39;subj&#39; or &#39;none&#39;). &lt;ex. mni&gt;.  </span>
-<span class="sd">        * sampling_distance &lt;=&gt; warp.samp: Approximate distance between sampled points when estimating the model parameters. a float &lt;ex. 3&gt;</span>
+<span class="sd">    *Segmentation: Segments,  bias  corrects  and  spatially normalises - all in the same model*</span>
 
+<span class="sd">    Please, see the complete documention for the `Coregister brick in the populse.mia_processes web site</span>
+<span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/preprocess/spm/NewSegment.html&gt;`_</span>
 
-<span class="sd">        * write_deformation_fields &lt;=&gt; warp.write: Deformation fields can be saved to disk, and used by the deformation utility.</span>
-<span class="sd">                                                   A list of 2 booleans for which deformation fields to write, [Inverse, Forward]:</span>
-<span class="sd">                                                   [False, False] Save nothing, [True, False] save Inverse only. &lt;ex. [False, True]&gt;</span>
-<span class="sd">    * Output parameters:</span>
-<span class="sd">        * forward_deformation_field: Forward deformation field. &lt;ex. /home/ArthurBlair/data/raw_data/y_Anat.nii&gt;.</span>
-<span class="sd">        * bias_field_images: Bias field images. &lt;ex. /home/ArthurBlair/data/raw_data/BiasField_Anat.nii&gt;</span>
-<span class="sd">        * bias_corrected_images: Bias corrected images. &lt;ex. /home/ArthurBlair/data/raw_data/mAnat.nii</span>
-<span class="sd">        * native_class_images: Native space probability maps. &lt;ex. [[&#39;/home/ArthurBlair/data/raw_data/c1Anat.nii&#39;],</span>
-<span class="sd">                                                                    [&#39;/home/ArthurBlair/data/raw_data/c2Anat.nii&#39;],</span>
-<span class="sd">                                                                    [&#39;/home/ArthurBlair/data/raw_data/c3Anat.nii&#39;],</span>
-<span class="sd">                                                                    [&#39;/home/ArthurBlair/data/raw_data/c4Anat.nii&#39;],</span>
-<span class="sd">                                                                    [&#39;/home/ArthurBlair/data/raw_data/c5Anat.nii&#39;]]&gt;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="NewSegment.__init__"><a class="viewcode-back" href="../../../../mia_processes.preprocess.spm.html#mia_processes.preprocess.spm.spatial_preprocessing.NewSegment.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
