@@ -189,7 +189,8 @@ modulation.</p>
 </div></blockquote>
 </li>
 <li><dl>
-<dt><em>warping_regularization &lt;=&gt; warp.reg</em> <a class="footnote-reference brackets" href="#label" id="id4">1</a></dt><dd><p>The measure of the roughness of the deformations for registration. Involve the sum of 5 elements (floats or list of floats; the latter isrequired by SPM12).</p>
+<dt><em>warping_regularization &lt;=&gt; warp.reg</em> <a class="footnote-reference brackets" href="#label" id="id4">1</a></dt><dd><p>The measure of the roughness of the deformations for registration. Involve the sum of 5 elements (floats or list of floats; the latter is
+required by SPM12).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -242,14 +243,15 @@ fields to write; Inverse, Forward).</p>
 </li>
 <li><dl>
 <dt><em>bias_field_images</em></dt><dd><p>The estimated bias field (a list of items which are a pathlike object or string representing an existing file).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">BiasField_Anat</span><span class="o">.</span><span class="n">nii</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">BiasField_Anat</span><span class="o">.</span><span class="n">nii</span>
 </pre></div>
 </div>
 </dd>
 </dl>
 </li>
 <li><dl>
-<dt><em>native_class_images</em></dt><dd><p>Native space probability maps (a list of items which are a list of items which are a pathlike object or string representing an existing file).</p>
+<dt><em>native_class_images</em></dt><dd><p>Native space probability maps (a list of items which are a list of items which are a pathlike object or string representing an existing
+file).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/c1Anat.nii&#39;</span><span class="p">],</span>
     <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/c2Anat.nii&#39;</span><span class="p">],</span>
     <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/c3Anat.nii&#39;</span><span class="p">],</span>
@@ -270,7 +272,7 @@ fields to write; Inverse, Forward).</p>
 </li>
 <li><dl>
 <dt><em>modulated_class_images</em></dt><dd><p>Modulated and normalised class images (a list of items which are a list of items which are a pathlike object or string representing an existing file).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span>
 </pre></div>
 </div>
 </dd>
@@ -278,35 +280,34 @@ fields to write; Inverse, Forward).</p>
 </li>
 <li><dl>
 <dt><em>normalized_class_images</em></dt><dd><p>Normalised class images, without modulation (a list of items which are a list of items which are a pathlike object or string representing an existing file).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span>
 </pre></div>
 </div>
 </dd>
 </dl>
 </li>
 <li><dl>
-<dt><em>inverse_deformation_field</em></dt><dd><p>(a list of items which are a pathlike object or string representing an existing file).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span>
+<dt><em>inverse_deformation_field</em></dt><dd><p>Inverse deformation field. Could be used for spatially normalising surface files as GIFTI i (a list of items which are a pathlike object or
+string representing an existing file).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span>
 </pre></div>
 </div>
 </dd>
 </dl>
 </li>
 <li><dl>
-<dt><em>forward_deformation_field</em></dt><dd><p>Forward deformation field (a list of items which are a pathlike object or string representing an existing file).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">y_Anat</span><span class="o">.</span><span class="n">nii</span>
+<dt><em>forward_deformation_field</em></dt><dd><p>Forward deformation field. Could be used for spatially normalising images to MNI space (a list of items which are a pathlike object or</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">y_Anat</span><span class="o">.</span><span class="n">nii</span>
 </pre></div>
 </div>
 </dd>
 </dl>
 </li>
 <li><dl>
-<dt><em>transformation_mat</em></dt><dd><p>Normalization transformation (a list of items which are a pathlike object or string representing an existing file).</p>
-<blockquote>
-<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span>
+<dt><em>transformation_mat</em></dt><dd><p>Normalisation transformation (a list of items which are a pathlike object or string representing an existing file).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span>
 </pre></div>
 </div>
-</div></blockquote>
 </dd>
 </dl>
 </li>
