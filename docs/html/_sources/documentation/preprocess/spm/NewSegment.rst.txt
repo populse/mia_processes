@@ -138,7 +138,7 @@ Segmentation: Segments,  bias  corrects  and  spatially normalises - all in the 
             (('/home/ArthurBlair/spm/spm12/tpm/TPM.nii', 6), 2, (True, False), (False, False))]
 
 - *warping_regularization <=> warp.reg* [#label]_
-    The measure of the roughness of the deformations for registration. Involve the sum of 5 elements (floats or list of floats; the latter is
+    The measure of the roughness of the deformations for registration. Involve the sum of 5 elements (a float or list of floats; the latter is
     required by SPM12).
 
     ::
@@ -222,7 +222,7 @@ Segmentation: Segments,  bias  corrects  and  spatially normalises - all in the 
       ex.
 
 - *inverse_deformation_field*
-    Inverse deformation field. Could be used for spatially normalising surface files as GIFTI i (a list of items which are a pathlike object or
+    Inverse deformation field. Could be used for spatially normalising surface files as GIFTI (a list of items which are a pathlike object or
     string representing an existing file).
 
     ::
