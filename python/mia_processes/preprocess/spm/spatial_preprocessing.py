@@ -45,7 +45,7 @@ class Coregister(Process_Mia):
     """
     *Realignment through different modalities: Align together scans of different modalities*
 
-    Please, see the complete documention for the `Coregister brick in the populse.mia_processes web site
+    Please, see the complete documention for the `Coregister brick in the populse.mia_processes web site:
     <https://populse.github.io/mia_processes/html/documentation/preprocess/spm/Coregister.html>`_
 
     """
@@ -341,8 +341,7 @@ class NewSegment(Process_Mia):
     """
     *Segmentation: Segments,  bias  corrects  and  spatially normalises - all in the same model*
 
-    Please, see the complete documention for the `Coregister brick in the populse.mia_processes web site
-    <https://populse.github.io/mia_processes/html/documentation/preprocess/spm/NewSegment.html>`_
+    Please, see the complete documention for the `NewSegment brick in the populse.mia_processes web site: <https://populse.github.io/mia_processes/html/documentation/preprocess/spm/NewSegment.html>`_
 
     """
 
@@ -361,30 +360,50 @@ class NewSegment(Process_Mia):
 
         # Inputs description
         
-        channel_files_desc = 'Path of the scans for processing, valid extensions: [.img, .nii, .hdr]. A list with one '\
-                             'string element corresponding to an existing path file'
-        channel_info_desc = 'A tuple with the following values:(bias reguralisation -a float between 0 and 10-, bias FWHM ' \
-                            '-a float between 20 and infinity-, which maps to save -a tuple of two boolean values (Field, Corrected)-)'
-        tissues_desc = 'A list of tuples with the following values for each tissue types (grey matter, white matter, ' \
-                       'etc): [((tissue probability map (4D), 1-based index to frame), number of gaussians, ' \
-                       '(which maps to save [Native, DARTEL]), (which maps to save [Unmodulated, Modulated])), ...].'
-        warping_regularization_desc = 'The measure of the roughness of the deformations for registration, involve ' \
-                                      'the sum of 5 elements. -floats or list of floats-'
-        affine_regularization_desc = 'Standard space for affine registration ("mni" or "eastern" or "subj" or "none").'
+        channel_files_desc = ('Path of the scans for processing, valid '
+                              'extensions: [.img, .nii, .hdr]. A list with one '
+                              'string element corresponding to an existing '
+                              'path file.')
+        channel_info_desc = ('A tuple with the following values: bias '
+                             'reguralisation -a float between 0 and 10-, bias '
+                             'FWHM -a float between 20 and infinity-, which '
+                             'maps to save -a tuple of two boolean values '
+                             '(Field, Corrected)-.')
+        tissues_desc = ('A list of tuples with the following values for each '
+                        'tissue types (grey matter, white matter, etc.): '
+                        '(tissue probability map (4D), 1-based index to frame),'
+                        ' number of gaussians, (which maps to save: Native,'
+                        'DARTEL), (which maps to save: Unmodulated, Modulated),'
+                        ' ...')
+        warping_regularization_desc = ('Define of the roughness of the '
+                                       'deformations for registration using '
+                                       '1 or 5 elements: a float or a list of '
+                                       'floats, the latter is required '
+                                       'by SPM12.')
+        affine_regularization_desc = ('Standard space for affine registration: '
+                                      'mni, eastern, subj or none.')
 
-        sampling_distance_desc = 'Approximate distance between sampled points when estimating the model parameters' \
-                                 ' -a float-'
+        sampling_distance_desc = ('Approximate distance between sampled points '
+                                 'when estimating the model parameters: '
+                                 'a float.')
         
 
-        write_deformation_fields = 'Deformation fields can be saved to disk, and used by the deformation utility. A ' \
-                                   'list of 2 booleans for which deformation fields to write: [Inverse, Forward]: ' \
-                                   '[False, False] Save nothing, [True, False] save Inverse only.'
+        write_deformation_fields = ('Which deformation fields, that can be used'
+                                    ' by the deformation utility, to save: a '
+                                    'list of 2 booleans for Inverse, Forward.')
 
         # Outputs description
-        forward_deformation_field_desc = 'Forward deformation field'
-        bias_field_images_desc = 'Bias field images'
-        bias_corrected_images_desc = 'Bias corrected images'
-        native_class_images_desc = 'Native space probability maps'
+        bias_corrected_images_desc = 'Bias corrected images.'
+        bias_field_images_desc = 'Estimated bias field.'
+        native_class_images_desc = 'Native space probability maps.'
+        dartel_input_images_desc = ('“Imported” class images into a form that '
+                                   'can be used with the Dartel toolbox.')
+        modulated_class_images_desc = 'Modulated and normalised class images.'
+        normalized_class_images_desc = ('Normalised class images, without '
+                                        'modulation.')
+        inverse_deformation_field_desc = 'Inverse deformation field.'
+        forward_deformation_field_desc = 'Forward deformation field.'
+        transformation_mat_desc = 'Normalisation transformation.'     
 
         # Tissues parameter definition
         config = Config()
@@ -399,7 +418,8 @@ class NewSegment(Process_Mia):
 
         # Inputs traits
         self.add_trait("channel_files",
-                       InputMultiPath(output=False,
+                       InputMultiPath(ImageFileSPM(),
+                                      output=False,
                                       optional=False,
                                       desc=channel_files_desc))
 
@@ -411,7 +431,7 @@ class NewSegment(Process_Mia):
                                                  low=20.,
                                                  high=None),
                                     traits.Tuple(traits.Bool(False),
-                                                 traits.Bool(True)),
+                                                traits.Bool(True)),
                                     output=False,
                                     optional=True,
                                     desc=channel_info_desc))
@@ -428,19 +448,15 @@ class NewSegment(Process_Mia):
                                       desc=tissues_desc))
 
         self.add_trait("warping_regularization",
-                       traits.List(traits.Float(),
-                                   minlen=5,
-                                   maxlen=5,
-                                   value=[0, 0.001, 0.5, 0.05, 0.2],
-                                   output=False,
-                                   optional=True,
-                                   desc=warping_regularization_desc))
-        """self.add_trait("warping_regularization", traits.Either(
-            traits.List(traits.Float(), minlen=5, maxlen=5),
-            traits.Float(), output=False))"""
-        """self.add_trait("warping_regularization",
-            traits.List(traits.Float(), output=False, optional=True))"""
-        
+                       traits.Either(traits.List(traits.Float(),
+                                                 minlen=5,
+                                                 maxlen=5),
+                                     traits.Float(),
+                                     default=[0, 0.001, 0.5, 0.05, 0.2],
+                                     output=False,
+                                     optional=True,
+                                     desc=warping_regularization_desc))
+
         self.add_trait("affine_regularization",
                        traits.Enum('mni',
                                    'eastern',
@@ -464,23 +480,64 @@ class NewSegment(Process_Mia):
                                    output=False,
                                    optional=True,
                                    desc=write_deformation_fields))
-        """self.add_trait("write_deformation_fields", traits.List(
-            traits.Bool(), output=False, optional=True))"""
 
         # Output traits
-        self.add_trait("forward_deformation_field",
-                       File(output=True,
-                            desc=forward_deformation_field_desc))
-        self.add_trait("bias_field_images",
-                       File(output=True,
-                            desc=bias_field_images_desc))
+        """
         self.add_trait("bias_corrected_images",
                        File(output=True,
                             desc=bias_corrected_images_desc))
+        """
+        self.add_trait("bias_corrected_images",
+                       OutputMultiPath(output=True,
+                                       optional=True,
+                                       desc=bias_corrected_images_desc))
+
+        self.add_trait("bias_field_images",
+                       OutputMultiPath(output=True,
+                                       optional=True,
+                                       desc=bias_field_images_desc))
+
         self.add_trait("native_class_images",
                        traits.List(traits.List(File()),
                                    output=True,
+                                   optional=True,
                                    desc=native_class_images_desc))
+
+        self.add_trait("dartel_input_images",
+                       traits.List(traits.List(File()),
+                                   output=True,
+                                   optional=True,
+                                   desc=dartel_input_images_desc))
+
+        self.add_trait("modulated_class_images",
+                       traits.List(traits.List(File()),
+                                   output=True,
+                                   optional=True,
+                                   desc=modulated_class_images_desc))
+
+        self.add_trait("normalized_class_images",
+                       traits.List(traits.List(File()),
+                                   output=True,
+                                   optional=True,
+                                   desc=normalized_class_images_desc))
+
+        self.add_trait("inverse_deformation_field",
+                       OutputMultiPath(File(),
+                                       output=True,
+                                       optional=True,
+                                       desc=inverse_deformation_field_desc))
+
+        self.add_trait("forward_deformation_field",
+                       OutputMultiPath(File(),
+                                       output=True,
+                                       optional=True,
+                                       desc=forward_deformation_field_desc))
+
+        self.add_trait("transformation_mat",
+                       OutputMultiPath(File(),
+                                       output=True,
+                                       optional=True,
+                                       desc=transformation_mat_desc))
 
         # process instanciation
         self.process = NewSegmentMia() #############
@@ -756,10 +813,9 @@ class Normalize(Process_Mia):
 
 class Realign(Process_Mia):
     """
-    **Realigns a time-series of images acquired from the same subject using a least squares approach and
-    a 6 parameters (rigid body) spatial transformation**
+    *Realigns a time-series of images acquired from the same subject*
 
-    Please, see the complete documention for the `Realign brick in the populse.mia_processes web site
+    Please, see the complete documention for the `Realign brick in the populse.mia_processes web site:
     <https://populse.github.io/mia_processes/html/documentation/preprocess/spm/Realign.html>`_
 
     """
@@ -1098,9 +1154,9 @@ class Realign(Process_Mia):
         
 class Smooth(Process_Mia):
     """
-    **3D Gaussian smoothing of image volumes**
+    *3D Gaussian smoothing of image volumes*
 
-    Please, see the complete documention for the `Smooth brick in the populse.mia_processes web site
+    Please, see the complete documention for the `Smooth brick in the populse.mia_processes web site:
     <https://populse.github.io/mia_processes/html/documentation/preprocess/spm/Smooth.html>`_
 
     """
