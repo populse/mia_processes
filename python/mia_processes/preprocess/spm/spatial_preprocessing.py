@@ -341,7 +341,8 @@ class NewSegment(Process_Mia):
     """
     *Segmentation: Segments,  bias  corrects  and  spatially normalises - all in the same model*
 
-    Please, see the complete documention for the `NewSegment brick in the populse.mia_processes web site: <https://populse.github.io/mia_processes/html/documentation/preprocess/spm/NewSegment.html>`_
+    Please, see the complete documention for the `NewSegment brick in the populse.mia_processes web site:
+    <https://populse.github.io/mia_processes/html/documentation/preprocess/spm/NewSegment.html>`_
 
     """
 
@@ -368,7 +369,7 @@ class NewSegment(Process_Mia):
                              'reguralisation -a float between 0 and 10-, bias '
                              'FWHM -a float between 20 and infinity-, which '
                              'maps to save -a tuple of two boolean values '
-                             '(Field, Corrected)-.')
+                             '(estimated bias field, bias corrected image)-.')
         tissues_desc = ('A list of tuples with the following values for each '
                         'tissue types (grey matter, white matter, etc.): '
                         '(tissue probability map (4D), 1-based index to frame),'
@@ -386,7 +387,6 @@ class NewSegment(Process_Mia):
         sampling_distance_desc = ('Approximate distance between sampled points '
                                  'when estimating the model parameters: '
                                  'a float.')
-        
 
         write_deformation_fields = ('Which deformation fields, that can be used'
                                     ' by the deformation utility, to save: a '
@@ -431,21 +431,23 @@ class NewSegment(Process_Mia):
                                                  low=20.,
                                                  high=None),
                                     traits.Tuple(traits.Bool(False),
-                                                traits.Bool(True)),
+                                                 traits.Bool(True)),
                                     output=False,
                                     optional=True,
                                     desc=channel_info_desc))
 
         self.add_trait("tissues",
-                          traits.List(traits.Tuple(traits.Tuple(ImageFileSPM(exists=True),
-                                                                traits.Int()),
-                                                   traits.Int(),
-                                                   traits.Tuple(traits.Bool, traits.Bool),
-                                                   traits.Tuple(traits.Bool, traits.Bool)),
-                                      value=tissues_list,
-                                      output=False,
-                                      optional=True,
-                                      desc=tissues_desc))
+                       traits.List(
+                           traits.Tuple(
+                               traits.Tuple(ImageFileSPM(exists=True),
+                                            traits.Int()),
+                               traits.Int(),
+                               traits.Tuple(traits.Bool, traits.Bool),
+                               traits.Tuple(traits.Bool, traits.Bool)),
+                           value=tissues_list,
+                           output=False,
+                           optional=True,
+                           desc=tissues_desc))
 
         self.add_trait("warping_regularization",
                        traits.Either(traits.List(traits.Float(),
@@ -482,11 +484,6 @@ class NewSegment(Process_Mia):
                                    desc=write_deformation_fields))
 
         # Output traits
-        """
-        self.add_trait("bias_corrected_images",
-                       File(output=True,
-                            desc=bias_corrected_images_desc))
-        """
         self.add_trait("bias_corrected_images",
                        OutputMultiPath(output=True,
                                        optional=True,
@@ -556,47 +553,44 @@ class NewSegment(Process_Mia):
         super(NewSegment, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
-        if self.channel_files and self.channel_info and self.write_deformation_fields:
+        if self.channel_files:
             self.process.inputs.channel_files = self.channel_files
-            self.process.inputs.channel_info = self.channel_info
-            self.process.inputs.write_deformation_fields = self.write_deformation_fields
+            
+            if self.channel_info:
+                self.process.inputs.channel_info = self.channel_info
+
+            if self.tissues:
+                self.process.inputs.tissues = self.tissues
+
+            if self.write_deformation_fields:
+                (self.process.inputs.
+                       write_deformation_fields) = self.write_deformation_fields
+
             self.outputs = self.process._list_outputs()
-       
-        """raw_data_folder = os.path.join("data", "raw_data")
-        derived_data_folder = os.path.join("data", "derived_data")
-        for out_name in list(outputs):
-            out_value = outputs[out_name]
-            if out_name not in ["forward_deformation_field"]:
-                del outputs[out_name]
-            else:
-                if type(out_value) is list:
-                    for idx, element in enumerate(out_value):
-                        if not element:
-                            continue
-                        if type(element) is list:
-                            for idx_2, element_2 in enumerate(element):
-                                element_2 = element_2.replace(raw_data_folder, derived_data_folder)
-                                outputs[out_name][idx][idx_2] = element
-                        else:
 
-                            print("element: ", element)
-                            element = element.replace(raw_data_folder, derived_data_folder)
-                            outputs[out_name][idx] = element"""
-
+        """
+         When there is only one image at the input, the tags inheritance is
+         directly managed in PipelineManagerTab.add_plug_value_to_database().
+         However the inheritance of 2 output parameters is defined below, as
+         an example
+        """
         if self.outputs:
         
             for key, values in self.outputs.items():
 
                 if key == "native_class_images":
-                    path, filename = os.path.split(values[0][0])
-                    filename_without_prefix = filename[2:]
 
-                    if (os.path.join(path,
-                                     filename_without_prefix)
-                              in self.channel_files):
-                        
-                        for fullname in values:
-                            self.inheritance_dict[fullname[0]] = os.path.join(path,
+                    if values[0]:
+                        path, filename = os.path.split(values[0][0])
+                        filename_without_prefix = filename[2:]
+
+                        if (os.path.join(path,
+                                         filename_without_prefix)
+                                                         in self.channel_files): 
+
+                            for fullname in values:
+                                self.inheritance_dict[fullname[0]
+                                                     ] = os.path.join(path,
                                                         filename_without_prefix)
 
                 if key == "forward_deformation_field":
@@ -607,10 +601,11 @@ class NewSegment(Process_Mia):
 
                         if (os.path.join(path,
                                      filename_without_prefix)
-                              in self.channel_files):
-        
-                            self.inheritance_dict[fullname] = os.path.join(path,
-                                                                           filename_without_prefix)
+                                                         in self.channel_files):
+
+                            self.inheritance_dict[fullname
+                                                 ] = os.path.join(path,
+                                                        filename_without_prefix)
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -618,13 +613,14 @@ class NewSegment(Process_Mia):
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
         super(NewSegment, self).run_process_mia()
-        self.process.inputs.affine_regularization = self.affine_regularization
         self.process.inputs.channel_files = self.channel_files
         self.process.inputs.channel_info = self.channel_info
-        self.process.inputs.sampling_distance = self.sampling_distance
         self.process.inputs.tissues = self.tissues
         self.process.inputs.warping_regularization = self.warping_regularization
-        self.process.inputs.write_deformation_fields = self.write_deformation_fields
+        self.process.inputs.affine_regularization = self.affine_regularization
+        self.process.inputs.sampling_distance = self.sampling_distance
+        (self.process.inputs.
+                       write_deformation_fields) = self.write_deformation_fields
         self.process.run()
 
 
