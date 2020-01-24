@@ -195,31 +195,43 @@ Segmentation: Segments,  bias  corrects  and  spatially normalises - all in the 
     ::
 
       ex. [['/home/ArthurBlair/data/raw_data/c1Anat.nii'],
-          ['/home/ArthurBlair/data/raw_data/c2Anat.nii'],
-          ['/home/ArthurBlair/data/raw_data/c3Anat.nii'],
-          ['/home/ArthurBlair/data/raw_data/c4Anat.nii'],
-          ['/home/ArthurBlair/data/raw_data/c5Anat.nii']]
+           ['/home/ArthurBlair/data/raw_data/c2Anat.nii'],
+           ['/home/ArthurBlair/data/raw_data/c3Anat.nii'],
+           ['/home/ArthurBlair/data/raw_data/c4Anat.nii'],
+           ['/home/ArthurBlair/data/raw_data/c5Anat.nii']]
 
 - *dartel_input_images*
     "Imported" class images into a form that can be used with the Dartel toolbox (a list of items which are a list of items which are a pathlike object or string representing an existing file).
 
     ::
 
-      ex.
+      ex. [['/home/ArthurBlair/data/raw_data/rc1Anat.nii'],
+           ['/home/ArthurBlair/data/raw_data/rc2Anat.nii'],
+           ['/home/ArthurBlair/data/raw_data/rc3Anat.nii'],
+           ['/home/ArthurBlair/data/raw_data/rc4Anat.nii'],
+           ['/home/ArthurBlair/data/raw_data/rc5Anat.nii']]
 
 - *modulated_class_images*
     Modulated and normalised class images (a list of items which are a list of items which are a pathlike object or string representing an existing file).
 
     ::
 
-      ex.
+      ex. [['/home/ArthurBlair/data/raw_data/mwc1Anat.nii'],
+           ['/home/ArthurBlair/data/raw_data/mwc2Anat.nii'],
+           ['/home/ArthurBlair/data/raw_data/mwc3Anat.nii'],
+           ['/home/ArthurBlair/data/raw_data/mwc4Anat.nii'],
+           ['/home/ArthurBlair/data/raw_data/mwc5Anat.nii']]
 
 - *normalized_class_images*
     Normalised class images, without modulation (a list of items which are a list of items which are a pathlike object or string representing an existing file).
 
     ::
 
-      ex.
+      ex. [['/home/ArthurBlair/data/raw_data/wc1Anat.nii'],
+           ['/home/ArthurBlair/data/raw_data/wc2Anat.nii'],
+           ['/home/ArthurBlair/data/raw_data/wc3Anat.nii'],
+           ['/home/ArthurBlair/data/raw_data/wc4Anat.nii'],
+           ['/home/ArthurBlair/data/raw_data/wc5Anat.nii']]
 
 - *inverse_deformation_field*
     Inverse deformation field. Could be used for spatially normalising surface files as GIFTI (a list of items which are a pathlike object or
@@ -227,7 +239,7 @@ Segmentation: Segments,  bias  corrects  and  spatially normalises - all in the 
 
     ::
 
-      ex.
+      ex. /home/ArthurBlair/data/raw_data/iy_Anat.nii
 
 - *forward_deformation_field*
     Forward deformation field. Could be used for spatially normalising images to MNI space (a list of items which are a pathlike object or
@@ -241,7 +253,7 @@ Segmentation: Segments,  bias  corrects  and  spatially normalises - all in the 
 
     ::
 
-      ex.
+      ex. /home/ArthurBlair/data/raw_data/Anat_seg8.mat
 
 -------------
 
