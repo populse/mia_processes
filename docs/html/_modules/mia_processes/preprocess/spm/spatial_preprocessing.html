@@ -373,7 +373,8 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Segmentation: Segments,  bias  corrects  and  spatially normalises - all in the same model*</span>
 
-<span class="sd">    Please, see the complete documention for the `NewSegment brick in the populse.mia_processes web site: &lt;https://populse.github.io/mia_processes/html/documentation/preprocess/spm/NewSegment.html&gt;`_</span>
+<span class="sd">    Please, see the complete documention for the `NewSegment brick in the populse.mia_processes web site:</span>
+<span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/preprocess/spm/NewSegment.html&gt;`_</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -400,7 +401,7 @@
                              <span class="s1">&#39;reguralisation -a float between 0 and 10-, bias &#39;</span>
                              <span class="s1">&#39;FWHM -a float between 20 and infinity-, which &#39;</span>
                              <span class="s1">&#39;maps to save -a tuple of two boolean values &#39;</span>
-                             <span class="s1">&#39;(Field, Corrected)-.&#39;</span><span class="p">)</span>
+                             <span class="s1">&#39;(estimated bias field, bias corrected image)-.&#39;</span><span class="p">)</span>
         <span class="n">tissues_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;A list of tuples with the following values for each &#39;</span>
                         <span class="s1">&#39;tissue types (grey matter, white matter, etc.): &#39;</span>
                         <span class="s1">&#39;(tissue probability map (4D), 1-based index to frame),&#39;</span>
@@ -418,7 +419,6 @@
         <span class="n">sampling_distance_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Approximate distance between sampled points &#39;</span>
                                  <span class="s1">&#39;when estimating the model parameters: &#39;</span>
                                  <span class="s1">&#39;a float.&#39;</span><span class="p">)</span>
-        
 
         <span class="n">write_deformation_fields</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Which deformation fields, that can be used&#39;</span>
                                     <span class="s1">&#39; by the deformation utility, to save: a &#39;</span>
@@ -463,21 +463,23 @@
                                                  <span class="n">low</span><span class="o">=</span><span class="mf">20.</span><span class="p">,</span>
                                                  <span class="n">high</span><span class="o">=</span><span class="kc">None</span><span class="p">),</span>
                                     <span class="n">traits</span><span class="o">.</span><span class="n">Tuple</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">),</span>
-                                                <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">)),</span>
+                                                 <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">)),</span>
                                     <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                                     <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                     <span class="n">desc</span><span class="o">=</span><span class="n">channel_info_desc</span><span class="p">))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;tissues&quot;</span><span class="p">,</span>
-                          <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Tuple</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Tuple</span><span class="p">(</span><span class="n">ImageFileSPM</span><span class="p">(</span><span class="n">exists</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
-                                                                <span class="n">traits</span><span class="o">.</span><span class="n">Int</span><span class="p">()),</span>
-                                                   <span class="n">traits</span><span class="o">.</span><span class="n">Int</span><span class="p">(),</span>
-                                                   <span class="n">traits</span><span class="o">.</span><span class="n">Tuple</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">),</span>
-                                                   <span class="n">traits</span><span class="o">.</span><span class="n">Tuple</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">)),</span>
-                                      <span class="n">value</span><span class="o">=</span><span class="n">tissues_list</span><span class="p">,</span>
-                                      <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                                      <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                      <span class="n">desc</span><span class="o">=</span><span class="n">tissues_desc</span><span class="p">))</span>
+                       <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span>
+                           <span class="n">traits</span><span class="o">.</span><span class="n">Tuple</span><span class="p">(</span>
+                               <span class="n">traits</span><span class="o">.</span><span class="n">Tuple</span><span class="p">(</span><span class="n">ImageFileSPM</span><span class="p">(</span><span class="n">exists</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+                                            <span class="n">traits</span><span class="o">.</span><span class="n">Int</span><span class="p">()),</span>
+                               <span class="n">traits</span><span class="o">.</span><span class="n">Int</span><span class="p">(),</span>
+                               <span class="n">traits</span><span class="o">.</span><span class="n">Tuple</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">),</span>
+                               <span class="n">traits</span><span class="o">.</span><span class="n">Tuple</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">)),</span>
+                           <span class="n">value</span><span class="o">=</span><span class="n">tissues_list</span><span class="p">,</span>
+                           <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                           <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                           <span class="n">desc</span><span class="o">=</span><span class="n">tissues_desc</span><span class="p">))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;warping_regularization&quot;</span><span class="p">,</span>
                        <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
@@ -514,11 +516,6 @@
                                    <span class="n">desc</span><span class="o">=</span><span class="n">write_deformation_fields</span><span class="p">))</span>
 
         <span class="c1"># Output traits</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        self.add_trait(&quot;bias_corrected_images&quot;,</span>
-<span class="sd">                       File(output=True,</span>
-<span class="sd">                            desc=bias_corrected_images_desc))</span>
-<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;bias_corrected_images&quot;</span><span class="p">,</span>
                        <span class="n">OutputMultiPath</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -588,47 +585,44 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">NewSegment</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="c1"># Outputs definition and tags inheritance (optional)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_files</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_info</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_deformation_fields</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_files</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">channel_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_files</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">channel_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_info</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">write_deformation_fields</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_deformation_fields</span>
+            
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_info</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">channel_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_info</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tissues</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">tissues</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tissues</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_deformation_fields</span><span class="p">:</span>
+                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span>
+                       <span class="n">write_deformation_fields</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_deformation_fields</span>
+
             <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">_list_outputs</span><span class="p">()</span>
-       
-        <span class="sd">&quot;&quot;&quot;raw_data_folder = os.path.join(&quot;data&quot;, &quot;raw_data&quot;)</span>
-<span class="sd">        derived_data_folder = os.path.join(&quot;data&quot;, &quot;derived_data&quot;)</span>
-<span class="sd">        for out_name in list(outputs):</span>
-<span class="sd">            out_value = outputs[out_name]</span>
-<span class="sd">            if out_name not in [&quot;forward_deformation_field&quot;]:</span>
-<span class="sd">                del outputs[out_name]</span>
-<span class="sd">            else:</span>
-<span class="sd">                if type(out_value) is list:</span>
-<span class="sd">                    for idx, element in enumerate(out_value):</span>
-<span class="sd">                        if not element:</span>
-<span class="sd">                            continue</span>
-<span class="sd">                        if type(element) is list:</span>
-<span class="sd">                            for idx_2, element_2 in enumerate(element):</span>
-<span class="sd">                                element_2 = element_2.replace(raw_data_folder, derived_data_folder)</span>
-<span class="sd">                                outputs[out_name][idx][idx_2] = element</span>
-<span class="sd">                        else:</span>
 
-<span class="sd">                            print(&quot;element: &quot;, element)</span>
-<span class="sd">                            element = element.replace(raw_data_folder, derived_data_folder)</span>
-<span class="sd">                            outputs[out_name][idx] = element&quot;&quot;&quot;</span>
-
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">         When there is only one image at the input, the tags inheritance is</span>
+<span class="sd">         directly managed in PipelineManagerTab.add_plug_value_to_database().</span>
+<span class="sd">         However the inheritance of 2 output parameters is defined below, as</span>
+<span class="sd">         an example</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
         
             <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
 
                 <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;native_class_images&quot;</span><span class="p">:</span>
-                    <span class="n">path</span><span class="p">,</span> <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-                    <span class="n">filename_without_prefix</span> <span class="o">=</span> <span class="n">filename</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
 
-                    <span class="k">if</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
-                                     <span class="n">filename_without_prefix</span><span class="p">)</span>
-                              <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_files</span><span class="p">):</span>
-                        
-                        <span class="k">for</span> <span class="n">fullname</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="n">fullname</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
+                    <span class="k">if</span> <span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                        <span class="n">path</span><span class="p">,</span> <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                        <span class="n">filename_without_prefix</span> <span class="o">=</span> <span class="n">filename</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+
+                        <span class="k">if</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
+                                         <span class="n">filename_without_prefix</span><span class="p">)</span>
+                                                         <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_files</span><span class="p">):</span> 
+
+                            <span class="k">for</span> <span class="n">fullname</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="n">fullname</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                                                     <span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
                                                         <span class="n">filename_without_prefix</span><span class="p">)</span>
 
                 <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;forward_deformation_field&quot;</span><span class="p">:</span>
@@ -639,10 +633,11 @@
 
                         <span class="k">if</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
                                      <span class="n">filename_without_prefix</span><span class="p">)</span>
-                              <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_files</span><span class="p">):</span>
-        
-                            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="n">fullname</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
-                                                                           <span class="n">filename_without_prefix</span><span class="p">)</span>
+                                                         <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_files</span><span class="p">):</span>
+
+                            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="n">fullname</span>
+                                                 <span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
+                                                        <span class="n">filename_without_prefix</span><span class="p">)</span>
 
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
@@ -650,13 +645,14 @@
 <div class="viewcode-block" id="NewSegment.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.preprocess.spm.html#mia_processes.preprocess.spm.spatial_preprocessing.NewSegment.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">NewSegment</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">affine_regularization</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">affine_regularization</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">channel_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_files</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">channel_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_info</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">sampling_distance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sampling_distance</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">tissues</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tissues</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">warping_regularization</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">warping_regularization</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">write_deformation_fields</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_deformation_fields</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">affine_regularization</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">affine_regularization</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">sampling_distance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sampling_distance</span>
+        <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span>
+                       <span class="n">write_deformation_fields</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_deformation_fields</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">()</span></div></div>
 
 
