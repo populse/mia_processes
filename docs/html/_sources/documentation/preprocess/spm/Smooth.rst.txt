@@ -16,16 +16,16 @@ Smooth brick
 >>> from mia_processes.preprocess.spm import Smooth
 >>> Smooth.help()
 
-**Inputs parameters:** [#label]_
+**Inputs parameters:**
 
-- *in_files <=> data*
+- *in_files <=> data* [#label]_
     List of files to smooth. A list of items which are an existing, uncompressed file (valid extensions: [.img, .nii, .hdr]).
 
     ::
 
       ex. ['/home/ArthurBlair/data/raw_data/Func.nii']
 
-- *fwhm <=> fwhm*
+- *fwhm <=> fwhm* [#label]_
     Specify the full-width at half maximum (FWHM) of the Gaussian smoothing kernel in mm. Three values can be entered, indicating
     the FWHM in the x, y and z directions, or one value only, indicating the same FWHM in all three directions. A list of 3 items which are a
     float.
@@ -34,7 +34,7 @@ Smooth brick
 
       ex. [6, 6, 6]
 
-- *data_type <=> dtype*
+- *data_type <=> dtype* [#label]_
     | Data type of the output images (an integer [int or long]).
     |   0: same as the original images
     |   2: UINT8 (unsigned char)
@@ -48,7 +48,7 @@ Smooth brick
 
       ex. 0, MIA_processes default value
 
-- *implicit_masking <=> im*
+- *implicit_masking <=> im* [#label]_
     A mask implied by a particular voxel value (a boolean). If set to True, the implicit masking of the input image is preserved in the
     smoothed image.
 
@@ -56,14 +56,14 @@ Smooth brick
 
       ex. False
 
-- *out_prefix <=> prefix*
+- *out_prefix <=> prefix* [#label]_
     Specify the string to be prepended to the filenames of the smoothed image file(s) (a string).
 
     ::
 
       ex. s, capsul/nipype default value
 
-**Outputs parameters:** [#label]_
+**Outputs parameters:**
 
 - *smoothed_files*
     Smoothed files (a list of items which are an existing file name).
@@ -78,4 +78,7 @@ Smooth brick
 
 	    Usefull links:
 	    `SPM12 Smooth <https://www.fil.ion.ucl.ac.uk/spm/doc/manual.pdf#page=57>`_, 
+	    `nipype Smooth <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.spm.preprocess.html#smooth>`_
+
+..
 	    `nipype <https://nipype.readthedocs.io/en/latest/interfaces/generated/interfaces.spm/preprocess.html#smooth>`_

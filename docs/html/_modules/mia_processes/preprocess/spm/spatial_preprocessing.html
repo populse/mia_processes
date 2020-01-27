@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>mia_processes.preprocess.spm.spatial_preprocessing &#8212; mia_processes 1.3.1 documentation</title>
+    <title>mia_processes.preprocess.spm.spatial_preprocessing &#8212; mia_processes 1.4.0 documentation</title>
     <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
@@ -16,7 +16,7 @@
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 1.3.1 documentation</span></a></h1>
+          <span>mia_processes 1.4.0 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.preprocess.spm.spatial_preprocessing</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -75,90 +75,13 @@
 
 <div class="viewcode-block" id="Coregister"><a class="viewcode-back" href="../../../../mia_processes.preprocess.spm.html#mia_processes.preprocess.spm.spatial_preprocessing.Coregister">[docs]</a><span class="k">class</span> <span class="nc">Coregister</span><span class="p">(</span><span class="n">Process_Mia</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">- Coregister (mia_processes.preprocess.spm.spatial_preprocessing.Coregister) &lt;=&gt; Coregister (SPM12 names).</span>
-<span class="sd">*** Realignment through different modalities: Align together scans of different modalities *** </span>
-<span class="sd">    * Input parameters:</span>
-<span class="sd">        * target &lt;=&gt; ref: The reference file (remains stationary) while the source image is moved to match it.</span>
-<span class="sd">                                   An existing, uncompressed file (valid extensions: [.img, .nii, .hdr]).</span>
-<span class="sd">            &lt;ex. /home/ArthurBlair/data/downloaded_data/meanFunc.nii&gt;</span>
-<span class="sd">        * source &lt;=&gt; source: The image that is jiggled about to best match the target image.</span>
-<span class="sd">                                      A list of items which are an existing, uncompressed file</span>
-<span class="sd">                                      (valid extensions: [.img, .nii, .hdr]).</span>
-<span class="sd">            &lt;ex. [&#39;/home/ArthurBlair/data/raw_data/Anat.nii&#39;]&gt;</span>
-<span class="sd">        * apply_to_files &lt;=&gt; other: These are any images that need to remain in alignment with the</span>
-<span class="sd">                                             source image (a list of items which are an existing file name).</span>
-<span class="sd">            &lt;ex. [&#39;/home/ArthurBlair/data/raw_data/Func.nii&#39;]&gt;</span>
-<span class="sd">        * jobtype: One of &#39;estwrite&#39; or &#39;estimate&#39; or &#39;write&#39;. If &#39;estimate&#39; is selected, the registration</span>
-<span class="sd">                   parameters are stored in the headers of the &#39;source&#39; and the &#39;apply_to_files&#39; images. If</span>
-<span class="sd">                   &#39;write&#39; is selected, the resliced images are named the same as the originals except that</span>
-<span class="sd">                   they are prefixed by out_prefix.</span>
-<span class="sd">            &lt;ex. estimate&gt;</span>
-<span class="sd">        * cost_function &lt;=&gt; eoptions.cost_fun: One of &#39;mi&#39; or &#39;nmi&#39; or &#39;ecc&#39; or &#39;ncc&#39;. Registration</span>
-<span class="sd">                                                        involves finding parameters that either maximise or</span>
-<span class="sd">                                                        minimise some objective function. For inter-modal</span>
-<span class="sd">                                                        registration, use &#39;Mutual Information&#39;,</span>
-<span class="sd">                                                        &#39;Normalised Mutual Information&#39; or</span>
-<span class="sd">                                                        &#39;Entropy Correlation Coefficient&#39;.</span>
-<span class="sd">                                                        For within modality, you could also use Normalised</span>
-<span class="sd">                                                        Cross Correlation.</span>
-<span class="sd">                                                        &#39;mi&#39;: Mutual Information.</span>
-<span class="sd">		                                        &#39;nmi&#39;: Normalised Mutual Information.</span>
-<span class="sd">		                                        &#39;ecc&#39;: Entropy Correlation Coefficient.</span>
-<span class="sd">		                                        &#39;ncc&#39;: Normalised Cross Correlation.</span>
-<span class="sd">            &lt;ex. nmi&gt;</span>
-<span class="sd">        * separation &lt;=&gt; eoptions.sep: A list of items which are a float. The average distance between</span>
-<span class="sd">                                                sampled points (in mm). Can be a vector to allow a coarse</span>
-<span class="sd">                                                registration followed by increasingly fine ones.</span>
-<span class="sd">            &lt;ex. [4, 2]&gt;</span>
-<span class="sd">        * tolerance &lt;=&gt; eoptions.tol: A list of 12 items which are a float. The acceptable tolerance</span>
-<span class="sd">                                               for each of 12 params. Iterations stop when differences</span>
-<span class="sd">                                               between successive estimates are less than the required tolerance.</span>
-<span class="sd">            &lt;ex. [0.02, 0.02, 0.02, 0.001, 0.001, 0.001, 0.01, 0.01, 0.01, 0.001, 0.001, 0.001]&gt;</span>
-<span class="sd">        * fwhm &lt;=&gt; eoptions.fwhm: A list of 2 items which are a float. Kernel of gaussian smooth to</span>
-<span class="sd">                                           apply to the 256*256 joint histogram.</span>
-<span class="sd">            &lt;ex. [7, 7]&gt;</span>
-<span class="sd">        * write_interp &lt;=&gt; roptions.interp: The method by which the images are sampled when being written in a different space.</span>
-<span class="sd">                                                  Nearest neighbour is fastest, but not recommended for image realignment. Trilinear</span>
-<span class="sd">                                                  Interpolation is probably OK for PET, or realigned and re-sliced fMRI, but not so</span>
-<span class="sd">                                                  suitable for fMRI with subject movemen because higher degree interpolation generally</span>
-<span class="sd">                                                  gives better results. Although higher degree methods provide better interpolation,</span>
-<span class="sd">                                                  but they are slower because they use more neighbouring voxels. (0 &lt;= a long integer &lt;= 7).</span>
-<span class="sd">                                                  Voxel sizes must all be identical and isotropic.</span>
+<span class="sd">    *Realignment through different modalities: Align together scans of different modalities*</span>
 
-<span class="sd">                                                  - 0: Nearest neighbour</span>
-<span class="sd">                                                  - 1: Trilinear</span>
-<span class="sd">                                                  - 2: 2nd Degree B-Spline</span>
-<span class="sd">                                                  - 3: 3rd Degree B-Spline</span>
-<span class="sd">                                                  …</span>
-<span class="sd">                                                  - 7: 7th Degree B-Spline</span>
-<span class="sd">            &lt;ex. 4&gt;</span>
-<span class="sd">        * write_wrap &lt;=&gt; roptions.wrap: Check if interpolation should wrap in [x,y,z] (a list of 3 items which are integer int or long).</span>
-<span class="sd">                                        For example, in MRI scans, the images wrap around in the phase encode direction, so the subject’s </span>
-<span class="sd">                                        nose may poke into the back of the subject’s head. These are typically:</span>
-
-<span class="sd">                                        - No wrapping [0, 0, 0]: for PET or images that have already been spatially transformed. (Also the recommended option if</span>
-<span class="sd">                                                                 you are not really sure).</span>
-<span class="sd">                                        - Wrap in Y [0, 1, 0], for (un-resliced) MRI where phase encoding is in the Y direction (voxel space).</span>
-<span class="sd">           &lt;ex. [0 0 0]&gt;</span>
-<span class="sd">        * write_mask &lt;=&gt; roptions.mask: Mask output image (a boolean). Because of subject motion, different images are likely to have different</span>
-<span class="sd">                                        patterns of zeros from where it was not possible to sample data. With masking enabled, the program</span>
-<span class="sd">                                        searches through the whole time series looking for voxels which need to be sampled from outside the</span>
-<span class="sd">                                        original images. Where this occurs, that voxel is set to zero for the whole set of images.</span>
-<span class="sd">          &lt;ex. False&gt;</span>
-
-<span class="sd">        * out_prefix &lt;=&gt; roptions.prefix: Specify the string to be prepended to the</span>
-<span class="sd">                                          filenames of the coregisterd image file(s)</span>
-<span class="sd">                                          (a string).</span>
-<span class="sd">          &lt;ex. r, capsul/nipype default value&gt;</span>
-<span class="sd">    * Outputs parameters:</span>
-<span class="sd">        # coregistered_source: A list of items which are an existing file name. Coregistered source files,</span>
-<span class="sd">                               corresponding to &#39;source&#39; images.</span>
-<span class="sd">		    &lt;ex. /home/ArthurBlair/data/raw_data/Anat.nii&gt;</span>
-<span class="sd">        # coregistered_files: A list of items which are an existing file name. Coregistered other files,</span>
-<span class="sd">                              corresponding to &#39;apply_to_files&#39; images.</span>
-<span class="sd">            &lt;ex. /home/ArthurBlair/data/raw_data/Func.nii&gt;</span>
+<span class="sd">    Please, see the complete documention for the `Coregister brick in the populse.mia_processes web site:</span>
+<span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/preprocess/spm/Coregister.html&gt;`_</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="Coregister.__init__"><a class="viewcode-back" href="../../../../mia_processes.preprocess.spm.html#mia_processes.preprocess.spm.spatial_preprocessing.Coregister.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instanciation.</span>
 <span class="sd">        </span>
@@ -257,7 +180,8 @@
                                    <span class="n">desc</span><span class="o">=</span><span class="n">separation_desc</span><span class="p">))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;tolerance&quot;</span><span class="p">,</span>
-                       <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="p">[</span><span class="o">.</span><span class="mi">02</span><span class="p">,</span> <span class="o">.</span><span class="mi">02</span><span class="p">,</span> <span class="o">.</span><span class="mi">02</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="o">.</span><span class="mi">01</span><span class="p">,</span> <span class="o">.</span><span class="mi">01</span><span class="p">,</span> <span class="o">.</span><span class="mi">01</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">],</span>
+                       <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="p">[</span><span class="o">.</span><span class="mi">02</span><span class="p">,</span> <span class="o">.</span><span class="mi">02</span><span class="p">,</span> <span class="o">.</span><span class="mi">02</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span>
+                                          <span class="o">.</span><span class="mi">01</span><span class="p">,</span> <span class="o">.</span><span class="mi">01</span><span class="p">,</span> <span class="o">.</span><span class="mi">01</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">],</span>
                                    <span class="n">trait</span><span class="o">=</span><span class="n">traits</span><span class="o">.</span><span class="n">Range</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="kc">None</span><span class="p">),</span>
                                    <span class="n">minlen</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
                                    <span class="n">maxlen</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
@@ -330,13 +254,17 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">Coregister</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
         
         <span class="c1"># Outputs definition and tags inheritance (optional)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="ow">and</span>
+              <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">!=</span> <span class="p">[</span><span class="n">Undefined</span><span class="p">]</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span>
 
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span> <span class="o">!=</span> <span class="p">[</span><span class="n">Undefined</span><span class="p">]:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">apply_to_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span> <span class="o">=</span> <span class="n">Undefined</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">out_prefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span>
@@ -344,18 +272,22 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">_list_outputs</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
+            <span class="n">outputs_coregsource</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">outputs_coregfiles</span> <span class="o">=</span> <span class="kc">None</span>
         
             <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
 
                 <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;coregistered_source&quot;</span><span class="p">:</span>
-
+                    <span class="n">outputs_coregsource</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                    
                     <span class="k">for</span> <span class="n">fullname</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
                         <span class="n">path</span><span class="p">,</span> <span class="n">filename_out</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">fullname</span><span class="p">)</span>
 
                         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">==</span> <span class="s2">&quot;estimate&quot;</span><span class="p">:</span>
 
                             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span><span class="p">:</span>
-                                <span class="n">filename_in</span> <span class="o">=</span> <span class="n">filename_out</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span><span class="p">):]</span>
+                                <span class="n">filename_in</span> <span class="o">=</span> <span class="n">filename_out</span><span class="p">[</span>
+                                                  <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span><span class="p">):]</span>
                         
                             <span class="k">else</span><span class="p">:</span>
                                 <span class="n">filename_in</span> <span class="o">=</span> <span class="n">filename_out</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">):]</span>
@@ -363,81 +295,68 @@
                         <span class="k">else</span><span class="p">:</span>
                             <span class="n">filename_in</span> <span class="o">=</span> <span class="n">filename_out</span>
     
-                        <span class="k">if</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
-                                         <span class="n">filename_in</span><span class="p">)</span>
-                              <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">):</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="n">fullname</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
-                                                                           <span class="n">filename_in</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">filename_in</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span>
+                                           <span class="n">fullname</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
+                                                                    <span class="n">filename_in</span><span class="p">)</span>
 
-                <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;coregistered_files&quot;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">values</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span><span class="p">]:</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">==</span> <span class="s2">&quot;estwrite&quot;</span><span class="p">:</span>
 
+                            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">outputs_coregsource</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                                <span class="n">outputs_coregsource</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                                                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">filename_in</span><span class="p">))</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
+                                                                   <span class="n">filename_in</span><span class="p">)</span>
+                                                     <span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
+                                                                    <span class="n">filename_in</span><span class="p">)</span>
+                                
+                <span class="k">if</span> <span class="p">(</span><span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;coregistered_files&quot;</span> <span class="ow">and</span>
+                    <span class="ow">not</span> <span class="n">values</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span><span class="p">]):</span>
+                    <span class="n">outputs_coregfiles</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                    
                     <span class="k">for</span> <span class="n">fullname</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
                         <span class="n">path</span><span class="p">,</span> <span class="n">filename_out</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">fullname</span><span class="p">)</span>
 
                         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">==</span> <span class="s2">&quot;estimate&quot;</span><span class="p">:</span>
-                    
+
                             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span><span class="p">:</span>
-                                <span class="n">filename_in</span> <span class="o">=</span> <span class="n">filename_out</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span><span class="p">):]</span>
-                        
+                                <span class="n">filename_in</span> <span class="o">=</span> <span class="n">filename_out</span><span class="p">[</span>
+                                                  <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span><span class="p">):]</span>
+
                             <span class="k">else</span><span class="p">:</span>
                                 <span class="n">filename_in</span> <span class="o">=</span> <span class="n">filename_out</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">):]</span>
 
                         <span class="k">else</span><span class="p">:</span>
                             <span class="n">filename_in</span> <span class="o">=</span> <span class="n">filename_out</span>
 
-                        <span class="k">if</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
-                                         <span class="n">filename_in</span><span class="p">)</span>
-                              <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span><span class="p">):</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="n">fullname</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
-                                                                           <span class="n">filename_in</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
+                                        <span class="n">filename_in</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span>
+                                           <span class="n">fullname</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
+                                                                    <span class="n">filename_in</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
-        <span class="c1">#return outputs, {}</span>
-              
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">            </span>
-<span class="sd">        if not self.target:</span>
-<span class="sd">            return {}</span>
-<span class="sd">        else:</span>
-<span class="sd">            self.process.inputs.target = self.target</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">==</span> <span class="s2">&quot;estwrite&quot;</span><span class="p">:</span>
 
-<span class="sd">        if not self.source:</span>
-<span class="sd">            return {}</span>
-<span class="sd">        else:</span>
-<span class="sd">            self.process.inputs.source = self.source</span>
-<span class="sd">            </span>
-<span class="sd">#        if not self.apply_to_files:</span>
-<span class="sd">#            return {}</span>
-<span class="sd">#        else:</span>
-<span class="sd">#            self.process.inputs.apply_to_files = self.apply_to_files</span>
+                            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">outputs_coregfiles</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                                <span class="n">outputs_coregfiles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                                               <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">filename_in</span><span class="p">))</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
+                                                                   <span class="n">filename_in</span><span class="p">)</span>
+                                                     <span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
+                                                                    <span class="n">filename_in</span><span class="p">)</span>
 
-<span class="sd">        if self.apply_to_files:</span>
-<span class="sd">            self.process.inputs.apply_to_files = self.apply_to_files</span>
+        <span class="k">if</span> <span class="n">outputs_coregsource</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;coregistered_source&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">outputs_coregsource</span>
 
-<span class="sd">        if not self.jobtype:</span>
-<span class="sd">            return {}</span>
-<span class="sd">        else:</span>
-<span class="sd">            self.process.inputs.jobtype = self.jobtype</span>
+        <span class="k">if</span> <span class="n">outputs_coregfiles</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;coregistered_files&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">outputs_coregfiles</span>
 
-<span class="sd">        outputs = self.process._list_outputs()</span>
-
-<span class="sd">#        if self.jobtype == &quot;estimate&quot;:</span>
-
-<span class="sd">#            if self.source and not self.apply_to_files:</span>
-<span class="sd">                </span>
-<span class="sd">#                if isinstance(self.source, list):</span>
-<span class="sd">#                    outputs[&quot;coregistered_files&quot;] = [self.source[0]]  # see for mutli-element in each list !</span>
-
-<span class="sd">#            elif self.source and self.apply_to_files:</span>
-
-<span class="sd">#                if isinstance(self.source, list) and isinstance(self.apply_to_files, list):</span>
-<span class="sd">#                    outputs[&quot;coregistered_files&quot;] = [self.source[0], self.apply_to_files[0]] # see for mutli-element in each list !</span>
-<span class="sd">        &quot;&quot;&quot;</span></div>
+        <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Coregister.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.preprocess.spm.html#mia_processes.preprocess.spm.spatial_preprocessing.Coregister.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-
+        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Coregister</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">apply_to_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span>
@@ -452,64 +371,11 @@
 
 <div class="viewcode-block" id="NewSegment"><a class="viewcode-back" href="../../../../mia_processes.preprocess.spm.html#mia_processes.preprocess.spm.spatial_preprocessing.NewSegment">[docs]</a><span class="k">class</span> <span class="nc">NewSegment</span><span class="p">(</span><span class="n">Process_Mia</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">- NewSegment (mia_processes.preprocess.spm.spatial_preprocessing.NewSegment) &lt;=&gt; Segment (SPM12 names).</span>
-<span class="sd">  The warp.fwhm, warp.cleanup and warp.mrf of SPM12 are not used in the NewSegment brick.</span>
-<span class="sd">*** Segmentation: Segments,  bias  corrects  and  spatially normalises - all in the same model *** </span>
-<span class="sd">    * Input parameters:</span>
-<span class="sd">        * affine_regularization &lt;=&gt; warp.affreg : Standard space for affine registration (&#39;mni&#39; or &#39;eastern&#39; or &#39;subj&#39; or &#39;none&#39;). &lt;ex. mni&gt;.</span>
-<span class="sd">        * channel_files &lt;=&gt; channel.vol : Path of the scans for processing (valid extensions, .img, .nii, .hdr).</span>
-<span class="sd">            &lt;ex. [&#39;/home/ArthurBlair/data/raw_data/Anat.nii&#39;]&gt;.</span>
-<span class="sd">        * channel_info: A tuple with the following values: - Bias reguralisation -a float [0-10]-</span>
-<span class="sd">                                                           - Bias FWHM -a float-</span>
-<span class="sd">                                                           - Which maps to save -a tuple of two boolean values (Field, Corrected)-.</span>
-<span class="sd">                * Bias regularisation &lt;=&gt; channel.biasreg: 0 Noregularisation, 0.00001 extremely light regularisation,  ... ,</span>
-<span class="sd">                                                           1 very heavy regularisation, 10 extremely heavy regularisation.</span>
-<span class="sd">                * Bias FWHM (Full Width at Half Maximum) &lt;=&gt; channel.biasfwhm: 30 (mm cutoff), 40 (mm cutoff), ...,</span>
-<span class="sd">                                                                               150 (mm cutoff), inf (no correction).</span>
-<span class="sd">                * Which maps to save (Field, Bias Corrected) &lt;=&gt; channel.write: For save a bias corrected version of the estimated</span>
-<span class="sd">                                                                                bias field or/and the processed image:</span>
-<span class="sd">                                                           (False, False) Save Nothing, (False, True) save Bias corrected image only, etc.</span>
-<span class="sd">            &lt;ex. (0.0001, 60, (False, True)&gt;.</span>
-<span class="sd">        * sampling_distance &lt;=&gt; warp.samp: Approximate distance between sampled points when estimating the model parameters. a float &lt;ex. 3&gt;</span>
-<span class="sd">        * tissues &lt;=&gt; tissue: A list of tuples with the following values for each tissue types; Grey Matter,</span>
-<span class="sd">                              White Matter, CerebroSpinal Flux, Bone tissue, Soft tissue, AirBackground:</span>
-<span class="sd">                              [((tissue probability map (4D), 1-based index to frame),  number of gaussians,</span>
-<span class="sd">                                (which maps to save [Native, DARTEL]), (which maps to save [Unmodulated, Modulated])), ...].</span>
-<span class="sd">                              Typically, the order of tissues is grey matter, white matter, CSF, bone,</span>
-<span class="sd">                              soft tissue and iar/background (if using tpm/TPM.nii).</span>
-<span class="sd">                * tissue probability map &lt;=&gt; tisue(x).tpm with x in [1, 2, 3, 4, 5, 6]: The tissue probability image [.img, .nii, .hdr].</span>
-<span class="sd">                * 1-based index to frame: index for the 4th dimension of the tissue probability map and then tissue type selection.</span>
-<span class="sd">                * number of gaussians &lt;=&gt; tissue(x).ngaus: Typical numbers of Gaussians could be two for GM, WM, CSF, three for bone,</span>
-<span class="sd">                                                           four for other soft tissues and two for air / background):</span>
-<span class="sd">                                                           [1,2,3,4,5,6,7,8,inf - Non parametric-].</span>
-<span class="sd">                * which maps to save [Native, DARTEL] &lt;=&gt; tissue(x).native:</span>
-<span class="sd">                  The native space option allows you to produce a tissue class image (c*) that is in alignment with the original.</span>
-<span class="sd">                  It can also be used for importing into a form that can be used with the Dartel toobox (rc*):</span>
-<span class="sd">                  (False, False) Save Nothing, (True, False) save native only. etc.</span>
-<span class="sd">                * which maps to save [Unmodulated, Modulated] &lt;=&gt; tissue(x).warped:</span>
-<span class="sd">                  To produces spatially normalised versions of the tissue class, both with (mcw*) and without (wc*)</span>
-<span class="sd">                   modulation: (False, False) Save Nothing, (True, False) save unmodulated only. etc.</span>
-<span class="sd">             &lt;ex. [((&#39;/home/ArthurBlair/spm/spm12/tpm/TPM.nii&#39;, 1), 2, (True, False), (False, False)),</span>
-<span class="sd">                   ((&#39;/home/ArthurBlair/spm/spm12/tpm/TPM.nii&#39;, 2), 2, (True, False), (False, False)), </span>
-<span class="sd">                   ((&#39;/home/ArthurBlair/spm/spm12/tpm/TPM.nii&#39;, 3), 2, (True, False), (False, False)),</span>
-<span class="sd">                   ((&#39;/home/ArthurBlair/spm/spm12/tpm/TPM.nii&#39;, 4), 3, (True, False), (False, False)),</span>
-<span class="sd">                   ((&#39;/home/ArthurBlair/spm/spm12/tpm/TPM.nii&#39;, 5), 4, (True, False), (False, False)),</span>
-<span class="sd">                   ((&#39;/home/ArthurBlair/spm/spm12/tpm/TPM.nii&#39;, 6), 2, (True, False), (False, False))]&gt;.</span>
-<span class="sd">        * warping_regularization &lt;=&gt; warp.reg: The measure of the roughness of the deformations for registration, involve the sum of</span>
-<span class="sd">                                               5 elements. Floats or list of floats. (the latter is required by SPM12).</span>
-<span class="sd">            &lt;ex. [0, 0.001, 0.5, 0.05, 0.2]&gt;</span>
-<span class="sd">        * write_deformation_fields &lt;=&gt; warp.write: Deformation fields can be saved to disk, and used by the deformation utility.</span>
-<span class="sd">                                                   A list of 2 booleans for which deformation fields to write, [Inverse, Forward]:</span>
-<span class="sd">                                                   [False, False] Save nothing, [True, False] save Inverse only. &lt;ex. [False, True]&gt;</span>
-<span class="sd">    * Output parameters:</span>
-<span class="sd">        * forward_deformation_field: Forward deformation field. &lt;ex. /home/ArthurBlair/data/raw_data/y_Anat.nii&gt;.</span>
-<span class="sd">        * bias_field_images: Bias field images. &lt;ex. /home/ArthurBlair/data/raw_data/BiasField_Anat.nii&gt;</span>
-<span class="sd">        * bias_corrected_images: Bias corrected images. &lt;ex. /home/ArthurBlair/data/raw_data/mAnat.nii</span>
-<span class="sd">        * native_class_images: Native space probability maps. &lt;ex. [[&#39;/home/ArthurBlair/data/raw_data/c1Anat.nii&#39;],</span>
-<span class="sd">                                                                    [&#39;/home/ArthurBlair/data/raw_data/c2Anat.nii&#39;],</span>
-<span class="sd">                                                                    [&#39;/home/ArthurBlair/data/raw_data/c3Anat.nii&#39;],</span>
-<span class="sd">                                                                    [&#39;/home/ArthurBlair/data/raw_data/c4Anat.nii&#39;],</span>
-<span class="sd">                                                                    [&#39;/home/ArthurBlair/data/raw_data/c5Anat.nii&#39;]]&gt;</span>
+<span class="sd">    *Segmentation: Segments,  bias  corrects  and  spatially normalises - all in the same model*</span>
+
+<span class="sd">    Please, see the complete documention for the `NewSegment brick in the populse.mia_processes web site:</span>
+<span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/preprocess/spm/NewSegment.html&gt;`_</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="NewSegment.__init__"><a class="viewcode-back" href="../../../../mia_processes.preprocess.spm.html#mia_processes.preprocess.spm.spatial_preprocessing.NewSegment.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -526,27 +392,50 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;matlab&#39;</span><span class="p">,</span> <span class="s1">&#39;spm&#39;</span><span class="p">]</span>
 
         <span class="c1"># Inputs description</span>
-        <span class="n">affine_regularization_desc</span> <span class="o">=</span> <span class="s1">&#39;Standard space for affine registration (&quot;mni&quot; or &quot;eastern&quot; or &quot;subj&quot; or &quot;none&quot;).&#39;</span>
-        <span class="n">channel_files_desc</span> <span class="o">=</span> <span class="s1">&#39;Path of the scans for processing, valid extensions: [.img, .nii, .hdr]. A list with one &#39;</span>\
-                             <span class="s1">&#39;string element corresponding to an existing path file&#39;</span>
-        <span class="n">channel_info_desc</span> <span class="o">=</span> <span class="s1">&#39;A tuple with the following values:(Bias reguralisation -a float [0-10]-, Bias FWHM &#39;</span> \
-                            <span class="s1">&#39;-a float-, Which maps to save -a tuple of two boolean values (Field, Corrected)-)&#39;</span>
-        <span class="n">sampling_distance_desc</span> <span class="o">=</span> <span class="s1">&#39;Approximate distance between sampled points when estimating the model parameters&#39;</span> \
-                                 <span class="s1">&#39; -a float-&#39;</span>
-        <span class="n">tissues_desc</span> <span class="o">=</span> <span class="s1">&#39;A list of tuples with the following values for each tissue types (grey matter, white matter, &#39;</span> \
-                       <span class="s1">&#39;etc): [((tissue probability map (4D), 1-based index to frame), number of gaussians, &#39;</span> \
-                       <span class="s1">&#39;(which maps to save [Native, DARTEL]), (which maps to save [Unmodulated, Modulated])), ...].&#39;</span>
-        <span class="n">warping_regularization_desc</span> <span class="o">=</span> <span class="s1">&#39;The measure of the roughness of the deformations for registration, involve &#39;</span> \
-                                      <span class="s1">&#39;the sum of 5 elements. -floats or list of floats-&#39;</span>
-        <span class="n">write_deformation_fields</span> <span class="o">=</span> <span class="s1">&#39;Deformation fields can be saved to disk, and used by the deformation utility. A &#39;</span> \
-                                   <span class="s1">&#39;list of 2 booleans for which deformation fields to write: [Inverse, Forward]: &#39;</span> \
-                                   <span class="s1">&#39;[False, False] Save nothing, [True, False] save Inverse only.&#39;</span>
+        
+        <span class="n">channel_files_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Path of the scans for processing, valid &#39;</span>
+                              <span class="s1">&#39;extensions: [.img, .nii, .hdr]. A list with one &#39;</span>
+                              <span class="s1">&#39;string element corresponding to an existing &#39;</span>
+                              <span class="s1">&#39;path file.&#39;</span><span class="p">)</span>
+        <span class="n">channel_info_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;A tuple with the following values: bias &#39;</span>
+                             <span class="s1">&#39;reguralisation -a float between 0 and 10-, bias &#39;</span>
+                             <span class="s1">&#39;FWHM -a float between 20 and infinity-, which &#39;</span>
+                             <span class="s1">&#39;maps to save -a tuple of two boolean values &#39;</span>
+                             <span class="s1">&#39;(estimated bias field, bias corrected image)-.&#39;</span><span class="p">)</span>
+        <span class="n">tissues_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;A list of tuples with the following values for each &#39;</span>
+                        <span class="s1">&#39;tissue types (grey matter, white matter, etc.): &#39;</span>
+                        <span class="s1">&#39;(tissue probability map (4D), 1-based index to frame),&#39;</span>
+                        <span class="s1">&#39; number of gaussians, (which maps to save: Native,&#39;</span>
+                        <span class="s1">&#39;DARTEL), (which maps to save: Unmodulated, Modulated),&#39;</span>
+                        <span class="s1">&#39; ...&#39;</span><span class="p">)</span>
+        <span class="n">warping_regularization_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Define of the roughness of the &#39;</span>
+                                       <span class="s1">&#39;deformations for registration using &#39;</span>
+                                       <span class="s1">&#39;1 or 5 elements: a float or a list of &#39;</span>
+                                       <span class="s1">&#39;floats, the latter is required &#39;</span>
+                                       <span class="s1">&#39;by SPM12.&#39;</span><span class="p">)</span>
+        <span class="n">affine_regularization_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Standard space for affine registration: &#39;</span>
+                                      <span class="s1">&#39;mni, eastern, subj or none.&#39;</span><span class="p">)</span>
+
+        <span class="n">sampling_distance_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Approximate distance between sampled points &#39;</span>
+                                 <span class="s1">&#39;when estimating the model parameters: &#39;</span>
+                                 <span class="s1">&#39;a float.&#39;</span><span class="p">)</span>
+
+        <span class="n">write_deformation_fields</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Which deformation fields, that can be used&#39;</span>
+                                    <span class="s1">&#39; by the deformation utility, to save: a &#39;</span>
+                                    <span class="s1">&#39;list of 2 booleans for Inverse, Forward.&#39;</span><span class="p">)</span>
 
         <span class="c1"># Outputs description</span>
-        <span class="n">forward_deformation_field_desc</span> <span class="o">=</span> <span class="s1">&#39;Forward deformation field&#39;</span>
-        <span class="n">bias_field_images_desc</span> <span class="o">=</span> <span class="s1">&#39;Bias field images&#39;</span>
-        <span class="n">bias_corrected_images_desc</span> <span class="o">=</span> <span class="s1">&#39;Bias corrected images&#39;</span>
-        <span class="n">native_class_images_desc</span> <span class="o">=</span> <span class="s1">&#39;Native space probability maps&#39;</span>
+        <span class="n">bias_corrected_images_desc</span> <span class="o">=</span> <span class="s1">&#39;Bias corrected images.&#39;</span>
+        <span class="n">bias_field_images_desc</span> <span class="o">=</span> <span class="s1">&#39;Estimated bias field.&#39;</span>
+        <span class="n">native_class_images_desc</span> <span class="o">=</span> <span class="s1">&#39;Native space probability maps.&#39;</span>
+        <span class="n">dartel_input_images_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;“Imported” class images into a form that &#39;</span>
+                                   <span class="s1">&#39;can be used with the Dartel toolbox.&#39;</span><span class="p">)</span>
+        <span class="n">modulated_class_images_desc</span> <span class="o">=</span> <span class="s1">&#39;Modulated and normalised class images.&#39;</span>
+        <span class="n">normalized_class_images_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Normalised class images, without &#39;</span>
+                                        <span class="s1">&#39;modulation.&#39;</span><span class="p">)</span>
+        <span class="n">inverse_deformation_field_desc</span> <span class="o">=</span> <span class="s1">&#39;Inverse deformation field.&#39;</span>
+        <span class="n">forward_deformation_field_desc</span> <span class="o">=</span> <span class="s1">&#39;Forward deformation field.&#39;</span>
+        <span class="n">transformation_mat_desc</span> <span class="o">=</span> <span class="s1">&#39;Normalisation transformation.&#39;</span>     
 
         <span class="c1"># Tissues parameter definition</span>
         <span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">()</span>
@@ -560,6 +449,48 @@
                         <span class="p">((</span><span class="n">tpm_path</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">))]</span>
 
         <span class="c1"># Inputs traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;channel_files&quot;</span><span class="p">,</span>
+                       <span class="n">InputMultiPath</span><span class="p">(</span><span class="n">ImageFileSPM</span><span class="p">(),</span>
+                                      <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                      <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                      <span class="n">desc</span><span class="o">=</span><span class="n">channel_files_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;channel_info&quot;</span><span class="p">,</span>
+                       <span class="n">traits</span><span class="o">.</span><span class="n">Tuple</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Range</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span>
+                                                 <span class="n">low</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
+                                                 <span class="n">high</span><span class="o">=</span><span class="mf">10.</span><span class="p">),</span>
+                                    <span class="n">traits</span><span class="o">.</span><span class="n">Range</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">60.</span><span class="p">,</span>
+                                                 <span class="n">low</span><span class="o">=</span><span class="mf">20.</span><span class="p">,</span>
+                                                 <span class="n">high</span><span class="o">=</span><span class="kc">None</span><span class="p">),</span>
+                                    <span class="n">traits</span><span class="o">.</span><span class="n">Tuple</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">),</span>
+                                                 <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">)),</span>
+                                    <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                    <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                    <span class="n">desc</span><span class="o">=</span><span class="n">channel_info_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;tissues&quot;</span><span class="p">,</span>
+                       <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span>
+                           <span class="n">traits</span><span class="o">.</span><span class="n">Tuple</span><span class="p">(</span>
+                               <span class="n">traits</span><span class="o">.</span><span class="n">Tuple</span><span class="p">(</span><span class="n">ImageFileSPM</span><span class="p">(</span><span class="n">exists</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+                                            <span class="n">traits</span><span class="o">.</span><span class="n">Int</span><span class="p">()),</span>
+                               <span class="n">traits</span><span class="o">.</span><span class="n">Int</span><span class="p">(),</span>
+                               <span class="n">traits</span><span class="o">.</span><span class="n">Tuple</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">),</span>
+                               <span class="n">traits</span><span class="o">.</span><span class="n">Tuple</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">)),</span>
+                           <span class="n">value</span><span class="o">=</span><span class="n">tissues_list</span><span class="p">,</span>
+                           <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                           <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                           <span class="n">desc</span><span class="o">=</span><span class="n">tissues_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;warping_regularization&quot;</span><span class="p">,</span>
+                       <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
+                                                 <span class="n">minlen</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                                                 <span class="n">maxlen</span><span class="o">=</span><span class="mi">5</span><span class="p">),</span>
+                                     <span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
+                                     <span class="n">default</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>
+                                     <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                     <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                     <span class="n">desc</span><span class="o">=</span><span class="n">warping_regularization_desc</span><span class="p">))</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;affine_regularization&quot;</span><span class="p">,</span>
                        <span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="s1">&#39;mni&#39;</span><span class="p">,</span>
                                    <span class="s1">&#39;eastern&#39;</span><span class="p">,</span>
@@ -569,53 +500,11 @@
                                    <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                    <span class="n">desc</span><span class="o">=</span><span class="n">affine_regularization_desc</span><span class="p">))</span>
         
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;channel_files&quot;</span><span class="p">,</span>
-                       <span class="n">InputMultiPath</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                                      <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                                      <span class="n">desc</span><span class="o">=</span><span class="n">channel_files_desc</span><span class="p">))</span>
-        <span class="sd">&quot;&quot;&quot;self.add_trait(&quot;channel_info&quot;, traits.Tuple(traits.Float(), traits.Float(),</span>
-<span class="sd">                                                    traits.Tuple(traits.Bool, traits.Bool(True)),</span>
-<span class="sd">                                                    output=False, optional=True))&quot;&quot;&quot;</span>
-        
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;channel_info&quot;</span><span class="p">,</span>
-                       <span class="n">traits</span><span class="o">.</span><span class="n">Tuple</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Range</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span>
-                                                 <span class="n">low</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
-                                                 <span class="n">high</span><span class="o">=</span><span class="mf">10.</span><span class="p">),</span>
-                                    <span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">110</span><span class="p">,</span> <span class="mi">120</span><span class="p">,</span> <span class="mi">130</span><span class="p">,</span> <span class="mi">140</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="s1">&#39;inf&#39;</span><span class="p">),</span>
-                                    <span class="n">traits</span><span class="o">.</span><span class="n">Tuple</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">),</span> <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">)),</span>
-                                    <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                                    <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                    <span class="n">desc</span><span class="o">=</span><span class="n">channel_info_desc</span><span class="p">))</span>
-        
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;sampling_distance&quot;</span><span class="p">,</span>
                        <span class="n">Float</span><span class="p">(</span><span class="mf">3.0</span><span class="p">,</span>
                              <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                              <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                              <span class="n">desc</span><span class="o">=</span><span class="n">sampling_distance_desc</span><span class="p">))</span>
-        
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;tissues&quot;</span><span class="p">,</span>
-                       <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">tissues_list</span><span class="p">,</span>
-                                   <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                                   <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                   <span class="n">desc</span><span class="o">=</span><span class="n">tissues_desc</span><span class="p">))</span>
-        <span class="sd">&quot;&quot;&quot;self.add_trait(&quot;tissues&quot;, traits.List(traits.Tuple(</span>
-<span class="sd">            traits.Tuple(ImageFileSPM(exists=True), traits.Int()),</span>
-<span class="sd">            traits.Int(), traits.Tuple(traits.Bool, traits.Bool),</span>
-<span class="sd">            traits.Tuple(traits.Bool, traits.Bool)), output=False, optional=True))&quot;&quot;&quot;</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;warping_regularization&quot;</span><span class="p">,</span>
-                       <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
-                                   <span class="n">minlen</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
-                                   <span class="n">maxlen</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
-                                   <span class="n">value</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>
-                                   <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                                   <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                   <span class="n">desc</span><span class="o">=</span><span class="n">warping_regularization_desc</span><span class="p">))</span>
-        <span class="sd">&quot;&quot;&quot;self.add_trait(&quot;warping_regularization&quot;, traits.Either(</span>
-<span class="sd">            traits.List(traits.Float(), minlen=5, maxlen=5),</span>
-<span class="sd">            traits.Float(), output=False))&quot;&quot;&quot;</span>
-        <span class="sd">&quot;&quot;&quot;self.add_trait(&quot;warping_regularization&quot;,</span>
-<span class="sd">            traits.List(traits.Float(), output=False, optional=True))&quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;write_deformation_fields&quot;</span><span class="p">,</span>
                        <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(),</span>
@@ -625,23 +514,59 @@
                                    <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                                    <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                    <span class="n">desc</span><span class="o">=</span><span class="n">write_deformation_fields</span><span class="p">))</span>
-        <span class="sd">&quot;&quot;&quot;self.add_trait(&quot;write_deformation_fields&quot;, traits.List(</span>
-<span class="sd">            traits.Bool(), output=False, optional=True))&quot;&quot;&quot;</span>
 
         <span class="c1"># Output traits</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;forward_deformation_field&quot;</span><span class="p">,</span>
-                       <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">desc</span><span class="o">=</span><span class="n">forward_deformation_field_desc</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;bias_field_images&quot;</span><span class="p">,</span>
-                       <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">desc</span><span class="o">=</span><span class="n">bias_field_images_desc</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;bias_corrected_images&quot;</span><span class="p">,</span>
-                       <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">desc</span><span class="o">=</span><span class="n">bias_corrected_images_desc</span><span class="p">))</span>
+                       <span class="n">OutputMultiPath</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                       <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                       <span class="n">desc</span><span class="o">=</span><span class="n">bias_corrected_images_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;bias_field_images&quot;</span><span class="p">,</span>
+                       <span class="n">OutputMultiPath</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                       <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                       <span class="n">desc</span><span class="o">=</span><span class="n">bias_field_images_desc</span><span class="p">))</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;native_class_images&quot;</span><span class="p">,</span>
                        <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">File</span><span class="p">()),</span>
                                    <span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                   <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                    <span class="n">desc</span><span class="o">=</span><span class="n">native_class_images_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;dartel_input_images&quot;</span><span class="p">,</span>
+                       <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">File</span><span class="p">()),</span>
+                                   <span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                   <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                   <span class="n">desc</span><span class="o">=</span><span class="n">dartel_input_images_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;modulated_class_images&quot;</span><span class="p">,</span>
+                       <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">File</span><span class="p">()),</span>
+                                   <span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                   <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                   <span class="n">desc</span><span class="o">=</span><span class="n">modulated_class_images_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;normalized_class_images&quot;</span><span class="p">,</span>
+                       <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">File</span><span class="p">()),</span>
+                                   <span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                   <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                   <span class="n">desc</span><span class="o">=</span><span class="n">normalized_class_images_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;inverse_deformation_field&quot;</span><span class="p">,</span>
+                       <span class="n">OutputMultiPath</span><span class="p">(</span><span class="n">File</span><span class="p">(),</span>
+                                       <span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                       <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                       <span class="n">desc</span><span class="o">=</span><span class="n">inverse_deformation_field_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;forward_deformation_field&quot;</span><span class="p">,</span>
+                       <span class="n">OutputMultiPath</span><span class="p">(</span><span class="n">File</span><span class="p">(),</span>
+                                       <span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                       <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                       <span class="n">desc</span><span class="o">=</span><span class="n">forward_deformation_field_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;transformation_mat&quot;</span><span class="p">,</span>
+                       <span class="n">OutputMultiPath</span><span class="p">(</span><span class="n">File</span><span class="p">(),</span>
+                                       <span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                       <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                       <span class="n">desc</span><span class="o">=</span><span class="n">transformation_mat_desc</span><span class="p">))</span>
 
         <span class="c1"># process instanciation</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span> <span class="o">=</span> <span class="n">NewSegmentMia</span><span class="p">()</span> <span class="c1">#############</span>
@@ -660,47 +585,44 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">NewSegment</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="c1"># Outputs definition and tags inheritance (optional)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_files</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_info</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_deformation_fields</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_files</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">channel_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_files</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">channel_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_info</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">write_deformation_fields</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_deformation_fields</span>
+            
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_info</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">channel_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_info</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tissues</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">tissues</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tissues</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_deformation_fields</span><span class="p">:</span>
+                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span>
+                       <span class="n">write_deformation_fields</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_deformation_fields</span>
+
             <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">_list_outputs</span><span class="p">()</span>
-       
-        <span class="sd">&quot;&quot;&quot;raw_data_folder = os.path.join(&quot;data&quot;, &quot;raw_data&quot;)</span>
-<span class="sd">        derived_data_folder = os.path.join(&quot;data&quot;, &quot;derived_data&quot;)</span>
-<span class="sd">        for out_name in list(outputs):</span>
-<span class="sd">            out_value = outputs[out_name]</span>
-<span class="sd">            if out_name not in [&quot;forward_deformation_field&quot;]:</span>
-<span class="sd">                del outputs[out_name]</span>
-<span class="sd">            else:</span>
-<span class="sd">                if type(out_value) is list:</span>
-<span class="sd">                    for idx, element in enumerate(out_value):</span>
-<span class="sd">                        if not element:</span>
-<span class="sd">                            continue</span>
-<span class="sd">                        if type(element) is list:</span>
-<span class="sd">                            for idx_2, element_2 in enumerate(element):</span>
-<span class="sd">                                element_2 = element_2.replace(raw_data_folder, derived_data_folder)</span>
-<span class="sd">                                outputs[out_name][idx][idx_2] = element</span>
-<span class="sd">                        else:</span>
 
-<span class="sd">                            print(&quot;element: &quot;, element)</span>
-<span class="sd">                            element = element.replace(raw_data_folder, derived_data_folder)</span>
-<span class="sd">                            outputs[out_name][idx] = element&quot;&quot;&quot;</span>
-
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">         When there is only one image at the input, the tags inheritance is</span>
+<span class="sd">         directly managed in PipelineManagerTab.add_plug_value_to_database().</span>
+<span class="sd">         However the inheritance of 2 output parameters is defined below, as</span>
+<span class="sd">         an example</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
         
             <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
 
                 <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;native_class_images&quot;</span><span class="p">:</span>
-                    <span class="n">path</span><span class="p">,</span> <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-                    <span class="n">filename_without_prefix</span> <span class="o">=</span> <span class="n">filename</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
 
-                    <span class="k">if</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
-                                     <span class="n">filename_without_prefix</span><span class="p">)</span>
-                              <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_files</span><span class="p">):</span>
-                        
-                        <span class="k">for</span> <span class="n">fullname</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="n">fullname</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
+                    <span class="k">if</span> <span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                        <span class="n">path</span><span class="p">,</span> <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                        <span class="n">filename_without_prefix</span> <span class="o">=</span> <span class="n">filename</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
+
+                        <span class="k">if</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
+                                         <span class="n">filename_without_prefix</span><span class="p">)</span>
+                                                         <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_files</span><span class="p">):</span> 
+
+                            <span class="k">for</span> <span class="n">fullname</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="n">fullname</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                                                     <span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
                                                         <span class="n">filename_without_prefix</span><span class="p">)</span>
 
                 <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;forward_deformation_field&quot;</span><span class="p">:</span>
@@ -711,27 +633,28 @@
 
                         <span class="k">if</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
                                      <span class="n">filename_without_prefix</span><span class="p">)</span>
-                              <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_files</span><span class="p">):</span>
-        
-                            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="n">fullname</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
-                                                                           <span class="n">filename_without_prefix</span><span class="p">)</span>
+                                                         <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_files</span><span class="p">):</span>
+
+                            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="n">fullname</span>
+                                                 <span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
+                                                        <span class="n">filename_without_prefix</span><span class="p">)</span>
 
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
     
 <div class="viewcode-block" id="NewSegment.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.preprocess.spm.html#mia_processes.preprocess.spm.spatial_preprocessing.NewSegment.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-
+        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">NewSegment</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">affine_regularization</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">affine_regularization</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">channel_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_files</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">channel_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_info</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">sampling_distance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sampling_distance</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">tissues</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tissues</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">warping_regularization</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">warping_regularization</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">write_deformation_fields</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_deformation_fields</span>
-
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">affine_regularization</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">affine_regularization</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">sampling_distance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sampling_distance</span>
+        <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span>
+                       <span class="n">write_deformation_fields</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_deformation_fields</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">()</span></div></div>
+
 
 <div class="viewcode-block" id="Normalize"><a class="viewcode-back" href="../../../../mia_processes.preprocess.spm.html#mia_processes.preprocess.spm.spatial_preprocessing.Normalize">[docs]</a><span class="k">class</span> <span class="nc">Normalize</span><span class="p">(</span><span class="n">Process_Mia</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -905,24 +828,22 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Normalize.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.preprocess.spm.html#mia_processes.preprocess.spm.spatial_preprocessing.Normalize.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-
+        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Normalize</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">apply_to_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">deformation_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">deformation_file</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">write_bounding_box</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_bounding_box</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">write_voxel_sizes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_voxel_sizes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">write_interp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_interp</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">()</span></div></div>
+
 
 <div class="viewcode-block" id="Realign"><a class="viewcode-back" href="../../../../mia_processes.preprocess.spm.html#mia_processes.preprocess.spm.spatial_preprocessing.Realign">[docs]</a><span class="k">class</span> <span class="nc">Realign</span><span class="p">(</span><span class="n">Process_Mia</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    **Realigns a time-series of images acquired from the same subject using a least squares approach and</span>
-<span class="sd">    a 6 parameters (rigid body) spatial transformation**</span>
+<span class="sd">    *Realigns a time-series of images acquired from the same subject*</span>
 
-<span class="sd">    Please, see the complete documention for the `Realign brick in the populse.mia_processes web site</span>
+<span class="sd">    Please, see the complete documention for the `Realign brick in the populse.mia_processes web site:</span>
 <span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/preprocess/spm/Realign.html&gt;`_</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -992,7 +913,6 @@
                                        <span class="s1">&#39; an existing file name).&#39;</span><span class="p">)</span>
         
         <span class="c1"># Inputs traits</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;in_files&#39;</span><span class="p">,</span>
                        <span class="n">InputMultiPath</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span><span class="n">ImageFileSPM</span><span class="p">(),</span>
                                                     <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">ImageFileSPM</span><span class="p">()),</span>
@@ -1262,9 +1182,9 @@
         
 <div class="viewcode-block" id="Smooth"><a class="viewcode-back" href="../../../../mia_processes.preprocess.spm.html#mia_processes.preprocess.spm.spatial_preprocessing.Smooth">[docs]</a><span class="k">class</span> <span class="nc">Smooth</span><span class="p">(</span><span class="n">Process_Mia</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    **3D Gaussian smoothing of image volumes**</span>
+<span class="sd">    *3D Gaussian smoothing of image volumes*</span>
 
-<span class="sd">    Please, see the complete documention for the `Smooth brick in the populse.mia_processes web site</span>
+<span class="sd">    Please, see the complete documention for the `Smooth brick in the populse.mia_processes web site:</span>
 <span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/preprocess/spm/Smooth.html&gt;`_</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -1310,6 +1230,7 @@
                                       <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                                       <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                                       <span class="n">desc</span><span class="o">=</span><span class="n">in_files_desc</span><span class="p">))</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;fwhm&quot;</span><span class="p">,</span>
                        <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
                                      <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>

@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>mia_processes.tools.tools &#8212; mia_processes 1.3.1 documentation</title>
+    <title>mia_processes.tools.tools &#8212; mia_processes 1.4.0 documentation</title>
     <link rel="stylesheet" href="../../../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
@@ -16,7 +16,7 @@
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
-          <span>mia_processes 1.3.1 documentation</span></a></h1>
+          <span>mia_processes 1.4.0 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.tools.tools</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -66,6 +66,138 @@
 <span class="c1"># Other import</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
+
+<div class="viewcode-block" id="Auto_Filter_List"><a class="viewcode-back" href="../../../mia_processes.tools.html#mia_processes.tools.tools.Auto_Filter_List">[docs]</a><span class="k">class</span> <span class="nc">Auto_Filter_List</span><span class="p">(</span><span class="n">Process_Mia</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Auto_Filter_List (from mia_processes.tools.tools)</span>
+<span class="sd">*** Selects one or more (slicing) elements from a list ***</span>
+<span class="sd">    [&#39;/home/ArthurBlair/data/raw_data/Anat.nii &#39;,</span>
+<span class="sd">     &#39;/home/ArthurBlair/data/raw_data/Func.nii&#39;,]</span>
+<span class="sd">                -&gt; Auto_Filter_List -&gt;</span>
+<span class="sd">    [&#39;/home/ArthurBlair/data/raw_data/Func.nii&#39;]</span>
+<span class="sd">    * Input parameters:</span>
+<span class="sd">        * in_list: the list of elements to be filtered (traits.List)</span>
+<span class="sd">            &lt;ex. [&#39;/home/ArthurBlair/data/raw_data/Anat.nii&#39;,</span>
+<span class="sd">                  &#39;/home/ArthurBlair/data/raw_data/Func.nii&#39;,</span>
+<span class="sd">                  &#39;/home/ArthurBlair/data/raw_data/rp_Func.txt&#39;,</span>
+<span class="sd">                  &#39;/home/ArthurBlair/data/raw_data/meanFunc.nii&#39;]&gt;</span>
+<span class="sd">        * index_filter: a list of 0 to 2 index for filtering (traits.List).</span>
+<span class="sd">                        If no index, take the first element of in_list.</span>
+<span class="sd">                        If there is one index, takes the element at that</span>
+<span class="sd">                        position in in_list. If two indexes, selects the</span>
+<span class="sd">                        elements between the first and the second index (the</span>
+<span class="sd">                        index corresponds to the actual position in the list,</span>
+<span class="sd">                        i.e. there is no index 0 as in python).</span>
+<span class="sd">            &lt;ex. [2, 4]&gt;</span>
+<span class="sd">    * Output parameters:</span>
+<span class="sd">        * filtered_list: the corresponding filtering result (traits.List)</span>
+<span class="sd">            &lt;ex. [&#39;/home/ArthurBlair/data/Func.nii&#39;,</span>
+<span class="sd">                  &#39;/home/ArthurBlair/data/raw_data/rp_Func.txt&#39;,</span>
+<span class="sd">                  &#39;/home/ArthurBlair/data/raw_data/meanFunc.nii&#39;]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    
+<div class="viewcode-block" id="Auto_Filter_List.__init__"><a class="viewcode-back" href="../../../mia_processes.tools.html#mia_processes.tools.tools.Auto_Filter_List.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instanciation.</span>
+<span class="sd">        </span>
+<span class="sd">        The input and output plugs are defined here. The special</span>
+<span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
+<span class="sd">        third-party products necessary for the running of the brick.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># initialisation of the objects needed for the launch of the brick</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Auto_Filter_List</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># no need of third party software!</span>
+
+        <span class="c1"># Inputs description</span>
+        <span class="n">in_list_desc</span> <span class="o">=</span> <span class="s1">&#39;The list of elements to be filtered.&#39;</span>
+        <span class="n">index_filter_desc</span> <span class="o">=</span> <span class="s1">&#39;A list of 0 to 2 indexes for filtering.&#39;</span>
+
+        <span class="c1"># Outputs description</span>
+        <span class="n">filtered_list_desc</span> <span class="o">=</span> <span class="s1">&#39;The corresponding filtering result (a list).&#39;</span>
+        
+        <span class="c1"># Inputs traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;in_list&quot;</span><span class="p">,</span>
+                        <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                   <span class="n">desc</span><span class="o">=</span><span class="n">in_list_desc</span><span class="p">))</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;index_filter&quot;</span><span class="p">,</span>
+                       <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                                   <span class="n">trait</span><span class="o">=</span><span class="n">traits</span><span class="o">.</span><span class="n">Range</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="kc">None</span><span class="p">),</span>
+                                   <span class="n">minlen</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                                   <span class="n">maxlen</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                                   <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                   <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                   <span class="n">desc</span><span class="o">=</span><span class="n">index_filter_desc</span><span class="p">))</span>
+
+        <span class="c1"># Outputs traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;filtered_list&quot;</span><span class="p">,</span>
+                       <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                   <span class="n">desc</span><span class="o">=</span><span class="n">filtered_list_desc</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Auto_Filter_List.list_outputs"><a class="viewcode-back" href="../../../mia_processes.tools.html#mia_processes.tools.tools.Auto_Filter_List.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+
+<span class="sd">        The main objective of this method is to produce the outputs of the</span>
+<span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
+<span class="sd">        if defined here. To work properly this method must return </span>
+<span class="sd">        self.make_initResult() object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Auto_Filter_List</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+
+        <span class="c1"># Outputs definition and tags inheritance (optional)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_list</span> <span class="ow">and</span>
+               <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_list</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span><span class="p">]):</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">index_filter</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;filtered_list&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">in_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index_filter</span><span class="p">)</span> <span class="ow">is</span> <span class="mi">1</span><span class="p">:</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">index_filter</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_list</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;filtered_list&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">in_list</span><span class="p">[</span>
+                                                        <span class="bp">self</span><span class="o">.</span><span class="n">index_filter</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">The initialisation of the Auto_Filter_List brick&#39;</span>
+                          <span class="s1">&#39; failed because the index_filter parameter is greater&#39;</span>
+                          <span class="s1">&#39; than the length of the in_list parameter ...</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index_filter</span><span class="p">)</span> <span class="ow">is</span> <span class="mi">2</span><span class="p">:</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">index_filter</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">index_filter</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">index_filter</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_list</span><span class="p">):</span>
+
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">index_filter</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_list</span><span class="p">):</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;filtered_list&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_list</span><span class="p">[</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">index_filter</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">index_filter</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">The initialisation of the Auto_Filter_List&#39;</span>
+                                  <span class="s1">&#39; brick failed because the second value of&#39;</span>
+                                  <span class="s1">&#39; the index_filter parameter is greater than&#39;</span>
+                                  <span class="s1">&#39; the length of the in_list parameter ...</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">The initialisation of the Auto_Filter_List&#39;</span>
+                              <span class="s1">&#39; brick failed because the first value of the&#39;</span>
+                              <span class="s1">&#39; index_filter parameter is greater than the&#39;</span>
+                              <span class="s1">&#39; length of the in_list parameter ...</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+                <span class="k">else</span><span class="p">:</span>
+                     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">The initialisation of the Auto_Filter_List brick&#39;</span>
+                           <span class="s1">&#39; failed because the first value of the index_filter&#39;</span>
+                           <span class="s1">&#39; parameter is greater than the second ...</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Auto_Filter_List.run_process_mia"><a class="viewcode-back" href="../../../mia_processes.tools.html#mia_processes.tools.tools.Auto_Filter_List.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="k">return</span></div></div>
 
 <div class="viewcode-block" id="Files_To_List"><a class="viewcode-back" href="../../../mia_processes.tools.html#mia_processes.tools.tools.Files_To_List">[docs]</a><span class="k">class</span> <span class="nc">Files_To_List</span><span class="p">(</span><span class="n">Process_Mia</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Files_To_List (from mia_processes.tools.tools)</span>

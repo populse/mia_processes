@@ -8,4 +8,4 @@
 # for details.
 ##########################################################################
 
-from .tools import Files_To_List, Input_Filter, List_Duplicate
+from .tools import Auto_Filter_List, Files_To_List, Input_Filter, List_Duplicate

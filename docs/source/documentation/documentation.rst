@@ -13,6 +13,10 @@ Mia_processes's documentation
   
   - **spm**
 
-    - `Smooth <preprocess/spm/Smooth.html>`_
-    - `Realign <preprocess/spm/Realign.html>`_
     - `Coregister <preprocess/spm/Coregister.html>`_
+    - `NewSegment <preprocess/spm/NewSegment.html>`_
+    - `Normalize <preprocess/spm/Normalize.html>`_
+    - `Realign <preprocess/spm/Realign.html>`_
+    - `Smooth <preprocess/spm/Smooth.html>`_
+
+

@@ -43,90 +43,13 @@ from traits.api import Undefined, Float
 
 class Coregister(Process_Mia):
     """
-- Coregister (mia_processes.preprocess.spm.spatial_preprocessing.Coregister) <=> Coregister (SPM12 names).
-*** Realignment through different modalities: Align together scans of different modalities *** 
-    * Input parameters:
-        * target <=> ref: The reference file (remains stationary) while the source image is moved to match it.
-                                   An existing, uncompressed file (valid extensions: [.img, .nii, .hdr]).
-            <ex. /home/ArthurBlair/data/downloaded_data/meanFunc.nii>
-        * source <=> source: The image that is jiggled about to best match the target image.
-                                      A list of items which are an existing, uncompressed file
-                                      (valid extensions: [.img, .nii, .hdr]).
-            <ex. ['/home/ArthurBlair/data/raw_data/Anat.nii']>
-        * apply_to_files <=> other: These are any images that need to remain in alignment with the
-                                             source image (a list of items which are an existing file name).
-            <ex. ['/home/ArthurBlair/data/raw_data/Func.nii']>
-        * jobtype: One of 'estwrite' or 'estimate' or 'write'. If 'estimate' is selected, the registration
-                   parameters are stored in the headers of the 'source' and the 'apply_to_files' images. If
-                   'write' is selected, the resliced images are named the same as the originals except that
-                   they are prefixed by out_prefix.
-            <ex. estimate>
-        * cost_function <=> eoptions.cost_fun: One of 'mi' or 'nmi' or 'ecc' or 'ncc'. Registration
-                                                        involves finding parameters that either maximise or
-                                                        minimise some objective function. For inter-modal
-                                                        registration, use 'Mutual Information',
-                                                        'Normalised Mutual Information' or
-                                                        'Entropy Correlation Coefficient'.
-                                                        For within modality, you could also use Normalised
-                                                        Cross Correlation.
-                                                        'mi': Mutual Information.
-		                                        'nmi': Normalised Mutual Information.
-		                                        'ecc': Entropy Correlation Coefficient.
-		                                        'ncc': Normalised Cross Correlation.
-            <ex. nmi>
-        * separation <=> eoptions.sep: A list of items which are a float. The average distance between
-                                                sampled points (in mm). Can be a vector to allow a coarse
-                                                registration followed by increasingly fine ones.
-            <ex. [4, 2]>
-        * tolerance <=> eoptions.tol: A list of 12 items which are a float. The acceptable tolerance
-                                               for each of 12 params. Iterations stop when differences
-                                               between successive estimates are less than the required tolerance.
-            <ex. [0.02, 0.02, 0.02, 0.001, 0.001, 0.001, 0.01, 0.01, 0.01, 0.001, 0.001, 0.001]>
-        * fwhm <=> eoptions.fwhm: A list of 2 items which are a float. Kernel of gaussian smooth to
-                                           apply to the 256*256 joint histogram.
-            <ex. [7, 7]>
-        * write_interp <=> roptions.interp: The method by which the images are sampled when being written in a different space.
-                                                  Nearest neighbour is fastest, but not recommended for image realignment. Trilinear
-                                                  Interpolation is probably OK for PET, or realigned and re-sliced fMRI, but not so
-                                                  suitable for fMRI with subject movemen because higher degree interpolation generally
-                                                  gives better results. Although higher degree methods provide better interpolation,
-                                                  but they are slower because they use more neighbouring voxels. (0 <= a long integer <= 7).
-                                                  Voxel sizes must all be identical and isotropic.
+    *Realignment through different modalities: Align together scans of different modalities*
 
-                                                  - 0: Nearest neighbour
-                                                  - 1: Trilinear
-                                                  - 2: 2nd Degree B-Spline
-                                                  - 3: 3rd Degree B-Spline
-                                                  …
-                                                  - 7: 7th Degree B-Spline
-            <ex. 4>
-        * write_wrap <=> roptions.wrap: Check if interpolation should wrap in [x,y,z] (a list of 3 items which are integer int or long).
-                                        For example, in MRI scans, the images wrap around in the phase encode direction, so the subject’s 
-                                        nose may poke into the back of the subject’s head. These are typically:
-
-                                        - No wrapping [0, 0, 0]: for PET or images that have already been spatially transformed. (Also the recommended option if
-                                                                 you are not really sure).
-                                        - Wrap in Y [0, 1, 0], for (un-resliced) MRI where phase encoding is in the Y direction (voxel space).
-           <ex. [0 0 0]>
-        * write_mask <=> roptions.mask: Mask output image (a boolean). Because of subject motion, different images are likely to have different
-                                        patterns of zeros from where it was not possible to sample data. With masking enabled, the program
-                                        searches through the whole time series looking for voxels which need to be sampled from outside the
-                                        original images. Where this occurs, that voxel is set to zero for the whole set of images.
-          <ex. False>
-
-        * out_prefix <=> roptions.prefix: Specify the string to be prepended to the
-                                          filenames of the coregisterd image file(s)
-                                          (a string).
-          <ex. r, capsul/nipype default value>
-    * Outputs parameters:
-        # coregistered_source: A list of items which are an existing file name. Coregistered source files,
-                               corresponding to 'source' images.
-		    <ex. /home/ArthurBlair/data/raw_data/Anat.nii>
-        # coregistered_files: A list of items which are an existing file name. Coregistered other files,
-                              corresponding to 'apply_to_files' images.
-            <ex. /home/ArthurBlair/data/raw_data/Func.nii>
+    Please, see the complete documention for the `Coregister brick in the populse.mia_processes web site:
+    <https://populse.github.io/mia_processes/html/documentation/preprocess/spm/Coregister.html>`_
 
     """
+
     def __init__(self):
         """Dedicated to the attributes initialisation / instanciation.
         
@@ -225,7 +148,8 @@ class Coregister(Process_Mia):
                                    desc=separation_desc))
 
         self.add_trait("tolerance",
-                       traits.List(value=[.02, .02, .02, 0.001, 0.001, 0.001, .01, .01, .01, 0.001, 0.001, 0.001],
+                       traits.List(value=[.02, .02, .02, 0.001, 0.001, 0.001,
+                                          .01, .01, .01, 0.001, 0.001, 0.001],
                                    trait=traits.Range(low=0.0, high=None),
                                    minlen=12,
                                    maxlen=12,
@@ -298,13 +222,17 @@ class Coregister(Process_Mia):
         super(Coregister, self).list_outputs()
         
         # Outputs definition and tags inheritance (optional)
-        if self.target and self.source and self.jobtype:
+        if (self.target and self.source and
+              self.source != [Undefined] and self.jobtype):
             self.process.inputs.target = self.target
             self.process.inputs.source = self.source
             self.process.inputs.jobtype = self.jobtype
 
-            if self.apply_to_files:
+            if self.apply_to_files and self.apply_to_files != [Undefined]:
                 self.process.inputs.apply_to_files = self.apply_to_files
+
+            else:
+                self.apply_to_files = Undefined
 
             if self.out_prefix:
                 self.process.inputs.out_prefix = self.out_prefix
@@ -312,18 +240,22 @@ class Coregister(Process_Mia):
             self.outputs = self.process._list_outputs()
 
         if self.outputs:
+            outputs_coregsource = None
+            outputs_coregfiles = None
         
             for key, values in self.outputs.items():
 
                 if key == "coregistered_source":
-
+                    outputs_coregsource = values.copy()
+                    
                     for fullname in values:
                         path, filename_out = os.path.split(fullname)
 
                         if not self.jobtype == "estimate":
 
                             if self.out_prefix:
-                                filename_in = filename_out[len(self.out_prefix):]
+                                filename_in = filename_out[
+                                                  len(self.out_prefix):]
                         
                             else:
                                 filename_in = filename_out[len('r'):]
@@ -331,81 +263,68 @@ class Coregister(Process_Mia):
                         else:
                             filename_in = filename_out
     
-                        if (os.path.join(path,
-                                         filename_in)
-                              in self.source):
-                            self.inheritance_dict[fullname] = os.path.join(path,
-                                                                           filename_in)
+                        if os.path.join(path, filename_in) in self.source:
+                            self.inheritance_dict[
+                                           fullname] = os.path.join(path,
+                                                                    filename_in)
 
-                if key == "coregistered_files" and not values in ["<undefined>", traits.Undefined]:
+                        if self.jobtype == "estwrite":
 
+                            if isinstance(outputs_coregsource, list):
+                                outputs_coregsource.append(
+                                                os.path.join(path, filename_in))
+                                self.inheritance_dict[os.path.join(path,
+                                                                   filename_in)
+                                                     ] = os.path.join(path,
+                                                                    filename_in)
+                                
+                if (key == "coregistered_files" and
+                    not values in ["<undefined>", traits.Undefined]):
+                    outputs_coregfiles = values.copy()
+                    
                     for fullname in values:
                         path, filename_out = os.path.split(fullname)
 
                         if not self.jobtype == "estimate":
-                    
+
                             if self.out_prefix:
-                                filename_in = filename_out[len(self.out_prefix):]
-                        
+                                filename_in = filename_out[
+                                                  len(self.out_prefix):]
+
                             else:
                                 filename_in = filename_out[len('r'):]
 
                         else:
                             filename_in = filename_out
 
-                        if (os.path.join(path,
-                                         filename_in)
-                              in self.apply_to_files):
-                            self.inheritance_dict[fullname] = os.path.join(path,
-                                                                           filename_in)
+                        if os.path.join(path,
+                                        filename_in) in self.apply_to_files:
+                            self.inheritance_dict[
+                                           fullname] = os.path.join(path,
+                                                                    filename_in)
 
+                        if self.jobtype == "estwrite":
+
+                            if isinstance(outputs_coregfiles, list):
+                                outputs_coregfiles.append(
+                                               os.path.join(path, filename_in))
+                                self.inheritance_dict[os.path.join(path,
+                                                                   filename_in)
+                                                     ] = os.path.join(path,
+                                                                    filename_in)
+
+        if outputs_coregsource:
+            self.outputs["coregistered_source"] = outputs_coregsource
+
+        if outputs_coregfiles:
+            self.outputs["coregistered_files"] = outputs_coregfiles
+
+        # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
-        #return outputs, {}
-              
-        """
-            
-        if not self.target:
-            return {}
-        else:
-            self.process.inputs.target = self.target
-
-        if not self.source:
-            return {}
-        else:
-            self.process.inputs.source = self.source
-            
-#        if not self.apply_to_files:
-#            return {}
-#        else:
-#            self.process.inputs.apply_to_files = self.apply_to_files
-
-        if self.apply_to_files:
-            self.process.inputs.apply_to_files = self.apply_to_files
-
-        if not self.jobtype:
-            return {}
-        else:
-            self.process.inputs.jobtype = self.jobtype
-
-        outputs = self.process._list_outputs()
-
-#        if self.jobtype == "estimate":
-
-#            if self.source and not self.apply_to_files:
-                
-#                if isinstance(self.source, list):
-#                    outputs["coregistered_files"] = [self.source[0]]  # see for mutli-element in each list !
-
-#            elif self.source and self.apply_to_files:
-
-#                if isinstance(self.source, list) and isinstance(self.apply_to_files, list):
-#                    outputs["coregistered_files"] = [self.source[0], self.apply_to_files[0]] # see for mutli-element in each list !
-        """
 
     def run_process_mia(self):
-
+        """Dedicated to the process launch step of the brick."""
         super(Coregister, self).run_process_mia()
-
         if self.output_directory is Undefined:
             self.output_directory = self.study_config.output_directory
         self.process.inputs.target = self.target
@@ -422,64 +341,11 @@ class Coregister(Process_Mia):
 
 class NewSegment(Process_Mia):
     """
-- NewSegment (mia_processes.preprocess.spm.spatial_preprocessing.NewSegment) <=> Segment (SPM12 names).
-  The warp.fwhm, warp.cleanup and warp.mrf of SPM12 are not used in the NewSegment brick.
-*** Segmentation: Segments,  bias  corrects  and  spatially normalises - all in the same model *** 
-    * Input parameters:
-        * affine_regularization <=> warp.affreg : Standard space for affine registration ('mni' or 'eastern' or 'subj' or 'none'). <ex. mni>.
-        * channel_files <=> channel.vol : Path of the scans for processing (valid extensions, .img, .nii, .hdr).
-            <ex. ['/home/ArthurBlair/data/raw_data/Anat.nii']>.
-        * channel_info: A tuple with the following values: - Bias reguralisation -a float [0-10]-
-                                                           - Bias FWHM -a float-
-                                                           - Which maps to save -a tuple of two boolean values (Field, Corrected)-.
-                * Bias regularisation <=> channel.biasreg: 0 Noregularisation, 0.00001 extremely light regularisation,  ... ,
-                                                           1 very heavy regularisation, 10 extremely heavy regularisation.
-                * Bias FWHM (Full Width at Half Maximum) <=> channel.biasfwhm: 30 (mm cutoff), 40 (mm cutoff), ...,
-                                                                               150 (mm cutoff), inf (no correction).
-                * Which maps to save (Field, Bias Corrected) <=> channel.write: For save a bias corrected version of the estimated
-                                                                                bias field or/and the processed image:
-                                                           (False, False) Save Nothing, (False, True) save Bias corrected image only, etc.
-            <ex. (0.0001, 60, (False, True)>.
-        * sampling_distance <=> warp.samp: Approximate distance between sampled points when estimating the model parameters. a float <ex. 3>
-        * tissues <=> tissue: A list of tuples with the following values for each tissue types; Grey Matter,
-                              White Matter, CerebroSpinal Flux, Bone tissue, Soft tissue, AirBackground:
-                              [((tissue probability map (4D), 1-based index to frame),  number of gaussians,
-                                (which maps to save [Native, DARTEL]), (which maps to save [Unmodulated, Modulated])), ...].
-                              Typically, the order of tissues is grey matter, white matter, CSF, bone,
-                              soft tissue and iar/background (if using tpm/TPM.nii).
-                * tissue probability map <=> tisue(x).tpm with x in [1, 2, 3, 4, 5, 6]: The tissue probability image [.img, .nii, .hdr].
-                * 1-based index to frame: index for the 4th dimension of the tissue probability map and then tissue type selection.
-                * number of gaussians <=> tissue(x).ngaus: Typical numbers of Gaussians could be two for GM, WM, CSF, three for bone,
-                                                           four for other soft tissues and two for air / background):
-                                                           [1,2,3,4,5,6,7,8,inf - Non parametric-].
-                * which maps to save [Native, DARTEL] <=> tissue(x).native:
-                  The native space option allows you to produce a tissue class image (c*) that is in alignment with the original.
-                  It can also be used for importing into a form that can be used with the Dartel toobox (rc*):
-                  (False, False) Save Nothing, (True, False) save native only. etc.
-                * which maps to save [Unmodulated, Modulated] <=> tissue(x).warped:
-                  To produces spatially normalised versions of the tissue class, both with (mcw*) and without (wc*)
-                   modulation: (False, False) Save Nothing, (True, False) save unmodulated only. etc.
-             <ex. [(('/home/ArthurBlair/spm/spm12/tpm/TPM.nii', 1), 2, (True, False), (False, False)),
-                   (('/home/ArthurBlair/spm/spm12/tpm/TPM.nii', 2), 2, (True, False), (False, False)), 
-                   (('/home/ArthurBlair/spm/spm12/tpm/TPM.nii', 3), 2, (True, False), (False, False)),
-                   (('/home/ArthurBlair/spm/spm12/tpm/TPM.nii', 4), 3, (True, False), (False, False)),
-                   (('/home/ArthurBlair/spm/spm12/tpm/TPM.nii', 5), 4, (True, False), (False, False)),
-                   (('/home/ArthurBlair/spm/spm12/tpm/TPM.nii', 6), 2, (True, False), (False, False))]>.
-        * warping_regularization <=> warp.reg: The measure of the roughness of the deformations for registration, involve the sum of
-                                               5 elements. Floats or list of floats. (the latter is required by SPM12).
-            <ex. [0, 0.001, 0.5, 0.05, 0.2]>
-        * write_deformation_fields <=> warp.write: Deformation fields can be saved to disk, and used by the deformation utility.
-                                                   A list of 2 booleans for which deformation fields to write, [Inverse, Forward]:
-                                                   [False, False] Save nothing, [True, False] save Inverse only. <ex. [False, True]>
-    * Output parameters:
-        * forward_deformation_field: Forward deformation field. <ex. /home/ArthurBlair/data/raw_data/y_Anat.nii>.
-        * bias_field_images: Bias field images. <ex. /home/ArthurBlair/data/raw_data/BiasField_Anat.nii>
-        * bias_corrected_images: Bias corrected images. <ex. /home/ArthurBlair/data/raw_data/mAnat.nii
-        * native_class_images: Native space probability maps. <ex. [['/home/ArthurBlair/data/raw_data/c1Anat.nii'],
-                                                                    ['/home/ArthurBlair/data/raw_data/c2Anat.nii'],
-                                                                    ['/home/ArthurBlair/data/raw_data/c3Anat.nii'],
-                                                                    ['/home/ArthurBlair/data/raw_data/c4Anat.nii'],
-                                                                    ['/home/ArthurBlair/data/raw_data/c5Anat.nii']]>
+    *Segmentation: Segments,  bias  corrects  and  spatially normalises - all in the same model*
+
+    Please, see the complete documention for the `NewSegment brick in the populse.mia_processes web site:
+    <https://populse.github.io/mia_processes/html/documentation/preprocess/spm/NewSegment.html>`_
+
     """
 
     def __init__(self):
@@ -496,27 +362,50 @@ class NewSegment(Process_Mia):
         self.requirement = ['matlab', 'spm']
 
         # Inputs description
-        affine_regularization_desc = 'Standard space for affine registration ("mni" or "eastern" or "subj" or "none").'
-        channel_files_desc = 'Path of the scans for processing, valid extensions: [.img, .nii, .hdr]. A list with one '\
-                             'string element corresponding to an existing path file'
-        channel_info_desc = 'A tuple with the following values:(Bias reguralisation -a float [0-10]-, Bias FWHM ' \
-                            '-a float-, Which maps to save -a tuple of two boolean values (Field, Corrected)-)'
-        sampling_distance_desc = 'Approximate distance between sampled points when estimating the model parameters' \
-                                 ' -a float-'
-        tissues_desc = 'A list of tuples with the following values for each tissue types (grey matter, white matter, ' \
-                       'etc): [((tissue probability map (4D), 1-based index to frame), number of gaussians, ' \
-                       '(which maps to save [Native, DARTEL]), (which maps to save [Unmodulated, Modulated])), ...].'
-        warping_regularization_desc = 'The measure of the roughness of the deformations for registration, involve ' \
-                                      'the sum of 5 elements. -floats or list of floats-'
-        write_deformation_fields = 'Deformation fields can be saved to disk, and used by the deformation utility. A ' \
-                                   'list of 2 booleans for which deformation fields to write: [Inverse, Forward]: ' \
-                                   '[False, False] Save nothing, [True, False] save Inverse only.'
+        
+        channel_files_desc = ('Path of the scans for processing, valid '
+                              'extensions: [.img, .nii, .hdr]. A list with one '
+                              'string element corresponding to an existing '
+                              'path file.')
+        channel_info_desc = ('A tuple with the following values: bias '
+                             'reguralisation -a float between 0 and 10-, bias '
+                             'FWHM -a float between 20 and infinity-, which '
+                             'maps to save -a tuple of two boolean values '
+                             '(estimated bias field, bias corrected image)-.')
+        tissues_desc = ('A list of tuples with the following values for each '
+                        'tissue types (grey matter, white matter, etc.): '
+                        '(tissue probability map (4D), 1-based index to frame),'
+                        ' number of gaussians, (which maps to save: Native,'
+                        'DARTEL), (which maps to save: Unmodulated, Modulated),'
+                        ' ...')
+        warping_regularization_desc = ('Define of the roughness of the '
+                                       'deformations for registration using '
+                                       '1 or 5 elements: a float or a list of '
+                                       'floats, the latter is required '
+                                       'by SPM12.')
+        affine_regularization_desc = ('Standard space for affine registration: '
+                                      'mni, eastern, subj or none.')
+
+        sampling_distance_desc = ('Approximate distance between sampled points '
+                                 'when estimating the model parameters: '
+                                 'a float.')
+
+        write_deformation_fields = ('Which deformation fields, that can be used'
+                                    ' by the deformation utility, to save: a '
+                                    'list of 2 booleans for Inverse, Forward.')
 
         # Outputs description
-        forward_deformation_field_desc = 'Forward deformation field'
-        bias_field_images_desc = 'Bias field images'
-        bias_corrected_images_desc = 'Bias corrected images'
-        native_class_images_desc = 'Native space probability maps'
+        bias_corrected_images_desc = 'Bias corrected images.'
+        bias_field_images_desc = 'Estimated bias field.'
+        native_class_images_desc = 'Native space probability maps.'
+        dartel_input_images_desc = ('“Imported” class images into a form that '
+                                   'can be used with the Dartel toolbox.')
+        modulated_class_images_desc = 'Modulated and normalised class images.'
+        normalized_class_images_desc = ('Normalised class images, without '
+                                        'modulation.')
+        inverse_deformation_field_desc = 'Inverse deformation field.'
+        forward_deformation_field_desc = 'Forward deformation field.'
+        transformation_mat_desc = 'Normalisation transformation.'     
 
         # Tissues parameter definition
         config = Config()
@@ -530,6 +419,48 @@ class NewSegment(Process_Mia):
                         ((tpm_path, 6), 2, (True, False), (False, False))]
 
         # Inputs traits
+        self.add_trait("channel_files",
+                       InputMultiPath(ImageFileSPM(),
+                                      output=False,
+                                      optional=False,
+                                      desc=channel_files_desc))
+
+        self.add_trait("channel_info",
+                       traits.Tuple(traits.Range(value=0.0001,
+                                                 low=0.,
+                                                 high=10.),
+                                    traits.Range(value=60.,
+                                                 low=20.,
+                                                 high=None),
+                                    traits.Tuple(traits.Bool(False),
+                                                 traits.Bool(True)),
+                                    output=False,
+                                    optional=True,
+                                    desc=channel_info_desc))
+
+        self.add_trait("tissues",
+                       traits.List(
+                           traits.Tuple(
+                               traits.Tuple(ImageFileSPM(exists=True),
+                                            traits.Int()),
+                               traits.Int(),
+                               traits.Tuple(traits.Bool, traits.Bool),
+                               traits.Tuple(traits.Bool, traits.Bool)),
+                           value=tissues_list,
+                           output=False,
+                           optional=True,
+                           desc=tissues_desc))
+
+        self.add_trait("warping_regularization",
+                       traits.Either(traits.List(traits.Float(),
+                                                 minlen=5,
+                                                 maxlen=5),
+                                     traits.Float(),
+                                     default=[0, 0.001, 0.5, 0.05, 0.2],
+                                     output=False,
+                                     optional=True,
+                                     desc=warping_regularization_desc))
+
         self.add_trait("affine_regularization",
                        traits.Enum('mni',
                                    'eastern',
@@ -539,53 +470,11 @@ class NewSegment(Process_Mia):
                                    optional=True,
                                    desc=affine_regularization_desc))
         
-        self.add_trait("channel_files",
-                       InputMultiPath(output=False,
-                                      optional=False,
-                                      desc=channel_files_desc))
-        """self.add_trait("channel_info", traits.Tuple(traits.Float(), traits.Float(),
-                                                    traits.Tuple(traits.Bool, traits.Bool(True)),
-                                                    output=False, optional=True))"""
-        
-        self.add_trait("channel_info",
-                       traits.Tuple(traits.Range(value=0.0001,
-                                                 low=0.,
-                                                 high=10.),
-                                    traits.Enum(60, 30, 40, 50, 70, 80, 90, 100, 110, 120, 130, 140, 150, 'inf'),
-                                    traits.Tuple(traits.Bool(False), traits.Bool(False)),
-                                    output=False,
-                                    optional=True,
-                                    desc=channel_info_desc))
-        
         self.add_trait("sampling_distance",
                        Float(3.0,
                              output=False,
                              optional=True,
                              desc=sampling_distance_desc))
-        
-        self.add_trait("tissues",
-                       traits.List(tissues_list,
-                                   output=False,
-                                   optional=True,
-                                   desc=tissues_desc))
-        """self.add_trait("tissues", traits.List(traits.Tuple(
-            traits.Tuple(ImageFileSPM(exists=True), traits.Int()),
-            traits.Int(), traits.Tuple(traits.Bool, traits.Bool),
-            traits.Tuple(traits.Bool, traits.Bool)), output=False, optional=True))"""
-
-        self.add_trait("warping_regularization",
-                       traits.List(traits.Float(),
-                                   minlen=5,
-                                   maxlen=5,
-                                   value=[0, 0.001, 0.5, 0.05, 0.2],
-                                   output=False,
-                                   optional=True,
-                                   desc=warping_regularization_desc))
-        """self.add_trait("warping_regularization", traits.Either(
-            traits.List(traits.Float(), minlen=5, maxlen=5),
-            traits.Float(), output=False))"""
-        """self.add_trait("warping_regularization",
-            traits.List(traits.Float(), output=False, optional=True))"""
 
         self.add_trait("write_deformation_fields",
                        traits.List(traits.Bool(),
@@ -595,23 +484,59 @@ class NewSegment(Process_Mia):
                                    output=False,
                                    optional=True,
                                    desc=write_deformation_fields))
-        """self.add_trait("write_deformation_fields", traits.List(
-            traits.Bool(), output=False, optional=True))"""
 
         # Output traits
-        self.add_trait("forward_deformation_field",
-                       File(output=True,
-                            desc=forward_deformation_field_desc))
-        self.add_trait("bias_field_images",
-                       File(output=True,
-                            desc=bias_field_images_desc))
         self.add_trait("bias_corrected_images",
-                       File(output=True,
-                            desc=bias_corrected_images_desc))
+                       OutputMultiPath(output=True,
+                                       optional=True,
+                                       desc=bias_corrected_images_desc))
+
+        self.add_trait("bias_field_images",
+                       OutputMultiPath(output=True,
+                                       optional=True,
+                                       desc=bias_field_images_desc))
+
         self.add_trait("native_class_images",
                        traits.List(traits.List(File()),
                                    output=True,
+                                   optional=True,
                                    desc=native_class_images_desc))
+
+        self.add_trait("dartel_input_images",
+                       traits.List(traits.List(File()),
+                                   output=True,
+                                   optional=True,
+                                   desc=dartel_input_images_desc))
+
+        self.add_trait("modulated_class_images",
+                       traits.List(traits.List(File()),
+                                   output=True,
+                                   optional=True,
+                                   desc=modulated_class_images_desc))
+
+        self.add_trait("normalized_class_images",
+                       traits.List(traits.List(File()),
+                                   output=True,
+                                   optional=True,
+                                   desc=normalized_class_images_desc))
+
+        self.add_trait("inverse_deformation_field",
+                       OutputMultiPath(File(),
+                                       output=True,
+                                       optional=True,
+                                       desc=inverse_deformation_field_desc))
+
+        self.add_trait("forward_deformation_field",
+                       OutputMultiPath(File(),
+                                       output=True,
+                                       optional=True,
+                                       desc=forward_deformation_field_desc))
+
+        self.add_trait("transformation_mat",
+                       OutputMultiPath(File(),
+                                       output=True,
+                                       optional=True,
+                                       desc=transformation_mat_desc))
 
         # process instanciation
         self.process = NewSegmentMia() #############
@@ -630,47 +555,44 @@ class NewSegment(Process_Mia):
         super(NewSegment, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
-        if self.channel_files and self.channel_info and self.write_deformation_fields:
+        if self.channel_files:
             self.process.inputs.channel_files = self.channel_files
-            self.process.inputs.channel_info = self.channel_info
-            self.process.inputs.write_deformation_fields = self.write_deformation_fields
+            
+            if self.channel_info:
+                self.process.inputs.channel_info = self.channel_info
+
+            if self.tissues:
+                self.process.inputs.tissues = self.tissues
+
+            if self.write_deformation_fields:
+                (self.process.inputs.
+                       write_deformation_fields) = self.write_deformation_fields
+
             self.outputs = self.process._list_outputs()
-       
-        """raw_data_folder = os.path.join("data", "raw_data")
-        derived_data_folder = os.path.join("data", "derived_data")
-        for out_name in list(outputs):
-            out_value = outputs[out_name]
-            if out_name not in ["forward_deformation_field"]:
-                del outputs[out_name]
-            else:
-                if type(out_value) is list:
-                    for idx, element in enumerate(out_value):
-                        if not element:
-                            continue
-                        if type(element) is list:
-                            for idx_2, element_2 in enumerate(element):
-                                element_2 = element_2.replace(raw_data_folder, derived_data_folder)
-                                outputs[out_name][idx][idx_2] = element
-                        else:
 
-                            print("element: ", element)
-                            element = element.replace(raw_data_folder, derived_data_folder)
-                            outputs[out_name][idx] = element"""
-
+        """
+         When there is only one image at the input, the tags inheritance is
+         directly managed in PipelineManagerTab.add_plug_value_to_database().
+         However the inheritance of 2 output parameters is defined below, as
+         an example
+        """
         if self.outputs:
         
             for key, values in self.outputs.items():
 
                 if key == "native_class_images":
-                    path, filename = os.path.split(values[0][0])
-                    filename_without_prefix = filename[2:]
 
-                    if (os.path.join(path,
-                                     filename_without_prefix)
-                              in self.channel_files):
-                        
-                        for fullname in values:
-                            self.inheritance_dict[fullname[0]] = os.path.join(path,
+                    if values[0]:
+                        path, filename = os.path.split(values[0][0])
+                        filename_without_prefix = filename[2:]
+
+                        if (os.path.join(path,
+                                         filename_without_prefix)
+                                                         in self.channel_files): 
+
+                            for fullname in values:
+                                self.inheritance_dict[fullname[0]
+                                                     ] = os.path.join(path,
                                                         filename_without_prefix)
 
                 if key == "forward_deformation_field":
@@ -681,27 +603,28 @@ class NewSegment(Process_Mia):
 
                         if (os.path.join(path,
                                      filename_without_prefix)
-                              in self.channel_files):
-        
-                            self.inheritance_dict[fullname] = os.path.join(path,
-                                                                           filename_without_prefix)
+                                                         in self.channel_files):
+
+                            self.inheritance_dict[fullname
+                                                 ] = os.path.join(path,
+                                                        filename_without_prefix)
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
     
     def run_process_mia(self):
-
+        """Dedicated to the process launch step of the brick."""
         super(NewSegment, self).run_process_mia()
-
-        self.process.inputs.affine_regularization = self.affine_regularization
         self.process.inputs.channel_files = self.channel_files
         self.process.inputs.channel_info = self.channel_info
-        self.process.inputs.sampling_distance = self.sampling_distance
         self.process.inputs.tissues = self.tissues
         self.process.inputs.warping_regularization = self.warping_regularization
-        self.process.inputs.write_deformation_fields = self.write_deformation_fields
-
+        self.process.inputs.affine_regularization = self.affine_regularization
+        self.process.inputs.sampling_distance = self.sampling_distance
+        (self.process.inputs.
+                       write_deformation_fields) = self.write_deformation_fields
         self.process.run()
+
 
 class Normalize(Process_Mia):
     """
@@ -875,24 +798,22 @@ class Normalize(Process_Mia):
         return self.make_initResult()
 
     def run_process_mia(self):
-
+        """Dedicated to the process launch step of the brick."""
         super(Normalize, self).run_process_mia()
-
         self.process.inputs.apply_to_files = self.apply_to_files
         self.process.inputs.deformation_file = self.deformation_file
         self.process.inputs.jobtype = self.jobtype
         self.process.inputs.write_bounding_box = self.write_bounding_box
         self.process.inputs.write_voxel_sizes = self.write_voxel_sizes
         self.process.inputs.write_interp = self.write_interp
-
         self.process.run()
+
 
 class Realign(Process_Mia):
     """
-    **Realigns a time-series of images acquired from the same subject using a least squares approach and
-    a 6 parameters (rigid body) spatial transformation**
+    *Realigns a time-series of images acquired from the same subject*
 
-    Please, see the complete documention for the `Realign brick in the populse.mia_processes web site
+    Please, see the complete documention for the `Realign brick in the populse.mia_processes web site:
     <https://populse.github.io/mia_processes/html/documentation/preprocess/spm/Realign.html>`_
 
     """
@@ -962,7 +883,6 @@ class Realign(Process_Mia):
                                        ' an existing file name).')
         
         # Inputs traits
-
         self.add_trait('in_files',
                        InputMultiPath(traits.Either(ImageFileSPM(),
                                                     traits.List(ImageFileSPM()),
@@ -1232,9 +1152,9 @@ class Realign(Process_Mia):
         
 class Smooth(Process_Mia):
     """
-    **3D Gaussian smoothing of image volumes**
+    *3D Gaussian smoothing of image volumes*
 
-    Please, see the complete documention for the `Smooth brick in the populse.mia_processes web site
+    Please, see the complete documention for the `Smooth brick in the populse.mia_processes web site:
     <https://populse.github.io/mia_processes/html/documentation/preprocess/spm/Smooth.html>`_
 
     """
@@ -1280,6 +1200,7 @@ class Smooth(Process_Mia):
                                       output=False,
                                       optional=False,
                                       desc=in_files_desc))
+
         self.add_trait("fwhm",
                        traits.Either(traits.Float(),
                                      traits.List(traits.Float(),
