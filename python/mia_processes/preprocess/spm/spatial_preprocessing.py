@@ -43,7 +43,7 @@ from traits.api import Undefined, Float
 
 class Coregister(Process_Mia):
     """
-    *Realignment through different modalities: Align together scans of different modalities*
+    *Align together scans of different modalities*
 
     Please, see the complete documention for the `Coregister brick in the populse.mia_processes web site:
     <https://populse.github.io/mia_processes/html/documentation/preprocess/spm/Coregister.html>`_
@@ -624,9 +624,9 @@ class NewSegment(Process_Mia):
         self.process.run()
 
 
-class Normalize(Process_Mia):
+class Normalize12(Process_Mia):
     """
-- Normalize (mia_processes.preprocess.spm.spatial_preprocessing.Normalize) <=> Normalise (SPM12 names).
+- Normalize12 (mia_processes.preprocess.spm.spatial_preprocessing.Normalize12) <=> Normalise (SPM12 names).
 *** Spatial normalisation: Computes the warp that best aligns the template (atlas) to the individual's image, so one ***
 *** location in the individual's image corresponds to the same location in another subject's brain scan.             ***
     * Input parameters:
@@ -668,7 +668,7 @@ class Normalize(Process_Mia):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(Normalize, self).__init__()
+        super(Normalize12, self).__init__()
 
         # Third party softwares required for the execution of the brick
         self.requirement = ['matlab', 'spm']
@@ -757,7 +757,7 @@ class Normalize(Process_Mia):
         self.make_initResult() object.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Normalize, self).list_outputs()
+        super(Normalize12, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.apply_to_files and self.deformation_file and self.jobtype:
@@ -797,7 +797,7 @@ class Normalize(Process_Mia):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(Normalize, self).run_process_mia()
+        super(Normalize12, self).run_process_mia()
         self.process.inputs.apply_to_files = self.apply_to_files
         self.process.inputs.deformation_file = self.deformation_file
         self.process.inputs.jobtype = self.jobtype
