@@ -1,18 +1,13 @@
 # -*- coding: utf-8 -*- #
 
-"""The spm preprocess library of the mia_processes package.
+"""The pipelines library of the mia_processes package.
 
-The purpose of this module is to customise the main spm preprocessing bricks
-provided by nipype and to correct some things that do not work directly in
-populse_mia.
+The objective of this module is to propose pipelines built from atomic bricks
+or other pipelines provided in the mia_processes library.
 
 :Contains:
     :Class:
-        - Coregister
-        - NewSegment
-        - Normalize
-        - Realign
-        - Smooth
+        - Spatial_preprocessing_1
 
 """
 
@@ -33,8 +28,8 @@ class Spatial_preprocessing_1(Pipeline):
  - Spatial_preprocessing_1 (mia_processes.studies.spatial_preprocessing_1.Spatial_preprocessing_1)
 *** Data preprocessing for cerebrovascular reserve analyse ***
     Main pipeline modules:
-        # Anatomic Images: NewSegment -> Normalize 
-        # Functional Images: Realign -> Coregister (to Anat Images) -> Normalize -> Smooth
+        # Anatomic Images: NewSegment -> Normalize12 
+        # Functional Images: Realign -> Coregister (to Anat Images) -> Normalize12 -> Smooth
     Inputs:
         # Anatomic Images (ex. 3D T1 sequence sush as T1 turbo field echo): <anat_file>
             <ex. /home/ArthurBlair/data/raw_data/Anat.nii>
@@ -66,8 +61,8 @@ class Spatial_preprocessing_1(Pipeline):
         self.add_process("newsegment1", "mia_processes.preprocess.spm.spatial_preprocessing.NewSegment")
         self.add_process("realign1", "mia_processes.preprocess.spm.spatial_preprocessing.Realign")
         self.add_process("list_duplicate1", "mia_processes.tools.tools.List_Duplicate")
-        self.add_process("normalize1", "mia_processes.preprocess.spm.spatial_preprocessing.Normalize")
-        self.add_process("normalize2", "mia_processes.preprocess.spm.spatial_preprocessing.Normalize")
+        self.add_process("normalize1", "mia_processes.preprocess.spm.spatial_preprocessing.Normalize12")
+        self.add_process("normalize2", "mia_processes.preprocess.spm.spatial_preprocessing.Normalize12")
         self.add_process("smooth1", "mia_processes.preprocess.spm.spatial_preprocessing.Smooth")
         self.add_process("coregister1", "mia_processes.preprocess.spm.spatial_preprocessing.Coregister")
 
