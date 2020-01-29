@@ -38,8 +38,8 @@
 NewSegment brick
 ================
 
-Segmentation: Segments,  bias  corrects  and  spatially normalises - all in the same model
-------------------------------------------------------------------------------------------
+Segments,  bias  corrects  and  spatially normalises - all in the same model
+---------------------------------------------------------------------------- 
 
 >>> from mia_processes.preprocess.spm import NewSegment
 >>> NewSegment.help()
