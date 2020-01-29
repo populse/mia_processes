@@ -38,8 +38,8 @@
 Coregister brick
 ================
 
-Realignment through different modalities: Align together scans of different modalities
---------------------------------------------------------------------------------------
+Align together scans of different modalities
+--------------------------------------------
 
 >>> from mia_processes.preprocess.spm import Coregister
 >>> Coregister.help()
