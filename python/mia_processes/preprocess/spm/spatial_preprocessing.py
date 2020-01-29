@@ -630,6 +630,15 @@ class Normalize12(Process_Mia):
 *** Spatial normalisation: Computes the warp that best aligns the template (atlas) to the individual's image, so one ***
 *** location in the individual's image corresponds to the same location in another subject's brain scan.             ***
     * Input parameters:
+        * image_to_align <=> subj.vol:
+        * bias_regularization <=> eoptions.biasreg:
+        * bias_fwhm <=> eoptions.biasfwhm:
+        * tpm <=> eoptions.tpm:
+        * affine_regularization_type <=> eoptions.affreg:
+        * warping_regularization <=> eoptions.reg:
+        * smoothness <=> eoptions.fwhm:
+        * sampling_distance <=> eoptions.samp:
+
         * apply_to_files <=> subj.resample: Files to apply transformation to. They can be any images that are in
                                             register with the image used to generate the deformation. A list of
                                             items which are an existing, uncompressed file
@@ -656,6 +665,8 @@ class Normalize12(Process_Mia):
                                           (a string).
             <ex. w, capsul/nipype default value>
     * Output parameters:
+        * deformation_field
+        * normalized_image
         * normalized_file <=> Normalised other files. (a list of items which are an existing file name)
             <ex. /home/ArthurBlair/data/raw_data/wAnat.nii>
     """
