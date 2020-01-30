@@ -625,50 +625,12 @@ class NewSegment(Process_Mia):
 
 
 class Normalize12(Process_Mia):
-    """
-- Normalize12 (mia_processes.preprocess.spm.spatial_preprocessing.Normalize12) <=> Normalise (SPM12 names).
-*** Spatial normalisation: Computes the warp that best aligns the template (atlas) to the individual's image, so one ***
-*** location in the individual's image corresponds to the same location in another subject's brain scan.             ***
-    * Input parameters:
-        * image_to_align <=> subj.vol:
-        * bias_regularization <=> eoptions.biasreg:
-        * bias_fwhm <=> eoptions.biasfwhm:
-        * tpm <=> eoptions.tpm:
-        * affine_regularization_type <=> eoptions.affreg:
-        * warping_regularization <=> eoptions.reg:
-        * smoothness <=> eoptions.fwhm:
-        * sampling_distance <=> eoptions.samp:
+    """    
+    *Computes the warp that best aligns the template (atlas) to the individual’s image*
 
-        * apply_to_files <=> subj.resample: Files to apply transformation to. They can be any images that are in
-                                            register with the image used to generate the deformation. A list of
-                                            items which are an existing, uncompressed file
-                                            (valid extensions: [.img, .nii, .hdr]).
-            <ex. ['/home/ArthurBlair/data/raw_data/Anat.nii']>
-        * deformation_file <=> subj.def: File y_*.nii containing 3 deformation fields for the deformation in x, y
-                                         and z dimension. A uncompressed file (valid extensions: [.img, .nii, .hdr])).
-            <ex. /home/ArthurBlair/data/downloaded_data/y_Anat.nii>
-        * jobtype: One of 'estwrite' or 'estimate' or 'write'.
-            <ex. write> 
-        * write_bounding_box <=> woptions.bb: A list of 2 items which are a list of items which are a float. This is
-                                              the bounding box (in mm) of the volume which is to be written (relative
-                                              to the anterior commissure).
-            <ex. [[-78, -112, -50], [78, 76, 85]]>
-        * write_voxel_sizes <=> woptions.vox: A list of 3 items which are a float. This is the voxel sizes of the written normalised images.
-            <ex. [1, 1, 1]>
-        * write_interp  <=> woptions.interp: This is the  method by which the images are sampled when being written
-                                             in a different space (0 <= a long integer <= 7).
-                                             0: Nearest neighbour, 1: Trilinear, 2: 2nd Degree B-spline, ...,
-                                             7: 7nd Degree B-spline.
-            <ex. 1>
-        * out_prefix <=> woptions.prefix: Specify the string to be prepended to the
-                                          filenames of the normalised image file(s)
-                                          (a string).
-            <ex. w, capsul/nipype default value>
-    * Output parameters:
-        * deformation_field
-        * normalized_image
-        * normalized_file <=> Normalised other files. (a list of items which are an existing file name)
-            <ex. /home/ArthurBlair/data/raw_data/wAnat.nii>
+    Please, see the complete documention for the `Normalize12 brick in the populse.mia_processes web site:
+    <https://populse.github.io/mia_processes/html/documentation/preprocess/spm/Normalize12.html>`_
+
     """
     
     def __init__(self):

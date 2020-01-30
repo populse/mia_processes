@@ -15,7 +15,7 @@ Mia_processes's documentation
 
     - `Coregister <preprocess/spm/Coregister.html>`_
     - `NewSegment <preprocess/spm/NewSegment.html>`_
-    - `Normalize <preprocess/spm/Normalize.html>`_
+    - `Normalize12 <preprocess/spm/Normalize12.html>`_
     - `Realign <preprocess/spm/Realign.html>`_
     - `Smooth <preprocess/spm/Smooth.html>`_
 
