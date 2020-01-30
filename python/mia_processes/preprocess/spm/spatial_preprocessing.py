@@ -10,7 +10,7 @@ populse_mia.
     :Class:
         - Coregister
         - NewSegment
-        - Normalize
+        - Normalize12
         - Realign
         - Smooth
 
