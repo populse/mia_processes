@@ -1,9 +1,11 @@
 
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>mia_processes.preprocess.spm.spatial_preprocessing &#8212; mia_processes 1.4.0 documentation</title>
     <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
@@ -11,7 +13,7 @@
     <script type="text/javascript" src="../../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
@@ -26,7 +28,7 @@
         </p>
 
       </div>
-      <div class="content" role="main">
+      <div class="content">
         
         
   <h1>Source code for mia_processes.preprocess.spm.spatial_preprocessing</h1><div class="highlight"><pre>
@@ -75,7 +77,7 @@
 
 <div class="viewcode-block" id="Coregister"><a class="viewcode-back" href="../../../../mia_processes.preprocess.spm.html#mia_processes.preprocess.spm.spatial_preprocessing.Coregister">[docs]</a><span class="k">class</span> <span class="nc">Coregister</span><span class="p">(</span><span class="n">Process_Mia</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    *Realignment through different modalities: Align together scans of different modalities*</span>
+<span class="sd">    *Align together scans of different modalities*</span>
 
 <span class="sd">    Please, see the complete documention for the `Coregister brick in the populse.mia_processes web site:</span>
 <span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/preprocess/spm/Coregister.html&gt;`_</span>
@@ -656,43 +658,16 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">()</span></div></div>
 
 
-<div class="viewcode-block" id="Normalize"><a class="viewcode-back" href="../../../../mia_processes.preprocess.spm.html#mia_processes.preprocess.spm.spatial_preprocessing.Normalize">[docs]</a><span class="k">class</span> <span class="nc">Normalize</span><span class="p">(</span><span class="n">Process_Mia</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">- Normalize (mia_processes.preprocess.spm.spatial_preprocessing.Normalize) &lt;=&gt; Normalise (SPM12 names).</span>
-<span class="sd">*** Spatial normalisation: Computes the warp that best aligns the template (atlas) to the individual&#39;s image, so one ***</span>
-<span class="sd">*** location in the individual&#39;s image corresponds to the same location in another subject&#39;s brain scan.             ***</span>
-<span class="sd">    * Input parameters:</span>
-<span class="sd">        * apply_to_files &lt;=&gt; subj.resample: Files to apply transformation to. They can be any images that are in</span>
-<span class="sd">                                            register with the image used to generate the deformation. A list of</span>
-<span class="sd">                                            items which are an existing, uncompressed file</span>
-<span class="sd">                                            (valid extensions: [.img, .nii, .hdr]).</span>
-<span class="sd">            &lt;ex. [&#39;/home/ArthurBlair/data/raw_data/Anat.nii&#39;]&gt;</span>
-<span class="sd">        * deformation_file &lt;=&gt; subj.def: File y_*.nii containing 3 deformation fields for the deformation in x, y</span>
-<span class="sd">                                         and z dimension. A uncompressed file (valid extensions: [.img, .nii, .hdr])).</span>
-<span class="sd">            &lt;ex. /home/ArthurBlair/data/downloaded_data/y_Anat.nii&gt;</span>
-<span class="sd">        * jobtype: One of &#39;estwrite&#39; or &#39;estimate&#39; or &#39;write&#39;.</span>
-<span class="sd">            &lt;ex. write&gt; </span>
-<span class="sd">        * write_bounding_box &lt;=&gt; woptions.bb: A list of 2 items which are a list of items which are a float. This is</span>
-<span class="sd">                                              the bounding box (in mm) of the volume which is to be written (relative</span>
-<span class="sd">                                              to the anterior commissure).</span>
-<span class="sd">            &lt;ex. [[-78, -112, -50], [78, 76, 85]]&gt;</span>
-<span class="sd">        * write_voxel_sizes &lt;=&gt; woptions.vox: A list of 3 items which are a float. This is the voxel sizes of the written normalised images.</span>
-<span class="sd">            &lt;ex. [1, 1, 1]&gt;</span>
-<span class="sd">        * write_interp  &lt;=&gt; woptions.interp: This is the  method by which the images are sampled when being written</span>
-<span class="sd">                                             in a different space (0 &lt;= a long integer &lt;= 7).</span>
-<span class="sd">                                             0: Nearest neighbour, 1: Trilinear, 2: 2nd Degree B-spline, ...,</span>
-<span class="sd">                                             7: 7nd Degree B-spline.</span>
-<span class="sd">            &lt;ex. 1&gt;</span>
-<span class="sd">        * out_prefix &lt;=&gt; woptions.prefix: Specify the string to be prepended to the</span>
-<span class="sd">                                          filenames of the normalised image file(s)</span>
-<span class="sd">                                          (a string).</span>
-<span class="sd">            &lt;ex. w, capsul/nipype default value&gt;</span>
-<span class="sd">    * Output parameters:</span>
-<span class="sd">        * normalized_file &lt;=&gt; Normalised other files. (a list of items which are an existing file name)</span>
-<span class="sd">            &lt;ex. /home/ArthurBlair/data/raw_data/wAnat.nii&gt;</span>
+<div class="viewcode-block" id="Normalize12"><a class="viewcode-back" href="../../../../mia_processes.preprocess.spm.html#mia_processes.preprocess.spm.spatial_preprocessing.Normalize12">[docs]</a><span class="k">class</span> <span class="nc">Normalize12</span><span class="p">(</span><span class="n">Process_Mia</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;    </span>
+<span class="sd">    *Computes the warp that best aligns the template (atlas) to the individual’s image*</span>
+
+<span class="sd">    Please, see the complete documention for the `Normalize12 brick in the populse.mia_processes web site:</span>
+<span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/preprocess/spm/Normalize12.html&gt;`_</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     
-<div class="viewcode-block" id="Normalize.__init__"><a class="viewcode-back" href="../../../../mia_processes.preprocess.spm.html#mia_processes.preprocess.spm.spatial_preprocessing.Normalize.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Normalize12.__init__"><a class="viewcode-back" href="../../../../mia_processes.preprocess.spm.html#mia_processes.preprocess.spm.spatial_preprocessing.Normalize12.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instanciation.</span>
 <span class="sd">        </span>
 <span class="sd">        The input and output plugs are defined here. The special</span>
@@ -700,7 +675,7 @@
 <span class="sd">        third-party products necessary for the running of the brick.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Normalize</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Normalize12</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="c1"># Third party softwares required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;matlab&#39;</span><span class="p">,</span> <span class="s1">&#39;spm&#39;</span><span class="p">]</span>
@@ -780,7 +755,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span> <span class="o">=</span> <span class="n">spm</span><span class="o">.</span><span class="n">Normalize12</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">change_dir</span> <span class="o">=</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="Normalize.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.preprocess.spm.html#mia_processes.preprocess.spm.spatial_preprocessing.Normalize.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Normalize12.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.preprocess.spm.html#mia_processes.preprocess.spm.spatial_preprocessing.Normalize12.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
@@ -789,7 +764,7 @@
 <span class="sd">        self.make_initResult() object.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Normalize</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Normalize12</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="c1"># Outputs definition and tags inheritance (optional)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">deformation_file</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span><span class="p">:</span>
@@ -827,9 +802,9 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Normalize.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.preprocess.spm.html#mia_processes.preprocess.spm.spatial_preprocessing.Normalize.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Normalize12.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.preprocess.spm.html#mia_processes.preprocess.spm.spatial_preprocessing.Normalize12.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Normalize</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Normalize12</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">apply_to_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">deformation_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">deformation_file</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span>
@@ -1349,7 +1324,7 @@
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, populse.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
     </div>
   </body>
 </html>
