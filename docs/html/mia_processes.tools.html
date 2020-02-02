@@ -1,11 +1,9 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>mia_processes.tools package &#8212; mia_processes 1.4.0 documentation</title>
     <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -13,7 +11,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" /> 
   </head><body>
@@ -28,7 +26,7 @@
         </p>
 
       </div>
-      <div class="content">
+      <div class="content" role="main">
         
         
   <div class="section" id="module-mia_processes.tools">
@@ -41,38 +39,28 @@
 <p>The tools library of the mia_processes package.</p>
 <p>Basically, this module is dedicated to the low-level processes
 needed to run other higher-level bricks.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Contains:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Class:</th><td class="field-body"><ul class="first last simple">
-<li>Files_To_List</li>
-<li>Input_Filter</li>
-<li>List_Duplicate</li>
+<dl class="field-list simple">
+<dt class="field-odd">Contains</dt>
+<dd class="field-odd"><dl class="field-list simple">
+<dt class="field-odd">Class</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>Files_To_List</p></li>
+<li><p>Input_Filter</p></li>
+<li><p>List_Duplicate</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
+</dd>
+</dl>
 <dl class="class">
 <dt id="mia_processes.tools.tools.Auto_Filter_List">
-<em class="property">class </em><code class="descclassname">mia_processes.tools.tools.</code><code class="descname">Auto_Filter_List</code><span class="sig-paren">(</span><em>from mia_processes.tools.tools</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/tools/tools.html#Auto_Filter_List"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.tools.tools.Auto_Filter_List" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">mia_processes.tools.tools.</code><code class="sig-name descname">Auto_Filter_List</code><span class="sig-paren">(</span><em class="sig-param">from mia_processes.tools.tools</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/tools/tools.html#Auto_Filter_List"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.tools.tools.Auto_Filter_List" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="mia_processes.html#mia_processes.process_mia.Process_Mia" title="mia_processes.process_mia.Process_Mia"><code class="xref py py-class docutils literal notranslate"><span class="pre">mia_processes.process_mia.Process_Mia</span></code></a></p>
-<dl class="docutils">
-<dt><strong>* Selects one or more (slicing) elements from a list *</strong></dt>
-<dd><dl class="first docutils">
-<dt>[‘/home/ArthurBlair/data/raw_data/Anat.nii ‘,</dt>
-<dd><dl class="first last docutils">
-<dt>‘/home/ArthurBlair/data/raw_data/Func.nii’,]</dt>
-<dd>-&gt; Auto_Filter_List -&gt;</dd>
+<dl>
+<dt><strong>* Selects one or more (slicing) elements from a list *</strong></dt><dd><dl class="simple">
+<dt>[‘/home/ArthurBlair/data/raw_data/Anat.nii ‘,</dt><dd><dl class="simple">
+<dt>‘/home/ArthurBlair/data/raw_data/Func.nii’,]</dt><dd><p>-&gt; Auto_Filter_List -&gt;</p>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -80,11 +68,9 @@ needed to run other higher-level bricks.</p>
 * Input parameters:</p>
 <blockquote>
 <div><ul>
-<li><dl class="first docutils">
-<dt>in_list: the list of elements to be filtered (traits.List)</dt>
-<dd><dl class="first last docutils">
-<dt>&lt;ex. [‘/home/ArthurBlair/data/raw_data/Anat.nii’,</dt>
-<dd><p class="first last">‘/home/ArthurBlair/data/raw_data/Func.nii’,
+<li><dl class="simple">
+<dt>in_list: the list of elements to be filtered (traits.List)</dt><dd><dl class="simple">
+<dt>&lt;ex. [‘/home/ArthurBlair/data/raw_data/Anat.nii’,</dt><dd><p>‘/home/ArthurBlair/data/raw_data/Func.nii’,
 ‘/home/ArthurBlair/data/raw_data/rp_Func.txt’,
 ‘/home/ArthurBlair/data/raw_data/meanFunc.nii’]&gt;</p>
 </dd>
@@ -92,9 +78,8 @@ needed to run other higher-level bricks.</p>
 </dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>index_filter: a list of 0 to 2 index for filtering (traits.List).</dt>
-<dd><blockquote class="first">
+<li><dl>
+<dt>index_filter: a list of 0 to 2 index for filtering (traits.List).</dt><dd><blockquote>
 <div><p>If no index, take the first element of in_list.
 If there is one index, takes the element at that
 position in in_list. If two indexes, selects the
@@ -102,22 +87,20 @@ elements between the first and the second index (the
 index corresponds to the actual position in the list,
 i.e. there is no index 0 as in python).</p>
 </div></blockquote>
-<p class="last">&lt;ex. [2, 4]&gt;</p>
+<p>&lt;ex. [2, 4]&gt;</p>
 </dd>
 </dl>
 </li>
 </ul>
 </div></blockquote>
-<ul class="last simple">
-<li><dl class="first docutils">
-<dt>Output parameters:</dt>
-<dd><ul class="first last">
-<li><dl class="first docutils">
-<dt>filtered_list: the corresponding filtering result (traits.List)</dt>
-<dd><dl class="first last docutils">
-<dt>&lt;ex. [‘/home/ArthurBlair/data/Func.nii’,</dt>
-<dd>‘/home/ArthurBlair/data/raw_data/rp_Func.txt’,
-‘/home/ArthurBlair/data/raw_data/meanFunc.nii’]</dd>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Output parameters:</dt><dd><ul>
+<li><dl class="simple">
+<dt>filtered_list: the corresponding filtering result (traits.List)</dt><dd><dl class="simple">
+<dt>&lt;ex. [‘/home/ArthurBlair/data/Func.nii’,</dt><dd><p>‘/home/ArthurBlair/data/raw_data/rp_Func.txt’,
+‘/home/ArthurBlair/data/raw_data/meanFunc.nii’]</p>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -130,16 +113,16 @@ i.e. there is no index 0 as in python).</p>
 </dd>
 </dl>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<ul class="last simple">
-<li>Type ‘Auto_Filter_List.help()’ for a full description of this process parameters.</li>
-<li>Type ‘&lt;Auto_Filter_List&gt;.get_input_spec()’ for a full description of this process input trait types.</li>
-<li>Type ‘&lt;Auto_Filter_List&gt;.get_output_spec()’ for a full description of this process output trait types.</li>
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Type ‘Auto_Filter_List.help()’ for a full description of this process parameters.</p></li>
+<li><p>Type ‘&lt;Auto_Filter_List&gt;.get_input_spec()’ for a full description of this process input trait types.</p></li>
+<li><p>Type ‘&lt;Auto_Filter_List&gt;.get_output_spec()’ for a full description of this process output trait types.</p></li>
 </ul>
 </div>
 <dl class="method">
 <dt id="mia_processes.tools.tools.Auto_Filter_List.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/tools/tools.html#Auto_Filter_List.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.tools.tools.Auto_Filter_List.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/tools/tools.html#Auto_Filter_List.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.tools.tools.Auto_Filter_List.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the attributes initialisation / instanciation.</p>
 <p>The input and output plugs are defined here. The special
 ‘self.requirement’ attribute (optional) is used to define the
@@ -148,7 +131,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="method">
 <dt id="mia_processes.tools.tools.Auto_Filter_List.list_outputs">
-<code class="descname">list_outputs</code><span class="sig-paren">(</span><em>is_plugged=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/tools/tools.html#Auto_Filter_List.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.tools.tools.Auto_Filter_List.list_outputs" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">list_outputs</code><span class="sig-paren">(</span><em class="sig-param">is_plugged=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/tools/tools.html#Auto_Filter_List.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.tools.tools.Auto_Filter_List.list_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -158,7 +141,7 @@ self.make_initResult() object.</p>
 
 <dl class="method">
 <dt id="mia_processes.tools.tools.Auto_Filter_List.run_process_mia">
-<code class="descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/tools/tools.html#Auto_Filter_List.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.tools.tools.Auto_Filter_List.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/tools/tools.html#Auto_Filter_List.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.tools.tools.Auto_Filter_List.run_process_mia" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the process launch step of the brick.</p>
 </dd></dl>
 
@@ -166,51 +149,45 @@ self.make_initResult() object.</p>
 
 <dl class="class">
 <dt id="mia_processes.tools.tools.Files_To_List">
-<em class="property">class </em><code class="descclassname">mia_processes.tools.tools.</code><code class="descname">Files_To_List</code><span class="sig-paren">(</span><em>from mia_processes.tools.tools</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/tools/tools.html#Files_To_List"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.tools.tools.Files_To_List" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">mia_processes.tools.tools.</code><code class="sig-name descname">Files_To_List</code><span class="sig-paren">(</span><em class="sig-param">from mia_processes.tools.tools</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/tools/tools.html#Files_To_List"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.tools.tools.Files_To_List" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="mia_processes.html#mia_processes.process_mia.Process_Mia" title="mia_processes.process_mia.Process_Mia"><code class="xref py py-class docutils literal notranslate"><span class="pre">mia_processes.process_mia.Process_Mia</span></code></a></p>
-<dl class="docutils">
-<dt><strong>* From 2 file names, generating a list containing all theses file names *</strong></dt>
-<dd><dl class="first docutils">
-<dt>‘/home/ArthurBlair/data/raw_data/Anat.nii ‘</dt>
-<dd><ul class="first last simple">
+<dl>
+<dt><strong>* From 2 file names, generating a list containing all theses file names *</strong></dt><dd><dl class="simple">
+<dt>‘/home/ArthurBlair/data/raw_data/Anat.nii ‘</dt><dd><ul class="simple">
 <li></li>
 </ul>
 </dd>
-<dt>‘/home/ArthurBlair/data/raw_data/Func.nii’</dt>
-<dd>-&gt; Files_To_List -&gt;</dd>
-<dt>[‘/home/ArthurBlair/data/raw_data/Anat.nii’,</dt>
-<dd>‘/home/ArthurBlair/data/raw_data/Func.nii’]</dd>
+<dt>‘/home/ArthurBlair/data/raw_data/Func.nii’</dt><dd><p>-&gt; Files_To_List -&gt;</p>
+</dd>
+<dt>[‘/home/ArthurBlair/data/raw_data/Anat.nii’,</dt><dd><p>‘/home/ArthurBlair/data/raw_data/Func.nii’]</p>
+</dd>
 </dl>
 <p>If only file1 is specified, returns a list containing file1 only.
 * Input parameters:</p>
 <blockquote>
 <div><ul>
-<li><dl class="first docutils">
-<dt>file1: a string corresponding to an existing path file (traits.File)</dt>
-<dd><p class="first last">&lt;ex. /home/ArthurBlair/data/raw_data/Anat.nii&gt;</p>
+<li><dl class="simple">
+<dt>file1: a string corresponding to an existing path file (traits.File)</dt><dd><p>&lt;ex. /home/ArthurBlair/data/raw_data/Anat.nii&gt;</p>
 </dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>file2: an optional string corresponding to an existing path</dt>
-<dd><blockquote class="first">
+<li><dl>
+<dt>file2: an optional string corresponding to an existing path</dt><dd><blockquote>
 <div><p>file (traits.File)</p>
 </div></blockquote>
-<p class="last">&lt;ex. /home/ArthurBlair/data/raw_data/Func.nii&gt;</p>
+<p>&lt;ex. /home/ArthurBlair/data/raw_data/Func.nii&gt;</p>
 </dd>
 </dl>
 </li>
 </ul>
 </div></blockquote>
-<ul class="last simple">
-<li><dl class="first docutils">
-<dt>Output parameters:</dt>
-<dd><ul class="first last">
-<li><dl class="first docutils">
-<dt>file_list: a list (traits.List)</dt>
-<dd><dl class="first last docutils">
-<dt>&lt;ex. [‘/home/ArthurBlair/data/raw_data/Anat.nii’,</dt>
-<dd>‘/home/ArthurBlair/data/Func.nii’]&gt;</dd>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Output parameters:</dt><dd><ul>
+<li><dl class="simple">
+<dt>file_list: a list (traits.List)</dt><dd><dl class="simple">
+<dt>&lt;ex. [‘/home/ArthurBlair/data/raw_data/Anat.nii’,</dt><dd><p>‘/home/ArthurBlair/data/Func.nii’]&gt;</p>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -223,16 +200,16 @@ self.make_initResult() object.</p>
 </dd>
 </dl>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<ul class="last simple">
-<li>Type ‘Files_To_List.help()’ for a full description of this process parameters.</li>
-<li>Type ‘&lt;Files_To_List&gt;.get_input_spec()’ for a full description of this process input trait types.</li>
-<li>Type ‘&lt;Files_To_List&gt;.get_output_spec()’ for a full description of this process output trait types.</li>
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Type ‘Files_To_List.help()’ for a full description of this process parameters.</p></li>
+<li><p>Type ‘&lt;Files_To_List&gt;.get_input_spec()’ for a full description of this process input trait types.</p></li>
+<li><p>Type ‘&lt;Files_To_List&gt;.get_output_spec()’ for a full description of this process output trait types.</p></li>
 </ul>
 </div>
 <dl class="method">
 <dt id="mia_processes.tools.tools.Files_To_List.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/tools/tools.html#Files_To_List.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.tools.tools.Files_To_List.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/tools/tools.html#Files_To_List.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.tools.tools.Files_To_List.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the attributes initialisation / instanciation.</p>
 <p>The input and output plugs are defined here. The special
 ‘self.requirement’ attribute (optional) is used to define the
@@ -241,7 +218,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="method">
 <dt id="mia_processes.tools.tools.Files_To_List.list_outputs">
-<code class="descname">list_outputs</code><span class="sig-paren">(</span><em>is_plugged=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/tools/tools.html#Files_To_List.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.tools.tools.Files_To_List.list_outputs" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">list_outputs</code><span class="sig-paren">(</span><em class="sig-param">is_plugged=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/tools/tools.html#Files_To_List.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.tools.tools.Files_To_List.list_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -251,7 +228,7 @@ self.make_initResult() object.</p>
 
 <dl class="method">
 <dt id="mia_processes.tools.tools.Files_To_List.run_process_mia">
-<code class="descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/tools/tools.html#Files_To_List.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.tools.tools.Files_To_List.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/tools/tools.html#Files_To_List.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.tools.tools.Files_To_List.run_process_mia" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the process launch step of the brick.</p>
 </dd></dl>
 
@@ -259,29 +236,27 @@ self.make_initResult() object.</p>
 
 <dl class="class">
 <dt id="mia_processes.tools.tools.Input_Filter">
-<em class="property">class </em><code class="descclassname">mia_processes.tools.tools.</code><code class="descname">Input_Filter</code><span class="sig-paren">(</span><em>from mia_processes.tools.tools</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/tools/tools.html#Input_Filter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.tools.tools.Input_Filter" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">mia_processes.tools.tools.</code><code class="sig-name descname">Input_Filter</code><span class="sig-paren">(</span><em class="sig-param">from mia_processes.tools.tools</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/tools/tools.html#Input_Filter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.tools.tools.Input_Filter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="mia_processes.html#mia_processes.process_mia.Process_Mia" title="mia_processes.process_mia.Process_Mia"><code class="xref py py-class docutils literal notranslate"><span class="pre">mia_processes.process_mia.Process_Mia</span></code></a></p>
-<dl class="docutils">
-<dt><a href="#id1"><span class="problematic" id="id2">**</span></a>* Process (brick) used to filter the content of the Data Browser tab </dt>
-<dd><p class="first">or the output data of another brick. <a href="#id3"><span class="problematic" id="id4">**</span></a>*
+<dl>
+<dt><a href="#id1"><span class="problematic" id="id2">**</span></a>* Process (brick) used to filter the content of the Data Browser tab </dt><dd><p>or the output data of another brick. <a href="#id3"><span class="problematic" id="id4">**</span></a>*
 [Preselected data (or not) from the Data Browser</p>
 <blockquote>
 <div><blockquote>
-<div>or the output data from another brick]</div></blockquote>
+<div><p>or the output data from another brick]</p>
+</div></blockquote>
 <p>-&gt;</p>
 </div></blockquote>
 <p>[‘/home/ArthurBlair/data/raw_data/Anat.nii’]
 * Input parameters:</p>
 <blockquote>
 <div><ul>
-<li><dl class="first docutils">
-<dt>input: a list corresponding to the data from the Data Browser</dt>
-<dd><blockquote class="first">
+<li><dl>
+<dt>input: a list corresponding to the data from the Data Browser</dt><dd><blockquote>
 <div><p>or the output data from another brick (traits.List)</p>
 </div></blockquote>
-<dl class="last docutils">
-<dt>&lt;ex. [‘/home/ArthurBlair/data/raw_data/Anat.nii’,</dt>
-<dd><p class="first last">‘/home/ArthurBlair/data/Func.nii’]&gt;</p>
+<dl class="simple">
+<dt>&lt;ex. [‘/home/ArthurBlair/data/raw_data/Anat.nii’,</dt><dd><p>‘/home/ArthurBlair/data/Func.nii’]&gt;</p>
 </dd>
 </dl>
 </dd>
@@ -289,40 +264,39 @@ self.make_initResult() object.</p>
 </li>
 </ul>
 </div></blockquote>
-<ul class="last simple">
-<li><dl class="first docutils">
-<dt>Output parameters:</dt>
-<dd><ul class="first last">
-<li><dl class="first docutils">
-<dt>output: a list with the result of the filter applied (traits.List)</dt>
-<dd>&lt;ex. [‘/home/ArthurBlair/data/raw_data/Anat.nii’]&gt;</dd>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Output parameters:</dt><dd><ul>
+<li><dl class="simple">
+<dt>output: a list with the result of the filter applied (traits.List)</dt><dd><p>&lt;ex. [‘/home/ArthurBlair/data/raw_data/Anat.nii’]&gt;</p>
+</dd>
 </dl>
 </li>
 </ul>
 </dd>
 </dl>
 </li>
-<li>To run properly, this process (node, brick) needs that, on the one hand,
+<li><p>To run properly, this process (node, brick) needs that, on the one hand,
 in the DataBrowser, the “send documents to the Pipeline Manager” button
 was clicked previously (with a selection of data made, or not), and on
 the other hand, at the input_filter brick level, that a right click then
 the selection of the option “Export to database_scans” has been made.
 Finally, a right click on the input_filter brick will allow to filter the
-input data by selecting “open filter”.</li>
+input data by selecting “open filter”.</p></li>
 </ul>
 </dd>
 </dl>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<ul class="last simple">
-<li>Type ‘Input_Filter.help()’ for a full description of this process parameters.</li>
-<li>Type ‘&lt;Input_Filter&gt;.get_input_spec()’ for a full description of this process input trait types.</li>
-<li>Type ‘&lt;Input_Filter&gt;.get_output_spec()’ for a full description of this process output trait types.</li>
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Type ‘Input_Filter.help()’ for a full description of this process parameters.</p></li>
+<li><p>Type ‘&lt;Input_Filter&gt;.get_input_spec()’ for a full description of this process input trait types.</p></li>
+<li><p>Type ‘&lt;Input_Filter&gt;.get_output_spec()’ for a full description of this process output trait types.</p></li>
 </ul>
 </div>
 <dl class="method">
 <dt id="mia_processes.tools.tools.Input_Filter.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/tools/tools.html#Input_Filter.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.tools.tools.Input_Filter.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/tools/tools.html#Input_Filter.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.tools.tools.Input_Filter.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the attributes initialisation / instanciation.</p>
 <p>The input and output plugs are defined here. The special
 ‘self.requirement’ attribute (optional) is used to define the
@@ -331,7 +305,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="method">
 <dt id="mia_processes.tools.tools.Input_Filter.list_outputs">
-<code class="descname">list_outputs</code><span class="sig-paren">(</span><em>is_plugged=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/tools/tools.html#Input_Filter.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.tools.tools.Input_Filter.list_outputs" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">list_outputs</code><span class="sig-paren">(</span><em class="sig-param">is_plugged=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/tools/tools.html#Input_Filter.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.tools.tools.Input_Filter.list_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -341,7 +315,7 @@ self.make_initResult() object.</p>
 
 <dl class="method">
 <dt id="mia_processes.tools.tools.Input_Filter.run_process_mia">
-<code class="descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/tools/tools.html#Input_Filter.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.tools.tools.Input_Filter.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/tools/tools.html#Input_Filter.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.tools.tools.Input_Filter.run_process_mia" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the process launch step of the brick.</p>
 </dd></dl>
 
@@ -349,48 +323,44 @@ self.make_initResult() object.</p>
 
 <dl class="class">
 <dt id="mia_processes.tools.tools.List_Duplicate">
-<em class="property">class </em><code class="descclassname">mia_processes.tools.tools.</code><code class="descname">List_Duplicate</code><span class="sig-paren">(</span><em>from mia_processes.tools.tools</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/tools/tools.html#List_Duplicate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.tools.tools.List_Duplicate" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">mia_processes.tools.tools.</code><code class="sig-name descname">List_Duplicate</code><span class="sig-paren">(</span><em class="sig-param">from mia_processes.tools.tools</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/tools/tools.html#List_Duplicate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.tools.tools.List_Duplicate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="mia_processes.html#mia_processes.process_mia.Process_Mia" title="mia_processes.process_mia.Process_Mia"><code class="xref py py-class docutils literal notranslate"><span class="pre">mia_processes.process_mia.Process_Mia</span></code></a></p>
-<dl class="docutils">
-<dt><a href="#id5"><span class="problematic" id="id6">**</span></a>* From a file name, generating a list containing this file name and the</dt>
-<dd><p class="first">file name itself <a href="#id7"><span class="problematic" id="id8">**</span></a>*
+<dl>
+<dt><a href="#id5"><span class="problematic" id="id6">**</span></a>* From a file name, generating a list containing this file name and the</dt><dd><p>file name itself <a href="#id7"><span class="problematic" id="id8">**</span></a>*
 ‘/home/ArthurBlair/Anat.nii’</p>
 <blockquote>
-<div>-&gt; List_Duplicate -&gt;</div></blockquote>
+<div><p>-&gt; List_Duplicate -&gt;</p>
+</div></blockquote>
 <p>[‘/home/ArthurBlair/Anat.nii’] + ‘/home/ArthurBlair/Anat.nii’
 * Input parameters:</p>
 <blockquote>
 <div><ul>
-<li><dl class="first docutils">
-<dt>file_name: a string corresponding to an existing</dt>
-<dd><blockquote class="first">
+<li><dl>
+<dt>file_name: a string corresponding to an existing</dt><dd><blockquote>
 <div><p>path file (traits.File)</p>
 </div></blockquote>
-<p class="last">&lt;ex. /home/ArthurBlair/data/Func.nii&gt;</p>
+<p>&lt;ex. /home/ArthurBlair/data/Func.nii&gt;</p>
 </dd>
 </dl>
 </li>
 </ul>
 </div></blockquote>
-<ul class="last">
-<li><dl class="first docutils">
-<dt>Output parameters:</dt>
-<dd><ul class="first last">
-<li><dl class="first docutils">
-<dt>out_file: a string corresponding to an existing</dt>
-<dd><blockquote class="first">
+<ul>
+<li><dl>
+<dt>Output parameters:</dt><dd><ul>
+<li><dl>
+<dt>out_file: a string corresponding to an existing</dt><dd><blockquote>
 <div><p>path file (traits.File)</p>
 </div></blockquote>
-<p class="last">&lt;ex. /home/ArthurBlair/data/Func.nii&gt;</p>
+<p>&lt;ex. /home/ArthurBlair/data/Func.nii&gt;</p>
 </dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>out_list: a list with one string element corresponding to an</dt>
-<dd><blockquote class="first">
+<li><dl>
+<dt>out_list: a list with one string element corresponding to an</dt><dd><blockquote>
 <div><p>existing path file (traits.List)</p>
 </div></blockquote>
-<p class="last">&lt;ex. [‘/home/ArthurBlair/data/Func.nii’]&gt;</p>
+<p>&lt;ex. [‘/home/ArthurBlair/data/Func.nii’]&gt;</p>
 </dd>
 </dl>
 </li>
@@ -402,16 +372,16 @@ self.make_initResult() object.</p>
 </dd>
 </dl>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<ul class="last simple">
-<li>Type ‘List_Duplicate.help()’ for a full description of this process parameters.</li>
-<li>Type ‘&lt;List_Duplicate&gt;.get_input_spec()’ for a full description of this process input trait types.</li>
-<li>Type ‘&lt;List_Duplicate&gt;.get_output_spec()’ for a full description of this process output trait types.</li>
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Type ‘List_Duplicate.help()’ for a full description of this process parameters.</p></li>
+<li><p>Type ‘&lt;List_Duplicate&gt;.get_input_spec()’ for a full description of this process input trait types.</p></li>
+<li><p>Type ‘&lt;List_Duplicate&gt;.get_output_spec()’ for a full description of this process output trait types.</p></li>
 </ul>
 </div>
 <dl class="method">
 <dt id="mia_processes.tools.tools.List_Duplicate.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/tools/tools.html#List_Duplicate.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.tools.tools.List_Duplicate.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/tools/tools.html#List_Duplicate.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.tools.tools.List_Duplicate.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the attributes initialisation / instanciation.</p>
 <p>The input and output plugs are defined here. The special
 ‘self.requirement’ attribute (optional) is used to define the
@@ -420,7 +390,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="method">
 <dt id="mia_processes.tools.tools.List_Duplicate.list_outputs">
-<code class="descname">list_outputs</code><span class="sig-paren">(</span><em>is_plugged=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/tools/tools.html#List_Duplicate.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.tools.tools.List_Duplicate.list_outputs" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">list_outputs</code><span class="sig-paren">(</span><em class="sig-param">is_plugged=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/tools/tools.html#List_Duplicate.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.tools.tools.List_Duplicate.list_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -430,7 +400,7 @@ self.make_initResult() object.</p>
 
 <dl class="method">
 <dt id="mia_processes.tools.tools.List_Duplicate.run_process_mia">
-<code class="descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/tools/tools.html#List_Duplicate.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.tools.tools.List_Duplicate.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/tools/tools.html#List_Duplicate.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.tools.tools.List_Duplicate.run_process_mia" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the process launch step of the brick.</p>
 </dd></dl>
 
@@ -451,7 +421,7 @@ self.make_initResult() object.</p>
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, populse.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.
     </div>
   </body>
 </html>
