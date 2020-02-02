@@ -883,9 +883,6 @@ class Normalize12(Process_Mia):
         if self.outputs:
         
             for key, values in self.outputs.items():
-
-                print('prout key: ', key)
-                print('prout values: ', values)
             
                 if key == "normalized_files":
 
@@ -925,11 +922,7 @@ class Normalize12(Process_Mia):
                                 self.inheritance_dict[values] = os.path.join(path,
                                                         filename_without_prefix)
 
-
         # Return the requirement, outputs and inheritance_dict
-
-        print('\nprout self.make_initResult(): ', self.make_initResult())
-        
         return self.make_initResult()
 
     def run_process_mia(self):
