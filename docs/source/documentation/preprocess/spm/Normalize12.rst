@@ -47,14 +47,14 @@ Computes the warp that best aligns the template (atlas) to the individual's imag
 **Inputs parameters:**
 
 - *image_to_align <=> subj.vol* [#label]_
-    The image that the template (atlas) data is warped into alignment with. Mutually exclusive with *deformation_file* parameter. A pathlike object or string representing an existing file (valid extensions: [.img, .nii, .hdr]).
+    The image that the template (atlas) data is warped into alignment with. Mutually exclusive with *deformation_file* parameter. A pathlike object or string representing an existing file (valid extensions in [.img, .nii, .hdr]).
 
     ::
 
       ex.
 
 - *deformation_file <=> subj.def*  [#label]_
-    File y_*.nii containing 3 deformation fields for the deformation in x, y and z dimension. Mutually exclusive with *image_to_align* and *tpm* parameters. A pathlike object or string representing an existing file (valid extensions: [.img, .nii, .hdr]).
+    File y_*.nii containing 3 deformation fields for the deformation in x, y and z dimension. Mutually exclusive with *image_to_align* and *tpm* parameters. A pathlike object or string representing an existing file (valid extensions in [.img, .nii, .hdr]).
 
     ::
 
@@ -62,7 +62,7 @@ Computes the warp that best aligns the template (atlas) to the individual's imag
 
 
 - *apply_to_files <=> subj.resample* [#label]_
-    Files to apply transformation to. They can be any images that are in register with the image used to generate the deformation. A list of  items which are an existing, uncompressed file (valid extensions: [.img, .nii, .hdr]).
+    Files to apply transformation to. They can be any images that are in register with the image used to generate the deformation. A list of  items which are an existing, uncompressed file (valid extensions in [.img, .nii, .hdr]).
 
     ::
 
@@ -89,7 +89,7 @@ Computes the warp that best aligns the template (atlas) to the individual's imag
       ex.
 
 - *bias_fwhm <=> eoptions.biasfwhm* [#label]_
-    Full Width at Half Maximum of Gaussian smoothness of bias (a float between 20 and infinity). Smoother bias fields need fewer parameters to describe them. This means that the algorithm is faster for smoother intensity non-uniformities (e.g. 150 mm cutoff gives faster results than 20 mm cutoff).
+    Full Width at Half Maximum of Gaussian smoothness of bias (a value in [30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, ‘Inf’). Smoother bias fields need fewer parameters to describe them. This means that the algorithm is faster for smoother intensity non-uniformities (e.g. 150 mm cutoff gives faster results than 30 mm cutoff).
   
     ::
 
@@ -110,7 +110,7 @@ Computes the warp that best aligns the template (atlas) to the individual's imag
       ex.
 
 - *warping_regularization <=> eoptions.reg* [#label]_
-    The measure of the roughness of the deformations for registration. Involve the sum of 5 elements (a float or list of floats; the latter is required by SPM12).
+    The measure of the roughness of the deformations for registration. Involve the sum of 5 elements (list of floats).
             
     ::
 
@@ -145,10 +145,10 @@ Computes the warp that best aligns the template (atlas) to the individual's imag
       ex. [1, 1, 1]
 
 - *write_interp  <=> woptions.interp* [#label]_
-    This is the  method by which the images are sampled when being written in a different space (0 <= a long integer <= 7).
+    This is the method by which the images are sampled when being written in a different space (0 <= a long integer <= 7).
 
       | \- 0 Nearest neighbour
-      | \- 1 Trilinear
+      | \- 1 Trilinear (OK for PET, realigned fMRI, or segmentations)
       | \- 2 2nd Degree B-spline
       | \-  ...
       | \- 7 7nd Degree B-spline.
@@ -182,7 +182,7 @@ Computes the warp that best aligns the template (atlas) to the individual's imag
       ex.
 
 - *normalized_files*
-    Normalised other files (a list of items which are an existing file name).
+    Normalised other files (a list of items which are a pathlike object or string representing an existing file).
 
     ::
        
