@@ -1,9 +1,11 @@
 
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>mia_processes.preprocess.spm package &#8212; mia_processes 1.4.0 documentation</title>
     <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -11,7 +13,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" /> 
   </head><body>
@@ -26,7 +28,7 @@
         </p>
 
       </div>
-      <div class="content" role="main">
+      <div class="content">
         
         
   <div class="section" id="module-mia_processes.preprocess.spm">
@@ -40,38 +42,46 @@
 <p>The purpose of this module is to customise the main spm preprocessing bricks
 provided by nipype and to correct some things that do not work directly in
 populse_mia.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Contains</dt>
-<dd class="field-odd"><dl class="field-list simple">
-<dt class="field-odd">Class</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p>Coregister</p></li>
-<li><p>NewSegment</p></li>
-<li><p>Normalize12</p></li>
-<li><p>Realign</p></li>
-<li><p>Smooth</p></li>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Contains:</th><td class="field-body"><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Class:</th><td class="field-body"><ul class="first last simple">
+<li>Coregister</li>
+<li>NewSegment</li>
+<li>Normalize12</li>
+<li>Realign</li>
+<li>Smooth</li>
 </ul>
-</dd>
-</dl>
-</dd>
-</dl>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="class">
 <dt id="mia_processes.preprocess.spm.spatial_preprocessing.Coregister">
-<em class="property">class </em><code class="sig-prename descclassname">mia_processes.preprocess.spm.spatial_preprocessing.</code><code class="sig-name descname">Coregister</code><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Coregister"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Coregister" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">mia_processes.preprocess.spm.spatial_preprocessing.</code><code class="descname">Coregister</code><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Coregister"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Coregister" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="mia_processes.html#mia_processes.process_mia.Process_Mia" title="mia_processes.process_mia.Process_Mia"><code class="xref py py-class docutils literal notranslate"><span class="pre">mia_processes.process_mia.Process_Mia</span></code></a></p>
 <p><em>Align together scans of different modalities</em></p>
 <p>Please, see the complete documention for the <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/preprocess/spm/Coregister.html">Coregister brick in the populse.mia_processes web site:</a></p>
 <div class="admonition note">
-<p class="admonition-title">Note</p>
-<ul class="simple">
-<li><p>Type ‘Coregister.help()’ for a full description of this process parameters.</p></li>
-<li><p>Type ‘&lt;Coregister&gt;.get_input_spec()’ for a full description of this process input trait types.</p></li>
-<li><p>Type ‘&lt;Coregister&gt;.get_output_spec()’ for a full description of this process output trait types.</p></li>
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>Type ‘Coregister.help()’ for a full description of this process parameters.</li>
+<li>Type ‘&lt;Coregister&gt;.get_input_spec()’ for a full description of this process input trait types.</li>
+<li>Type ‘&lt;Coregister&gt;.get_output_spec()’ for a full description of this process output trait types.</li>
 </ul>
 </div>
 <dl class="method">
 <dt id="mia_processes.preprocess.spm.spatial_preprocessing.Coregister.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Coregister.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Coregister.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Coregister.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Coregister.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the attributes initialisation / instanciation.</p>
 <p>The input and output plugs are defined here. The special
 ‘self.requirement’ attribute (optional) is used to define the
@@ -80,7 +90,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="method">
 <dt id="mia_processes.preprocess.spm.spatial_preprocessing.Coregister.list_outputs">
-<code class="sig-name descname">list_outputs</code><span class="sig-paren">(</span><em class="sig-param">is_plugged=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Coregister.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Coregister.list_outputs" title="Permalink to this definition">¶</a></dt>
+<code class="descname">list_outputs</code><span class="sig-paren">(</span><em>is_plugged=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Coregister.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Coregister.list_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -90,7 +100,7 @@ self.make_initResult() object.</p>
 
 <dl class="method">
 <dt id="mia_processes.preprocess.spm.spatial_preprocessing.Coregister.run_process_mia">
-<code class="sig-name descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Coregister.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Coregister.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<code class="descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Coregister.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Coregister.run_process_mia" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the process launch step of the brick.</p>
 </dd></dl>
 
@@ -98,21 +108,21 @@ self.make_initResult() object.</p>
 
 <dl class="class">
 <dt id="mia_processes.preprocess.spm.spatial_preprocessing.NewSegment">
-<em class="property">class </em><code class="sig-prename descclassname">mia_processes.preprocess.spm.spatial_preprocessing.</code><code class="sig-name descname">NewSegment</code><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#NewSegment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.NewSegment" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">mia_processes.preprocess.spm.spatial_preprocessing.</code><code class="descname">NewSegment</code><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#NewSegment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.NewSegment" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="mia_processes.html#mia_processes.process_mia.Process_Mia" title="mia_processes.process_mia.Process_Mia"><code class="xref py py-class docutils literal notranslate"><span class="pre">mia_processes.process_mia.Process_Mia</span></code></a></p>
 <p><em>Segmentation: Segments,  bias  corrects  and  spatially normalises - all in the same model</em></p>
 <p>Please, see the complete documention for the <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/preprocess/spm/NewSegment.html">NewSegment brick in the populse.mia_processes web site:</a></p>
 <div class="admonition note">
-<p class="admonition-title">Note</p>
-<ul class="simple">
-<li><p>Type ‘NewSegment.help()’ for a full description of this process parameters.</p></li>
-<li><p>Type ‘&lt;NewSegment&gt;.get_input_spec()’ for a full description of this process input trait types.</p></li>
-<li><p>Type ‘&lt;NewSegment&gt;.get_output_spec()’ for a full description of this process output trait types.</p></li>
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>Type ‘NewSegment.help()’ for a full description of this process parameters.</li>
+<li>Type ‘&lt;NewSegment&gt;.get_input_spec()’ for a full description of this process input trait types.</li>
+<li>Type ‘&lt;NewSegment&gt;.get_output_spec()’ for a full description of this process output trait types.</li>
 </ul>
 </div>
 <dl class="method">
 <dt id="mia_processes.preprocess.spm.spatial_preprocessing.NewSegment.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#NewSegment.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.NewSegment.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#NewSegment.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.NewSegment.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the attributes initialisation / instanciation.</p>
 <p>The input and output plugs are defined here. The special
 ‘self.requirement’ attribute (optional) is used to define the
@@ -121,7 +131,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="method">
 <dt id="mia_processes.preprocess.spm.spatial_preprocessing.NewSegment.list_outputs">
-<code class="sig-name descname">list_outputs</code><span class="sig-paren">(</span><em class="sig-param">is_plugged=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#NewSegment.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.NewSegment.list_outputs" title="Permalink to this definition">¶</a></dt>
+<code class="descname">list_outputs</code><span class="sig-paren">(</span><em>is_plugged=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#NewSegment.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.NewSegment.list_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -131,7 +141,7 @@ self.make_initResult() object.</p>
 
 <dl class="method">
 <dt id="mia_processes.preprocess.spm.spatial_preprocessing.NewSegment.run_process_mia">
-<code class="sig-name descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#NewSegment.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.NewSegment.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<code class="descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#NewSegment.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.NewSegment.run_process_mia" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the process launch step of the brick.</p>
 </dd></dl>
 
@@ -139,21 +149,21 @@ self.make_initResult() object.</p>
 
 <dl class="class">
 <dt id="mia_processes.preprocess.spm.spatial_preprocessing.Normalize12">
-<em class="property">class </em><code class="sig-prename descclassname">mia_processes.preprocess.spm.spatial_preprocessing.</code><code class="sig-name descname">Normalize12</code><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Normalize12"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Normalize12" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">mia_processes.preprocess.spm.spatial_preprocessing.</code><code class="descname">Normalize12</code><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Normalize12"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Normalize12" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="mia_processes.html#mia_processes.process_mia.Process_Mia" title="mia_processes.process_mia.Process_Mia"><code class="xref py py-class docutils literal notranslate"><span class="pre">mia_processes.process_mia.Process_Mia</span></code></a></p>
 <p><em>Computes the warp that best aligns the template (atlas) to the individual’s image</em></p>
 <p>Please, see the complete documention for the <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/preprocess/spm/Normalize12.html">Normalize12 brick in the populse.mia_processes web site:</a></p>
 <div class="admonition note">
-<p class="admonition-title">Note</p>
-<ul class="simple">
-<li><p>Type ‘Normalize12.help()’ for a full description of this process parameters.</p></li>
-<li><p>Type ‘&lt;Normalize12&gt;.get_input_spec()’ for a full description of this process input trait types.</p></li>
-<li><p>Type ‘&lt;Normalize12&gt;.get_output_spec()’ for a full description of this process output trait types.</p></li>
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>Type ‘Normalize12.help()’ for a full description of this process parameters.</li>
+<li>Type ‘&lt;Normalize12&gt;.get_input_spec()’ for a full description of this process input trait types.</li>
+<li>Type ‘&lt;Normalize12&gt;.get_output_spec()’ for a full description of this process output trait types.</li>
 </ul>
 </div>
 <dl class="method">
 <dt id="mia_processes.preprocess.spm.spatial_preprocessing.Normalize12.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Normalize12.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Normalize12.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Normalize12.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Normalize12.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the attributes initialisation / instanciation.</p>
 <p>The input and output plugs are defined here. The special
 ‘self.requirement’ attribute (optional) is used to define the
@@ -162,7 +172,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="method">
 <dt id="mia_processes.preprocess.spm.spatial_preprocessing.Normalize12.list_outputs">
-<code class="sig-name descname">list_outputs</code><span class="sig-paren">(</span><em class="sig-param">is_plugged=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Normalize12.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Normalize12.list_outputs" title="Permalink to this definition">¶</a></dt>
+<code class="descname">list_outputs</code><span class="sig-paren">(</span><em>is_plugged=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Normalize12.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Normalize12.list_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -172,7 +182,7 @@ self.make_initResult() object.</p>
 
 <dl class="method">
 <dt id="mia_processes.preprocess.spm.spatial_preprocessing.Normalize12.run_process_mia">
-<code class="sig-name descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Normalize12.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Normalize12.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<code class="descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Normalize12.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Normalize12.run_process_mia" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the process launch step of the brick.</p>
 </dd></dl>
 
@@ -180,21 +190,21 @@ self.make_initResult() object.</p>
 
 <dl class="class">
 <dt id="mia_processes.preprocess.spm.spatial_preprocessing.Realign">
-<em class="property">class </em><code class="sig-prename descclassname">mia_processes.preprocess.spm.spatial_preprocessing.</code><code class="sig-name descname">Realign</code><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Realign"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Realign" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">mia_processes.preprocess.spm.spatial_preprocessing.</code><code class="descname">Realign</code><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Realign"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Realign" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="mia_processes.html#mia_processes.process_mia.Process_Mia" title="mia_processes.process_mia.Process_Mia"><code class="xref py py-class docutils literal notranslate"><span class="pre">mia_processes.process_mia.Process_Mia</span></code></a></p>
 <p><em>Realigns a time-series of images acquired from the same subject</em></p>
 <p>Please, see the complete documention for the <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/preprocess/spm/Realign.html">Realign brick in the populse.mia_processes web site:</a></p>
 <div class="admonition note">
-<p class="admonition-title">Note</p>
-<ul class="simple">
-<li><p>Type ‘Realign.help()’ for a full description of this process parameters.</p></li>
-<li><p>Type ‘&lt;Realign&gt;.get_input_spec()’ for a full description of this process input trait types.</p></li>
-<li><p>Type ‘&lt;Realign&gt;.get_output_spec()’ for a full description of this process output trait types.</p></li>
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>Type ‘Realign.help()’ for a full description of this process parameters.</li>
+<li>Type ‘&lt;Realign&gt;.get_input_spec()’ for a full description of this process input trait types.</li>
+<li>Type ‘&lt;Realign&gt;.get_output_spec()’ for a full description of this process output trait types.</li>
 </ul>
 </div>
 <dl class="method">
 <dt id="mia_processes.preprocess.spm.spatial_preprocessing.Realign.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Realign.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Realign.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Realign.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Realign.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the attributes initialisation / instanciation.</p>
 <p>The input and output plugs are defined here. The special
 ‘self.requirement’ attribute (optional) is used to define the
@@ -203,7 +213,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="method">
 <dt id="mia_processes.preprocess.spm.spatial_preprocessing.Realign.list_outputs">
-<code class="sig-name descname">list_outputs</code><span class="sig-paren">(</span><em class="sig-param">is_plugged=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Realign.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Realign.list_outputs" title="Permalink to this definition">¶</a></dt>
+<code class="descname">list_outputs</code><span class="sig-paren">(</span><em>is_plugged=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Realign.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Realign.list_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -213,7 +223,7 @@ self.make_initResult() object.</p>
 
 <dl class="method">
 <dt id="mia_processes.preprocess.spm.spatial_preprocessing.Realign.run_process_mia">
-<code class="sig-name descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Realign.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Realign.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<code class="descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Realign.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Realign.run_process_mia" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the process launch step of the brick.</p>
 </dd></dl>
 
@@ -221,21 +231,21 @@ self.make_initResult() object.</p>
 
 <dl class="class">
 <dt id="mia_processes.preprocess.spm.spatial_preprocessing.Smooth">
-<em class="property">class </em><code class="sig-prename descclassname">mia_processes.preprocess.spm.spatial_preprocessing.</code><code class="sig-name descname">Smooth</code><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Smooth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Smooth" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">mia_processes.preprocess.spm.spatial_preprocessing.</code><code class="descname">Smooth</code><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Smooth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Smooth" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="mia_processes.html#mia_processes.process_mia.Process_Mia" title="mia_processes.process_mia.Process_Mia"><code class="xref py py-class docutils literal notranslate"><span class="pre">mia_processes.process_mia.Process_Mia</span></code></a></p>
 <p><em>3D Gaussian smoothing of image volumes</em></p>
 <p>Please, see the complete documention for the <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/preprocess/spm/Smooth.html">Smooth brick in the populse.mia_processes web site:</a></p>
 <div class="admonition note">
-<p class="admonition-title">Note</p>
-<ul class="simple">
-<li><p>Type ‘Smooth.help()’ for a full description of this process parameters.</p></li>
-<li><p>Type ‘&lt;Smooth&gt;.get_input_spec()’ for a full description of this process input trait types.</p></li>
-<li><p>Type ‘&lt;Smooth&gt;.get_output_spec()’ for a full description of this process output trait types.</p></li>
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li>Type ‘Smooth.help()’ for a full description of this process parameters.</li>
+<li>Type ‘&lt;Smooth&gt;.get_input_spec()’ for a full description of this process input trait types.</li>
+<li>Type ‘&lt;Smooth&gt;.get_output_spec()’ for a full description of this process output trait types.</li>
 </ul>
 </div>
 <dl class="method">
 <dt id="mia_processes.preprocess.spm.spatial_preprocessing.Smooth.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Smooth.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Smooth.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Smooth.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Smooth.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the attributes initialisation / instanciation.</p>
 <p>The input and output plugs are defined here. The special
 ‘self.requirement’ attribute (optional) is used to define the
@@ -244,7 +254,7 @@ third-party products necessary for the running of the brick.</p>
 
 <dl class="method">
 <dt id="mia_processes.preprocess.spm.spatial_preprocessing.Smooth.list_outputs">
-<code class="sig-name descname">list_outputs</code><span class="sig-paren">(</span><em class="sig-param">is_plugged=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Smooth.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Smooth.list_outputs" title="Permalink to this definition">¶</a></dt>
+<code class="descname">list_outputs</code><span class="sig-paren">(</span><em>is_plugged=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Smooth.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Smooth.list_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -254,7 +264,7 @@ self.make_initResult() object.</p>
 
 <dl class="method">
 <dt id="mia_processes.preprocess.spm.spatial_preprocessing.Smooth.run_process_mia">
-<code class="sig-name descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Smooth.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Smooth.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<code class="descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/preprocess/spm/spatial_preprocessing.html#Smooth.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.preprocess.spm.spatial_preprocessing.Smooth.run_process_mia" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the process launch step of the brick.</p>
 </dd></dl>
 
@@ -275,7 +285,7 @@ self.make_initResult() object.</p>
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, populse.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
     </div>
   </body>
 </html>
