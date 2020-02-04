@@ -1,9 +1,11 @@
 
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>mia_processes.preprocess.spm.spatial_preprocessing &#8212; mia_processes 1.4.0 documentation</title>
     <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
@@ -11,7 +13,7 @@
     <script type="text/javascript" src="../../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
@@ -26,7 +28,7 @@
         </p>
 
       </div>
-      <div class="content" role="main">
+      <div class="content">
         
         
   <h1>Source code for mia_processes.preprocess.spm.spatial_preprocessing</h1><div class="highlight"><pre>
@@ -71,7 +73,7 @@
 <span class="c1"># Other import</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">traits.api</span> <span class="k">import</span> <span class="n">Undefined</span><span class="p">,</span> <span class="n">Float</span>
-
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
 
 <div class="viewcode-block" id="Coregister"><a class="viewcode-back" href="../../../../mia_processes.preprocess.spm.html#mia_processes.preprocess.spm.spatial_preprocessing.Coregister">[docs]</a><span class="k">class</span> <span class="nc">Coregister</span><span class="p">(</span><span class="n">Process_Mia</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -441,6 +443,10 @@
         <span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">()</span>
         <span class="n">resources_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get_mia_path</span><span class="p">(),</span> <span class="s1">&#39;resources&#39;</span><span class="p">)</span>
         <span class="n">tpm_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">resources_path</span><span class="p">,</span> <span class="s1">&#39;spm12&#39;</span><span class="p">,</span> <span class="s1">&#39;tpm&#39;</span><span class="p">,</span> <span class="s1">&#39;TPM.nii&#39;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">Path</span><span class="p">(</span><span class="n">tpm_path</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1"> The </span><span class="si">{}</span><span class="s1"> file seems to not exists ...&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tpm_path</span><span class="p">))</span>
+
         <span class="n">tissues_list</span> <span class="o">=</span> <span class="p">[((</span><span class="n">tpm_path</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)),</span>
                         <span class="p">((</span><span class="n">tpm_path</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)),</span>
                         <span class="p">((</span><span class="n">tpm_path</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)),</span>
@@ -557,10 +563,9 @@
                                        <span class="n">desc</span><span class="o">=</span><span class="n">inverse_deformation_field_desc</span><span class="p">))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;forward_deformation_field&quot;</span><span class="p">,</span>
-                       <span class="n">OutputMultiPath</span><span class="p">(</span><span class="n">File</span><span class="p">(),</span>
-                                       <span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                       <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                       <span class="n">desc</span><span class="o">=</span><span class="n">forward_deformation_field_desc</span><span class="p">))</span>
+                       <span class="n">ImageFileSPM</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                    <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                    <span class="n">desc</span><span class="o">=</span><span class="n">forward_deformation_field_desc</span><span class="p">))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;transformation_mat&quot;</span><span class="p">,</span>
                        <span class="n">OutputMultiPath</span><span class="p">(</span><span class="n">File</span><span class="p">(),</span>
@@ -591,14 +596,13 @@
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_info</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">channel_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_info</span>
 
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tissues</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">tissues</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tissues</span>
-
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_deformation_fields</span><span class="p">:</span>
                 <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span>
                        <span class="n">write_deformation_fields</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_deformation_fields</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">_list_outputs</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tissues</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">tissues</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tissues</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">_list_outputs</span><span class="p">()</span>
 
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">         When there is only one image at the input, the tags inheritance is</span>
@@ -695,9 +699,9 @@
         <span class="n">bias_regularization_desc</span> <span class="o">=</span><span class="p">(</span><span class="s1">&#39;(For low-intensity non-uniformity artifacts&#39;</span>
                                    <span class="s1">&#39;, use a high bias regularization (a float &#39;</span>
                                    <span class="s1">&#39; between 0 and 10).&#39;</span><span class="p">)</span>
-        <span class="n">bias_fwhm_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Full Width at Half Maximum of Gaussian smoothness of &#39;</span>
-                          <span class="s1">&#39;bias (a value in [30, 40, 50, 60, 70, 80, 90, 100, &#39;</span>
-                          <span class="s1">&#39;110, 120, 130, 140, 150, ‘Inf’).&#39;</span><span class="p">)</span>
+        <span class="n">bias_fwhm_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Full Width at Half Maximum of Gaussian smoothness &#39;</span>
+                          <span class="s1">&#39;of bias (a value in [30, 40, 50, 60, 70, 80, 90, &#39;</span>
+                          <span class="s1">&#39;100, 110, 120, 130, 140, 150, ‘Inf’).&#39;</span><span class="p">)</span>
         <span class="n">tpm_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;The template in form of tissue probability atlas (a &#39;</span>
                     <span class="s1">&#39;pathlike object or string representing an existing file). &#39;</span>
                     <span class="s1">&#39;Mutually exclusive with the deformation_file parameter.&#39;</span><span class="p">)</span>
@@ -723,19 +727,28 @@
         <span class="n">write_interp_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Degree of b-spline used for interpolation &#39;</span>
                              <span class="s1">&#39;(0 &lt;= a long integer &lt;= 7; 1 is OK for PET, &#39;</span>
                              <span class="s1">&#39;realigned fMRI, or segmentations).&#39;</span><span class="p">)</span>
-        <span class="n">out_prefix_desc</span> <span class="o">=</span> <span class="s1">&#39;normalised output prefix (a string).&#39;</span>
         
         <span class="c1"># Outputs description</span>
         <span class="n">deformation_field_desc</span>  <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;File y_*.nii containing 3 deformation &#39;</span>
                                    <span class="s1">&#39;fields for the deformation in x, y and z &#39;</span>
                                    <span class="s1">&#39;dimension.&#39;</span><span class="p">)</span>
         <span class="n">normalized_image_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Normalised file that needed to be aligned (a &#39;</span>
-                                <span class="s1">&#39;list of items which are an existing file name).&#39;</span><span class="p">)</span>
-        <span class="n">normalized_files_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Normalised other files (a list of items which are &#39;</span>
-                                 <span class="s1">&#39;an existing file name).&#39;</span><span class="p">)</span>
+                                <span class="s1">&#39;list of items which are an existing file &#39;</span>
+                                 <span class="s1">&#39;name).&#39;</span><span class="p">)</span>
+        <span class="n">normalized_files_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Normalised other files (a list of items &#39;</span>
+                                 <span class="s1">&#39;which are an existing file name).&#39;</span><span class="p">)</span>
+
+
+        <span class="c1"># Tpm parameter definition</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">()</span>
+        <span class="n">resources_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get_mia_path</span><span class="p">(),</span> <span class="s1">&#39;resources&#39;</span><span class="p">)</span>
+        <span class="n">tpm_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">resources_path</span><span class="p">,</span> <span class="s1">&#39;spm12&#39;</span><span class="p">,</span> <span class="s1">&#39;tpm&#39;</span><span class="p">,</span> <span class="s1">&#39;TPM.nii&#39;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">Path</span><span class="p">(</span><span class="n">tpm_path</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1"> The </span><span class="si">{}</span><span class="s1"> file seems to not exists ...&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tpm_path</span><span class="p">))</span>
+            <span class="n">tpm_path</span> <span class="o">=</span> <span class="n">Undefined</span>
 
         <span class="c1"># Inputs traits</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;image_to_align&quot;</span><span class="p">,</span>
                        <span class="n">ImageFileSPM</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                                     <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -796,7 +809,9 @@
                                    <span class="n">desc</span><span class="o">=</span><span class="n">bias_fwhm_desc</span><span class="p">))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;tpm&quot;</span><span class="p">,</span>
-                       <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                       <span class="n">File</span><span class="p">(</span><span class="n">exists</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">value</span><span class="o">=</span><span class="n">tpm_path</span><span class="p">,</span>
+                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                             <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                             <span class="n">desc</span><span class="o">=</span><span class="n">tpm_desc</span><span class="p">))</span>
 
@@ -851,14 +866,7 @@
                                     <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                     <span class="n">desc</span><span class="o">=</span><span class="n">write_interp_desc</span><span class="p">))</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;out_prefix&quot;</span><span class="p">,</span>
-                       <span class="n">traits</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">,</span>
-                                     <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                                     <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                     <span class="n">desc</span><span class="o">=</span><span class="n">out_prefix_desc</span><span class="p">))</span>
-
         <span class="c1"># Outputs traits</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;deformation_field&quot;</span><span class="p">,</span>
                        <span class="n">OutputMultiPath</span><span class="p">(</span><span class="n">File</span><span class="p">(),</span>
                                        <span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -892,88 +900,124 @@
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Normalize12</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
-        <span class="c1"># Outputs definition and tags inheritance (optional)</span>
+        <span class="c1"># Outputs definition</span>
         <span class="n">_flag</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span>
         
-        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">deformation_file</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">==</span> <span class="s1">&#39;write&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span> <span class="o">!=</span> <span class="p">[</span><span class="n">Undefined</span><span class="p">])</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">deformation_file</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">==</span> <span class="s1">&#39;write&#39;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">apply_to_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">deformation_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">deformation_file</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span>
             <span class="n">_flag</span> <span class="o">=</span> <span class="kc">True</span>
-            
-        <span class="k">elif</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image_to_align</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">==</span> <span class="s1">&#39;est&#39;</span><span class="p">):</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_to_align</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">image_to_align</span> <span class="o">=</span> <span class="n">Undefined</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tpm</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tpm</span> <span class="o">=</span> <span class="n">Undefined</span>
+                
+        <span class="k">elif</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image_to_align</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tpm</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">==</span> <span class="s1">&#39;est&#39;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">image_to_align</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_to_align</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">tpm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tpm</span>
             <span class="n">_flag</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span> <span class="o">!=</span> <span class="p">[</span><span class="n">Undefined</span><span class="p">]):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span> <span class="o">=</span> <span class="n">Undefined</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">deformation_file</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">deformation_file</span> <span class="o">=</span> <span class="n">Undefined</span>
+                
+        <span class="k">elif</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image_to_align</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tpm</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">==</span> <span class="s1">&#39;estwrite&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">image_to_align</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_to_align</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">tpm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tpm</span>
+            <span class="n">_flag</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">deformation_file</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">deformation_file</span> <span class="o">=</span> <span class="n">Undefined</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span> <span class="o">!=</span> <span class="p">[</span><span class="n">Undefined</span><span class="p">])</span> <span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">apply_to_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span>
 
         <span class="k">if</span> <span class="n">_flag</span><span class="p">:</span>
-            
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">out_prefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span>
-
             <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">_list_outputs</span><span class="p">()</span>
-            
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
+
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        #Tags inheritance (optional)</span>
+<span class="sd">        if self.outputs:</span>
+<span class="sd">        </span>
+<span class="sd">            for key, values in self.outputs.items():</span>
+<span class="sd">            </span>
+<span class="sd">                if key == &quot;normalized_files&quot;:</span>
+
+<span class="sd">                    if self.jobtype == &#39;est&#39;:</span>
+<span class="sd">                        self.outputs[&#39;normalized_files&#39;] = Undefined</span>
+
+<span class="sd">                    else:</span>
+
+<span class="sd">                        for fullname in values:</span>
+<span class="sd">                            path, filename = os.path.split(fullname)</span>
+<span class="sd">                    </span>
+<span class="sd">                            if self.out_prefix:</span>
+<span class="sd">                                filename_without_prefix = filename[</span>
+<span class="sd">                                                              len(self.out_prefix):]</span>
+<span class="sd">                        </span>
+<span class="sd">                            else:</span>
+<span class="sd">                                filename_without_prefix = filename[len(&#39;w&#39;):]</span>
+
+<span class="sd">                            if (os.path.join(path,</span>
+<span class="sd">                                             filename_without_prefix)</span>
+<span class="sd">                                in self.apply_to_files):</span>
+<span class="sd">                                self.inheritance_dict[fullname] = os.path.join(path,</span>
+<span class="sd">                                                        filename_without_prefix)</span>
+
+<span class="sd">                if key == &quot;deformation_field&quot;:</span>
+
+<span class="sd">                    if self.jobtype == &#39;write&#39;:</span>
+<span class="sd">                        self.outputs[&#39;deformation_field&#39;] = Undefined</span>
+
+<span class="sd">                    else:</span>
+<span class="sd">                        path, filename = os.path.split(values)</span>
+<span class="sd">                        filename_without_prefix = filename[len(&#39;y_&#39;):]</span>
+
+<span class="sd">                        if (os.path.join(path,</span>
+<span class="sd">                                             filename_without_prefix)</span>
+<span class="sd">                                in self.image_to_align):</span>
+<span class="sd">                                self.inheritance_dict[values] = os.path.join(path,</span>
+<span class="sd">                                                        filename_without_prefix)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         
-            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-
-                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;prout key: &#39;</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;prout values: &#39;</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
-            
-                <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;normalized_files&quot;</span><span class="p">:</span>
-
-                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">==</span> <span class="s1">&#39;est&#39;</span><span class="p">:</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;normalized_files&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Undefined</span>
-
-                    <span class="k">else</span><span class="p">:</span>
-
-                        <span class="k">for</span> <span class="n">fullname</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
-                            <span class="n">path</span><span class="p">,</span> <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">fullname</span><span class="p">)</span>
-                    
-                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span><span class="p">:</span>
-                                <span class="n">filename_without_prefix</span> <span class="o">=</span> <span class="n">filename</span><span class="p">[</span>
-                                                              <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span><span class="p">):]</span>
-                        
-                            <span class="k">else</span><span class="p">:</span>
-                                <span class="n">filename_without_prefix</span> <span class="o">=</span> <span class="n">filename</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">):]</span>
-
-                            <span class="k">if</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
-                                             <span class="n">filename_without_prefix</span><span class="p">)</span>
-                                <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span><span class="p">):</span>
-                                <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="n">fullname</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
-                                                        <span class="n">filename_without_prefix</span><span class="p">)</span>
-
-                <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;deformation_field&quot;</span><span class="p">:</span>
-
-                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">==</span> <span class="s1">&#39;write&#39;</span><span class="p">:</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;deformation_field&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Undefined</span>
-
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="n">path</span><span class="p">,</span> <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
-                        <span class="n">filename_without_prefix</span> <span class="o">=</span> <span class="n">filename</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="s1">&#39;y_&#39;</span><span class="p">):]</span>
-
-                        <span class="k">if</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
-                                             <span class="n">filename_without_prefix</span><span class="p">)</span>
-                                <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_to_align</span><span class="p">):</span>
-                                <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="n">values</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
-                                                        <span class="n">filename_without_prefix</span><span class="p">)</span>
-
-
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
-
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">prout self.make_initResult(): &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">())</span>
-        
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Normalize12.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.preprocess.spm.html#mia_processes.preprocess.spm.spatial_preprocessing.Normalize12.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Normalize12</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">apply_to_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">deformation_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">deformation_file</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">write_bounding_box</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_bounding_box</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">write_voxel_sizes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_voxel_sizes</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">write_interp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_interp</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">==</span> <span class="s1">&#39;write&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">write_bounding_box</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_bounding_box</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">write_voxel_sizes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_voxel_sizes</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">write_interp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_interp</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">==</span> <span class="s1">&#39;est&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">bias_regularization</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias_regularization</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">bias_fwhm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias_fwhm</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">tpm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tpm</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">affine_regularization_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">affine_regularization_type</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">warping_regularization</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">warping_regularization</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">smoothness</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">smoothness</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">sampling_distance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sampling_distance</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">==</span> <span class="s1">&#39;estwrite&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">bias_regularization</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias_regularization</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">bias_fwhm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias_fwhm</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">tpm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tpm</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">affine_regularization_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">affine_regularization_type</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">warping_regularization</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">warping_regularization</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">smoothness</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">smoothness</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">sampling_distance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sampling_distance</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">write_bounding_box</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_bounding_box</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">write_voxel_sizes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_voxel_sizes</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">write_interp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_interp</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">()</span></div></div>
 
 
@@ -1486,7 +1530,7 @@
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, populse.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
     </div>
   </body>
 </html>

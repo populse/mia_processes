@@ -39,7 +39,7 @@ from nipype.interfaces.spm.base import ImageFileSPM
 # Other import
 import os
 from traits.api import Undefined, Float
-
+from pathlib import Path
 
 class Coregister(Process_Mia):
     """
@@ -409,6 +409,10 @@ class NewSegment(Process_Mia):
         config = Config()
         resources_path = os.path.join(config.get_mia_path(), 'resources')
         tpm_path = os.path.join(resources_path, 'spm12', 'tpm', 'TPM.nii')
+        
+        if not Path(tpm_path).exists():
+            print('\n The {} file seems to not exists ...'.format(tpm_path))
+
         tissues_list = [((tpm_path, 1), 2, (True, False), (False, False)),
                         ((tpm_path, 2), 2, (True, False), (False, False)),
                         ((tpm_path, 3), 2, (True, False), (False, False)),
@@ -558,14 +562,13 @@ class NewSegment(Process_Mia):
             if self.channel_info:
                 self.process.inputs.channel_info = self.channel_info
 
-            if self.tissues:
-                self.process.inputs.tissues = self.tissues
-
             if self.write_deformation_fields:
                 (self.process.inputs.
                        write_deformation_fields) = self.write_deformation_fields
 
-            self.outputs = self.process._list_outputs()
+            if self.tissues:
+                    self.process.inputs.tissues = self.tissues
+                    self.outputs = self.process._list_outputs()
 
         """
          When there is only one image at the input, the tags inheritance is
@@ -662,9 +665,9 @@ class Normalize12(Process_Mia):
         bias_regularization_desc =('(For low-intensity non-uniformity artifacts'
                                    ', use a high bias regularization (a float '
                                    ' between 0 and 10).')
-        bias_fwhm_desc = ('Full Width at Half Maximum of Gaussian smoothness of '
-                          'bias (a value in [30, 40, 50, 60, 70, 80, 90, 100, '
-                          '110, 120, 130, 140, 150, ‘Inf’).')
+        bias_fwhm_desc = ('Full Width at Half Maximum of Gaussian smoothness '
+                          'of bias (a value in [30, 40, 50, 60, 70, 80, 90, '
+                          '100, 110, 120, 130, 140, 150, ‘Inf’).')
         tpm_desc = ('The template in form of tissue probability atlas (a '
                     'pathlike object or string representing an existing file). '
                     'Mutually exclusive with the deformation_file parameter.')
@@ -690,19 +693,28 @@ class Normalize12(Process_Mia):
         write_interp_desc = ('Degree of b-spline used for interpolation '
                              '(0 <= a long integer <= 7; 1 is OK for PET, '
                              'realigned fMRI, or segmentations).')
-        out_prefix_desc = 'normalised output prefix (a string).'
         
         # Outputs description
         deformation_field_desc  = ('File y_*.nii containing 3 deformation '
                                    'fields for the deformation in x, y and z '
                                    'dimension.')
         normalized_image_desc = ('Normalised file that needed to be aligned (a '
-                                'list of items which are an existing file name).')
-        normalized_files_desc = ('Normalised other files (a list of items which are '
-                                 'an existing file name).')
+                                'list of items which are an existing file '
+                                 'name).')
+        normalized_files_desc = ('Normalised other files (a list of items '
+                                 'which are an existing file name).')
+
+
+        # Tpm parameter definition
+        config = Config()
+        resources_path = os.path.join(config.get_mia_path(), 'resources')
+        tpm_path = os.path.join(resources_path, 'spm12', 'tpm', 'TPM.nii')
+        
+        if not Path(tpm_path).exists():
+            print('\n The {} file seems to not exists ...'.format(tpm_path))
+            tpm_path = Undefined
 
         # Inputs traits
-
         self.add_trait("image_to_align",
                        ImageFileSPM(output=False,
                                     optional=True,
@@ -763,7 +775,9 @@ class Normalize12(Process_Mia):
                                    desc=bias_fwhm_desc))
 
         self.add_trait("tpm",
-                       File(output=False,
+                       File(exists=True,
+                            value=tpm_path,
+                            output=False,
                             optional=True,
                             desc=tpm_desc))
 
@@ -818,14 +832,7 @@ class Normalize12(Process_Mia):
                                     optional=True,
                                     desc=write_interp_desc))
 
-        self.add_trait("out_prefix",
-                       traits.String('w',
-                                     output=False,
-                                     optional=True,
-                                     desc=out_prefix_desc))
-
         # Outputs traits
-
         self.add_trait("deformation_field",
                        OutputMultiPath(File(),
                                        output=True,
@@ -859,27 +866,48 @@ class Normalize12(Process_Mia):
         # Using the inheritance to ProcessMIA class, list_outputs method
         super(Normalize12, self).list_outputs()
 
-        # Outputs definition and tags inheritance (optional)
+        # Outputs definition
         _flag = False
+        self.process.inputs.jobtype = self.jobtype
         
-        if (self.apply_to_files) and (self.deformation_file) and (self.jobtype == 'write'):
+        if (self.apply_to_files) and (self.apply_to_files != [Undefined]) and (self.deformation_file) and (self.jobtype == 'write'):
             self.process.inputs.apply_to_files = self.apply_to_files
             self.process.inputs.deformation_file = self.deformation_file
-            self.process.inputs.jobtype = self.jobtype
             _flag = True
-            
-        elif (self.image_to_align) and (self.jobtype == 'est'):
+
+            if self.image_to_align:
+                self.image_to_align = Undefined
+
+            if self.tpm:
+                self.tpm = Undefined
+                
+        elif (self.image_to_align) and (self.tpm) and (self.jobtype == 'est'):
             self.process.inputs.image_to_align = self.image_to_align
-            self.process.inputs.jobtype = self.jobtype
+            self.process.inputs.tpm = self.tpm
             _flag = True
+
+            if self.apply_to_files and (self.apply_to_files != [Undefined]):
+                self.apply_to_files = Undefined
+
+            if self.deformation_file:
+                self.deformation_file = Undefined
+                
+        elif (self.image_to_align) and (self.tpm) and (self.jobtype == 'estwrite'):
+            self.process.inputs.image_to_align = self.image_to_align
+            self.process.inputs.tpm = self.tpm
+            _flag = True
+
+            if self.deformation_file:
+                self.deformation_file = Undefined
+
+            if (self.apply_to_files) and (self.apply_to_files != [Undefined]) :
+                self.process.inputs.apply_to_files = self.apply_to_files
 
         if _flag:
-            
-            if self.out_prefix:
-                self.process.inputs.out_prefix = self.out_prefix
-
             self.outputs = self.process._list_outputs()
-            
+
+        """
+        #Tags inheritance (optional)
         if self.outputs:
         
             for key, values in self.outputs.items():
@@ -921,19 +949,41 @@ class Normalize12(Process_Mia):
                                 in self.image_to_align):
                                 self.inheritance_dict[values] = os.path.join(path,
                                                         filename_without_prefix)
-
+        """
+        
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
         super(Normalize12, self).run_process_mia()
-        self.process.inputs.apply_to_files = self.apply_to_files
-        self.process.inputs.deformation_file = self.deformation_file
-        self.process.inputs.jobtype = self.jobtype
-        self.process.inputs.write_bounding_box = self.write_bounding_box
-        self.process.inputs.write_voxel_sizes = self.write_voxel_sizes
-        self.process.inputs.write_interp = self.write_interp
+
+        if self.jobtype == 'write':
+            self.process.inputs.write_bounding_box = self.write_bounding_box
+            self.process.inputs.write_voxel_sizes = self.write_voxel_sizes
+            self.process.inputs.write_interp = self.write_interp
+
+        if self.jobtype == 'est':
+            self.process.inputs.bias_regularization = self.bias_regularization
+            self.process.inputs.bias_fwhm = self.bias_fwhm
+            self.process.inputs.tpm = self.tpm
+            self.process.inputs.affine_regularization_type = self.affine_regularization_type
+            self.process.inputs.warping_regularization = self.warping_regularization
+            self.process.inputs.smoothness = self.smoothness
+            self.process.inputs.sampling_distance = self.sampling_distance
+
+        if self.jobtype == 'estwrite':
+            self.process.inputs.bias_regularization = self.bias_regularization
+            self.process.inputs.bias_fwhm = self.bias_fwhm
+            self.process.inputs.tpm = self.tpm
+            self.process.inputs.affine_regularization_type = self.affine_regularization_type
+            self.process.inputs.warping_regularization = self.warping_regularization
+            self.process.inputs.smoothness = self.smoothness
+            self.process.inputs.sampling_distance = self.sampling_distance
+            self.process.inputs.write_bounding_box = self.write_bounding_box
+            self.process.inputs.write_voxel_sizes = self.write_voxel_sizes
+            self.process.inputs.write_interp = self.write_interp
+
         self.process.run()
 
 
