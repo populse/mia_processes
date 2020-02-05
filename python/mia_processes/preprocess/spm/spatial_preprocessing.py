@@ -870,7 +870,8 @@ class Normalize12(Process_Mia):
         _flag = False
         self.process.inputs.jobtype = self.jobtype
         
-        if (self.apply_to_files) and (self.apply_to_files != [Undefined]) and (self.deformation_file) and (self.jobtype == 'write'):
+        if ((self.apply_to_files) and (self.apply_to_files != [Undefined]) and
+                         (self.deformation_file) and (self.jobtype == 'write')):
             self.process.inputs.apply_to_files = self.apply_to_files
             self.process.inputs.deformation_file = self.deformation_file
             _flag = True
@@ -892,7 +893,8 @@ class Normalize12(Process_Mia):
             if self.deformation_file:
                 self.deformation_file = Undefined
                 
-        elif (self.image_to_align) and (self.tpm) and (self.jobtype == 'estwrite'):
+        elif ((self.image_to_align) and (self.tpm) and
+                                                (self.jobtype == 'estwrite')):
             self.process.inputs.image_to_align = self.image_to_align
             self.process.inputs.tpm = self.tpm
             _flag = True
@@ -900,57 +902,49 @@ class Normalize12(Process_Mia):
             if self.deformation_file:
                 self.deformation_file = Undefined
 
-            if (self.apply_to_files) and (self.apply_to_files != [Undefined]) :
+            if (self.apply_to_files) and (self.apply_to_files != [Undefined]):
                 self.process.inputs.apply_to_files = self.apply_to_files
 
         if _flag:
             self.outputs = self.process._list_outputs()
 
-        """
         #Tags inheritance (optional)
         if self.outputs:
-        
+
             for key, values in self.outputs.items():
-            
+
                 if key == "normalized_files":
 
-                    if self.jobtype == 'est':
-                        self.outputs['normalized_files'] = Undefined
+                    for fullname in values:
+                        path, filename = os.path.split(fullname)
+                        filename_without_prefix = filename[len('w'):]
 
-                    else:
-
-                        for fullname in values:
-                            path, filename = os.path.split(fullname)
-                    
-                            if self.out_prefix:
-                                filename_without_prefix = filename[
-                                                              len(self.out_prefix):]
-                        
-                            else:
-                                filename_without_prefix = filename[len('w'):]
-
-                            if (os.path.join(path,
-                                             filename_without_prefix)
-                                in self.apply_to_files):
-                                self.inheritance_dict[fullname] = os.path.join(path,
+                        if (os.path.join(path,
+                                         filename_without_prefix)
+                                                        in self.apply_to_files):
+                            self.inheritance_dict[fullname] = os.path.join(path,
                                                         filename_without_prefix)
 
                 if key == "deformation_field":
+                    path, filename = os.path.split(values)
+                    filename_without_prefix = filename[len('y_'):]
 
-                    if self.jobtype == 'write':
-                        self.outputs['deformation_field'] = Undefined
-
-                    else:
-                        path, filename = os.path.split(values)
-                        filename_without_prefix = filename[len('y_'):]
-
-                        if (os.path.join(path,
-                                             filename_without_prefix)
-                                in self.image_to_align):
-                                self.inheritance_dict[values] = os.path.join(path,
+                    if (os.path.join(path,
+                                     filename_without_prefix)
+                                                        in self.image_to_align):
+                        self.inheritance_dict[values] = os.path.join(path,
                                                         filename_without_prefix)
-        """
-        
+
+                if key == "normalized_image":
+                    path, filename = os.path.split(values)
+                    filename_without_prefix = filename[len('w'):]
+                    
+                    if (os.path.join(path,
+                                     filename_without_prefix)
+                                                        in self.image_to_align):
+                        self.inheritance_dict[values] = os.path.join(path,
+                                                        filename_without_prefix)
+
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
 
@@ -967,8 +961,10 @@ class Normalize12(Process_Mia):
             self.process.inputs.bias_regularization = self.bias_regularization
             self.process.inputs.bias_fwhm = self.bias_fwhm
             self.process.inputs.tpm = self.tpm
-            self.process.inputs.affine_regularization_type = self.affine_regularization_type
-            self.process.inputs.warping_regularization = self.warping_regularization
+            (self.process.inputs.
+                   affine_regularization_type) = self.affine_regularization_type
+            (self.process.inputs.
+                           warping_regularization) = self.warping_regularization
             self.process.inputs.smoothness = self.smoothness
             self.process.inputs.sampling_distance = self.sampling_distance
 
@@ -976,8 +972,10 @@ class Normalize12(Process_Mia):
             self.process.inputs.bias_regularization = self.bias_regularization
             self.process.inputs.bias_fwhm = self.bias_fwhm
             self.process.inputs.tpm = self.tpm
-            self.process.inputs.affine_regularization_type = self.affine_regularization_type
-            self.process.inputs.warping_regularization = self.warping_regularization
+            (self.process.inputs.
+                   affine_regularization_type) = self.affine_regularization_type
+            (self.process.inputs.
+                           warping_regularization) = self.warping_regularization
             self.process.inputs.smoothness = self.smoothness
             self.process.inputs.sampling_distance = self.sampling_distance
             self.process.inputs.write_bounding_box = self.write_bounding_box
