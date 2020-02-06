@@ -10,7 +10,7 @@ Mia_processes's documentation
 =============================
 
 - **preprocess**
-  
+
   - **spm**
 
     - `Coregister <preprocess/spm/Coregister.html>`_
@@ -19,4 +19,6 @@ Mia_processes's documentation
     - `Realign <preprocess/spm/Realign.html>`_
     - `Smooth <preprocess/spm/Smooth.html>`_
 
+- **studies**
 
+  - `Spatial_preprocessing_1 <studies/Spatial_preprocessing_1.html>`_

@@ -243,6 +243,7 @@ Segments,  bias  corrects  and  spatially normalises - all in the same model
 
 - *forward_deformation_field*
     Forward deformation field. Could be used for spatially normalising images to MNI space (a list of items which are a pathlike object or
+    string representing an existing file).
 
     ::
 
