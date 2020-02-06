@@ -913,7 +913,7 @@ class Normalize12(Process_Mia):
 
             for key, values in self.outputs.items():
 
-                if key == "normalized_files":
+                if (key == "normalized_files") and (values != Undefined):
 
                     for fullname in values:
                         path, filename = os.path.split(fullname)
@@ -925,7 +925,8 @@ class Normalize12(Process_Mia):
                             self.inheritance_dict[fullname] = os.path.join(path,
                                                         filename_without_prefix)
 
-                if key == "deformation_field":
+                if (key == "deformation_field") and (values != Undefined):
+
                     path, filename = os.path.split(values)
                     filename_without_prefix = filename[len('y_'):]
 
@@ -935,7 +936,8 @@ class Normalize12(Process_Mia):
                         self.inheritance_dict[values] = os.path.join(path,
                                                         filename_without_prefix)
 
-                if key == "normalized_image":
+                if (key == "normalized_image") and (values != Undefined):
+
                     path, filename = os.path.split(values)
                     filename_without_prefix = filename[len('w'):]
                     
