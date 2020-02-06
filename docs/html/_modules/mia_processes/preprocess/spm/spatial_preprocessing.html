@@ -904,7 +904,8 @@
         <span class="n">_flag</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span>
         
-        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span> <span class="o">!=</span> <span class="p">[</span><span class="n">Undefined</span><span class="p">])</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">deformation_file</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">==</span> <span class="s1">&#39;write&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span> <span class="o">!=</span> <span class="p">[</span><span class="n">Undefined</span><span class="p">])</span> <span class="ow">and</span>
+                         <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">deformation_file</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">==</span> <span class="s1">&#39;write&#39;</span><span class="p">)):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">apply_to_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">deformation_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">deformation_file</span>
             <span class="n">_flag</span> <span class="o">=</span> <span class="kc">True</span>
@@ -926,7 +927,8 @@
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">deformation_file</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">deformation_file</span> <span class="o">=</span> <span class="n">Undefined</span>
                 
-        <span class="k">elif</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image_to_align</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tpm</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">==</span> <span class="s1">&#39;estwrite&#39;</span><span class="p">):</span>
+        <span class="k">elif</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">image_to_align</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tpm</span><span class="p">)</span> <span class="ow">and</span>
+                                                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">==</span> <span class="s1">&#39;estwrite&#39;</span><span class="p">)):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">image_to_align</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_to_align</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">tpm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tpm</span>
             <span class="n">_flag</span> <span class="o">=</span> <span class="kc">True</span>
@@ -934,57 +936,51 @@
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">deformation_file</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">deformation_file</span> <span class="o">=</span> <span class="n">Undefined</span>
 
-            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span> <span class="o">!=</span> <span class="p">[</span><span class="n">Undefined</span><span class="p">])</span> <span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span> <span class="o">!=</span> <span class="p">[</span><span class="n">Undefined</span><span class="p">]):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">apply_to_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span>
 
         <span class="k">if</span> <span class="n">_flag</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">_list_outputs</span><span class="p">()</span>
 
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        #Tags inheritance (optional)</span>
-<span class="sd">        if self.outputs:</span>
-<span class="sd">        </span>
-<span class="sd">            for key, values in self.outputs.items():</span>
-<span class="sd">            </span>
-<span class="sd">                if key == &quot;normalized_files&quot;:</span>
+        <span class="c1">#Tags inheritance (optional)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
 
-<span class="sd">                    if self.jobtype == &#39;est&#39;:</span>
-<span class="sd">                        self.outputs[&#39;normalized_files&#39;] = Undefined</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
 
-<span class="sd">                    else:</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;normalized_files&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">values</span> <span class="o">!=</span> <span class="n">Undefined</span><span class="p">):</span>
 
-<span class="sd">                        for fullname in values:</span>
-<span class="sd">                            path, filename = os.path.split(fullname)</span>
-<span class="sd">                    </span>
-<span class="sd">                            if self.out_prefix:</span>
-<span class="sd">                                filename_without_prefix = filename[</span>
-<span class="sd">                                                              len(self.out_prefix):]</span>
-<span class="sd">                        </span>
-<span class="sd">                            else:</span>
-<span class="sd">                                filename_without_prefix = filename[len(&#39;w&#39;):]</span>
+                    <span class="k">for</span> <span class="n">fullname</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
+                        <span class="n">path</span><span class="p">,</span> <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">fullname</span><span class="p">)</span>
+                        <span class="n">filename_without_prefix</span> <span class="o">=</span> <span class="n">filename</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">):]</span>
 
-<span class="sd">                            if (os.path.join(path,</span>
-<span class="sd">                                             filename_without_prefix)</span>
-<span class="sd">                                in self.apply_to_files):</span>
-<span class="sd">                                self.inheritance_dict[fullname] = os.path.join(path,</span>
-<span class="sd">                                                        filename_without_prefix)</span>
+                        <span class="k">if</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
+                                         <span class="n">filename_without_prefix</span><span class="p">)</span>
+                                                        <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span><span class="p">):</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="n">fullname</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
+                                                        <span class="n">filename_without_prefix</span><span class="p">)</span>
 
-<span class="sd">                if key == &quot;deformation_field&quot;:</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;deformation_field&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">values</span> <span class="o">!=</span> <span class="n">Undefined</span><span class="p">):</span>
 
-<span class="sd">                    if self.jobtype == &#39;write&#39;:</span>
-<span class="sd">                        self.outputs[&#39;deformation_field&#39;] = Undefined</span>
+                    <span class="n">path</span><span class="p">,</span> <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+                    <span class="n">filename_without_prefix</span> <span class="o">=</span> <span class="n">filename</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="s1">&#39;y_&#39;</span><span class="p">):]</span>
 
-<span class="sd">                    else:</span>
-<span class="sd">                        path, filename = os.path.split(values)</span>
-<span class="sd">                        filename_without_prefix = filename[len(&#39;y_&#39;):]</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
+                                     <span class="n">filename_without_prefix</span><span class="p">)</span>
+                                                        <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_to_align</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="n">values</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
+                                                        <span class="n">filename_without_prefix</span><span class="p">)</span>
 
-<span class="sd">                        if (os.path.join(path,</span>
-<span class="sd">                                             filename_without_prefix)</span>
-<span class="sd">                                in self.image_to_align):</span>
-<span class="sd">                                self.inheritance_dict[values] = os.path.join(path,</span>
-<span class="sd">                                                        filename_without_prefix)</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        
+                <span class="k">if</span> <span class="p">(</span><span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;normalized_image&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">values</span> <span class="o">!=</span> <span class="n">Undefined</span><span class="p">):</span>
+
+                    <span class="n">path</span><span class="p">,</span> <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+                    <span class="n">filename_without_prefix</span> <span class="o">=</span> <span class="n">filename</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">):]</span>
+                    
+                    <span class="k">if</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
+                                     <span class="n">filename_without_prefix</span><span class="p">)</span>
+                                                        <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_to_align</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="n">values</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
+                                                        <span class="n">filename_without_prefix</span><span class="p">)</span>
+
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
@@ -1001,8 +997,10 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">bias_regularization</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias_regularization</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">bias_fwhm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias_fwhm</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">tpm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tpm</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">affine_regularization_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">affine_regularization_type</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">warping_regularization</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">warping_regularization</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span>
+                   <span class="n">affine_regularization_type</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">affine_regularization_type</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span>
+                           <span class="n">warping_regularization</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">warping_regularization</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">smoothness</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">smoothness</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">sampling_distance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sampling_distance</span>
 
@@ -1010,8 +1008,10 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">bias_regularization</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias_regularization</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">bias_fwhm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias_fwhm</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">tpm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tpm</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">affine_regularization_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">affine_regularization_type</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">warping_regularization</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">warping_regularization</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span>
+                   <span class="n">affine_regularization_type</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">affine_regularization_type</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span>
+                           <span class="n">warping_regularization</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">warping_regularization</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">smoothness</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">smoothness</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">sampling_distance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sampling_distance</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">inputs</span><span class="o">.</span><span class="n">write_bounding_box</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_bounding_box</span>
