@@ -25,35 +25,9 @@ from capsul.api import Pipeline
 
 class Spatial_preprocessing_1(Pipeline):
     """
- - Spatial_preprocessing_1 (mia_processes.studies.spatial_preprocessing_1.Spatial_preprocessing_1)
-*** Data preprocessing for cerebrovascular reserve analyse ***
-    Main pipeline modules:
-        # Anatomic Images: NewSegment -> Normalize12 
-        # Functional Images: Realign -> Coregister (to Anat Images) -> Normalize12 -> Smooth
-    Inputs:
-        # Anatomic Images (ex. 3D T1 sequence sush as T1 turbo field echo): <anat_file>
-            <ex. /home/ArthurBlair/data/raw_data/Anat.nii>
-        # Functional Images under hypercapnic challenge (ex. 3D T2* sequence sush as echo planar imaging): <func_files>
-            <ex. ['/home/ArthurBlair/data/raw_data/Func.nii']
-        # The voxel sizes (x, y & z, in mm) of the written normalised Functional Images: <voxel_sizes_func>
-            <ex. [2, 2, 2]> Depends of the study; this example is valid for cevastoc, cevastoc32, etc.
-    Outputs:
-        # Deformation field from the NewSegment module and the Anatomic Images: <forward_deformation_field>
-            <ex. /home/ArthurBlair/data/raw_data/y_Anat.nii>
-        # Native space probaility maps from Anatomic Images (Grey matter, White matter, etc.): <native_class_images>
-            <ex. [['/home/ArthurBlair/data/raw_data/c1Anat.nii'],
-                 ['/home/ArthurBlair/data/raw_data/c2Anat.nii'],
-                 ['/home/ArthurBlair/data/raw_data/c3Anat.nii'],
-                 ['/home/ArthurBlair/data/raw_data/c4Anat.nii'],
-                 ['/home/ArthurBlair/data/raw_data/c5Anat.nii']]>
-        # Estimated translation and rotation parameters from Functional Images: <realignment_parameters>
-            <ex. /home/ArthurBlair/data/raw_data/rp_Func.txt>
-        # Anatomic Images normalised to the MNI space: <normalized_anat>
-            <ex. /home/ArthurBlair/data/raw_data/wAnat.nii>
-        # Functional Images, realigned, coregistered to Anat Images, Normalised to the MNI Space and smoothed: <smoothed_func>
-            <ex. /home/ArthurBlair/data/raw_data/swrFunc.nii>
-        # Mean Functional Images coregistered to the anat Images: <coregistered_source>
-            <ex. /home/ArthurBlair/data/raw_data/meanFunc.nii>
+    *Data pre-processing for cerebrovascular reserve analysis (CVRa) at CLUNI - IRMaGe (Grenoble - France)*
+    Please, see the complete documention for the `Spatial_preprocessing_1 brick in the populse.mia_processes web site:
+    <https://populse.github.io/mia_processes/html/documentation/studies/Spatial_preprocessing_1.html>`_
     """
 
     def pipeline_definition(self):
