@@ -22,3 +22,7 @@ Mia_processes's documentation
 - **studies**
 
   - `Spatial_preprocessing_1 <studies/Spatial_preprocessing_1.html>`_
+
+- **tools**
+
+  - `List_Duplicate <tools/List_Duplicate.html>`_
