@@ -1,11 +1,9 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>mia_processes.tools.tools &#8212; mia_processes 1.4.0 documentation</title>
     <link rel="stylesheet" href="../../../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -13,7 +11,7 @@
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head><body>
@@ -28,22 +26,23 @@
         </p>
 
       </div>
-      <div class="content">
+      <div class="content" role="main">
         
         
   <h1>Source code for mia_processes.tools.tools</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*- #</span>
 
-<span class="sd">&quot;&quot;&quot;The tools library of the mia_processes package.</span>
+<span class="sd">&quot;&quot;&quot;The toolbox library of the mia_processes package.</span>
 
 <span class="sd">Basically, this module is dedicated to the low-level processes</span>
 <span class="sd">needed to run other higher-level bricks.</span>
 
 <span class="sd">:Contains:</span>
 <span class="sd">    :Class:</span>
+<span class="sd">        - Auto_Filter_List</span>
 <span class="sd">        - Files_To_List</span>
 <span class="sd">        - Input_Filter</span>
-<span class="sd">        - List_Duplicate</span>
+<span class="sd">        - List_Duplicate  ######## OK</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 
@@ -414,27 +413,14 @@
 
 
 <div class="viewcode-block" id="List_Duplicate"><a class="viewcode-back" href="../../../mia_processes.tools.html#mia_processes.tools.tools.List_Duplicate">[docs]</a><span class="k">class</span> <span class="nc">List_Duplicate</span><span class="p">(</span><span class="n">Process_Mia</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;List_Duplicate (from mia_processes.tools.tools)</span>
-<span class="sd">*** From a file name, generating a list containing this file name and the</span>
-<span class="sd">    file name itself ***</span>
-<span class="sd">    &#39;/home/ArthurBlair/Anat.nii&#39;</span>
-<span class="sd">       -&gt; List_Duplicate -&gt;</span>
-<span class="sd">    [&#39;/home/ArthurBlair/Anat.nii&#39;] + &#39;/home/ArthurBlair/Anat.nii&#39;</span>
-<span class="sd">    * Input parameters:</span>
-<span class="sd">        * file_name: a string corresponding to an existing</span>
-<span class="sd">                     path file (traits.File)</span>
-<span class="sd">            &lt;ex. /home/ArthurBlair/data/Func.nii&gt;</span>
-<span class="sd">    * Output parameters:</span>
-<span class="sd">        * out_file: a string corresponding to an existing</span>
-<span class="sd">                    path file (traits.File)</span>
-<span class="sd">            &lt;ex. /home/ArthurBlair/data/Func.nii&gt;</span>
-<span class="sd">        * out_list: a list with one string element corresponding to an</span>
-<span class="sd">                    existing path file (traits.List)</span>
-<span class="sd">            &lt;ex. [&#39;/home/ArthurBlair/data/Func.nii&#39;]&gt;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    *From a file name, generating a list containing this file name and the file name itself*</span>
+
+<span class="sd">    Please, see the complete documention for the `List_Duplicate in the populse.mia_processes web site</span>
+<span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/tools/List_Duplicate.html&gt;`_</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    
 <div class="viewcode-block" id="List_Duplicate.__init__"><a class="viewcode-back" href="../../../mia_processes.tools.html#mia_processes.tools.tools.List_Duplicate.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instanciation.</span>
 
@@ -507,7 +493,7 @@
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, populse.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.
     </div>
   </body>
 </html>

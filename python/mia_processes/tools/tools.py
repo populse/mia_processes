@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*- #
 
-"""The tools library of the mia_processes package.
+"""The toolbox library of the mia_processes package.
 
 Basically, this module is dedicated to the low-level processes
 needed to run other higher-level bricks.
 
 :Contains:
     :Class:
+        - Auto_Filter_List
         - Files_To_List
         - Input_Filter
-        - List_Duplicate
+        - List_Duplicate  ######## OK
 
 """
 
@@ -380,27 +381,14 @@ class Input_Filter(Process_Mia):
 
 
 class List_Duplicate(Process_Mia):
-    """List_Duplicate (from mia_processes.tools.tools)
-*** From a file name, generating a list containing this file name and the
-    file name itself ***
-    '/home/ArthurBlair/Anat.nii'
-       -> List_Duplicate ->
-    ['/home/ArthurBlair/Anat.nii'] + '/home/ArthurBlair/Anat.nii'
-    * Input parameters:
-        * file_name: a string corresponding to an existing
-                     path file (traits.File)
-            <ex. /home/ArthurBlair/data/Func.nii>
-    * Output parameters:
-        * out_file: a string corresponding to an existing
-                    path file (traits.File)
-            <ex. /home/ArthurBlair/data/Func.nii>
-        * out_list: a list with one string element corresponding to an
-                    existing path file (traits.List)
-            <ex. ['/home/ArthurBlair/data/Func.nii']>
+    """
+    *From a file name, generating a list containing this file name and the file name itself*
+
+    Please, see the complete documention for the `List_Duplicate in the populse.mia_processes web site
+    <https://populse.github.io/mia_processes/html/documentation/tools/List_Duplicate.html>`_
 
     """
 
-    
     def __init__(self):
         """Dedicated to the attributes initialisation / instanciation.
 
