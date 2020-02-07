@@ -429,7 +429,9 @@ class List_Duplicate(Process_Mia):
 
         The main objective of this method is to produce the outputs of the
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
-        if defined here. To work properly this method must return 
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return 
         self.make_initResult() object.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -439,12 +441,14 @@ class List_Duplicate(Process_Mia):
         if self.file_name:
             self.outputs["out_list"] = [self.file_name]
             self.outputs["out_file"] =  self.file_name
+            self.outputs["notInDb"] = ["out_list", "out_file"]
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
+
         if self.file_name:
             self.out_list = [self.file_name]
             self.out_file = self.file_name
