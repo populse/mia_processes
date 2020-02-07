@@ -1,11 +1,9 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>NewSegment brick &#8212; mia_processes 1.4.0 documentation</title>
     <link rel="stylesheet" href="../../../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -13,7 +11,7 @@
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head><body>
@@ -28,21 +26,21 @@
         </p>
 
       </div>
-      <div class="content">
+      <div class="content" role="main">
         
         
   <div class="toctree-wrapper compound">
 </div>
-<table border="1" class="docutils">
+<table class="docutils align-default">
 <colgroup>
-<col width="23%" />
-<col width="35%" />
-<col width="42%" />
+<col style="width: 23%" />
+<col style="width: 35%" />
+<col style="width: 42%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference external" href="../../../index.html">Home</a></td>
-<td><a class="reference external" href="../../documentation.html">Documentation</a></td>
-<td><a class="reference external" href="https://github.com/populse/mia_processes">GitHub</a></td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference external" href="../../../index.html">Home</a></p></td>
+<td><p><a class="reference external" href="../../documentation.html">Documentation</a></p></td>
+<td><p><a class="reference external" href="https://github.com/populse/mia_processes">GitHub</a></p></td>
 </tr>
 </tbody>
 </table>
@@ -56,26 +54,23 @@
 </div>
 <p><strong>Inputs parameters:</strong></p>
 <ul>
-<li><dl class="first docutils">
-<dt><em>channel_files &lt;=&gt; channel.vols</em> <a class="footnote-reference" href="#label" id="id1">[1]</a></dt>
-<dd><p class="first">Path of the scans for processing (valid extensions, .img, .nii, .hdr).</p>
-<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/Anat.nii&#39;</span><span class="p">]</span>
+<li><dl>
+<dt><em>channel_files &lt;=&gt; channel.vols</em> <a class="footnote-reference brackets" href="#label" id="id1">1</a></dt><dd><p>Path of the scans for processing (valid extensions, .img, .nii, .hdr).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/Anat.nii&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 </dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt><em>channel_info &lt;=&gt; (channel.biasreg, channel.biasfwhm, (channel.write))</em> <a class="footnote-reference" href="#label" id="id2">[1]</a></dt>
-<dd><p class="first">A tuple (consisting of a float, a float and a tuple consisting of a boolean, a boolean) with the following fields:</p>
+<li><dl>
+<dt><em>channel_info &lt;=&gt; (channel.biasreg, channel.biasfwhm, (channel.write))</em> <a class="footnote-reference brackets" href="#label" id="id2">1</a></dt><dd><p>A tuple (consisting of a float, a float and a tuple consisting of a boolean, a boolean) with the following fields:</p>
 <ul>
-<li><dl class="first docutils">
-<dt>bias reguralisation (a float between 0 and 10)</dt>
-<dd><p class="first">The goal is to model, by different tissue classes, the intensity variations that arise due to different tissues, while model, with a
+<li><dl>
+<dt>bias reguralisation (a float between 0 and 10)</dt><dd><p>The goal is to model, by different tissue classes, the intensity variations that arise due to different tissues, while model, with a
 bias field, those that occur because of the bias artifact due to the physics of MRI imaging. If the data have very little intensity
 non-uniformity artifact, then bias control should be increased. This effectively tells the algorithm that there is very little bias in
 the data, so it doesn’t try to model it.</p>
-<blockquote class="last">
+<blockquote>
 <div><div class="line-block">
 <div class="line">- 0 No regularisation</div>
 <div class="line">- 0.00001 extremely light regularisation</div>
@@ -87,18 +82,16 @@ the data, so it doesn’t try to model it.</p>
 </dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>bias FWHM (a float between 20 and infinity)</dt>
-<dd><p class="first last">Full Width at Half Maximum of Gaussian smoothness of bias. Smoother bias fields need fewer parameters to describe them.
+<li><dl class="simple">
+<dt>bias FWHM (a float between 20 and infinity)</dt><dd><p>Full Width at Half Maximum of Gaussian smoothness of bias. Smoother bias fields need fewer parameters to describe them.
 This means that the algorithm is faster for smoother intensity non-uniformities (e.g. 150 mm cutoff gives faster results than 20
 mm cutoff).</p>
 </dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>which maps to save (a tuple of two boolean values; (Field, Corrected))</dt>
-<dd><p class="first">To save the estimated bias field or/and the bias corrected version of the processed image.</p>
-<blockquote class="last">
+<li><dl>
+<dt>which maps to save (a tuple of two boolean values; (Field, Corrected))</dt><dd><p>To save the estimated bias field or/and the bias corrected version of the processed image.</p>
+<blockquote>
 <div><div class="line-block">
 <div class="line">- (False, False) save Nothing</div>
 <div class="line">- (False, True) save bias corrected image only</div>
@@ -110,14 +103,14 @@ mm cutoff).</p>
 </dl>
 </li>
 </ul>
-<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">(</span><span class="mf">0.0001</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">(</span><span class="mf">0.0001</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
 </pre></div>
 </div>
 </dd>
 </dl>
 </li>
-<li><p class="first"><em>tissues &lt;=&gt; [((tissue(i).tpm), tissue(i).ngaus, (tissue(i).native), (tissue(i).warped)), ((tissue(i+1).tpm), tissue(i+1).ngaus,
-(tissue(i+1).native), (tissue(i+1).warped)), …]</em> <a class="footnote-reference" href="#label" id="id3">[1]</a></p>
+<li><p><em>tissues &lt;=&gt; [((tissue(i).tpm), tissue(i).ngaus, (tissue(i).native), (tissue(i).warped)), ((tissue(i+1).tpm), tissue(i+1).ngaus,
+(tissue(i+1).native), (tissue(i+1).warped)), …]</em> <a class="footnote-reference brackets" href="#label" id="id3">1</a></p>
 <blockquote>
 <div><p>A list of tuples (one per tissue, i from 1 to 6) with parameter values for each tissue types. Typically, the order of tissues is grey
 matter (i=1), white matter (i=2), CSF (i=3), bone (i=4), soft tissue (i=5) and air/background (i=6), if using tpm/TPM.nii from
@@ -128,16 +121,14 @@ spm12.</p>
 (which maps to save; Unmodulated, Modulated)</p>
 <blockquote>
 <div><ul>
-<li><dl class="first docutils">
-<dt>tissue probability map &lt;=&gt; tissue(i).tpm with i in (1, 2, 3, 4, 5, 6])</dt>
-<dd><p class="first last">The tissue probability image [.img, .nii, .hdr].</p>
+<li><dl class="simple">
+<dt>tissue probability map &lt;=&gt; tissue(i).tpm with i in (1, 2, 3, 4, 5, 6])</dt><dd><p>The tissue probability image [.img, .nii, .hdr].</p>
 </dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>1-based index to frame</dt>
-<dd><p class="first">Index for the 4th dimension of the tissue probability map and then tissue type selection.</p>
-<blockquote class="last">
+<li><dl>
+<dt>1-based index to frame</dt><dd><p>Index for the 4th dimension of the tissue probability map and then tissue type selection.</p>
+<blockquote>
 <div><div class="line-block">
 <div class="line">- 1 to 6</div>
 </div>
@@ -145,11 +136,10 @@ spm12.</p>
 </dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>number of gaussians &lt;=&gt; tissue(i).ngaus</dt>
-<dd><p class="first">Typical numbers of Gaussians could be 2 for GM, WM, CSF, 3 for bone, 4 for other soft tissues and
+<li><dl>
+<dt>number of gaussians &lt;=&gt; tissue(i).ngaus</dt><dd><p>Typical numbers of Gaussians could be 2 for GM, WM, CSF, 3 for bone, 4 for other soft tissues and
 2 for air/background.</p>
-<blockquote class="last">
+<blockquote>
 <div><div class="line-block">
 <div class="line">- 1, 2, 3, 4, 5, 6 , 7, 8, inf -Non parametric-</div>
 </div>
@@ -157,11 +147,10 @@ spm12.</p>
 </dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>which maps to save; Native, DARTEL &lt;=&gt; tissue(i).native</dt>
-<dd><p class="first">To produce a tissue class image that is in alignment with the original (ci) or that can be used with
+<li><dl>
+<dt>which maps to save; Native, DARTEL &lt;=&gt; tissue(i).native</dt><dd><p>To produce a tissue class image that is in alignment with the original (ci) or that can be used with
 the Dartel toobox (rci).</p>
-<blockquote class="last">
+<blockquote>
 <div><div class="line-block">
 <div class="line">- (False, False) Save Nothing</div>
 <div class="line">- (True, False) save native only</div>
@@ -172,11 +161,10 @@ the Dartel toobox (rci).</p>
 </dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt>which maps to save [Unmodulated, Modulated] &lt;=&gt; tissue(i).warped</dt>
-<dd><p class="first">To produces spatially normalised versions of the tissue class, with (mcwi) and without (wci)
+<li><dl>
+<dt>which maps to save [Unmodulated, Modulated] &lt;=&gt; tissue(i).warped</dt><dd><p>To produces spatially normalised versions of the tissue class, with (mcwi) and without (wci)
 modulation.</p>
-<blockquote class="last">
+<blockquote>
 <div><div class="line-block">
 <div class="line">- (False, False) Save Nothing</div>
 <div class="line">- (True, False) save unmodulated only</div>
@@ -200,37 +188,33 @@ modulation.</p>
 </div>
 </div></blockquote>
 </li>
-<li><dl class="first docutils">
-<dt><em>warping_regularization &lt;=&gt; warp.reg</em> <a class="footnote-reference" href="#label" id="id4">[1]</a></dt>
-<dd><p class="first">The measure of the roughness of the deformations for registration. Involve the sum of 5 elements (a float or list of floats; the latter is
+<li><dl>
+<dt><em>warping_regularization &lt;=&gt; warp.reg</em> <a class="footnote-reference brackets" href="#label" id="id4">1</a></dt><dd><p>The measure of the roughness of the deformations for registration. Involve the sum of 5 elements (a float or list of floats; the latter is
 required by SPM12).</p>
-<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">]</span>
 </pre></div>
 </div>
 </dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt><em>affine_regularization &lt;=&gt; warp.affreg</em> <a class="footnote-reference" href="#label" id="id5">[1]</a></dt>
-<dd><p class="first">Standard space for affine registration (‘mni’ or ‘eastern’ or ‘subj’ or ‘none’).</p>
-<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="n">mni</span>
+<li><dl>
+<dt><em>affine_regularization &lt;=&gt; warp.affreg</em> <a class="footnote-reference brackets" href="#label" id="id5">1</a></dt><dd><p>Standard space for affine registration (‘mni’ or ‘eastern’ or ‘subj’ or ‘none’).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="n">mni</span>
 </pre></div>
 </div>
 </dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt><em>sampling_distance &lt;=&gt; warp.samp</em> <a class="footnote-reference" href="#label" id="id6">[1]</a></dt>
-<dd><p class="first">Approximate distance between sampled points when estimating the model parameters (a float).</p>
-<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">3</span>
+<li><dl>
+<dt><em>sampling_distance &lt;=&gt; warp.samp</em> <a class="footnote-reference brackets" href="#label" id="id6">1</a></dt><dd><p>Approximate distance between sampled points when estimating the model parameters (a float).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">3</span>
 </pre></div>
 </div>
 </dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt><em>write_deformation_fields &lt;=&gt; warp.write</em> <a class="footnote-reference" href="#label" id="id7">[1]</a></dt>
-<dd><p class="first">Deformation fields can be saved to disk, and used by the deformation utility (a list of 2 booleans for which deformation
+<li><dl>
+<dt><em>write_deformation_fields &lt;=&gt; warp.write</em> <a class="footnote-reference brackets" href="#label" id="id7">1</a></dt><dd><p>Deformation fields can be saved to disk, and used by the deformation utility (a list of 2 booleans for which deformation
 fields to write; Inverse, Forward).</p>
 <blockquote>
 <div><div class="line-block">
@@ -240,7 +224,7 @@ fields to write; Inverse, Forward).</p>
 <div class="line">- etc.</div>
 </div>
 </div></blockquote>
-<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">]</span>
 </pre></div>
 </div>
 </dd>
@@ -249,29 +233,26 @@ fields to write; Inverse, Forward).</p>
 </ul>
 <p><strong>Outputs parameters:</strong></p>
 <ul>
-<li><dl class="first docutils">
-<dt><em>bias_corrected_images</em></dt>
-<dd><p class="first">The bias corrected images (a list of items which are a pathlike object or string representing an existing file).</p>
-<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">mAnat</span><span class="o">.</span><span class="n">nii</span>
+<li><dl>
+<dt><em>bias_corrected_images</em></dt><dd><p>The bias corrected images (a list of items which are a pathlike object or string representing an existing file).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">mAnat</span><span class="o">.</span><span class="n">nii</span>
 </pre></div>
 </div>
 </dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt><em>bias_field_images</em></dt>
-<dd><p class="first">The estimated bias field (a list of items which are a pathlike object or string representing an existing file).</p>
-<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">BiasField_Anat</span><span class="o">.</span><span class="n">nii</span>
+<li><dl>
+<dt><em>bias_field_images</em></dt><dd><p>The estimated bias field (a list of items which are a pathlike object or string representing an existing file).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">BiasField_Anat</span><span class="o">.</span><span class="n">nii</span>
 </pre></div>
 </div>
 </dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt><em>native_class_images</em></dt>
-<dd><p class="first">Native space probability maps (a list of items which are a list of items which are a pathlike object or string representing an existing
+<li><dl>
+<dt><em>native_class_images</em></dt><dd><p>Native space probability maps (a list of items which are a list of items which are a pathlike object or string representing an existing
 file).</p>
-<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/c1Anat.nii&#39;</span><span class="p">],</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/c1Anat.nii&#39;</span><span class="p">],</span>
      <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/c2Anat.nii&#39;</span><span class="p">],</span>
      <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/c3Anat.nii&#39;</span><span class="p">],</span>
      <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/c4Anat.nii&#39;</span><span class="p">],</span>
@@ -281,10 +262,9 @@ file).</p>
 </dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt><em>dartel_input_images</em></dt>
-<dd><p class="first">“Imported” class images into a form that can be used with the Dartel toolbox (a list of items which are a list of items which are a pathlike object or string representing an existing file).</p>
-<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/rc1Anat.nii&#39;</span><span class="p">],</span>
+<li><dl>
+<dt><em>dartel_input_images</em></dt><dd><p>“Imported” class images into a form that can be used with the Dartel toolbox (a list of items which are a list of items which are a pathlike object or string representing an existing file).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/rc1Anat.nii&#39;</span><span class="p">],</span>
      <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/rc2Anat.nii&#39;</span><span class="p">],</span>
      <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/rc3Anat.nii&#39;</span><span class="p">],</span>
      <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/rc4Anat.nii&#39;</span><span class="p">],</span>
@@ -294,10 +274,9 @@ file).</p>
 </dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt><em>modulated_class_images</em></dt>
-<dd><p class="first">Modulated and normalised class images (a list of items which are a list of items which are a pathlike object or string representing an existing file).</p>
-<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/mwc1Anat.nii&#39;</span><span class="p">],</span>
+<li><dl>
+<dt><em>modulated_class_images</em></dt><dd><p>Modulated and normalised class images (a list of items which are a list of items which are a pathlike object or string representing an existing file).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/mwc1Anat.nii&#39;</span><span class="p">],</span>
      <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/mwc2Anat.nii&#39;</span><span class="p">],</span>
      <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/mwc3Anat.nii&#39;</span><span class="p">],</span>
      <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/mwc4Anat.nii&#39;</span><span class="p">],</span>
@@ -307,10 +286,9 @@ file).</p>
 </dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt><em>normalized_class_images</em></dt>
-<dd><p class="first">Normalised class images, without modulation (a list of items which are a list of items which are a pathlike object or string representing an existing file).</p>
-<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/wc1Anat.nii&#39;</span><span class="p">],</span>
+<li><dl>
+<dt><em>normalized_class_images</em></dt><dd><p>Normalised class images, without modulation (a list of items which are a list of items which are a pathlike object or string representing an existing file).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/wc1Anat.nii&#39;</span><span class="p">],</span>
      <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/wc2Anat.nii&#39;</span><span class="p">],</span>
      <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/wc3Anat.nii&#39;</span><span class="p">],</span>
      <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/wc4Anat.nii&#39;</span><span class="p">],</span>
@@ -320,30 +298,27 @@ file).</p>
 </dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt><em>inverse_deformation_field</em></dt>
-<dd><p class="first">Inverse deformation field. Could be used for spatially normalising surface files as GIFTI (a list of items which are a pathlike object or
+<li><dl>
+<dt><em>inverse_deformation_field</em></dt><dd><p>Inverse deformation field. Could be used for spatially normalising surface files as GIFTI (a list of items which are a pathlike object or
 string representing an existing file).</p>
-<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">iy_Anat</span><span class="o">.</span><span class="n">nii</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">iy_Anat</span><span class="o">.</span><span class="n">nii</span>
 </pre></div>
 </div>
 </dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt><em>forward_deformation_field</em></dt>
-<dd><p class="first">Forward deformation field. Could be used for spatially normalising images to MNI space (a list of items which are a pathlike object or
+<li><dl>
+<dt><em>forward_deformation_field</em></dt><dd><p>Forward deformation field. Could be used for spatially normalising images to MNI space (a list of items which are a pathlike object or
 string representing an existing file).</p>
-<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">y_Anat</span><span class="o">.</span><span class="n">nii</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">y_Anat</span><span class="o">.</span><span class="n">nii</span>
 </pre></div>
 </div>
 </dd>
 </dl>
 </li>
-<li><dl class="first docutils">
-<dt><em>transformation_mat</em></dt>
-<dd><p class="first">Normalisation transformation (a list of items which are a pathlike object or string representing an existing file).</p>
-<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">Anat_seg8</span><span class="o">.</span><span class="n">mat</span>
+<li><dl>
+<dt><em>transformation_mat</em></dt><dd><p>Normalisation transformation (a list of items which are a pathlike object or string representing an existing file).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">Anat_seg8</span><span class="o">.</span><span class="n">mat</span>
 </pre></div>
 </div>
 </dd>
@@ -351,24 +326,21 @@ string representing an existing file).</p>
 </li>
 </ul>
 <hr class="docutils" />
-<table class="docutils footnote" frame="void" id="label" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label">[1]</td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id2">2</a>, <a class="fn-backref" href="#id3">3</a>, <a class="fn-backref" href="#id4">4</a>, <a class="fn-backref" href="#id5">5</a>, <a class="fn-backref" href="#id6">6</a>, <a class="fn-backref" href="#id7">7</a>)</em> <p>Syntax: mia_processes/nipype NewSegment &lt;=&gt; SPM12 Segment.</p>
-<dl class="docutils">
-<dt>NOTE:</dt>
-<dd><ul class="first last simple">
-<li>This interface currently supports single channel input only.</li>
-<li>The warp.mrf, warp.cleanup and warp.fwhm, from  SPM12, are not used in this brick.</li>
+<dl class="footnote brackets">
+<dt class="label" id="label"><span class="brackets">1</span><span class="fn-backref">(<a href="#id1">1</a>,<a href="#id2">2</a>,<a href="#id3">3</a>,<a href="#id4">4</a>,<a href="#id5">5</a>,<a href="#id6">6</a>,<a href="#id7">7</a>)</span></dt>
+<dd><p>Syntax: mia_processes/nipype NewSegment &lt;=&gt; SPM12 Segment.</p>
+<dl class="simple">
+<dt>NOTE:</dt><dd><ul class="simple">
+<li><p>This interface currently supports single channel input only.</p></li>
+<li><p>The warp.mrf, warp.cleanup and warp.fwhm, from  SPM12, are not used in this brick.</p></li>
 </ul>
 </dd>
 </dl>
-<p class="last">Usefull links:
+<p>Usefull links:
 <a class="reference external" href="https://www.fil.ion.ucl.ac.uk/spm/doc/manual.pdf#page=45">SPM12 Segment</a>,
 <a class="reference external" href="https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.spm.preprocess.html#newsegment">nipype NewSegment</a></p>
-</td></tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </div>
 </div>
 
@@ -384,7 +356,7 @@ string representing an existing file).</p>
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, populse.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.
     </div>
   </body>
 </html>

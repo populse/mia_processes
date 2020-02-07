@@ -45,7 +45,7 @@ class Coregister(Process_Mia):
     """
     *Align together scans of different modalities*
 
-    Please, see the complete documention for the `Coregister brick in the populse.mia_processes web site:
+    Please, see the complete documention for the `Coregister brick in the populse.mia_processes web site
     <https://populse.github.io/mia_processes/html/documentation/preprocess/spm/Coregister.html>`_
 
     """
@@ -341,7 +341,7 @@ class NewSegment(Process_Mia):
     """
     *Segmentation: Segments,  bias  corrects  and  spatially normalises - all in the same model*
 
-    Please, see the complete documention for the `NewSegment brick in the populse.mia_processes web site:
+    Please, see the complete documention for the `NewSegment brick in the populse.mia_processes web site
     <https://populse.github.io/mia_processes/html/documentation/preprocess/spm/NewSegment.html>`_
 
     """
@@ -630,7 +630,7 @@ class Normalize12(Process_Mia):
     """    
     *Computes the warp that best aligns the template (atlas) to the individual’s image*
 
-    Please, see the complete documention for the `Normalize12 brick in the populse.mia_processes web site:
+    Please, see the complete documention for the `Normalize12 brick in the populse.mia_processes web site
     <https://populse.github.io/mia_processes/html/documentation/preprocess/spm/Normalize12.html>`_
 
     """
@@ -991,7 +991,7 @@ class Realign(Process_Mia):
     """
     *Realigns a time-series of images acquired from the same subject*
 
-    Please, see the complete documention for the `Realign brick in the populse.mia_processes web site:
+    Please, see the complete documention for the `Realign brick in the populse.mia_processes web site
     <https://populse.github.io/mia_processes/html/documentation/preprocess/spm/Realign.html>`_
 
     """
@@ -1332,7 +1332,7 @@ class Smooth(Process_Mia):
     """
     *3D Gaussian smoothing of image volumes*
 
-    Please, see the complete documention for the `Smooth brick in the populse.mia_processes web site:
+    Please, see the complete documention for the `Smooth brick in the populse.mia_processes web site
     <https://populse.github.io/mia_processes/html/documentation/preprocess/spm/Smooth.html>`_
 
     """
