@@ -313,11 +313,11 @@ class Coregister(Process_Mia):
                                                      ] = os.path.join(path,
                                                                     filename_in)
 
-        if outputs_coregsource:
-            self.outputs["coregistered_source"] = outputs_coregsource
+            if outputs_coregsource:
+                self.outputs["coregistered_source"] = outputs_coregsource
 
-        if outputs_coregfiles:
-            self.outputs["coregistered_files"] = outputs_coregfiles
+            if outputs_coregfiles:
+                self.outputs["coregistered_files"] = outputs_coregfiles
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -1293,7 +1293,7 @@ class Realign(Process_Mia):
                             path, filename = os.path.split(fullname)
                             filename_without_prefix = filename[len('rp_'):]
 
-                            if filename_without_prefix [-4:] == '.txt':
+                            if filename_without_prefix[-4:] == '.txt':
                                 filename_without_prefix = (
                                           filename_without_prefix[:-4] + '.nii')
 
