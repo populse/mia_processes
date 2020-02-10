@@ -7,7 +7,7 @@ needed to run other higher-level bricks.
 
 :Contains:
     :Class:
-        - Auto_Filter_List
+        - Auto_Filter_List ######## OK
         - Files_To_List    ######## OK
         - Input_Filter
         - List_Duplicate   ######## OK
