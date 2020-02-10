@@ -8,9 +8,9 @@ needed to run other higher-level bricks.
 :Contains:
     :Class:
         - Auto_Filter_List
-        - Files_To_List
+        - Files_To_List    ######## OK
         - Input_Filter
-        - List_Duplicate  ######## OK
+        - List_Duplicate   ######## OK
 
 """
 
@@ -169,29 +169,14 @@ class Auto_Filter_List(Process_Mia):
         return
 
 class Files_To_List(Process_Mia):
-    """ Files_To_List (from mia_processes.tools.tools)
-*** From 2 file names, generating a list containing all theses file names ***
-    '/home/ArthurBlair/data/raw_data/Anat.nii '
-                        + 
-    '/home/ArthurBlair/data/raw_data/Func.nii'
-                -> Files_To_List ->
-    ['/home/ArthurBlair/data/raw_data/Anat.nii',
-     '/home/ArthurBlair/data/raw_data/Func.nii']
-    If only file1 is specified, returns a list containing file1 only.
-    * Input parameters:
-        * file1: a string corresponding to an existing path file (traits.File)
-            <ex. /home/ArthurBlair/data/raw_data/Anat.nii>
-        * file2: an optional string corresponding to an existing path
-                 file (traits.File)
-            <ex. /home/ArthurBlair/data/raw_data/Func.nii>
-    * Output parameters:
-        * file_list: a list (traits.List)
-            <ex. ['/home/ArthurBlair/data/raw_data/Anat.nii',
-                  '/home/ArthurBlair/data/Func.nii']>
+    """
+    *From 2 file names, generating a list containing all theses file names*
+
+    Please, see the complete documention for the `Files_To_List in the populse.mia_processes web site
+    <https://populse.github.io/mia_processes/html/documentation/tools/Files_To_List.html>`_
 
     """
 
-    
     def __init__(self):
         """Dedicated to the attributes initialisation / instanciation.
         
@@ -232,7 +217,9 @@ class Files_To_List(Process_Mia):
 
         The main objective of this method is to produce the outputs of the
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
-        if defined here. To work properly this method must return 
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return 
         self.make_initResult() object.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -248,20 +235,16 @@ class Files_To_List(Process_Mia):
             else:
                 self.outputs['file_list'] = [self.file1, self.file2]
 
+            self.outputs["notInDb"] = ["file_list"]
+
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        if not self.file2 or self.file2 in ["<undefined>", traits.Undefined]:
-            out_list = [self.file1]
-            
-        else:
-            out_list = [self.file1, self.file2]
-            
-        self.file_list = out_list
+        return
+       
 
-        
 class Input_Filter(Process_Mia):
     """ Input_Filter (from mia_processes.tools.tools)
 *** Process (brick) used to filter the content of the Data Browser tab 
@@ -448,7 +431,4 @@ class List_Duplicate(Process_Mia):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-
-        if self.file_name:
-            self.out_list = [self.file_name]
-            self.out_file = self.file_name
+        return
