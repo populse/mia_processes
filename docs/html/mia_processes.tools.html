@@ -55,64 +55,10 @@ needed to run other higher-level bricks.</p>
 </dl>
 <dl class="class">
 <dt id="mia_processes.tools.tools.Auto_Filter_List">
-<em class="property">class </em><code class="sig-prename descclassname">mia_processes.tools.tools.</code><code class="sig-name descname">Auto_Filter_List</code><span class="sig-paren">(</span><em class="sig-param">from mia_processes.tools.tools</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/tools/tools.html#Auto_Filter_List"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.tools.tools.Auto_Filter_List" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">mia_processes.tools.tools.</code><code class="sig-name descname">Auto_Filter_List</code><a class="reference internal" href="_modules/mia_processes/tools/tools.html#Auto_Filter_List"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.tools.tools.Auto_Filter_List" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="mia_processes.html#mia_processes.process_mia.Process_Mia" title="mia_processes.process_mia.Process_Mia"><code class="xref py py-class docutils literal notranslate"><span class="pre">mia_processes.process_mia.Process_Mia</span></code></a></p>
-<dl>
-<dt><strong>* Selects one or more (slicing) elements from a list *</strong></dt><dd><dl class="simple">
-<dt>[‘/home/ArthurBlair/data/raw_data/Anat.nii ‘,</dt><dd><dl class="simple">
-<dt>‘/home/ArthurBlair/data/raw_data/Func.nii’,]</dt><dd><p>-&gt; Auto_Filter_List -&gt;</p>
-</dd>
-</dl>
-</dd>
-</dl>
-<p>[‘/home/ArthurBlair/data/raw_data/Func.nii’]
-* Input parameters:</p>
-<blockquote>
-<div><ul>
-<li><dl class="simple">
-<dt>in_list: the list of elements to be filtered (traits.List)</dt><dd><dl class="simple">
-<dt>&lt;ex. [‘/home/ArthurBlair/data/raw_data/Anat.nii’,</dt><dd><p>‘/home/ArthurBlair/data/raw_data/Func.nii’,
-‘/home/ArthurBlair/data/raw_data/rp_Func.txt’,
-‘/home/ArthurBlair/data/raw_data/meanFunc.nii’]&gt;</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</li>
-<li><dl>
-<dt>index_filter: a list of 0 to 2 index for filtering (traits.List).</dt><dd><blockquote>
-<div><p>If no index, take the first element of in_list.
-If there is one index, takes the element at that
-position in in_list. If two indexes, selects the
-elements between the first and the second index (the
-index corresponds to the actual position in the list,
-i.e. there is no index 0 as in python).</p>
-</div></blockquote>
-<p>&lt;ex. [2, 4]&gt;</p>
-</dd>
-</dl>
-</li>
-</ul>
-</div></blockquote>
-<ul class="simple">
-<li><dl class="simple">
-<dt>Output parameters:</dt><dd><ul>
-<li><dl class="simple">
-<dt>filtered_list: the corresponding filtering result (traits.List)</dt><dd><dl class="simple">
-<dt>&lt;ex. [‘/home/ArthurBlair/data/Func.nii’,</dt><dd><p>‘/home/ArthurBlair/data/raw_data/rp_Func.txt’,
-‘/home/ArthurBlair/data/raw_data/meanFunc.nii’]</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</li>
-</ul>
-</dd>
-</dl>
-</li>
-</ul>
-</dd>
-</dl>
+<p><em>Selects one or more (slicing) element(s) from a list</em></p>
+<p>Please, see the complete documention for the <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/tools/Auto_Filter_List.html">Auto_Filter_List in the populse.mia_processes web site</a></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <ul class="simple">
