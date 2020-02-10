@@ -90,7 +90,9 @@ class Auto_Filter_List(Process_Mia):
 
         The main objective of this method is to produce the outputs of the
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
-        if defined here. To work properly this method must return 
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return 
         self.make_initResult() object.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -140,6 +142,8 @@ class Auto_Filter_List(Process_Mia):
                      print('\nThe initialisation of the Auto_Filter_List brick'
                            ' failed because the first value of the index_filter'
                            ' parameter is greater than the second ...\n')
+
+            self.outputs["notInDb"] = ["filtered_list"]
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
