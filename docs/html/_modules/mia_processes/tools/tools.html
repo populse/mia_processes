@@ -69,31 +69,11 @@
 
 
 <div class="viewcode-block" id="Auto_Filter_List"><a class="viewcode-back" href="../../../mia_processes.tools.html#mia_processes.tools.tools.Auto_Filter_List">[docs]</a><span class="k">class</span> <span class="nc">Auto_Filter_List</span><span class="p">(</span><span class="n">Process_Mia</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Auto_Filter_List (from mia_processes.tools.tools)</span>
-<span class="sd">*** Selects one or more (slicing) elements from a list ***</span>
-<span class="sd">    [&#39;/home/ArthurBlair/data/raw_data/Anat.nii &#39;,</span>
-<span class="sd">     &#39;/home/ArthurBlair/data/raw_data/Func.nii&#39;,]</span>
-<span class="sd">                -&gt; Auto_Filter_List -&gt;</span>
-<span class="sd">    [&#39;/home/ArthurBlair/data/raw_data/Func.nii&#39;]</span>
-<span class="sd">    * Input parameters:</span>
-<span class="sd">        * in_list: the list of elements to be filtered (traits.List)</span>
-<span class="sd">            &lt;ex. [&#39;/home/ArthurBlair/data/raw_data/Anat.nii&#39;,</span>
-<span class="sd">                  &#39;/home/ArthurBlair/data/raw_data/Func.nii&#39;,</span>
-<span class="sd">                  &#39;/home/ArthurBlair/data/raw_data/rp_Func.txt&#39;,</span>
-<span class="sd">                  &#39;/home/ArthurBlair/data/raw_data/meanFunc.nii&#39;]&gt;</span>
-<span class="sd">        * index_filter: a list of 0 to 2 index for filtering (traits.List).</span>
-<span class="sd">                        If no index, take the first element of in_list.</span>
-<span class="sd">                        If there is one index, takes the element at that</span>
-<span class="sd">                        position in in_list. If two indexes, selects the</span>
-<span class="sd">                        elements between the first and the second index (the</span>
-<span class="sd">                        index corresponds to the actual position in the list,</span>
-<span class="sd">                        i.e. there is no index 0 as in python).</span>
-<span class="sd">            &lt;ex. [2, 4]&gt;</span>
-<span class="sd">    * Output parameters:</span>
-<span class="sd">        * filtered_list: the corresponding filtering result (traits.List)</span>
-<span class="sd">            &lt;ex. [&#39;/home/ArthurBlair/data/Func.nii&#39;,</span>
-<span class="sd">                  &#39;/home/ArthurBlair/data/raw_data/rp_Func.txt&#39;,</span>
-<span class="sd">                  &#39;/home/ArthurBlair/data/raw_data/meanFunc.nii&#39;]</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    *Selects one or more (slicing) element(s) from a list*</span>
+
+<span class="sd">    Please, see the complete documention for the `Auto_Filter_List in the populse.mia_processes web site</span>
+<span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/tools/Auto_Filter_List.html&gt;`_</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 

@@ -37,31 +37,11 @@ import os
 
 
 class Auto_Filter_List(Process_Mia):
-    """ Auto_Filter_List (from mia_processes.tools.tools)
-*** Selects one or more (slicing) elements from a list ***
-    ['/home/ArthurBlair/data/raw_data/Anat.nii ',
-     '/home/ArthurBlair/data/raw_data/Func.nii',]
-                -> Auto_Filter_List ->
-    ['/home/ArthurBlair/data/raw_data/Func.nii']
-    * Input parameters:
-        * in_list: the list of elements to be filtered (traits.List)
-            <ex. ['/home/ArthurBlair/data/raw_data/Anat.nii',
-                  '/home/ArthurBlair/data/raw_data/Func.nii',
-                  '/home/ArthurBlair/data/raw_data/rp_Func.txt',
-                  '/home/ArthurBlair/data/raw_data/meanFunc.nii']>
-        * index_filter: a list of 0 to 2 index for filtering (traits.List).
-                        If no index, take the first element of in_list.
-                        If there is one index, takes the element at that
-                        position in in_list. If two indexes, selects the
-                        elements between the first and the second index (the
-                        index corresponds to the actual position in the list,
-                        i.e. there is no index 0 as in python).
-            <ex. [2, 4]>
-    * Output parameters:
-        * filtered_list: the corresponding filtering result (traits.List)
-            <ex. ['/home/ArthurBlair/data/Func.nii',
-                  '/home/ArthurBlair/data/raw_data/rp_Func.txt',
-                  '/home/ArthurBlair/data/raw_data/meanFunc.nii']
+    """
+    *Selects one or more (slicing) element(s) from a list*
+
+    Please, see the complete documention for the `Auto_Filter_List in the populse.mia_processes web site
+    <https://populse.github.io/mia_processes/html/documentation/tools/Auto_Filter_List.html>`_
 
     """
 
