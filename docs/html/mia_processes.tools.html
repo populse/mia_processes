@@ -45,9 +45,9 @@ needed to run other higher-level bricks.</p>
 <dt class="field-odd">Class</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p>Auto_Filter_List</p></li>
-<li><p>Files_To_List</p></li>
+<li><p>Files_To_List    ######## OK</p></li>
 <li><p>Input_Filter</p></li>
-<li><p>List_Duplicate  ######## OK</p></li>
+<li><p>List_Duplicate   ######## OK</p></li>
 </ul>
 </dd>
 </dl>
@@ -150,56 +150,10 @@ self.make_initResult() object.</p>
 
 <dl class="class">
 <dt id="mia_processes.tools.tools.Files_To_List">
-<em class="property">class </em><code class="sig-prename descclassname">mia_processes.tools.tools.</code><code class="sig-name descname">Files_To_List</code><span class="sig-paren">(</span><em class="sig-param">from mia_processes.tools.tools</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/tools/tools.html#Files_To_List"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.tools.tools.Files_To_List" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">mia_processes.tools.tools.</code><code class="sig-name descname">Files_To_List</code><a class="reference internal" href="_modules/mia_processes/tools/tools.html#Files_To_List"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.tools.tools.Files_To_List" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="mia_processes.html#mia_processes.process_mia.Process_Mia" title="mia_processes.process_mia.Process_Mia"><code class="xref py py-class docutils literal notranslate"><span class="pre">mia_processes.process_mia.Process_Mia</span></code></a></p>
-<dl>
-<dt><strong>* From 2 file names, generating a list containing all theses file names *</strong></dt><dd><dl class="simple">
-<dt>‘/home/ArthurBlair/data/raw_data/Anat.nii ‘</dt><dd><ul class="simple">
-<li></li>
-</ul>
-</dd>
-<dt>‘/home/ArthurBlair/data/raw_data/Func.nii’</dt><dd><p>-&gt; Files_To_List -&gt;</p>
-</dd>
-<dt>[‘/home/ArthurBlair/data/raw_data/Anat.nii’,</dt><dd><p>‘/home/ArthurBlair/data/raw_data/Func.nii’]</p>
-</dd>
-</dl>
-<p>If only file1 is specified, returns a list containing file1 only.
-* Input parameters:</p>
-<blockquote>
-<div><ul>
-<li><dl class="simple">
-<dt>file1: a string corresponding to an existing path file (traits.File)</dt><dd><p>&lt;ex. /home/ArthurBlair/data/raw_data/Anat.nii&gt;</p>
-</dd>
-</dl>
-</li>
-<li><dl>
-<dt>file2: an optional string corresponding to an existing path</dt><dd><blockquote>
-<div><p>file (traits.File)</p>
-</div></blockquote>
-<p>&lt;ex. /home/ArthurBlair/data/raw_data/Func.nii&gt;</p>
-</dd>
-</dl>
-</li>
-</ul>
-</div></blockquote>
-<ul class="simple">
-<li><dl class="simple">
-<dt>Output parameters:</dt><dd><ul>
-<li><dl class="simple">
-<dt>file_list: a list (traits.List)</dt><dd><dl class="simple">
-<dt>&lt;ex. [‘/home/ArthurBlair/data/raw_data/Anat.nii’,</dt><dd><p>‘/home/ArthurBlair/data/Func.nii’]&gt;</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</li>
-</ul>
-</dd>
-</dl>
-</li>
-</ul>
-</dd>
-</dl>
+<p><em>From 2 file names, generating a list containing all theses file names</em></p>
+<p>Please, see the complete documention for the <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/tools/Files_To_List.html">Files_To_List in the populse.mia_processes web site</a></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <ul class="simple">
@@ -223,7 +177,9 @@ third-party products necessary for the running of the brick.</p>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
-if defined here. To work properly this method must return 
+if defined here. In order not to include an output in the database,
+this output must be a value of the optional key ‘notInDb’ of the
+self.outputs dictionary. To work properly this method must return 
 self.make_initResult() object.</p>
 </dd></dl>
 
@@ -351,7 +307,9 @@ third-party products necessary for the running of the brick.</p>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
-if defined here. To work properly this method must return 
+if defined here. In order not to include an output in the database,
+this output must be a value of the optional key ‘notInDb’ of the
+self.outputs dictionary. To work properly this method must return 
 self.make_initResult() object.</p>
 </dd></dl>
 

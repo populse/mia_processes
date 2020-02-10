@@ -41,7 +41,7 @@ List_Duplicate brick
 From a file name, generating a list containing this file name and the file name itself
 ---------------------------------------------------------------------------------------
 
-*'/home/ArthurBlair/Anat.nii' -> List_Duplicate -> ['/home/ArthurBlair/Anat.nii'] + '/home/ArthurBlair/Anat.nii'*
+*'/home/ArthurBlair/data/Anat.nii' -> List_Duplicate -> ['/home/ArthurBlair/data/Anat.nii'] + '/home/ArthurBlair/data/Anat.nii'*
 
 >>> from mia_processes.tools import List_Duplicate
 >>> List_Duplicate.help()
