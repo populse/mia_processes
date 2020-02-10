@@ -25,4 +25,6 @@ Mia_processes's documentation
 
 - **tools**
 
+  - `Files_To_List <tools/Files_To_List.html>`_
   - `List_Duplicate <tools/List_Duplicate.html>`_
+ 

@@ -34,41 +34,43 @@
 
    &nbsp;
 
-====================
-List_Duplicate brick
-====================
+===================
+Files_To_List brick
+===================
 
-From a file name, generating a list containing this file name and the file name itself
----------------------------------------------------------------------------------------
+From 2 file names, generating a list containing all theses file names
+---------------------------------------------------------------------
 
-*'/home/ArthurBlair/data/Anat.nii' -> List_Duplicate -> ['/home/ArthurBlair/data/Anat.nii'] + '/home/ArthurBlair/data/Anat.nii'*
+*'/home/ArthurBlair/data/Anat.nii' +  '/home/ArthurBlair/data/Func.nii' -> Files_To_List -> ['/home/ArthurBlair/data/Anat.nii', '/home/ArthurBlair/data/Func.nii']*
 
->>> from mia_processes.tools import List_Duplicate
->>> List_Duplicate.help()
+>>> from mia_processes.tools import Files_To_List
+>>> Files_To_List.help()
 
 **Inputs parameters:**
 
-- *file_name*
+- *file1*
     A string corresponding to an existing path file.
- 
+
     ::
 
-      ex. /home/ArthurBlair/data/Func.nii
+      ex. /home/ArthurBlair/data/Anat.nii
 
-**Outputs parameters:**
-
-- *out_file*
-    A string corresponding to an existing path file.
+- *file2*
+    An optional string corresponding to an existing path file.
 
     ::
 
       ex.  /home/ArthurBlair/data/Func.nii
 
-- *out_list*
-    A list with one string element corresponding to an existing path file.
+**Outputs parameters:**
+
+- *file_list*
+    A list.
 
     ::
 
-      ex. ['/home/ArthurBlair/data/Func.nii']
+      ex. ['/home/ArthurBlair/data/Anat.nii', '/home/ArthurBlair/data/Func.nii']
 
+-------------
 
+NOTE: If only file1 is specified, returns a list containing file1 only.

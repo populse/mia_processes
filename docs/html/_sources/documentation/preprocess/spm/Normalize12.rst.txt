@@ -199,10 +199,8 @@ Computes the warp that best aligns the template (atlas) to the individual's imag
 .. [#label] Syntax: mia_processes/nipype Normalize12 <=> SPM12 Normalise.
 
 	    NOTE:
-	        - Contrary to what is stated in the nipype documentation, this brick does not accept the out_prefix parameter which would allow to use a prefix other than "w" for the normalized image.
+	        - Contrary to what is stated in the nipype documentation, this brick does not accept the out_prefix parameter which would allow to use a prefix other than "w" for the normalised image.
 
 	    Usefull links:
 	    `SPM12 Normalise <https://www.fil.ion.ucl.ac.uk/spm/doc/manual.pdf#page=51>`_,
-	    `nipype Normalize <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.spm.preprocess.html#normalize>`_
-..
-  `nipype <https://nipype.readthedocs.io/en/latest/interfaces/generated/interfaces.spm/preprocess.html#normalize>`_
+	    `nipype Normalize12 <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.spm.preprocess.html#normalize12>`_
