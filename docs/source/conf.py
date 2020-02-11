@@ -183,3 +183,18 @@ epub_exclude_files = ['search.html']
 autodoc_default_options = {
     'special-members': '__init__',
 }
+
+# generate pipeline and processes docs
+# we must actually write in sources for now.
+import subprocess
+
+sphinx_dir = os.path.dirname(__file__)
+proc_rst_dir = os.path.join(sphinx_dir, 'process_docs', 'mia_processes')
+if not os.path.exists(proc_rst_dir):
+    os.makedirs(proc_rst_dir)
+cmd = [sys.executable, '-m', 'capsul.sphinxext.capsul_pipeline_rst',
+       '-i', 'mia_processes', '-o', proc_rst_dir, '--schema']
+print('generating CAPSUL processes docs...')
+print(cmd)
+subprocess.check_output(cmd)
+

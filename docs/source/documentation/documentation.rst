@@ -29,3 +29,25 @@ Mia_processes's documentation
   - `Files_To_List <tools/Files_To_List.html>`_
   - `List_Duplicate <tools/List_Duplicate.html>`_
  
+Capsul processes auto-generated docs
+====================================
+
+- **preprocess**
+
+  .. toctree::
+
+      ../process_docs/mia_processes/preprocess/index.rst
+
+- **studies**
+
+  .. toctree::
+
+      ../process_docs/mia_processes/process_matlab/index.rst
+
+- **tools**
+
+  .. toctree::
+
+      ../process_docs/mia_processes/tools/index.rst
+      ../process_docs/mia_processes/process_mia/index.rst
+      ../process_docs/mia_processes/studies/index.rst
