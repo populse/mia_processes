@@ -44,7 +44,7 @@ needed to run other higher-level bricks.</p>
 <dd class="field-odd"><dl class="field-list simple">
 <dt class="field-odd">Class</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p>Auto_Filter_List</p></li>
+<li><p>Auto_Filter_List ######## OK</p></li>
 <li><p>Files_To_List    ######## OK</p></li>
 <li><p>Input_Filter</p></li>
 <li><p>List_Duplicate   ######## OK</p></li>
@@ -82,7 +82,9 @@ third-party products necessary for the running of the brick.</p>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
-if defined here. To work properly this method must return 
+if defined here. In order not to include an output in the database,
+this output must be a value of the optional key ‘notInDb’ of the
+self.outputs dictionary. To work properly this method must return 
 self.make_initResult() object.</p>
 </dd></dl>
 
