@@ -39,7 +39,7 @@
 
 <span class="sd">:Contains:</span>
 <span class="sd">    :Class:</span>
-<span class="sd">        - Auto_Filter_List</span>
+<span class="sd">        - Auto_Filter_List ######## OK</span>
 <span class="sd">        - Files_To_List    ######## OK</span>
 <span class="sd">        - Input_Filter</span>
 <span class="sd">        - List_Duplicate   ######## OK</span>
@@ -122,7 +122,9 @@
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
-<span class="sd">        if defined here. To work properly this method must return </span>
+<span class="sd">        if defined here. In order not to include an output in the database,</span>
+<span class="sd">        this output must be a value of the optional key &#39;notInDb&#39; of the</span>
+<span class="sd">        self.outputs dictionary. To work properly this method must return </span>
 <span class="sd">        self.make_initResult() object.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -172,6 +174,8 @@
                      <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">The initialisation of the Auto_Filter_List brick&#39;</span>
                            <span class="s1">&#39; failed because the first value of the index_filter&#39;</span>
                            <span class="s1">&#39; parameter is greater than the second ...</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;notInDb&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;filtered_list&quot;</span><span class="p">]</span>
 
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
