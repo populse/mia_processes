@@ -9,6 +9,8 @@
 Mia_processes's documentation
 =============================
 
+(manually written rst docs)
+
 - **preprocess**
 
   - **spm**
@@ -29,25 +31,41 @@ Mia_processes's documentation
   - `Files_To_List <tools/Files_To_List.html>`_
   - `List_Duplicate <tools/List_Duplicate.html>`_
  
+
 Capsul processes auto-generated docs
 ====================================
 
+(links to auto-generated docs from docstrings and traits descriptions)
+
 - **preprocess**
 
-  .. toctree::
+  - **spm**
 
-      ../process_docs/mia_processes/preprocess/index.rst
+    - :doc:`Coregister <../process_docs/mia_processes/preprocess/process/mia_processes.preprocess.spm.spatial_preprocessing.Coregister>`
+    - :doc:`NewSegment <../process_docs/mia_processes/preprocess/process/mia_processes.preprocess.spm.spatial_preprocessing.NewSegment>`
+    - :doc:`Normalize12 <../process_docs/mia_processes/preprocess/process/mia_processes.preprocess.spm.spatial_preprocessing.Normalize12>`
+    - :doc:`Realign <../process_docs/mia_processes/preprocess/process/mia_processes.preprocess.spm.spatial_preprocessing.Realign>`
+    - :doc:`Smooth <../process_docs/mia_processes/preprocess/process/mia_processes.preprocess.spm.spatial_preprocessing.Smooth>`
 
 - **studies**
 
-  .. toctree::
-
-      ../process_docs/mia_processes/studies/index.rst
+    - :doc:`Spatial_preprocessing_1 <../process_docs/mia_processes/studies/pipeline/mia_processes.studies.spatial_preprocessing_1.Spatial_preprocessing_1>`
 
 - **tools**
 
-  .. toctree::
+    - :doc:`Auto_Filter_List <../process_docs/mia_processes/tools/process/mia_processes.tools.tools.Auto_Filter_List>`
+    - :doc:`Files_To_List <../process_docs/mia_processes/tools/process/mia_processes.tools.tools.Files_To_List>`
+    - :doc:`Input_Filter <../process_docs/mia_processes/tools/process/mia_processes.tools.tools.Input_Filter>`
+    - :doc:`List_Duplicate <../process_docs/mia_processes/tools/process/mia_processes.tools.tools.List_Duplicate>`
+    - :doc:`Process_Mia <../process_docs/mia_processes/tools/process/mia_processes.tools.tools.Process_Mia>`
 
-      ../process_docs/mia_processes/tools/index.rst
-      ../process_docs/mia_processes/process_mia/index.rst
-      ../process_docs/mia_processes/process_matlab/index.rst
+
+or, same docs used via links to index.rst files:
+
+.. toctree::
+
+    ../process_docs/mia_processes/preprocess/index.rst
+    ../process_docs/mia_processes/studies/index.rst
+    ../process_docs/mia_processes/tools/index.rst
+    ../process_docs/mia_processes/process_mia/index.rst
+    ../process_docs/mia_processes/process_matlab/index.rst
