@@ -11,6 +11,7 @@ needed to run other higher-level bricks.
         - Files_To_List    ######## OK
         - Input_Filter
         - List_Duplicate   ######## OK
+        - List_To_File
 
 """
 
@@ -112,9 +113,10 @@ class Auto_Filter_List(Process_Mia):
                                                         self.index_filter[0]-1]]
 
                 else:
-                    print('\nThe initialisation of the Auto_Filter_List brick'
-                          ' failed because the index_filter parameter is greater'
-                          ' than the length of the in_list parameter ...\n')
+                    print('\nThe initialisation of the Auto_Filter_List brick '
+                          ' failed because the index_filter parameter is '
+                          ' greater than the length of the in_list '
+                          ' parameter ...\n')
 
             if len(self.index_filter) is 2:
 
@@ -409,6 +411,101 @@ class List_Duplicate(Process_Mia):
             self.outputs["out_list"] = [self.file_name]
             self.outputs["out_file"] =  self.file_name
             self.outputs["notInDb"] = ["out_list", "out_file"]
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        return
+
+
+class List_To_File(Process_Mia):
+    """
+    *From several filenames, selects and generates a file.*
+
+    Please, see the complete documention for the `List_To_File in the populse.mia_processes web site
+    <https://populse.github.io/mia_processes/html/documentation/tools/List_To_File.html>`_
+
+    """
+
+    
+    def __init__(self):
+        """Dedicated to the attributes initialisation / instanciation.
+        
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # initialisation of the objects needed for the launch of the brick
+        super(List_To_File, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = [] # no need of third party software!
+
+        # Inputs description
+        file_list_desc = 'The list of elements to be filtered.'
+        index_filter_desc = 'A list of 0 to 1 indexes for filtering.'
+
+        # Outputs description
+        file_desc = 'The corresponding filtering result (a file).'
+        
+        # Inputs traits
+        self.add_trait("file_list",
+                       traits.List(traits.File(),
+                                   output=False,
+                                   desc=file_list_desc))
+        
+        self.add_trait("index_filter",
+                       traits.List(value=[1],
+                                   trait=traits.Range(low=1, high=None),
+                                   minlen=0,
+                                   maxlen=1,
+                                   output=False,
+                                   optional=True,
+                                   desc=index_filter_desc))
+
+        # Outputs traits
+        self.add_trait("file",
+                       traits.File(output=True,
+                                   desc=file_desc))
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return 
+        self.make_initResult() object.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(List_To_File, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.outputs:
+            self.outputs = {}
+        
+        if (self.file_list and
+               not self.file_list in ["<undefined>", traits.Undefined]):
+
+            if not self.index_filter:
+                self.outputs['file'] = [self.file_list[0]]
+                self.outputs["notInDb"] = ["file"]
+
+            if len(self.index_filter) is 1:
+
+                if self.index_filter[0] <= len(self.file_list):
+                    self.outputs['file'] = [self.file_list[
+                                                        self.index_filter[0]-1]]
+                    self.outputs["notInDb"] = ["file"]
+
+                else:
+                    print('\nThe initialisation of the List_To_File brick '
+                          'failed because the index_filter parameter is '
+                          'greater than the length of file_list '
+                          'parameter ...\n')
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
