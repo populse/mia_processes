@@ -10,13 +10,22 @@ Mia_processes's documentation
 =============================
 
 - **preprocess**
-  
+
   - **spm**
 
     - `Coregister <preprocess/spm/Coregister.html>`_
     - `NewSegment <preprocess/spm/NewSegment.html>`_
-    - `Normalize <preprocess/spm/Normalize.html>`_
+    - `Normalize12 <preprocess/spm/Normalize12.html>`_
     - `Realign <preprocess/spm/Realign.html>`_
     - `Smooth <preprocess/spm/Smooth.html>`_
 
+- **studies**
 
+  - `Spatial_preprocessing_1 <studies/Spatial_preprocessing_1.html>`_
+
+- **tools**
+
+  - `Auto_Filter_List <tools/Auto_Filter_List.html>`_
+  - `Files_To_List <tools/Files_To_List.html>`_
+  - `List_Duplicate <tools/List_Duplicate.html>`_
+ 

@@ -38,8 +38,8 @@
 NewSegment brick
 ================
 
-Segmentation: Segments,  bias  corrects  and  spatially normalises - all in the same model
-------------------------------------------------------------------------------------------
+Segments,  bias  corrects  and  spatially normalises - all in the same model
+---------------------------------------------------------------------------- 
 
 >>> from mia_processes.preprocess.spm import NewSegment
 >>> NewSegment.help()
@@ -130,12 +130,12 @@ Segmentation: Segments,  bias  corrects  and  spatially normalises - all in the 
 
     ::
 
-      ex.  [(('/home/ArthurBlair/spm/spm12/tpm/TPM.nii', 1), 2, (True, False), (False, False)),
-            (('/home/ArthurBlair/spm/spm12/tpm/TPM.nii', 2), 2, (True, False), (False, False)), 
-            (('/home/ArthurBlair/spm/spm12/tpm/TPM.nii', 3), 2, (True, False), (False, False)),
-            (('/home/ArthurBlair/spm/spm12/tpm/TPM.nii', 4), 3, (True, False), (False, False)),
-            (('/home/ArthurBlair/spm/spm12/tpm/TPM.nii', 5), 4, (True, False), (False, False)),
-            (('/home/ArthurBlair/spm/spm12/tpm/TPM.nii', 6), 2, (True, False), (False, False))]
+      ex.  [(('/home/ArthurBlair/spm12/tpm/TPM.nii', 1), 2, (True, False), (False, False)),
+            (('/home/ArthurBlair/spm12/tpm/TPM.nii', 2), 2, (True, False), (False, False)), 
+            (('/home/ArthurBlair/spm12/tpm/TPM.nii', 3), 2, (True, False), (False, False)),
+            (('/home/ArthurBlair/spm12/tpm/TPM.nii', 4), 3, (True, False), (False, False)),
+            (('/home/ArthurBlair/spm12/tpm/TPM.nii', 5), 4, (True, False), (False, False)),
+            (('/home/ArthurBlair/spm12/tpm/TPM.nii', 6), 2, (True, False), (False, False))]
 
 - *warping_regularization <=> warp.reg* [#label]_
     The measure of the roughness of the deformations for registration. Involve the sum of 5 elements (a float or list of floats; the latter is
@@ -243,6 +243,7 @@ Segmentation: Segments,  bias  corrects  and  spatially normalises - all in the 
 
 - *forward_deformation_field*
     Forward deformation field. Could be used for spatially normalising images to MNI space (a list of items which are a pathlike object or
+    string representing an existing file).
 
     ::
 

@@ -42,8 +42,8 @@
 Realign brick
 =============
 
-Realigns a time-series of images acquired from the same subject using a least squares approach and a 6 parameters (rigid body) spatial transformation
------------------------------------------------------------------------------------------------------------------------------------------------------
+Realigns a time-series of images acquired from the same subject
+---------------------------------------------------------------
 
 >>> from mia_processes.preprocess.spm import Realign
 >>> Realign.help()

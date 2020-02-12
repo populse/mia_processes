@@ -10,7 +10,7 @@ populse_mia.
     :Class:
         - Coregister
         - NewSegment
-        - Normalize
+        - Normalize12
         - Realign
         - Smooth
 
@@ -39,13 +39,13 @@ from nipype.interfaces.spm.base import ImageFileSPM
 # Other import
 import os
 from traits.api import Undefined, Float
-
+from pathlib import Path
 
 class Coregister(Process_Mia):
     """
-    *Realignment through different modalities: Align together scans of different modalities*
+    *Align together scans of different modalities*
 
-    Please, see the complete documention for the `Coregister brick in the populse.mia_processes web site:
+    Please, see the complete documention for the `Coregister brick in the populse.mia_processes web site
     <https://populse.github.io/mia_processes/html/documentation/preprocess/spm/Coregister.html>`_
 
     """
@@ -313,11 +313,11 @@ class Coregister(Process_Mia):
                                                      ] = os.path.join(path,
                                                                     filename_in)
 
-        if outputs_coregsource:
-            self.outputs["coregistered_source"] = outputs_coregsource
+            if outputs_coregsource:
+                self.outputs["coregistered_source"] = outputs_coregsource
 
-        if outputs_coregfiles:
-            self.outputs["coregistered_files"] = outputs_coregfiles
+            if outputs_coregfiles:
+                self.outputs["coregistered_files"] = outputs_coregfiles
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -343,7 +343,7 @@ class NewSegment(Process_Mia):
     """
     *Segmentation: Segments,  bias  corrects  and  spatially normalises - all in the same model*
 
-    Please, see the complete documention for the `NewSegment brick in the populse.mia_processes web site:
+    Please, see the complete documention for the `NewSegment brick in the populse.mia_processes web site
     <https://populse.github.io/mia_processes/html/documentation/preprocess/spm/NewSegment.html>`_
 
     """
@@ -411,6 +411,10 @@ class NewSegment(Process_Mia):
         config = Config()
         resources_path = os.path.join(config.get_mia_path(), 'resources')
         tpm_path = os.path.join(resources_path, 'spm12', 'tpm', 'TPM.nii')
+        
+        if not Path(tpm_path).exists():
+            print('\n The {} file seems to not exists ...'.format(tpm_path))
+
         tissues_list = [((tpm_path, 1), 2, (True, False), (False, False)),
                         ((tpm_path, 2), 2, (True, False), (False, False)),
                         ((tpm_path, 3), 2, (True, False), (False, False)),
@@ -527,10 +531,9 @@ class NewSegment(Process_Mia):
                                        desc=inverse_deformation_field_desc))
 
         self.add_trait("forward_deformation_field",
-                       OutputMultiPath(File(),
-                                       output=True,
-                                       optional=True,
-                                       desc=forward_deformation_field_desc))
+                       ImageFileSPM(output=True,
+                                    optional=True,
+                                    desc=forward_deformation_field_desc))
 
         self.add_trait("transformation_mat",
                        OutputMultiPath(File(),
@@ -561,14 +564,13 @@ class NewSegment(Process_Mia):
             if self.channel_info:
                 self.process.inputs.channel_info = self.channel_info
 
-            if self.tissues:
-                self.process.inputs.tissues = self.tissues
-
             if self.write_deformation_fields:
                 (self.process.inputs.
                        write_deformation_fields) = self.write_deformation_fields
 
-            self.outputs = self.process._list_outputs()
+            if self.tissues:
+                    self.process.inputs.tissues = self.tissues
+                    self.outputs = self.process._list_outputs()
 
         """
          When there is only one image at the input, the tags inheritance is
@@ -626,40 +628,13 @@ class NewSegment(Process_Mia):
         self.process.run()
 
 
-class Normalize(Process_Mia):
-    """
-- Normalize (mia_processes.preprocess.spm.spatial_preprocessing.Normalize) <=> Normalise (SPM12 names).
-*** Spatial normalisation: Computes the warp that best aligns the template (atlas) to the individual's image, so one ***
-*** location in the individual's image corresponds to the same location in another subject's brain scan.             ***
-    * Input parameters:
-        * apply_to_files <=> subj.resample: Files to apply transformation to. They can be any images that are in
-                                            register with the image used to generate the deformation. A list of
-                                            items which are an existing, uncompressed file
-                                            (valid extensions: [.img, .nii, .hdr]).
-            <ex. ['/home/ArthurBlair/data/raw_data/Anat.nii']>
-        * deformation_file <=> subj.def: File y_*.nii containing 3 deformation fields for the deformation in x, y
-                                         and z dimension. A uncompressed file (valid extensions: [.img, .nii, .hdr])).
-            <ex. /home/ArthurBlair/data/downloaded_data/y_Anat.nii>
-        * jobtype: One of 'estwrite' or 'estimate' or 'write'.
-            <ex. write> 
-        * write_bounding_box <=> woptions.bb: A list of 2 items which are a list of items which are a float. This is
-                                              the bounding box (in mm) of the volume which is to be written (relative
-                                              to the anterior commissure).
-            <ex. [[-78, -112, -50], [78, 76, 85]]>
-        * write_voxel_sizes <=> woptions.vox: A list of 3 items which are a float. This is the voxel sizes of the written normalised images.
-            <ex. [1, 1, 1]>
-        * write_interp  <=> woptions.interp: This is the  method by which the images are sampled when being written
-                                             in a different space (0 <= a long integer <= 7).
-                                             0: Nearest neighbour, 1: Trilinear, 2: 2nd Degree B-spline, ...,
-                                             7: 7nd Degree B-spline.
-            <ex. 1>
-        * out_prefix <=> woptions.prefix: Specify the string to be prepended to the
-                                          filenames of the normalised image file(s)
-                                          (a string).
-            <ex. w, capsul/nipype default value>
-    * Output parameters:
-        * normalized_file <=> Normalised other files. (a list of items which are an existing file name)
-            <ex. /home/ArthurBlair/data/raw_data/wAnat.nii>
+class Normalize12(Process_Mia):
+    """    
+    *Computes the warp that best aligns the template (atlas) to the individual’s image*
+
+    Please, see the complete documention for the `Normalize12 brick in the populse.mia_processes web site
+    <https://populse.github.io/mia_processes/html/documentation/preprocess/spm/Normalize12.html>`_
+
     """
     
     def __init__(self):
@@ -670,80 +645,212 @@ class Normalize(Process_Mia):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(Normalize, self).__init__()
+        super(Normalize12, self).__init__()
 
         # Third party softwares required for the execution of the brick
         self.requirement = ['matlab', 'spm']
 
         # Inputs description
-        apply_to_files_desc = 'Files to apply transformation to. A list of items which are an existing, uncompressed file '\
-                              '(valid extensions: [.img, .nii, .hdr]).'
-        deformation_file_desc = 'File y_*.nii containing 3 deformation fields for the deformation in x, y and z dimension. '\
-                                'A uncompressed file (valid extensions: [.img, .nii, .hdr])).'
+        image_to_align_desc = ('The image that the atlas data is warped into '
+                               'alignment with (an existing file; valid '
+                               'extensions in [.img, .nii, .hdr]). Mutually '
+                               'exclusive with the deformation_file parameter.')
+        deformation_file_desc = ('File y_*.nii containing 3 deformation fields '
+                                 'for the deformation in x, y and z dimension '
+                                 '(an uncompressed file; valid extensions in '
+                                 '[.img, .nii, .hdr]). Mutually exclusive with '
+                                 'the image_to_align and tpm parameters.')
+        apply_to_files_desc = ('Files to apply transformation to. A list of '
+                               'items which are an existing, uncompressed file '
+                               '(valid extensions: [.img, .nii, .hdr]).')
         jobtype_desc = 'One of "estwrite" or "estimate" or "write".'
-        write_bounding_box_desc = 'The bounding box (in mm) of the volume which is to be written. A list of 2 items which '\
-                                  'are a list of items which are a float.'
-        write_voxel_sizes_desc = 'The voxel sizes (x, y & z, in mm) of the written normalised images. A list of 3 items '\
-                                 'which are a float'
-        write_interp_desc = 'Degree of b-spline used for interpolation (0 <= a long integer <= 7). '
-        out_prefix_desc = 'normalised output prefix (a string).'
+        bias_regularization_desc =('(For low-intensity non-uniformity artifacts'
+                                   ', use a high bias regularization (a float '
+                                   ' between 0 and 10).')
+        bias_fwhm_desc = ('Full Width at Half Maximum of Gaussian smoothness '
+                          'of bias (a value in [30, 40, 50, 60, 70, 80, 90, '
+                          '100, 110, 120, 130, 140, 150, ‘Inf’).')
+        tpm_desc = ('The template in form of tissue probability atlas (a '
+                    'pathlike object or string representing an existing file). '
+                    'Mutually exclusive with the deformation_file parameter.')
+        affine_regularization_type_desc = ("Standard space for affine "
+                                           "registration (‘mni’ or ‘size’ or "
+                                           "‘none’).")
+        warping_regularization_desc = ('The measure of the roughness of the '
+                                       'deformations for registration. Involve '
+                                       'the sum of 5 elements (list of '
+                                       'floats).')
+        smoothness_desc = ('Value to smooth the data before normalisation (a '
+                           'float; in mm). 0 is a good value for MRI.')
+        sampling_distance_desc = ('Approximate distance between sampled points '
+                                  'when estimating the model parameters (a '
+                                  'float).')
+        write_bounding_box_desc = ('The bounding box (in mm) of the volume '
+                                  'which is to be written (a list of 2 items, '
+                                  'which are a list of items, which are a '
+                                  'float.')
+        write_voxel_sizes_desc = ('The voxel sizes (x, y & z, in mm) of the '
+                                  'written normalised images (a list of 3 '
+                                  'items, which are a float).')
+        write_interp_desc = ('Degree of b-spline used for interpolation '
+                             '(0 <= a long integer <= 7; 1 is OK for PET, '
+                             'realigned fMRI, or segmentations).')
         
         # Outputs description
-        normalized_files_desc = 'Normalised files. A list of items which are an existing file name.'
+        deformation_field_desc  = ('File y_*.nii containing 3 deformation '
+                                   'fields for the deformation in x, y and z '
+                                   'dimension.')
+        normalized_image_desc = ('Normalised file that needed to be aligned (a '
+                                'list of items which are an existing file '
+                                 'name).')
+        normalized_files_desc = ('Normalised other files (a list of items '
+                                 'which are an existing file name).')
 
-        # Inputs traits 
-        # self.add_trait("apply_to_files", InputMultiPath(traits.Either(
-        #    ImageFileSPM(exists=True), traits.List(ImageFileSPM(exists=True)), output=False)))
-        self.add_trait("apply_to_files",
-                       InputMultiPath(traits.Either(ImageFileSPM(),
-                                                    traits.List(ImageFileSPM())),
-                                      output=False,
-                                      desc=apply_to_files_desc))
+
+        # Tpm parameter definition
+        config = Config()
+        resources_path = os.path.join(config.get_mia_path(), 'resources')
+        tpm_path = os.path.join(resources_path, 'spm12', 'tpm', 'TPM.nii')
+        
+        if not Path(tpm_path).exists():
+            print('\n The {} file seems to not exists ...'.format(tpm_path))
+            tpm_path = Undefined
+
+        # Inputs traits
+        self.add_trait("image_to_align",
+                       ImageFileSPM(output=False,
+                                    optional=True,
+                                    desc=image_to_align_desc))
 
         self.add_trait("deformation_file",
                        ImageFileSPM(output=False,
+                                    optional=True,
                                     desc=deformation_file_desc))
+ 
+        self.add_trait("apply_to_files",
+                       InputMultiPath(traits.Either(ImageFileSPM(),
+                                                    traits.List(ImageFileSPM()),
+                                                    Undefined),
+                                      value=[Undefined],
+                                      output=False,
+                                      optional=True,
+                                      desc=apply_to_files_desc))
 
-        """self.add_trait("jobtype", traits.Enum('write', 'est', 'estwrite',
-                                              usedefault=True, output=False, optional=True))"""
         self.add_trait("jobtype",
-                       traits.String('write',
-                                     usedefault=True,
-                                     output=False,
-                                     optional=True,
-                                     desc=jobtype_desc))
-        
-        # self.add_trait("write_bounding_box", traits.List(traits.List(traits.Float()), output=False, optional=True))
+                       traits.Enum("write",
+                                   "est",
+                                   "estwrite",
+                                   output=False,
+                                   optional=True,
+                                   desc=jobtype_desc))
+
+        self.add_trait("bias_regularization",
+                       traits.Enum(0.0001,
+                                   0,
+                                   0.00001,
+                                   0.001,
+                                   0.01,
+                                   0.1,
+                                   1,
+                                   10,
+                                   output=False,
+                                   optional=True,
+                                   desc=bias_regularization_desc))
+
+        self.add_trait("bias_fwhm",
+                       traits.Enum(60,
+                                   30,
+                                   40,
+                                   50,
+                                   70,
+                                   80,
+                                   90,
+                                   100,
+                                   110,
+                                   120,
+                                   130,
+                                   140,
+                                   150,
+                                   "Inf",
+                                   output=False,
+                                   optional=True,
+                                   desc=bias_fwhm_desc))
+
+        self.add_trait("tpm",
+                       File(exists=True,
+                            value=tpm_path,
+                            output=False,
+                            optional=True,
+                            desc=tpm_desc))
+
+        self.add_trait("affine_regularization_type",
+                       traits.Enum("mni",
+                                   "size",
+                                   "none",
+                                   output=False,
+                                   optional=True,
+                                   desc=affine_regularization_type_desc))
+
+        self.add_trait("warping_regularization",
+                       traits.List(value=[0, 0.001, 0.5, 0.05, 0.2],
+                                   trait=traits.Float(),
+                                   minlen=5,
+                                   maxlen=5,
+                                   output=False,
+                                   optional=True,
+                                   desc=warping_regularization_desc))
+
+        self.add_trait("smoothness",
+                       traits.Float(0.,
+                                   output=False,
+                                   optional=True,
+                                   desc=smoothness_desc))
+
+        self.add_trait("sampling_distance",
+                       traits.Float(3,
+                                    output=False,
+                                    optional=True,
+                                    desc=sampling_distance_desc))
+
         self.add_trait("write_bounding_box",
-                       traits.List([[-78, -112, -50], [78, 76, 85]],
+                       traits.List(traits.List(traits.Float()),
+                                   value=[[-78, -112, -50], [78, 76, 85]],
                                    output=False,
                                    optional=True,
                                    desc=write_bounding_box_desc))
-        
-        # self.add_trait("write_voxel_sizes", traits.List(traits.Float(), output=False, optional=True))
+
         self.add_trait("write_voxel_sizes",
-                       traits.List([1, 1, 1],
+                       traits.List(traits.Float(),
+                                   value=[1, 1, 1],
                                    output=False,
                                    optional=True,
                                    desc=write_voxel_sizes_desc))
-        
-        # self.add_trait("write_interp", traits.Range(low=0, high=7, output=False, optional=True))
+
         self.add_trait("write_interp",
-                       traits.Int(1,
-                                  output=False,
-                                  optional=True,
-                                  desc=write_interp_desc))
+                       traits.Range(value=1,
+                                    low=0,
+                                    high=7,
+                                    output=False,
+                                    optional=True,
+                                    desc=write_interp_desc))
 
-        self.add_trait("out_prefix",
-                       traits.String('w',
-                                     output=False,
-                                     optional=True,
-                                     desc=out_prefix_desc))
+        # Outputs traits
+        self.add_trait("deformation_field",
+                       OutputMultiPath(File(),
+                                       output=True,
+                                       optional=True,
+                                       desc=deformation_field_desc))
+                       
+        self.add_trait("normalized_image",
+                        OutputMultiPath(File(),
+                                        output=True,
+                                        optional=True,
+                                        desc=normalized_image_desc))
 
-        # Outputs traits 
         self.add_trait("normalized_files",
                        OutputMultiPath(File(),
                                        output=True,
+                                       optional=True,
                                        desc=normalized_files_desc))
 
         # process instanciation
@@ -759,39 +866,87 @@ class Normalize(Process_Mia):
         self.make_initResult() object.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Normalize, self).list_outputs()
+        super(Normalize12, self).list_outputs()
 
-        # Outputs definition and tags inheritance (optional)
-        if self.apply_to_files and self.deformation_file and self.jobtype:
+        # Outputs definition
+        _flag = False
+        self.process.inputs.jobtype = self.jobtype
+        
+        if ((self.apply_to_files) and (self.apply_to_files != [Undefined]) and
+                         (self.deformation_file) and (self.jobtype == 'write')):
             self.process.inputs.apply_to_files = self.apply_to_files
             self.process.inputs.deformation_file = self.deformation_file
-            self.process.inputs.jobtype = self.jobtype
-             
-            if self.out_prefix:
-                self.process.inputs.out_prefix = self.out_prefix
+            _flag = True
 
-            self.outputs = self.process._list_outputs()
-            
-        if self.outputs:
-        
-            for key, values in self.outputs.items():
-            
-                if key == "normalized_files":
+            if self.image_to_align:
+                self.image_to_align = Undefined
+
+            if self.tpm:
+                self.tpm = Undefined
                 
+        elif (self.image_to_align) and (self.tpm) and (self.jobtype == 'est'):
+            self.process.inputs.image_to_align = self.image_to_align
+            self.process.inputs.tpm = self.tpm
+            _flag = True
+
+            if self.apply_to_files and (self.apply_to_files != [Undefined]):
+                self.apply_to_files = Undefined
+
+            if self.deformation_file:
+                self.deformation_file = Undefined
+                
+        elif ((self.image_to_align) and (self.tpm) and
+                                                (self.jobtype == 'estwrite')):
+            self.process.inputs.image_to_align = self.image_to_align
+            self.process.inputs.tpm = self.tpm
+            _flag = True
+
+            if self.deformation_file:
+                self.deformation_file = Undefined
+
+            if (self.apply_to_files) and (self.apply_to_files != [Undefined]):
+                self.process.inputs.apply_to_files = self.apply_to_files
+
+        if _flag:
+            self.outputs = self.process._list_outputs()
+
+        #Tags inheritance (optional)
+        if self.outputs:
+
+            for key, values in self.outputs.items():
+
+                if (key == "normalized_files") and (values != Undefined):
+
                     for fullname in values:
                         path, filename = os.path.split(fullname)
-                    
-                        if self.out_prefix:
-                            filename_without_prefix = filename[
-                                                          len(self.out_prefix):]
-                        
-                        else:
-                            filename_without_prefix = filename[len('w'):]
+                        filename_without_prefix = filename[len('w'):]
 
                         if (os.path.join(path,
                                          filename_without_prefix)
-                              in self.apply_to_files):
+                                                        in self.apply_to_files):
                             self.inheritance_dict[fullname] = os.path.join(path,
+                                                        filename_without_prefix)
+
+                if (key == "deformation_field") and (values != Undefined):
+
+                    path, filename = os.path.split(values)
+                    filename_without_prefix = filename[len('y_'):]
+
+                    if (os.path.join(path,
+                                     filename_without_prefix)
+                                                        in self.image_to_align):
+                        self.inheritance_dict[values] = os.path.join(path,
+                                                        filename_without_prefix)
+
+                if (key == "normalized_image") and (values != Undefined):
+
+                    path, filename = os.path.split(values)
+                    filename_without_prefix = filename[len('w'):]
+                    
+                    if (os.path.join(path,
+                                     filename_without_prefix)
+                                                        in self.image_to_align):
+                        self.inheritance_dict[values] = os.path.join(path,
                                                         filename_without_prefix)
 
         # Return the requirement, outputs and inheritance_dict
@@ -799,13 +954,38 @@ class Normalize(Process_Mia):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(Normalize, self).run_process_mia()
-        self.process.inputs.apply_to_files = self.apply_to_files
-        self.process.inputs.deformation_file = self.deformation_file
-        self.process.inputs.jobtype = self.jobtype
-        self.process.inputs.write_bounding_box = self.write_bounding_box
-        self.process.inputs.write_voxel_sizes = self.write_voxel_sizes
-        self.process.inputs.write_interp = self.write_interp
+        super(Normalize12, self).run_process_mia()
+
+        if self.jobtype == 'write':
+            self.process.inputs.write_bounding_box = self.write_bounding_box
+            self.process.inputs.write_voxel_sizes = self.write_voxel_sizes
+            self.process.inputs.write_interp = self.write_interp
+
+        if self.jobtype == 'est':
+            self.process.inputs.bias_regularization = self.bias_regularization
+            self.process.inputs.bias_fwhm = self.bias_fwhm
+            self.process.inputs.tpm = self.tpm
+            (self.process.inputs.
+                   affine_regularization_type) = self.affine_regularization_type
+            (self.process.inputs.
+                           warping_regularization) = self.warping_regularization
+            self.process.inputs.smoothness = self.smoothness
+            self.process.inputs.sampling_distance = self.sampling_distance
+
+        if self.jobtype == 'estwrite':
+            self.process.inputs.bias_regularization = self.bias_regularization
+            self.process.inputs.bias_fwhm = self.bias_fwhm
+            self.process.inputs.tpm = self.tpm
+            (self.process.inputs.
+                   affine_regularization_type) = self.affine_regularization_type
+            (self.process.inputs.
+                           warping_regularization) = self.warping_regularization
+            self.process.inputs.smoothness = self.smoothness
+            self.process.inputs.sampling_distance = self.sampling_distance
+            self.process.inputs.write_bounding_box = self.write_bounding_box
+            self.process.inputs.write_voxel_sizes = self.write_voxel_sizes
+            self.process.inputs.write_interp = self.write_interp
+
         self.process.run()
 
 
@@ -813,7 +993,7 @@ class Realign(Process_Mia):
     """
     *Realigns a time-series of images acquired from the same subject*
 
-    Please, see the complete documention for the `Realign brick in the populse.mia_processes web site:
+    Please, see the complete documention for the `Realign brick in the populse.mia_processes web site
     <https://populse.github.io/mia_processes/html/documentation/preprocess/spm/Realign.html>`_
 
     """
@@ -1115,7 +1295,7 @@ class Realign(Process_Mia):
                             path, filename = os.path.split(fullname)
                             filename_without_prefix = filename[len('rp_'):]
 
-                            if filename_without_prefix [-4:] == '.txt':
+                            if filename_without_prefix[-4:] == '.txt':
                                 filename_without_prefix = (
                                           filename_without_prefix[:-4] + '.nii')
 
@@ -1154,7 +1334,7 @@ class Smooth(Process_Mia):
     """
     *3D Gaussian smoothing of image volumes*
 
-    Please, see the complete documention for the `Smooth brick in the populse.mia_processes web site:
+    Please, see the complete documention for the `Smooth brick in the populse.mia_processes web site
     <https://populse.github.io/mia_processes/html/documentation/preprocess/spm/Smooth.html>`_
 
     """
@@ -1219,10 +1399,9 @@ class Smooth(Process_Mia):
                        traits.Bool(output=False,
                                    optional=True,
                                    desc=implicit_masking_desc))
-        
+
         self.add_trait("out_prefix",
                        traits.String('s',
-                                     usedefault=True,
                                      output=False,
                                      optional=True,
                                      desc=out_prefix_desc))
