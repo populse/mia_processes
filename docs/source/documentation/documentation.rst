@@ -42,7 +42,7 @@ Capsul processes auto-generated docs
 
   .. toctree::
 
-      ../process_docs/mia_processes/process_matlab/index.rst
+      ../process_docs/mia_processes/studies/index.rst
 
 - **tools**
 
@@ -50,4 +50,4 @@ Capsul processes auto-generated docs
 
       ../process_docs/mia_processes/tools/index.rst
       ../process_docs/mia_processes/process_mia/index.rst
-      ../process_docs/mia_processes/studies/index.rst
+      ../process_docs/mia_processes/process_matlab/index.rst
