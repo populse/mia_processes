@@ -1,9 +1,11 @@
 
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Coregister brick &#8212; mia_processes 1.4.0 documentation</title>
     <link rel="stylesheet" href="../../../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -11,7 +13,7 @@
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head><body>
@@ -26,21 +28,21 @@
         </p>
 
       </div>
-      <div class="content" role="main">
+      <div class="content">
         
         
   <div class="toctree-wrapper compound">
 </div>
-<table class="docutils align-default">
+<table border="1" class="docutils">
 <colgroup>
-<col style="width: 23%" />
-<col style="width: 35%" />
-<col style="width: 42%" />
+<col width="23%" />
+<col width="35%" />
+<col width="42%" />
 </colgroup>
-<tbody>
-<tr class="row-odd"><td><p><a class="reference external" href="../../../index.html">Home</a></p></td>
-<td><p><a class="reference external" href="../../documentation.html">Documentation</a></p></td>
-<td><p><a class="reference external" href="https://github.com/populse/mia_processes">GitHub</a></p></td>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference external" href="../../../index.html">Home</a></td>
+<td><a class="reference external" href="../../documentation.html">Documentation</a></td>
+<td><a class="reference external" href="https://github.com/populse/mia_processes">GitHub</a></td>
 </tr>
 </tbody>
 </table>
@@ -54,46 +56,51 @@
 </div>
 <p><strong>Inputs parameters:</strong></p>
 <ul>
-<li><dl>
-<dt><em>target &lt;=&gt; ref</em> <a class="footnote-reference brackets" href="#label" id="id1">1</a></dt><dd><p>The reference file (remains stationary) while the source image is moved to match it. An existing, uncompressed file (valid extensions:
+<li><dl class="first docutils">
+<dt><em>target &lt;=&gt; ref</em> <a class="footnote-reference" href="#label" id="id1">[1]</a></dt>
+<dd><p class="first">The reference file (remains stationary) while the source image is moved to match it. An existing, uncompressed file (valid extensions:
 [.img, .nii, .hdr]).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">downloaded_data</span><span class="o">/</span><span class="n">meanFunc</span><span class="o">.</span><span class="n">nii</span>
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">downloaded_data</span><span class="o">/</span><span class="n">meanFunc</span><span class="o">.</span><span class="n">nii</span>
 </pre></div>
 </div>
 </dd>
 </dl>
 </li>
-<li><dl>
-<dt><em>source &lt;=&gt; source</em> <a class="footnote-reference brackets" href="#label" id="id2">1</a></dt><dd><p>The image that is jiggled about to best match the target image. A list of items which are an existing, uncompressed file (valid
+<li><dl class="first docutils">
+<dt><em>source &lt;=&gt; source</em> <a class="footnote-reference" href="#label" id="id2">[1]</a></dt>
+<dd><p class="first">The image that is jiggled about to best match the target image. A list of items which are an existing, uncompressed file (valid
 extensions: [.img, .nii, .hdr]).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/Anat.nii&#39;</span><span class="p">]</span>
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/Anat.nii&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 </dd>
 </dl>
 </li>
-<li><dl>
-<dt><em>apply_to_files &lt;=&gt; other</em> <a class="footnote-reference brackets" href="#label" id="id3">1</a></dt><dd><p>These are any images that need to remain in alignment with the source image (a list of items which are an existing file name).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/Func.nii&#39;</span><span class="p">]</span>
+<li><dl class="first docutils">
+<dt><em>apply_to_files &lt;=&gt; other</em> <a class="footnote-reference" href="#label" id="id3">[1]</a></dt>
+<dd><p class="first">These are any images that need to remain in alignment with the source image (a list of items which are an existing file name).</p>
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/Func.nii&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 </dd>
 </dl>
 </li>
-<li><dl>
-<dt><em>jobtype</em> <a class="footnote-reference brackets" href="#label" id="id4">1</a></dt><dd><p>One of ‘estwrite’ or ‘estimate’ or ‘write’. If ‘estimate’ is selected, the registration parameters are stored in the headers of the ‘source’
+<li><dl class="first docutils">
+<dt><em>jobtype</em> <a class="footnote-reference" href="#label" id="id4">[1]</a></dt>
+<dd><p class="first">One of ‘estwrite’ or ‘estimate’ or ‘write’. If ‘estimate’ is selected, the registration parameters are stored in the headers of the ‘source’
 and the ‘apply_to_files’ images. If ‘write’ is selected, the resliced images are named the same as the originals except that they are
 prefixed by out_prefix. if ‘estwrite’ is selected, the described procedures for ‘estimate’ and ‘write’ are performed and the output parameter
 (coregistered_source and/or coregistered_files) contains the resliced images and the one whose header has been rewritten. If it is necessary
 to choose one or the other for a subsequent calculation in a pipeline, the Auto_Filter_List brick (mia_processes library) can be used.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="n">estimate</span>
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="n">estimate</span>
 </pre></div>
 </div>
 </dd>
 </dl>
 </li>
-<li><dl>
-<dt><em>cost_function &lt;=&gt; eoptions.cost_fun</em> <a class="footnote-reference brackets" href="#label" id="id5">1</a></dt><dd><p>One of ‘mi’ or ‘nmi’ or ‘ecc’ or ‘ncc’. Registration involves finding parameters that either maximise or minimise some objective
+<li><dl class="first docutils">
+<dt><em>cost_function &lt;=&gt; eoptions.cost_fun</em> <a class="footnote-reference" href="#label" id="id5">[1]</a></dt>
+<dd><p class="first">One of ‘mi’ or ‘nmi’ or ‘ecc’ or ‘ncc’. Registration involves finding parameters that either maximise or minimise some objective
 function. For inter-modal registration,  use ‘Mutual Information’, ‘Normalised Mutual Information’ or ‘Entropy Correlation Coefficient’. For
 within modality, you could also use Normalised Cross Correlation.</p>
 <blockquote>
@@ -104,40 +111,44 @@ within modality, you could also use Normalised Cross Correlation.</p>
 <div class="line">- ‘ncc’: Normalised Cross Correlation</div>
 </div>
 </div></blockquote>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="n">nmi</span>
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="n">nmi</span>
 </pre></div>
 </div>
 </dd>
 </dl>
 </li>
-<li><dl>
-<dt><em>separation &lt;=&gt; eoptions.sep</em> <a class="footnote-reference brackets" href="#label" id="id6">1</a></dt><dd><p>A list of items which are a float. The average distance between sampled points (in mm). Can be a vector to allow a coarse registration
+<li><dl class="first docutils">
+<dt><em>separation &lt;=&gt; eoptions.sep</em> <a class="footnote-reference" href="#label" id="id6">[1]</a></dt>
+<dd><p class="first">A list of items which are a float. The average distance between sampled points (in mm). Can be a vector to allow a coarse registration
 followed by increasingly fine ones.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
 </pre></div>
 </div>
 </dd>
 </dl>
 </li>
-<li><dl>
-<dt><em>tolerance &lt;=&gt; eoptions.tol</em> <a class="footnote-reference brackets" href="#label" id="id7">1</a></dt><dd><p>A list of 12 items which are a float. The acceptable tolerance for each of 12 params. Iterations stop when differences between
+<li><dl class="first docutils">
+<dt><em>tolerance &lt;=&gt; eoptions.tol</em> <a class="footnote-reference" href="#label" id="id7">[1]</a></dt>
+<dd><p class="first">A list of 12 items which are a float. The acceptable tolerance for each of 12 params. Iterations stop when differences between
 successive estimates are less than the required tolerance.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">]</span>
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">]</span>
 </pre></div>
 </div>
 </dd>
 </dl>
 </li>
-<li><dl>
-<dt><em>fwhm &lt;=&gt; eoptions.fwhm</em> <a class="footnote-reference brackets" href="#label" id="id8">1</a></dt><dd><p>A list of 2 items which are a float. Kernel of gaussian smooth to apply to the 256*256 joint histogram.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">]</span>
+<li><dl class="first docutils">
+<dt><em>fwhm &lt;=&gt; eoptions.fwhm</em> <a class="footnote-reference" href="#label" id="id8">[1]</a></dt>
+<dd><p class="first">A list of 2 items which are a float. Kernel of gaussian smooth to apply to the 256*256 joint histogram.</p>
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">]</span>
 </pre></div>
 </div>
 </dd>
 </dl>
 </li>
-<li><dl>
-<dt><em>write_interp &lt;=&gt; roptions.interp</em> <a class="footnote-reference brackets" href="#label" id="id9">1</a></dt><dd><p>The method by which the images are sampled when being written in a different space. Nearest neighbour is fastest, but not
+<li><dl class="first docutils">
+<dt><em>write_interp &lt;=&gt; roptions.interp</em> <a class="footnote-reference" href="#label" id="id9">[1]</a></dt>
+<dd><p class="first">The method by which the images are sampled when being written in a different space. Nearest neighbour is fastest, but not
 recommended for image realignment. Trilinear Interpolation is probably OK for PET, or realigned and re-sliced fMRI, but not so suitable
 for fMRI with subject movemen because higher degree interpolation generally gives better results. Although higher degree methods
 provide better interpolation, but they are slower because they use more neighbouring voxels. (0 &lt;= a long integer &lt;= 7). Voxel sizes
@@ -152,14 +163,15 @@ must all be identical and isotropic.</p>
 <div class="line">- 7: 7th Degree B-Spline</div>
 </div>
 </div></blockquote>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">4</span>
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">4</span>
 </pre></div>
 </div>
 </dd>
 </dl>
 </li>
-<li><dl>
-<dt><em>write_wrap &lt;=&gt; roptions.wrap</em> <a class="footnote-reference brackets" href="#label" id="id10">1</a></dt><dd><p>Check if interpolation should wrap in [x,y,z] (a list of 3 items which are integer int or long). For example, in MRI scans, the images wrap
+<li><dl class="first docutils">
+<dt><em>write_wrap &lt;=&gt; roptions.wrap</em> <a class="footnote-reference" href="#label" id="id10">[1]</a></dt>
+<dd><p class="first">Check if interpolation should wrap in [x,y,z] (a list of 3 items which are integer int or long). For example, in MRI scans, the images wrap
 around in the phase encode direction, so the subject’s nose may poke into the back of the subject’s head. These are typically:</p>
 <blockquote>
 <div><div class="line-block">
@@ -168,25 +180,27 @@ around in the phase encode direction, so the subject’s nose may poke into the 
 <div class="line">- Wrap in Y [0, 1, 0], for (un-resliced) MRI where phase encoding is in the Y direction (voxel space)</div>
 </div>
 </div></blockquote>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span><span class="p">]</span>
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="mi">0</span> <span class="mi">0</span> <span class="mi">0</span><span class="p">]</span>
 </pre></div>
 </div>
 </dd>
 </dl>
 </li>
-<li><dl>
-<dt><em>write_mask &lt;=&gt; roptions.mask</em> <a class="footnote-reference brackets" href="#label" id="id11">1</a></dt><dd><p>Mask output image (a boolean). Because of subject motion, different images are likely to have different patterns of zeros from where it
+<li><dl class="first docutils">
+<dt><em>write_mask &lt;=&gt; roptions.mask</em> <a class="footnote-reference" href="#label" id="id11">[1]</a></dt>
+<dd><p class="first">Mask output image (a boolean). Because of subject motion, different images are likely to have different patterns of zeros from where it
 was not possible to sample data. With masking enabled, the program searches through the whole time series looking for voxels which
 need to be sampled from outside the original images. Where this occurs, that voxel is set to zero for the whole set of images.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
 </pre></div>
 </div>
 </dd>
 </dl>
 </li>
-<li><dl>
-<dt><em>out_prefix &lt;=&gt; roptions.prefix</em> <a class="footnote-reference brackets" href="#label" id="id12">1</a></dt><dd><p>Specify the string to be prepended to the filenames of the coregisterd image file(s).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="n">r</span><span class="p">,</span> <span class="n">capsul</span><span class="o">/</span><span class="n">nipype</span> <span class="n">default</span> <span class="n">value</span>
+<li><dl class="first docutils">
+<dt><em>out_prefix &lt;=&gt; roptions.prefix</em> <a class="footnote-reference" href="#label" id="id12">[1]</a></dt>
+<dd><p class="first">Specify the string to be prepended to the filenames of the coregisterd image file(s).</p>
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="n">r</span><span class="p">,</span> <span class="n">capsul</span><span class="o">/</span><span class="n">nipype</span> <span class="n">default</span> <span class="n">value</span>
 </pre></div>
 </div>
 </dd>
@@ -195,17 +209,19 @@ need to be sampled from outside the original images. Where this occurs, that vox
 </ul>
 <p><strong>Outputs parameters:</strong></p>
 <ul>
-<li><dl>
-<dt><em>coregistered_source</em></dt><dd><p>A list of items which are an existing file name. Coregistered source files, corresponding to ‘source’ images.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">Anat</span><span class="o">.</span><span class="n">nii</span>
+<li><dl class="first docutils">
+<dt><em>coregistered_source</em></dt>
+<dd><p class="first">A list of items which are an existing file name. Coregistered source files, corresponding to ‘source’ images.</p>
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">Anat</span><span class="o">.</span><span class="n">nii</span>
 </pre></div>
 </div>
 </dd>
 </dl>
 </li>
-<li><dl>
-<dt><em>coregistered_files</em></dt><dd><p>A list of items which are an existing file name. Coregistered other files, corresponding to ‘apply_to_files’ images.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">Func</span><span class="o">.</span><span class="n">nii</span>
+<li><dl class="first docutils">
+<dt><em>coregistered_files</em></dt>
+<dd><p class="first">A list of items which are an existing file name. Coregistered other files, corresponding to ‘apply_to_files’ images.</p>
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">Func</span><span class="o">.</span><span class="n">nii</span>
 </pre></div>
 </div>
 </dd>
@@ -213,14 +229,16 @@ need to be sampled from outside the original images. Where this occurs, that vox
 </li>
 </ul>
 <hr class="docutils" />
-<dl class="footnote brackets">
-<dt class="label" id="label"><span class="brackets">1</span><span class="fn-backref">(<a href="#id1">1</a>,<a href="#id2">2</a>,<a href="#id3">3</a>,<a href="#id4">4</a>,<a href="#id5">5</a>,<a href="#id6">6</a>,<a href="#id7">7</a>,<a href="#id8">8</a>,<a href="#id9">9</a>,<a href="#id10">10</a>,<a href="#id11">11</a>,<a href="#id12">12</a>)</span></dt>
-<dd><p>Syntax: mia_processes/nipype Coregister &lt;=&gt; SPM12 Coregister.</p>
-<p>Usefull links:
+<table class="docutils footnote" frame="void" id="label" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[1]</td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id2">2</a>, <a class="fn-backref" href="#id3">3</a>, <a class="fn-backref" href="#id4">4</a>, <a class="fn-backref" href="#id5">5</a>, <a class="fn-backref" href="#id6">6</a>, <a class="fn-backref" href="#id7">7</a>, <a class="fn-backref" href="#id8">8</a>, <a class="fn-backref" href="#id9">9</a>, <a class="fn-backref" href="#id10">10</a>, <a class="fn-backref" href="#id11">11</a>, <a class="fn-backref" href="#id12">12</a>)</em> <p>Syntax: mia_processes/nipype Coregister &lt;=&gt; SPM12 Coregister.</p>
+<p class="last">Usefull links:
 <a class="reference external" href="https://www.fil.ion.ucl.ac.uk/spm/doc/manual.pdf#page=39">SPM12 Coregister</a>,
 <a class="reference external" href="https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.spm.preprocess.html#coregister">nipype Coregister</a></p>
-</dd>
-</dl>
+</td></tr>
+</tbody>
+</table>
 </div>
 </div>
 
@@ -236,7 +254,7 @@ need to be sampled from outside the original images. Where this occurs, that vox
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, populse.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
     </div>
   </body>
 </html>
