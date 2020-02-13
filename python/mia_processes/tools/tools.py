@@ -232,32 +232,14 @@ class Files_To_List(Process_Mia):
        
 
 class Input_Filter(Process_Mia):
-    """ Input_Filter (from mia_processes.tools.tools)
-*** Process (brick) used to filter the content of the Data Browser tab 
-    or the output data of another brick. ***
-    [Preselected data (or not) from the Data Browser
-                                          or the output data from another brick]
-                         ->
-    ['/home/ArthurBlair/data/raw_data/Anat.nii']
-    * Input parameters:
-        * input: a list corresponding to the data from the Data Browser
-                 or the output data from another brick (traits.List)
-            <ex. ['/home/ArthurBlair/data/raw_data/Anat.nii',
-                  '/home/ArthurBlair/data/Func.nii']>
-    * Output parameters:
-        * output: a list with the result of the filter applied (traits.List)
-            <ex. ['/home/ArthurBlair/data/raw_data/Anat.nii']>
-    * To run properly, this process (node, brick) needs that, on the one hand,
-      in the DataBrowser, the "send documents to the Pipeline Manager" button
-      was clicked previously (with a selection of data made, or not), and on
-      the other hand, at the input_filter brick level, that a right click then
-      the selection of the option "Export to database_scans" has been made.
-      Finally, a right click on the input_filter brick will allow to filter the
-      input data by selecting "open filter".
+    """
+    *To filter the content of the Data Browser tab or the output data of another brick*
+
+    Please, see the complete documention for the `Input_Filter in the populse.mia_processes web site
+    <https://populse.github.io/mia_processes/html/documentation/tools/Input_Filter.html>`_
 
     """
 
-    
     def __init__(self):
         """Dedicated to the attributes initialisation / instanciation.
 

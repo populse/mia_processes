@@ -152,59 +152,10 @@ self.make_initResult() object.</p>
 
 <dl class="class">
 <dt id="mia_processes.tools.tools.Input_Filter">
-<em class="property">class </em><code class="descclassname">mia_processes.tools.tools.</code><code class="descname">Input_Filter</code><span class="sig-paren">(</span><em>from mia_processes.tools.tools</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/tools/tools.html#Input_Filter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.tools.tools.Input_Filter" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">mia_processes.tools.tools.</code><code class="descname">Input_Filter</code><a class="reference internal" href="_modules/mia_processes/tools/tools.html#Input_Filter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.tools.tools.Input_Filter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="mia_processes.html#mia_processes.process_mia.Process_Mia" title="mia_processes.process_mia.Process_Mia"><code class="xref py py-class docutils literal notranslate"><span class="pre">mia_processes.process_mia.Process_Mia</span></code></a></p>
-<dl class="docutils">
-<dt><a href="#id1"><span class="problematic" id="id2">**</span></a>* Process (brick) used to filter the content of the Data Browser tab </dt>
-<dd><p class="first">or the output data of another brick. <a href="#id3"><span class="problematic" id="id4">**</span></a>*
-[Preselected data (or not) from the Data Browser</p>
-<blockquote>
-<div><blockquote>
-<div>or the output data from another brick]</div></blockquote>
-<p>-&gt;</p>
-</div></blockquote>
-<p>[‘/home/ArthurBlair/data/raw_data/Anat.nii’]
-* Input parameters:</p>
-<blockquote>
-<div><ul>
-<li><dl class="first docutils">
-<dt>input: a list corresponding to the data from the Data Browser</dt>
-<dd><blockquote class="first">
-<div><p>or the output data from another brick (traits.List)</p>
-</div></blockquote>
-<dl class="last docutils">
-<dt>&lt;ex. [‘/home/ArthurBlair/data/raw_data/Anat.nii’,</dt>
-<dd><p class="first last">‘/home/ArthurBlair/data/Func.nii’]&gt;</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</li>
-</ul>
-</div></blockquote>
-<ul class="last simple">
-<li><dl class="first docutils">
-<dt>Output parameters:</dt>
-<dd><ul class="first last">
-<li><dl class="first docutils">
-<dt>output: a list with the result of the filter applied (traits.List)</dt>
-<dd>&lt;ex. [‘/home/ArthurBlair/data/raw_data/Anat.nii’]&gt;</dd>
-</dl>
-</li>
-</ul>
-</dd>
-</dl>
-</li>
-<li>To run properly, this process (node, brick) needs that, on the one hand,
-in the DataBrowser, the “send documents to the Pipeline Manager” button
-was clicked previously (with a selection of data made, or not), and on
-the other hand, at the input_filter brick level, that a right click then
-the selection of the option “Export to database_scans” has been made.
-Finally, a right click on the input_filter brick will allow to filter the
-input data by selecting “open filter”.</li>
-</ul>
-</dd>
-</dl>
+<p><em>To filter the content of the Data Browser tab or the output data of another brick</em></p>
+<p>Please, see the complete documention for the <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/tools/Input_Filter.html">Input_Filter in the populse.mia_processes web site</a></p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <ul class="last simple">
