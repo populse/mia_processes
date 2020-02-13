@@ -11,7 +11,7 @@ needed to run other higher-level bricks.
         - Files_To_List    ######## OK
         - Input_Filter
         - List_Duplicate   ######## OK
-        - List_To_File
+        - List_To_File     ######## OK
 
 """
 
