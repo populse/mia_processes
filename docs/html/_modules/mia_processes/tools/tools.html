@@ -266,32 +266,14 @@
        
 
 <div class="viewcode-block" id="Input_Filter"><a class="viewcode-back" href="../../../mia_processes.tools.html#mia_processes.tools.tools.Input_Filter">[docs]</a><span class="k">class</span> <span class="nc">Input_Filter</span><span class="p">(</span><span class="n">Process_Mia</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Input_Filter (from mia_processes.tools.tools)</span>
-<span class="sd">*** Process (brick) used to filter the content of the Data Browser tab </span>
-<span class="sd">    or the output data of another brick. ***</span>
-<span class="sd">    [Preselected data (or not) from the Data Browser</span>
-<span class="sd">                                          or the output data from another brick]</span>
-<span class="sd">                         -&gt;</span>
-<span class="sd">    [&#39;/home/ArthurBlair/data/raw_data/Anat.nii&#39;]</span>
-<span class="sd">    * Input parameters:</span>
-<span class="sd">        * input: a list corresponding to the data from the Data Browser</span>
-<span class="sd">                 or the output data from another brick (traits.List)</span>
-<span class="sd">            &lt;ex. [&#39;/home/ArthurBlair/data/raw_data/Anat.nii&#39;,</span>
-<span class="sd">                  &#39;/home/ArthurBlair/data/Func.nii&#39;]&gt;</span>
-<span class="sd">    * Output parameters:</span>
-<span class="sd">        * output: a list with the result of the filter applied (traits.List)</span>
-<span class="sd">            &lt;ex. [&#39;/home/ArthurBlair/data/raw_data/Anat.nii&#39;]&gt;</span>
-<span class="sd">    * To run properly, this process (node, brick) needs that, on the one hand,</span>
-<span class="sd">      in the DataBrowser, the &quot;send documents to the Pipeline Manager&quot; button</span>
-<span class="sd">      was clicked previously (with a selection of data made, or not), and on</span>
-<span class="sd">      the other hand, at the input_filter brick level, that a right click then</span>
-<span class="sd">      the selection of the option &quot;Export to database_scans&quot; has been made.</span>
-<span class="sd">      Finally, a right click on the input_filter brick will allow to filter the</span>
-<span class="sd">      input data by selecting &quot;open filter&quot;.</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    *To filter the content of the Data Browser tab or the output data of another brick*</span>
+
+<span class="sd">    Please, see the complete documention for the `Input_Filter in the populse.mia_processes web site</span>
+<span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/tools/Input_Filter.html&gt;`_</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    
 <div class="viewcode-block" id="Input_Filter.__init__"><a class="viewcode-back" href="../../../mia_processes.tools.html#mia_processes.tools.tools.Input_Filter.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instanciation.</span>
 
