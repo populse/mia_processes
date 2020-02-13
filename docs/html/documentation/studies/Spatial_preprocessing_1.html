@@ -1,9 +1,11 @@
 
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Spatial_preprocessing_1 pipeline &#8212; mia_processes 1.4.0 documentation</title>
     <link rel="stylesheet" href="../../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -11,7 +13,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
   </head><body>
@@ -26,21 +28,21 @@
         </p>
 
       </div>
-      <div class="content" role="main">
+      <div class="content">
         
         
   <div class="toctree-wrapper compound">
 </div>
-<table class="docutils align-default">
+<table border="1" class="docutils">
 <colgroup>
-<col style="width: 24%" />
-<col style="width: 33%" />
-<col style="width: 43%" />
+<col width="24%" />
+<col width="33%" />
+<col width="43%" />
 </colgroup>
-<tbody>
-<tr class="row-odd"><td><p><a class="reference external" href="../../../index.html">Home</a></p></td>
-<td><p><a class="reference external" href="../documentation.html">Documentation</a></p></td>
-<td><p><a class="reference external" href="https://github.com/populse/mia_processes">GitHub</a></p></td>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference external" href="../../../index.html">Home</a></td>
+<td><a class="reference external" href="../documentation.html">Documentation</a></td>
+<td><a class="reference external" href="https://github.com/populse/mia_processes">GitHub</a></td>
 </tr>
 </tbody>
 </table>
@@ -50,33 +52,36 @@
 <h2>Data pre-processing for cerebrovascular reserve analysis (CVRa) at <a class="reference external" href="http://www.neuroradiologie-grenoble.fr/">CLUNI</a> - <a class="reference external" href="https://irmage.univ-grenoble-alpes.fr/">IRMaGe</a> (Grenoble - France)<a class="headerlink" href="#data-pre-processing-for-cerebrovascular-reserve-analysis-cvra-at-cluni-irmage-grenoble-france" title="Permalink to this headline">¶</a></h2>
 <p><strong>Pipeline insight</strong></p>
 <ul class="simple">
-<li><p>Anatomical image: NewSegment -&gt; Normalize12</p></li>
-<li><p>Functional images: Realign -&gt; Coregister (to anatomical image) -&gt; Normalize12 -&gt; Smooth</p></li>
+<li>Anatomical image: NewSegment -&gt; Normalize12</li>
+<li>Functional images: Realign -&gt; Coregister (to anatomical image) -&gt; Normalize12 -&gt; Smooth</li>
 </ul>
 <p><strong>Inputs parameters</strong></p>
 <ul>
-<li><dl>
-<dt><em>anat_file</em></dt><dd><p>An anatomical image (ex. 3D T1 sequence sush as T1 turbo field echo). An existing, uncompressed file (valid extensions: [.img, .nii,
+<li><dl class="first docutils">
+<dt><em>anat_file</em></dt>
+<dd><p class="first">An anatomical image (ex. 3D T1 sequence sush as T1 turbo field echo). An existing, uncompressed file (valid extensions: [.img, .nii,
 .hdr]).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">Anat</span><span class="o">.</span><span class="n">nii</span>
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">Anat</span><span class="o">.</span><span class="n">nii</span>
 </pre></div>
 </div>
 </dd>
 </dl>
 </li>
-<li><dl>
-<dt><em>func_files</em></dt><dd><p>Functional images under hypercapnic challenge (ex. 3D T2* sequence sush as echo planar imaging). A list of items which are an
+<li><dl class="first docutils">
+<dt><em>func_files</em></dt>
+<dd><p class="first">Functional images under hypercapnic challenge (ex. 3D T2* sequence sush as echo planar imaging). A list of items which are an
 existing, uncompressed file (valid extensions: [.img, .nii, .hdr]).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/Func.nii&#39;</span><span class="p">]</span>
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/Func.nii&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 </dd>
 </dl>
 </li>
-<li><dl>
-<dt><em>voxel_sizes_func</em> <a class="footnote-reference brackets" href="#label" id="id1">1</a></dt><dd><p>The voxel sizes (x, y &amp; z, in mm) of the written normalised functional images (this the input write_voxel_sizes parameter of the
+<li><dl class="first docutils">
+<dt><em>voxel_sizes_func</em> <a class="footnote-reference" href="#label" id="id1">[1]</a></dt>
+<dd><p class="first">The voxel sizes (x, y &amp; z, in mm) of the written normalised functional images (this the input write_voxel_sizes parameter of the
 Normalize12 brick for the functional images). A list of 3 items which are a float.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">]</span>
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">]</span>
 </pre></div>
 </div>
 </dd>
@@ -85,35 +90,39 @@ Normalize12 brick for the functional images). A list of 3 items which are a floa
 </ul>
 <p><strong>Outputs parameters:</strong></p>
 <ul>
-<li><dl>
-<dt><em>forward_deformation_field</em></dt><dd><p>Forward deformation field. Could be used for spatially normalising images to MNI space (a list of items which are a pathlike object or
+<li><dl class="first docutils">
+<dt><em>forward_deformation_field</em></dt>
+<dd><p class="first">Forward deformation field. Could be used for spatially normalising images to MNI space (a list of items which are a pathlike object or
 string representing an existing file).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">y_Anat</span><span class="o">.</span><span class="n">nii</span>
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">y_Anat</span><span class="o">.</span><span class="n">nii</span>
 </pre></div>
 </div>
 </dd>
 </dl>
 </li>
-<li><dl>
-<dt><em>bias_field_images</em></dt><dd><p>The estimated bias field (a list of items which are a pathlike object or string representing an existing file).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">&lt;</span><span class="n">undefined</span><span class="o">&gt;</span>
+<li><dl class="first docutils">
+<dt><em>bias_field_images</em></dt>
+<dd><p class="first">The estimated bias field (a list of items which are a pathlike object or string representing an existing file).</p>
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">&lt;</span><span class="n">undefined</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 </dd>
 </dl>
 </li>
-<li><dl>
-<dt><em>bias_corrected_images</em></dt><dd><p>The bias corrected images (a list of items which are a pathlike object or string representing an existing file).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">mAnat</span><span class="o">.</span><span class="n">nii</span>
+<li><dl class="first docutils">
+<dt><em>bias_corrected_images</em></dt>
+<dd><p class="first">The bias corrected images (a list of items which are a pathlike object or string representing an existing file).</p>
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">mAnat</span><span class="o">.</span><span class="n">nii</span>
 </pre></div>
 </div>
 </dd>
 </dl>
 </li>
-<li><dl>
-<dt><em>native_class_images</em></dt><dd><p>Native space probability maps (a list of items which are a list of items which are a pathlike object or string representing an existing
+<li><dl class="first docutils">
+<dt><em>native_class_images</em></dt>
+<dd><p class="first">Native space probability maps (a list of items which are a list of items which are a pathlike object or string representing an existing
 file).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/c1Anat.nii&#39;</span><span class="p">],</span>
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/c1Anat.nii&#39;</span><span class="p">],</span>
      <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/c2Anat.nii&#39;</span><span class="p">],</span>
      <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/c3Anat.nii&#39;</span><span class="p">],</span>
      <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/c4Anat.nii&#39;</span><span class="p">],</span>
@@ -123,35 +132,39 @@ file).</p>
 </dd>
 </dl>
 </li>
-<li><dl>
-<dt><em>realignment_parameters</em></dt><dd><p>The estimated translation and rotation parameters during the realign stage (a list of items which are a pathlike object or string
+<li><dl class="first docutils">
+<dt><em>realignment_parameters</em></dt>
+<dd><p class="first">The estimated translation and rotation parameters during the realign stage (a list of items which are a pathlike object or string
 representing an existing file).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">rp_Func</span><span class="o">.</span><span class="n">txt</span>
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">rp_Func</span><span class="o">.</span><span class="n">txt</span>
 </pre></div>
 </div>
 </dd>
 </dl>
 </li>
-<li><dl>
-<dt><em>normalized_anat</em></dt><dd><p>The final normalised anatomical image (a list of items which are a pathlike object or string representing an existing file).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">wAnat</span><span class="o">.</span><span class="n">nii</span>
+<li><dl class="first docutils">
+<dt><em>normalized_anat</em></dt>
+<dd><p class="first">The final normalised anatomical image (a list of items which are a pathlike object or string representing an existing file).</p>
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">wAnat</span><span class="o">.</span><span class="n">nii</span>
 </pre></div>
 </div>
 </dd>
 </dl>
 </li>
-<li><dl>
-<dt><em>smoothed_func</em></dt><dd><p>The final, realigned then coregistered then normalised then smoothed, functional images (a list of items which are an existing file
+<li><dl class="first docutils">
+<dt><em>smoothed_func</em></dt>
+<dd><p class="first">The final, realigned then coregistered then normalised then smoothed, functional images (a list of items which are an existing file
 name).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">swrFunc</span><span class="o">.</span><span class="n">nii</span>
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">swrFunc</span><span class="o">.</span><span class="n">nii</span>
 </pre></div>
 </div>
 </dd>
 </dl>
 </li>
-<li><dl>
-<dt><em>coregistered_source</em></dt><dd><p>Coregistered source files, corresponding to ‘source’ images (a list of items which are an existing file name).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">meanFunc</span><span class="o">.</span><span class="n">nii</span>
+<li><dl class="first docutils">
+<dt><em>coregistered_source</em></dt>
+<dd><p class="first">Coregistered source files, corresponding to ‘source’ images (a list of items which are an existing file name).</p>
+<div class="last highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">meanFunc</span><span class="o">.</span><span class="n">nii</span>
 </pre></div>
 </div>
 </dd>
@@ -159,12 +172,13 @@ name).</p>
 </li>
 </ul>
 <hr class="docutils" />
-<dl class="footnote brackets">
-<dt class="label" id="label"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
-<dd><p>Depends of the study; the value given as an example is valid for cevastoc, cevastoc32, etc. CVRa studies at
-<a class="reference external" href="http://www.neuroradiologie-grenoble.fr/">CLUNI</a> - <a class="reference external" href="https://irmage.univ-grenoble-alpes.fr/">IRMaGe</a>.</p>
-</dd>
-</dl>
+<table class="docutils footnote" frame="void" id="label" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>Depends of the study; the value given as an example is valid for cevastoc, cevastoc32, etc. CVRa studies at
+<a class="reference external" href="http://www.neuroradiologie-grenoble.fr/">CLUNI</a> - <a class="reference external" href="https://irmage.univ-grenoble-alpes.fr/">IRMaGe</a>.</td></tr>
+</tbody>
+</table>
 </div>
 </div>
 
@@ -180,7 +194,7 @@ name).</p>
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, populse.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.1.
     </div>
   </body>
 </html>
