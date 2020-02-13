@@ -34,14 +34,17 @@ class Spatial_preprocessing_1(Pipeline):
         # nodes
         self.add_process("newsegment1", "mia_processes.preprocess.spm.spatial_preprocessing.NewSegment")
         self.add_process("realign1", "mia_processes.preprocess.spm.spatial_preprocessing.Realign")
-        self.add_process("list_duplicate1", "mia_processes.tools.tools.List_Duplicate")
+        self.add_custom_node("list_duplicate1",
+                             "capsul.pipeline.custom_nodes.reduce_node",
+                             parameters={"input_names": ["file_name_%d"],
+                                         "output_names": ["out_list"]})
         self.add_process("normalize12_1", "mia_processes.preprocess.spm.spatial_preprocessing.Normalize12")
         self.add_process("normalize12_2", "mia_processes.preprocess.spm.spatial_preprocessing.Normalize12")
         self.add_process("smooth1", "mia_processes.preprocess.spm.spatial_preprocessing.Smooth")
         self.add_process("coregister1", "mia_processes.preprocess.spm.spatial_preprocessing.Coregister")
 
         # links
-        self.export_parameter("list_duplicate1", "file_name", "anat_file")
+        self.export_parameter("list_duplicate1", "file_name_0", "anat_file")
         self.export_parameter("realign1", "in_files", "func_files")
         self.export_parameter("normalize12_2", "write_voxel_sizes", "voxel_sizes_func")
         self.export_parameter("newsegment1", "forward_deformation_field")
@@ -53,7 +56,7 @@ class Spatial_preprocessing_1(Pipeline):
         self.add_link("realign1.realigned_files->coregister1.apply_to_files")
         self.add_link("realign1.mean_image->coregister1.source")
         self.export_parameter("realign1", "realignment_parameters")
-        self.add_link("list_duplicate1.out_file->coregister1.target")
+        self.add_link("anat_file->coregister1.target")
         self.add_link("list_duplicate1.out_list->newsegment1.channel_files")
         self.add_link("list_duplicate1.out_list->normalize12_1.apply_to_files")
         self.export_parameter("normalize12_1", "normalized_files", "normalized_anat")
