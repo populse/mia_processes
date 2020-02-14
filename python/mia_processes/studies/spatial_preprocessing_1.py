@@ -25,9 +25,18 @@ from capsul.api import Pipeline
 
 class Spatial_preprocessing_1(Pipeline):
     """
-    *Data pre-processing for cerebrovascular reserve analysis (CVRa) at CLUNI - IRMaGe (Grenoble - France)*
-    Please, see the complete documention for the `Spatial_preprocessing_1 brick in the populse.mia_processes web site:
-    <https://populse.github.io/mia_processes/html/documentation/studies/Spatial_preprocessing_1.html>`_
+Data pre-processing for cerebrovascular reserve analysis (CVRa) at `CLUNI <http://www.neuroradiologie-grenoble.fr/>`_ - `IRMaGe <https://irmage.univ-grenoble-alpes.fr/>`_ (Grenoble - France)
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+**Pipeline insight**
+
+- Anatomical image: NewSegment -> Normalize12
+- Functional images: Realign -> Coregister (to anatomical image) -> Normalize12 -> Smooth
+
+------------
+
+.. [#label] Depends of the study; the value given as an example is valid for cevastoc, cevastoc32, etc. CVRa studies at
+    `CLUNI <http://www.neuroradiologie-grenoble.fr/>`_ - `IRMaGe <https://irmage.univ-grenoble-alpes.fr/>`_.
     """
 
     def pipeline_definition(self):
@@ -61,6 +70,44 @@ class Spatial_preprocessing_1(Pipeline):
         self.export_parameter("smooth1", "smoothed_files", "smoothed_func")
         self.add_link("coregister1.coregistered_files->normalize12_2.apply_to_files")
         self.export_parameter("coregister1", "coregistered_source")
+
+        self.trait('anat_file').desc = '''An anatomical image (ex. 3D T1 sequence sush as T1 turbo field echo). An existing, uncompressed file (valid extensions: [.img, .nii, .hdr]).
+
+    ::
+
+      ex. /home/ArthurBlair/data/raw_data/Anat.nii
+'''
+        self.trait('func_files').desc = '''Functional images under hypercapnic challenge (ex. 3D T2* sequence sush as echo planar imaging). A list of items which are an existing, uncompressed file (valid extensions: [.img, .nii, .hdr]).
+
+    ::
+
+      ex. ['/home/ArthurBlair/data/raw_data/Func.nii']
+'''
+        self.trait('voxel_sizes_func').desc = '''[#label]_ The voxel sizes (x, y & z, in mm) of the written normalised functional images (this the input write_voxel_sizes parameter of the Normalize12 brick for the functional images). A list of 3 items which are a float.
+
+    ::
+
+      ex. [2.0, 2.0, 2.0]
+'''
+        self.trait('realignment_parameters').desc = '''The estimated translation and rotation parameters during the realign stage (a list of items which are a pathlike object or string representing an existing file).
+
+    ::
+
+      ex. /home/ArthurBlair/data/raw_data/rp_Func.txt
+'''
+        self.trait('normalized_anat').desc = '''The final normalised anatomical image (a list of items which are a pathlike object or string representing an existing file).
+
+    ::
+
+      ex. /home/ArthurBlair/data/raw_data/wAnat.nii
+'''
+        self.trait('smoothed_func').desc = '''The final, realigned then coregistered then normalised then smoothed, functional images (a list of items which are an existing file
+    name).
+
+    ::
+
+      ex. /home/ArthurBlair/data/raw_data/swrFunc.nii
+'''
 
         # nodes positions
         self.node_position = {
