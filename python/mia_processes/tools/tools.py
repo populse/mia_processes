@@ -7,11 +7,11 @@ needed to run other higher-level bricks.
 
 :Contains:
     :Class:
-        - Auto_Filter_List ######## OK
-        - Files_To_List    ######## OK
+        - Auto_Filter_List
+        - Files_To_List
         - Input_Filter
-        - List_Duplicate   ######## OK
-        - List_To_File     ######## OK
+        - List_Duplicate
+        - List_To_File
 
 """
 
@@ -100,6 +100,9 @@ class Auto_Filter_List(Process_Mia):
         super(Auto_Filter_List, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
+        if self.outputs:
+            self.outputs = {}
+
         if (self.in_list and
                not self.in_list in ["<undefined>", traits.Undefined]):
 
@@ -212,6 +215,9 @@ class Files_To_List(Process_Mia):
         super(Files_To_List, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
+        if self.outputs:
+            self.outputs = {}
+
         if self.file1 and not self.file1 in ["<undefined>", traits.Undefined]:
         
             if ((not self.file2) or
@@ -254,10 +260,11 @@ class Input_Filter(Process_Mia):
         self.requirement = [] # no need of third party software!
 
         # Inputs description
-        input_desc = 'Input plug description.'
+        input_desc = ('A list corresponding to the data from the Data Browser '
+                      'or the output data from another brick.')
 
         # Outputs description
-        output_desc = 'Output plug description.'
+        output_desc = 'A list with the result of the filter applied.'
 
         # Inputs traits
         self.add_trait("input",
@@ -280,7 +287,9 @@ class Input_Filter(Process_Mia):
 
         The main objective of this method is to produce the outputs of the
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
-        if defined here. To work properly this method must return 
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return 
         self.make_initResult() object.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
@@ -290,14 +299,15 @@ class Input_Filter(Process_Mia):
         # open_filter OF PipelineEditor?
 
         # Outputs definition and tags inheritance (optional)
+        
         # Getting the input:
         # The current way for obtaining input data and filtering them is very
         # permissive. Indeed, it is possible to obtain the data from the output
         # of a previous brick or from the database (using Export to
-        # database_scans) and of course to perform a filtering from it.
+        # database_scans, or not) and of course to perform a filtering from it.
         # But also, if no data is sent in, we get all the data from the database
-        # (self.project.session.get_documents_names(COLLECTION_CURRENT), below),
-        # it can maybe lead to side effects (however it also allows for example
+        # (self.project.session.get_documents_names(COLLECTION_CURRENT), below).
+        # It can maybe lead to side effects (however it also allows for example
         # not to connect the input to something and to have the whole database
         # by default... Is it really desirable????
         if self.input: 
@@ -313,9 +323,13 @@ class Input_Filter(Process_Mia):
                                                        for i in self.scans_list]
 
         # Apply the filter to the input
+        if self.outputs:
+            self.outputs = {}
+
         self.outputs['output'] = self.filter.generate_filter(self.project,
                                                              self.scans_list,
                                           self.project.session.get_shown_tags())
+        self.outputs["notInDb"] = ["output"]
 
         # The output data are always an absolute path
         for idx, element in enumerate(self.outputs['output']):
@@ -389,6 +403,9 @@ class List_Duplicate(Process_Mia):
         super(List_Duplicate, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
+        if self.outputs:
+            self.outputs = {}
+
         if self.file_name:
             self.outputs["out_list"] = [self.file_name]
             self.outputs["out_file"] =  self.file_name

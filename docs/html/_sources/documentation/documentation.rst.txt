@@ -27,5 +27,6 @@ Mia_processes's documentation
 
   - `Auto_Filter_List <tools/Auto_Filter_List.html>`_
   - `Files_To_List <tools/Files_To_List.html>`_
+  - `Input_Filter <tools/Input_Filter.html>`_
   - `List_Duplicate <tools/List_Duplicate.html>`_
   - `List_To_File <tools/List_To_File.html>`_
