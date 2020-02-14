@@ -43,16 +43,20 @@ from pathlib import Path
 
 class Coregister(Process_Mia):
     """
-    *Align together scans of different modalities*
+*Align together scans of different modalities*
 
-    Please, see the complete documention for the `Coregister brick in the populse.mia_processes web site
-    <https://populse.github.io/mia_processes/html/documentation/preprocess/spm/Coregister.html>`_
+-------------
 
+.. [#label] Syntax: mia_processes/nipype Coregister <=> SPM12 Coregister.
+
+    Useful links:
+    `SPM12 Coregister <https://www.fil.ion.ucl.ac.uk/spm/doc/manual.pdf#page=39>`_,
+    `nipype Coregister <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.spm.preprocess.html#coregister>`_
     """
 
     def __init__(self):
         """Dedicated to the attributes initialisation / instanciation.
-        
+
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
         third-party products necessary for the running of the brick.
@@ -64,41 +68,134 @@ class Coregister(Process_Mia):
         self.requirement = ['matlab', 'spm']
 
         # Inputs description
-        target_desc = ('The reference file to register to. An existing,'
-                       ' uncompressed file (valid extensions:'
-                       ' [.img, .nii, .hdr]).')
-        source_desc = ('File to register to target image. A list of items which'
-                       ' are an existing, uncompressed file (valid extensions:'
-                       ' [.img, .nii, .hdr]).')
-        apply_to_files_desc = ('Files to apply transformation to (a list of'
-                               ' items which are an existing file name, (valid'
-                               ' extensions: [.img, .nii, .hdr]).')
-        jobtype_desc = "One of 'estwrite' or 'estimate' or 'write'."
-        cost_function_desc = "One of 'mi' or 'nmi' or 'ecc' or 'ncc'."
-        separation_desc = ('Sampling separation in mm (a list of items which'
-                           ' are a float).')
-        tolerance_desc = ('The acceptable tolerance for each of 12 params (a'
-                          ' list of items which are a float).')
-        fwhm_desc = ('Gaussian smoothing kernel width (mm) applied to the'
-                     ' 256*256 joint histogram (a list of 2 items which are'
-                     ' a float).')
-        write_interp_desc = ('0 <= a long integer <= 7. The method by which the'
-                             ' images are sampled when being written in a'
-                             ' different space.')
-        write_wrap_desc = ('A list of from 3 to 3 items which are an integer'
-                           ' (int or long).')
-        write_mask_desc = 'Mask output image (a boolean)'
-        out_prefix_desc = 'Coregisterd output prefix (a string).'
+        target_desc = '''*<=> ref* [#label]_
+
+The reference file (remains stationary) while the source image is moved to match it. An existing, uncompressed file (valid extensions: [.img, .nii, .hdr]).
+
+::
+
+  ex. /home/ArthurBlair/data/downloaded_data/meanFunc.nii
+'''
+        source_desc = '''*<=> source* [#label]_
+
+The image that is jiggled about to best match the target image. A list of items which are an existing, uncompressed file (valid extensions: [.img, .nii, .hdr]).
+
+::
+
+  ex. ['/home/ArthurBlair/data/raw_data/Anat.nii']
+'''
+        apply_to_files_desc = '''*<=> other* [#label]_
+
+These are any images that need to remain in alignment with the source image (a list of items which are an existing file name) (valid extensions: [.img, .nii, .hdr]).
+
+::
+
+  ex. ['/home/ArthurBlair/data/raw_data/Func.nii']
+'''
+        jobtype_desc = '''[#label]_
+
+One of 'estwrite' or 'estimate' or 'write'. If 'estimate' is selected, the registration parameters are stored in the headers of the 'source' and the 'apply_to_files' images. If 'write' is selected, the resliced images are named the same as the originals except that they are prefixed by out_prefix. if 'estwrite' is selected, the described procedures for 'estimate' and 'write' are performed and the output parameter (coregistered_source and/or coregistered_files) contains the resliced images and the one whose header has been rewritten. If it is necessary to choose one or the other for a subsequent calculation in a pipeline, the Auto_Filter_List brick (mia_processes library) can be used.
+
+::
+
+    ex. estimate
+'''
+        cost_function_desc = '''*<=> eoptions.cost_fun* [#label]_
+
+One of 'mi' or 'nmi' or 'ecc' or 'ncc'. Registration involves finding parameters that either maximise or minimise some objective function. For inter-modal registration,  use 'Mutual Information', 'Normalised Mutual Information' or 'Entropy Correlation Coefficient'. For within modality, you could also use Normalised Cross Correlation.
+
+  - 'mi': Mutual Information
+  - 'nmi': Normalised Mutual Information
+  - 'ecc': Entropy Correlation Coefficient
+  - 'ncc': Normalised Cross Correlation
+
+::
+
+  ex. nmi
+'''
+        separation_desc = '''*<=> eoptions.sep* [#label]_
+
+A list of items which are a float. The average distance between sampled points (in mm). Can be a vector to allow a coarse registration followed by increasingly fine ones.
+
+::
+
+  ex. [4, 2]
+'''
+        tolerance_desc = '''*<=> eoptions.tol* [#label]_
+
+A list of 12 items which are a float. The acceptable tolerance for each of 12 params. Iterations stop when differences between
+successive estimates are less than the required tolerance.
+
+::
+
+  ex. [0.02, 0.02, 0.02, 0.001, 0.001, 0.001, 0.01, 0.01, 0.01, 0.001, 0.001, 0.001]
+'''
+        fwhm_desc = '''*<=> eoptions.fwhm* [#label]_
+
+A list of 2 items which are a float. Kernel of gaussian smooth to apply to the 256*256 joint histogram.
+
+::
+
+  ex. [7, 7]
+'''
+        write_interp_desc = '''*<=> roptions.interp* [#label]_
+
+The method by which the images are sampled when being written in a different space. Nearest neighbour is fastest, but not recommended for image realignment. Trilinear Interpolation is probably OK for PET, or realigned and re-sliced fMRI, but not so suitable for fMRI with subject movemen because higher degree interpolation generally gives better results. Although higher degree methods provide better interpolation, but they are slower because they use more neighbouring voxels. (0 <= a long integer <= 7). Voxel sizes must all be identical and isotropic.
+
+  - 0: Nearest neighbour
+  - 1: Trilinear
+  - 2: 2nd Degree B-Spline
+  - 3: 3rd Degree B-Spline
+
+  …
+
+  - 7: 7th Degree B-Spline
+
+::
+
+  ex. 4
+'''
+        write_wrap_desc = '''*<=> roptions.wrap* [#label]_
+
+Check if interpolation should wrap in [x,y,z] (a list of 3 items which are integer int or long). For example, in MRI scans, the images wrap around in the phase encode direction, so the subject’s nose may poke into the back of the subject’s head. These are typically:
+
+  - No wrapping [0, 0, 0]: for PET or images that have already been spatially transformed (Also the recommended option if you are not really sure)
+  - Wrap in Y [0, 1, 0], for (un-resliced) MRI where phase encoding is in the Y direction (voxel space)
+
+::
+
+    ex. [0 0 0]
+'''
+        write_mask_desc = '''*<=> roptions.mask* [#label]_
+
+Mask output image (a boolean). Because of subject motion, different images are likely to have different patterns of zeros from where it was not possible to sample data. With masking enabled, the program searches through the whole time series looking for voxels which need to be sampled from outside the original images. Where this occurs, that voxel is set to zero for the whole set of images.
+
+::
+
+  ex. False
+'''
+        out_prefix_desc = '''*<=> roptions.prefix* [#label]_
+
+Specify the string to be prepended to the filenames of the coregisterd image file(s).
+
+::
+
+  ex. r, capsul/nipype default value
+'''
         
         # Outputs description
         coregistered_source_desc = '''Coregistered source files, corresponding to ‘source’ images (a list of items which are an existing file name).
 
-    ::
+::
 
-      ex. /home/ArthurBlair/data/raw_data/meanFunc.nii
+  ex. /home/ArthurBlair/data/raw_data/meanFunc.nii
 '''
-        coregistered_files_desc = ("Coregistered other files, corresponding"
-                                   " to 'apply_to_files'.")
+        coregistered_files_desc = '''A list of items which are an existing file name. Coregistered other files, corresponding to 'apply_to_files' images.
+
+::
+
+  ex. /home/ArthurBlair/data/raw_data/Func.nii
+'''
 
         # Inputs traits 
         self.add_trait("target",
@@ -405,7 +502,7 @@ A tuple (consisting of a float, a float and a tuple consisting of a boolean, a b
 
   ex. (0.0001, 60, (False, True))
 '''
-        tissues_desc = '''<=> [((tissue(i).tpm), tissue(i).ngaus, (tissue(i).native), (tissue(i).warped)), ((tissue(i+1).tpm), tissue(i+1).ngaus, (tissue(i+1).native), (tissue(i+1).warped)), ...]* [#label]_
+        tissues_desc = '''*<=> [((tissue(i).tpm), tissue(i).ngaus, (tissue(i).native), (tissue(i).warped)), ((tissue(i+1).tpm), tissue(i+1).ngaus, (tissue(i+1).native), (tissue(i+1).warped)), ...]* [#label]_
 
 A list of tuples (one per tissue, i from 1 to 6) with parameter values for each tissue types. Typically, the order of tissues is grey matter (i=1), white matter (i=2), CSF (i=3), bone (i=4), soft tissue (i=5) and air/background (i=6), if using tpm/TPM.nii from spm12.
 
@@ -454,7 +551,7 @@ Each tuple consists of the following fields:
         (('/home/ArthurBlair/spm12/tpm/TPM.nii', 5), 4, (True, False), (False, False)),
         (('/home/ArthurBlair/spm12/tpm/TPM.nii', 6), 2, (True, False), (False, False))]
 '''
-        warping_regularization_desc = '''<=> warp.reg* [#label]_
+        warping_regularization_desc = '''*<=> warp.reg* [#label]_
 
 The measure of the roughness of the deformations for registration. Involve the sum of 5 elements (a float or list of floats; the latter is required by SPM12).
 
@@ -462,7 +559,7 @@ The measure of the roughness of the deformations for registration. Involve the s
 
   ex. [0, 0.001, 0.5, 0.05, 0.2]
 '''
-        affine_regularization_desc = '''<=> warp.affreg* [#label]_
+        affine_regularization_desc = '''*<=> warp.affreg* [#label]_
 
 Standard space for affine registration ('mni' or 'eastern' or 'subj' or 'none').
 
@@ -471,7 +568,7 @@ Standard space for affine registration ('mni' or 'eastern' or 'subj' or 'none').
     ex. mni
 '''
 
-        sampling_distance_desc = '''<=> warp.samp* [#label]_
+        sampling_distance_desc = '''*<=> warp.samp* [#label]_
 
 Approximate distance between sampled points when estimating the model parameters (a float).
 
@@ -479,7 +576,7 @@ Approximate distance between sampled points when estimating the model parameters
 
   ex. 3
 '''
-        write_deformation_fields = '''<=> warp.write* [#label]_
+        write_deformation_fields = '''*<=> warp.write* [#label]_
 
 Deformation fields can be saved to disk, and used by the deformation utility (a list of 2 booleans for which deformation fields to write; Inverse, Forward).
 
