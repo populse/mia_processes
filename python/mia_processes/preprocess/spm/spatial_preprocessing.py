@@ -323,6 +323,12 @@ Specify the string to be prepended to the filenames of the coregisterd image fil
         super(Coregister, self).list_outputs()
         
         # Outputs definition and tags inheritance (optional)
+        if self.outputs:
+            self.outputs = {}
+
+        if self.inheritance_dict:
+            self.inheritance_dict = {}
+
         if (self.target and self.source and
               self.source != [Undefined] and self.jobtype):
             self.process.inputs.target = self.target
@@ -797,7 +803,9 @@ Deformation fields can be saved to disk, and used by the deformation utility (a 
                                        desc=transformation_mat_desc))
 
         # process instanciation
-        self.process = NewSegmentMia() #############
+        self.process = NewSegmentMia() # workaround to try to decrease the
+                                       # instantiation time of the NewSegment
+                                       # class
         #self.process = spm.NewSegment()
         self.change_dir = True
 
@@ -813,6 +821,12 @@ Deformation fields can be saved to disk, and used by the deformation utility (a 
         super(NewSegment, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
+        if self.outputs:
+            self.outputs = {}
+
+        if self.inheritance_dict:
+            self.inheritance_dict = {}
+
         if self.channel_files:
             self.process.inputs.channel_files = self.channel_files
             
@@ -1124,6 +1138,9 @@ class Normalize12(Process_Mia):
         super(Normalize12, self).list_outputs()
 
         # Outputs definition
+        if self.outputs:
+            self.outputs = {}
+
         _flag = False
         self.process.inputs.jobtype = self.jobtype
         
@@ -1166,6 +1183,9 @@ class Normalize12(Process_Mia):
             self.outputs = self.process._list_outputs()
 
         #Tags inheritance (optional)
+        if self.inheritance_dict:
+            self.inheritance_dict = {}
+
         if self.outputs:
 
             for key, values in self.outputs.items():
@@ -1467,7 +1487,13 @@ class Realign(Process_Mia):
         # Using the inheritance to ProcessMIA class, list_outputs method
         super(Realign, self).list_outputs()
         
-        # Outputs definition and tags inheritance (optional)         
+        # Outputs definition and tags inheritance (optional)
+        if self.outputs:
+            self.outputs = {}
+
+        if self.inheritance_dict:
+            self.inheritance_dict = {}
+        
         if self.in_files and self.in_files != [Undefined]:
             self.process.inputs.in_files = self.in_files
 
@@ -1682,6 +1708,12 @@ class Smooth(Process_Mia):
         super(Smooth, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
+        if self.outputs:
+            self.outputs = {}
+
+        if self.inheritance_dict:
+            self.inheritance_dict = {}
+
         if self.in_files and self.in_files != [Undefined]:
             self.process.inputs.in_files = self.in_files
 

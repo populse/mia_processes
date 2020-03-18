@@ -85,8 +85,7 @@ Segments,  bias  corrects  and  spatially normalises - all in the same model
 
       ex. (0.0001, 60, (False, True))
 
-- *tissues <=> [((tissue(i).tpm), tissue(i).ngaus, (tissue(i).native), (tissue(i).warped)), ((tissue(i+1).tpm), tissue(i+1).ngaus,
-  (tissue(i+1).native), (tissue(i+1).warped)), ...]* [#label]_
+- *tissues <=> [((tissue(i).tpm), tissue(i).ngaus, (tissue(i).native), (tissue(i).warped)), ((tissue(i+1).tpm), tissue(i+1).ngaus, (tissue(i+1).native), (tissue(i+1).warped)), ...]* [#label]_
     A list of tuples (one per tissue, i from 1 to 6) with parameter values for each tissue types. Typically, the order of tissues is grey
     matter (i=1), white matter (i=2), CSF (i=3), bone (i=4), soft tissue (i=5) and air/background (i=6), if using tpm/TPM.nii from
     spm12.

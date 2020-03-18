@@ -39,10 +39,11 @@
 
 <span class="sd">:Contains:</span>
 <span class="sd">    :Class:</span>
-<span class="sd">        - Auto_Filter_List ######## OK</span>
-<span class="sd">        - Files_To_List    ######## OK</span>
+<span class="sd">        - Auto_Filter_List</span>
+<span class="sd">        - Files_To_List</span>
 <span class="sd">        - Input_Filter</span>
-<span class="sd">        - List_Duplicate   ######## OK</span>
+<span class="sd">        - List_Duplicate</span>
+<span class="sd">        - List_To_File</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 
@@ -131,6 +132,9 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">Auto_Filter_List</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="c1"># Outputs definition and tags inheritance (optional)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span> <span class="o">=</span> <span class="p">{}</span>
+
         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_list</span> <span class="ow">and</span>
                <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_list</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span><span class="p">]):</span>
 
@@ -144,9 +148,10 @@
                                                         <span class="bp">self</span><span class="o">.</span><span class="n">index_filter</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
 
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">The initialisation of the Auto_Filter_List brick&#39;</span>
-                          <span class="s1">&#39; failed because the index_filter parameter is greater&#39;</span>
-                          <span class="s1">&#39; than the length of the in_list parameter ...</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">The initialisation of the Auto_Filter_List brick &#39;</span>
+                          <span class="s1">&#39; failed because the index_filter parameter is &#39;</span>
+                          <span class="s1">&#39; greater than the length of the in_list &#39;</span>
+                          <span class="s1">&#39; parameter ...</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index_filter</span><span class="p">)</span> <span class="ow">is</span> <span class="mi">2</span><span class="p">:</span>
 
@@ -242,6 +247,9 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">Files_To_List</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="c1"># Outputs definition and tags inheritance (optional)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span> <span class="o">=</span> <span class="p">{}</span>
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">file1</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">file1</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span><span class="p">]:</span>
         
             <span class="k">if</span> <span class="p">((</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">file2</span><span class="p">)</span> <span class="ow">or</span>
@@ -262,32 +270,14 @@
        
 
 <div class="viewcode-block" id="Input_Filter"><a class="viewcode-back" href="../../../mia_processes.tools.html#mia_processes.tools.tools.Input_Filter">[docs]</a><span class="k">class</span> <span class="nc">Input_Filter</span><span class="p">(</span><span class="n">Process_Mia</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Input_Filter (from mia_processes.tools.tools)</span>
-<span class="sd">*** Process (brick) used to filter the content of the Data Browser tab </span>
-<span class="sd">    or the output data of another brick. ***</span>
-<span class="sd">    [Preselected data (or not) from the Data Browser</span>
-<span class="sd">                                          or the output data from another brick]</span>
-<span class="sd">                         -&gt;</span>
-<span class="sd">    [&#39;/home/ArthurBlair/data/raw_data/Anat.nii&#39;]</span>
-<span class="sd">    * Input parameters:</span>
-<span class="sd">        * input: a list corresponding to the data from the Data Browser</span>
-<span class="sd">                 or the output data from another brick (traits.List)</span>
-<span class="sd">            &lt;ex. [&#39;/home/ArthurBlair/data/raw_data/Anat.nii&#39;,</span>
-<span class="sd">                  &#39;/home/ArthurBlair/data/Func.nii&#39;]&gt;</span>
-<span class="sd">    * Output parameters:</span>
-<span class="sd">        * output: a list with the result of the filter applied (traits.List)</span>
-<span class="sd">            &lt;ex. [&#39;/home/ArthurBlair/data/raw_data/Anat.nii&#39;]&gt;</span>
-<span class="sd">    * To run properly, this process (node, brick) needs that, on the one hand,</span>
-<span class="sd">      in the DataBrowser, the &quot;send documents to the Pipeline Manager&quot; button</span>
-<span class="sd">      was clicked previously (with a selection of data made, or not), and on</span>
-<span class="sd">      the other hand, at the input_filter brick level, that a right click then</span>
-<span class="sd">      the selection of the option &quot;Export to database_scans&quot; has been made.</span>
-<span class="sd">      Finally, a right click on the input_filter brick will allow to filter the</span>
-<span class="sd">      input data by selecting &quot;open filter&quot;.</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    *To filter the content of the Data Browser tab or the output data of another brick*</span>
+
+<span class="sd">    Please, see the complete documention for the `Input_Filter in the populse.mia_processes web site</span>
+<span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/tools/Input_Filter.html&gt;`_</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    
 <div class="viewcode-block" id="Input_Filter.__init__"><a class="viewcode-back" href="../../../mia_processes.tools.html#mia_processes.tools.tools.Input_Filter.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instanciation.</span>
 
@@ -302,10 +292,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># no need of third party software!</span>
 
         <span class="c1"># Inputs description</span>
-        <span class="n">input_desc</span> <span class="o">=</span> <span class="s1">&#39;Input plug description.&#39;</span>
+        <span class="n">input_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;A list corresponding to the data from the Data Browser &#39;</span>
+                      <span class="s1">&#39;or the output data from another brick.&#39;</span><span class="p">)</span>
 
         <span class="c1"># Outputs description</span>
-        <span class="n">output_desc</span> <span class="o">=</span> <span class="s1">&#39;Output plug description.&#39;</span>
+        <span class="n">output_desc</span> <span class="o">=</span> <span class="s1">&#39;A list with the result of the filter applied.&#39;</span>
 
         <span class="c1"># Inputs traits</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;input&quot;</span><span class="p">,</span>
@@ -328,7 +319,9 @@
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
-<span class="sd">        if defined here. To work properly this method must return </span>
+<span class="sd">        if defined here. In order not to include an output in the database,</span>
+<span class="sd">        this output must be a value of the optional key &#39;notInDb&#39; of the</span>
+<span class="sd">        self.outputs dictionary. To work properly this method must return </span>
 <span class="sd">        self.make_initResult() object.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
@@ -338,14 +331,15 @@
         <span class="c1"># open_filter OF PipelineEditor?</span>
 
         <span class="c1"># Outputs definition and tags inheritance (optional)</span>
+        
         <span class="c1"># Getting the input:</span>
         <span class="c1"># The current way for obtaining input data and filtering them is very</span>
         <span class="c1"># permissive. Indeed, it is possible to obtain the data from the output</span>
         <span class="c1"># of a previous brick or from the database (using Export to</span>
-        <span class="c1"># database_scans) and of course to perform a filtering from it.</span>
+        <span class="c1"># database_scans, or not) and of course to perform a filtering from it.</span>
         <span class="c1"># But also, if no data is sent in, we get all the data from the database</span>
-        <span class="c1"># (self.project.session.get_documents_names(COLLECTION_CURRENT), below),</span>
-        <span class="c1"># it can maybe lead to side effects (however it also allows for example</span>
+        <span class="c1"># (self.project.session.get_documents_names(COLLECTION_CURRENT), below).</span>
+        <span class="c1"># It can maybe lead to side effects (however it also allows for example</span>
         <span class="c1"># not to connect the input to something and to have the whole database</span>
         <span class="c1"># by default... Is it really desirable????</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">input</span><span class="p">:</span> 
@@ -361,9 +355,13 @@
                                                        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">scans_list</span><span class="p">]</span>
 
         <span class="c1"># Apply the filter to the input</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span> <span class="o">=</span> <span class="p">{}</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter</span><span class="o">.</span><span class="n">generate_filter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span>
                                                              <span class="bp">self</span><span class="o">.</span><span class="n">scans_list</span><span class="p">,</span>
                                           <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get_shown_tags</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;notInDb&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">]</span>
 
         <span class="c1"># The output data are always an absolute path</span>
         <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">element</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">]):</span>
@@ -437,6 +435,9 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">List_Duplicate</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="c1"># Outputs definition and tags inheritance (optional)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span> <span class="o">=</span> <span class="p">{}</span>
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_name</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;out_list&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">file_name</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;out_file&quot;</span><span class="p">]</span> <span class="o">=</span>  <span class="bp">self</span><span class="o">.</span><span class="n">file_name</span>
@@ -446,6 +447,101 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="List_Duplicate.run_process_mia"><a class="viewcode-back" href="../../../mia_processes.tools.html#mia_processes.tools.tools.List_Duplicate.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="k">return</span></div></div>
+
+
+<div class="viewcode-block" id="List_To_File"><a class="viewcode-back" href="../../../mia_processes.tools.html#mia_processes.tools.tools.List_To_File">[docs]</a><span class="k">class</span> <span class="nc">List_To_File</span><span class="p">(</span><span class="n">Process_Mia</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    *From several filenames, selects and generates a file.*</span>
+
+<span class="sd">    Please, see the complete documention for the `List_To_File in the populse.mia_processes web site</span>
+<span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/tools/List_To_File.html&gt;`_</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    
+<div class="viewcode-block" id="List_To_File.__init__"><a class="viewcode-back" href="../../../mia_processes.tools.html#mia_processes.tools.tools.List_To_File.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instanciation.</span>
+<span class="sd">        </span>
+<span class="sd">        The input and output plugs are defined here. The special</span>
+<span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
+<span class="sd">        third-party products necessary for the running of the brick.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># initialisation of the objects needed for the launch of the brick</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">List_To_File</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># no need of third party software!</span>
+
+        <span class="c1"># Inputs description</span>
+        <span class="n">file_list_desc</span> <span class="o">=</span> <span class="s1">&#39;The list of elements to be filtered.&#39;</span>
+        <span class="n">index_filter_desc</span> <span class="o">=</span> <span class="s1">&#39;A list of 0 to 1 indexes for filtering.&#39;</span>
+
+        <span class="c1"># Outputs description</span>
+        <span class="n">file_desc</span> <span class="o">=</span> <span class="s1">&#39;The corresponding filtering result (a file).&#39;</span>
+        
+        <span class="c1"># Inputs traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;file_list&quot;</span><span class="p">,</span>
+                       <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">File</span><span class="p">(),</span>
+                                   <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                   <span class="n">desc</span><span class="o">=</span><span class="n">file_list_desc</span><span class="p">))</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;index_filter&quot;</span><span class="p">,</span>
+                       <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                                   <span class="n">trait</span><span class="o">=</span><span class="n">traits</span><span class="o">.</span><span class="n">Range</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="kc">None</span><span class="p">),</span>
+                                   <span class="n">minlen</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                                   <span class="n">maxlen</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                   <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                   <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                   <span class="n">desc</span><span class="o">=</span><span class="n">index_filter_desc</span><span class="p">))</span>
+
+        <span class="c1"># Outputs traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;file&quot;</span><span class="p">,</span>
+                       <span class="n">traits</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                   <span class="n">desc</span><span class="o">=</span><span class="n">file_desc</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="List_To_File.list_outputs"><a class="viewcode-back" href="../../../mia_processes.tools.html#mia_processes.tools.tools.List_To_File.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+
+<span class="sd">        The main objective of this method is to produce the outputs of the</span>
+<span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
+<span class="sd">        if defined here. In order not to include an output in the database,</span>
+<span class="sd">        this output must be a value of the optional key &#39;notInDb&#39; of the</span>
+<span class="sd">        self.outputs dictionary. To work properly this method must return </span>
+<span class="sd">        self.make_initResult() object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">List_To_File</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+
+        <span class="c1"># Outputs definition and tags inheritance (optional)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span> <span class="o">=</span> <span class="p">{}</span>
+        
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_list</span> <span class="ow">and</span>
+               <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_list</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span><span class="p">]):</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">index_filter</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;file&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">file_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;notInDb&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;file&quot;</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index_filter</span><span class="p">)</span> <span class="ow">is</span> <span class="mi">1</span><span class="p">:</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">index_filter</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_list</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;file&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">file_list</span><span class="p">[</span>
+                                                        <span class="bp">self</span><span class="o">.</span><span class="n">index_filter</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;notInDb&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;file&quot;</span><span class="p">]</span>
+
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">The initialisation of the List_To_File brick &#39;</span>
+                          <span class="s1">&#39;failed because the index_filter parameter is &#39;</span>
+                          <span class="s1">&#39;greater than the length of file_list &#39;</span>
+                          <span class="s1">&#39;parameter ...</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="List_To_File.run_process_mia"><a class="viewcode-back" href="../../../mia_processes.tools.html#mia_processes.tools.tools.List_To_File.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="k">return</span></div></div>
 </pre></div>

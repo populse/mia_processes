@@ -109,10 +109,8 @@ mm cutoff).</p>
 </dd>
 </dl>
 </li>
-<li><p><em>tissues &lt;=&gt; [((tissue(i).tpm), tissue(i).ngaus, (tissue(i).native), (tissue(i).warped)), ((tissue(i+1).tpm), tissue(i+1).ngaus,
-(tissue(i+1).native), (tissue(i+1).warped)), …]</em> <a class="footnote-reference brackets" href="#label" id="id3">1</a></p>
-<blockquote>
-<div><p>A list of tuples (one per tissue, i from 1 to 6) with parameter values for each tissue types. Typically, the order of tissues is grey
+<li><dl>
+<dt><em>tissues &lt;=&gt; [((tissue(i).tpm), tissue(i).ngaus, (tissue(i).native), (tissue(i).warped)), ((tissue(i+1).tpm), tissue(i+1).ngaus, (tissue(i+1).native), (tissue(i+1).warped)), …]</em> <a class="footnote-reference brackets" href="#label" id="id3">1</a></dt><dd><p>A list of tuples (one per tissue, i from 1 to 6) with parameter values for each tissue types. Typically, the order of tissues is grey
 matter (i=1), white matter (i=2), CSF (i=3), bone (i=4), soft tissue (i=5) and air/background (i=6), if using tpm/TPM.nii from
 spm12.</p>
 <p>Each tuple consists of the following fields:</p>
@@ -186,7 +184,8 @@ modulation.</p>
       <span class="p">((</span><span class="s1">&#39;/home/ArthurBlair/spm12/tpm/TPM.nii&#39;</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">))]</span>
 </pre></div>
 </div>
-</div></blockquote>
+</dd>
+</dl>
 </li>
 <li><dl>
 <dt><em>warping_regularization &lt;=&gt; warp.reg</em> <a class="footnote-reference brackets" href="#label" id="id4">1</a></dt><dd><p>The measure of the roughness of the deformations for registration. Involve the sum of 5 elements (a float or list of floats; the latter is
