@@ -9,12 +9,11 @@ jobs:
   allow_failures:
 
 install:
-    - echo "$TRAVIS_OS_NAME"
-    - echo "$TRAVIS_PYTHON_VERSION" == "3.8"
     - if [[ "$TRAVIS_OS_NAME" == "linux" && "$TRAVIS_PYTHON_VERSION" == "3.8" ]]; then export BUILD_DOC=1; fi
-    - if [[ "$BUILd_DOC" == "1" ]]; then pip install -U sphinx && sudo apt-get install wget && export BASEDIR=/tmp; pushd $BASEDIR; mkdir populse_mia && svn export https://github.com/populse/populse_mia/trunk/python populse_mia/python && wget https://github.com/populse/capsul/archive/master.zip && unzip master.zip && rm master.zip && mv capsul-master capsul && wget https://github.com/populse/soma-base/archive/master.zip && unzip master.zip && rm master.zip && mv soma-base-master soma-base; popd; fi
-    - if [[ "$BUILd_DOC" == "1" ]]; then pushd docs; PYTHONPATH="$PWD/../python:$BASEDIR/populse_mia/python:$BASEDIR/capsul:$BASEDIR/soma-base/python:$PYTHONPATH" make html && touch html/.nojekyll; popd; fi
-    - if [[ -n "$GITHUB_TOKEN" && "$BUILd_DOC" == "1" ]]; then export PUSH_DOC_TO_GH_PAGES=yes; fi
+    - echo "$BUILD_DOC"
+    - if [[ "$BUILD_DOC" == "1" ]]; then pip install -U sphinx && sudo apt-get install wget && export BASEDIR=/tmp; pushd $BASEDIR; mkdir populse_mia && svn export https://github.com/populse/populse_mia/trunk/python populse_mia/python && wget https://github.com/populse/capsul/archive/master.zip && unzip master.zip && rm master.zip && mv capsul-master capsul && wget https://github.com/populse/soma-base/archive/master.zip && unzip master.zip && rm master.zip && mv soma-base-master soma-base; popd; fi
+    - if [[ "$BUILD_DOC" == "1" ]]; then pushd docs; PYTHONPATH="$PWD/../python:$BASEDIR/populse_mia/python:$BASEDIR/capsul:$BASEDIR/soma-base/python:$PYTHONPATH" make html && touch html/.nojekyll; popd; fi
+    - if [[ -n "$GITHUB_TOKEN" && "$BUILD_DOC" == "1" ]]; then export PUSH_DOC_TO_GH_PAGES=yes; fi
 
 script: echo No tests.
 
