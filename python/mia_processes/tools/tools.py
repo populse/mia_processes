@@ -109,7 +109,7 @@ class Auto_Filter_List(Process_Mia):
             if not self.index_filter:
                 self.outputs['filtered_list'] = [self.in_list[0]]
 
-            if len(self.index_filter) is 1:
+            if len(self.index_filter) == 1:
 
                 if self.index_filter[0] <= len(self.in_list):
                     self.outputs['filtered_list'] = [self.in_list[
@@ -121,7 +121,7 @@ class Auto_Filter_List(Process_Mia):
                           ' greater than the length of the in_list '
                           ' parameter ...\n')
 
-            if len(self.index_filter) is 2:
+            if len(self.index_filter) == 2:
 
                 if self.index_filter[0] < self.index_filter[1]:
 
@@ -493,7 +493,7 @@ class List_To_File(Process_Mia):
                 self.outputs['file'] = [self.file_list[0]]
                 self.outputs["notInDb"] = ["file"]
 
-            if len(self.index_filter) is 1:
+            if len(self.index_filter) == 1:
 
                 if self.index_filter[0] <= len(self.file_list):
                     self.outputs['file'] = [self.file_list[
