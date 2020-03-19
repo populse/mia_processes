@@ -22,7 +22,7 @@ deploy:
   skip_cleanup: true
   github_token: $GITHUB_TOKEN
   target-branch: gh-pages
-  local-dir: doc/html
+  local-dir: docs/html
   on:
     branch: master
     condition: $PUSH_DOC_TO_GH_PAGES == yes
