@@ -77,4 +77,3 @@
 If you have a problem or would like to ask a question about how to do something in mia_processes, please [open an issue](https://github.com/populse/mia_processes/issues).
 
 You can even contact the developer team by using populse-support@univ-grenoble-alpes.fr.
-test !
