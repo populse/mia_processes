@@ -18,11 +18,21 @@ install:
 script: echo No tests.
 
 deploy:
-  provider: pages
-  skip_cleanup: true
-  github_token: $GITHUB_TOKEN
-  target-branch: gh-pages
-  local-dir: docs/html
-  on:
-    branch: master
-    condition: $PUSH_DOC_TO_GH_PAGES == yes
+  - provider: pages
+    skip_cleanup: true
+    github_token: $GITHUB_TOKEN
+    target-branch: gh-pages
+    local-dir: docs/html
+    env: "prod"
+    on:
+      branch: master
+      condition: $PUSH_DOC_TO_GH_PAGES == yes
+  - provider: pages
+    skip_cleanup: true
+    github_token: $GITHUB_TOKEN
+    target-branch: gh-pages
+    local-dir: docs/html
+    env: "dev"
+    on:
+      branch: capsul_doc
+      condition: $PUSH_DOC_TO_GH_PAGES == yes
