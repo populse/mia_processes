@@ -1,6 +1,6 @@
 # mia_processes
 
-<!-- [![](https://codecov.io/github/populse/mia_processes/coverage.svg?branch=master)](https://codecov.io/github/populse/mia_processes) -->;
+<!-- [![](https://codecov.io/github/populse/mia_processes/coverage.svg?branch=master)](https://codecov.io/github/populse/mia_processes) -->
 [![](https://img.shields.io/badge/license-CeCILL-blue.svg)](https://github.com/populse/mia_processes/blob/master/LICENSE)
 [![](https://img.shields.io/pypi/v/mia_processes.svg)](https://pypi.org/project/mia_processes/)
 [![](https://img.shields.io/badge/python-3.5%2C%203.6%2C%203.7-yellow.svg)](#)
