@@ -10,4 +10,25 @@
 
 from .info import __version__
 
+_doc_path = None
+
+def _init_doc_path():
+    global _doc_path
+    import os
+    from .info import version_major
+    from .info import version_minor
+    import mia_processes
+
+    opd = os.path.dirname
+    p = os.path.join(
+        opd(opd(opd(mia_processes.__file__))),
+        'docs/html/process_docs/mia_processes')
+    if os.path.exists(p):
+        _doc_path = p
+        return _doc_path
+    _doc_path = 'https://populse.github.io/mia_processes/process_docs/mia_processes'
+    return _doc_path
+
+_init_doc_path()
+
 
