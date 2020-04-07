@@ -91,10 +91,16 @@ class Coregister(Process_Mia):
         out_prefix_desc = 'Coregisterd output prefix (a string).'
         
         # Outputs description
-        coregistered_source_desc = ("Coregistered source files, corresponding"
-                                    " to 'source' images.")
+        coregistered_source_desc = ("Coregistered source files, corresponding "
+                                    "to 'source' images, (a pathlike object "
+                                    "or string representing a file, or a list "
+                                    "of pathlike objects or strings "
+                                    "representing a file).")
         coregistered_files_desc = ("Coregistered other files, corresponding"
-                                   " to 'apply_to_files'.")
+                                   " to 'apply_to_files', (a pathlike object "
+                                    "or string representing a file, or a list "
+                                    "of pathlike objects or strings "
+                                    "representing a file).")
 
         # Inputs traits 
         self.add_trait("target",
@@ -399,17 +405,41 @@ class NewSegment(Process_Mia):
                                     'list of 2 booleans for Inverse, Forward.')
 
         # Outputs description
-        bias_corrected_images_desc = 'Bias corrected images.'
-        bias_field_images_desc = 'Estimated bias field.'
-        native_class_images_desc = 'Native space probability maps.'
+        bias_corrected_images_desc = ('Bias corrected images (a pathlike '
+                                      'object or string representing a file, '
+                                      'or a list of pathlike objects or '
+                                      'strings representing a file).')
+        bias_field_images_desc = ('Estimated bias field (a pathlike object or'
+                                  'string representing a file, or a list of '
+                                  'pathlike objects or strings representing a '
+                                  'file).')
+        native_class_images_desc = ('Native space probability maps (a list of '
+                                    'items which are a list of items which are '
+                                    'a pathlike object or string representing '
+                                    'a file).')
         dartel_input_images_desc = ('“Imported” class images into a form that '
-                                   'can be used with the Dartel toolbox.')
-        modulated_class_images_desc = 'Modulated and normalised class images.'
+                                    'can be used with the Dartel toolbox (a '
+                                    'list of items which are a list of items '
+                                    'which are a pathlike object or string '
+                                    'representing a file).')
+        modulated_class_images_desc = ('Modulated and normalised class images '
+                                       '(a list of items which are a list of '
+                                       'items which are a pathlike object or '
+                                       'string representing a file).')
         normalized_class_images_desc = ('Normalised class images, without '
-                                        'modulation.')
-        inverse_deformation_field_desc = 'Inverse deformation field.'
-        forward_deformation_field_desc = 'Forward deformation field.'
-        transformation_mat_desc = 'Normalisation transformation.'     
+                                        'modulation (a list of items which are '
+                                        'a list of items which are a pathlike '
+                                        'object or string representing a file')
+        inverse_deformation_field_desc = ('Inverse deformation field (a '
+                                          'pathlike object or string '
+                                          'representing a file, or a list of '
+                                          'pathlike objects or strings '
+                                          'representing a file).')
+        forward_deformation_field_desc = ('Forward deformation field (a '
+                                          'pathlike object or string '
+                                          'representing a file).')
+        transformation_mat_desc = ('Normalisation transformation (a pathlike '
+                                   'object or string representing a file).')     
 
         # Tissues parameter definition
         config = Config()
@@ -495,12 +525,14 @@ class NewSegment(Process_Mia):
 
         # Output traits
         self.add_trait("bias_corrected_images",
-                       OutputMultiPath(output=True,
+                       OutputMultiPath(File(),
+                                       output=True,
                                        optional=True,
                                        desc=bias_corrected_images_desc))
 
         self.add_trait("bias_field_images",
-                       OutputMultiPath(output=True,
+                       OutputMultiPath(File(),
+                                       output=True,
                                        optional=True,
                                        desc=bias_field_images_desc))
 
@@ -711,13 +743,17 @@ class Normalize12(Process_Mia):
         # Outputs description
         deformation_field_desc  = ('File y_*.nii containing 3 deformation '
                                    'fields for the deformation in x, y and z '
-                                   'dimension.')
+                                   'dimension (a pathlike object or string '
+                                   'representing a file, or a list of pathlike '
+                                   'objects or strings representing a file)')
         normalized_image_desc = ('Normalised file that needed to be aligned (a '
-                                'list of items which are an existing file '
-                                 'name).')
-        normalized_files_desc = ('Normalised other files (a list of items '
-                                 'which are an existing file name).')
-
+                                 'pathlike object or string representing a '
+                                 'file, or a list of pathlike objects or '
+                                 'strings representing a file).')
+        normalized_files_desc = ('Normalised other files (a pathlike object or '
+                                 'string representing a file, or a list of '
+                                 'pathlike objects or strings representing a '
+                                 'file).')
 
         # Tpm parameter definition
         config = Config()
@@ -1030,8 +1066,10 @@ class Realign(Process_Mia):
         self.requirement = ['matlab', 'spm']
         
         # Inputs description
-        in_files_desc = ('A list  of items with string elements corresponding'
-                         ' to existing path files.')
+        in_files_desc = ('The images to realign (a list of pathlike objects or '
+                         'strings representing a file or of list of items '
+                         'which are a pathlike object or strings representing '
+                         'a file or a _Undefined).')
         jobtype_desc = 'One of "estwrite" or "estimate" or "write".'
         quality_desc = ('Quality versus speed trade-off (0.0 <= a floating'
                         'point number <= 1.0).')
@@ -1061,24 +1099,33 @@ class Realign(Process_Mia):
 
         # Outputs description
         realigned_files_desc = ('If write_which is [2, 0], [1, 0] or [2, 1] and'
-                                ' jobtype is write or estwrite, these will be'
-                                ' the resliced files (a list of items which are'
-                                ' a list of items which are an existing file'
-                                ' name).')
-        modified_in_files_desc = ('If the jobtype parameter is estimate or'
-                                  ' estwrite, these will be copies of the'
-                                  ' in_files with a rewritten header (a list of'
-                                  ' items which are a list of items which are'
-                                  ' an existing file name).')
-        mean_image_desc = ('If write_which is [2, 1] or [0, 1] and jobtype is'
-                           ' write or estwrite, this will be the mean image'
-                           ' file from the realignment (an existing file'
-                           ' name).')
-        realignment_parameters_desc = ('If the jobtype parameter is estimate'
-                                       ' or estwrite, this will be the'
-                                       ' estimated translation and rotation'
-                                       ' parameters (a list of items which are'
-                                       ' an existing file name).')
+                                ' jobtype is write or estwrite, these will be '
+                                'the resliced files (a pathlike object or '
+                                'string representing a file or a list of '
+                                'items which are a pathlike object or string '
+                                'representing a file or a list of list of '
+                                'items which are a pathlike object or string '
+                                'representing a file).')
+        modified_in_files_desc = ('If the jobtype parameter is estimate or '
+                                  'estwrite, these will be copies of the '
+                                  'in_files with a rewritten header (a '
+                                  'pathlike object or string representing a '
+                                  'file or a list of items which are a '
+                                  'pathlike object or string representing a '
+                                  'file or a list of list of items which are a '
+                                  'pathlike object or string representing a '
+                                  'file).')
+        mean_image_desc = ('If write_which is [2, 1] or [0, 1] and jobtype is '
+                           'write or estwrite, this will be the mean image '
+                           'file from the realignment (a pathlike object or '
+                           'string representing a file).')
+        realignment_parameters_desc = ('If the jobtype parameter is estimate '
+                                       'or estwrite, this will be the '
+                                       'estimated translation and rotation '
+                                       'parameters (a pathlike object or '
+                                       'string representing a file, or a list '
+                                       'of pathlike objects or strings '
+                                       'representing a file).')
         
         # Inputs traits
         self.add_trait('in_files',
@@ -1392,8 +1439,10 @@ class Smooth(Process_Mia):
                            '(a string).')
 
         # Outputs description
-        smoothed_files_desc = ('The smoothed files (a list of items which are '
-                               'an existing file name).')
+        smoothed_files_desc = ('The smoothed files (a pathlike object or '
+                               'string representing a file, or a list of '
+                               'pathlike objects or strings representing a '
+                               'file).')
 
         # Input traits 
         self.add_trait("in_files",
