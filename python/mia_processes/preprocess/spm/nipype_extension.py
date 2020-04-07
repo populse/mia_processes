@@ -34,7 +34,6 @@ class NewSegmentMia(NewSegment):
 
     """
 
-
     input_spec = NewSegmentInputSpec
     output_spec = NewSegmentOutputSpec
 

@@ -184,18 +184,26 @@ Specify the string to be prepended to the filenames of the coregisterd image fil
 '''
         
         # Outputs description
-        coregistered_source_desc = '''Coregistered source files, corresponding to ‘source’ images (a list of items which are an existing file name).
-
+        coregistered_source_desc = ("Coregistered source files, corresponding "
+                                    "to 'source' images, (a pathlike object "
+                                    "or string representing a file, or a list "
+                                    "of pathlike objects or strings "
+                                    "representing a file)."
+'''
 ::
 
   ex. /home/ArthurBlair/data/raw_data/meanFunc.nii
+''')
+        coregistered_files_desc = ("Coregistered other files, corresponding"
+                                   " to 'apply_to_files', (a pathlike object "
+                                    "or string representing a file, or a list "
+                                    "of pathlike objects or strings "
+                                    "representing a file)."
 '''
-        coregistered_files_desc = '''A list of items which are an existing file name. Coregistered other files, corresponding to 'apply_to_files' images.
-
 ::
 
   ex. /home/ArthurBlair/data/raw_data/Func.nii
-'''
+''')
 
         # Inputs traits 
         self.add_trait("target",
@@ -597,76 +605,41 @@ Deformation fields can be saved to disk, and used by the deformation utility (a 
 '''
 
         # Outputs description
-        bias_corrected_images_desc = '''The bias corrected images (a list of items which are a pathlike object or string representing an existing file).
-
-::
-
-  ex. /home/ArthurBlair/data/raw_data/mAnat.nii
-'''
-        bias_field_images_desc = '''The estimated bias field (a list of items which are a pathlike object or string representing an existing file).
-
-::
-
-  ex. <undefined>
-'''
-        native_class_images_desc = '''Native space probability maps (a list of items which are a list of items which are a pathlike object or string representing an existing file).
-
-::
-
-  ex. [['/home/ArthurBlair/data/raw_data/c1Anat.nii'],
-       ['/home/ArthurBlair/data/raw_data/c2Anat.nii'],
-       ['/home/ArthurBlair/data/raw_data/c3Anat.nii'],
-       ['/home/ArthurBlair/data/raw_data/c4Anat.nii'],
-       ['/home/ArthurBlair/data/raw_data/c5Anat.nii']]
-'''
-        dartel_input_images_desc = '''"Imported" class images into a form that can be used with the Dartel toolbox (a list of items which are a list of items which are a pathlike object or string representing an existing file).
-
-::
-
-  ex. [['/home/ArthurBlair/data/raw_data/rc1Anat.nii'],
-       ['/home/ArthurBlair/data/raw_data/rc2Anat.nii'],
-       ['/home/ArthurBlair/data/raw_data/rc3Anat.nii'],
-       ['/home/ArthurBlair/data/raw_data/rc4Anat.nii'],
-       ['/home/ArthurBlair/data/raw_data/rc5Anat.nii']]
-'''
-        modulated_class_images_desc = '''Modulated and normalised class images (a list of items which are a list of items which are a pathlike object or string representing an existing file).
-
-::
-
-  ex. [['/home/ArthurBlair/data/raw_data/mwc1Anat.nii'],
-       ['/home/ArthurBlair/data/raw_data/mwc2Anat.nii'],
-       ['/home/ArthurBlair/data/raw_data/mwc3Anat.nii'],
-       ['/home/ArthurBlair/data/raw_data/mwc4Anat.nii'],
-       ['/home/ArthurBlair/data/raw_data/mwc5Anat.nii']]
-'''
-        normalized_class_images_desc = '''Normalised class images, without modulation (a list of items which are a list of items which are a pathlike object or string representing an existing file).
-
-::
-
-  ex. [['/home/ArthurBlair/data/raw_data/wc1Anat.nii'],
-       ['/home/ArthurBlair/data/raw_data/wc2Anat.nii'],
-       ['/home/ArthurBlair/data/raw_data/wc3Anat.nii'],
-       ['/home/ArthurBlair/data/raw_data/wc4Anat.nii'],
-       ['/home/ArthurBlair/data/raw_data/wc5Anat.nii']]
-'''
-        inverse_deformation_field_desc = '''Inverse deformation field. Could be used for spatially normalising surface files as GIFTI (a list of items which are a pathlike object or string representing an existing file).
-
-::
-
-  ex. /home/ArthurBlair/data/raw_data/iy_Anat.nii
-'''
-        forward_deformation_field_desc = '''Forward deformation field. Could be used for spatially normalising images to MNI space (a list of items which are a pathlike object or string representing an existing file).
-
-::
-
-  ex. /home/ArthurBlair/data/raw_data/y_Anat.nii
-'''
-        transformation_mat_desc = '''Normalisation transformation (a list of items which are a pathlike object or string representing an existing file).
-
-::
-
-  ex. /home/ArthurBlair/data/raw_data/Anat_seg8.mat
-'''
+        bias_corrected_images_desc = ('Bias corrected images (a pathlike '
+                                      'object or string representing a file, '
+                                      'or a list of pathlike objects or '
+                                      'strings representing a file).')
+        bias_field_images_desc = ('Estimated bias field (a pathlike object or'
+                                  'string representing a file, or a list of '
+                                  'pathlike objects or strings representing a '
+                                  'file).')
+        native_class_images_desc = ('Native space probability maps (a list of '
+                                    'items which are a list of items which are '
+                                    'a pathlike object or string representing '
+                                    'a file).')
+        dartel_input_images_desc = ('“Imported” class images into a form that '
+                                    'can be used with the Dartel toolbox (a '
+                                    'list of items which are a list of items '
+                                    'which are a pathlike object or string '
+                                    'representing a file).')
+        modulated_class_images_desc = ('Modulated and normalised class images '
+                                       '(a list of items which are a list of '
+                                       'items which are a pathlike object or '
+                                       'string representing a file).')
+        normalized_class_images_desc = ('Normalised class images, without '
+                                        'modulation (a list of items which are '
+                                        'a list of items which are a pathlike '
+                                        'object or string representing a file')
+        inverse_deformation_field_desc = ('Inverse deformation field (a '
+                                          'pathlike object or string '
+                                          'representing a file, or a list of '
+                                          'pathlike objects or strings '
+                                          'representing a file).')
+        forward_deformation_field_desc = ('Forward deformation field (a '
+                                          'pathlike object or string '
+                                          'representing a file).')
+        transformation_mat_desc = ('Normalisation transformation (a pathlike '
+                                   'object or string representing a file).')     
 
         # Tissues parameter definition
         config = Config()
@@ -752,12 +725,14 @@ Deformation fields can be saved to disk, and used by the deformation utility (a 
 
         # Output traits
         self.add_trait("bias_corrected_images",
-                       OutputMultiPath(output=True,
+                       OutputMultiPath(File(),
+                                       output=True,
                                        optional=True,
                                        desc=bias_corrected_images_desc))
 
         self.add_trait("bias_field_images",
-                       OutputMultiPath(output=True,
+                       OutputMultiPath(File(),
+                                       output=True,
                                        optional=True,
                                        desc=bias_field_images_desc))
 
@@ -968,13 +943,17 @@ class Normalize12(Process_Mia):
         # Outputs description
         deformation_field_desc  = ('File y_*.nii containing 3 deformation '
                                    'fields for the deformation in x, y and z '
-                                   'dimension.')
+                                   'dimension (a pathlike object or string '
+                                   'representing a file, or a list of pathlike '
+                                   'objects or strings representing a file)')
         normalized_image_desc = ('Normalised file that needed to be aligned (a '
-                                'list of items which are an existing file '
-                                 'name).')
-        normalized_files_desc = ('Normalised other files (a list of items '
-                                 'which are an existing file name).')
-
+                                 'pathlike object or string representing a '
+                                 'file, or a list of pathlike objects or '
+                                 'strings representing a file).')
+        normalized_files_desc = ('Normalised other files (a pathlike object or '
+                                 'string representing a file, or a list of '
+                                 'pathlike objects or strings representing a '
+                                 'file).')
 
         # Tpm parameter definition
         config = Config()
@@ -1287,8 +1266,10 @@ class Realign(Process_Mia):
         self.requirement = ['matlab', 'spm']
         
         # Inputs description
-        in_files_desc = ('A list  of items with string elements corresponding'
-                         ' to existing path files.')
+        in_files_desc = ('The images to realign (a list of pathlike objects or '
+                         'strings representing a file or of list of items '
+                         'which are a pathlike object or strings representing '
+                         'a file or a _Undefined).')
         jobtype_desc = 'One of "estwrite" or "estimate" or "write".'
         quality_desc = ('Quality versus speed trade-off (0.0 <= a floating'
                         'point number <= 1.0).')
@@ -1318,24 +1299,33 @@ class Realign(Process_Mia):
 
         # Outputs description
         realigned_files_desc = ('If write_which is [2, 0], [1, 0] or [2, 1] and'
-                                ' jobtype is write or estwrite, these will be'
-                                ' the resliced files (a list of items which are'
-                                ' a list of items which are an existing file'
-                                ' name).')
-        modified_in_files_desc = ('If the jobtype parameter is estimate or'
-                                  ' estwrite, these will be copies of the'
-                                  ' in_files with a rewritten header (a list of'
-                                  ' items which are a list of items which are'
-                                  ' an existing file name).')
-        mean_image_desc = ('If write_which is [2, 1] or [0, 1] and jobtype is'
-                           ' write or estwrite, this will be the mean image'
-                           ' file from the realignment (an existing file'
-                           ' name).')
-        realignment_parameters_desc = ('If the jobtype parameter is estimate'
-                                       ' or estwrite, this will be the'
-                                       ' estimated translation and rotation'
-                                       ' parameters (a list of items which are'
-                                       ' an existing file name).')
+                                ' jobtype is write or estwrite, these will be '
+                                'the resliced files (a pathlike object or '
+                                'string representing a file or a list of '
+                                'items which are a pathlike object or string '
+                                'representing a file or a list of list of '
+                                'items which are a pathlike object or string '
+                                'representing a file).')
+        modified_in_files_desc = ('If the jobtype parameter is estimate or '
+                                  'estwrite, these will be copies of the '
+                                  'in_files with a rewritten header (a '
+                                  'pathlike object or string representing a '
+                                  'file or a list of items which are a '
+                                  'pathlike object or string representing a '
+                                  'file or a list of list of items which are a '
+                                  'pathlike object or string representing a '
+                                  'file).')
+        mean_image_desc = ('If write_which is [2, 1] or [0, 1] and jobtype is '
+                           'write or estwrite, this will be the mean image '
+                           'file from the realignment (a pathlike object or '
+                           'string representing a file).')
+        realignment_parameters_desc = ('If the jobtype parameter is estimate '
+                                       'or estwrite, this will be the '
+                                       'estimated translation and rotation '
+                                       'parameters (a pathlike object or '
+                                       'string representing a file, or a list '
+                                       'of pathlike objects or strings '
+                                       'representing a file).')
         
         # Inputs traits
         self.add_trait('in_files',
@@ -1649,8 +1639,10 @@ class Smooth(Process_Mia):
                            '(a string).')
 
         # Outputs description
-        smoothed_files_desc = ('The smoothed files (a list of items which are '
-                               'an existing file name).')
+        smoothed_files_desc = ('The smoothed files (a pathlike object or '
+                               'string representing a file, or a list of '
+                               'pathlike objects or strings representing a '
+                               'file).')
 
         # Input traits 
         self.add_trait("in_files",
