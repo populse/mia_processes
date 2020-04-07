@@ -51,7 +51,7 @@ Realigns a time-series of images acquired from the same subject
 **Inputs parameters:**
 
 - *in_files <=> data* [#label]_
-    A list of items which are an existing, uncompressed file (valid extensions: [.img, .nii, .hdr]).
+    'The images to realign (a list of items which are an existing, uncompressed file (valid extensions: [.img, .nii, .hdr]).
 
     ::
 
