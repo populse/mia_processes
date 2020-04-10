@@ -326,6 +326,9 @@ Specify the string to be prepended to the filenames of the coregisterd image fil
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
         if defined here. To work properly this method must return 
         self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
         super(Coregister, self).list_outputs()
@@ -791,6 +794,9 @@ Deformation fields can be saved to disk, and used by the deformation utility (a 
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
         if defined here. To work properly this method must return 
         self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
         super(NewSegment, self).list_outputs()
@@ -1112,6 +1118,9 @@ class Normalize12(Process_Mia):
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
         if defined here. To work properly this method must return 
         self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
         super(Normalize12, self).list_outputs()
@@ -1473,6 +1482,9 @@ class Realign(Process_Mia):
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
         if defined here. To work properly this method must return 
         self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
         super(Realign, self).list_outputs()
@@ -1695,6 +1707,9 @@ class Smooth(Process_Mia):
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
         if defined here. To work properly this method must return 
         self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
         super(Smooth, self).list_outputs()
