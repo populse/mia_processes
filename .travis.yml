@@ -34,5 +34,5 @@ deploy:
     local-dir: docs/html
     env: "dev"
     on:
-      branch: capsul_doc
+      branch: master
       condition: $PUSH_DOC_TO_GH_PAGES == yes
