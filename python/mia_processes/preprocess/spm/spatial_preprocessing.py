@@ -1481,7 +1481,7 @@ class Smooth(Process_Mia):
                                      default=[6.0,6.0,6.0],
                                      output=False,
                                      optional=True,
-                                     desc= fwhm_desc))
+                                     desc=fwhm_desc))
 
         self.add_trait("data_type",
                        traits.Int(output=False,
