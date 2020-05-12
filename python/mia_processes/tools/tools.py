@@ -42,7 +42,7 @@ class Auto_Filter_List(Process_Mia):
     *Selects one or more (slicing) element(s) from a list*
 
     Please, see the complete documention for the `Auto_Filter_List in the populse.mia_processes web site
-    <https://populse.github.io/mia_processes/html/documentation/tools/Auto_Filter_List.html>`_
+    <https://populse.github.io/mia_processes/documentation/tools/Auto_Filter_List.html>`_
 
     """
 
@@ -95,6 +95,9 @@ class Auto_Filter_List(Process_Mia):
         this output must be a value of the optional key 'notInDb' of the
         self.outputs dictionary. To work properly this method must return 
         self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
         super(Auto_Filter_List, self).list_outputs()
@@ -162,7 +165,7 @@ class Files_To_List(Process_Mia):
     *From 2 file names, generating a list containing all theses file names*
 
     Please, see the complete documention for the `Files_To_List in the populse.mia_processes web site
-    <https://populse.github.io/mia_processes/html/documentation/tools/Files_To_List.html>`_
+    <https://populse.github.io/mia_processes/documentation/tools/Files_To_List.html>`_
 
     """
 
@@ -210,6 +213,9 @@ class Files_To_List(Process_Mia):
         this output must be a value of the optional key 'notInDb' of the
         self.outputs dictionary. To work properly this method must return 
         self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
         super(Files_To_List, self).list_outputs()
@@ -242,7 +248,7 @@ class Input_Filter(Process_Mia):
     *To filter the content of the Data Browser tab or the output data of another brick*
 
     Please, see the complete documention for the `Input_Filter in the populse.mia_processes web site
-    <https://populse.github.io/mia_processes/html/documentation/tools/Input_Filter.html>`_
+    <https://populse.github.io/mia_processes/documentation/tools/Input_Filter.html>`_
 
     """
 
@@ -291,6 +297,9 @@ class Input_Filter(Process_Mia):
         this output must be a value of the optional key 'notInDb' of the
         self.outputs dictionary. To work properly this method must return 
         self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
         super(Input_Filter, self).list_outputs()
@@ -350,7 +359,7 @@ class List_Duplicate(Process_Mia):
     *From a file name, generating a list containing this file name and the file name itself*
 
     Please, see the complete documention for the `List_Duplicate in the populse.mia_processes web site
-    <https://populse.github.io/mia_processes/html/documentation/tools/List_Duplicate.html>`_
+    <https://populse.github.io/mia_processes/documentation/tools/List_Duplicate.html>`_
 
     """
 
@@ -398,6 +407,9 @@ class List_Duplicate(Process_Mia):
         this output must be a value of the optional key 'notInDb' of the
         self.outputs dictionary. To work properly this method must return 
         self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
         super(List_Duplicate, self).list_outputs()
@@ -424,7 +436,7 @@ class List_To_File(Process_Mia):
     *From several filenames, selects and generates a file.*
 
     Please, see the complete documention for the `List_To_File in the populse.mia_processes web site
-    <https://populse.github.io/mia_processes/html/documentation/tools/List_To_File.html>`_
+    <https://populse.github.io/mia_processes/documentation/tools/List_To_File.html>`_
 
     """
 
@@ -478,6 +490,9 @@ class List_To_File(Process_Mia):
         this output must be a value of the optional key 'notInDb' of the
         self.outputs dictionary. To work properly this method must return 
         self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
         super(List_To_File, self).list_outputs()

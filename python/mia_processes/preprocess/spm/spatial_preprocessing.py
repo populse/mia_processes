@@ -324,7 +324,9 @@ Specify the string to be prepended to the filenames of the coregisterd image fil
 
         The main objective of this method is to produce the outputs of the
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
-        if defined here. To work properly this method must return 
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return 
         self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
@@ -792,7 +794,9 @@ Deformation fields can be saved to disk, and used by the deformation utility (a 
 
         The main objective of this method is to produce the outputs of the
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
-        if defined here. To work properly this method must return 
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return 
         self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
@@ -883,7 +887,7 @@ class Normalize12(Process_Mia):
     *Computes the warp that best aligns the template (atlas) to the individual’s image*
 
     Please, see the complete documention for the `Normalize12 brick in the populse.mia_processes web site
-    <https://populse.github.io/mia_processes/html/documentation/preprocess/spm/Normalize12.html>`_
+    <https://populse.github.io/mia_processes/documentation/preprocess/spm/Normalize12.html>`_
 
     """
     
@@ -1116,7 +1120,9 @@ class Normalize12(Process_Mia):
 
         The main objective of this method is to produce the outputs of the
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
-        if defined here. To work properly this method must return 
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return 
         self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
@@ -1257,7 +1263,7 @@ class Realign(Process_Mia):
     *Realigns a time-series of images acquired from the same subject*
 
     Please, see the complete documention for the `Realign brick in the populse.mia_processes web site
-    <https://populse.github.io/mia_processes/html/documentation/preprocess/spm/Realign.html>`_
+    <https://populse.github.io/mia_processes/documentation/preprocess/spm/Realign.html>`_
 
     """
     
@@ -1480,7 +1486,9 @@ class Realign(Process_Mia):
 
         The main objective of this method is to produce the outputs of the
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
-        if defined here. To work properly this method must return 
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return 
         self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
@@ -1618,7 +1626,7 @@ class Smooth(Process_Mia):
     *3D Gaussian smoothing of image volumes*
 
     Please, see the complete documention for the `Smooth brick in the populse.mia_processes web site
-    <https://populse.github.io/mia_processes/html/documentation/preprocess/spm/Smooth.html>`_
+    <https://populse.github.io/mia_processes/documentation/preprocess/spm/Smooth.html>`_
 
     """
 
@@ -1673,7 +1681,7 @@ class Smooth(Process_Mia):
                                      default=[6.0,6.0,6.0],
                                      output=False,
                                      optional=True,
-                                     desc= fwhm_desc))
+                                     desc=fwhm_desc))
 
         self.add_trait("data_type",
                        traits.Int(output=False,
@@ -1705,7 +1713,9 @@ class Smooth(Process_Mia):
 
         The main objective of this method is to produce the outputs of the
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
-        if defined here. To work properly this method must return 
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return 
         self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.

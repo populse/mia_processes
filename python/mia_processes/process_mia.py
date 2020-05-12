@@ -68,7 +68,7 @@ class Process_Mia(ProcessMIA):
         if ((self.requirement is None) or
             (not self.inheritance_dict) or
             (not self.outputs)):
-            print('During the {0} process initialisation, some possible '
+            print('\nDuring the {0} process initialisation, some possible '
                    'problems were detected:'.format(self))
              
             if self.requirement is None:
@@ -81,7 +81,7 @@ class Process_Mia(ProcessMIA):
                 print('- outputs attribute was not found ...')
 
             print()
-            
+
         return {'requirement': self.requirement, 'outputs': self.outputs,
                 'inheritance_dict': self.inheritance_dict}
 
