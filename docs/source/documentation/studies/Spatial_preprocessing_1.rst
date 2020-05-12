@@ -43,8 +43,8 @@ Data pre-processing for cerebrovascular reserve analysis (CVRa) at `CLUNI <http:
 
 **Pipeline insight**
 
-- Anatomical image: NewSegment -> Normalize12
-- Functional images: Realign -> Coregister (to anatomical image) -> Normalize12 -> Smooth
+- Anatomical image: NewSegment -> Normalize12_1
+- Functional images: Realign -> Coregister (to anatomical image) -> Normalize12_2 [#label]_ -> Smooth
 
 **Inputs parameters**
 
@@ -63,14 +63,6 @@ Data pre-processing for cerebrovascular reserve analysis (CVRa) at `CLUNI <http:
     ::
 
       ex. ['/home/ArthurBlair/data/raw_data/Func.nii']
-
-- *voxel_sizes_func* [#label]_
-    The voxel sizes (x, y & z, in mm) of the written normalised functional images (this the input write_voxel_sizes parameter of the
-    Normalize12 brick for the functional images). A list of 3 items which are a float.
-
-    ::
-
-      ex. [2.0, 2.0, 2.0]
 
 **Outputs parameters:**
 
@@ -141,5 +133,5 @@ Data pre-processing for cerebrovascular reserve analysis (CVRa) at `CLUNI <http:
 
 -------------
 
-.. [#label] Depends of the study; the value given as an example is valid for cevastoc, cevastoc32, etc. CVRa studies at
-	    `CLUNI <http://www.neuroradiologie-grenoble.fr/>`_ - `IRMaGe <https://irmage.univ-grenoble-alpes.fr/>`_.
+.. [#label] The voxel_sizes_func parameter value of the Normalize12_2 brick is set to [2.0, 2.0, 2.0] (valid for cevastoc, cevastoc32, etc. CVRa studies at
+	    `CLUNI <http://www.neuroradiologie-grenoble.fr/>`_ - `IRMaGe <https://irmage.univ-grenoble-alpes.fr/>`_).
