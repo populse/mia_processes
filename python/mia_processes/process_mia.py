@@ -63,6 +63,15 @@ class Process_Mia(ProcessMIA):
         if self.change_dir:
             self.switch_to_cur_work_dir()
 
+    def requirements(self):
+        """
+        Capsul Process.requirements() implementation using MIA's
+        Process_Mia.requirement attribute
+        """
+        if self.requirement:
+            return {req: 'any' for req in self.requirement}
+        return {}
+
     def make_initResult(self):
         """Make the initResult_dict from initialisation."""
         if ((self.requirement is None) or
