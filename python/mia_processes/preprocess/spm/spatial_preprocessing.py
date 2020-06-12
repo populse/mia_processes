@@ -33,12 +33,13 @@ from populse_mia.software_properties import Config
 
 # nipype import
 from nipype.interfaces import spm
-from nipype.interfaces.base import OutputMultiPath, InputMultiPath, File, traits
+from nipype.interfaces.base import OutputMultiPath, InputMultiPath, File, InputMultiObject, traits_extension
 from nipype.interfaces.spm.base import ImageFileSPM
 
 # Other import
 import os
 from traits.api import Undefined, Float
+import traits.api as traits
 from pathlib import Path
 
 class Coregister(Process_Mia):
@@ -49,6 +50,10 @@ class Coregister(Process_Mia):
     <https://populse.github.io/mia_processes/documentation/preprocess/spm/Coregister.html>`_
 
     """
+    use_mcr = traits.Bool(optional=True)
+    paths = InputMultiObject(traits.Directory(), optional=True)
+    matlab_cmd = traits_extension.Str(optional=True)
+    mfile = traits.Bool(optional=True)
 
     def __init__(self):
         """Dedicated to the attributes initialisation / instanciation.
@@ -61,7 +66,7 @@ class Coregister(Process_Mia):
         super(Coregister, self).__init__()
 
         # Third party softwares required for the execution of the brick
-        self.requirement = ['matlab', 'spm']
+        self.requirement = ['spm']
 
         # Inputs description
         target_desc = ('The reference file to register to. An existing,'
@@ -363,6 +368,11 @@ class NewSegment(Process_Mia):
 
     """
 
+    use_mcr = traits.Bool(optional=True)
+    paths = InputMultiObject(traits.Directory(), optional=True)
+    matlab_cmd = traits_extension.Str(optional=True)
+    mfile = traits.Bool(optional=True)
+
     def __init__(self):
         """Dedicated to the attributes initialisation / instanciation.
         
@@ -374,7 +384,7 @@ class NewSegment(Process_Mia):
         super(NewSegment, self).__init__()
 
         # Third party softwares required for the execution of the brick
-        self.requirement = ['matlab', 'spm']
+        self.requirement = ['spm']
 
         # Inputs description
         
@@ -572,9 +582,10 @@ class NewSegment(Process_Mia):
                                        desc=inverse_deformation_field_desc))
 
         self.add_trait("forward_deformation_field",
-                       ImageFileSPM(output=True,
-                                    optional=True,
-                                    desc=forward_deformation_field_desc))
+                       OutputMultiPath(ImageFileSPM(),
+                                       output=True,
+                                       optional=True,
+                                       desc=forward_deformation_field_desc))
 
         self.add_trait("transformation_mat",
                        OutputMultiPath(File(),
@@ -691,6 +702,11 @@ class Normalize12(Process_Mia):
 
     """
     
+    use_mcr = traits.Bool(optional=True)
+    paths = InputMultiObject(traits.Directory(), optional=True)
+    matlab_cmd = traits_extension.Str(optional=True)
+    mfile = traits.Bool(optional=True)
+
     def __init__(self):
         """Dedicated to the attributes initialisation / instanciation.
         
@@ -702,7 +718,7 @@ class Normalize12(Process_Mia):
         super(Normalize12, self).__init__()
 
         # Third party softwares required for the execution of the brick
-        self.requirement = ['matlab', 'spm']
+        self.requirement = ['spm']
 
         # Inputs description
         image_to_align_desc = ('The image that the atlas data is warped into '
@@ -1067,6 +1083,11 @@ class Realign(Process_Mia):
 
     """
     
+    use_mcr = traits.Bool(optional=True)
+    paths = InputMultiObject(traits.Directory(), optional=True)
+    matlab_cmd = traits_extension.Str(optional=True)
+    mfile = traits.Bool(optional=True)
+
     def __init__(self):
         """Dedicated to the attributes initialisation / instanciation.
         
@@ -1078,7 +1099,7 @@ class Realign(Process_Mia):
         super(Realign, self).__init__()
 
         # Third party softwares required for the execution of the brick
-        self.requirement = ['matlab', 'spm']
+        self.requirement = ['spm']
         
         # Inputs description
         in_files_desc = ('The images to realign (a list of pathlike objects or '
@@ -1430,6 +1451,11 @@ class Smooth(Process_Mia):
 
     """
 
+    use_mcr = traits.Bool(optional=True)
+    paths = InputMultiObject(traits.Directory(), optional=True)
+    matlab_cmd = traits_extension.Str(optional=True)
+    mfile = traits.Bool(optional=True)
+
     def __init__(self):
         """Dedicated to the attributes initialisation / instanciation.
         
@@ -1441,7 +1467,7 @@ class Smooth(Process_Mia):
         super(Smooth, self).__init__()
 
         # Third party softwares required for the execution of the brick
-        self.requirement = ['matlab', 'spm']
+        self.requirement = ['spm']
 
         # Inputs description
         in_files_desc = ('List of files to smooth. A list of items which are '

@@ -21,6 +21,7 @@ a custom execution of the bricks in populse_mia.
 
 import os
 from traits.api import Undefined
+import traits.api as traits
 
 # Populse_MIA imports
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
@@ -43,6 +44,11 @@ class Process_Mia(ProcessMIA):
 
     """
 
+    # this output_directory trait is optional because it will not necessarily
+    # be connected to another plug, MIA infrastructure will set it internally.
+    # This is not very clean since the parameter is actually mandatory to
+    # run the process.
+    output_directory = traits.Directory(output=False, optional=True)
     
     def __init__(self):
         super(Process_Mia, self).__init__()
