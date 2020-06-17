@@ -50,10 +50,10 @@ class Coregister(Process_Mia):
     <https://populse.github.io/mia_processes/documentation/preprocess/spm/Coregister.html>`_
 
     """
-    use_mcr = traits.Bool(optional=True)
-    paths = InputMultiObject(traits.Directory(), optional=True)
-    matlab_cmd = traits_extension.Str(optional=True)
-    mfile = traits.Bool(optional=True)
+    use_mcr = traits.Bool(optional=True, hidden=True)
+    paths = InputMultiObject(traits.Directory(), optional=True, hidden=True)
+    matlab_cmd = traits_extension.Str(optional=True, hidden=True)
+    mfile = traits.Bool(optional=True, hidden=True)
 
     def __init__(self):
         """Dedicated to the attributes initialisation / instanciation.
@@ -368,10 +368,10 @@ class NewSegment(Process_Mia):
 
     """
 
-    use_mcr = traits.Bool(optional=True)
-    paths = InputMultiObject(traits.Directory(), optional=True)
-    matlab_cmd = traits_extension.Str(optional=True)
-    mfile = traits.Bool(optional=True)
+    use_mcr = traits.Bool(optional=True, hidden=True)
+    paths = InputMultiObject(traits.Directory(), optional=True, hidden=True)
+    matlab_cmd = traits_extension.Str(optional=True, hidden=True)
+    mfile = traits.Bool(optional=True, hidden=True)
 
     def __init__(self):
         """Dedicated to the attributes initialisation / instanciation.
@@ -702,10 +702,10 @@ class Normalize12(Process_Mia):
 
     """
     
-    use_mcr = traits.Bool(optional=True)
-    paths = InputMultiObject(traits.Directory(), optional=True)
-    matlab_cmd = traits_extension.Str(optional=True)
-    mfile = traits.Bool(optional=True)
+    use_mcr = traits.Bool(optional=True, hidden=True)
+    paths = InputMultiObject(traits.Directory(), optional=True, hidden=True)
+    matlab_cmd = traits_extension.Str(optional=True, hidden=True)
+    mfile = traits.Bool(optional=True, hidden=True)
 
     def __init__(self):
         """Dedicated to the attributes initialisation / instanciation.
@@ -1083,10 +1083,10 @@ class Realign(Process_Mia):
 
     """
     
-    use_mcr = traits.Bool(optional=True)
-    paths = InputMultiObject(traits.Directory(), optional=True)
-    matlab_cmd = traits_extension.Str(optional=True)
-    mfile = traits.Bool(optional=True)
+    use_mcr = traits.Bool(optional=True, hidden=True)
+    paths = InputMultiObject(traits.Directory(), optional=True, hidden=True)
+    matlab_cmd = traits_extension.Str(optional=True, hidden=True)
+    mfile = traits.Bool(optional=True, hidden=True)
 
     def __init__(self):
         """Dedicated to the attributes initialisation / instanciation.
@@ -1451,10 +1451,10 @@ class Smooth(Process_Mia):
 
     """
 
-    use_mcr = traits.Bool(optional=True)
-    paths = InputMultiObject(traits.Directory(), optional=True)
-    matlab_cmd = traits_extension.Str(optional=True)
-    mfile = traits.Bool(optional=True)
+    use_mcr = traits.Bool(optional=True, hidden=True)
+    paths = InputMultiObject(traits.Directory(), optional=True, hidden=True)
+    matlab_cmd = traits_extension.Str(optional=True, hidden=True)
+    mfile = traits.Bool(optional=True, hidden=True)
 
     def __init__(self):
         """Dedicated to the attributes initialisation / instanciation.
@@ -1606,7 +1606,7 @@ class Smooth(Process_Mia):
         super(Smooth, self).run_process_mia()
         
         for idx, element in enumerate(self.in_files):
-            full_path = os.path.relpath(element)
+            full_path = os.path.abspath(element)
             self.in_files[idx] = full_path
 
         self.process.inputs.in_files = self.in_files

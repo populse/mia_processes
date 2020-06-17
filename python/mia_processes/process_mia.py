@@ -48,7 +48,8 @@ class Process_Mia(ProcessMIA):
     # be connected to another plug, MIA infrastructure will set it internally.
     # This is not very clean since the parameter is actually mandatory to
     # run the process.
-    output_directory = traits.Directory(output=False, optional=True)
+    output_directory = traits.Directory(output=False, optional=True,
+                                        hidden=True)
     
     def __init__(self):
         super(Process_Mia, self).__init__()
