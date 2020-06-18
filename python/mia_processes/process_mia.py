@@ -49,7 +49,7 @@ class Process_Mia(ProcessMIA):
     # This is not very clean since the parameter is actually mandatory to
     # run the process.
     output_directory = traits.Directory(output=False, optional=True,
-                                        hidden=True)
+                                        userlevel=1)
     
     def __init__(self):
         super(Process_Mia, self).__init__()
