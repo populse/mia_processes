@@ -347,6 +347,19 @@ class Coregister(Process_Mia):
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
         super(Coregister, self).run_process_mia()
+
+        if (self.target and self.source and
+                self.source != [Undefined] and self.jobtype):
+            self.process.inputs.target = self.target
+            self.process.inputs.source = self.source
+            self.process.inputs.jobtype = self.jobtype
+
+            if self.apply_to_files and self.apply_to_files != [Undefined]:
+                self.process.inputs.apply_to_files = self.apply_to_files
+
+            if self.out_prefix:
+                self.process.inputs.out_prefix = self.out_prefix
+
         self.process.inputs.target = self.target
         self.process.inputs.source = self.source
         self.process.inputs.apply_to_files = self.apply_to_files
@@ -682,6 +695,20 @@ class NewSegment(Process_Mia):
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
         super(NewSegment, self).run_process_mia()
+
+        if self.channel_files:
+            self.process.inputs.channel_files = self.channel_files
+
+            if self.channel_info:
+                self.process.inputs.channel_info = self.channel_info
+
+            if self.write_deformation_fields:
+                (self.process.inputs.
+                    write_deformation_fields) = self.write_deformation_fields
+
+            if self.tissues:
+                self.process.inputs.tissues = self.tissues
+
         self.process.inputs.channel_files = self.channel_files
         self.process.inputs.channel_info = self.channel_info
         self.process.inputs.tissues = self.tissues
@@ -1040,6 +1067,26 @@ class Normalize12(Process_Mia):
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
         super(Normalize12, self).run_process_mia()
+
+        self.process.inputs.jobtype = self.jobtype
+
+        if ((self.apply_to_files) and (self.apply_to_files != [Undefined]) and
+                         (self.deformation_file)
+                         and (self.jobtype == 'write')):
+            self.process.inputs.apply_to_files = self.apply_to_files
+            self.process.inputs.deformation_file = self.deformation_file
+
+        elif (self.image_to_align) and (self.tpm) and (self.jobtype == 'est'):
+            self.process.inputs.image_to_align = self.image_to_align
+            self.process.inputs.tpm = self.tpm
+
+        elif ((self.image_to_align) and (self.tpm) and
+                                                (self.jobtype == 'estwrite')):
+            self.process.inputs.image_to_align = self.image_to_align
+            self.process.inputs.tpm = self.tpm
+
+            if (self.apply_to_files) and (self.apply_to_files != [Undefined]):
+                self.process.inputs.apply_to_files = self.apply_to_files
 
         if self.jobtype == 'write':
             self.process.inputs.write_bounding_box = self.write_bounding_box
@@ -1425,6 +1472,13 @@ class Realign(Process_Mia):
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
         super(Realign, self).run_process_mia()
+
+        if self.in_files and self.in_files != [Undefined]:
+            self.process.inputs.in_files = self.in_files
+
+            if self.out_prefix:
+                self.process.inputs.out_prefix = self.out_prefix
+
         self.process.inputs.in_files = self.in_files
         self.process.inputs.jobtype = self.jobtype
         self.process.inputs.quality = self.quality
@@ -1604,7 +1658,13 @@ class Smooth(Process_Mia):
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
         super(Smooth, self).run_process_mia()
-        
+
+        if self.in_files and self.in_files != [Undefined]:
+            self.process.inputs.in_files = self.in_files
+
+            if self.out_prefix:
+                self.process.inputs.out_prefix = self.out_prefix
+
         for idx, element in enumerate(self.in_files):
             full_path = os.path.abspath(element)
             self.in_files[idx] = full_path
