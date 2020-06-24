@@ -30,6 +30,7 @@ from .nipype_extension import NewSegmentMia
 
 # populse_mia import
 from populse_mia.software_properties import Config
+from soma.controller.trait_utils import relax_exists_constraint
 
 # nipype import
 from nipype.interfaces import spm
@@ -957,6 +958,9 @@ class Normalize12(Process_Mia):
         # process instanciation
         self.process = spm.Normalize12()
         self.change_dir = True
+        # fix an output trait marked as exists
+        relax_exists_constraint(self.process.output_spec().trait(
+            'normalized_files'))
 
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
