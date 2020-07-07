@@ -474,16 +474,18 @@ class NewSegment(Process_Mia):
         config = Config()
         resources_path = os.path.join(config.get_mia_path(), 'resources')
         tpm_path = os.path.join(resources_path, 'spm12', 'tpm', 'TPM.nii')
-        
-        if not Path(tpm_path).exists():
-            print('\n The {} file seems to not exists ...'.format(tpm_path))
 
-        tissues_list = [((tpm_path, 1), 2, (True, False), (False, False)),
-                        ((tpm_path, 2), 2, (True, False), (False, False)),
-                        ((tpm_path, 3), 2, (True, False), (False, False)),
-                        ((tpm_path, 4), 3, (True, False), (False, False)),
-                        ((tpm_path, 5), 4, (True, False), (False, False)),
-                        ((tpm_path, 6), 2, (True, False), (False, False))]
+        if not Path(tpm_path).is_file():
+            print('\nThe {} file seems to not exists ...'.format(tpm_path))
+            tissues_list = Undefined
+
+        else:
+            tissues_list = [((tpm_path, 1), 2, (True, False), (False, False)),
+                            ((tpm_path, 2), 2, (True, False), (False, False)),
+                            ((tpm_path, 3), 2, (True, False), (False, False)),
+                            ((tpm_path, 4), 3, (True, False), (False, False)),
+                            ((tpm_path, 5), 4, (True, False), (False, False)),
+                            ((tpm_path, 6), 2, (True, False), (False, False))]
 
         # Inputs traits
         self.add_trait("channel_files",
@@ -506,17 +508,19 @@ class NewSegment(Process_Mia):
                                     desc=channel_info_desc))
 
         self.add_trait("tissues",
-                       traits.List(
-                           traits.Tuple(
-                               traits.Tuple(ImageFileSPM(exists=True),
-                                            traits.Int()),
-                               traits.Int(),
-                               traits.Tuple(traits.Bool, traits.Bool),
-                               traits.Tuple(traits.Bool, traits.Bool)),
-                           value=tissues_list,
+                       traits.Either(
+                           traits.List(
+                               traits.Tuple(
+                                   traits.Tuple(ImageFileSPM(exists=True),
+                                                traits.Int()),
+                                   traits.Int(),
+                                   traits.Tuple(traits.Bool, traits.Bool),
+                                   traits.Tuple(traits.Bool, traits.Bool))),
+                           Undefined,
                            output=False,
                            optional=True,
                            desc=tissues_desc))
+        self.tissues = tissues_list
 
         self.add_trait("warping_regularization",
                        traits.Either(traits.List(traits.Float(),
@@ -814,8 +818,8 @@ class Normalize12(Process_Mia):
         resources_path = os.path.join(config.get_mia_path(), 'resources')
         tpm_path = os.path.join(resources_path, 'spm12', 'tpm', 'TPM.nii')
         
-        if not Path(tpm_path).exists():
-            print('\n The {} file seems to not exists ...'.format(tpm_path))
+        if not Path(tpm_path).is_file():
+            print('\nThe {} file seems to not exists ...'.format(tpm_path))
             tpm_path = Undefined
 
         # Inputs traits
