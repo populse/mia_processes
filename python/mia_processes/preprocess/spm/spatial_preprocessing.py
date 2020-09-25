@@ -34,7 +34,8 @@ from soma.controller.trait_utils import relax_exists_constraint
 
 # nipype import
 from nipype.interfaces import spm
-from nipype.interfaces.base import OutputMultiPath, InputMultiPath, File, InputMultiObject, traits_extension
+from nipype.interfaces.base import (OutputMultiPath, InputMultiPath, File,
+                                    InputMultiObject, traits_extension)
 from nipype.interfaces.spm.base import ImageFileSPM
 
 # Other import
@@ -51,6 +52,7 @@ class Coregister(Process_Mia):
     <https://populse.github.io/mia_processes/documentation/preprocess/spm/Coregister.html>`_
 
     """
+
     use_mcr = traits.Bool(optional=True, userlevel=1)
     paths = InputMultiObject(traits.Directory(), optional=True, userlevel=1)
     matlab_cmd = traits_extension.Str(optional=True, userlevel=1)
