@@ -14,16 +14,60 @@ The info.py module is mainly used by the setup.py module.
 # for details.
 ##########################################################################
 
+import os
+import subprocess
 import sys
 
 # Current version
 version_major = 1
-version_minor = 4
-version_micro = 1
-version_extra = ""
+version_minor = 5
+version_micro = 0
+version_extra = "dev" # leave empty for release
 
 # Expected by setup.py: string of form "X.Y.Z"
-__version__ = "{0}.{1}.{2}".format(version_major, version_minor, version_micro)
+if version_extra:
+    __version__ = "{0}.{1}.{2}-{3}".format(version_major, version_minor, version_micro, version_extra)
+    
+else:
+    __version__ = "{0}.{1}.{2}".format(version_major, version_minor, version_micro)
+   
+def get_gitversion():
+    """Mia_processes version as reported by the last commit in git
+    Returns the version or None if nothing was found
+    """
+    try:
+        import mia_processes
+        dir_mia_processes = os.path.realpath(
+            os.path.join(os.path.dirname(mia_processes.__file__), os.path.pardir, os.path.pardir))
+
+    except:
+        dir_mia_processes = os.getcwd()
+
+    dir_mia_processesgit = os.path.join(dir_mia_processes, ".git")
+
+    if not os.path.exists(dir_mia_processesgit):
+        return None
+
+    ver = None
+
+    try:
+        gitversion, _ = subprocess.Popen(
+            "git show -s --format=%h", shell=True, cwd=dir_mia_processes, stdout=subprocess.PIPE
+        ).communicate()
+
+    except Exception:
+        pass
+
+    else:
+        ver = gitversion.decode().strip().split("-")[-1]
+
+    return ver
+
+if __version__.endswith("-dev"):
+    gitversion = get_gitversion()
+
+    if gitversion:
+        __version__ = "{0}+{1}".format(__version__, gitversion)
 
 # Expected by setup.py: the status of the project
 CLASSIFIERS = ['Development Status :: 5 - Production/Stable',
