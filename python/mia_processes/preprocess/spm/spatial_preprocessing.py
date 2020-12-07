@@ -1505,8 +1505,40 @@ class Realign(Process_Mia):
         self.process.inputs.out_prefix = self.out_prefix
         self.process.run()
 
+from capsul.process.process import NipypeProcess
+
+class MIANipypeProcess(Process_Mia, NipypeProcess):
+
+    def __new__(cls, *args, **kwargs):
+        '''
+        we need to refefine the __new__ method to use the nipype_factory()
+        function under the hood for new instances. This way new instances
+        specialization will be allowed in a __postinit__ method.
+        '''
+
+        from capsul.process.nipype_process import nipype_factory
+        if len(args) == 0:
+            interface = getattr(cls, '_interface_class', spm.Smooth)
+            instance = nipype_factory(interface(), base_class=cls)
+            # override direct nipype reference
+            instance.id = instance.__class__.__module__ + "." + instance.name
+            instance.__postinit__(*args, **kwargs)
+        else:
+            instance = super(MIANipypeProcess, cls).__new__(cls, *args,
+                                                            **kwargs)
+            instance.__mianp_init_done__ = False
+
+        return instance
+
+    def __init__(self, *args, **kwargs):
+        if hasattr(self, '__mianp_init_done__') and self.__mianp_init_done__:
+            return
+
+        self.__mianp_init_done__ = True
+        super(MIANipypeProcess, self).__init__(*args, **kwargs)
+
         
-class Smooth(Process_Mia):
+class Smooth(MIANipypeProcess):
     """
     *3D Gaussian smoothing of image volumes*
 
@@ -1515,12 +1547,9 @@ class Smooth(Process_Mia):
 
     """
 
-    use_mcr = traits.Bool(optional=True, userlevel=1)
-    paths = InputMultiObject(traits.Directory(), optional=True, userlevel=1)
-    matlab_cmd = traits_extension.Str(optional=True, userlevel=1)
-    mfile = traits.Bool(optional=True, userlevel=1)
+    _interface_class = spm.Smooth
 
-    def __init__(self):
+    def __postinit__(self, *args, **kwargs):
         """Dedicated to the attributes initialisation / instanciation.
         
         The input and output plugs are defined here. The special
@@ -1528,7 +1557,6 @@ class Smooth(Process_Mia):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(Smooth, self).__init__()
 
         # Third party softwares required for the execution of the brick
         self.requirement = ['spm']
@@ -1555,48 +1583,41 @@ class Smooth(Process_Mia):
                                'file).')
 
         # Input traits 
-        self.add_trait("in_files",
-                       InputMultiPath(traits.Either(ImageFileSPM(),
-                                                    Undefined),
-                                      value=[Undefined],
-                                      copyfile=False,
-                                      output=False,
-                                      optional=False,
-                                      desc=in_files_desc))
+        self.trait("in_files").desc = in_files_desc
+        self.trait("fwhm").desc = fwhm_desc
+        self.trait("data_type").desc = data_type_desc
+        self.trait("implicit_masking").desc = implicit_masking_desc
+        self.trait("out_prefix").desc = out_prefix_desc
 
-        self.add_trait("fwhm",
-                       traits.Either(traits.Float(),
-                                     traits.List(traits.Float(),
-                                                 minlen=3, maxlen=3),
-                                     default=[6.0,6.0,6.0],
-                                     output=False,
-                                     optional=True,
-                                     desc=fwhm_desc))
-
-        self.add_trait("data_type",
-                       traits.Int(output=False,
-                                  optional=True,
-                                  desc=data_type_desc))
-        
-        self.add_trait("implicit_masking",
-                       traits.Bool(output=False,
-                                   optional=True,
-                                   desc=implicit_masking_desc))
-
-        self.add_trait("out_prefix",
-                       traits.String('s',
-                                     output=False,
-                                     optional=True,
-                                     desc=out_prefix_desc))
+        for tname in ('synchronize', 'matlab_cmd', 'mfile', 'paths', 'use_mcr',
+                      'use_v8struct', '_smoothed_files', '_spm_script_file'):
+            self.trait(tname).userlevel = 2
 
         # Output traits 
         self.add_trait("smoothed_files",
                        OutputMultiPath(File(),
                                        output=True,
                                        desc=smoothed_files_desc))
+        #self.add_trait("spm_script_file",
+                       #self._clone_trait(self.trait('_spm_script_file')))
 
-        self.process = spm.Smooth()
-        self.change_dir = True
+        self.on_trait_change(self.sync_np_smoothed_files,
+                             ['smoothed_files', '_smoothed_files',
+                              #'spm_script_file', '_spm_script_file'
+                              ])
+
+        #self.change_dir = True  # not needed in NipypeProcess
+
+    def sync_np_smoothed_files(self, param, value):
+        '''
+        sync copies of NipypeProcess output traits starting with underscores
+        '''
+        if param[0] == '_':
+            dest = param[1:]
+        else:
+            dest = '_%s' % param
+        if value != getattr(self, dest):
+            setattr(self, dest, value)
 
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
@@ -1621,14 +1642,8 @@ class Smooth(Process_Mia):
         if self.inheritance_dict:
             self.inheritance_dict = {}
 
-        if self.in_files and self.in_files != [Undefined]:
-            self.process.inputs.in_files = self.in_files
-
-            if self.out_prefix:
-                self.process.inputs.out_prefix = self.out_prefix
-
-            self.outputs['smoothed_files'] = self.process._list_outputs()[
-                                                               'smoothed_files']
+        self.outputs['smoothed_files'] = self.process._list_outputs()[
+                                                            'smoothed_files']
 
         """raw_data_folder = os.path.join("data", "raw_data")
         derived_data_folder = os.path.join("data", "derived_data")
@@ -1665,23 +1680,3 @@ class Smooth(Process_Mia):
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
     
-    def run_process_mia(self):
-        """Dedicated to the process launch step of the brick."""
-        super(Smooth, self).run_process_mia()
-
-        if self.in_files and self.in_files != [Undefined]:
-            self.process.inputs.in_files = self.in_files
-
-            if self.out_prefix:
-                self.process.inputs.out_prefix = self.out_prefix
-
-        for idx, element in enumerate(self.in_files):
-            full_path = os.path.abspath(element)
-            self.in_files[idx] = full_path
-
-        self.process.inputs.in_files = self.in_files
-        self.process.inputs.fwhm = self.fwhm
-        self.process.inputs.data_type = self.data_type
-        self.process.inputs.implicit_masking = self.implicit_masking
-        self.process.inputs.out_prefix = self.out_prefix
-        self.process.run()
