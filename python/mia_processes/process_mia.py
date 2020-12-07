@@ -26,6 +26,10 @@ import traits.api as traits
 # Populse_MIA imports
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 
+# Capsul imports
+from capsul.process.process import NipypeProcess
+
+
 class Process_Mia(ProcessMIA):
     """Class overriding the ProcessMIA class, in order to personalise 
        the run in MIA.
@@ -143,3 +147,62 @@ class Process_Mia(ProcessMIA):
 
         except Exception as e:
             print('{0}: {1}'.format(e.__class__, e))
+
+
+class MiaNipypeProcess(Process_Mia, NipypeProcess):
+    '''
+    Process inheriting both Process_Mia and NipypeProcess. This class can be
+    subclassed for specialized nipype interfaces, and customized if needed.
+    The factory functions (capsul.process.nipype_process.nipype_factory) will
+    be called automatically and appropriately when new instances are built,
+    thanks to the overloaded __new__ operator.
+
+    Specialized subclasses should define:
+
+    * a "_nipype_class" class attribute containing the nipype interface
+    class to be used with this process class
+    * a  `__postinit__()` method which performs the desired customizations. It
+    is used more or less like the constructor, but is called after the
+    constructor and the `NipypeProcess` initialisation is done.
+    * They do not need to (maybe should not) define an `__init__` method.
+
+    See :class:`~mia_processes.preprocess.spm.spatial_preprocessing.Smooth` for
+    an example.
+    '''
+
+    def __new__(cls, *args, **kwargs):
+        '''
+        we need to refefine the __new__ method to use the nipype_factory()
+        function under the hood for new instances. This way new instances
+        specialization will be allowed in a __postinit__ method.
+        '''
+
+        from capsul.process.nipype_process import nipype_factory
+        if len(args) == 0:
+            interface = getattr(cls, '_nipype_class', None)
+            if interface is None:
+                print('Warning: process class', cls.__name__,
+                      'does not define a Nipype interface as it should in its '
+                      '"_nipype_class" class attribute. Using an arbitrary '
+                      'spm.Smooth interface')
+                from nipype.interfaces import spm
+                interface = spm.Smooth
+            instance = nipype_factory(interface(), base_class=cls)
+            # override direct nipype reference
+            instance.id = instance.__class__.__module__ + "." + instance.name
+            instance.__postinit__(*args, **kwargs)
+        else:
+            instance = super(MiaNipypeProcess, cls).__new__(cls, *args,
+                                                            **kwargs)
+            instance.__mianp_init_done__ = False
+
+        return instance
+
+    def __init__(self, *args, **kwargs):
+        if hasattr(self, '__mianp_init_done__') and self.__mianp_init_done__:
+            return
+
+        self.__mianp_init_done__ = True
+        super(MiaNipypeProcess, self).__init__(*args, **kwargs)
+
+
