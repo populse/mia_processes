@@ -51,8 +51,8 @@ class Process_Mia(ProcessMIA):
     output_directory = traits.Directory(output=False, optional=True,
                                         userlevel=1)
     
-    def __init__(self):
-        super(Process_Mia, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(Process_Mia, self).__init__(*args, **kwargs)
         self.change_dir = False
         self.requirement = None
         self.outputs = {}
