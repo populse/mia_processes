@@ -25,7 +25,7 @@ populse_mia.
 ##########################################################################
 
 # mia_processes import
-from mia_processes.process_mia import Process_Mia
+from mia_processes.process_mia import Process_Mia, MiaNipypeProcess
 from .nipype_extension import NewSegmentMia
 
 # populse_mia import
@@ -1505,40 +1505,8 @@ class Realign(Process_Mia):
         self.process.inputs.out_prefix = self.out_prefix
         self.process.run()
 
-from capsul.process.process import NipypeProcess
 
-class MIANipypeProcess(Process_Mia, NipypeProcess):
-
-    def __new__(cls, *args, **kwargs):
-        '''
-        we need to refefine the __new__ method to use the nipype_factory()
-        function under the hood for new instances. This way new instances
-        specialization will be allowed in a __postinit__ method.
-        '''
-
-        from capsul.process.nipype_process import nipype_factory
-        if len(args) == 0:
-            interface = getattr(cls, '_interface_class', spm.Smooth)
-            instance = nipype_factory(interface(), base_class=cls)
-            # override direct nipype reference
-            instance.id = instance.__class__.__module__ + "." + instance.name
-            instance.__postinit__(*args, **kwargs)
-        else:
-            instance = super(MIANipypeProcess, cls).__new__(cls, *args,
-                                                            **kwargs)
-            instance.__mianp_init_done__ = False
-
-        return instance
-
-    def __init__(self, *args, **kwargs):
-        if hasattr(self, '__mianp_init_done__') and self.__mianp_init_done__:
-            return
-
-        self.__mianp_init_done__ = True
-        super(MIANipypeProcess, self).__init__(*args, **kwargs)
-
-        
-class Smooth(MIANipypeProcess):
+class Smooth(MiaNipypeProcess):
     """
     *3D Gaussian smoothing of image volumes*
 
@@ -1547,7 +1515,9 @@ class Smooth(MIANipypeProcess):
 
     """
 
-    _interface_class = spm.Smooth
+    _nipype_class = spm.Smooth
+    _nipype_trait_mapping = {'smoothed_files': 'smoothed_files',
+                             '_spm_script_file': 'spm_script_file'}
 
     def __postinit__(self, *args, **kwargs):
         """Dedicated to the attributes initialisation / instanciation.
@@ -1590,34 +1560,37 @@ class Smooth(MIANipypeProcess):
         self.trait("out_prefix").desc = out_prefix_desc
 
         for tname in ('synchronize', 'matlab_cmd', 'mfile', 'paths', 'use_mcr',
-                      'use_v8struct', '_smoothed_files', '_spm_script_file'):
+                      'use_v8struct', 'spm_script_file'):
             self.trait(tname).userlevel = 2
 
-        # Output traits 
-        self.add_trait("smoothed_files",
-                       OutputMultiPath(File(),
-                                       output=True,
-                                       desc=smoothed_files_desc))
-        #self.add_trait("spm_script_file",
-                       #self._clone_trait(self.trait('_spm_script_file')))
+        # Output traits
+        #self.trait("smoothed_files").desc = smoothed_files_desc
 
-        self.on_trait_change(self.sync_np_smoothed_files,
-                             ['smoothed_files', '_smoothed_files',
-                              #'spm_script_file', '_spm_script_file'
-                              ])
+        # by now we duplicate the output trait "smoothed_files" to have it
+        # under the name we expect. It would be far better to rename it, this
+        # woud require a few modifs in nipype_factory().
+        #self.add_trait("smoothed_files",
+                       #OutputMultiPath(File(),
+                                       #output=True,
+                                       #desc=smoothed_files_desc))
+
+        #self.on_trait_change(self.sync_np_smoothed_files,
+                             #['smoothed_files', '_smoothed_files',
+                              ##'spm_script_file', '_spm_script_file'
+                              #])
 
         #self.change_dir = True  # not needed in NipypeProcess
 
-    def sync_np_smoothed_files(self, param, value):
-        '''
-        sync copies of NipypeProcess output traits starting with underscores
-        '''
-        if param[0] == '_':
-            dest = param[1:]
-        else:
-            dest = '_%s' % param
-        if value != getattr(self, dest):
-            setattr(self, dest, value)
+    #def sync_np_smoothed_files(self, param, value):
+        #'''
+        #sync copies of NipypeProcess output traits starting with underscores
+        #'''
+        #if param[0] == '_':
+            #dest = param[1:]
+        #else:
+            #dest = '_%s' % param
+        #if value != getattr(self, dest):
+            #setattr(self, dest, value)
 
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
