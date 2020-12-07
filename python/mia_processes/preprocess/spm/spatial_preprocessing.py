@@ -1642,8 +1642,8 @@ class Smooth(MIANipypeProcess):
         if self.inheritance_dict:
             self.inheritance_dict = {}
 
-        self.outputs['smoothed_files'] = self.process._list_outputs()[
-                                                            'smoothed_files']
+        self.outputs['smoothed_files'] \
+            = self._nipype_interface._list_outputs()['smoothed_files']
 
         """raw_data_folder = os.path.join("data", "raw_data")
         derived_data_folder = os.path.join("data", "derived_data")
