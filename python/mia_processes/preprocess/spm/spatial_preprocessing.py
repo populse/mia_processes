@@ -1598,8 +1598,8 @@ class Smooth(Process_Mia, NipypeProcess):
         project = getattr(study_config, 'project', None)
 
         if project and values and self.in_files:
-            values = project.files_in_project(values)
-            ivalues = project.files_in_project(self.in_files)
+            if isinstance(values, str):
+                values = [values]
 
             for ivalue, ovalue in zip(self.in_files, values):
                 pair = project.files_in_project([ivalue, ovalue])
@@ -1609,4 +1609,12 @@ class Smooth(Process_Mia, NipypeProcess):
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
+
+    def run_process_mia(self):
+        '''
+        We must overload this method because _run_process is already overloaded
+        in Process_MIA and thus will not call NipypeProcess._run_process
+        automatically
+        '''
+        return NipypeProcess._run_process(self)
 
