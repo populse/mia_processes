@@ -1601,7 +1601,7 @@ class Smooth(Process_Mia):
                                        desc=smoothed_files_desc))
 
         self.add_trait("spm_script_file",
-                       File(output=True, input_filenme=True, userlevel=1,
+                       File(output=True, input_filenme=True, userlevel=0,
                             optional=True, desc=spm_script_file_desc))
 
         # self.process = spm.Smooth()
@@ -1655,7 +1655,7 @@ class Smooth(Process_Mia):
             print('smoothed_files:', self.process._smoothed_files)
 
         self.smoothed_files = self.process._smoothed_files
-        self.spm_script_file = self.process._spm_script_file
+        self.process._spm_script_file = self.spm_script_file
 
         """raw_data_folder = os.path.join("data", "raw_data")
         derived_data_folder = os.path.join("data", "derived_data")
@@ -1713,6 +1713,7 @@ class Smooth(Process_Mia):
         self.process.data_type = self.data_type
         self.process.implicit_masking = self.implicit_masking
         self.process.out_prefix = self.out_prefix
+        self.process._spm_script_file = self.spm_script_file
         result = self.process.run(configuration_dict={})
         self.smoothed_files = self.process._smoothed_files
         self.spm_script_file = self.process._spm_script_file
