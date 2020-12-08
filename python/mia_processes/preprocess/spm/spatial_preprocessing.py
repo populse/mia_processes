@@ -1562,8 +1562,8 @@ class Smooth(Process_Mia, NipypeProcess):
         self.trait("out_prefix").desc = out_prefix_desc
 
         for tname in ('synchronize', 'matlab_cmd', 'mfile', 'paths', 'use_mcr',
-                      'use_v8struct', 'spm_script_file'):
-            self.trait(tname).userlevel = 2
+                      'use_v8struct', 'output_directory'):
+            self.trait(tname).userlevel = 1
 
         self.reorder_traits(['in_files', 'output_directory',
                              'smoothed_files', 'fwhm'])
