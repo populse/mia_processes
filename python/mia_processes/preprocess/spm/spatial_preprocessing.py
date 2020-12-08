@@ -1565,40 +1565,14 @@ class Smooth(Process_Mia, NipypeProcess):
                       'use_v8struct', 'spm_script_file'):
             self.trait(tname).userlevel = 2
 
-        # Output traits
-        #self.trait("smoothed_files").desc = smoothed_files_desc
-
-        # by now we duplicate the output trait "smoothed_files" to have it
-        # under the name we expect. It would be far better to rename it, this
-        # woud require a few modifs in nipype_factory().
-        #self.add_trait("smoothed_files",
-                       #OutputMultiPath(File(),
-                                       #output=True,
-                                       #desc=smoothed_files_desc))
-
-        #self.on_trait_change(self.sync_np_smoothed_files,
-                             #['smoothed_files', '_smoothed_files',
-                              ##'spm_script_file', '_spm_script_file'
-                              #])
-
-        #self.change_dir = True  # not needed in NipypeProcess
-
-    #def sync_np_smoothed_files(self, param, value):
-        #'''
-        #sync copies of NipypeProcess output traits starting with underscores
-        #'''
-        #if param[0] == '_':
-            #dest = param[1:]
-        #else:
-            #dest = '_%s' % param
-        #if value != getattr(self, dest):
-            #setattr(self, dest, value)
+        self.reorder_traits(['in_files', 'output_directory',
+                             'smoothed_files', 'fwhm'])
 
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
 
-        The main objective of this method is to produce the outputs of the
-        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        The main objective of this method is to produce the tags associated to
+        outputs (self.inheritance_dic),
         if defined here. In order not to include an output in the database,
         this output must be a value of the optional key 'notInDb' of the
         self.outputs dictionary. To work properly this method must return 
@@ -1617,41 +1591,22 @@ class Smooth(Process_Mia, NipypeProcess):
         if self.inheritance_dict:
             self.inheritance_dict = {}
 
-        self.outputs['smoothed_files'] \
-            = self._nipype_interface._list_outputs()['smoothed_files']
+        self.outputs['smoothed_files'] = self.smoothed_files
 
-        """raw_data_folder = os.path.join("data", "raw_data")
-        derived_data_folder = os.path.join("data", "derived_data")
-        for out_name, out_value in outputs.items():
-            if type(out_value) is list:
-                for idx, element in enumerate(out_value):
-                    # To change the raw_data_folder to the derived_data_folder
-                    element = element.replace(raw_data_folder, derived_data_folder)
-                    outputs[out_name][idx] = element
-                    self.smoothed_files = outputs["smoothed_files"]
-        """
-        if self.outputs:
-        
-            for key, values in self.outputs.items():
-            
-                if key == "smoothed_files":
-                
-                    for fullname in values:
-                        path, filename = os.path.split(fullname)
-                    
-                        if self.out_prefix:
-                            filename_without_prefix = filename[
-                                                          len(self.out_prefix):]
-                        
-                        else:
-                            filename_without_prefix = filename[len('s'):]
+        values = self.smoothed_files
+        study_config = self.get_study_config()
+        project = getattr(study_config, 'project', None)
 
-                        if (os.path.join(path,
-                                         filename_without_prefix)
-                              in self.in_files):
-                            self.inheritance_dict[fullname] = os.path.join(path,
-                                                        filename_without_prefix)
-        
+        if project and values and self.in_files:
+            values = project.files_in_project(values)
+            ivalues = project.files_in_project(self.in_files)
+
+            for ivalue, ovalue in zip(self.in_files, values):
+                pair = project.files_in_project([ivalue, ovalue])
+                if len(pair) == 2:
+                    # if both in project directory
+                    self.inheritance_dict[pair[1]] = pair[0]
+
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
-    
+
