@@ -1602,10 +1602,12 @@ class Smooth(Process_Mia, NipypeProcess):
                 values = [values]
 
             for ivalue, ovalue in zip(self.in_files, values):
-                pair = project.files_in_project([ivalue, ovalue])
-                if len(pair) == 2:
+                ivalue1 = project.files_in_project([ivalue])
+                ovalue1 = project.files_in_project([ovalue])
+                if len(ivalue1) == 1 and len(ovalue1) == 1:
                     # if both in project directory
-                    self.inheritance_dict[pair[1]] = pair[0]
+                    self.inheritance_dict[next(iter(ovalue1))] \
+                        = next(iter(ivalue1))
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
