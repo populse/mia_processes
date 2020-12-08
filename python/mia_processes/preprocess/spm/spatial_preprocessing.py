@@ -25,7 +25,7 @@ populse_mia.
 ##########################################################################
 
 # mia_processes import
-from mia_processes.process_mia import Process_Mia, MiaNipypeProcess
+from mia_processes.process_mia import Process_Mia
 from .nipype_extension import NewSegmentMia
 
 # populse_mia import
@@ -1506,7 +1506,9 @@ class Realign(Process_Mia):
         self.process.run()
 
 
-class Smooth(MiaNipypeProcess):
+from capsul.process.process import NipypeProcess
+
+class Smooth(Process_Mia, NipypeProcess):
     """
     *3D Gaussian smoothing of image volumes*
 
@@ -1515,7 +1517,7 @@ class Smooth(MiaNipypeProcess):
 
     """
 
-    _nipype_class = spm.Smooth
+    _nipype_class_type = spm.Smooth
     _nipype_trait_mapping = {'smoothed_files': 'smoothed_files',
                              '_spm_script_file': 'spm_script_file'}
 
