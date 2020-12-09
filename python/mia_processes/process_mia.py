@@ -156,6 +156,7 @@ class Process_Mia(ProcessMIA):
             ni_inputs = self.process.inputs
             for name, trait in ni_inputs.traits().items():
                 relax_exists_constraint(trait)
+
     def manage_matlab_launch_parameters(self):
         """Set the Matlab's config parameters when a Nipype process is used.
         Called in bricks.
