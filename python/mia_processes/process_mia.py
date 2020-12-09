@@ -26,9 +26,6 @@ import traits.api as traits
 # Populse_MIA imports
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 
-# Capsul imports
-from capsul.process.process import NipypeProcess
-
 
 class Process_Mia(ProcessMIA):
     """Class overriding the ProcessMIA class, in order to personalise 
@@ -68,6 +65,7 @@ class Process_Mia(ProcessMIA):
         """
         if self.change_dir:
             self.switch_to_scripts_dir()
+            self.manage_matlab_launch_parameters()
 
         self.run_process_mia()
 
@@ -106,9 +104,14 @@ class Process_Mia(ProcessMIA):
                 'inheritance_dict': self.inheritance_dict}
 
     def run_process_mia(self):
-        """Used for Matlab's config parameters."""
-        if self.change_dir:
-            self.manage_matlab_launch_parameters()
+        """
+        Implements specific runs for Process_Mia subclasses
+        """
+        pass
+
+    def list_outputs(self):
+        """Override the outputs of the process."""
+        self.relax_nipype_exists_constraints()
 
     def switch_to_scripts_dir(self):
         """Method that changes the current working directory to the scripts
@@ -148,3 +151,19 @@ class Process_Mia(ProcessMIA):
         except Exception as e:
             print('{0}: {1}'.format(e.__class__, e))
 
+    def relax_nipype_exists_constraints(self):
+        if hasattr(self, 'process') and hasattr(self.process, 'inputs'):
+            ni_inputs = self.process.inputs
+            for name, trait in ni_inputs.traits().items():
+                relax_exists_constraint(trait)
+    def manage_matlab_launch_parameters(self):
+        """Set the Matlab's config parameters when a Nipype process is used.
+        Called in bricks.
+        """
+        # Note: this is a non-general trick which should probably not be here.
+        if hasattr(self, "process") and hasattr(self.process, 'inputs') \
+                and hasattr(self, 'use_mcr'):
+            self.process.inputs.use_mcr = self.use_mcr
+            self.process.inputs.paths = self.paths
+            self.process.inputs.matlab_cmd = self.matlab_cmd
+            self.process.inputs.mfile = self.mfile
