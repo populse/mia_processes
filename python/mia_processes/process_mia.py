@@ -19,12 +19,16 @@ a custom execution of the bricks in populse_mia.
 # for details.
 ##########################################################################
 
+# Populse_MIA imports
+from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
+
+# Soma-base imports
+from soma.controller.trait_utils import relax_exists_constraint
+
+# Other imports
 import os
 from traits.api import Undefined
 import traits.api as traits
-
-# Populse_MIA imports
-from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 
 
 class Process_Mia(ProcessMIA):
@@ -32,25 +36,20 @@ class Process_Mia(ProcessMIA):
        the run in MIA.
 
         Methods:
-            - _run_processes: overrides the ProcessMIA's _run_process that is
-                              called to run the process
+            - _run_processes: capsul forces to define a _run_process()
+                              method  in derived classes
+            - list_outputs: override the outputs of the process
             - make_initResult: make the final dictionnary for outputs,
                                inheritance and requirement from the
                                initialisation of a brick
-            - run_process_mia: (need to be overridden)
-            - switch_to_scripts_dir: Changes the current working directory to
-                                     the scripts directory
-            - switch_to_cur_work_dir: Changes the scripts directory to the
-                                      current working directory
-
+            - relax_nipype_exists_constraints: relax the exists constraint of
+                                               the process.inputs traits
+            - requirements: capsul Process.requirements() implementation using
+                            MIA's Process_Mia.requirement attribute
+            - run_process_mia: implements specific runs for Process_Mia
+                               subclasses
+    
     """
-
-    # this output_directory trait is optional because it will not necessarily
-    # be connected to another plug, MIA infrastructure will set it internally.
-    # This is not very clean since the parameter is actually mandatory to
-    # run the process.
-    output_directory = traits.Directory(output=False, optional=True,
-                                        userlevel=1)
     
     def __init__(self, *args, **kwargs):
         super(Process_Mia, self).__init__(*args, **kwargs)
@@ -60,29 +59,17 @@ class Process_Mia(ProcessMIA):
         self.inheritance_dict = {}
 
     def _run_process(self):
-        """ Method overriding the ProcessMIA's _run_process that is called to
-        run the process.
+        """ capsul forces to define a _run_process() method
+        in derived classes
         """
-        if self.change_dir:
-            self.switch_to_scripts_dir()
-            self.manage_matlab_launch_parameters()
-
         self.run_process_mia()
 
-        if self.change_dir:
-            self.switch_to_cur_work_dir()
-
-    def requirements(self):
-        """
-        Capsul Process.requirements() implementation using MIA's
-        Process_Mia.requirement attribute
-        """
-        if self.requirement:
-            return {req: 'any' for req in self.requirement}
-        return {}
+    def list_outputs(self):
+        """Override the outputs of the process."""
+        self.relax_nipype_exists_constraints()
 
     def make_initResult(self):
-        """Make the initResult_dict from initialisation."""
+        """Make the initResult_dict from initialisation."""        
         if ((self.requirement is None) or
             (not self.inheritance_dict) or
             (not self.outputs)):
@@ -103,70 +90,24 @@ class Process_Mia(ProcessMIA):
         return {'requirement': self.requirement, 'outputs': self.outputs,
                 'inheritance_dict': self.inheritance_dict}
 
-    def run_process_mia(self):
-        """
-        Implements specific runs for Process_Mia subclasses
-        """
-        pass
-
-    def list_outputs(self):
-        """Override the outputs of the process."""
-        self.relax_nipype_exists_constraints()
-
-    def switch_to_scripts_dir(self):
-        """Method that changes the current working directory to the scripts
-           directory.
-        """
-        try:
-            self.cwd = os.getcwd()
-
-        except OSError:
-            self.cwd = None
-
-        if (not hasattr(self, 'output_directory') or
-              self.output_directory is None or
-              self.output_directory is Undefined):
-            raise ValueError('output_directory is not set but is mandatory to '
-                             'run a Process_Mia')
-
-        print('\nChanging from {0} directory to {1} directory ...\n'
-                                       .format(self.cwd, self.output_directory))
-        os.chdir(self.output_directory)
-        
-    def switch_to_cur_work_dir(self):
-        """Method that changes the scripts directory to the current
-           working directory.
-        """
-        try:
-            cwd1 = os.getcwd()
-
-        except OSError:
-            cwd1 = None
-
-        try:
-            os.chdir(self.cwd)
-            print('Changing from {0} directory to {1} directory ...\n'
-                                                        .format(cwd1, self.cwd))
-
-        except Exception as e:
-            print('{0}: {1}'.format(e.__class__, e))
-
     def relax_nipype_exists_constraints(self):
+        """Relax the exists constraint of the process.inputs traits"""
         if hasattr(self, 'process') and hasattr(self.process, 'inputs'):
             ni_inputs = self.process.inputs
             for name, trait in ni_inputs.traits().items():
                 relax_exists_constraint(trait)
 
-    def manage_matlab_launch_parameters(self):
-        """Set the Matlab's config parameters when a Nipype process is used.
-
-        Called in bricks.
+    def requirements(self):
+        """Capsul Process.requirements() implementation using MIA's
+        Process_Mia.requirement attribute
         """
-        # Note: this is a non-general trick which should probably not be here.
-        if hasattr(self, "process") and hasattr(self.process, 'inputs') \
-                and hasattr(self, 'use_mcr'):
-            self.process.inputs.use_mcr = self.use_mcr
-            self.process.inputs.paths = self.paths
-            self.process.inputs.matlab_cmd = self.matlab_cmd
-            self.process.inputs.mfile = self.mfile
+        if self.requirement:
+            return {req: 'any' for req in self.requirement}
+        return {}
 
+    def run_process_mia(self):
+        """
+        Implements specific runs for Process_Mia subclasses
+        """
+        pass
+ 
