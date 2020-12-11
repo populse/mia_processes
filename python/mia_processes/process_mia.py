@@ -26,6 +26,9 @@ import traits.api as traits
 # Populse_MIA imports
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 
+# soma-base imports
+from soma.controller.trait_utils import relax_exists_constraint
+
 
 class Process_Mia(ProcessMIA):
     """Class overriding the ProcessMIA class, in order to personalise 
