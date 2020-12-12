@@ -30,14 +30,16 @@ import os
 from traits.api import Undefined
 import traits.api as traits
 
+from capsul.api import Process
 
+# class Process_Mia(Process): Ne marche pas avoir !
 class Process_Mia(ProcessMIA):
     """Class overriding the ProcessMIA class, in order to personalise 
        the run in MIA.
 
         Methods:
-            - _run_processes: capsul forces to define a _run_process()
-                              method  in derived classes
+            - _run_processes: call the run_process_mia method in the 
+               Process_Mia subclass
             - list_outputs: override the outputs of the process
             - make_initResult: make the final dictionnary for outputs,
                                inheritance and requirement from the
@@ -59,9 +61,7 @@ class Process_Mia(ProcessMIA):
         self.inheritance_dict = {}
 
     def _run_process(self):
-        """ capsul forces to define a _run_process() method
-        in derived classes
-        """
+        """ call the run_process_mia method in the Process_Mia subclass"""
         self.run_process_mia()
 
     def list_outputs(self):
