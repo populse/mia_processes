@@ -1507,7 +1507,7 @@ class Realign(ProcessMIA):
         self.process.run()
 
 
-class Smooth(Process_Mia, NipypeProcess):
+class Smooth(ProcessMIA, NipypeProcess):
     """
     *3D Gaussian smoothing of image volumes*
 
