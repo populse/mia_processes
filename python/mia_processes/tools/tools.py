@@ -23,21 +23,19 @@ needed to run other higher-level bricks.
 # for details.
 ##########################################################################
 
-# mia_processes import
-from mia_processes.process_mia import Process_Mia
-
 # nipype import
 from nipype.interfaces.base import traits
 
-# populse_mia import
+# populse_mia imports
 from populse_mia.data_manager.filter import Filter
 from populse_mia.data_manager.project import COLLECTION_CURRENT
+from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 
-# Other import
+# Other imports
 import os
 
 
-class Auto_Filter_List(Process_Mia):
+class Auto_Filter_List(ProcessMIA):
     """
     *Selects one or more (slicing) element(s) from a list*
 
@@ -46,9 +44,8 @@ class Auto_Filter_List(Process_Mia):
 
     """
 
-    
     def __init__(self):
-        """Dedicated to the attributes initialisation / instanciation.
+        """Dedicated to the attributes initialisation/instanciation.
         
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
@@ -160,7 +157,7 @@ class Auto_Filter_List(Process_Mia):
         """Dedicated to the process launch step of the brick."""
         return
 
-class Files_To_List(Process_Mia):
+class Files_To_List(ProcessMIA):
     """
     *From 2 file names, generating a list containing all theses file names*
 
@@ -170,7 +167,7 @@ class Files_To_List(Process_Mia):
     """
 
     def __init__(self):
-        """Dedicated to the attributes initialisation / instanciation.
+        """Dedicated to the attributes initialisation/instanciation.
         
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
@@ -243,7 +240,7 @@ class Files_To_List(Process_Mia):
         return
        
 
-class Input_Filter(Process_Mia):
+class Input_Filter(ProcessMIA):
     """
     *To filter the content of the Data Browser tab or the output data of another brick*
 
@@ -253,7 +250,7 @@ class Input_Filter(Process_Mia):
     """
 
     def __init__(self):
-        """Dedicated to the attributes initialisation / instanciation.
+        """Dedicated to the attributes initialisation/instanciation.
 
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
@@ -354,7 +351,7 @@ class Input_Filter(Process_Mia):
         return
 
 
-class List_Duplicate(Process_Mia):
+class List_Duplicate(ProcessMIA):
     """
     *From a file name, generating a list containing this file name and the file name itself*
 
@@ -431,7 +428,7 @@ class List_Duplicate(Process_Mia):
         return
 
 
-class List_To_File(Process_Mia):
+class List_To_File(ProcessMIA):
     """
     *From several filenames, selects and generates a file.*
 
@@ -440,7 +437,6 @@ class List_To_File(Process_Mia):
 
     """
 
-    
     def __init__(self):
         """Dedicated to the attributes initialisation / instanciation.
         

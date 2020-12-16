@@ -24,27 +24,32 @@ populse_mia.
 # for details.
 ##########################################################################
 
+# capsul import
+from capsul.process.process import NipypeProcess
+
 # mia_processes import
-from mia_processes.process_mia import Process_Mia
 from .nipype_extension import NewSegmentMia
 
-# populse_mia import
+# populse_mia imports
 from populse_mia.software_properties import Config
+from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
+
+# soma-base import
 from soma.controller.trait_utils import relax_exists_constraint
 
 # nipype import
 from nipype.interfaces import spm
-from nipype.interfaces.base import (OutputMultiPath, InputMultiPath, File,
-                                    InputMultiObject, traits_extension)
+from nipype.interfaces.base import (File, InputMultiPath, InputMultiObject,
+                                    OutputMultiPath, traits_extension)
 from nipype.interfaces.spm.base import ImageFileSPM
 
-# Other import
+# Other imports
 import os
 from traits.api import Undefined, Float
 import traits.api as traits
 from pathlib import Path
 
-class Coregister(Process_Mia):
+class Coregister(ProcessMIA):
     """
     *Align together scans of different modalities*
 
@@ -59,7 +64,7 @@ class Coregister(Process_Mia):
     mfile = traits.Bool(optional=True, userlevel=1)
 
     def __init__(self):
-        """Dedicated to the attributes initialisation / instanciation.
+        """Dedicated to the attributes initialisation/instanciation.
         
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
@@ -222,7 +227,6 @@ class Coregister(Process_Mia):
                                        desc=coregistered_files_desc))
 
         self.process = spm.Coregister()
-        self.change_dir = True
 
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
@@ -375,7 +379,7 @@ class Coregister(Process_Mia):
         self.process.run()
 
 
-class NewSegment(Process_Mia):
+class NewSegment(ProcessMIA):
     """
     *Segmentation: Segments,  bias  corrects  and  spatially normalises - all in the same model*
 
@@ -618,7 +622,6 @@ class NewSegment(Process_Mia):
                                        # instantiation time of the NewSegment
                                        # class
         #self.process = spm.NewSegment()
-        self.change_dir = True
 
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
@@ -727,7 +730,7 @@ class NewSegment(Process_Mia):
         self.process.run()
 
 
-class Normalize12(Process_Mia):
+class Normalize12(ProcessMIA):
     """    
     *Computes the warp that best aligns the template (atlas) to the individual’s image*
 
@@ -963,7 +966,6 @@ class Normalize12(Process_Mia):
 
         # process instanciation
         self.process = spm.Normalize12()
-        self.change_dir = True
         # fix an output trait marked as exists
         relax_exists_constraint(self.process.output_spec().trait(
             'normalized_files'))
@@ -1131,7 +1133,7 @@ class Normalize12(Process_Mia):
         self.process.run()
 
 
-class Realign(Process_Mia):
+class Realign(ProcessMIA):
     """
     *Realigns a time-series of images acquired from the same subject*
 
@@ -1357,7 +1359,6 @@ class Realign(Process_Mia):
                                        desc=realignment_parameters_desc))  # rp_
 
         self.process = spm.Realign()
-        self.change_dir = True
 
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
@@ -1505,8 +1506,6 @@ class Realign(Process_Mia):
         self.process.inputs.out_prefix = self.out_prefix
         self.process.run()
 
-
-from capsul.process.process import NipypeProcess
 
 class Smooth(Process_Mia, NipypeProcess):
     """
