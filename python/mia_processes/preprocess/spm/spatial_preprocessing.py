@@ -1561,11 +1561,11 @@ class Smooth(ProcessMIA, NipypeProcess):
         # Input traits 
         self.trait("in_files").desc = in_files_desc
         self.trait("fwhm").desc = fwhm_desc
-        #self.fwhm = [6., 6., 6.]
+        self.fwhm = [6., 6., 6.]
         self.trait("data_type").desc = data_type_desc
-        #self.data_type = 0
+        self.data_type = 0
         self.trait("implicit_masking").desc = implicit_masking_desc
-        #self.implicit_masking = False
+        self.implicit_masking = False
         self.trait("out_prefix").desc = out_prefix_desc
 
         # Output traits
