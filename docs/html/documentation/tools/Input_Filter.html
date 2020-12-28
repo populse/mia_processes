@@ -1,0 +1,98 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>Input_Filter brick &#8212; mia_processes 1.5.0-dev+6c9dad6 documentation</title>
+    <link rel="stylesheet" href="../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../index.html">
+          <span>mia_processes 1.5.0-dev+6c9dad6 documentation</span></a></h1>
+        <h2 class="heading"><span>Input_Filter brick</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <div class="toctree-wrapper compound">
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 33%" />
+<col style="width: 43%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference external" href="../../../index.html">Home</a></p></td>
+<td><p><a class="reference external" href="../documentation.html">Documentation</a></p></td>
+<td><p><a class="reference external" href="https://github.com/populse/mia_processes">GitHub</a></p></td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="input-filter-brick">
+<h1>Input_Filter brick<a class="headerlink" href="#input-filter-brick" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="to-filter-the-content-of-the-data-browser-tab-or-the-output-data-of-another-brick">
+<h2>To filter the content of the Data Browser tab or the output data of another brick<a class="headerlink" href="#to-filter-the-content-of-the-data-browser-tab-or-the-output-data-of-another-brick" title="Permalink to this headline">¶</a></h2>
+<p><em>[Preselected data (or not) from the Data Browser or the output data from another brick] -&gt; Input_Filter -&gt; [‘/home/ArthurBlair/data/raw_data/Anat.nii’]</em></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">mia_processes.tools</span> <span class="k">import</span> <span class="n">Input_Filter</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Input_Filter</span><span class="o">.</span><span class="n">help</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><strong>Inputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>input</em></dt><dd><p>A list corresponding to the data from the Data Browser or the output data from another brick.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/Anat.nii&#39;</span><span class="p">,</span> <span class="s1">&#39;/home/ArthurBlair/data/Func.nii&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Outputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>output</em></dt><dd><p>A list with the result of the filter applied.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/Func.nii&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<hr class="docutils" />
+<p>NOTE: To run properly, this process (node, brick) needs that, on the one hand, in the DataBrowser, the “send documents to the Pipeline Manager” button was clicked previously (with a selection of data made, or not), and on the other hand, at the input_filter brick level, that a right click then the selection of the option “Export to database_scans” has been made. Finally, a right click on the input_filter brick will allow to filter the input data by selecting “open filter”.</p>
+</div>
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, populse.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.2.
+    </div>
+  </body>
+</html>

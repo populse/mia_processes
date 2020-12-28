@@ -1555,7 +1555,7 @@ class Smooth(ProcessMIA, NipypeProcess):
                                'file).')
         spm_script_file_desc = ('Used in SPM interfaces to write the matlab '
                                 'script and automatically set during the '
-                                'initialisation step (a string representing a '
+                                'run step (a string representing a '
                                 'file).')
 
         # Input traits 
