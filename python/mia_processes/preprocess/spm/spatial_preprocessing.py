@@ -25,7 +25,7 @@ populse_mia.
 ##########################################################################
 
 # capsul import
-from capsul.process.process import NipypeProcess
+from capsul.api import capsul_engine
 
 # mia_processes import
 from .nipype_extension import NewSegmentMia
@@ -1507,7 +1507,7 @@ class Realign(ProcessMIA):
         self.process.run()
 
 
-class Smooth(ProcessMIA, NipypeProcess):
+class Smooth(ProcessMIA):
     """
     *3D Gaussian smoothing of image volumes*
 
@@ -1516,30 +1516,26 @@ class Smooth(ProcessMIA, NipypeProcess):
 
     """
 
-    _nipype_class_type = spm.Smooth
-    _nipype_trait_mapping = {'smoothed_files': 'smoothed_files',
-                             '_spm_script_file': 'spm_script_file'}
-
-    def __postinit__(self, *args, **kwargs):
-        """Dedicated to the attributes initialisation/instanciation.
+    def __init__(self):
+        """Dedicated to the attributes initialisation / instanciation.
         
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        #super(Smooth, self).__init__()
-        
+        super(Smooth, self).__init__()
+
         # Third party softwares required for the execution of the brick
-        self.requirement = ['spm']
+        self.requirement = ['spm', 'nipype']
 
         # Inputs description
         in_files_desc = ('List of files to smooth. A list of items which are '
                          'an existing, uncompressed file '
                          '(valid extensions: [.img, .nii, .hdr]).')
         fwhm_desc = ('Full-width at half maximum (FWHM) of the Gaussian '
-                     'smoothing kernel in mm. A float or a list of 3 items '
-                     'which are a float.')
+                     'smoothing kernel in mm. A list of 3 items which are a '
+                     'float of fwhm for each dimension.')
         data_type_desc = ('Data type of the output images '
                           '(an integer [int or long]).')
         implicit_masking_desc = ('A mask implied by a particular voxel value '
@@ -1553,31 +1549,82 @@ class Smooth(ProcessMIA, NipypeProcess):
                                'string representing a file, or a list of '
                                'pathlike objects or strings representing a '
                                'file).')
-        spm_script_file_desc = ('Used in SPM interfaces to write the matlab '
-                                'script and automatically set during the '
-                                'run step (a string representing a '
-                                'file).')
+        spm_script_file_desc = ('Location of the output SPM matlab script, '
+                                'automatically generated at the run step '
+                                'time (a string representing a file).')
 
-        # Input traits 
-        self.trait("in_files").desc = in_files_desc
-        self.trait("fwhm").desc = fwhm_desc
-        self.fwhm = [6., 6., 6.]
-        self.trait("data_type").desc = data_type_desc
-        self.data_type = 0
-        self.trait("implicit_masking").desc = implicit_masking_desc
-        self.implicit_masking = False
-        self.trait("out_prefix").desc = out_prefix_desc
+        # Input traits
+        self.add_trait("use_mcr",
+                       traits.Bool(optional=True,
+                                   userlevel=1))
 
-        # Output traits
-        self.trait("smoothed_files").desc = smoothed_files_desc
-        self.trait("spm_script_file").desc = spm_script_file_desc
+        self.add_trait("paths",
+                       InputMultiObject(traits.Directory(),
+                                        optional=True,
+                                        userlevel=1))
 
-        for tname in ('synchronize', 'matlab_cmd', 'mfile', 'paths', 'use_mcr',
-                      'use_v8struct', 'output_directory'):
-            self.trait(tname).userlevel = 1
+        self.add_trait("matlab_cmd",
+                       traits_extension.Str(optional=True,
+                                            userlevel=1))
 
-        self.reorder_traits(['in_files', 'output_directory',
-                             'smoothed_files', 'fwhm'])
+        self.add_trait("mfile",
+                       traits.Bool(optional=True,
+                                   userlevel=1))
+
+        self.add_trait("output_directory",
+                       traits.Directory(output=False,
+                                        optional=True,
+                                        userlevel=1))
+
+        self.add_trait("in_files",
+                       InputMultiPath(traits.Either(ImageFileSPM(),
+                                                    Undefined),
+                                      value=[Undefined],
+                                      copyfile=False,
+                                      output=False,
+                                      optional=False,
+                                      desc=in_files_desc))
+
+        self.add_trait("fwhm",
+                       traits.Either(traits.Float(),
+                                     traits.List(traits.Float(),
+                                                 minlen=3, maxlen=3),
+                                     default=[6.0,6.0,6.0],
+                                     output=False,
+                                     optional=True,
+                                     desc=fwhm_desc))
+
+        self.add_trait("data_type",
+                       traits.Int(output=False,
+                                  optional=True,
+                                  desc=data_type_desc))
+        
+        self.add_trait("implicit_masking",
+                       traits.Bool(output=False,
+                                   optional=True,
+                                   desc=implicit_masking_desc))
+
+        self.add_trait("out_prefix",
+                       traits.String('s',
+                                     output=False,
+                                     optional=True,
+                                     desc=out_prefix_desc))
+
+        # Output traits 
+        self.add_trait("smoothed_files",
+                       OutputMultiPath(File(),
+                                       output=True,
+                                       desc=smoothed_files_desc))
+
+        self.add_trait("spm_script_file",
+                       File(output=True, input_filenme=True, userlevel=0,
+                            optional=True, desc=spm_script_file_desc))
+
+        if getattr(self, 'study_config'):
+            ce = self.study_config.engine
+        else:
+            ce = capsul_engine()
+        self.process = ce.get_process_instance('nipype.interfaces.spm.Smooth')
 
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
@@ -1593,6 +1640,7 @@ class Smooth(ProcessMIA, NipypeProcess):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
+        print('Smooth.list_outputs')
         super(Smooth, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
@@ -1602,33 +1650,76 @@ class Smooth(ProcessMIA, NipypeProcess):
         if self.inheritance_dict:
             self.inheritance_dict = {}
 
-        self.outputs['smoothed_files'] = self.smoothed_files
+        if self.in_files and self.in_files != [Undefined]:
+            #self.process.inputs.in_files = self.in_files
+            print('set in_files')
+            self.process.in_files = self.in_files
 
-        values = self.smoothed_files
-        study_config = self.get_study_config()
-        project = getattr(study_config, 'project', None)
+            if self.out_prefix:
+                #self.process.inputs.out_prefix = self.out_prefix
+                self.process.out_prefix = self.out_prefix
 
-        if project and values and self.in_files:
-            if isinstance(values, str):
-                values = [values]
+            if self.output_directory:
+                print('set output_directory:', self.output_directory)
+                self.process.output_directory = self.output_directory
 
-            for ivalue, ovalue in zip(self.in_files, values):
-                ivalue1 = project.files_in_project([ivalue])
-                ovalue1 = project.files_in_project([ovalue])
-                if len(ivalue1) == 1 and len(ovalue1) == 1:
-                    # if both in project directory
-                    self.inheritance_dict[next(iter(ovalue1))] \
-                        = next(iter(ivalue1))
+            #self.outputs['smoothed_files'] = self.process._list_outputs()[
+                                                               #'smoothed_files']
+            self.outputs['smoothed_files'] = self.process._smoothed_files
+            print('smoothed_files:', self.process._smoothed_files)
 
+        self.smoothed_files = self.process._smoothed_files
+        self.process._spm_script_file = self.spm_script_file
+
+        if self.outputs:
+        
+            for key, values in self.outputs.items():
+            
+                if key == "smoothed_files":
+                
+                    for fullname in values:
+                        path, filename = os.path.split(fullname)
+                    
+                        if self.out_prefix:
+                            filename_without_prefix = filename[
+                                                          len(self.out_prefix):]
+                        
+                        else:
+                            filename_without_prefix = filename[len('s'):]
+
+                        if (os.path.join(path,
+                                         filename_without_prefix)
+                              in self.in_files):
+                            self.inheritance_dict[fullname] = os.path.join(path,
+                                                        filename_without_prefix)
+        
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
-
+    
     def run_process_mia(self):
-        '''
-        We must overload this method because _run_process is already overloaded
-        in ProcessMIA and thus will not call NipypeProcess._run_process
-        automatically
-        '''
+        """Dedicated to the process launch step of the brick."""
         super(Smooth, self).run_process_mia()
-        return NipypeProcess._run_process(self)
+
+        if self.in_files and self.in_files != [Undefined]:
+            for idx, element in enumerate(self.in_files):
+                full_path = os.path.abspath(element)
+                self.in_files[idx] = full_path
+
+        if self.out_prefix:
+            #self.process.inputs.out_prefix = self.out_prefix
+            self.process.out_prefix = self.out_prefix
+
+        if self.output_directory:
+            self.process.output_directory = self.output_directory
+
+        self.process.in_files = self.in_files
+        self.process.fwhm = self.fwhm
+        self.process.data_type = self.data_type
+        self.process.implicit_masking = self.implicit_masking
+        self.process.out_prefix = self.out_prefix
+        self.process._spm_script_file = self.spm_script_file
+        result = self.process.run(configuration_dict={})
+        self.smoothed_files = self.process._smoothed_files
+        self.spm_script_file = self.process._spm_script_file
+        return result
 
