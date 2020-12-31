@@ -30,18 +30,18 @@ from capsul.api import capsul_engine
 # mia_processes import
 from .nipype_extension import NewSegmentMia
 
+# nipype imports
+from nipype.interfaces import spm
+from nipype.interfaces.base import (File, InputMultiPath, InputMultiObject,
+                                    OutputMultiPath, traits_extension)
+from nipype.interfaces.spm.base import ImageFileSPM
+
 # populse_mia imports
 from populse_mia.software_properties import Config
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 
 # soma-base import
 from soma.controller.trait_utils import relax_exists_constraint
-
-# nipype import
-from nipype.interfaces import spm
-from nipype.interfaces.base import (File, InputMultiPath, InputMultiObject,
-                                    OutputMultiPath, traits_extension)
-from nipype.interfaces.spm.base import ImageFileSPM
 
 # Other imports
 import os
@@ -1549,32 +1549,8 @@ class Smooth(ProcessMIA):
                                'string representing a file, or a list of '
                                'pathlike objects or strings representing a '
                                'file).')
-        spm_script_file_desc = ('The location of the output SPM matlab script, '
-                                'automatically generated at the run step '
-                                'time (a string representing a file).')
 
         # Input traits
-        self.add_trait("use_mcr",
-                       traits.Bool(optional=True,
-                                   userlevel=1))
-
-        self.add_trait("paths",
-                       InputMultiObject(traits.Directory(),
-                                        optional=True,
-                                        userlevel=1))
-
-        self.add_trait("matlab_cmd",
-                       traits_extension.Str(optional=True,
-                                            userlevel=1))
-
-        self.add_trait("mfile",
-                       traits.Bool(optional=True,
-                                   userlevel=1))
-
-        self.add_trait("output_directory",
-                       traits.Directory(output=False,
-                                        optional=True,
-                                        userlevel=1))
 
         self.add_trait("in_files",
                        InputMultiPath(traits.Either(ImageFileSPM(),
@@ -1616,17 +1592,14 @@ class Smooth(ProcessMIA):
                                        output=True,
                                        desc=smoothed_files_desc))
 
-        self.add_trait("spm_script_file",
-                       File(output=True,
-                            optional=True,
-                            input_filename=True,
-                            userlevel=0,
-                            desc=spm_script_file_desc))
+        self.init_default_traits()
 
         if getattr(self, 'study_config'):
             ce = self.study_config.engine
+
         else:
             ce = capsul_engine()
+
         self.process = ce.get_process_instance('nipype.interfaces.spm.Smooth')
 
     def list_outputs(self, is_plugged=None):
