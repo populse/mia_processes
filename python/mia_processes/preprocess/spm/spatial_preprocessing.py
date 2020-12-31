@@ -1634,10 +1634,10 @@ class Smooth(ProcessMIA):
 
             if self.output_directory:
                 self.process.output_directory = self.output_directory
-                print('\noutput_directory used: ',  self.output_directory)
+                print('output_directory used: {}\n'.format(self.output_directory))
 
             else:
-                print('\nNo output_directory was found...!')
+                print('No output_directory was found...!\n')
    
             self.outputs[
                 'smoothed_files'
