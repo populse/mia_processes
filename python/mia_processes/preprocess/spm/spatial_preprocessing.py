@@ -1634,7 +1634,6 @@ class Smooth(ProcessMIA):
 
             if self.output_directory:
                 self.process.output_directory = self.output_directory
-                print('output_directory used: {}\n'.format(self.output_directory))
 
             else:
                 print('No output_directory was found...!\n')
