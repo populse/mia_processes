@@ -70,7 +70,7 @@
 
 * The whole populse project is open source.
 * Mia_processes is precisely released under the CeCILL software license.
-* All license details can be found [here](http://www.cecill.info/licences/Licence_CeCILL_V2.1-en.html), or refer to the license file [here](https://github.com/populse/mia_processes/blob/master/LICENSE).
+* All license details can be found [here](http://cecill.info/licences/Licence_CeCILL_V2.1-en.html), or refer to the license file [here](https://github.com/populse/mia_processes/blob/master/LICENSE).
 
 # Support and Communication
 
