@@ -9,4 +9,4 @@
 ##########################################################################
 
 from .spatial_preprocessing import (Coregister, NewSegment, Normalize12, Realign,
-                                    Smooth)
+                                    SliceTiming, Smooth)
