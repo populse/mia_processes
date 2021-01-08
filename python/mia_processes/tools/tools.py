@@ -7,8 +7,8 @@ needed to run other higher-level bricks.
 
 :Contains:
     :Class:
-        - Auto_Filter_List
         - Files_To_List
+        - Filter_Files_List
         - Input_Filter
         - List_Duplicate
         - List_To_File
@@ -34,129 +34,6 @@ from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 # Other imports
 import os
 
-
-class Auto_Filter_List(ProcessMIA):
-    """
-    *Selects one or more (slicing) element(s) from a list*
-
-    Please, see the complete documention for the `Auto_Filter_List in the populse.mia_processes web site
-    <https://populse.github.io/mia_processes/documentation/tools/Auto_Filter_List.html>`_
-
-    """
-
-    def __init__(self):
-        """Dedicated to the attributes initialisation/instanciation.
-        
-        The input and output plugs are defined here. The special
-        'self.requirement' attribute (optional) is used to define the
-        third-party products necessary for the running of the brick.
-        """
-        # initialisation of the objects needed for the launch of the brick
-        super(Auto_Filter_List, self).__init__()
-
-        # Third party softwares required for the execution of the brick
-        self.requirement = [] # no need of third party software!
-
-        # Inputs description
-        in_list_desc = 'The list of elements to be filtered.'
-        index_filter_desc = 'A list of 0 to 2 indexes for filtering.'
-
-        # Outputs description
-        filtered_list_desc = 'The corresponding filtering result (a list).'
-        
-        # Inputs traits
-        self.add_trait("in_list",
-                        traits.List(traits.File,
-                                    output=False,
-                                    desc=in_list_desc))
-        
-        self.add_trait("index_filter",
-                       traits.List(value=[1],
-                                   trait=traits.Range(low=1, high=None),
-                                   minlen=0,
-                                   maxlen=2,
-                                   output=False,
-                                   optional=True,
-                                   desc=index_filter_desc))
-
-        # Outputs traits
-        self.add_trait("filtered_list",
-                       traits.List(output=True,
-                                   desc=filtered_list_desc))
-
-    def list_outputs(self, is_plugged=None):
-        """Dedicated to the initialisation step of the brick.
-
-        The main objective of this method is to produce the outputs of the
-        bricks (self.outputs) and the associated tags (self.inheritance_dic),
-        if defined here. In order not to include an output in the database,
-        this output must be a value of the optional key 'notInDb' of the
-        self.outputs dictionary. To work properly this method must return 
-        self.make_initResult() object.
-
-        :param is_plugged: the state, linked or not, of the plugs.
-        :returns: a dictionary with requirement, outputs and inheritance_dict.
-        """
-        # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Auto_Filter_List, self).list_outputs()
-
-        # Outputs definition and tags inheritance (optional)
-        if self.outputs:
-            self.outputs = {}
-
-        if (self.in_list and
-               not self.in_list in ["<undefined>", traits.Undefined]):
-
-            if not self.index_filter:
-                self.outputs['filtered_list'] = [self.in_list[0]]
-
-            if len(self.index_filter) == 1:
-
-                if self.index_filter[0] <= len(self.in_list):
-                    self.outputs['filtered_list'] = [self.in_list[
-                                                        self.index_filter[0]-1]]
-
-                else:
-                    print('\nThe initialisation of the Auto_Filter_List brick '
-                          ' failed because the index_filter parameter is '
-                          ' greater than the length of the in_list '
-                          ' parameter ...\n')
-
-            if len(self.index_filter) == 2:
-
-                if self.index_filter[0] < self.index_filter[1]:
-
-                    if self.index_filter[0] <= len(self.in_list):
-
-                        if self.index_filter[1] <= len(self.in_list):
-                            self.outputs['filtered_list'] = self.in_list[
-                                    self.index_filter[0]-1:self.index_filter[1]]
-
-                        else:
-                            print('\nThe initialisation of the Auto_Filter_List'
-                                  ' brick failed because the second value of'
-                                  ' the index_filter parameter is greater than'
-                                  ' the length of the in_list parameter ...\n')
-
-                    else:
-                        print('\nThe initialisation of the Auto_Filter_List'
-                              ' brick failed because the first value of the'
-                              ' index_filter parameter is greater than the'
-                              ' length of the in_list parameter ...\n')
-
-                else:
-                     print('\nThe initialisation of the Auto_Filter_List brick'
-                           ' failed because the first value of the index_filter'
-                           ' parameter is greater than the second ...\n')
-
-            self.outputs["notInDb"] = ["filtered_list"]
-
-        # Return the requirement, outputs and inheritance_dict
-        return self.make_initResult()
-
-    def run_process_mia(self):
-        """Dedicated to the process launch step of the brick."""
-        return
 
 class Files_To_List(ProcessMIA):
     """
@@ -239,7 +116,132 @@ class Files_To_List(ProcessMIA):
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
         return
-       
+
+
+class Filter_Files_List(ProcessMIA):
+    """
+    *Selects one or more (slicing) element(s) from a list*
+
+    Please, see the complete documention for the `Filter_Files_List in the populse.mia_processes web site
+    <https://populse.github.io/mia_processes/documentation/tools/Filter_Files_List.html>`_
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instanciation.
+        
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # initialisation of the objects needed for the launch of the brick
+        super(Filter_Files_List, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = [] # no need of third party software!
+
+        # Inputs description
+        in_list_desc = 'The list of elements to be filtered.'
+        index_filter_desc = 'A list of 0 to 2 indexes for filtering.'
+
+        # Outputs description
+        filtered_list_desc = 'The corresponding filtering result (a list).'
+        
+        # Inputs traits
+        self.add_trait("in_list",
+                        traits.List(traits.File,
+                                    output=False,
+                                    desc=in_list_desc))
+        
+        self.add_trait("index_filter",
+                       traits.List(value=[1],
+                                   trait=traits.Range(low=1, high=None),
+                                   minlen=0,
+                                   maxlen=2,
+                                   output=False,
+                                   optional=True,
+                                   desc=index_filter_desc))
+
+        # Outputs traits
+        self.add_trait("filtered_list",
+                       traits.List(output=True,
+                                   desc=filtered_list_desc))
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return 
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(Filter_Files_List, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.outputs:
+            self.outputs = {}
+
+        if (self.in_list and
+               not self.in_list in ["<undefined>", traits.Undefined]):
+
+            if not self.index_filter:
+                self.outputs['filtered_list'] = [self.in_list[0]]
+
+            if len(self.index_filter) == 1:
+
+                if self.index_filter[0] <= len(self.in_list):
+                    self.outputs['filtered_list'] = [self.in_list[
+                                                        self.index_filter[0]-1]]
+
+                else:
+                    print('\nThe initialisation of the Filter_Files_List brick '
+                          ' failed because the index_filter parameter is '
+                          ' greater than the length of the in_list '
+                          ' parameter ...\n')
+
+            if len(self.index_filter) == 2:
+
+                if self.index_filter[0] < self.index_filter[1]:
+
+                    if self.index_filter[0] <= len(self.in_list):
+
+                        if self.index_filter[1] <= len(self.in_list):
+                            self.outputs['filtered_list'] = self.in_list[
+                                    self.index_filter[0]-1:self.index_filter[1]]
+
+                        else:
+                            print('\nThe initialisation of the '
+                                  'Filter_Files_List brick failed because the '
+                                  'second value of the index_filter parameter '
+                                  'is greater than the length of the in_list '
+                                  'parameter ...\n')
+
+                    else:
+                        print('\nThe initialisation of the Filter_Files_List '
+                              'brick failed because the first value of the '
+                              'index_filter parameter is greater than the '
+                              'length of the in_list parameter ...\n')
+
+                else:
+                     print('\nThe initialisation of the Filter_Files_List brick'
+                           ' failed because the first value of the index_filter'
+                           ' parameter is greater than the second ...\n')
+
+            self.outputs["notInDb"] = ["filtered_list"]
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        return
+
 
 class Input_Filter(ProcessMIA):
     """
