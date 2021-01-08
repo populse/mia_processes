@@ -76,7 +76,7 @@ Align together scans of different modalities
     and the 'apply_to_files' images. If 'write' is selected, the resliced images are named the same as the originals except that they are
     prefixed by out_prefix. if 'estwrite' is selected, the described procedures for 'estimate' and 'write' are performed and the output parameter
     (coregistered_source and/or coregistered_files) contains the resliced images and the one whose header has been rewritten. If it is necessary
-    to choose one or the other for a subsequent calculation in a pipeline, the Auto_Filter_List brick (mia_processes library) can be used.
+    to choose one or the other for a subsequent calculation in a pipeline, the Filter_Files_List brick (mia_processes library) can be used.
 
     ::
 
