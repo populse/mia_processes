@@ -12,6 +12,7 @@ populse_mia.
         - NewSegment
         - Normalize12
         - Realign
+        - SliceTiming
         - Smooth
 
 """
@@ -37,14 +38,16 @@ from nipype.interfaces.base import (File, InputMultiPath, InputMultiObject,
 from nipype.interfaces.spm.base import ImageFileSPM
 
 # populse_mia imports
+from populse_mia.data_manager.project import COLLECTION_CURRENT
 from populse_mia.software_properties import Config
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 
 # soma-base import
 from soma.controller.trait_utils import relax_exists_constraint
+from soma.qt_gui.qt_backend.Qt import QMessageBox
 
 # Other imports
-import os
+import itertools, math, os
 from traits.api import Undefined, Float
 import traits.api as traits
 from pathlib import Path
@@ -1507,6 +1510,510 @@ class Realign(ProcessMIA):
         self.process.run()
 
 
+class SliceTiming(ProcessMIA):
+    """
+    *Temporal correction to get back every slice at the same acquisition time*
+
+    Please, see the complete documentation for the `SliceTiming brick in the populse.mia_processes web site
+    <https://populse.github.io/mia_processes/documentation/preprocess/spm/SliceTiming.html>`
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation / instanciation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(SliceTiming, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = ['spm', 'nipype']
+
+        # Inputs description
+        desc_in_file = ("The images to be brought back to the reference slice "
+                        "time (a list of pathlike objects or string "
+                        "representing a file or of list of items which are a "
+                        "pathlike object or strings representing a file or a "
+                        "_Undefined or None)")
+        desc_acquisition = ('Type of image acquisition (one of "sequential '
+                            'ascending", "sequential descending", "interleaved '
+                            '(middle-top)", "interleaved (bottom-up)", '
+                            '"interleaved (top-down)"). From the acquisition '
+                            'parameter the slice_order parameter can be '
+                            'calculated automatically')
+        desc_num_slices = ("Number of slices in the in_file (an integer). "
+                           "Can be automatically retrieved from the database")
+        desc_TR = ("Repetition time in the in_file (a float, in seconds). "
+                   "Can be automatically retrieved from the database")
+        desc_TA = ("Time of volume acquisition (a float, in seconds). Can be "
+                   "automatically calculated as TR-(TR/num_slices)")
+        desc_slice_order = ('Order of how were recorded the slices during the '
+                            'volumes aquisition (a list of items which are '
+                            'an integer or a float or a _Undefined or None. '
+                            'Can be automatically calculated according to the '
+                            'acquisition" parameter)')
+        desc_ref_slice = ('The chosen reference slice, will serve as the '
+                          'reference for the other slices during the '
+                          'correction (an integer or a float or an _Undefined '
+                          'or None). A default value is calculated according '
+                          'to the "acquisition" parameter')
+        desc_out_prefix = ("SliceTiming routine output prefix (a string)")
+
+        # Outputs description
+        desc_timed_files = ("The image after the SliceTiming correction (a "
+                            "pathlike object or string representing a file)")
+
+        # Input traits
+        self.add_trait("in_files",
+                       InputMultiPath(traits.Either(ImageFileSPM(),
+                                                    traits.List(ImageFileSPM()),
+                                                    Undefined),
+                                      value=[Undefined],
+                                      output=False,
+                                      optional=False,
+                                      desc=desc_in_file))
+
+        self.add_trait("acquisition",
+                       traits.Enum("sequential ascending",
+                                   "sequential descending",
+                                   "interleaved (middle-top)",
+                                   "interleaved (bottom-up)",
+                                   "interleaved (top-down)",
+                                   value="sequential ascending",
+                                   output=False,
+                                   optional=True,
+                                   desc=desc_acquisition))
+
+        self.add_trait("num_slices",
+                       traits.Either(traits.Int(),
+                                     Undefined,
+                                     output=False,
+                                     optional=True,
+                                     desc=desc_num_slices))
+        self.num_slices = Undefined
+
+        self.add_trait("TR",
+                       traits.Either(traits.Float(),
+                                     Undefined,
+                                     output=False,
+                                     optional=True,
+                                     desc=desc_TR))
+        self.TR = Undefined
+
+        self.add_trait("TA",
+                       traits.Either(traits.Float(),
+                                     Undefined,
+                                     output=False,
+                                     optional=True,
+                                     desc=desc_TA))
+        self.TA = Undefined
+
+        self.add_trait("slice_order",
+                       traits.Either(traits.List(traits.Either(traits.Int(),
+                                                               traits.Float())),
+                                     Undefined,
+                                     output=False,
+                                     optional=True,
+                                     desc=desc_slice_order))
+        self.slice_order = Undefined
+
+        self.add_trait("ref_slice",
+                       traits.Either(traits.Int(),
+                                     traits.Float(),
+                                     Undefined,
+                                     output=False,
+                                     optional=True,
+                                     desc=desc_ref_slice))
+        self.ref_slice = Undefined
+
+        self.add_trait("out_prefix",
+                       traits.String('a',
+                                     output=False,
+                                     optional=True,
+                                     desc=desc_out_prefix))
+
+        # Output traits
+        self.add_trait("timed_files",
+                       OutputMultiPath(File(),
+                                       output=True,
+                                       desc=desc_timed_files))
+
+        self.init_default_traits()
+
+        if getattr(self, 'study_config'):
+            ce = self.study_config.engine
+
+        else:
+            ce = capsul_engine()
+
+        self.process = ce.get_process_instance(
+                                            'nipype.interfaces.spm.SliceTiming')
+
+    def _get_database_value(self):
+        """sets default values for certain parameters.
+
+        If the following parameters are undefined, this method attempts to give
+        them a value from the database or by making a calculation from other
+        known parameters:
+        - num_slices (from database)
+        - TR (from database)
+        - TA (from TR-(TR/num_slices))
+        - slice_order (from the "acquisition" parameter value)
+        - ref_slice (from the "acquisition" parameter value)
+
+        :returns: True if no problem is detected, otherwise False
+
+        """
+        # FIXME: If several data are entered in in_files parameter, we use the
+        # first element to determine, from the database, few calculation
+        # parameters. These calculation parameters must be identical for all
+        # data in in_files. Currently there is no verification to see if it's
+        # true (e.g. do all data have the same slice number?, etc.).
+        result = True
+        complete_path = self.in_files[0]
+        file_position = (complete_path.find(self.project.getName())
+                            + len(self.project.getName()) + 1)
+        database_filename = complete_path[file_position:]
+        temp = None
+        
+        if ('Dataset dimensions (Count, X,Y,Z,T...)' in
+                     self.project.session.get_fields_names(COLLECTION_CURRENT)):
+            temp = self.project.session.get_value(COLLECTION_CURRENT,
+                                                  database_filename,
+                                                  ('Dataset dimensions '
+                                                   '(Count, X,Y,Z,T...)'))[3]
+
+        if self.num_slices == Undefined:
+
+            if temp:
+                self.num_slices = temp
+
+            else:
+                msg = QMessageBox()
+                msg.setIcon(QMessageBox.Warning)
+                msg.setWindowTitle("User_processes_ECdev - "
+                                   "SliceTiming Error!")
+                msg.setText("Warning: the value of the num_slices parameter "
+                            "was not found in the database. "
+                            "Please check the data.")
+                msg.setStandardButtons(QMessageBox.Close)
+                msg.buttonClicked.connect(msg.close)
+                msg.exec()
+                result = False
+
+        else:
+
+            if temp:
+
+                if self.num_slices != temp:
+                    msg = QMessageBox()
+                    msg.setIcon(QMessageBox.Warning)
+                    msg.setWindowTitle("User_processes_ECdev - "
+                                       "SliceTiming Error!")
+                    msg.setText("Warning: The value for the num_slices "
+                                "parameter does not match the value in the "
+                                "database. Please check the data.")
+                    msg.setStandardButtons(QMessageBox.Close)
+                    msg.buttonClicked.connect(msg.close)
+                    msg.exec()
+                    result = False
+
+        temp = None
+
+        if ('RepetitionTime' in
+                     self.project.session.get_fields_names(COLLECTION_CURRENT)):
+            temp = self.project.session.get_value(COLLECTION_CURRENT,
+                                                  database_filename,
+                                                  'RepetitionTime')[0]/1000
+
+        if self.TR == Undefined:
+
+            if temp:
+                self.TR = temp
+
+            else:
+                msg = QMessageBox()
+                msg.setIcon(QMessageBox.Warning)
+                msg.setWindowTitle("User_processes_ECdev - "
+                                   "SliceTiming Error!")
+                msg.setText("Warning: the value of the TR parameter "
+                            "was not found in the database. "
+                            "Please check the data.")
+                msg.setStandardButtons(QMessageBox.Close)
+                msg.buttonClicked.connect(msg.close)
+                msg.exec()
+                result =  False
+
+        else:
+
+            if temp:
+
+                if self.TR != temp:
+                    msg = QMessageBox()
+                    msg.setIcon(QMessageBox.Warning)
+                    msg.setWindowTitle("User_processes_ECdev - "
+                                       "SliceTiming Error!")
+                    msg.setText("Warning: The value for the TR "
+                                "parameter does not match the value in the "
+                                "database. Please check the data.")
+                    msg.setStandardButtons(QMessageBox.Close)
+                    msg.buttonClicked.connect(msg.close)
+                    msg.exec()
+                    result = False
+
+        # FIXME: in SPM, TA can be egal to 0 (If slice_order and
+        # ref_slice are entered in milliseconds, TA will not be used and
+        # can be set to 0). Here we consider that slice_order and
+        # ref_slice paramters are only indices !
+
+        if self.TA != 0:
+
+            if self.TR != Undefined and self.num_slices != Undefined:
+       
+                if self.TA != Undefined:
+             
+                    if self.TA != self.TR - (self.TR / self.num_slices):
+                        msg = QMessageBox()
+                        msg.setIcon(QMessageBox.Warning)
+                        msg.setWindowTitle("User_processes_ECdev - "
+                                           "SliceTiming Error!")
+                        msg.setText("Warning: the value of the TA parameter "
+                                    "doesn't exactly match the other "
+                                    "parameters. Please check the data.")
+                        msg.setStandardButtons(QMessageBox.Close)
+                        msg.buttonClicked.connect(msg.close)
+                        msg.exec()
+                        result = False
+
+                else:
+                    self.TA = self.TR - (self.TR / self.num_slices)
+
+            elif self.TA == Undefined:
+                msg = QMessageBox()
+                msg.setIcon(QMessageBox.Warning)
+                msg.setWindowTitle("User_processes_ECdev - "
+                                   "SliceTiming Error!")
+                msg.setText("The value of TR or num_slices parameters was not "
+                            "found in the database, then the TA parameter "
+                            "could not be calculated automatically. Please "
+                            "check the data.")
+                msg.setStandardButtons(QMessageBox.Close)
+                msg.buttonClicked.connect(msg.close)
+                msg.exec()
+                result = False
+
+        if self.slice_order != Undefined:
+
+            if len(self.slice_order) != self.num_slices:
+                msg = QMessageBox()
+                msg.setIcon(QMessageBox.Warning)
+                msg.setWindowTitle("User_processes_ECdev - SliceTiming Error!")
+                msg.setText("Warning: the slice_order parameter doesn't "
+                            "match the num_slices parameter. Please check the "
+                            "data.")
+                msg.setStandardButtons(QMessageBox.Close)
+                msg.buttonClicked.connect(msg.close)
+                msg.exec()
+                result = False
+
+        elif self.num_slices != Undefined:
+            
+            if self.acquisition == "sequential ascending":
+                self.slice_order = list(range(1, self.num_slices+1))
+
+            if self.acquisition == "sequential descending":
+                self.slice_order = list(range(self.num_slices, 0, -1))
+
+            if self.acquisition == "interleaved (middle-top)":
+                self.slice_order = []
+
+                for (a, b) in (itertools.
+                           zip_longest)(list(range(math.ceil(self.num_slices/2),
+                                                   0,
+                                                   -1)),
+                                        list(range(math.ceil(self.num_slices),
+                                                   math.ceil(self.num_slices/2),
+                                                   -1))):
+
+                    if (self.num_slices % 2) == 0:
+                        self.slice_order.append(b)
+                        self.slice_order.append(a)
+
+                    else:
+                        self.slice_order.append(a)
+                        self.slice_order.append(b)
+
+                if None in self.slice_order: self.slice_order.remove(None)
+
+            if self.acquisition == "interleaved (bottom-up)":
+                self.slice_order = (list(range(1, self.num_slices+1, 2))
+                                    +list(range(2, self.num_slices+1, 2)))
+
+            if self.acquisition == "interleaved (top-down)":
+                self.slice_order = (list(range(self.num_slices, 0, -2))
+                                    +list(range(self.num_slices-1, 0, -2)))
+
+            if self.TA == 0 and self.TR != Undefined:
+                self.slice_order = [(i-1) * (self.TR/self.num_slices) * 1000
+                                    for i in self.slice_order]
+
+        else:
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Warning)
+            msg.setWindowTitle("User_processes_ECdev - SliceTiming Error!")
+            msg.setText("Warning: As the num_slices parameter was not found in "
+                        "the database, it was not possible to determine the "
+                        "slice_order parameter automatically. Please check the "
+                        "data.")
+            msg.setStandardButtons(QMessageBox.Close)
+            msg.buttonClicked.connect(msg.close)
+            msg.exec()
+            result = False
+
+        if self.ref_slice == Undefined:
+
+            if (self.acquisition == "sequential ascending" or
+                                   self.acquisition == "sequential descending"):
+                
+                if self.num_slices != Undefined:
+                    self.ref_slice = math.ceil(self.num_slices/2)
+
+                else:
+                    msg = QMessageBox()
+                    msg.setIcon(QMessageBox.Warning)
+                    msg.setWindowTitle("User_processes_ECdev - SliceTiming "
+                                       "Error!")
+                    msg.setText("Warning: It was not possible to determine the "
+                                "ref_slice parameter automatically. Please "
+                                "check the data.")
+                    msg.setStandardButtons(QMessageBox.Close)
+                    msg.buttonClicked.connect(msg.close)
+                    msg.exec()
+                    result = False
+
+            else:
+                self.ref_slice = 1
+
+            if (self.TA == 0 and
+                    self.TR != Undefined and
+                    self.num_slices != Undefined):
+                self.ref_slice = ((self.ref_slice-1) *
+                                                 self.TR/self.num_slices * 1000)
+
+        return result
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(SliceTiming, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.outputs:
+            self.outputs = {}
+
+        if self.inheritance_dict:
+            self.inheritance_dict = {}
+
+        # Definition of the necessary inputs for the spm fonction
+        # acquired from the databse
+        if self.in_files and self.in_files != [Undefined]:
+            self.process.in_files = self.in_files
+            res = self._get_database_value()
+
+            if not res:
+                return self.make_initResult()
+
+            if (self.num_slices != Undefined and
+                        self.TR != Undefined and
+                        self.TA != Undefined and
+                        self.slice_order != Undefined and
+                        self.ref_slice != Undefined):
+
+                if self.out_prefix:
+                    self.process.out_prefix = self.out_prefix
+
+                if self.output_directory:
+                    self.process.output_directory = self.output_directory
+
+                else:
+                    print('No output_directory was found...!\n')
+
+                self.outputs[
+                    'timed_files'] = (self.
+                                      timed_files) = (self.
+                                                      process.
+                                                      _timecorrected_files)
+                self.process._spm_script_file = self.spm_script_file
+
+        if self.outputs:
+
+            for key, val in self.outputs.items():
+
+                if key == "timed_files":
+                    
+                    if not isinstance(val, list):
+                        val = [val]
+
+                    for in_val, out_val in zip(self.in_files, val):
+                        _, fileOval = os.path.split(out_val)
+                        _, fileIval = os.path.split(in_val)
+
+                        if self.out_prefix:
+                            fileOval_without_prefix = fileOval[
+                                                          len(self.out_prefix):]
+                        
+                        else:
+                           fileOval_without_prefix = fileOval[len('s'):]
+
+                        if fileOval_without_prefix == fileIval:
+                            self.inheritance_dict[out_val] = in_val
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(SliceTiming, self).run_process_mia()
+
+        if self.in_files and self.in_files != [Undefined]:
+
+            # in_files parameter are normally already in absolute path format.
+            # So, the 3  next files can be see as "in case of"...
+            for idx, element in enumerate(self.in_files):
+                full_path = os.path.abspath(element)
+                self.in_files[idx] = full_path
+
+            self.process.in_files = self.in_files
+            self.process.num_slices = self.num_slices
+            self.process.time_repetition = self.TR
+            self.process.time_acquisition = self.TA
+            self.process.slice_order = self.slice_order
+            self.process.ref_slice = self.ref_slice
+
+            if self.out_prefix:
+                self.process.out_prefix = self.out_prefix
+
+            if self.output_directory:
+                self.process.output_directory = self.output_directory
+
+            self.process._spm_script_file = self.spm_script_file
+            return self.process.run(configuration_dict={})
+
+
 class Smooth(ProcessMIA):
     """
     *3D Gaussian smoothing of image volumes*
@@ -1517,7 +2024,7 @@ class Smooth(ProcessMIA):
     """
 
     def __init__(self):
-        """Dedicated to the attributes initialisation / instanciation.
+        """Dedicated to the attributes initialisation/instanciation.
         
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
@@ -1695,4 +2202,3 @@ class Smooth(ProcessMIA):
 
         self.process._spm_script_file = self.spm_script_file
         return self.process.run(configuration_dict={})
-
