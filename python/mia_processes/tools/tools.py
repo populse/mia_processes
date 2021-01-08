@@ -66,8 +66,9 @@ class Auto_Filter_List(ProcessMIA):
         
         # Inputs traits
         self.add_trait("in_list",
-                        traits.List(output=False,
-                                   desc=in_list_desc))
+                        traits.List(traits.File,
+                                    output=False,
+                                    desc=in_list_desc))
         
         self.add_trait("index_filter",
                        traits.List(value=[1],
