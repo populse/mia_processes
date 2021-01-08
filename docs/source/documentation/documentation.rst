@@ -17,6 +17,7 @@ Mia_processes's documentation
     - `NewSegment <preprocess/spm/NewSegment.html>`_
     - `Normalize12 <preprocess/spm/Normalize12.html>`_
     - `Realign <preprocess/spm/Realign.html>`_
+    - `SliceTiming <preprocess/spm/SliceTiming.html>`_
     - `Smooth <preprocess/spm/Smooth.html>`_
 
 - **studies**
