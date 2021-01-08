@@ -14,7 +14,7 @@
 
 * A compatible version of [Python](https://www.python.org/) (>= 3.5) and [pip](https://packaging.python.org/guides/tool-recommendations/) must be installed.
 
-* Depending on your Python setup and OS, the “python3” command can be use as the default Python command.
+* Depending on the Python setup and OS, the “python3” command can be use as the default Python command.
 
     Try:
         `python -V`
@@ -69,11 +69,11 @@
 # License
 
 * The whole populse project is open source.
-* mia_processes is precisely released under the CeCILL software license.
-* You can find all the details on the license [here](http://www.cecill.info/licences/Licence_CeCILL_V2.1-en.html), or refer to the license file [here](https://github.com/populse/mia_processes/blob/master/LICENSE).
+* Mia_processes is precisely released under the CeCILL software license.
+* All license details can be found [here](http://www.cecill.info/licences/Licence_CeCILL_V2.1-en.html), or refer to the license file [here](https://github.com/populse/mia_processes/blob/master/LICENSE).
 
 # Support and Communication
 
-If you have a problem or would like to ask a question about how to do something in mia_processes, please [open an issue](https://github.com/populse/mia_processes/issues).
+In case of a problem or to ask a question about how to do something in mia_processes, please [open an issue](https://github.com/populse/mia_processes/issues).
 
-You can even contact the developer team by using populse-support@univ-grenoble-alpes.fr.
+The developer team can even be contacted using populse-support@univ-grenoble-alpes.fr.
