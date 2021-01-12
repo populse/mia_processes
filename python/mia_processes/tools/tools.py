@@ -99,7 +99,7 @@ class Files_To_List(ProcessMIA):
         if self.outputs:
             self.outputs = {}
 
-        if self.file1 and not self.file1 in ["<undefined>", traits.Undefined]:
+        if self.file1 and self.file1 not in ["<undefined>", traits.Undefined]:
         
             if ((not self.file2) or
                 (self.file2 in ["<undefined>", traits.Undefined])):
@@ -107,8 +107,9 @@ class Files_To_List(ProcessMIA):
 
             else:
                 self.outputs['file_list'] = [self.file1, self.file2]
-
-            self.outputs["notInDb"] = ["file_list"]
+                
+            if self.outputs:
+                self.outputs["notInDb"] = ["file_list"]
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -188,7 +189,7 @@ class Filter_Files_List(ProcessMIA):
             self.outputs = {}
 
         if (self.in_list and
-               not self.in_list in ["<undefined>", traits.Undefined]):
+               self.in_list not in ["<undefined>", traits.Undefined]):
 
             if not self.index_filter:
                 self.outputs['filtered_list'] = [self.in_list[0]]
@@ -201,9 +202,9 @@ class Filter_Files_List(ProcessMIA):
 
                 else:
                     print('\nThe initialisation of the Filter_Files_List brick '
-                          ' failed because the index_filter parameter is '
-                          ' greater than the length of the in_list '
-                          ' parameter ...\n')
+                          'failed because the index_filter parameter is '
+                          'greater than the length of the in_list '
+                          'parameter ...\n')
 
             if len(self.index_filter) == 2:
 
@@ -233,7 +234,8 @@ class Filter_Files_List(ProcessMIA):
                            ' failed because the first value of the index_filter'
                            ' parameter is greater than the second ...\n')
 
-            self.outputs["notInDb"] = ["filtered_list"]
+            if self.outputs:
+                self.outputs["notInDb"] = ["filtered_list"]
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -501,24 +503,25 @@ class List_To_File(ProcessMIA):
             self.outputs = {}
         
         if (self.file_list and
-               not self.file_list in ["<undefined>", traits.Undefined]):
+               self.file_list not in ["<undefined>", traits.Undefined]):
 
             if not self.index_filter:
                 self.outputs['file'] = [self.file_list[0]]
-                self.outputs["notInDb"] = ["file"]
 
             if len(self.index_filter) == 1:
 
                 if self.index_filter[0] <= len(self.file_list):
                     self.outputs['file'] = [self.file_list[
                                                         self.index_filter[0]-1]]
-                    self.outputs["notInDb"] = ["file"]
 
                 else:
                     print('\nThe initialisation of the List_To_File brick '
                           'failed because the index_filter parameter is '
                           'greater than the length of file_list '
                           'parameter ...\n')
+
+            if self.outputs:
+                self.outputs["notInDb"] = ["file"]
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()

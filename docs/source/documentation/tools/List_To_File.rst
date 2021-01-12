@@ -73,4 +73,4 @@ From a list of files, generation of a single file
 
 -------------
 
-NOTE: If no index is specified, returns the first element of the list.
+NOTE: If no index is specified, returns the first element of the list (the index corresponds to the actual position in the list, i.e. there is no “0” index as in python).
