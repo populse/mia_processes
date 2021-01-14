@@ -88,7 +88,7 @@ Bring back every slice of a BOLD image to the reference slice time.
 
     ::
 
-      ex. /home/ArthurBlair/data/scripts/pyscript_slicetiming_4545dec4-dc24-4ba1-b077-df5fbb81ef66.m
+      ex. /home/ArthurBlair/scripts/pyscript_slicetiming_4545dec4-dc24-4ba1-b077-df5fbb81ef66.m
 
 -------------
 

@@ -61,12 +61,12 @@ Realigns a time-series of images acquired from the same subject
     One of 'estwrite', 'estimate' or 'write':
 
       | - estimate: generates realignment_parameters and modified_in_files
-      | - write: |ws4| |ws4| |ws4| with write_which == [2, 0] or [1, 0] generates realigned_files
-      | |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| with write_which == [2, 1] generates mean_image and realigned_files
-      | |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| with write_which == [0, 1] generates mean_image
-      | - estwrite:|ws4| with write_which == [2, 0] or [1, 0] generates realignment_parameters, modified_in_files and realigned_files
-      | |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| with write_which == [2, 1] generates realignment_parameters, modified_in_file, mean_image and realigned_files
-      | |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| with write_which == [0, 1] generates realignment_parameters, modified_in_file and mean_image
+      | - write: |ws4| |ws4| with write_which == [2, 0] or [1, 0] generates realigned_files
+      | |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| with write_which == [2, 1] generates mean_image and realigned_files
+      | |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| with write_which == [0, 1] generates mean_image
+      | - estwrite:|ws1| with write_which == [2, 0] or [1, 0] generates realignment_parameters, modified_in_files and realigned_files
+      | |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| with write_which == [2, 1] generates realignment_parameters, modified_in_file, mean_image and realigned_files
+      | |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| with write_which == [0, 1] generates realignment_parameters, modified_in_file and mean_image
 
     ::
 
@@ -202,7 +202,7 @@ Realigns a time-series of images acquired from the same subject
 
     ::
 
-      ex. /home/ArthurBlair/data/raw_data/rFunc.nii
+      ex. /home/ArthurBlair/data/derived_data/rFunc.nii
 
 - *modified_in_files*
     If the jobtype parameter is equal to estimate or estwrite, these will be copies of the in_files with a rewritten header (a list of items
@@ -211,7 +211,7 @@ Realigns a time-series of images acquired from the same subject
 
     ::
 
-      ex. /home/ArthurBlair/data/raw_data/Func.nii
+      ex. /home/ArthurBlair/data/derived_data/Func.nii
 
 - *mean_image*
     If the write_which parameter is equal to [2, 1] or [0, 1] and jobtype parameter is equal to write or estwrite, this will be the Mean image
@@ -219,7 +219,7 @@ Realigns a time-series of images acquired from the same subject
 
     ::
 
-      ex. /home/ArthurBlair/data/raw_data/meanFunc.nii
+      ex. /home/ArthurBlair/data/derived_data/meanFunc.nii
 
 - *realignment_parameters*
     If the jobtype parameter is equal to estimate or estwrite, this will be the Estimated translation and rotation parameters (a list of items
@@ -227,8 +227,15 @@ Realigns a time-series of images acquired from the same subject
 
     ::
 
-      ex. /home/ArthurBlair/data/raw_data/rp_Func.txt
+      ex. /home/ArthurBlair/data/derived_data/rp_Func.txt
 
+- *spm_script_file*
+    A file necessary for the internal workings of nipype and automatically generated at the run step time (a string representing a file).
+
+    ::
+
+      ex./home/ArthurBlair/scripts/pyscript_realign_459a6c0d-d060-406c-80ce-f40de77692f9.m
+ 
 -------------
 
 .. [#label] Syntax: mia_processes/nipype Realign <=> SPM12 Realign.
