@@ -1144,11 +1144,6 @@ class Realign(ProcessMIA):
     <https://populse.github.io/mia_processes/documentation/preprocess/spm/Realign.html>`_
 
     """
-    
-    use_mcr = traits.Bool(optional=True, userlevel=1)
-    paths = InputMultiObject(traits.Directory(), optional=True, userlevel=1)
-    matlab_cmd = traits_extension.Str(optional=True, userlevel=1)
-    mfile = traits.Bool(optional=True, userlevel=1)
 
     def __init__(self):
         """Dedicated to the attributes initialisation/instanciation.
@@ -1161,7 +1156,7 @@ class Realign(ProcessMIA):
         super(Realign, self).__init__()
 
         # Third party softwares required for the execution of the brick
-        self.requirement = ['spm']
+        self.requirement = ['spm', 'nipype']
         
         # Inputs description
         in_files_desc = ('The images to realign (a list of pathlike objects or '
@@ -1359,9 +1354,11 @@ class Realign(ProcessMIA):
                        OutputMultiPath(File(),
                                        output=True,
                                        optional=True,
-                                       desc=realignment_parameters_desc))  # rp_
+                                       desc=realignment_parameters_desc))
 
-        self.process = spm.Realign()
+
+        self.init_default_traits()
+        self.init_process('nipype.interfaces.spm.Realign')
 
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
@@ -1387,16 +1384,33 @@ class Realign(ProcessMIA):
             self.inheritance_dict = {}
         
         if self.in_files and self.in_files != [Undefined]:
-            self.process.inputs.in_files = self.in_files
+            self.process.in_files = self.in_files
 
             if self.out_prefix:
-                self.process.inputs.out_prefix = self.out_prefix
+                self.process.out_prefix = self.out_prefix
 
-            self.outputs = self.process._list_outputs()
+            if self.output_directory:
+                self.process.output_directory = self.output_directory
+
+            else:
+                print('No output_directory was found...!\n')
+
+            if self.jobtype:
+                self.process.jobtype = self.jobtype
+
+            if self.write_which:
+                self.process.write_which = self.write_which
+
+            for k in ('realigned_files', 'modified_in_files',
+                      'mean_image', 'realignment_parameters'):
+                self.outputs[k] = getattr(self.process, '_' + k)
+                setattr(self, k, getattr(self.process, '_' + k))
+
+            self.process._spm_script_file = self.spm_script_file
 
         if self.outputs:
 
-            for key, values in self.outputs.items():
+            for key, val in self.outputs.items():
 
                 if key == 'realigned_files':
 
@@ -1406,28 +1420,42 @@ class Realign(ProcessMIA):
                         self.outputs['realigned_files'] = Undefined
 
                     else:
-
-                        for fullname in values:
-                            path, filename = os.path.split(fullname)
+                        
+                        if not isinstance(val, list):
+                            val = [val]
+                            
+                        for in_val, out_val in zip(self.in_files, val):
+                            _, fileOval = os.path.split(out_val)
+                            _, fileIval = os.path.split(in_val)
 
                             if self.out_prefix:
-                                filename_without_prefix = filename[len(
-                                                              self.out_prefix):]
-
+                                fileOvalNoPref = fileOval[len(self.out_prefix):]
+                        
                             else:
-                                filename_without_prefix = filename[len('r'):]
+                                fileOvalNoPref = fileOval[len('r'):]
 
-                            if (os.path.join(path,
-                                             filename_without_prefix)
-                                                 in self.in_files):
-                                self.inheritance_dict[fullname] = (
-                                    os.path.join(path, filename_without_prefix))
+                            if fileOvalNoPref == fileIval:
+                                self.inheritance_dict[out_val] = in_val
 
                 if key == 'modified_in_files':
 
                     if self.jobtype == 'write':
                         self.outputs['modified_in_files'] = Undefined
 
+                    else:
+
+                        if not isinstance(val, list):
+                            val = [val]
+                            
+                        for in_val, out_val in zip(self.in_files, val):
+                            _, fileOval = os.path.split(out_val)
+                            _, fileIval = os.path.split(in_val)
+                            fileOvalNoPref = fileOval
+
+                            if fileOvalNoPref == fileIval:
+                                self.inheritance_dict[out_val] = in_val
+
+                # Only the first data in in_files gives mean_image
                 if key == 'mean_image':
 
                     if (
@@ -1440,20 +1468,17 @@ class Realign(ProcessMIA):
 
                     else:
 
-                        if isinstance(values, str):
-                            values = [values]
+                        if not isinstance(val, list):
+                            values = [val]
 
-                        for fullname in values:
-                            path, filename = os.path.split(fullname)
-                            filename_without_prefix = filename[len('mean'):]
+                        for in_val, out_val in zip(self.in_files, val):
+                            _, fileOval = os.path.split(out_val)
+                            _, fileIval = os.path.split(in_val)
+                            fileOvalNoPref = fileOval[len('mean'):]
 
-                            if (os.path.join(path,
-                                             filename_without_prefix)
-                                           in self.in_files):
-                                self.inheritance_dict[fullname] = (
-                                    os.path.join(path,
-                                                 filename_without_prefix)
-                                                                  )
+                            if fileOvalNoPref == fileIval:
+                                self.inheritance_dict[out_val] = in_val
+
                 if key == 'realignment_parameters':
 
                     if self.jobtype == 'write':
@@ -1461,24 +1486,17 @@ class Realign(ProcessMIA):
 
                     else:
 
-                        if isinstance(values, str):
-                            values = [values]
+                        if not isinstance(val, list):
+                            values = [val]
 
-                        for fullname in values:
-                            path, filename = os.path.split(fullname)
-                            filename_without_prefix = filename[len('rp_'):]
+                        for in_val, out_val in zip(self.in_files, val):
+                            _, fileOval = os.path.split(out_val)
+                            _, fileIval = os.path.split(in_val)
+                            fileOvalNoPref = fileOval[len('rp_'):]
 
-                            if filename_without_prefix[-4:] == '.txt':
-                                filename_without_prefix = (
-                                          filename_without_prefix[:-4] + '.nii')
-
-                            if (os.path.join(path,
-                                             filename_without_prefix)
-                                           in self.in_files):
-                                self.inheritance_dict[fullname] = (
-                                    os.path.join(path,
-                                                 filename_without_prefix)
-                                                                  )
+                            if ('.'.join(fileOvalNoPref.split('.')[:-1]) ==
+                                            '.'.join(fileIval.split('.')[:-1])):
+                                self.inheritance_dict[out_val] = in_val
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -1488,26 +1506,28 @@ class Realign(ProcessMIA):
         super(Realign, self).run_process_mia()
 
         if self.in_files and self.in_files != [Undefined]:
-            self.process.inputs.in_files = self.in_files
+            self.process.in_files = self.in_files
 
-            if self.out_prefix:
-                self.process.inputs.out_prefix = self.out_prefix
+        if self.out_prefix:
+            self.process.out_prefix = self.out_prefix
 
-        self.process.inputs.in_files = self.in_files
-        self.process.inputs.jobtype = self.jobtype
-        self.process.inputs.quality = self.quality
-        self.process.inputs.separation = self.separation
-        self.process.inputs.fwhm = self.fwhm
-        self.process.inputs.register_to_mean = self.register_to_mean
-        self.process.inputs.interp = self.interp
-        self.process.inputs.wrap = self.wrap
-        self.process.inputs.weight_img = self.weight_img
-        self.process.inputs.write_which = self.write_which
-        self.process.inputs.write_interp = self.write_interp
-        self.process.inputs.write_wrap = self.write_wrap
-        self.process.inputs.write_mask = self.write_mask
-        self.process.inputs.out_prefix = self.out_prefix
-        self.process.run()
+        if self.output_directory:
+            self.process.output_directory = self.output_directory
+
+        self.process.jobtype = self.jobtype
+        self.process.quality = self.quality
+        self.process.separation = self.separation
+        self.process.fwhm = self.fwhm
+        self.process.register_to_mean = self.register_to_mean
+        self.process.interp = self.interp
+        self.process.wrap = self.wrap
+        self.process.weight_img = self.weight_img
+        self.process.write_which = self.write_which
+        self.process.write_interp = self.write_interp
+        self.process.write_wrap = self.write_wrap
+        self.process.write_mask = self.write_mask
+        self.process._spm_script_file = self.spm_script_file
+        return self.process.run(configuration_dict={})
 
 
 class SliceTiming(ProcessMIA):
@@ -1642,15 +1662,7 @@ class SliceTiming(ProcessMIA):
                                        desc=desc_timed_files))
 
         self.init_default_traits()
-
-        if getattr(self, 'study_config'):
-            ce = self.study_config.engine
-
-        else:
-            ce = capsul_engine()
-
-        self.process = ce.get_process_instance(
-                                            'nipype.interfaces.spm.SliceTiming')
+        self.init_process('nipype.interfaces.spm.SliceTiming')
 
     def _get_database_value(self):
         """sets default values for certain parameters.
@@ -1973,13 +1985,12 @@ class SliceTiming(ProcessMIA):
                         _, fileIval = os.path.split(in_val)
 
                         if self.out_prefix:
-                            fileOval_without_prefix = fileOval[
-                                                          len(self.out_prefix):]
+                            fileOvalNoPref = fileOval[len(self.out_prefix):]
                         
                         else:
-                           fileOval_without_prefix = fileOval[len('s'):]
+                           fileOvalNoPref = fileOval[len('s'):]
 
-                        if fileOval_without_prefix == fileIval:
+                        if fileOvalNoPref == fileIval:
                             self.inheritance_dict[out_val] = in_val
 
         # Return the requirement, outputs and inheritance_dict
@@ -2100,14 +2111,7 @@ class Smooth(ProcessMIA):
                                        desc=smoothed_files_desc))
 
         self.init_default_traits()
-
-        if getattr(self, 'study_config'):
-            ce = self.study_config.engine
-
-        else:
-            ce = capsul_engine()
-
-        self.process = ce.get_process_instance('nipype.interfaces.spm.Smooth')
+        self.init_process('nipype.interfaces.spm.Smooth')
 
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
@@ -2164,13 +2168,12 @@ class Smooth(ProcessMIA):
                         _, fileIval = os.path.split(in_val)
                         
                         if self.out_prefix:
-                            fileOval_without_prefix = fileOval[
-                                                          len(self.out_prefix):]
+                            fileOvalNoPref = fileOval[len(self.out_prefix):]
                         
                         else:
-                           fileOval_without_prefix = fileOval[len('s'):]
+                           fileOvalNoPref = fileOval[len('s'):]
 
-                        if fileOval_without_prefix == fileIval:
+                        if fileOvalNoPref == fileIval:
                             self.inheritance_dict[out_val] = in_val
        
         # Return the requirement, outputs and inheritance_dict
