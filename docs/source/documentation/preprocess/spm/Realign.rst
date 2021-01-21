@@ -228,13 +228,6 @@ Realigns a time-series of images acquired from the same subject
     ::
 
       ex. /home/ArthurBlair/data/derived_data/rp_Func.txt
-
-- *spm_script_file*
-    A file necessary for the internal workings of nipype and automatically generated at the run step time (a string representing a file).
-
-    ::
-
-      ex./home/ArthurBlair/scripts/pyscript_realign_459a6c0d-d060-406c-80ce-f40de77692f9.m
  
 -------------
 
