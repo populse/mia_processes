@@ -71,13 +71,6 @@ Smooth brick
 
       ex. /home/ArthurBlair/data/derived_data/sFunc.nii
 
-- *spm_script_file*
-    A file necessary for the internal workings of nipype and automatically generated at the run step time (a string representing a file).
-
-    ::
-
-      ex./home/ArthurBlair/scripts/pyscript_smooth_ee4a78e7-fffe-43e1-ae6c-f0aed6507b40.m
-
 -------------
 
 .. [#label] Syntax: mia_processes/nipype Smooth <=> SPM12 Smooth.
