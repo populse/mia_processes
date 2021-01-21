@@ -83,13 +83,6 @@ Bring back every slice of a BOLD image to the reference slice time.
 
       ex. /home/ArthurBlair/data/derived_data/aFunc.nii
 
-- *spm_script_file*
-    The location of the output SPM matlab script automatically generated at the run step time (a string representing a file).
-
-    ::
-
-      ex. /home/ArthurBlair/scripts/pyscript_slicetiming_4545dec4-dc24-4ba1-b077-df5fbb81ef66.m
-
 -------------
 
 .. [#label] Syntax: mia_processes/nipype SliceTiming <=> SPM12 Slice Timing.
