@@ -48,8 +48,8 @@ from soma.qt_gui.qt_backend.Qt import QMessageBox
 
 # Other imports
 import itertools, math, os
-from traits.api import Undefined, Float
-import traits.api as traits
+from traits.api import (Bool, Either, Enum, Float, Int, List, Range, String,
+                        Tuple, Undefined)
 from pathlib import Path
 
 class Coregister(ProcessMIA):
@@ -60,11 +60,6 @@ class Coregister(ProcessMIA):
     <https://populse.github.io/mia_processes/documentation/preprocess/spm/Coregister.html>`_
 
     """
-
-    use_mcr = traits.Bool(optional=True, userlevel=1)
-    paths = InputMultiObject(traits.Directory(), optional=True, userlevel=1)
-    matlab_cmd = traits_extension.Str(optional=True, userlevel=1)
-    mfile = traits.Bool(optional=True, userlevel=1)
 
     def __init__(self):
         """Dedicated to the attributes initialisation/instanciation.
@@ -77,7 +72,7 @@ class Coregister(ProcessMIA):
         super(Coregister, self).__init__()
 
         # Third party softwares required for the execution of the brick
-        self.requirement = ['spm']
+        self.requirement = ['spm', 'nipype']
 
         # Inputs description
         target_desc = ('The reference file to register to. An existing,'
@@ -126,7 +121,7 @@ class Coregister(ProcessMIA):
                                     desc=target_desc))
         
         self.add_trait("source",
-                       InputMultiPath(traits.Either(ImageFileSPM(),
+                       InputMultiPath(Either(ImageFileSPM(),
                                                     Undefined),
                                       value=[Undefined],
                                       copyfile=True,
@@ -135,7 +130,7 @@ class Coregister(ProcessMIA):
                                       desc=source_desc))
         
         self.add_trait("apply_to_files",
-                       InputMultiPath(traits.Either(File(),
+                       InputMultiPath(Either(ImageFileSPM(),
                                                     Undefined),
                                       value=[Undefined],
                                       copyfile=True,
@@ -144,92 +139,93 @@ class Coregister(ProcessMIA):
                                       desc=apply_to_files_desc))
 
         self.add_trait("jobtype",
-                       traits.Enum('estimate',
-                                   'estwrite',
-                                   'write',
-                                   output=False,
-                                   optional=True,
-                                   desc=jobtype_desc))
+                       Enum('estimate',
+                            'estwrite',
+                            'write',
+                            output=False,
+                            optional=True,
+                            desc=jobtype_desc))
 
         self.add_trait("cost_function",
-                       traits.Enum('nmi',
-                                   'mi',
-                                   'ecc',
-                                   'ncc',
-                                   output=False,
-                                   optional=True,
-                                   desc=cost_function_desc))
+                       Enum('nmi',
+                            'mi',
+                            'ecc',
+                            'ncc',
+                            output=False,
+                            optional=True,
+                            desc=cost_function_desc))
 
         self.add_trait("separation",
-                       traits.List(value=[4.0, 2.0],
-                                   trait=traits.Range(low=0.0, high=None),
-                                   minlen=1,
-                                   maxlen=32,
-                                   output=False,
-                                   optional=True,
-                                   desc=separation_desc))
+                       List(value=[4.0, 2.0],
+                            trait=Range(low=0.0, high=None),
+                            minlen=1,
+                            maxlen=32,
+                            output=False,
+                            optional=True,
+                            desc=separation_desc))
 
         self.add_trait("tolerance",
-                       traits.List(value=[.02, .02, .02, 0.001, 0.001, 0.001,
-                                          .01, .01, .01, 0.001, 0.001, 0.001],
-                                   trait=traits.Range(low=0.0, high=None),
-                                   minlen=12,
-                                   maxlen=12,
-                                   output=False,
-                                   optional=True,
-                                   desc=tolerance_desc))
+                       List(value=[.02, .02, .02, 0.001, 0.001, 0.001,
+                                   .01, .01, .01, 0.001, 0.001, 0.001],
+                            trait=Range(low=0.0, high=None),
+                            minlen=12,
+                            maxlen=12,
+                            output=False,
+                            optional=True,
+                            desc=tolerance_desc))
 
         self.add_trait("fwhm",
-                       traits.List(value=[7.0, 7.0],
-                                   trait=traits.Range(low=0.0, high=None),
-                                   minlen=2,
-                                   maxlen=2,
-                                   output=False,
-                                   optional=True,
-                                   desc=fwhm_desc))
+                       List(value=[7.0, 7.0],
+                            trait=Range(low=0.0, high=None),
+                            minlen=2,
+                            maxlen=2,
+                            output=False,
+                            optional=True,
+                            desc=fwhm_desc))
 
         self.add_trait("write_interp",
-                       traits.Range(value=4,
-                                    low=0,
-                                    high=7,
-                                    output=False,
-                                    optional=True,
-                                    desc=write_interp_desc))
+                       Range(value=4,
+                             low=0,
+                             high=7,
+                             output=False,
+                             optional=True,
+                             desc=write_interp_desc))
 
         self.add_trait("write_wrap",
-                       traits.List(value=[0, 0, 0],
-                                   trait=traits.Range(low=0, high=1),
-                                   minlen=3,
-                                   maxlen=3,
-                                   output=False,
-                                   optional=True,
-                                   desc=write_wrap_desc))
+                       List(value=[0, 0, 0],
+                            trait=Range(low=0, high=1),
+                            minlen=3,
+                            maxlen=3,
+                            output=False,
+                            optional=True,
+                            desc=write_wrap_desc))
 
         self.add_trait("write_mask",
-                       traits.Bool(default_value=False,
-                                   output=False,
-                                   optional=True,
-                                   desc=write_mask_desc))
+                       Bool(default_value=False,
+                            output=False,
+                            optional=True,
+                            desc=write_mask_desc))
 
         self.add_trait("out_prefix",
-                       traits.String('r',
-                                     output=False,
-                                     optional=True,
-                                     desc=out_prefix_desc))
+                       String('r',
+                              output=False,
+                              optional=True,
+                              desc=out_prefix_desc))
 
         # Output traits
         self.add_trait("coregistered_source",
-                       OutputMultiPath(File(),
+                       OutputMultiPath(ImageFileSPM(),
                                        output=True,
                                        desc=coregistered_source_desc))
 
         self.add_trait("coregistered_files",
-                       OutputMultiPath(File(),
+                       OutputMultiPath(ImageFileSPM(),
                                        output=True,
                                        optional=True,
                                        desc=coregistered_files_desc))
 
-        self.process = spm.Coregister()
+        self.init_default_traits()
+        self.init_process('nipype.interfaces.spm.Coregister')
 
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
@@ -254,102 +250,107 @@ class Coregister(ProcessMIA):
         if self.inheritance_dict:
             self.inheritance_dict = {}
 
-        if (self.target and self.source and
-              self.source != [Undefined] and self.jobtype):
-            self.process.inputs.target = self.target
-            self.process.inputs.source = self.source
-            self.process.inputs.jobtype = self.jobtype
+        if (self.target and self.target != Undefined and
+              self.source and self.source != [Undefined] and
+              self.jobtype):
+            self.process.source = self.source
+            self.process.target = self.target
+            self.process.jobtype = self.jobtype
 
             if self.apply_to_files and self.apply_to_files != [Undefined]:
-                self.process.inputs.apply_to_files = self.apply_to_files
-
-            else:
-                self.apply_to_files = Undefined
+                self.process.apply_to_files = self.apply_to_files
 
             if self.out_prefix:
-                self.process.inputs.out_prefix = self.out_prefix
+                self.process.out_prefix = self.out_prefix
 
-            self.outputs = self.process._list_outputs()
+            if self.output_directory:
+                self.process.output_directory = self.output_directory
+
+            else:
+                print('No output_directory was found...!\n')
+
+            self.outputs[
+                'coregistered_source'
+                        ] = self.process._coregistered_source
+            self.outputs[
+                'coregistered_files'
+                        ] = self.process._coregistered_files
 
         if self.outputs:
-            outputs_coregsource = None
-            outputs_coregfiles = None
-        
-            for key, values in self.outputs.items():
+            out_coregsource = []
+            out_coregfiles = []
+
+            for key, val in self.outputs.items():
 
                 if key == "coregistered_source":
-                    outputs_coregsource = values.copy()
                     
-                    for fullname in values:
-                        path, filename_out = os.path.split(fullname)
+                    if not isinstance(val, list):
+                        val = [val]
+
+                    for in_val, out_val in zip(self.source, val):
+                        pathOval, fileOval = os.path.split(out_val)
+                        _, fileIval = os.path.split(in_val)
 
                         if not self.jobtype == "estimate":
 
                             if self.out_prefix:
-                                filename_in = filename_out[
-                                                  len(self.out_prefix):]
+                                fileOvalNoPref = fileOval[len(self.out_prefix):]
                         
                             else:
-                                filename_in = filename_out[len('r'):]
+                                fileOvalNoPref = fileOval[len('r'):]
 
                         else:
-                            filename_in = filename_out
-    
-                        if os.path.join(path, filename_in) in self.source:
-                            self.inheritance_dict[
-                                           fullname] = os.path.join(path,
-                                                                    filename_in)
+                            fileOvalNoPref = fileOval
 
-                        if self.jobtype == "estwrite":
+                        if fileOvalNoPref == fileIval:
+                            self.inheritance_dict[out_val] = in_val
 
-                            if isinstance(outputs_coregsource, list):
-                                outputs_coregsource.append(
-                                                os.path.join(path, filename_in))
-                                self.inheritance_dict[os.path.join(path,
-                                                                   filename_in)
-                                                     ] = os.path.join(path,
-                                                                    filename_in)
-                                
-                if (key == "coregistered_files" and
-                    not values in ["<undefined>", traits.Undefined]):
-                    outputs_coregfiles = values.copy()
-                    
-                    for fullname in values:
-                        path, filename_out = os.path.split(fullname)
+                            if self.jobtype == "estwrite":
+                                self.inheritance_dict[
+                                    os.path.join(pathOval,
+                                                 fileOvalNoPref)] = in_val
+                                out_coregsource.append(out_val)
+                                out_coregsource.append(
+                                                os.path.join(pathOval,
+                                                             fileOvalNoPref))
+
+                if key == "coregistered_files" and val != Undefined:
+
+                    if not isinstance(val, list):
+                        val = [val]
+
+                    for in_val, out_val in zip(self.apply_to_files, val):
+                        pathOval, fileOval = os.path.split(out_val)
+                        _, fileIval = os.path.split(in_val)
 
                         if not self.jobtype == "estimate":
 
                             if self.out_prefix:
-                                filename_in = filename_out[
-                                                  len(self.out_prefix):]
-
+                                fileOvalNoPref = fileOval[len(self.out_prefix):]
+                        
                             else:
-                                filename_in = filename_out[len('r'):]
+                                fileOvalNoPref = fileOval[len('r'):]
 
                         else:
-                            filename_in = filename_out
+                            fileOvalNoPref = fileOval
 
-                        if os.path.join(path,
-                                        filename_in) in self.apply_to_files:
-                            self.inheritance_dict[
-                                           fullname] = os.path.join(path,
-                                                                    filename_in)
+                        if fileOvalNoPref == fileIval:
+                            self.inheritance_dict[out_val] = in_val
 
-                        if self.jobtype == "estwrite":
+                            if self.jobtype == "estwrite":
+                                self.inheritance_dict[
+                                    os.path.join(pathOval,
+                                                 fileOvalNoPref)] = in_val
+                                out_coregfiles.append(out_val)
+                                out_coregfiles.append(
+                                               os.path.join(pathOval,
+                                                            fileOvalNoPref))
 
-                            if isinstance(outputs_coregfiles, list):
-                                outputs_coregfiles.append(
-                                               os.path.join(path, filename_in))
-                                self.inheritance_dict[os.path.join(path,
-                                                                   filename_in)
-                                                     ] = os.path.join(path,
-                                                                    filename_in)
+            if out_coregsource:
+                self.outputs["coregistered_source"] = out_coregsource
 
-            if outputs_coregsource:
-                self.outputs["coregistered_source"] = outputs_coregsource
-
-            if outputs_coregfiles:
-                self.outputs["coregistered_files"] = outputs_coregfiles
+            if out_coregfiles:
+                self.outputs["coregistered_files"] = out_coregfiles
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -358,29 +359,27 @@ class Coregister(ProcessMIA):
         """Dedicated to the process launch step of the brick."""
         super(Coregister, self).run_process_mia()
 
-        if (self.target and self.source and
-                self.source != [Undefined] and self.jobtype):
-            self.process.inputs.target = self.target
-            self.process.inputs.source = self.source
-            self.process.inputs.jobtype = self.jobtype
+        if (self.target and self.target != [Undefined] and
+                       self.source and self.source != [Undefined] and
+                       self.jobtype):
+            self.process.target = self.target
+            self.process.source = self.source
+            self.process.jobtype = self.jobtype
 
             if self.apply_to_files and self.apply_to_files != [Undefined]:
-                self.process.inputs.apply_to_files = self.apply_to_files
+                self.process.apply_to_files = self.apply_to_files
 
             if self.out_prefix:
-                self.process.inputs.out_prefix = self.out_prefix
+                self.process.out_prefix = self.out_prefix
 
-        self.process.inputs.target = self.target
-        self.process.inputs.source = self.source
-        self.process.inputs.apply_to_files = self.apply_to_files
-        self.process.inputs.jobtype = self.jobtype
-        self.process.inputs.cost_function = self.cost_function
-        self.process.inputs.fwhm = self.fwhm
-        self.process.inputs.separation = self.separation
-        self.process.inputs.tolerance = self.tolerance
-        self.process.inputs.out_prefix = self.out_prefix
-        self.process.run()
-
+        self.process.cost_function = self.cost_function
+        self.process.separation = self.separation
+        self.process.tolerance = self.tolerance
+        self.process.fwhm = self.fwhm
+        self.process.write_interp = self.write_interp
+        self.process.write_wrap = self.write_wrap
+        self.process.write_mask = self.write_mask
+        return self.process.run(configuration_dict={})
 
 class NewSegment(ProcessMIA):
     """
@@ -390,11 +389,12 @@ class NewSegment(ProcessMIA):
     <https://populse.github.io/mia_processes/documentation/preprocess/spm/NewSegment.html>`_
 
     """
-
+    """
     use_mcr = traits.Bool(optional=True, userlevel=1)
     paths = InputMultiObject(traits.Directory(), optional=True, userlevel=1)
     matlab_cmd = traits_extension.Str(optional=True, userlevel=1)
     mfile = traits.Bool(optional=True, userlevel=1)
+    """
 
     def __init__(self):
         """Dedicated to the attributes initialisation/instanciation.
@@ -504,27 +504,27 @@ class NewSegment(ProcessMIA):
                                       desc=channel_files_desc))
 
         self.add_trait("channel_info",
-                       traits.Tuple(traits.Range(value=0.0001,
-                                                 low=0.,
-                                                 high=10.),
-                                    traits.Range(value=60.,
-                                                 low=20.,
-                                                 high=None),
-                                    traits.Tuple(traits.Bool(False),
-                                                 traits.Bool(True)),
-                                    output=False,
-                                    optional=True,
-                                    desc=channel_info_desc))
+                       Tuple(Range(value=0.0001,
+                                   low=0.,
+                                   high=10.),
+                             Range(value=60.,
+                                   low=20.,
+                                   high=None),
+                             Tuple(Bool(False),
+                                   Bool(True)),
+                             output=False,
+                             optional=True,
+                             desc=channel_info_desc))
 
         self.add_trait("tissues",
-                       traits.Either(
-                           traits.List(
-                               traits.Tuple(
-                                   traits.Tuple(ImageFileSPM(exists=True),
-                                                traits.Int()),
-                                   traits.Int(),
-                                   traits.Tuple(traits.Bool, traits.Bool),
-                                   traits.Tuple(traits.Bool, traits.Bool))),
+                       Either(
+                           List(
+                               Tuple(
+                                   Tuple(ImageFileSPM(exists=True),
+                                         Int()),
+                                   Int(),
+                                   Tuple(Bool, Bool),
+                                   Tuple(Bool, Bool))),
                            Undefined,
                            output=False,
                            optional=True,
@@ -532,23 +532,23 @@ class NewSegment(ProcessMIA):
         self.tissues = tissues_list
 
         self.add_trait("warping_regularization",
-                       traits.Either(traits.List(traits.Float(),
-                                                 minlen=5,
-                                                 maxlen=5),
-                                     traits.Float(),
-                                     default=[0, 0.001, 0.5, 0.05, 0.2],
-                                     output=False,
-                                     optional=True,
-                                     desc=warping_regularization_desc))
+                       Either(List(Float(),
+                                   minlen=5,
+                                   maxlen=5),
+                              Float(),
+                              default=[0, 0.001, 0.5, 0.05, 0.2],
+                              output=False,
+                              optional=True,
+                              desc=warping_regularization_desc))
 
         self.add_trait("affine_regularization",
-                       traits.Enum('mni',
-                                   'eastern',
-                                   'subj',
-                                   'none',
-                                   output=False,
-                                   optional=True,
-                                   desc=affine_regularization_desc))
+                       Enum('mni',
+                            'eastern',
+                            'subj',
+                            'none',
+                            output=False,
+                            optional=True,
+                            desc=affine_regularization_desc))
         
         self.add_trait("sampling_distance",
                        Float(3.0,
@@ -557,13 +557,13 @@ class NewSegment(ProcessMIA):
                              desc=sampling_distance_desc))
 
         self.add_trait("write_deformation_fields",
-                       traits.List(traits.Bool(),
-                                   minlen=2,
-                                   maxlen=2,
-                                   value=[False, True],
-                                   output=False,
-                                   optional=True,
-                                   desc=write_deformation_fields))
+                       List(Bool(),
+                            minlen=2,
+                            maxlen=2,
+                            value=[False, True],
+                            output=False,
+                            optional=True,
+                            desc=write_deformation_fields))
 
         # Output traits
         self.add_trait("bias_corrected_images",
@@ -579,28 +579,28 @@ class NewSegment(ProcessMIA):
                                        desc=bias_field_images_desc))
 
         self.add_trait("native_class_images",
-                       traits.List(traits.List(File()),
-                                   output=True,
-                                   optional=True,
-                                   desc=native_class_images_desc))
+                       List(List(File()),
+                            output=True,
+                            optional=True,
+                            desc=native_class_images_desc))
 
         self.add_trait("dartel_input_images",
-                       traits.List(traits.List(File()),
-                                   output=True,
-                                   optional=True,
-                                   desc=dartel_input_images_desc))
+                       List(List(File()),
+                            output=True,
+                            optional=True,
+                            desc=dartel_input_images_desc))
 
         self.add_trait("modulated_class_images",
-                       traits.List(traits.List(File()),
-                                   output=True,
-                                   optional=True,
-                                   desc=modulated_class_images_desc))
+                       List(List(File()),
+                            output=True,
+                            optional=True,
+                            desc=modulated_class_images_desc))
 
         self.add_trait("normalized_class_images",
-                       traits.List(traits.List(File()),
-                                   output=True,
-                                   optional=True,
-                                   desc=normalized_class_images_desc))
+                       List(List(File()),
+                            output=True,
+                            optional=True,
+                            desc=normalized_class_images_desc))
 
         self.add_trait("inverse_deformation_field",
                        OutputMultiPath(File(),
@@ -741,11 +741,12 @@ class Normalize12(ProcessMIA):
     <https://populse.github.io/mia_processes/documentation/preprocess/spm/Normalize12.html>`_
 
     """
-    
+    """
     use_mcr = traits.Bool(optional=True, userlevel=1)
     paths = InputMultiObject(traits.Directory(), optional=True, userlevel=1)
     matlab_cmd = traits_extension.Str(optional=True, userlevel=1)
     mfile = traits.Bool(optional=True, userlevel=1)
+    """
 
     def __init__(self):
         """Dedicated to the attributes initialisation/instanciation.
@@ -842,53 +843,35 @@ class Normalize12(ProcessMIA):
                                     desc=deformation_file_desc))
  
         self.add_trait("apply_to_files",
-                       InputMultiPath(traits.Either(ImageFileSPM(),
-                                                    traits.List(ImageFileSPM()),
-                                                    Undefined),
+                       InputMultiPath(Either(ImageFileSPM(),
+                                             List(ImageFileSPM()),
+                                             Undefined),
                                       value=[Undefined],
                                       output=False,
                                       optional=True,
                                       desc=apply_to_files_desc))
 
         self.add_trait("jobtype",
-                       traits.Enum("write",
-                                   "est",
-                                   "estwrite",
-                                   output=False,
-                                   optional=True,
-                                   desc=jobtype_desc))
+                       Enum("write",
+                            "est",
+                            "estwrite",
+                            output=False,
+                            optional=True,
+                            desc=jobtype_desc))
 
         self.add_trait("bias_regularization",
-                       traits.Enum(0.0001,
-                                   0,
-                                   0.00001,
-                                   0.001,
-                                   0.01,
-                                   0.1,
-                                   1,
-                                   10,
-                                   output=False,
-                                   optional=True,
-                                   desc=bias_regularization_desc))
+                       Enum(0, 0.00001, 0.0001, 0.001,
+                            0.01, 0.1, 1, 10,
+                            output=False,
+                            optional=True,
+                            desc=bias_regularization_desc))
 
         self.add_trait("bias_fwhm",
-                       traits.Enum(60,
-                                   30,
-                                   40,
-                                   50,
-                                   70,
-                                   80,
-                                   90,
-                                   100,
-                                   110,
-                                   120,
-                                   130,
-                                   140,
-                                   150,
-                                   "Inf",
-                                   output=False,
-                                   optional=True,
-                                   desc=bias_fwhm_desc))
+                       Enum(60, 30, 40, 50, 70, 80, 90, 100,
+                            110, 120, 130, 140,150, "Inf",
+                            output=False,
+                            optional=True,
+                            desc=bias_fwhm_desc))
 
         self.add_trait("tpm",
                        File(exists=True,
@@ -898,55 +881,55 @@ class Normalize12(ProcessMIA):
                             desc=tpm_desc))
 
         self.add_trait("affine_regularization_type",
-                       traits.Enum("mni",
-                                   "size",
-                                   "none",
-                                   output=False,
-                                   optional=True,
-                                   desc=affine_regularization_type_desc))
+                       Enum("mni",
+                            "size",
+                            "none",
+                            output=False,
+                            optional=True,
+                            desc=affine_regularization_type_desc))
 
         self.add_trait("warping_regularization",
-                       traits.List(value=[0, 0.001, 0.5, 0.05, 0.2],
-                                   trait=traits.Float(),
-                                   minlen=5,
-                                   maxlen=5,
-                                   output=False,
-                                   optional=True,
-                                   desc=warping_regularization_desc))
+                       List(value=[0, 0.001, 0.5, 0.05, 0.2],
+                            trait=Float(),
+                            minlen=5,
+                            maxlen=5,
+                            output=False,
+                            optional=True,
+                            desc=warping_regularization_desc))
 
         self.add_trait("smoothness",
-                       traits.Float(0.,
-                                   output=False,
-                                   optional=True,
-                                   desc=smoothness_desc))
+                       Float(0.,
+                             output=False,
+                             optional=True,
+                             desc=smoothness_desc))
 
         self.add_trait("sampling_distance",
-                       traits.Float(3,
-                                    output=False,
-                                    optional=True,
-                                    desc=sampling_distance_desc))
+                       Float(3.,
+                             output=False,
+                             optional=True,
+                             desc=sampling_distance_desc))
 
         self.add_trait("write_bounding_box",
-                       traits.List(traits.List(traits.Float()),
-                                   value=[[-78, -112, -50], [78, 76, 85]],
-                                   output=False,
-                                   optional=True,
-                                   desc=write_bounding_box_desc))
+                       List(List(Float()),
+                            value=[[-78, -112, -50], [78, 76, 85]],
+                            output=False,
+                            optional=True,
+                            desc=write_bounding_box_desc))
 
         self.add_trait("write_voxel_sizes",
-                       traits.List(traits.Float(),
-                                   value=[1, 1, 1],
-                                   output=False,
-                                   optional=True,
-                                   desc=write_voxel_sizes_desc))
+                       List(Float(),
+                            value=[1, 1, 1],
+                            output=False,
+                            optional=True,
+                            desc=write_voxel_sizes_desc))
 
         self.add_trait("write_interp",
-                       traits.Range(value=1,
-                                    low=0,
-                                    high=7,
-                                    output=False,
-                                    optional=True,
-                                    desc=write_interp_desc))
+                       Range(value=1,
+                             low=0,
+                             high=7,
+                             output=False,
+                             optional=True,
+                             desc=write_interp_desc))
 
         # Outputs traits
         self.add_trait("deformation_field",
@@ -1222,9 +1205,9 @@ class Realign(ProcessMIA):
         
         # Inputs traits
         self.add_trait('in_files',
-                       InputMultiPath(traits.Either(ImageFileSPM(),
-                                                    traits.List(ImageFileSPM()),
-                                                    Undefined),
+                       InputMultiPath(Either(ImageFileSPM(),
+                                             List(ImageFileSPM()),
+                                             Undefined),
                                       value=[Undefined],
                                       copyfile=True,
                                       output=False,
@@ -1232,115 +1215,115 @@ class Realign(ProcessMIA):
                                       desc=in_files_desc))
         
         self.add_trait("jobtype",
-                       traits.Enum('estwrite',
-                                   'estimate',
-                                   'write',
-                                   output=False,
-                                   optional=True,
-                                   desc=jobtype_desc))
+                       Enum('estwrite',
+                            'estimate',
+                            'write',
+                            output=False,
+                            optional=True,
+                            desc=jobtype_desc))
 
         self.add_trait("quality",
-                       traits.Range(value=0.9,
-                                    low=0.0,
-                                    high=1.0,
-                                    output=False,
-                                    optional=True,
-                                    desc=quality_desc))
+                       Range(value=0.9,
+                             low=0.0,
+                             high=1.0,
+                             output=False,
+                             optional=True,
+                             desc=quality_desc))
 
         self.add_trait("separation",
-                       traits.Range(value=4.0,
-                                    low=0.0,
-                                    high=None,
-                                    output=False,
-                                    optional=True,
-                                    desc=separation_desc))
+                       Range(value=4.0,
+                             low=0.0,
+                             high=None,
+                             output=False,
+                             optional=True,
+                             desc=separation_desc))
 
         self.add_trait("fwhm",
-                       traits.Range(value=5.0,
-                                    low=0.0,
-                                    high=None,
-                                    output=False,
-                                    optional=True,
-                                    desc=fwhm_desc))
+                       Range(value=5.0,
+                             low=0.0,
+                             high=None,
+                             output=False,
+                             optional=True,
+                             desc=fwhm_desc))
 
         self.add_trait("register_to_mean",
-                       traits.Bool(True,
-                                   output=False,
-                                   optional=True,
-                                   desc=register_to_mean_desc))
+                       Bool(True,
+                            output=False,
+                            optional=True,
+                            desc=register_to_mean_desc))
 
         self.add_trait("interp",
-                       traits.Range(value=2,
-                                    low=0,
-                                    high=7,
-                                    output=False,
-                                    optional=True,
-                                    desc=interp_desc))
+                       Range(value=2,
+                             low=0,
+                             high=7,
+                             output=False,
+                             optional=True,
+                             desc=interp_desc))
 
         self.add_trait("wrap",
-                       traits.List(value=[0, 0, 0],
-                                   trait=traits.Range(low=0, high=1),
-                                   minlen=3,
-                                   maxlen=3,
-                                   output=False,
-                                   optional=True,
-                                   desc=wrap_desc))
+                       List(value=[0, 0, 0],
+                            trait=Range(low=0, high=1),
+                            minlen=3,
+                            maxlen=3,
+                            output=False,
+                            optional=True,
+                            desc=wrap_desc))
 
         self.add_trait("weight_img",
-                       traits.File(value=Undefined,
-                                   output=False,
-                                   optional=True,
-                                   desc=weight_img_desc))
+                       File(value=Undefined,
+                            output=False,
+                            optional=True,
+                            desc=weight_img_desc))
 
         self.add_trait('write_which',
-                       traits.Enum([2, 1],
-                                   [1, 0],
-                                   [2, 0],
-                                   [0, 1],
-                                   output=False,
-                                   optional=True,
-                                   desc=write_which_desc))
+                       Enum([2, 1],
+                            [1, 0],
+                            [2, 0],
+                            [0, 1],
+                            output=False,
+                            optional=True,
+                            desc=write_which_desc))
  
         self.add_trait("write_interp",
-                       traits.Range(value=4,
-                                    low=0,
-                                    high=7,
-                                    output=False,
-                                    optional=True,
-                                    desc=write_interp_desc))
+                       Range(value=4,
+                             low=0,
+                             high=7,
+                             output=False,
+                             optional=True,
+                             desc=write_interp_desc))
 
         self.add_trait("write_wrap",
-                       traits.List(value=[0, 0, 0],
-                                   trait=traits.Range(low=0, high=1),
-                                   minlen=3,
-                                   maxlen=3,
-                                   output=False,
-                                   optional=True,
-                                   desc=write_wrap_desc))
+                       List(value=[0, 0, 0],
+                            trait=Range(low=0, high=1),
+                            minlen=3,
+                            maxlen=3,
+                            output=False,
+                            optional=True,
+                            desc=write_wrap_desc))
 
         self.add_trait("write_mask",
-                       traits.Bool(default_value=True,
-                                   output=False,
-                                   optional=True,
-                                   desc=write_mask_desc))
+                       Bool(default_value=True,
+                            output=False,
+                            optional=True,
+                            desc=write_mask_desc))
 
         self.add_trait("out_prefix",
-                       traits.String(value='r',
-                                     output=False,
-                                     optional=True,
-                                     desc=out_prefix_desc))
+                       String(value='r',
+                              output=False,
+                              optional=True,
+                              desc=out_prefix_desc))
 
         # Output traits
         self.add_trait("realigned_files",
-                       OutputMultiPath(traits.Either(traits.List(File()),
-                                                     File()),
+                       OutputMultiPath(Either(List(File()),
+                                              File()),
                                        output=True,
                                        optional=True,
                                        desc=realigned_files_desc))
 
         self.add_trait("modified_in_files",
-                       OutputMultiPath(traits.Either(traits.List(File()),
-                                                     File()),
+                       OutputMultiPath(Either(List(File()),
+                                              File()),
                                        output=True,
                                        optional=True,
                                        desc=modified_in_files_desc))
@@ -1404,9 +1387,6 @@ class Realign(ProcessMIA):
             for k in ('realigned_files', 'modified_in_files',
                       'mean_image', 'realignment_parameters'):
                 self.outputs[k] = getattr(self.process, '_' + k)
-                setattr(self, k, getattr(self.process, '_' + k))
-
-            self.process._spm_script_file = self.spm_script_file
 
         if self.outputs:
 
@@ -1511,9 +1491,6 @@ class Realign(ProcessMIA):
         if self.out_prefix:
             self.process.out_prefix = self.out_prefix
 
-        if self.output_directory:
-            self.process.output_directory = self.output_directory
-
         self.process.jobtype = self.jobtype
         self.process.quality = self.quality
         self.process.separation = self.separation
@@ -1526,7 +1503,6 @@ class Realign(ProcessMIA):
         self.process.write_interp = self.write_interp
         self.process.write_wrap = self.write_wrap
         self.process.write_mask = self.write_mask
-        self.process._spm_script_file = self.spm_script_file
         return self.process.run(configuration_dict={})
 
 
@@ -1588,72 +1564,72 @@ class SliceTiming(ProcessMIA):
 
         # Input traits
         self.add_trait("in_files",
-                       InputMultiPath(traits.Either(ImageFileSPM(),
-                                                    traits.List(ImageFileSPM()),
-                                                    Undefined),
+                       InputMultiPath(Either(ImageFileSPM(),
+                                             List(ImageFileSPM()),
+                                             Undefined),
                                       value=[Undefined],
                                       output=False,
                                       optional=False,
                                       desc=desc_in_file))
 
         self.add_trait("acquisition",
-                       traits.Enum("sequential ascending",
-                                   "sequential descending",
-                                   "interleaved (middle-top)",
-                                   "interleaved (bottom-up)",
-                                   "interleaved (top-down)",
-                                   value="sequential ascending",
-                                   output=False,
-                                   optional=True,
-                                   desc=desc_acquisition))
+                       Enum("sequential ascending",
+                            "sequential descending",
+                            "interleaved (middle-top)",
+                            "interleaved (bottom-up)",
+                            "interleaved (top-down)",
+                            value="sequential ascending",
+                            output=False,
+                            optional=True,
+                            desc=desc_acquisition))
 
         self.add_trait("num_slices",
-                       traits.Either(traits.Int(),
-                                     Undefined,
-                                     output=False,
-                                     optional=True,
-                                     desc=desc_num_slices))
+                       Either(Int(),
+                              Undefined,
+                              output=False,
+                              optional=True,
+                              desc=desc_num_slices))
         self.num_slices = Undefined
 
         self.add_trait("TR",
-                       traits.Either(traits.Float(),
-                                     Undefined,
-                                     output=False,
-                                     optional=True,
-                                     desc=desc_TR))
+                       Either(Float(),
+                              Undefined,
+                              output=False,
+                              optional=True,
+                              desc=desc_TR))
         self.TR = Undefined
 
         self.add_trait("TA",
-                       traits.Either(traits.Float(),
-                                     Undefined,
-                                     output=False,
-                                     optional=True,
-                                     desc=desc_TA))
+                       Either(Float(),
+                              Undefined,
+                              output=False,
+                              optional=True,
+                              desc=desc_TA))
         self.TA = Undefined
 
         self.add_trait("slice_order",
-                       traits.Either(traits.List(traits.Either(traits.Int(),
-                                                               traits.Float())),
-                                     Undefined,
-                                     output=False,
-                                     optional=True,
-                                     desc=desc_slice_order))
+                       Either(List(Either(Int(),
+                                          Float())),
+                              Undefined,
+                              output=False,
+                              optional=True,
+                              desc=desc_slice_order))
         self.slice_order = Undefined
 
         self.add_trait("ref_slice",
-                       traits.Either(traits.Int(),
-                                     traits.Float(),
-                                     Undefined,
-                                     output=False,
-                                     optional=True,
-                                     desc=desc_ref_slice))
+                       Either(Int(),
+                              Float(),
+                              Undefined,
+                              output=False,
+                              optional=True,
+                              desc=desc_ref_slice))
         self.ref_slice = Undefined
 
         self.add_trait("out_prefix",
-                       traits.String('a',
-                                     output=False,
-                                     optional=True,
-                                     desc=desc_out_prefix))
+                       String('a',
+                              output=False,
+                              optional=True,
+                              desc=desc_out_prefix))
 
         # Output traits
         self.add_trait("timed_files",
@@ -1964,12 +1940,7 @@ class SliceTiming(ProcessMIA):
                 else:
                     print('No output_directory was found...!\n')
 
-                self.outputs[
-                    'timed_files'] = (self.
-                                      timed_files) = (self.
-                                                      process.
-                                                      _timecorrected_files)
-                self.process._spm_script_file = self.spm_script_file
+                self.outputs['timed_files'] = self.process._timecorrected_files
 
         if self.outputs:
 
@@ -2018,10 +1989,6 @@ class SliceTiming(ProcessMIA):
             if self.out_prefix:
                 self.process.out_prefix = self.out_prefix
 
-            if self.output_directory:
-                self.process.output_directory = self.output_directory
-
-            self.process._spm_script_file = self.spm_script_file
             return self.process.run(configuration_dict={})
 
 
@@ -2071,8 +2038,8 @@ class Smooth(ProcessMIA):
         # Input traits
 
         self.add_trait("in_files",
-                       InputMultiPath(traits.Either(ImageFileSPM(),
-                                                    Undefined),
+                       InputMultiPath(Either(ImageFileSPM(),
+                                             Undefined),
                                       value=[Undefined],
                                       copyfile=False,
                                       output=False,
@@ -2080,29 +2047,29 @@ class Smooth(ProcessMIA):
                                       desc=in_files_desc))
 
         self.add_trait("fwhm",
-                       traits.Either(traits.Float(),
-                                     traits.List(traits.Float(),
-                                                 minlen=3, maxlen=3),
-                                     default=[6.0,6.0,6.0],
-                                     output=False,
-                                     optional=True,
-                                     desc=fwhm_desc))
+                       Either(Float(),
+                              List(Float(),
+                                   minlen=3, maxlen=3),
+                              default=[6.0,6.0,6.0],
+                              output=False,
+                              optional=True,
+                              desc=fwhm_desc))
 
         self.add_trait("data_type",
-                       traits.Int(output=False,
-                                  optional=True,
-                                  desc=data_type_desc))
+                       Int(output=False,
+                           optional=True,
+                           desc=data_type_desc))
         
         self.add_trait("implicit_masking",
-                       traits.Bool(output=False,
-                                   optional=True,
-                                   desc=implicit_masking_desc))
+                       Bool(output=False,
+                            optional=True,
+                            desc=implicit_masking_desc))
 
         self.add_trait("out_prefix",
-                       traits.String('s',
-                                     output=False,
-                                     optional=True,
-                                     desc=out_prefix_desc))
+                       String('s',
+                              output=False,
+                              optional=True,
+                              desc=out_prefix_desc))
 
         # Output traits 
         self.add_trait("smoothed_files",
@@ -2149,10 +2116,7 @@ class Smooth(ProcessMIA):
             else:
                 print('No output_directory was found...!\n')
    
-            self.outputs[
-                'smoothed_files'
-                        ] = self.smoothed_files = self.process._smoothed_files
-            self.process._spm_script_file = self.spm_script_file
+            self.outputs['smoothed_files'] = self.process._smoothed_files
 
         if self.outputs:
         
@@ -2200,8 +2164,4 @@ class Smooth(ProcessMIA):
         if self.out_prefix:
             self.process.out_prefix = self.out_prefix
 
-        if self.output_directory:
-            self.process.output_directory = self.output_directory
-
-        self.process._spm_script_file = self.spm_script_file
         return self.process.run(configuration_dict={})

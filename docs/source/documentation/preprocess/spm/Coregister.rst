@@ -122,7 +122,7 @@ Align together scans of different modalities
 - *write_interp <=> roptions.interp* [#label]_
     The method by which the images are sampled when being written in a different space. Nearest neighbour is fastest, but not
     recommended for image realignment. Trilinear Interpolation is probably OK for PET, or realigned and re-sliced fMRI, but not so suitable
-    for fMRI with subject movemen because higher degree interpolation generally gives better results. Although higher degree methods
+    for fMRI with subject movement because higher degree interpolation generally gives better results. Although higher degree methods
     provide better interpolation, but they are slower because they use more neighbouring voxels. (0 <= a long integer <= 7). Voxel sizes
     must all be identical and isotropic.
 
