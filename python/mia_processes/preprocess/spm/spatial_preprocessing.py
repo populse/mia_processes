@@ -244,12 +244,6 @@ class Coregister(ProcessMIA):
         super(Coregister, self).list_outputs()
         
         # Outputs definition and tags inheritance (optional)
-        if self.outputs:
-            self.outputs = {}
-
-        if self.inheritance_dict:
-            self.inheritance_dict = {}
-
         if (self.target and self.target != Undefined and
               self.source and self.source != [Undefined] and
               self.jobtype):
@@ -263,6 +257,12 @@ class Coregister(ProcessMIA):
             if self.out_prefix:
                 self.process.out_prefix = self.out_prefix
 
+            # The management of self.process.output_directory could be delegated
+            # to the populse_mia.user_interface.pipeline_manager.process_mia
+            # module. We can't do it at the moment because the
+            # sync_process_output_traits() of the capsul/process/nipype_process
+            # module raises an exception in nipype if the mandatory parameters
+            # are not yet defined!
             if self.output_directory:
                 self.process.output_directory = self.output_directory
 
@@ -358,19 +358,15 @@ class Coregister(ProcessMIA):
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
         super(Coregister, self).run_process_mia()
+        self.process.target = self.target
+        self.process.source = self.source
+        self.process.jobtype = self.jobtype
 
-        if (self.target and self.target != [Undefined] and
-                       self.source and self.source != [Undefined] and
-                       self.jobtype):
-            self.process.target = self.target
-            self.process.source = self.source
-            self.process.jobtype = self.jobtype
+        if self.apply_to_files and self.apply_to_files != [Undefined]:
+            self.process.apply_to_files = self.apply_to_files
 
-            if self.apply_to_files and self.apply_to_files != [Undefined]:
-                self.process.apply_to_files = self.apply_to_files
-
-            if self.out_prefix:
-                self.process.out_prefix = self.out_prefix
+        if self.out_prefix:
+            self.process.out_prefix = self.out_prefix
 
         self.process.cost_function = self.cost_function
         self.process.separation = self.separation
@@ -643,12 +639,6 @@ class NewSegment(ProcessMIA):
         super(NewSegment, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
-        if self.outputs:
-            self.outputs = {}
-
-        if self.inheritance_dict:
-            self.inheritance_dict = {}
-
         if self.channel_files:
             self.process.inputs.channel_files = self.channel_files
             
@@ -973,9 +963,6 @@ class Normalize12(ProcessMIA):
         super(Normalize12, self).list_outputs()
 
         # Outputs definition
-        if self.outputs:
-            self.outputs = {}
-
         _flag = False
         self.process.inputs.jobtype = self.jobtype
         
@@ -1018,9 +1005,6 @@ class Normalize12(ProcessMIA):
             self.outputs = self.process._list_outputs()
 
         #Tags inheritance (optional)
-        if self.inheritance_dict:
-            self.inheritance_dict = {}
-
         if self.outputs:
 
             for key, values in self.outputs.items():
@@ -1360,18 +1344,18 @@ class Realign(ProcessMIA):
         super(Realign, self).list_outputs()
         
         # Outputs definition and tags inheritance (optional)
-        if self.outputs:
-            self.outputs = {}
-
-        if self.inheritance_dict:
-            self.inheritance_dict = {}
-        
         if self.in_files and self.in_files != [Undefined]:
             self.process.in_files = self.in_files
 
             if self.out_prefix:
                 self.process.out_prefix = self.out_prefix
-
+                
+            # The management of self.process.output_directory could be delegated
+            # to the populse_mia.user_interface.pipeline_manager.process_mia
+            # module. We can't do it at the moment because the
+            # sync_process_output_traits() of the capsul/process/nipype_process
+            # module raises an exception in nipype if the mandatory parameters
+            # are not yet defined!
             if self.output_directory:
                 self.process.output_directory = self.output_directory
 
@@ -1484,9 +1468,7 @@ class Realign(ProcessMIA):
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
         super(Realign, self).run_process_mia()
-
-        if self.in_files and self.in_files != [Undefined]:
-            self.process.in_files = self.in_files
+        self.process.in_files = self.in_files
 
         if self.out_prefix:
             self.process.out_prefix = self.out_prefix
@@ -1910,16 +1892,10 @@ class SliceTiming(ProcessMIA):
         super(SliceTiming, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
-        if self.outputs:
-            self.outputs = {}
-
-        if self.inheritance_dict:
-            self.inheritance_dict = {}
-
-        # Definition of the necessary inputs for the spm fonction
-        # acquired from the databse
         if self.in_files and self.in_files != [Undefined]:
             self.process.in_files = self.in_files
+            # Definition of the necessary inputs for the spm fonction
+            # acquired from the databse
             res = self._get_database_value()
 
             if not res:
@@ -1934,6 +1910,12 @@ class SliceTiming(ProcessMIA):
                 if self.out_prefix:
                     self.process.out_prefix = self.out_prefix
 
+                # The management of self.process.output_directory could be delegated
+                # to the populse_mia.user_interface.pipeline_manager.process_mia
+                # module. We can't do it at the moment because the
+                # sync_process_output_traits() of the capsul/process/nipype_process
+                # module raises an exception in nipype if the mandatory parameters
+                # are not yet defined!
                 if self.output_directory:
                     self.process.output_directory = self.output_directory
 
@@ -1971,25 +1953,23 @@ class SliceTiming(ProcessMIA):
         """Dedicated to the process launch step of the brick."""
         super(SliceTiming, self).run_process_mia()
 
-        if self.in_files and self.in_files != [Undefined]:
+        # in_files parameter are normally already in absolute path format.
+        # So, the 3 next lines can be see as "in case of"...
+        for idx, element in enumerate(self.in_files):
+            full_path = os.path.abspath(element)
+            self.in_files[idx] = full_path
 
-            # in_files parameter are normally already in absolute path format.
-            # So, the 3  next files can be see as "in case of"...
-            for idx, element in enumerate(self.in_files):
-                full_path = os.path.abspath(element)
-                self.in_files[idx] = full_path
+        self.process.in_files = self.in_files
+        self.process.num_slices = self.num_slices
+        self.process.time_repetition = self.TR
+        self.process.time_acquisition = self.TA
+        self.process.slice_order = self.slice_order
+        self.process.ref_slice = self.ref_slice
 
-            self.process.in_files = self.in_files
-            self.process.num_slices = self.num_slices
-            self.process.time_repetition = self.TR
-            self.process.time_acquisition = self.TA
-            self.process.slice_order = self.slice_order
-            self.process.ref_slice = self.ref_slice
+        if self.out_prefix:
+            self.process.out_prefix = self.out_prefix
 
-            if self.out_prefix:
-                self.process.out_prefix = self.out_prefix
-
-            return self.process.run(configuration_dict={})
+        return self.process.run(configuration_dict={})
 
 
 class Smooth(ProcessMIA):
@@ -2094,28 +2074,27 @@ class Smooth(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        #print('Smooth.list_outputs')
         super(Smooth, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
-        if self.outputs:
-            self.outputs = {}
-
-        if self.inheritance_dict:
-            self.inheritance_dict = {}
-
         if self.in_files and self.in_files != [Undefined]:
             self.process.in_files = self.in_files
 
             if self.out_prefix:
                 self.process.out_prefix = self.out_prefix
 
+            # The management of self.process.output_directory could be delegated
+            # to the populse_mia.user_interface.pipeline_manager.process_mia
+            # module. We can't do it at the moment because the
+            # sync_process_output_traits() of the capsul/process/nipype_process
+            # module raises an exception in nipype if the mandatory parameters
+            # are not yet defined!
             if self.output_directory:
                 self.process.output_directory = self.output_directory
 
             else:
                 print('No output_directory was found...!\n')
-   
+
             self.outputs['smoothed_files'] = self.process._smoothed_files
 
         if self.outputs:
@@ -2147,16 +2126,13 @@ class Smooth(ProcessMIA):
         """Dedicated to the process launch step of the brick."""
         super(Smooth, self).run_process_mia()
 
-        if self.in_files and self.in_files != [Undefined]:
+        # in_files parameter are normally already in absolute path format.
+        # So, the 3 next lines can be see as "in case of"...
+        for idx, element in enumerate(self.in_files):
+            full_path = os.path.abspath(element)
+            self.in_files[idx] = full_path
 
-            # in_files parameter are normally already in absolute path format.
-            # So, the 3  next files can be see as "in case of"...
-            for idx, element in enumerate(self.in_files):
-                full_path = os.path.abspath(element)
-                self.in_files[idx] = full_path
-
-            self.process.in_files = self.in_files
-
+        self.process.in_files = self.in_files
         self.process.fwhm = self.fwhm
         self.process.data_type = self.data_type
         self.process.implicit_masking = self.implicit_masking
