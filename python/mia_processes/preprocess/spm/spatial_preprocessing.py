@@ -29,7 +29,7 @@ populse_mia.
 from capsul.api import capsul_engine
 
 # mia_processes import
-from .nipype_extension import NewSegmentMia
+#from .nipype_extension import NewSegmentMia
 
 # nipype imports
 from nipype.interfaces import spm
@@ -379,17 +379,11 @@ class Coregister(ProcessMIA):
 
 class NewSegment(ProcessMIA):
     """
-    *Segmentation: Segments,  bias  corrects  and  spatially normalises - all in the same model*
+    *Segmentation: Segments, bias corrects and spatially normalises - all in the same model*
 
     Please, see the complete documention for the `NewSegment brick in the populse.mia_processes web site
     <https://populse.github.io/mia_processes/documentation/preprocess/spm/NewSegment.html>`_
 
-    """
-    """
-    use_mcr = traits.Bool(optional=True, userlevel=1)
-    paths = InputMultiObject(traits.Directory(), optional=True, userlevel=1)
-    matlab_cmd = traits_extension.Str(optional=True, userlevel=1)
-    mfile = traits.Bool(optional=True, userlevel=1)
     """
 
     def __init__(self):
@@ -403,7 +397,7 @@ class NewSegment(ProcessMIA):
         super(NewSegment, self).__init__()
 
         # Third party softwares required for the execution of the brick
-        self.requirement = ['spm']
+        self.requirement = ['spm', 'nipype']
 
         # Inputs description
         
@@ -616,11 +610,16 @@ class NewSegment(ProcessMIA):
                                        optional=True,
                                        desc=transformation_mat_desc))
 
+        self.init_default_traits()
+        self.init_process('nipype.interfaces.spm.NewSegment')
+
+        """ To be removed for V2
         # process instanciation
         self.process = NewSegmentMia() # workaround to try to decrease the
                                        # instantiation time of the NewSegment
                                        # class
         #self.process = spm.NewSegment()
+        """
 
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
@@ -639,26 +638,40 @@ class NewSegment(ProcessMIA):
         super(NewSegment, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
-        if self.channel_files:
-            self.process.inputs.channel_files = self.channel_files
-            
-            if self.channel_info:
-                self.process.inputs.channel_info = self.channel_info
+        if (self.channel_files and self.channel_info and
+                       self.write_deformation_fields and self.tissues):
+            self.process.channel_files = self.channel_files
+            self.process.channel_info = self.channel_info
+            self.process.write_deformation_fields = self.write_deformation_fields
+            self.process.tissues = self.tissues
 
-            if self.write_deformation_fields:
-                (self.process.inputs.
-                       write_deformation_fields) = self.write_deformation_fields
+            # The management of self.process.output_directory could be delegated
+            # to the populse_mia.user_interface.pipeline_manager.process_mia
+            # module. We can't do it at the moment because the
+            # sync_process_output_traits() of the capsul/process/nipype_process
+            # module raises an exception in nipype if the mandatory parameters
+            # are not yet defined!
+            if self.output_directory:
+                self.process.output_directory = self.output_directory
 
-            if self.tissues:
-                    self.process.inputs.tissues = self.tissues
-                    self.outputs = self.process._list_outputs()
+            else:
+                print('No output_directory was found...!\n')
 
+            for k in ('bias_corrected_images', 'bias_field_images',
+                      'native_class_images', 'dartel_input_images',
+                      'modulated_class_images', 'normalized_class_images',
+                      'inverse_deformation_field', 'forward_deformation_field',
+                      'transformation_mat'):
+                self.outputs[k] = getattr(self.process, '_' + k)
+        
         """
          When there is only one image at the input, the tags inheritance is
          directly managed in PipelineManagerTab.add_plug_value_to_database().
          However the inheritance of 2 output parameters is defined below, as
          an example
         """
+
+        """TODO
         if self.outputs:
         
             for key, values in self.outputs.items():
@@ -691,6 +704,7 @@ class NewSegment(ProcessMIA):
                             self.inheritance_dict[fullname
                                                  ] = os.path.join(path,
                                                         filename_without_prefix)
+        """
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -698,29 +712,14 @@ class NewSegment(ProcessMIA):
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
         super(NewSegment, self).run_process_mia()
-
-        if self.channel_files:
-            self.process.inputs.channel_files = self.channel_files
-
-            if self.channel_info:
-                self.process.inputs.channel_info = self.channel_info
-
-            if self.write_deformation_fields:
-                (self.process.inputs.
-                    write_deformation_fields) = self.write_deformation_fields
-
-            if self.tissues:
-                self.process.inputs.tissues = self.tissues
-
-        self.process.inputs.channel_files = self.channel_files
-        self.process.inputs.channel_info = self.channel_info
-        self.process.inputs.tissues = self.tissues
-        self.process.inputs.warping_regularization = self.warping_regularization
-        self.process.inputs.affine_regularization = self.affine_regularization
-        self.process.inputs.sampling_distance = self.sampling_distance
-        (self.process.inputs.
-                       write_deformation_fields) = self.write_deformation_fields
-        self.process.run()
+        self.process.channel_files = self.channel_files
+        self.process.channel_info = self.channel_info
+        self.process.tissues = self.tissues
+        self.process.warping_regularization = self.warping_regularization
+        self.process.affine_regularization = self.affine_regularization
+        self.process.sampling_distance = self.sampling_distance
+        self.process.write_deformation_fields = self.write_deformation_fields
+        return self.process.run(configuration_dict={})
 
 
 class Normalize12(ProcessMIA):
