@@ -475,7 +475,8 @@ class NewSegment(ProcessMIA):
         tpm_path = os.path.join(resources_path, 'spm12', 'tpm', 'TPM.nii')
 
         if not Path(tpm_path).is_file():
-            print('\nThe {} file seems to not exists ...'.format(tpm_path))
+            print('\nNewSegment brick warning!: The {} file seems to '
+                  'not exists ...'.format(tpm_path))
             tissues_list = Undefined
 
         else:
@@ -642,7 +643,8 @@ class NewSegment(ProcessMIA):
                        self.write_deformation_fields and self.tissues):
             self.process.channel_files = self.channel_files
             self.process.channel_info = self.channel_info
-            self.process.write_deformation_fields = self.write_deformation_fields
+            (self.process.
+                  write_deformation_fields) = self.write_deformation_fields
             self.process.tissues = self.tissues
 
             # The management of self.process.output_directory could be delegated
@@ -670,41 +672,36 @@ class NewSegment(ProcessMIA):
          However the inheritance of 2 output parameters is defined below, as
          an example
         """
-
-        """TODO
         if self.outputs:
-        
-            for key, values in self.outputs.items():
+
+            for key, val in self.outputs.items():
 
                 if key == "native_class_images":
 
-                    if values[0]:
-                        path, filename = os.path.split(values[0][0])
-                        filename_without_prefix = filename[2:]
+                    if val[0]:
+                        inp = self.channel_files.copy() * len(val)
+                        out = [x[0] for x in val]
 
-                        if (os.path.join(path,
-                                         filename_without_prefix)
-                                                         in self.channel_files): 
+                        for in_val, out_val in zip(inp, out):
+                            _, fileOval = os.path.split(out_val)
+                            _, fileIval = os.path.split(in_val)
+                            fileOvalNoPref = fileOval[2:]
 
-                            for fullname in values:
-                                self.inheritance_dict[fullname[0]
-                                                     ] = os.path.join(path,
-                                                        filename_without_prefix)
+                            if fileOvalNoPref == fileIval:
+                                self.inheritance_dict[out_val] = in_val
 
                 if key == "forward_deformation_field":
 
-                    for fullname in values:
-                        path, filename = os.path.split(fullname)
-                        filename_without_prefix = filename[2:]
+                    if val != Undefined:
+                        val = [val]
 
-                        if (os.path.join(path,
-                                     filename_without_prefix)
-                                                         in self.channel_files):
+                        for in_val, out_val in zip(self.channel_files, val):
+                            _, fileOval = os.path.split(out_val)
+                            _, fileIval = os.path.split(in_val)
+                            fileOvalNoPref = fileOval[2:]
 
-                            self.inheritance_dict[fullname
-                                                 ] = os.path.join(path,
-                                                        filename_without_prefix)
-        """
+                            if fileOvalNoPref == fileIval:
+                                self.inheritance_dict[out_val] = in_val
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
