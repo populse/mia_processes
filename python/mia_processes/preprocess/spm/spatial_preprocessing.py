@@ -52,6 +52,7 @@ from traits.api import (Bool, Either, Enum, Float, Int, List, Range, String,
                         Tuple, Undefined)
 from pathlib import Path
 
+
 class Coregister(ProcessMIA):
     """
     *Align together scans of different modalities*
@@ -727,12 +728,6 @@ class Normalize12(ProcessMIA):
     <https://populse.github.io/mia_processes/documentation/preprocess/spm/Normalize12.html>`_
 
     """
-    """
-    use_mcr = traits.Bool(optional=True, userlevel=1)
-    paths = InputMultiObject(traits.Directory(), optional=True, userlevel=1)
-    matlab_cmd = traits_extension.Str(optional=True, userlevel=1)
-    mfile = traits.Bool(optional=True, userlevel=1)
-    """
 
     def __init__(self):
         """Dedicated to the attributes initialisation/instanciation.
@@ -745,7 +740,7 @@ class Normalize12(ProcessMIA):
         super(Normalize12, self).__init__()
 
         # Third party softwares required for the execution of the brick
-        self.requirement = ['spm']
+        self.requirement = ['spm', 'nipype']
 
         # Inputs description
         image_to_align_desc = ('The image that the atlas data is warped into '
@@ -936,11 +931,13 @@ class Normalize12(ProcessMIA):
                                        optional=True,
                                        desc=normalized_files_desc))
 
-        # process instanciation
-        self.process = spm.Normalize12()
         # fix an output trait marked as exists
-        relax_exists_constraint(self.process.output_spec().trait(
-            'normalized_files'))
+        #relax_exists_constraint(self.process.output_spec().trait(
+        #    'normalized_files'))
+
+        
+        self.init_default_traits()
+        self.init_process('nipype.interfaces.spm.Normalize12')
 
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
@@ -960,12 +957,12 @@ class Normalize12(ProcessMIA):
 
         # Outputs definition
         _flag = False
-        self.process.inputs.jobtype = self.jobtype
+        ########self.process.jobtype = self.jobtype
         
         if ((self.apply_to_files) and (self.apply_to_files != [Undefined]) and
                          (self.deformation_file) and (self.jobtype == 'write')):
-            self.process.inputs.apply_to_files = self.apply_to_files
-            self.process.inputs.deformation_file = self.deformation_file
+            self.process.apply_to_files = self.apply_to_files
+            self.process.deformation_file = self.deformation_file
             _flag = True
 
             if self.image_to_align:
@@ -975,8 +972,9 @@ class Normalize12(ProcessMIA):
                 self.tpm = Undefined
                 
         elif (self.image_to_align) and (self.tpm) and (self.jobtype == 'est'):
-            self.process.inputs.image_to_align = self.image_to_align
-            self.process.inputs.tpm = self.tpm
+            self.process.image_to_align = self.image_to_align
+            self.process.jobtype = self.jobtype
+            self.process.tpm = self.tpm
             _flag = True
 
             if self.apply_to_files and (self.apply_to_files != [Undefined]):
@@ -987,18 +985,32 @@ class Normalize12(ProcessMIA):
                 
         elif ((self.image_to_align) and (self.tpm) and
                                                 (self.jobtype == 'estwrite')):
-            self.process.inputs.image_to_align = self.image_to_align
-            self.process.inputs.tpm = self.tpm
+            self.process.image_to_align = self.image_to_align
+            self.process.tpm = self.tpm
             _flag = True
 
             if self.deformation_file:
                 self.deformation_file = Undefined
 
             if (self.apply_to_files) and (self.apply_to_files != [Undefined]):
-                self.process.inputs.apply_to_files = self.apply_to_files
+                self.process.apply_to_files = self.apply_to_files
 
         if _flag:
-            self.outputs = self.process._list_outputs()
+
+            if self.output_directory:
+                self.process.output_directory = self.output_directory
+
+            else:
+                print('No output_directory was found...!\n')
+
+
+            for i in self.process.user_traits():
+                print('\n-i: ', i)
+                print('\n getattr(self.process, i): ', getattr(self.process, i))
+
+            for k in ('deformation_field', 'normalized_files',
+                      'normalized_image'):
+                self.outputs[k] = getattr(self.process, '_' + k)
 
         #Tags inheritance (optional)
         if self.outputs:
@@ -1046,55 +1058,51 @@ class Normalize12(ProcessMIA):
         """Dedicated to the process launch step of the brick."""
         super(Normalize12, self).run_process_mia()
 
-        self.process.inputs.jobtype = self.jobtype
+        self.process.jobtype = self.jobtype
 
         if ((self.apply_to_files) and (self.apply_to_files != [Undefined]) and
                          (self.deformation_file)
                          and (self.jobtype == 'write')):
-            self.process.inputs.apply_to_files = self.apply_to_files
-            self.process.inputs.deformation_file = self.deformation_file
+            self.process.apply_to_files = self.apply_to_files
+            self.process.deformation_file = self.deformation_file
 
         elif (self.image_to_align) and (self.tpm) and (self.jobtype == 'est'):
-            self.process.inputs.image_to_align = self.image_to_align
-            self.process.inputs.tpm = self.tpm
+            self.process.image_to_align = self.image_to_align
+            self.process.tpm = self.tpm
 
         elif ((self.image_to_align) and (self.tpm) and
                                                 (self.jobtype == 'estwrite')):
-            self.process.inputs.image_to_align = self.image_to_align
-            self.process.inputs.tpm = self.tpm
+            self.process.image_to_align = self.image_to_align
+            self.process.tpm = self.tpm
 
             if (self.apply_to_files) and (self.apply_to_files != [Undefined]):
-                self.process.inputs.apply_to_files = self.apply_to_files
+                self.process.apply_to_files = self.apply_to_files
 
         if self.jobtype == 'write':
-            self.process.inputs.write_bounding_box = self.write_bounding_box
-            self.process.inputs.write_voxel_sizes = self.write_voxel_sizes
-            self.process.inputs.write_interp = self.write_interp
+            self.process.write_bounding_box = self.write_bounding_box
+            self.process.write_voxel_sizes = self.write_voxel_sizes
+            self.process.write_interp = self.write_interp
 
         if self.jobtype == 'est':
-            self.process.inputs.bias_regularization = self.bias_regularization
-            self.process.inputs.bias_fwhm = self.bias_fwhm
-            self.process.inputs.tpm = self.tpm
-            (self.process.inputs.
-                   affine_regularization_type) = self.affine_regularization_type
-            (self.process.inputs.
-                           warping_regularization) = self.warping_regularization
-            self.process.inputs.smoothness = self.smoothness
-            self.process.inputs.sampling_distance = self.sampling_distance
+            self.process.bias_regularization = self.bias_regularization
+            self.process.bias_fwhm = self.bias_fwhm
+            self.process.tpm = self.tpm
+            (self.process.affine_regularization_type) = self.affine_regularization_type
+            (self.process.warping_regularization) = self.warping_regularization
+            self.process.smoothness = self.smoothness
+            self.process.sampling_distance = self.sampling_distance
 
         if self.jobtype == 'estwrite':
-            self.process.inputs.bias_regularization = self.bias_regularization
-            self.process.inputs.bias_fwhm = self.bias_fwhm
-            self.process.inputs.tpm = self.tpm
-            (self.process.inputs.
-                   affine_regularization_type) = self.affine_regularization_type
-            (self.process.inputs.
-                           warping_regularization) = self.warping_regularization
-            self.process.inputs.smoothness = self.smoothness
-            self.process.inputs.sampling_distance = self.sampling_distance
-            self.process.inputs.write_bounding_box = self.write_bounding_box
-            self.process.inputs.write_voxel_sizes = self.write_voxel_sizes
-            self.process.inputs.write_interp = self.write_interp
+            self.process.bias_regularization = self.bias_regularization
+            self.process.bias_fwhm = self.bias_fwhm
+            self.process.tpm = self.tpm
+            (self.process.affine_regularization_type) = self.affine_regularization_type
+            (self.process.warping_regularization) = self.warping_regularization
+            self.process.smoothness = self.smoothness
+            self.process.sampling_distance = self.sampling_distance
+            self.process.write_bounding_box = self.write_bounding_box
+            self.process.write_voxel_sizes = self.write_voxel_sizes
+            self.process.write_interp = self.write_interp
 
         self.process.run()
 
