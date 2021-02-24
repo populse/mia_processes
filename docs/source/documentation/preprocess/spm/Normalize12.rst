@@ -52,7 +52,7 @@ Computes the warp that best aligns the template (atlas) to the individual's imag
 
     ::
 
-      ex. /home/ArthurBlair/data/downloaded_data/Anat.nii
+      ex. /home/ArthurBlair/data/raw_data/Anat.nii
 
 - *deformation_file <=> subj.def*  [#label]_
     File y_*.nii containing 3 deformation fields for the deformation in x, y and z dimension. Mutually exclusive with *image_to_align* and
@@ -178,21 +178,14 @@ Computes the warp that best aligns the template (atlas) to the individual's imag
 
     ::
 
-      ex. /home/ArthurBlair/data/downloaded_data/y_Anat.nii
-
-- *normalized_image*
-    Normalized file that needed to be aligned (a list of items which are a pathlike object or string representing an existing file).
-
-    ::
-
-      ex. /home/ArthurBlair/data/raw_data/wAnat.nii
+      ex. /home/ArthurBlair/data/derived_data/y_Anat.nii
 
 - *normalized_files*
     Normalised other files (a list of items which are a pathlike object or string representing an existing file).
 
     ::
        
-      ex. /home/ArthurBlair/data/raw_data/wAnat.nii
+      ex. /home/ArthurBlair/data/derived_data/wAnat.nii
 
 -------------
 
