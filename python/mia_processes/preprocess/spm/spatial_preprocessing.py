@@ -918,12 +918,6 @@ class Normalize12(ProcessMIA):
                                        output=True,
                                        optional=True,
                                        desc=deformation_field_desc))
-                       
-        self.add_trait("normalized_image",
-                        OutputMultiPath(File(),
-                                        output=True,
-                                        optional=True,
-                                        desc=normalized_image_desc))
 
         self.add_trait("normalized_files",
                        OutputMultiPath(File(),
@@ -931,13 +925,9 @@ class Normalize12(ProcessMIA):
                                        optional=True,
                                        desc=normalized_files_desc))
 
-        # fix an output trait marked as exists
-        #relax_exists_constraint(self.process.output_spec().trait(
-        #    'normalized_files'))
-
-        
         self.init_default_traits()
         self.init_process('nipype.interfaces.spm.Normalize12')
+    
 
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
@@ -957,10 +947,10 @@ class Normalize12(ProcessMIA):
 
         # Outputs definition
         _flag = False
-        ########self.process.jobtype = self.jobtype
         
         if ((self.apply_to_files) and (self.apply_to_files != [Undefined]) and
                          (self.deformation_file) and (self.jobtype == 'write')):
+            self.process.jobtype = self.jobtype
             self.process.apply_to_files = self.apply_to_files
             self.process.deformation_file = self.deformation_file
             _flag = True
@@ -971,140 +961,112 @@ class Normalize12(ProcessMIA):
             if self.tpm:
                 self.tpm = Undefined
                 
-        elif (self.image_to_align) and (self.tpm) and (self.jobtype == 'est'):
+        elif ((self.image_to_align) and (self.image_to_align != Undefined) and
+                                        (self.tpm) and (self.jobtype == 'est')):
             self.process.image_to_align = self.image_to_align
-            self.process.jobtype = self.jobtype
             self.process.tpm = self.tpm
+            self.process.jobtype = self.jobtype
             _flag = True
 
             if self.apply_to_files and (self.apply_to_files != [Undefined]):
-                self.apply_to_files = Undefined
+                self.apply_to_files = [Undefined]
 
             if self.deformation_file:
                 self.deformation_file = Undefined
                 
-        elif ((self.image_to_align) and (self.tpm) and
-                                                (self.jobtype == 'estwrite')):
+        elif ((self.image_to_align) and (self.image_to_align != Undefined) and
+                                   (self.tpm) and (self.jobtype == 'estwrite')):
             self.process.image_to_align = self.image_to_align
             self.process.tpm = self.tpm
+            self.process.jobtype = self.jobtype
             _flag = True
-
-            if self.deformation_file:
-                self.deformation_file = Undefined
 
             if (self.apply_to_files) and (self.apply_to_files != [Undefined]):
                 self.process.apply_to_files = self.apply_to_files
 
+            if self.deformation_file:
+                self.deformation_file = Undefined
+
         if _flag:
 
+            # The management of self.process.output_directory could be delegated
+            # to the populse_mia.user_interface.pipeline_manager.process_mia
+            # module. We can't do it at the moment because the
+            # sync_process_output_traits() of the capsul/process/nipype_process
+            # module raises an exception in nipype if the mandatory parameters
+            # are not yet defined!
             if self.output_directory:
                 self.process.output_directory = self.output_directory
 
             else:
                 print('No output_directory was found...!\n')
 
-
-            for i in self.process.user_traits():
-                print('\n-i: ', i)
-                print('\n getattr(self.process, i): ', getattr(self.process, i))
-
-            for k in ('deformation_field', 'normalized_files',
-                      'normalized_image'):
+            for k in ('deformation_field', 'normalized_files'):
                 self.outputs[k] = getattr(self.process, '_' + k)
 
         #Tags inheritance (optional)
         if self.outputs:
 
-            for key, values in self.outputs.items():
+            for key, val in self.outputs.items():
 
-                if (key == "normalized_files") and (values != Undefined):
+                if (key == "normalized_files") and (val != Undefined):
 
-                    for fullname in values:
-                        path, filename = os.path.split(fullname)
-                        filename_without_prefix = filename[len('w'):]
+                    if not isinstance(val, list):
+                        val = [val]
 
-                        if (os.path.join(path,
-                                         filename_without_prefix)
-                                                        in self.apply_to_files):
-                            self.inheritance_dict[fullname] = os.path.join(path,
-                                                        filename_without_prefix)
+                    for in_val, out_val in zip(self.apply_to_files, val):
+                        pathOval, fileOval = os.path.split(out_val)
+                        _, fileIval = os.path.split(in_val)
+                        fileOvalNoPref = fileOval[1:]
 
-                if (key == "deformation_field") and (values != Undefined):
+                        if fileOvalNoPref == fileIval:
+                            self.inheritance_dict[out_val] = in_val
 
-                    path, filename = os.path.split(values)
-                    filename_without_prefix = filename[len('y_'):]
-
-                    if (os.path.join(path,
-                                     filename_without_prefix)
-                                                        in self.image_to_align):
-                        self.inheritance_dict[values] = os.path.join(path,
-                                                        filename_without_prefix)
-
-                if (key == "normalized_image") and (values != Undefined):
-
-                    path, filename = os.path.split(values)
-                    filename_without_prefix = filename[len('w'):]
+                if (key == "deformation_field") and (val != Undefined):
+                    pathOval, fileOval = os.path.split(val)
+                    _, fileIval = os.path.split(self.image_to_align)
+                    fileOvalNoPref = fileOval[2:]
                     
-                    if (os.path.join(path,
-                                     filename_without_prefix)
-                                                        in self.image_to_align):
-                        self.inheritance_dict[values] = os.path.join(path,
-                                                        filename_without_prefix)
+                    if fileOvalNoPref == fileIval:
+                        self.inheritance_dict[val] = self.image_to_align
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(Normalize12, self).run_process_mia()
-
+        self.process.trait('image_to_align').optional = True
+        self.process.image_to_align = self.image_to_align
         self.process.jobtype = self.jobtype
+        self.process.trait('deformation_file').optional = True
+        self.process.deformation_file = self.deformation_file
+        
+        if self.apply_to_files == [Undefined]:
+            self.process.apply_to_files = Undefined
 
-        if ((self.apply_to_files) and (self.apply_to_files != [Undefined]) and
-                         (self.deformation_file)
-                         and (self.jobtype == 'write')):
+        else:
             self.process.apply_to_files = self.apply_to_files
-            self.process.deformation_file = self.deformation_file
 
-        elif (self.image_to_align) and (self.tpm) and (self.jobtype == 'est'):
-            self.process.image_to_align = self.image_to_align
+        self.process.bias_regularization = self.bias_regularization
+        self.process.bias_fwhm = self.bias_fwhm
+
+        if self.jobtype.startswith('est'):
             self.process.tpm = self.tpm
 
-        elif ((self.image_to_align) and (self.tpm) and
-                                                (self.jobtype == 'estwrite')):
-            self.process.image_to_align = self.image_to_align
-            self.process.tpm = self.tpm
+        (self.process.
+                   affine_regularization_type) = self.affine_regularization_type
+        self.process.warping_regularization = self.warping_regularization
+        self.process.smoothness = self.smoothness
+        self.process.sampling_distance = self.sampling_distance
+        self.process.write_bounding_box = self.write_bounding_box
+        self.process.write_voxel_sizes = self.write_voxel_sizes
+        self.process.write_interp = self.write_interp
 
-            if (self.apply_to_files) and (self.apply_to_files != [Undefined]):
-                self.process.apply_to_files = self.apply_to_files
-
-        if self.jobtype == 'write':
-            self.process.write_bounding_box = self.write_bounding_box
-            self.process.write_voxel_sizes = self.write_voxel_sizes
-            self.process.write_interp = self.write_interp
-
-        if self.jobtype == 'est':
-            self.process.bias_regularization = self.bias_regularization
-            self.process.bias_fwhm = self.bias_fwhm
-            self.process.tpm = self.tpm
-            (self.process.affine_regularization_type) = self.affine_regularization_type
-            (self.process.warping_regularization) = self.warping_regularization
-            self.process.smoothness = self.smoothness
-            self.process.sampling_distance = self.sampling_distance
-
-        if self.jobtype == 'estwrite':
-            self.process.bias_regularization = self.bias_regularization
-            self.process.bias_fwhm = self.bias_fwhm
-            self.process.tpm = self.tpm
-            (self.process.affine_regularization_type) = self.affine_regularization_type
-            (self.process.warping_regularization) = self.warping_regularization
-            self.process.smoothness = self.smoothness
-            self.process.sampling_distance = self.sampling_distance
-            self.process.write_bounding_box = self.write_bounding_box
-            self.process.write_voxel_sizes = self.write_voxel_sizes
-            self.process.write_interp = self.write_interp
-
-        self.process.run()
+        # because the sync_process_output_traits() of the capsul/process/nipype_process
+        # module raises an exception in nipype if the mandatory parameters
+        # are not yet defined, the next line can't be write before!
+        super(Normalize12, self).run_process_mia()
+        return self.process.run(configuration_dict={})
 
 
 class Realign(ProcessMIA):
