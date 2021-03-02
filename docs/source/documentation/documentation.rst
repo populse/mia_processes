@@ -9,25 +9,31 @@
 Mia_processes's documentation
 =============================
 
-- **preprocess**
+- **bricks**
 
-  - **spm**
+  - **preprocess**
 
-    - `Coregister <preprocess/spm/Coregister.html>`_
-    - `NewSegment <preprocess/spm/NewSegment.html>`_
-    - `Normalize12 <preprocess/spm/Normalize12.html>`_
-    - `Realign <preprocess/spm/Realign.html>`_
-    - `SliceTiming <preprocess/spm/SliceTiming.html>`_
-    - `Smooth <preprocess/spm/Smooth.html>`_
+    - **spm**
 
-- **studies**
+      - `Coregister <bricks/preprocess/spm/Coregister.html>`_
+      - `NewSegment <bricks/preprocess/spm/NewSegment.html>`_
+      - `Normalize12 <bricks/preprocess/spm/Normalize12.html>`_
+      - `Realign <bricks/preprocess/spm/Realign.html>`_
+      - `SliceTiming <bricks/preprocess/spm/SliceTiming.html>`_
+      - `Smooth <bricks/preprocess/spm/Smooth.html>`_
 
-  - `Spatial_preprocessing_1 <studies/Spatial_preprocessing_1.html>`_
+  - **tools**
 
-- **tools**
+    - `Files_To_List <bricks/tools/Files_To_List.html>`_
+    - `Filter_Files_List <bricks/tools/Filter_Files_List.html>`_
+    - `Input_Filter <bricks/tools/Input_Filter.html>`_
+    - `List_Duplicate <bricks/tools/List_Duplicate.html>`_
+    - `List_To_File <bricks/tools/List_To_File.html>`_  
 
-  - `Files_To_List <tools/Files_To_List.html>`_
-  - `Filter_Files_List <tools/Filter_Files_List.html>`_
-  - `Input_Filter <tools/Input_Filter.html>`_
-  - `List_Duplicate <tools/List_Duplicate.html>`_
-  - `List_To_File <tools/List_To_File.html>`_
+- **pipelines**
+
+  - **preprocess**
+
+    - `Spatial_preprocessing_1 <pipelines/preprocess/Spatial_preprocessing_1.html>`_
+
+
