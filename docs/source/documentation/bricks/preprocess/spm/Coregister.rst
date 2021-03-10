@@ -131,7 +131,7 @@ Align together scans of different modalities
       - 1: Trilinear
       - 2: 2nd Degree B-Spline
       - 3: 3rd Degree B-Spline
-      | …
+      - …
       - 7: 7th Degree B-Spline
 
     ::
