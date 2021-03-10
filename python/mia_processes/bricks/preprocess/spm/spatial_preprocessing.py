@@ -63,7 +63,7 @@ class Coregister(ProcessMIA):
     *Align together scans of different modalities*
 
     Please, see the complete documention for the `Coregister brick in the populse.mia_processes web site
-    <https://populse.github.io/mia_processes/documentation/preprocess/spm/Coregister.html>`_
+    <https://populse.github.io/mia_processes/documentation/bricks/preprocess/spm/Coregister.html>`_
 
     """
 
@@ -389,7 +389,7 @@ class GM_WM_Normalize(ProcessMIA):
     *Normalisation of the grey and/or white matter map(s)*
 
     Please, see the complete documention for the `GM_WM_Normalize brick in the populse.mia_processes web site
-    <https://populse.github.io/mia_processes/documentation/preprocess/spm/GM_WM_Normalize.html>`_
+    <https://populse.github.io/mia_processes/documentation/bricks/preprocess/spm/GM_WM_Normalize.html>`_
 
     """
     
@@ -710,7 +710,7 @@ class NewSegment(ProcessMIA):
     *Segmentation: Segments, bias corrects and spatially normalises - all in the same model*
 
     Please, see the complete documention for the `NewSegment brick in the populse.mia_processes web site
-    <https://populse.github.io/mia_processes/documentation/preprocess/spm/NewSegment.html>`_
+    <https://populse.github.io/mia_processes/documentation/bricks/preprocess/spm/NewSegment.html>`_
 
     """
 
@@ -1052,7 +1052,7 @@ class Normalize12(ProcessMIA):
     *Computes the warp that best aligns the template (atlas) to the individual’s image*
 
     Please, see the complete documention for the `Normalize12 brick in the populse.mia_processes web site
-    <https://populse.github.io/mia_processes/documentation/preprocess/spm/Normalize12.html>`_
+    <https://populse.github.io/mia_processes/documentation/bricks/preprocess/spm/Normalize12.html>`_
 
     """
 
@@ -1401,7 +1401,7 @@ class Realign(ProcessMIA):
     *Realigns a time-series of images acquired from the same subject*
 
     Please, see the complete documention for the `Realign brick in the populse.mia_processes web site
-    <https://populse.github.io/mia_processes/documentation/preprocess/spm/Realign.html>`_
+    <https://populse.github.io/mia_processes/documentation/bricks/preprocess/spm/Realign.html>`_
 
     """
 
@@ -1786,7 +1786,7 @@ class SliceTiming(ProcessMIA):
     *Temporal correction to get back every slice at the same acquisition time*
 
     Please, see the complete documentation for the `SliceTiming brick in the populse.mia_processes web site
-    <https://populse.github.io/mia_processes/documentation/preprocess/spm/SliceTiming.html>`
+    <https://populse.github.io/mia_processes/documentation/bricks/preprocess/spm/SliceTiming.html>`
 
     """
 
@@ -2270,7 +2270,7 @@ class Smooth(ProcessMIA):
     *3D Gaussian smoothing of image volumes*
 
     Please, see the complete documention for the `Smooth brick in the populse.mia_processes web site
-    <https://populse.github.io/mia_processes/documentation/preprocess/spm/Smooth.html>`_
+    <https://populse.github.io/mia_processes/documentation/bricks/preprocess/spm/Smooth.html>`_
 
     """
 
