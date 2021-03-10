@@ -9,6 +9,7 @@ populse_mia.
 :Contains:
     :Class:
         - Coregister
+        - GM_WM_Normalize
         - NewSegment
         - Normalize12
         - Realign
@@ -34,7 +35,8 @@ from capsul.api import capsul_engine
 # nipype imports
 from nipype.interfaces import spm
 from nipype.interfaces.base import (File, InputMultiPath, InputMultiObject,
-                                    OutputMultiPath, traits_extension)
+                                    OutputMultiPath, traits, TraitListObject,
+                                    traits_extension)
 from nipype.interfaces.spm.base import ImageFileSPM
 
 # populse_mia imports
@@ -48,9 +50,12 @@ from soma.qt_gui.qt_backend.Qt import QMessageBox
 
 # Other imports
 import itertools, math, os
+import nibabel as nib
+import numpy as np
+import tempfile
+from pathlib import Path
 from traits.api import (Bool, Either, Enum, Float, Int, List, Range, String,
                         Tuple, Undefined)
-from pathlib import Path
 
 
 class Coregister(ProcessMIA):
@@ -377,6 +382,328 @@ class Coregister(ProcessMIA):
         self.process.write_wrap = self.write_wrap
         self.process.write_mask = self.write_mask
         return self.process.run(configuration_dict={})
+
+
+class GM_WM_Normalize(ProcessMIA):
+    """
+    *Normalisation of the grey and/or white matter map(s)*
+
+    Please, see the complete documention for the `GM_WM_Normalize brick in the populse.mia_processes web site
+    <https://populse.github.io/mia_processes/documentation/preprocess/spm/GM_WM_Normalize.html>`_
+
+    """
+    
+    def __init__(self):
+        """Dedicated to the attributes initialisation / instanciation.
+        
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(GM_WM_Normalize, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = ['spm', 'nipype']
+
+        # Inputs description
+        deformation_file_desc = ('File y_*.nii containing 3 deformation fields '
+                                 'for the deformation in x, y and z dimension '
+                                 '(an uncompressed file; valid extensions in '
+                                 '[.img, .nii, .hdr]).')
+        apply_to_files_desc = ('Files to apply transformation to. A list of '
+                               'items which are an existing, uncompressed file '
+                               '(valid extensions: [.img, .nii, .hdr]).')
+
+        in_filter_desc = ('One of "GM" (gray matter) or "WM" (white matter) or '
+                          '"GM & WM" (uses GM and WM; 2 files) or "GM + WM" '
+                          '(makes GM + WM, then uses the result; 1 file).')
+
+        write_bounding_box_desc = ('The bounding box (in mm) of the volume '
+                                  'which is to be written (a list of 2 items, '
+                                  'which are a list of items, which are a '
+                                  'float.')
+        write_voxel_sizes_desc = ('The voxel sizes (x, y & z, in mm) of the '
+                                  'written normalised images (a list of 3 '
+                                  'items, which are a float).')
+        write_interp_desc = ('Degree of b-spline used for interpolation '
+                             '(0 <= a long integer <= 7; 1 is OK for PET, '
+                             'realigned fMRI, or segmentations).')
+        
+        # Outputs description
+        normalized_files_desc = ('Normalised files (a pathlike object or '
+                                 'string representing a file, or a list of '
+                                 'pathlike objects or strings representing a '
+                                 'file).')
+        
+        # Inputs traits 
+        self.add_trait("deformation_file",
+                       ImageFileSPM(output=False,
+                                    optional=False,
+                                    desc=deformation_file_desc))
+ 
+        self.add_trait("apply_to_files",
+                       InputMultiPath(traits.Either(ImageFileSPM(),
+                                                    traits.List(ImageFileSPM()),
+                                                    Undefined),
+                                      value=[Undefined],
+                                      output=False,
+                                      optional=False,
+                                      desc=apply_to_files_desc))
+
+        self.add_trait("in_filter",
+                       Enum('GM',
+                            'WM',
+                            'GM & WM',
+                            'GM + WM',
+                            output=False,
+                            optional=True,
+                            desc=in_filter_desc))
+
+        self.add_trait("write_bounding_box",
+                       traits.List(traits.List(traits.Float()),
+                                   value=[[-78, -112, -50], [78, 76, 85]],
+                                   output=False,
+                                   optional=True,
+                                   desc=write_bounding_box_desc))
+
+        self.add_trait("write_voxel_sizes",
+                       traits.List(traits.Float(),
+                                   value=[1, 1, 1],
+                                   output=False,
+                                   optional=True,
+                                   desc=write_voxel_sizes_desc))
+
+        self.add_trait("write_interp",
+                       traits.Range(value=1,
+                                    low=0,
+                                    high=7,
+                                    output=False,
+                                    optional=True,
+                                    desc=write_interp_desc))
+
+        self.add_trait("files",
+                       traits.List(output=False,
+                                   optional=True,
+                                   userlevel=1,
+                                   desc='internal parameter'))
+
+        # Outputs traits
+        self.add_trait("normalized_files",
+                       OutputMultiPath(File(),
+                                       output=True,
+                                       optional=True,
+                                       desc=normalized_files_desc))
+
+        self.init_default_traits()
+        self.init_process('nipype.interfaces.spm.Normalize12')
+        
+    def _namesFilter(self):
+        """Filtering of apply_to_files input parameter for GM, WM, etc.
+
+        :returns: from the apply_to_files input parameter, returns the selected 
+                  mask(s).
+        """
+        files = []
+
+        if self.runFlag is False:
+
+            for file_name in self.apply_to_files:
+            
+                if type(file_name) in [list, TraitListObject]:
+                    file_name = file_name[0]
+
+                if (self.in_filter == 'GM' and
+                        os.path.basename(os.path.normpath(
+                                                     file_name))[:2] in ['c1']):
+                    files.append(file_name)
+
+                elif (self.in_filter == 'WM' and
+                        os.path.basename(os.path.normpath(
+                                                     file_name))[:2] in ['c2']):
+                    files.append(file_name)         
+
+                elif ((self.in_filter == 'GM & WM' or
+                        self.in_filter == 'GM + WM') and
+                            os.path.basename(os.path.normpath(
+                                               file_name))[:2] in ['c1', 'c2']):
+                    files.append(file_name)
+
+            if len(files) == 0:
+                print('\nWarning: No GM or WM were detected ... Please, check '
+                      'the input data and/or the in_filter parameter!')
+                return []
+
+            self.files = files.copy()
+    
+            if self.in_filter == 'GM + WM':
+                j = []
+                self.files = []
+                
+                while files:
+                    i = files.pop()
+                    i_path, i_file =  os.path.split(i)
+                
+                    if i_file[:2] in ['c1', 'c2']:
+
+                        try:
+                            ind = [os.path.split(k)[1] for k in files].index(
+                                                              'c2' + i_file[2:])
+
+                        except ValueError:
+                            pass
+
+                        else:
+                            self.files.append(i)
+                            self.files.append(files.pop(ind))
+                            j.append(os.path.join(i_path, 'c1c2' + i_file[2:]))
+                        
+                        try:
+                            ind = [os.path.split(k)[1] for k in files].index(
+                                                              'c1' + i_file[2:])
+
+                        except ValueError:
+                            pass
+
+                        else:
+                            self.files.append(i)
+                            self.files.append(files.pop(ind))
+                            j.append(os.path.join(i_path, 'c1c2' + i_file[2:]))
+
+                files = j
+               
+                if len(files) == 0:
+                    print('\nWarning: no c1+c2 doublet was detected ... '
+                          'Please, check the input data and/or the in_filter '
+                          'parameter!')
+                    return []
+
+        if self.runFlag is True:
+        
+            if self.in_filter == 'GM + WM':
+
+                for i, j in zip(self.files[0::2], self.files[1::2]):
+                    img1 = nib.load(i)
+                    img2 = nib.load(j)
+
+                    if (img1.affine != img2.affine).all():
+                        print('\nWarning! The affine arrays for {0} and {1} '
+                              'are not the same. This can produce an erroneous '
+                              'result!'.format(i, j))
+
+                    img1_data = img1.get_fdata()
+                    img2_data = img2.get_fdata()
+            
+                    if img1_data.shape != img2_data.shape:
+                        print('\nWarning! The shapes for {0} and {1} are not '
+                              'the same. This can produce an erroneous '
+                              'result!'.format(i, j))
+
+                    c1c2_img_data = np.add(img1_data, img2_data)
+                    c1c2_img = nib.Nifti1Image(c1c2_img_data,
+                                               header=img1.header,
+                                               affine=img1.affine)
+                    c1c2_img.header['descrip'] = np.array(b'Tissue class 1 + '
+                                                          b'Tissue class 2',
+                                                          dtype='|S80')
+                    temp_dir = tempfile.mkdtemp()
+                    c1c2_file = os.path.join(temp_dir,
+                                             'c1c2' + os.path.split(i)[1][2:])
+                    nib.save(c1c2_img, c1c2_file)
+                    files.append(c1c2_file)
+
+            else:
+                files = self.files   
+
+        return files
+    
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return 
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(GM_WM_Normalize, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.outputs:
+            self.outputs = {}
+
+        if self.inheritance_dict:
+            self.inheritance_dict = {}
+
+        self.runFlag = False
+        self.process.jobtype = 'write'
+        self.process.apply_to_files = self._namesFilter()
+
+        if self.process.apply_to_files != Undefined and self.deformation_file:
+            self.process.deformation_file = self.deformation_file
+
+            # The management of self.process.output_directory could be delegated
+            # to the populse_mia.user_interface.pipeline_manager.process_mia
+            # module. We can't do it at the moment because the
+            # sync_process_output_traits() of the capsul/process/nipype_process
+            # module raises an exception in nipype if the mandatory parameters
+            # are not yet defined!
+            if self.output_directory:
+                self.process.output_directory = self.output_directory
+
+            else:
+                print('No output_directory was found...!\n')
+
+            self.outputs['normalized_files'] = self.process._normalized_files
+
+        if self.outputs:
+
+            for key, val in self.outputs.items():
+
+                if (key == "normalized_files"):
+
+                    if self.in_filter == 'GM + WM':
+                        self.inheritance_dict[val] = self.apply_to_files[0]
+                        
+                    else:
+
+                        if not isinstance(val, list):
+                            val = [val]
+                        
+                        for (in_val,
+                              out_val) in zip(self.process.apply_to_files, val):
+                            _, fileOval = os.path.split(out_val)
+                            _, fileIval = os.path.split(in_val)
+                            fileOvalNoPref = fileOval[1:]
+
+                            if fileOvalNoPref == fileIval:
+                                self.inheritance_dict[out_val] = in_val
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+ 
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        self.runFlag = True
+        self.process.jobtype = 'write'
+        self.process.apply_to_files = self._namesFilter()
+        self.process.deformation_file = self.deformation_file
+        self.process.write_bounding_box = self.write_bounding_box
+        self.process.write_voxel_sizes = self.write_voxel_sizes
+        self.process.write_interp = self.write_interp
+        self.process.trait('image_to_align').optional = True
+
+        # because the sync_process_output_traits() of the capsul/process/nipype_process
+        # module raises an exception in nipype if the mandatory parameters
+        # are not yet defined, the next line can't be write before!
+        super(GM_WM_Normalize, self).run_process_mia()
+        return self.process.run(configuration_dict={})
+
 
 class NewSegment(ProcessMIA):
     """

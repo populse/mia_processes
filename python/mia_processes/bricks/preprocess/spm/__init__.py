@@ -8,5 +8,5 @@
 # for details.
 ##########################################################################
 
-from .spatial_preprocessing import (Coregister, NewSegment, Normalize12, Realign,
-                                    SliceTiming, Smooth)
+from .spatial_preprocessing import (Coregister, GM_WM_Normalize, NewSegment,
+                                    Normalize12, Realign, SliceTiming, Smooth)
