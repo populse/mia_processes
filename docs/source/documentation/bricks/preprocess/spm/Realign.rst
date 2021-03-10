@@ -45,7 +45,7 @@ Realign brick
 Realigns a time-series of images acquired from the same subject
 ---------------------------------------------------------------
 
->>> from mia_processes.preprocess.spm import Realign
+>>> from mia_processes.bricks.preprocess.spm import Realign
 >>> Realign.help()
 
 **Inputs parameters:**

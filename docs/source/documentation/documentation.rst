@@ -16,6 +16,7 @@ Mia_processes's documentation
     - **spm**
 
       - `Coregister <bricks/preprocess/spm/Coregister.html>`_
+      - `GM_WM_Normalize <bricks/preprocess/spm/GM_WM_Normalize.html>`_
       - `NewSegment <bricks/preprocess/spm/NewSegment.html>`_
       - `Normalize12 <bricks/preprocess/spm/Normalize12.html>`_
       - `Realign <bricks/preprocess/spm/Realign.html>`_

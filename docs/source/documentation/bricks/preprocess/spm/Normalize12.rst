@@ -41,7 +41,7 @@ Normalize12 brick
 Computes the warp that best aligns the template (atlas) to the individual's image
 ---------------------------------------------------------------------------------
 
->>> from mia_processes.preprocess.spm import Normalize12
+>>> from mia_processes.bricks.preprocess.spm import Normalize12
 >>> Normalize12.help()
 
 **Inputs parameters:**

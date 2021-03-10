@@ -13,7 +13,7 @@ SliceTiming brick
 Bring back every slice of a BOLD image to the reference slice time.
 -------------------------------------------------------------------
 
->>> from mia_processes.preprocess.spm import SliceTiming
+>>> from mia_processes.bricks.preprocess.spm import SliceTiming
 >>> SliceTiming.help()
 
 **Inputs parameters:**
