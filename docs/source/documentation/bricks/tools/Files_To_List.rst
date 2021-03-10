@@ -43,7 +43,7 @@ From 2 file names, generating a list containing all theses file names
 
 *'/home/ArthurBlair/data/Anat.nii' +  '/home/ArthurBlair/data/Func.nii' -> Files_To_List -> ['/home/ArthurBlair/data/Anat.nii', '/home/ArthurBlair/data/Func.nii']*
 
->>> from mia_processes.tools import Files_To_List
+>>> from mia_processes.bricks.tools import Files_To_List
 >>> Files_To_List.help()
 
 **Inputs parameters:**

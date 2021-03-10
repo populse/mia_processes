@@ -41,7 +41,7 @@ Coregister brick
 Align together scans of different modalities
 --------------------------------------------
 
->>> from mia_processes.preprocess.spm import Coregister
+>>> from mia_processes.bricks.preprocess.spm import Coregister
 >>> Coregister.help()
 
 **Inputs parameters:**
@@ -76,7 +76,8 @@ Align together scans of different modalities
     and the 'apply_to_files' images. If 'write' is selected, the resliced images are named the same as the originals except that they are
     prefixed by out_prefix. if 'estwrite' is selected, the described procedures for 'estimate' and 'write' are performed and the output parameter
     (coregistered_source and/or coregistered_files) contains the resliced images and the one whose header has been rewritten. If it is necessary
-    to choose one or the other for a subsequent calculation in a pipeline, the Filter_Files_List brick (mia_processes library) can be used.
+    to choose one or the other for a subsequent calculation in a pipeline, the `Filter_Files_List <../../tools/Filter_Files_List.html>`_ brick (mia_processes
+    library) can be used.
 
     ::
 
@@ -84,13 +85,13 @@ Align together scans of different modalities
 
 - *cost_function <=> eoptions.cost_fun* [#label]_
     One of 'mi' or 'nmi' or 'ecc' or 'ncc'. Registration involves finding parameters that either maximise or minimise some objective
-    function. For inter-modal registration,  use 'Mutual Information', 'Normalised Mutual Information' or 'Entropy Correlation Coefficient'. For
-    within modality, you could also use Normalised Cross Correlation. 
+    function. For inter-modal registration, 'Mutual Information', 'Normalised Mutual Information' or 'Entropy Correlation Coefficient' could be used. For
+    within modality, 'Normalised Cross Correlation' could be used. 
 
-      | \- 'mi': Mutual Information
-      | \- 'nmi': Normalised Mutual Information
-      | \- 'ecc': Entropy Correlation Coefficient
-      | \- 'ncc': Normalised Cross Correlation
+      - 'mi': Mutual Information
+      - 'nmi': Normalised Mutual Information
+      - 'ecc': Entropy Correlation Coefficient
+      - 'ncc': Normalised Cross Correlation
 
     ::
 
@@ -120,30 +121,30 @@ Align together scans of different modalities
       ex. [7, 7] 
 
 - *write_interp <=> roptions.interp* [#label]_
-    The method by which the images are sampled when being written in a different space. Nearest neighbour is fastest, but not
-    recommended for image realignment. Trilinear Interpolation is probably OK for PET, or realigned and re-sliced fMRI, but not so suitable
-    for fMRI with subject movement because higher degree interpolation generally gives better results. Although higher degree methods
-    provide better interpolation, but they are slower because they use more neighbouring voxels. (0 <= a long integer <= 7). Voxel sizes
-    must all be identical and isotropic.
+    0 <= a long integer <= 7. The method by which the images are sampled when being written in a different space. Nearest neighbour is
+    fastest, but not recommended for image realignment. Trilinear Interpolation is probably OK for PET, or realigned and re-sliced fMRI, but
+    not so suitable for fMRI with subject movement because higher degree interpolation generally gives better results. Although higher
+    degree methods provide better interpolation, but they are slower because they use more neighbouring voxels. Voxel sizes must all be
+    identical and isotropic.
 
-      | \- 0: Nearest neighbour
-      | \- 1: Trilinear
-      | \- 2: 2nd Degree B-Spline
-      | \- 3: 3rd Degree B-Spline
+      - 0: Nearest neighbour
+      - 1: Trilinear
+      - 2: 2nd Degree B-Spline
+      - 3: 3rd Degree B-Spline
       | …
-      | \- 7: 7th Degree B-Spline
+      - 7: 7th Degree B-Spline
 
     ::
 
       ex. 4
 
 - *write_wrap <=> roptions.wrap* [#label]_
-    Check if interpolation should wrap in [x,y,z] (a list of 3 items which are integer int or long). For example, in MRI scans, the images wrap
-    around in the phase encode direction, so the subject’s nose may poke into the back of the subject’s head. These are typically:
+    Check if interpolation should wrap in [x,y,z] (a list of 3 items which are an integer). For example, in MRI scans, the images wrap around
+    in the phase encode direction, so the subject’s nose may poke into the back of the subject’s head. These are typically:
 
-      | \- No wrapping [0, 0, 0]: for PET or images that have already been spatially transformed (Also the recommended option if
-      | |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| you are not really sure)
-      | \- Wrap in Y [0, 1, 0], for (un-resliced) MRI where phase encoding is in the Y direction (voxel space)
+      - No wrapping [0, 0, 0]: for PET or images that have already been spatially transformed (also the recommended option
+        if you are not really sure)
+      - Wrap in Y [0, 1, 0], for (un-resliced) MRI where phase encoding is in the Y direction (voxel space)
 
     ::
 
