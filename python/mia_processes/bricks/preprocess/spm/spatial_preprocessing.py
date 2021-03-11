@@ -634,12 +634,6 @@ class GM_WM_Normalize(ProcessMIA):
         super(GM_WM_Normalize, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
-        if self.outputs:
-            self.outputs = {}
-
-        if self.inheritance_dict:
-            self.inheritance_dict = {}
-
         self.runFlag = False
         self.process.jobtype = 'write'
         self.process.apply_to_files = self._namesFilter()
