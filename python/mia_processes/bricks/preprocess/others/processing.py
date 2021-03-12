@@ -42,8 +42,8 @@ class Threshold(ProcessMIA):
     *Image thresholding*
     User_processes_ECdev.preprocess.others.processing.Threshold()
 
-    Please, see the complete documention for the Threshold brick in the
-    https://gricad-gitlab.univ-grenoble-alpes.fr/condamie/ec_dev web site     
+    Please, see the complete documention for the `Threshold brick in the populse.mia_processes web site
+    https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/Threshold.html
 
     """
     def __init__(self):

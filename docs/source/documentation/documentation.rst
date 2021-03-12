@@ -13,7 +13,11 @@ Mia_processes's documentation
 
   - **preprocess**
 
-    - **spm**
+    - **others**
+
+      - `Threshold <bricks/preprocess/other/Threshold.html>`_
+
+  - **spm**
 
       - `Coregister <bricks/preprocess/spm/Coregister.html>`_
       - `GM_WM_Normalize <bricks/preprocess/spm/GM_WM_Normalize.html>`_
