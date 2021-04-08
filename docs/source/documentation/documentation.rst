@@ -13,11 +13,11 @@ Mia_processes's documentation
 
   - **preprocess**
 
-    - **others**
+    - **fsl**
 
-      - `Threshold <bricks/preprocess/other/Threshold.html>`_
+      - `Smooth <bricks/preprocess/fsl/Smooth.html>`_
 
-  - **spm**
+    - **spm**
 
       - `Coregister <bricks/preprocess/spm/Coregister.html>`_
       - `GM_WM_Normalize <bricks/preprocess/spm/GM_WM_Normalize.html>`_
@@ -26,6 +26,10 @@ Mia_processes's documentation
       - `Realign <bricks/preprocess/spm/Realign.html>`_
       - `SliceTiming <bricks/preprocess/spm/SliceTiming.html>`_
       - `Smooth <bricks/preprocess/spm/Smooth.html>`_
+
+    - **others**
+
+      - `Threshold <bricks/preprocess/other/Threshold.html>`_
 
   - **tools**
 
