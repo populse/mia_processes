@@ -2303,7 +2303,6 @@ class Smooth(ProcessMIA):
                                'file).')
 
         # Input traits
-
         self.add_trait("in_files",
                        InputMultiPath(Either(ImageFileSPM(),
                                              Undefined),
@@ -2405,7 +2404,7 @@ class Smooth(ProcessMIA):
 
                         if fileOvalNoPref == fileIval:
                             self.inheritance_dict[out_val] = in_val
-       
+
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
     

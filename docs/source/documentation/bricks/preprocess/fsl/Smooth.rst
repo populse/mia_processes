@@ -18,45 +18,41 @@ Smooth brick
 
 **Inputs parameters:**
 
-- *in_files <=> data* [#label]_
-    List of files to smooth. A list of items which are an existing, uncompressed file (valid extensions: [.img, .nii, .hdr]).
+- *in_file*
+    An image to be smoothed. An item that is an existing, uncompressed file (valid extensions: [.img, .nii, .hdr]).
 
     ::
 
       ex. ['/home/ArthurBlair/data/raw_data/Func.nii']
 
-- *fwhm <=> fwhm* [#label]_
-    Specify the full-width at half maximum (FWHM) of the Gaussian smoothing kernel in mm (a float or a list of 3 items which are a float).
-    Three values can be entered, indicating the FWHM in the x, y and z directions, or one value only, indicating the same FWHM in all three
-    directions.
+- *fwhm*
+    Specify the full-width at half maximum of the Gaussian smoothing kernel (a float) in mm (not voxels).
+    Will be converted internally to sigma in mm (not voxels), using approximately `2.355 * sigma = fwhm <https://brainder.org/2011/08/20/gaussian-kernels-convert-fwhm-to-sigma/>`_. Mutually exclusive with sigma.
 
     ::
 
-      ex. [6, 6, 6]
+      ex. 6.0
 
-- *data_type <=> dtype* [#label]_
-    | Data type of the output images (an integer [int or long]).
-    |   0: same as the original images
-    |   2: UINT8 (unsigned char)
-    |   4: INT16 (signed short)
-    |   6: INT32 (signed int)
-    |   8: FLOAT32 (single prec. float)
-    |   10: FLOAT64 (double prec. float)
+- *sigma*
+    Specify the standard deviation of the filter (a float) in mm (not voxels). Mutually exclusive with fwhm.
 
     ::
 
-      ex. 0
+      ex. 2.55
 
-- *implicit_masking <=> im* [#label]_
-    A mask implied by a particular voxel value (a boolean). If set to True, the implicit masking of the input image is preserved in the
-    smoothed image.
+- *output_type*
+    | Format of the output image (one of NIFTI, NIFTI_PAIR, NIFTI_GZ, NIFTI_PAIR_GZ).
+    |   NIFTI: \*.nii
+    |   NIFTI_GZ: \*.nii.gz
+    |   NIFTI_PAIR: \*.img / \*.hdr
+    |   NIFTI_PAIR_GZ: \*.img.gz / \*.hdr.gz
 
     ::
 
-      ex. False
+      ex. NIFTI
 
-- *out_prefix <=> prefix* [#label]_
-    Specify the string to be prepended to the filenames of the smoothed image file(s) (a string).
+- *out_prefix*
+    Specify the string to be prepended to the filename of the smoothed image file (a string).
 
     ::
 
@@ -64,8 +60,8 @@ Smooth brick
 
 **Outputs parameters:**
 
-- *smoothed_files*
-    Smoothed files (a list of items which are an existing file name).
+- *out_file*
+    Smoothed file (an item which are a file name).
 
     ::
 
@@ -73,8 +69,5 @@ Smooth brick
 
 -------------
 
-.. [#label] Syntax: mia_processes/nipype Smooth <=> SPM12 Smooth.
-
-	    Usefull links:
-	    `SPM12 Smooth <https://www.fil.ion.ucl.ac.uk/spm/doc/manual.pdf#page=57>`_, 
-	    `nipype Smooth <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.spm.preprocess.html#smooth>`_
+Usefull links:
+`FSL Smooth <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.fsl.utils.html#smooth>`_
