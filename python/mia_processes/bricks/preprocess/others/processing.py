@@ -40,7 +40,6 @@ import os
 class Threshold(ProcessMIA):
     """
     *Image thresholding*
-    User_processes_ECdev.preprocess.others.processing.Threshold()
 
     Please, see the complete documention for the `Threshold brick in the populse.mia_processes web site
     https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/Threshold.html
