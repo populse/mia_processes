@@ -216,6 +216,10 @@ class Threshold(ProcessMIA):
             if files_name:
                 self.outputs['out_files'] = files
 
+            else:
+                print('- There was no output file deducted during '
+                      'initialisation. Please check the input parameters...!')
+
         # tags inheritance (optional)
         if self.outputs:
 
