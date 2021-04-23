@@ -499,9 +499,6 @@ class List_To_File(ProcessMIA):
         super(List_To_File, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
-        if self.outputs:
-            self.outputs = {}
-        
         if (self.file_list and
                self.file_list not in ["<undefined>", traits.Undefined]):
 
@@ -511,17 +508,17 @@ class List_To_File(ProcessMIA):
             if len(self.index_filter) == 1:
 
                 if self.index_filter[0] <= len(self.file_list):
-                    self.outputs['file'] = [self.file_list[
-                                                        self.index_filter[0]-1]]
+                    self.outputs['file'] = self.file_list[
+                                                         self.index_filter[0]-1]
 
                 else:
                     print('\nThe initialisation of the List_To_File brick '
                           'failed because the index_filter parameter is '
                           'greater than the length of file_list '
                           'parameter ...\n')
-
-            if self.outputs:
-                self.outputs["notInDb"] = ["file"]
+        
+        if self.outputs:
+            self.outputs["notInDb"] = ["file"]
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
