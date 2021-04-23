@@ -30,6 +30,7 @@ Mia_processes's documentation
     - **others**
 
       - `Threshold <bricks/preprocess/other/Threshold.html>`_
+      - `Resample <bricks/preprocess/other/Resample.html>`_
 
   - **tools**
 

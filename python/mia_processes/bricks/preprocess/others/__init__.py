@@ -8,4 +8,4 @@
 # for details.
 ##########################################################################
 
-from .processing import Threshold
+from .processing import Resample, Threshold
