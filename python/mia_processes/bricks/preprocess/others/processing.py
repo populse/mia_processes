@@ -146,7 +146,6 @@ class Resample(ProcessMIA):
         super(Resample, self).list_outputs()
 
         # Outputs definition
-
         if ((self.reference_image) and
                 (self.files_to_resample) and
                 (self.interp)):
@@ -156,7 +155,8 @@ class Resample(ProcessMIA):
             try:
                 refName = nib.load(self.reference_image)
                 
-            except (nib.filebasedimages.ImageFileError, TypeError) as e:
+            except (nib.filebasedimages.ImageFileError,
+                    FileNotFoundError, TypeError) as e:
                 print("\nError with reference_image, during initialisation: ",
                       e)
                 refName = None
@@ -181,7 +181,8 @@ class Resample(ProcessMIA):
                 try:
                     fileName = nib.load(file_name)
 
-                except (nib.filebasedimages.ImageFileError, TypeError) as e:
+                except (nib.filebasedimages.ImageFileError,
+                        FileNotFoundError, TypeError) as e:
                     print("\nError with files_to_resample, during "
                            "initialisation: ", e)
                     fileName = None
@@ -233,8 +234,7 @@ class Resample(ProcessMIA):
                                 "parameters.".format(file_name,
                                                      self.reference_image))
                     msg.setStandardButtons(QMessageBox.Yes | QMessageBox.Abort)
-                    msg.buttonClicked.connect(msg.close)
-                    retval = msg.exec()
+                    retval = msg.exec_()
                     
                     if retval == QMessageBox.Yes:
                         print("\nResample brick Warning!: Empty input file(s). "
@@ -279,8 +279,7 @@ class Resample(ProcessMIA):
                             "agree to use these input "
                             "parameters?".format(set(files)))
                 msg.setStandardButtons(QMessageBox.Yes | QMessageBox.Abort)
-                msg.buttonClicked.connect(msg.close)
-                retval = msg.exec()
+                retval = msg.exec_()
 
                 if retval == QMessageBox.Yes:
                     print('\nResample brick warning: suffix and prefix input '
@@ -636,30 +635,38 @@ class Threshold(ProcessMIA):
                                 "Abort?".format(file_name1))
                     msg.setStandardButtons(QMessageBox.Yes|QMessageBox.YesToAll|
                                            QMessageBox.Abort)
-                    msg.buttonClicked.connect(msg.close)
-                    retval = msg.exec()
+                    retval = msg.exec_()
 
-                    if retval == QMessageBox.YesToAll: flag = False
+                    if retval !=  QMessageBox.Abort:
+                        (file_name_no_ext,
+                         file_extension) = os.path.splitext(file_name)
+                        files.append(os.path.join(self.output_directory,
+                                                  (self.prefix.strip() +
+                                                   file_name_no_ext +
+                                                   self.suffix.strip() +
+                                                   file_extension)))
+                        print('\nThreshold brick warning: the out_files output '
+                              'parameter is the same as the in_files input '
+                              'parameter (suffix and prefix are not defined):'
+                              '\n{0} will be overwrited ...'.format(file_name1))
 
-                if retval !=  QMessageBox.Abort:
+                        if retval == QMessageBox.YesToAll:
+                            flag = False
+                            print('\nYesToAll selected: end of overwrite '
+                                  'checks on input images ...')
+                    else:
+                        files_name = []
+                        print('\nAborted. Please check your input parameters ...')
+                        break
+
+                else:
                     (file_name_no_ext,
-                     file_extension) = os.path.splitext(file_name)
+                         file_extension) = os.path.splitext(file_name)
                     files.append(os.path.join(self.output_directory,
                                               (self.prefix.strip() +
                                                file_name_no_ext +
                                                self.suffix.strip() +
                                                file_extension)))
-
-                    if (path == self.output_directory and
-                                   self.suffix == " " and self.prefix == " "):
-                        print('\nThreshold brick warning: The out_files output '
-                              'parameter is the same as the in_files input '
-                              'parameter (suffix and prefix are not defined):\n'
-                              '{0} will be overwrited ...'.format(file_name1))
-
-                else:
-                    files_name = []
-                    break
 
             if files_name:
                 self.outputs['out_files'] = files
