@@ -72,7 +72,8 @@ class Files_To_List(ProcessMIA):
         
         self.add_trait("file2",
                        traits.File(output=False,
-                                   desc=file2_desc, optional=True))
+                                   optional=True,
+                                   desc=file2_desc))
 
         # Outputs traits
         self.add_trait("file_list",
@@ -96,9 +97,6 @@ class Files_To_List(ProcessMIA):
         super(Files_To_List, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
-        if self.outputs:
-            self.outputs = {}
-
         if self.file1 and self.file1 not in ["<undefined>", traits.Undefined]:
         
             if ((not self.file2) or
@@ -185,9 +183,6 @@ class Filter_Files_List(ProcessMIA):
         super(Filter_Files_List, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
-        if self.outputs:
-            self.outputs = {}
-
         if (self.in_list and
                self.in_list not in ["<undefined>", traits.Undefined]):
 
@@ -334,9 +329,6 @@ class Input_Filter(ProcessMIA):
                                                        for i in self.scans_list]
 
         # Apply the filter to the input
-        if self.outputs:
-            self.outputs = {}
-
         self.outputs['output'] = self.filter.generate_filter(self.project,
                                                              self.scans_list,
                                           self.project.session.get_shown_tags())
@@ -417,9 +409,6 @@ class List_Duplicate(ProcessMIA):
         super(List_Duplicate, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
-        if self.outputs:
-            self.outputs = {}
-
         if self.file_name:
             self.outputs["out_list"] = [self.file_name]
             self.outputs["out_file"] =  self.file_name
