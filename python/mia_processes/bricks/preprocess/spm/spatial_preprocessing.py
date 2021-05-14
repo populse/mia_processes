@@ -128,8 +128,7 @@ class Coregister(ProcessMIA):
         
         self.add_trait("source",
                        InputMultiPath(Either(ImageFileSPM(),
-                                                    Undefined),
-                                      value=[Undefined],
+                                             Undefined),
                                       copyfile=True,
                                       output=False,
                                       optional=False,
@@ -137,8 +136,7 @@ class Coregister(ProcessMIA):
         
         self.add_trait("apply_to_files",
                        InputMultiPath(Either(ImageFileSPM(),
-                                                    Undefined),
-                                      value=[Undefined],
+                                             Undefined),
                                       copyfile=True,
                                       output=False,
                                       optional=True,
@@ -446,7 +444,6 @@ class GM_WM_Normalize(ProcessMIA):
                        InputMultiPath(traits.Either(ImageFileSPM(),
                                                     traits.List(ImageFileSPM()),
                                                     Undefined),
-                                      value=[Undefined],
                                       output=False,
                                       optional=False,
                                       desc=apply_to_files_desc))
@@ -1148,7 +1145,6 @@ class Normalize12(ProcessMIA):
                        InputMultiPath(Either(ImageFileSPM(),
                                              List(ImageFileSPM()),
                                              Undefined),
-                                      value=[Undefined],
                                       output=False,
                                       optional=True,
                                       desc=apply_to_files_desc))
@@ -1479,7 +1475,6 @@ class Realign(ProcessMIA):
                        InputMultiPath(Either(ImageFileSPM(),
                                              List(ImageFileSPM()),
                                              Undefined),
-                                      value=[Undefined],
                                       copyfile=True,
                                       output=False,
                                       optional=False,
@@ -1836,7 +1831,6 @@ class SliceTiming(ProcessMIA):
                        InputMultiPath(Either(ImageFileSPM(),
                                              List(ImageFileSPM()),
                                              Undefined),
-                                      value=[Undefined],
                                       output=False,
                                       optional=False,
                                       desc=desc_in_file))
@@ -2306,7 +2300,6 @@ class Smooth(ProcessMIA):
         self.add_trait("in_files",
                        InputMultiPath(Either(ImageFileSPM(),
                                              Undefined),
-                                      value=[Undefined],
                                       copyfile=False,
                                       output=False,
                                       optional=False,
