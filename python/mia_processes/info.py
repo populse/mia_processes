@@ -19,8 +19,8 @@ import subprocess
 import sys
 
 # Current version
-version_major = 1
-version_minor = 5
+version_major = 2
+version_minor = 0
 version_micro = 0
 version_extra = "dev" # leave empty for release
 
