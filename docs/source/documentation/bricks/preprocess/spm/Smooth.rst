@@ -13,7 +13,7 @@ Smooth brick
 3D Gaussian smoothing of image volumes
 --------------------------------------
 
->>> from mia_processes.preprocess.spm import Smooth
+>>> from mia_processes.bricks.preprocess.spm import Smooth
 >>> Smooth.help()
 
 **Inputs parameters:**
@@ -26,9 +26,9 @@ Smooth brick
       ex. ['/home/ArthurBlair/data/raw_data/Func.nii']
 
 - *fwhm <=> fwhm* [#label]_
-    Specify the full-width at half maximum (FWHM) of the Gaussian smoothing kernel in mm. Three values can be entered, indicating
-    the FWHM in the x, y and z directions, or one value only, indicating the same FWHM in all three directions. A list of 3 items which are a
-    float.
+    Specify the full-width at half maximum (FWHM) of the Gaussian smoothing kernel in mm (a float or a list of 3 items which are a float).
+    Three values can be entered, indicating the FWHM in the x, y and z directions, or one value only, indicating the same FWHM in all three
+    directions.
 
     ::
 
@@ -42,11 +42,10 @@ Smooth brick
     |   6: INT32 (signed int)
     |   8: FLOAT32 (single prec. float)
     |   10: FLOAT64 (double prec. float)
-    |   <undefined> = 0 ?
 
     ::
 
-      ex. 0, MIA_processes default value
+      ex. 0
 
 - *implicit_masking <=> im* [#label]_
     A mask implied by a particular voxel value (a boolean). If set to True, the implicit masking of the input image is preserved in the
@@ -61,7 +60,7 @@ Smooth brick
 
     ::
 
-      ex. s, capsul/nipype default value
+      ex. s
 
 **Outputs parameters:**
 
@@ -70,7 +69,7 @@ Smooth brick
 
     ::
 
-      ex. /home/ArthurBlair/data raw_data/sFunc.nii
+      ex. /home/ArthurBlair/data/derived_data/sFunc.nii
 
 -------------
 
@@ -79,6 +78,3 @@ Smooth brick
 	    Usefull links:
 	    `SPM12 Smooth <https://www.fil.ion.ucl.ac.uk/spm/doc/manual.pdf#page=57>`_, 
 	    `nipype Smooth <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.spm.preprocess.html#smooth>`_
-
-..
-	    `nipype <https://nipype.readthedocs.io/en/latest/interfaces/generated/interfaces.spm/preprocess.html#smooth>`_

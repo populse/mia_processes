@@ -43,7 +43,7 @@ From a list of files, generation of a single file
 
 *['/home/ArthurBlair/data/Anat.nii', '/home/ArthurBlair/data/Func.nii'] -> List_To_File -> '/home/ArthurBlair/data/Func.nii'*
 
->>> from mia_processes.tools import List_to_File
+>>> from mia_processes.bricks.tools import List_to_File
 >>> List_to_File.help()
 
 **Inputs parameters:**
@@ -73,4 +73,4 @@ From a list of files, generation of a single file
 
 -------------
 
-NOTE: If no index is specified, returns the first element of the list.
+NOTE: If no index is specified, returns the first element of the list (the index corresponds to the actual position in the list, i.e. there is no “0” index as in python).
