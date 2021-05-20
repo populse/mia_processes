@@ -109,7 +109,7 @@ VERSION = __version__
 CLASSIFIERS = CLASSIFIERS
 PLATFORMS = 'OS Independent'
 REQUIRES = [
-    'populse_mia>=1.3.0'
+    'populse_mia>=2.0.0'
 ]
 EXTRA_REQUIRES = {
     'doc': [
