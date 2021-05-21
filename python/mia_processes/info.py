@@ -22,7 +22,7 @@ import sys
 version_major = 1
 version_minor = 5
 version_micro = 0
-version_extra = "dev" # leave empty for release
+version_extra = "" # leave empty for release
 
 # Expected by setup.py: string of form "X.Y.Z"
 if version_extra:
@@ -109,7 +109,8 @@ VERSION = __version__
 CLASSIFIERS = CLASSIFIERS
 PLATFORMS = 'OS Independent'
 REQUIRES = [
-    'populse_mia>=1.3.0'
+    'populse_mia==1.5.0',
+    'populse_db==1.5.0'
 ]
 EXTRA_REQUIRES = {
     'doc': [
