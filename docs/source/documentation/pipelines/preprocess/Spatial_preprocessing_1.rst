@@ -38,8 +38,8 @@
 Spatial_preprocessing_1 pipeline
 ================================
 
-Data pre-processing for cerebrovascular reserve analysis (CVRa) at `CLUNI <http://www.neuroradiologie-grenoble.fr/>`_ - `IRMaGe <https://irmage.univ-grenoble-alpes.fr/>`_ (Grenoble - France)
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+An example of fMRI data pre-processing
+--------------------------------------
 
 **Pipeline insight**
 
@@ -133,5 +133,5 @@ Data pre-processing for cerebrovascular reserve analysis (CVRa) at `CLUNI <http:
 
 -------------
 
-.. [#label] The voxel_sizes_func parameter value of the Normalize12_2 brick is set to [2.0, 2.0, 2.0] (valid for cevastoc, cevastoc32, etc. CVRa studies at
+.. [#label] The voxel_sizes_func parameter value of the Normalize12_2 brick is set to [2.0, 2.0, 2.0] (valid for cevastoc, cevastoc32, etc., CVR studies at
 	    `CLUNI <http://www.neuroradiologie-grenoble.fr/>`_ - `IRMaGe <https://irmage.univ-grenoble-alpes.fr/>`_).

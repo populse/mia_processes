@@ -38,8 +38,8 @@
 Resample brick
 ==============
 
-Resamples an image to the resolution of a reference image, using N-D spline interpolation.
-----------------------------------------------
+Resamples an image to the resolution of a reference image, using N-D spline interpolation
+-----------------------------------------------------------------------------------------
 
 >>> from mia_processes.bricks.preprocess.other import Resample
 >>> Resample.help()
