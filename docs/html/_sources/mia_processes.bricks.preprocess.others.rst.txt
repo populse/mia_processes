@@ -3,7 +3,6 @@ mia\_processes.bricks.preprocess.others package
 
 Submodules
 ----------
-
 mia\_processes.bricks.preprocess.others.processing module
 ---------------------------------------------------------
 
