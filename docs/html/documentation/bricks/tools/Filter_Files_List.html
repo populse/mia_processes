@@ -1,0 +1,122 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Filter_Files_List brick &#8212; mia_processes 2.0.1-dev+4f41999 documentation</title>
+    <link rel="stylesheet" href="../../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '2.0.1-dev+4f41999',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head>
+  <body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
+          <span>mia_processes 2.0.1-dev+4f41999 documentation</span></a></h1>
+        <h2 class="heading"><span>Filter_Files_List brick</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="toctree-wrapper compound">
+</div>
+<table border="1" class="docutils">
+<colgroup>
+<col width="23%" />
+<col width="35%" />
+<col width="42%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference external" href="../../../index.html">Home</a></td>
+<td><a class="reference external" href="../../documentation.html">Documentation</a></td>
+<td><a class="reference external" href="https://github.com/populse/mia_processes">GitHub</a></td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="filter-files-list-brick">
+<h1>Filter_Files_List brick<a class="headerlink" href="#filter-files-list-brick" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="selects-one-or-more-slicing-elements-from-a-list">
+<h2>Selects one or more (slicing) elements from a list<a class="headerlink" href="#selects-one-or-more-slicing-elements-from-a-list" title="Permalink to this headline">¶</a></h2>
+<p>[‘/home/ArthurBlair/data/raw_data/Anat.nii’, ‘/home/ArthurBlair/data/raw_data/Func.nii’] -&gt; Filter_Files_List -&gt; [‘/home/ArthurBlair/data/raw_data/Func.nii’]</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">mia_processes.bricks.tools</span> <span class="kn">import</span> <span class="n">Filter_Files_List</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Filter_Files_List</span><span class="o">.</span><span class="n">help</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><strong>Inputs parameters:</strong></p>
+<ul>
+<li><dl class="first docutils">
+<dt><em>in_list</em></dt>
+<dd><p class="first">The list of elements to be filtered.</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/Anat.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/ArthurBlair/data/raw_data/Func.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/ArthurBlair/data/raw_data/rp_Func.txt&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/ArthurBlair/data/raw_data/meanFunc.nii&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><em>index_filter</em></dt>
+<dd><p class="first">A list of 0 index to 2 indices (integer) for filtering. If no index is given, takes the first element of in_list. If there is one index, takes the element at that position in in_list. If two indices, selects the elements between the first and the second index (the index corresponds to the actual position in the list, i.e. there is no “0” index as in python).</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Outputs parameters:</strong></p>
+<ul>
+<li><dl class="first docutils">
+<dt><em>filtered_list</em></dt>
+<dd><p class="first">The corresponding filtering result (a list).</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/Func.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/ArthurBlair/data/raw_data/rp_Func.txt&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/ArthurBlair/data/raw_data/meanFunc.nii&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, populse.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.
+    </div>
+  </body>
+</html>
