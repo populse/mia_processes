@@ -1,0 +1,287 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Normalize12 brick &#8212; mia_processes 2.0.1-dev+4f41999 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../',
+        VERSION:     '2.0.1-dev+4f41999',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head>
+  <body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
+          <span>mia_processes 2.0.1-dev+4f41999 documentation</span></a></h1>
+        <h2 class="heading"><span>Normalize12 brick</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="toctree-wrapper compound">
+</div>
+<table border="1" class="docutils">
+<colgroup>
+<col width="25%" />
+<col width="35%" />
+<col width="40%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference external" href="../../../../index.html">Home</a></td>
+<td><a class="reference external" href="../../../documentation.html">Documentation</a></td>
+<td><a class="reference external" href="https://github.com/populse/mia_processes">GitHub</a></td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="normalize12-brick">
+<h1>Normalize12 brick<a class="headerlink" href="#normalize12-brick" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="computes-the-warp-that-best-aligns-the-template-atlas-to-the-individual-s-image">
+<h2>Computes the warp that best aligns the template (atlas) to the individual’s image<a class="headerlink" href="#computes-the-warp-that-best-aligns-the-template-atlas-to-the-individual-s-image" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">mia_processes.bricks.preprocess.spm</span> <span class="kn">import</span> <span class="n">Normalize12</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Normalize12</span><span class="o">.</span><span class="n">help</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><strong>Inputs parameters:</strong></p>
+<ul>
+<li><dl class="first docutils">
+<dt><em>image_to_align &lt;=&gt; subj.vol</em> <a class="footnote-reference" href="#label" id="id1">[1]</a></dt>
+<dd><p class="first">The image that the template (atlas) data is warped into alignment with. Mutually exclusive with <em>deformation_file</em> parameter. A
+pathlike object or string representing an existing file (valid extensions in [.img, .nii, .hdr]).</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">Anat</span><span class="o">.</span><span class="n">nii</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><em>deformation_file &lt;=&gt; subj.def</em>  <a class="footnote-reference" href="#label" id="id2">[1]</a></dt>
+<dd><p class="first">File y_*.nii containing 3 deformation fields for the deformation in x, y and z dimension. Mutually exclusive with <em>image_to_align</em> and
+<em>tpm</em> parameters. A pathlike object or string representing an existing file (valid extensions in [.img, .nii, .hdr]).</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">downloaded_data</span><span class="o">/</span><span class="n">y_Anat</span><span class="o">.</span><span class="n">nii</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><em>apply_to_files &lt;=&gt; subj.resample</em> <a class="footnote-reference" href="#label" id="id3">[1]</a></dt>
+<dd><p class="first">Files to apply transformation to. They can be any images that are in register with the image used to generate the deformation. A list
+of items which are an existing, uncompressed file (valid extensions in [.img, .nii, .hdr]).</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/Anat.nii&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><em>jobtype</em></dt>
+<dd><p class="first">One of ‘write’ (write) or  ‘est’ (estimate) or ‘estwrite’ (estimate and write).</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">- write: Needs the deformation_file and apply_to_files input parameters. The normalized_files output parameter comes</div>
+<div class="line">&thinsp; &thinsp; &thinsp; &thinsp; &thinsp; &thinsp; &thinsp; from the apply_to_files parameter.</div>
+</div>
+<div class="line-block">
+<div class="line">- est: Needs the tpm and image_to_align input parameters. The deformation_field output parameter comes from the</div>
+<div class="line">&thinsp; &thinsp; &thinsp; &thinsp; &nbsp; image_to_align parameter.</div>
+</div>
+<div class="line-block">
+<div class="line">- estwrite: Needs, at least, the tpm and image_to_align input parameters. The deformation_field and normalized_image</div>
+<div class="line">&thinsp; &thinsp; &thinsp; &thinsp; &thinsp; &thinsp; &thinsp; &thinsp; &thinsp; &thinsp; output parameters come from the image_to_align parameter. If the apply_to_files input parameter is defined,</div>
+<div class="line">&thinsp; &thinsp; &thinsp; &thinsp; &thinsp; &thinsp; &thinsp; &thinsp; &thinsp; &thinsp; the normalized_files output parameter is also created.</div>
+</div>
+</div></blockquote>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="n">write</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><em>bias_regularization &lt;=&gt; eoptions.biasreg</em>  <a class="footnote-reference" href="#label" id="id4">[1]</a></dt>
+<dd><p class="first">The goal is to model, by different tissue classes, the intensity variations that arise due to different tissues, while model, with a bias field, those that occur because of the bias artifact due to the physics of MRI imaging. If the data have very little intensity non-uniformity artifact, then bias control should be increased. This effectively tells the algorithm that there is very little bias in the data, so it doesn’t try to model it (a float between 0 and 10).</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">- 0 No regularisation</div>
+<div class="line">- 0.00001 extremely light regularisation</div>
+<div class="line">-  …</div>
+<div class="line">- 1 very heavy regularisation</div>
+<div class="line">- 10 extremely heavy regularisation</div>
+</div>
+</div></blockquote>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mf">0.0001</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><em>bias_fwhm &lt;=&gt; eoptions.biasfwhm</em> <a class="footnote-reference" href="#label" id="id5">[1]</a></dt>
+<dd><p class="first">Full Width at Half Maximum of Gaussian smoothness of bias (a value in [30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, ‘Inf’). Smoother bias fields need fewer parameters to describe them. This means that the algorithm is faster for smoother intensity non-uniformities (e.g. 150 mm cutoff gives faster results than 30 mm cutoff).</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">60</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><em>tpm &lt;=&gt; eoptions.tpm</em> <a class="footnote-reference" href="#label" id="id6">[1]</a></dt>
+<dd><p class="first">The template in form of tissue probability atlas (a pathlike object or string representing an existing file). Mutually exclusive with the <em>deformation_file</em> parameter.</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">spm12</span><span class="o">/</span><span class="n">tpm</span><span class="o">/</span><span class="n">TPM</span><span class="o">.</span><span class="n">nii</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><em>affine_regularization_type &lt;=&gt; eoptions.affreg</em> <a class="footnote-reference" href="#label" id="id7">[1]</a></dt>
+<dd><p class="first">Standard space for affine registration (‘mni’ or ‘size’ or ‘none’).</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="n">mni</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><em>warping_regularization &lt;=&gt; eoptions.reg</em> <a class="footnote-reference" href="#label" id="id8">[1]</a></dt>
+<dd><p class="first">The measure of the roughness of the deformations for registration. Involve the sum of 5 elements (list of floats).</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><em>smoothness &lt;=&gt; eoptions.fwhm</em> <a class="footnote-reference" href="#label" id="id9">[1]</a></dt>
+<dd><p class="first">Value to smooth the data before normalization (a float; in mm). 0 is a good value for MRI.</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mf">0.0</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><em>sampling_distance &lt;=&gt; eoptions.samp</em> <a class="footnote-reference" href="#label" id="id10">[1]</a></dt>
+<dd><p class="first">Approximate distance between sampled points when estimating the model parameters (a float).</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mf">3.0</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><em>write_bounding_box &lt;=&gt; woptions.bb</em> <a class="footnote-reference" href="#label" id="id11">[1]</a></dt>
+<dd><p class="first">A list of 2 items which are a list of items which are a float. This is the bounding box (in mm) of the volume which is to be written (relative to the anterior commissure).</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[[</span><span class="o">-</span><span class="mi">78</span><span class="p">,</span> <span class="o">-</span><span class="mi">112</span><span class="p">,</span> <span class="o">-</span><span class="mi">50</span><span class="p">],</span> <span class="p">[</span><span class="mi">78</span><span class="p">,</span> <span class="mi">76</span><span class="p">,</span> <span class="mi">85</span><span class="p">]]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><em>write_voxel_sizes &lt;=&gt; woptions.vox</em> <a class="footnote-reference" href="#label" id="id12">[1]</a></dt>
+<dd><p class="first">A list of 3 items which are a float. This is the voxel sizes of the written normalised images.</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><em>write_interp  &lt;=&gt; woptions.interp</em> <a class="footnote-reference" href="#label" id="id13">[1]</a></dt>
+<dd><p class="first">This is the method by which the images are sampled when being written in a different space (0 &lt;= a long integer &lt;= 7).</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">- 0 Nearest neighbour</div>
+<div class="line">- 1 Trilinear (OK for PET, realigned fMRI, or segmentations)</div>
+<div class="line">- 2 2nd Degree B-spline</div>
+<div class="line">-  …</div>
+<div class="line">- 7 7nd Degree B-spline.</div>
+</div>
+</div></blockquote>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Outputs parameters</strong></p>
+<ul>
+<li><dl class="first docutils">
+<dt><em>deformation_field</em></dt>
+<dd><p class="first">NIfTI file containing 3 deformation fields for the deformation in x, y and z dimension (a list of items which are a pathlike object or string representing an existing file).</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">derived_data</span><span class="o">/</span><span class="n">y_Anat</span><span class="o">.</span><span class="n">nii</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><em>normalized_files</em></dt>
+<dd><p class="first">Normalised other files (a list of items which are a pathlike object or string representing an existing file).</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">derived_data</span><span class="o">/</span><span class="n">wAnat</span><span class="o">.</span><span class="n">nii</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<hr class="docutils" />
+<table class="docutils footnote" frame="void" id="label" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[1]</td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id2">2</a>, <a class="fn-backref" href="#id3">3</a>, <a class="fn-backref" href="#id4">4</a>, <a class="fn-backref" href="#id5">5</a>, <a class="fn-backref" href="#id6">6</a>, <a class="fn-backref" href="#id7">7</a>, <a class="fn-backref" href="#id8">8</a>, <a class="fn-backref" href="#id9">9</a>, <a class="fn-backref" href="#id10">10</a>, <a class="fn-backref" href="#id11">11</a>, <a class="fn-backref" href="#id12">12</a>, <a class="fn-backref" href="#id13">13</a>)</em> <p>Syntax: mia_processes/nipype Normalize12 &lt;=&gt; SPM12 Normalise.</p>
+<dl class="docutils">
+<dt>NOTE:</dt>
+<dd><ul class="first last simple">
+<li>Contrary to what is stated in the nipype documentation, this brick does not accept the out_prefix parameter which would allow to use a prefix other than “w” for the normalised image.</li>
+</ul>
+</dd>
+</dl>
+<p class="last">Usefull links:
+<a class="reference external" href="https://www.fil.ion.ucl.ac.uk/spm/doc/manual.pdf#page=51">SPM12 Normalise</a>,
+<a class="reference external" href="https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.spm.preprocess.html#normalize12">nipype Normalize12</a></p>
+</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, populse.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.
+    </div>
+  </body>
+</html>
