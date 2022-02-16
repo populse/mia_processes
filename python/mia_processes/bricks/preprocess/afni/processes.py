@@ -8,7 +8,7 @@ populse_mia.
 
 :Contains:
     :Class:
-        - Smooth
+        - SkullStripping
 
 """
 
@@ -21,13 +21,13 @@ populse_mia.
 ##########################################################################
 
 # Capsul import
-#from capsul.api import StudyConfig, get_process_instance
+# from capsul.api import StudyConfig, get_process_instance
 
 # nibabel import
-#import nibabel as nib
+# import nibabel as nib
 
 # nipype imports
-#from nipype.interfaces import fsl
+# from nipype.interfaces import fsl
 from nipype.interfaces.base import File
 
 # populse_mia import
@@ -38,12 +38,12 @@ import os
 from traits.api import Either, Enum, Float, String, Undefined
 
 
-class Smooth(ProcessMIA):
+class SkullStripping(ProcessMIA):
     """
-    *3D Gaussian smoothing of image volumes*
+    * Extract the brain from surrounding tissue from MRI T1-weighted images*
 
     Please, see the complete documention for the `Smooth brick in the populse.mia_processes web site
-    <https://populse.github.io/mia_processes/documentation/bricks/preprocess/fsl/Smooth.html>`_
+    <https://populse.github.io/mia_processes/documentation/bricks/preprocess/afni/SkullStripping.html>`_
 
     """
 
@@ -55,49 +55,30 @@ class Smooth(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(Smooth, self).__init__()
+        super(SkullStripping, self).__init__()
 
         # Third party softwares required for the execution of the brick
-        self.requirement = ['fsl', 'nipype']
+        self.requirement = ['afni', 'nipype']
 
         # Inputs description
-        in_file_desc = ('A file to smooth (a pathlike object or string '
-                       'representing a file).')
-        fwhm_desc = ('Gaussian kernel fwhm in mm (a float). Mutually exclusive '
-                    'with sigma. Basically, 2.3548 * sigma = fwhm.')
-        sigma_desc = ('Gaussian kernel sigma in mm (a float). Mutually '
-                     'exclusive with fwhm. Basically, 2.3548 * sigma = fwhm.')
+        in_file_desc = ('A 3D-T1 file to skull-strip (a pathlike object or string '
+                        'representing a file).')
         output_type_desc = ('Typecodes of the output NIfTI image formats (one '
-                           'of NIFTI, NIFTI_PAIR, NIFTI_GZ, NIFTI_PAIR_GZ).')
+                            'of NIFTI, NIFTI_PAIR, NIFTI_GZ, NIFTI_PAIR_GZ).')
         out_prefix_desc = ('Specify the string to be prepended to the '
                            'filenames of the smoothed image file(s) '
                            '(a string).')
 
         # Outputs description
-        out_file_desc = ('The smoothed files (a pathlike object or a '
-                        'string representing a file).')
+        out_file_desc = ('The skull-stripped files (a pathlike object or a '
+                         'string representing a file).')
 
-        # Inputs traits 
+        # Inputs traits
         self.add_trait("in_file",
                        File(output=False,
                             optional=False,
                             desc=in_file_desc))
 
-        self.add_trait("fwhm",
-                       Either(Undefined,
-                              Float(),
-                              default=6.0,
-                              output=False,
-                              optional=True,
-                              desc=fwhm_desc))
-
-        self.add_trait("sigma",
-                       Either(Undefined,
-                              Float(),
-                              default=Undefined,
-                              output=False,
-                              optional=True,
-                              desc=sigma_desc))
 
         self.add_trait("output_type",
                        Enum('NIFTI',
@@ -109,15 +90,11 @@ class Smooth(ProcessMIA):
                             desc=output_type_desc))
 
         self.add_trait("out_prefix",
-                       String('s',
+                       String('ss',
                               output=False,
                               optional=True,
                               desc=out_prefix_desc))
 
-        self.add_trait("outf",
-                       String(output=False,
-                              optional=True,
-                              userlevel=1))
 
         # Outputs traits
         self.add_trait("out_file",
@@ -126,12 +103,12 @@ class Smooth(ProcessMIA):
 
         self.init_default_traits()
 
-        # To suppress the "FSLOUTPUTTYPE environment
-        # variable is not set" nipype warning:
-        if not 'FSLOUTPUTTYPE' in os.environ:
-            os.environ['FSLOUTPUTTYPE'] = self.output_type
+        # # To suppress the "FSLOUTPUTTYPE environment
+        # # variable is not set" nipype warning:
+        # if not 'FSLOUTPUTTYPE' in os.environ:
+        #     os.environ['FSLOUTPUTTYPE'] = self.output_type
 
-        self.init_process('nipype.interfaces.fsl.Smooth')
+        self.init_process('nipype.interfaces.afni.SkullStrip')
 
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
@@ -140,39 +117,28 @@ class Smooth(ProcessMIA):
         bricks (self.outputs) and the associated tags (self.inheritance_dic),
         if defined here. In order not to include an output in the database,
         this output must be a value of the optional key 'notInDb' of the
-        self.outputs dictionary. To work properly this method must return 
+        self.outputs dictionary. To work properly this method must return
         self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Smooth, self).list_outputs()
+        super(SkullStripping, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
-        if self.sigma == Undefined and self.fwhm == Undefined:
-            print('\nInitialisation failed. Please, set one of the two input '
-                  'parameters sigma or fwhm ...!')
-            return
-
-        elif self.sigma != Undefined and self.fwhm != Undefined:
-            print('\nInitialisation failed. Both input parameters "sigma" and '
-                  '"fwhm" are mutually exclusive. Please, define only one of '
-                  'these two parameters (set the other as Undefined) ...!')
-            return
-
         if self.in_file:
-            
+
             if self.out_prefix == Undefined:
-                self.out_prefix = 's'
+                self.out_prefix = 'ss'
                 print('The out_prefix parameter is undefined. Automatically '
-                      'set to "s" ...')
-            
+                      'set to "ss" ...')
+
             if self.output_directory:
                 ifile = os.path.split(self.in_file)[-1]
 
                 try:
-                    fileName ,trail = ifile.rsplit('.', 1)
+                    fileName, trail = ifile.rsplit('.', 1)
 
                 except ValueError:
                     print('\nThe input image format is not recognised ...!')
@@ -182,49 +148,45 @@ class Smooth(ProcessMIA):
 
                     if trail in ['nii', 'img']:
 
-                        if self.output_type == 'NIFTI': trail = 'nii'
-                        elif self.output_type == 'NIFTI_PAIR': trail = 'img'
-                        elif self.output_type == 'NIFTI_GZ': trail = 'nii.gz'
+                        if self.output_type == 'NIFTI':
+                            trail = 'nii'
+                        elif self.output_type == 'NIFTI_PAIR':
+                            trail = 'img'
+                        elif self.output_type == 'NIFTI_GZ':
+                            trail = 'nii.gz'
                         elif self.output_type == 'NIFTI_PAIR_GZ':
-                                                                trail = 'img.gz'
-                        
+                            trail = 'img.gz'
+
                         self.outputs['out_file'] = os.path.join(
-                                       self.output_directory,
-                                       self.out_prefix + fileName + '.' + trail)
-                        self.outf = os.path.join(self.output_directory,
-                                                 self.out_prefix + fileName)
+                            self.output_directory,
+                            self.out_prefix + fileName + '.' + trail)
 
                     else:
-                         self.outputs['out_file'] = os.path.join(
-                                                        self.output_directory,
-                                                        self.out_prefix + ifile)
-                         print('\nThe input image format does not seem to be '
-                               'nii or img. This can prevent the process '
-                               'launch ...!')
+                        self.outputs['out_file'] = os.path.join(
+                            self.output_directory,
+                            self.out_prefix + ifile)
+                        print('\nThe input image format does not seem to be '
+                              'nii or img. This can prevent the process '
+                              'launch ...!')
 
                     self.inheritance_dict[self.outputs[
-                                                     'out_file']] = self.in_file
+                        'out_file']] = self.in_file
 
             else:
                 print('No output_directory was found...!\n')
                 return
-            
+
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(Smooth, self).run_process_mia()
+        super(SkullStripping, self).run_process_mia()
         self.process.in_file = self.in_file
-
-        if self.fwhm == Undefined:
-            self.process.sigma = self.sigma
-            self.process.trait('fwhm').optional = True
-
-        else:
-            self.process.fwhm = self.fwhm
-            self.process.trait('sigma').optional = True
-
         self.process.output_type = self.output_type
-        self.process.smoothed_file = self.outf
+        self.process.out_file = self.out_file
+
+        if self.out_prefix:
+            self.process.out_prefix = self.out_prefix
+
         return self.process.run(configuration_dict={})
