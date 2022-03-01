@@ -20,14 +20,6 @@ populse_mia.
 # for details.
 ##########################################################################
 
-# Capsul import
-#from capsul.api import StudyConfig, get_process_instance
-
-# nibabel import
-#import nibabel as nib
-
-# nipype imports
-#from nipype.interfaces import fsl
 from nipype.interfaces.base import File
 
 # populse_mia import
