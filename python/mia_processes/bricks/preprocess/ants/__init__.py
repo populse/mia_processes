@@ -8,3 +8,4 @@
 # for details.
 ##########################################################################
 
+from .processes import (N4BiasFieldCorrection)
