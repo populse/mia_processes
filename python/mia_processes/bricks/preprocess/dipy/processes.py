@@ -20,6 +20,10 @@ populse_mia.
 # for details.
 ##########################################################################
 
+# nibabel import
+import nibabel as nib
+import nibabel.processing as nibp
+
 # nipype imports
 from nipype.interfaces.base import File
 
@@ -29,7 +33,7 @@ from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 # Other import
 import os
 from traits.api import Either, Enum, Float, String, Undefined
-
+import numpy as np
 
 class Denoise(ProcessMIA):
     """
@@ -56,8 +60,13 @@ class Denoise(ProcessMIA):
         # Inputs description
         in_file_desc = ('A file to denoise (a pathlike object or string '
                         'representing a file).')
+        seg_file_desc = ('A segmentation file to calculate SNR (a pathlike '
+                         'object or string representing a file). Mutually '
+                         'exclusive with snr')
         snr_desc = ('Signal to noise ratio (a float). If undefined, SNR is '
-                    'estimated from in_file')
+                    'estimated from in_file and seg_file. If seg_file also '
+                    'undefined, SNR is estimated from in_file only. Mutually '
+                    'exclusive with seg_file')
         out_prefix_desc = ('Specify the string to be prepended to the '
                            'filenames of the smoothed image file(s) '
                            '(a string).')
@@ -71,6 +80,11 @@ class Denoise(ProcessMIA):
                        File(output=False,
                             optional=False,
                             desc=in_file_desc))
+
+        self.add_trait("seg_file",
+                       File(output=False,
+                            optional=True,
+                            desc=seg_file_desc))
 
         self.add_trait("snr",
                        Either(Undefined,
@@ -111,6 +125,11 @@ class Denoise(ProcessMIA):
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
         super(Denoise, self).list_outputs()
+
+        if self.seg_file and self.snr is not Either(Undefined, None):
+                print('\nInitialisation failed. Please, do not set both seg_file '
+                      'and snr ...!')
+                return
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
@@ -156,10 +175,32 @@ class Denoise(ProcessMIA):
         """Dedicated to the process launch step of the brick."""
         super(Denoise, self).run_process_mia()
         self.process.in_file = self.in_file
-        if self.snr is Undefined:
-            self.process.snr = None
+
+        if self.seg_file:
+            file_name = self.in_file
+            seg_file_name = self.seg_file
+
+            try:
+                img = nib.load(file_name)
+                seg_img = nib.load(seg_file_name)
+            except (nib.filebasedimages.ImageFileError,
+                    FileNotFoundError, TypeError) as e:
+                print("\nError with files, during "
+                      "initialisation: ", e)
+                img = None
+                seg_img = None
+
+            if (img is not None) and (seg_img is not None):
+                data = img.get_fdata()
+                mask = seg_img.get_fdata() == 2  # WM label
+                self.process.snr = float(np.mean(data[mask]) /
+                                         (data[mask].std() * np.sqrt(mask.sum() / (mask.sum() - 1))))
         else:
-            self.process.snr = self.snr
+            if self.snr is Undefined:
+                self.process.snr = None
+            else:
+                self.prcess.snr = self.snr
+
         self.process.out_file = self.out_file
 
         if self.out_prefix:
