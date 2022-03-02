@@ -38,13 +38,14 @@ from soma.qt_gui.qt_backend.Qt import QMessageBox
 
 # Other import
 import os
-
+import numpy as np
+from scipy import ndimage as sim
 
 class Resample(ProcessMIA):
     """
     *Resamples an image to the resolution of a reference image*
 
-    Please, see the complete documention for the `Resample brick in the populse.mia_processes web site
+    Please, see the complete documentation for the `Resample brick in the populse.mia_processes website
     https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/Resample.html
 
    """
@@ -489,7 +490,7 @@ class Threshold(ProcessMIA):
     """
     *Image thresholding*
 
-    Please, see the complete documention for the `Threshold brick in the populse.mia_processes web site
+    Please, see the complete documentation for the `Threshold brick in the populse.mia_processes website
     https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/Threshold.html
 
     """
@@ -749,8 +750,8 @@ class Binarize(ProcessMIA):
     """
     *Image binarization*
 
-    Please, see the complete documention for the `Binarize' brick in the populse.mia_processes website
-    https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/Threshold.html
+    Please, see the complete documentation for the `Binarize' brick in the populse.mia_processes website
+    https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/Binarize.html
 
     """
 
@@ -794,7 +795,7 @@ class Binarize(ProcessMIA):
                                     desc=thresh_low_desc))
 
         self.add_trait("suffix",
-                       traits.String("_002",
+                       traits.String("_bin",
                                      output=False,
                                      optional=True,
                                      desc=suffix_desc))
@@ -941,7 +942,7 @@ class Binarize(ProcessMIA):
 
             except (nib.filebasedimages.ImageFileError,
                     FileNotFoundError, TypeError) as e:
-                print("\nError with files_to_resample, during "
+                print("\nError with files to binarize, during "
                       "initialisation: ", e)
                 img = None
 
@@ -959,6 +960,466 @@ class Binarize(ProcessMIA):
                 file_out = os.path.join(self.output_directory,
                                          (self.prefix.strip() +
                                           file_name_no_ext +
-                                          self.suffix.strip() +
+                                          self.suffix.strip() + '.' +
                                           file_extension))
                 nib.save(maskimg, file_out)
+
+class Enhance(ProcessMIA):
+    """
+    *Image enhancing*
+
+    Please, see the complete documentation for the `Enhance' brick in the populse.mia_processes website
+    https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/Enhance.html
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation / instanciation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(Enhance, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = []
+
+        # Inputs description
+        in_files_desc = ('A list of items with string elements corresponding '
+                         'to existing path files.')
+        prefix_desc = 'Prefix of the output image (a string).'
+        suffix_desc = 'Suffix of the output image (a string).'
+
+        # Outputs description
+        out_files_desc = ('Path of the scan after enhancing '
+                          '(a pathlike object or string representing a file, or '
+                          'a list of pathlike objects or strings representing a '
+                          'file).')
+
+        # Inputs traits
+        self.add_trait("in_files",
+                       InputMultiPath(traits.Either(ImageFileSPM(),
+                                                    traits.List(ImageFileSPM())),
+                                      output=False,
+                                      desc=in_files_desc))
+
+        self.add_trait("suffix",
+                       traits.String("_enh",
+                                     output=False,
+                                     optional=True,
+                                     desc=suffix_desc))
+
+        self.add_trait("prefix",
+                       traits.String("",
+                                     output=False,
+                                     optional=True,
+                                     desc=prefix_desc))
+
+        # Outputs traits
+        self.add_trait("out_files",
+                       OutputMultiPath(File(),
+                                       output=True,
+                                       desc=out_files_desc))
+
+        self.init_default_traits()
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(Enhance, self).list_outputs()
+
+        # Outputs definition
+        if self.in_files:
+
+            files_name = self.in_files
+
+            if ((not self.suffix) or (self.suffix.isspace()) or
+                    self.suffix in [Undefined, "<undefined>"]):
+                self.suffix = " "
+
+            if ((not self.prefix) or (self.prefix.isspace()) or
+                    (self.prefix in [Undefined, "<undefined>"])):
+                self.prefix = " "
+
+            files = []
+            flag = True  # If False, suf/pref check will not be performed later
+
+            for file_name1 in files_name:
+                path, file_name = os.path.split(file_name1)
+
+                if (self.suffix == " " and
+                        self.prefix == " " and
+                        path == self.output_directory and flag is True):
+                    msg = QMessageBox()
+                    msg.setIcon(QMessageBox.Warning)
+                    msg.setWindowTitle("mia_processes - "
+                                       "Threshold brick Warning!")
+                    msg.setText("Suffix and prefix input parameters are not "
+                                "defined or consist only of one or more white "
+                                "spaces.\nThe {0} input parameter will be "
+                                "overwritten ...\n Yes or "
+                                "Abort?".format(file_name1))
+                    msg.setStandardButtons(QMessageBox.Yes | QMessageBox.YesToAll |
+                                           QMessageBox.Abort)
+                    retval = msg.exec_()
+
+                    if retval != QMessageBox.Abort:
+                        (file_name_no_ext,
+                         file_extension) = os.path.splitext(file_name)
+                        files.append(os.path.join(self.output_directory,
+                                                  (self.prefix.strip() +
+                                                   file_name_no_ext +
+                                                   self.suffix.strip() +
+                                                   file_extension)))
+                        print('\nBinarize brick warning: the out_files output '
+                              'parameter is the same as the in_files input '
+                              'parameter (suffix and prefix are not defined):'
+                              '\n{0} will be overwrited ...'.format(file_name1))
+
+                        if retval == QMessageBox.YesToAll:
+                            flag = False
+                            print('\nYesToAll selected: end of overwrite '
+                                  'checks on input images ...')
+                    else:
+                        files_name = []
+                        print('\nAborted. Please check your input parameters ...')
+                        break
+
+                else:
+                    (file_name_no_ext,
+                     file_extension) = os.path.splitext(file_name)
+                    files.append(os.path.join(self.output_directory,
+                                              (self.prefix.strip() +
+                                               file_name_no_ext +
+                                               self.suffix.strip() +
+                                               file_extension)))
+
+            if files_name:
+                self.outputs['out_files'] = files
+
+            else:
+                print('- There was no output file deducted during '
+                      'initialisation. Please check the input parameters...!')
+
+        # tags inheritance (optional)
+        if self.outputs:
+
+            for key, val in self.outputs.items():
+
+                if key == "out_files":
+
+                    for in_val, out_val in zip(files_name, val):
+                        _, fileOval = os.path.split(out_val)
+                        fileOval_no_ext, _ = os.path.splitext(fileOval)
+                        _, fileIval = os.path.split(in_val)
+                        fileIval_no_ext, _ = os.path.splitext(fileIval)
+
+                        if ((self.prefix) and
+                                (fileOval_no_ext.startswith(self.prefix))):
+                            fileOval_no_ext = fileOval_no_ext[len(self.prefix):]
+
+                        if ((self.suffix) and
+                                (fileOval_no_ext.endswith(self.suffix))):
+                            fileOval_no_ext = fileOval_no_ext[:-len(
+                                self.suffix)]
+
+                        if fileOval_no_ext == fileIval_no_ext:
+                            self.inheritance_dict[out_val] = in_val
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(Enhance, self).run_process_mia()
+
+        files_name = self.in_files
+
+        for file_name in files_name:
+            # Image processing
+            try:
+                img = nib.load(file_name)
+
+            except (nib.filebasedimages.ImageFileError,
+                    FileNotFoundError, TypeError) as e:
+                print("\nError with file to enhance, during "
+                      "initialisation: ", e)
+                img = None
+
+            if img is not None:
+                data = img.get_fdata().astype(np.float32)
+                range_max = np.percentile(data[data > 0], 99.98)
+                range_min = np.median(data[data > 0])
+
+                # Resample signal excess pixels
+                excess = np.where(data > range_max)
+                data[excess] = 0
+                data[excess] = np.random.choice(data[data > range_min], size=len(excess[0]))
+
+                out_image = img.__class__(data.astype("uint8"), img.affine, img.header)
+
+                # Image save
+                _, file_name = os.path.split(file_name)
+                file_name_no_ext, file_extension = os.path.splitext(file_name)
+
+                file_out = os.path.join(self.output_directory,
+                                         (self.prefix.strip() +
+                                          file_name_no_ext +
+                                          self.suffix.strip() + '.' +
+                                          file_extension))
+                nib.save(out_image, file_out)
+
+
+class GradientThreshold(ProcessMIA):
+    """
+    * Computes a threshold from the histogram of the magnitude gradient image *
+
+    Please, see the complete documentation for the `Gradient' brick in the populse.mia_processes website
+    https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/Gradient.html
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation / instanciation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(GradientThreshold, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = []
+
+        # Inputs description
+        in_file_desc = 'An existing path file.'
+        seg_file_desc = 'An existing path of segmentation file.'
+        prefix_desc = 'Prefix of the output image (a string).'
+        suffix_desc = 'Suffix of the output image (a string).'
+
+        # Outputs description
+        out_files_desc = ('Path of the thresholded scan '
+                          '(a pathlike object or string representing a file, or '
+                          'a list of pathlike objects or strings representing a '
+                          'file).')
+
+        # Inputs traits
+        self.add_trait("in_file",
+                       ImageFileSPM(output=False,
+                                    optional=False,
+                                    desc=in_file_desc))
+
+        self.add_trait("seg_file",
+                       ImageFileSPM(output=False,
+                                    optional=False,
+                                    desc=in_file_desc))
+
+        self.add_trait("suffix",
+                       traits.String("_grad",
+                                     output=False,
+                                     optional=True,
+                                     desc=suffix_desc))
+
+        self.add_trait("prefix",
+                       traits.String("",
+                                     output=False,
+                                     optional=True,
+                                     desc=prefix_desc))
+
+        # Outputs traits
+        self.add_trait("out_file",
+                       File(output=True,
+                            desc=out_files_desc))
+
+        self.init_default_traits()
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(GradientThreshold, self).list_outputs()
+
+        # Outputs definition
+        if self.in_file:
+
+            file_name = self.in_file
+
+            if ((not self.suffix) or (self.suffix.isspace()) or
+                    self.suffix in [Undefined, "<undefined>"]):
+                self.suffix = " "
+
+            if ((not self.prefix) or (self.prefix.isspace()) or
+                    (self.prefix in [Undefined, "<undefined>"])):
+                self.prefix = " "
+
+            files = []
+            flag = True  # If False, suf/pref check will not be performed later
+
+            path, file_name = os.path.split(file_name)
+
+            if (self.suffix == " " and
+                    self.prefix == " " and
+                    path == self.output_directory and flag is True):
+                msg = QMessageBox()
+                msg.setIcon(QMessageBox.Warning)
+                msg.setWindowTitle("mia_processes - "
+                                   "Threshold brick Warning!")
+                msg.setText("Suffix and prefix input parameters are not "
+                            "defined or consist only of one or more white "
+                            "spaces.\nThe {0} input parameter will be "
+                            "overwritten ...\n Yes or "
+                            "Abort?".format(file_name))
+                msg.setStandardButtons(QMessageBox.Yes | QMessageBox.YesToAll |
+                                       QMessageBox.Abort)
+                retval = msg.exec_()
+
+                if retval != QMessageBox.Abort:
+                    (file_name_no_ext,
+                     file_extension) = os.path.splitext(file_name)
+                    files.append(os.path.join(self.output_directory,
+                                              (self.prefix.strip() +
+                                               file_name_no_ext +
+                                               self.suffix.strip() +
+                                               file_extension)))
+                    print('\nBinarize brick warning: the out_files output '
+                          'parameter is the same as the in_files input '
+                          'parameter (suffix and prefix are not defined):'
+                          '\n{0} will be overwrited ...'.format(file_name))
+
+                    if retval == QMessageBox.YesToAll:
+                        flag = False
+                        print('\nYesToAll selected: end of overwrite '
+                              'checks on input images ...')
+                else:
+                    file_name = []
+                    print('\nAborted. Please check your input parameters ...')
+
+            else:
+                (file_name_no_ext,
+                 file_extension) = os.path.splitext(file_name)
+                files.append(os.path.join(self.output_directory,
+                                          (self.prefix.strip() +
+                                           file_name_no_ext +
+                                           self.suffix.strip() +
+                                           file_extension)))
+
+            if file_name:
+                self.outputs['out_files'] = files
+
+            else:
+                print('- There was no output file deducted during '
+                      'initialisation. Please check the input parameters...!')
+
+        # tags inheritance (optional)
+        if self.outputs:
+
+            for key, val in self.outputs.items():
+
+                if key == "out_file":
+                    in_val = file_name
+                    out_val = val
+
+                    _, fileOval = os.path.split(out_val)
+                    fileOval_no_ext, _ = os.path.splitext(fileOval)
+                    _, fileIval = os.path.split(in_val)
+                    fileIval_no_ext, _ = os.path.splitext(fileIval)
+
+                    if ((self.prefix) and
+                            (fileOval_no_ext.startswith(self.prefix))):
+                        fileOval_no_ext = fileOval_no_ext[len(self.prefix):]
+
+                    if ((self.suffix) and
+                            (fileOval_no_ext.endswith(self.suffix))):
+                        fileOval_no_ext = fileOval_no_ext[:-len(
+                            self.suffix)]
+
+                    if fileOval_no_ext == fileIval_no_ext:
+                        self.inheritance_dict[out_val] = in_val
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(GradientThreshold, self).run_process_mia()
+
+        file_name = self.in_file
+        seg_file_name = self.seg_file
+
+        # Image processing
+        try:
+            img = nib.load(file_name)
+            seg_img = nib.load(seg_file_name)
+
+        except (nib.filebasedimages.ImageFileError,
+                FileNotFoundError, TypeError) as e:
+            print("\nError with file to enhance, during "
+                  "initialisation: ", e)
+            img = None
+            seg_img = None
+
+        if (img is not None) and (seg_img is not None):
+            # Image gradient
+            data = img.get_fdata().astype(np.float32)
+            data_max = np.percentile(data.reshape(-1), 99.5)
+            data *= 100 / data_max
+            grad = sim.gaussian_gradient_magnitude(data, 3.0)
+            grad_max = np.percentile(grad.reshape(-1), 99.5)
+            grad *= 100.
+            grad /= grad_max
+
+            # Gradient threshold
+            struc = sim.iterate_structure(sim.generate_binary_structure(3, 2), 2)
+            mask = np.zeros_like(grad, dtype=np.uint8)
+            mask[grad > 15.] = 1
+
+            seg_data = seg_img.get_fdata().astype(np.uint8)
+            seg_data[seg_data > 0] = 1
+            seg_data = sim.binary_dilation(
+                seg_data, struc, iterations=2, border_value=1).astype(np.uint8)
+            mask[seg_data > 0] = 1
+            mask = sim.binary_closing(mask, struc, iterations=2).astype(np.uint8)
+
+            label_im, nb_labels = sim.label(mask)
+            artmsk = np.zeros_like(mask)
+            if nb_labels > 2:
+                sizes = sim.sum(mask, label_im, list(range(nb_labels + 1)))
+                ordered = list(reversed(sorted(zip(sizes, list(range(nb_labels + 1))))))
+                for _, label in ordered[2:]:
+                    mask[label_im == label] = 0
+                    artmsk[label_im == label] = 1
+
+            mask = sim.binary_fill_holes(mask, struc).astype(np.uint8)
+
+            out_image = img.__class__(mask.astype("uint8"), img.affine, img.header)
+
+            # Image save
+            _, file_name = os.path.split(file_name)
+            file_name_no_ext, file_extension = os.path.splitext(file_name)
+
+            file_out = os.path.join(self.output_directory,
+                                     (self.prefix.strip() +
+                                      file_name_no_ext +
+                                      self.suffix.strip() + '.' +
+                                      file_extension))
+            nib.save(out_image, file_out)
