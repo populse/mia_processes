@@ -83,7 +83,7 @@ class SkullStripping(ProcessMIA):
                             desc=output_type_desc))
 
         self.add_trait("out_prefix",
-                       String('ss',
+                       String('ss_',
                               output=False,
                               optional=True,
                               desc=out_prefix_desc))
@@ -226,12 +226,14 @@ class Calc(ProcessMIA):
                             desc=in_file_a_desc))
 
         self.add_trait("in_file_b",
-                       File(output=False,
+                       File(value=Undefined,
+                            output=False,
                             optional=True,
                             desc=in_file_b_desc))
 
         self.add_trait("in_file_c",
-                       File(output=False,
+                       File(value=Undefined,
+                            output=False,
                             optional=True,
                             desc=in_file_c_desc))
 
