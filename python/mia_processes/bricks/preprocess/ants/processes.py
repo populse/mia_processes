@@ -633,3 +633,181 @@ class Registration(ProcessMIA):
             self.process.out_prefix = self.out_prefix
 
         return self.process.run(configuration_dict={})
+
+
+class ApplyTransforms(ProcessMIA):
+    """
+    * Registers a moving image to a fixed image using a predefined
+     (sequence of) cost function(s) and transformation operations.
+     Uses a sequence of three transforms: Rigid, Affine and SyN*
+
+    Please, see the complete documentation for the `Registration' brick in the populse.mia_processes website
+    <https://populse.github.io/mia_processes/documentation/bricks/preprocess/afni/N4BiasFieldCorrection.html>`_
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instanciation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(ApplyTransforms, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = ['ants', 'nipype']
+
+        # Inputs description
+        input_image_desc = ('Image to apply transformation to. (a pathlike object '
+                            'or string representing an existing file)')
+
+        reference_image_desc = 'Reference image space that you wish to warp into ' \
+                               '(a pathlike object or string representing an existing file)'
+
+        transforms_desc = 'Transform files that will be applied in reverse order.'
+
+        interpolation_desc = 'Choice of interpolator. (‘Linear’ or ‘NearestNeighbor’ ' \
+                             'or ‘CosineWindowedSinc’ or ‘WelchWindowedSinc’ or ' \
+                             '‘HammingWindowedSinc’ or ‘LanczosWindowedSinc’ or ' \
+                             '‘MultiLabel’ or ‘Gaussian’ or ‘BSpline’)'
+
+        out_prefix_desc = ('Specify the string to be prepended to the '
+                           'filenames of the corrected image file '
+                           '(a string).')
+
+        # Outputs description
+        output_image_desc = ('Warped image (a pathlike object or string representing '
+                        'an existing file).')
+
+        # Inputs traits
+        self.add_trait("input_image",
+                       File(output=False,
+                            optional=False,
+                            desc=input_image_desc))
+
+        self.add_trait("reference_image",
+                       File(output=False,
+                            optional=False,
+                            desc=reference_image_desc))
+
+        self.add_trait("transforms",
+                       Either(InputMultiPath(File()),
+                              'Identity',
+                              default='identity',
+                              output=False,
+                              optional=False,
+                              desc=transforms_desc))
+
+        self.add_trait("interpolation",
+                       Enum('Linear',
+                            'NearestNeighbor',
+                            'CosineWindowedSinc',
+                            'WelchWindowedSinc',
+                            'HammingWindowedSinc',
+                            'LanczosWindowedSinc',
+                            'MultiLabel',
+                            'Gaussian'
+                            'BSpline',
+                            default='Linear',
+                            output=False,
+                            optional=True,
+                            desc=interpolation_desc))
+
+        self.add_trait("out_prefix",
+                       String('t_',
+                              output=False,
+                              optional=True,
+                              desc=out_prefix_desc))
+
+        # Outputs traits
+        self.add_trait("output_image",
+                       File(output=True,
+                            desc=output_image_desc))
+
+        self.init_default_traits()
+
+        self.init_process('nipype.interfaces.ants.ApplyTransforms')
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(ApplyTransforms, self).list_outputs()
+
+        if (self.sampling_percentage == Undefined and self.sampling_strategy != Undefined) or \
+           (self.sampling_percentage != Undefined and self.sampling_strategy == Undefined):
+            print('\nInitialisation failed. Please, set both (or none) of the two input '
+                  'parameters sampling_percentage and sampling_strategy ...!')
+            return
+
+        # Outputs definition and tags inheritance (optional)
+        if self.input_image:
+
+            if self.out_prefix == Undefined:
+                self.out_prefix = 't_'
+                print('The out_prefix parameter is undefined. Automatically '
+                      'set to "AffineTransform_" ...')
+
+            if self.output_directory:
+                ifile = os.path.split(self.moving_image)[-1]
+
+                try:
+                    fileName, trail = ifile.rsplit('.', 1)
+
+                except ValueError:
+                    print('\nThe input image format is not recognized ...!')
+                    return
+
+                else:
+
+                    if trail in ['nii', 'nii.gz', 'img']:
+                        print('\nThe input image format does not seem to be '
+                              'nii or img. This can prevent the process '
+                              'launch ...!')
+
+                    self.outputs['output_image'] = os.path.join(
+                        self.output_directory,
+                        self.out_prefix + ifile)
+
+                    self.inheritance_dict[self.outputs[
+                        'output_image']] = self.input_image
+
+            else:
+                print('No output_directory was found...!\n')
+                return
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(ApplyTransforms, self).run_process_mia()
+
+        self.process.input_image = self.input_image
+        self.process.reference_image = self.reference_image
+        self.process.transforms = self.transforms
+
+        self.process.dimension = 3
+        self.process.default_value = 0.0
+        self.process.interpolation = self.interpolation
+
+        self.process.output_image = self.output_image
+        self.process.composite_transform = self.composite_transform
+        self.process.inverse_composite_transform = self.inverse_composite_transform
+
+        if self.out_prefix:
+            self.process.out_prefix = self.out_prefix
+
+        return self.process.run(configuration_dict={})
