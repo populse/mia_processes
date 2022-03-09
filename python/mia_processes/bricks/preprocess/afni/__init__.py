@@ -8,4 +8,4 @@
 # for details.
 ##########################################################################
 
-from .processes import (SkullStripping, Calc)
+from .processes import (Calc, SkullStripping)

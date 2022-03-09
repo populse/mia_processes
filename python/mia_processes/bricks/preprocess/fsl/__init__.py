@@ -8,4 +8,4 @@
 # for details.
 ##########################################################################
 
-from .processes import Smooth
+from .processes import (Segment, Smooth)

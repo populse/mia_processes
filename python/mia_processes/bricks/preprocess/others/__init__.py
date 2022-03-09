@@ -8,4 +8,7 @@
 # for details.
 ##########################################################################
 
-from .processing import (Resample, Threshold, Binarize, ConformImage)
+from .processing import (ArtifactMask, Binarize, ConformImage,
+                         Enhance, GradientThreshold, Mask,
+                         Resample, RotationMask, Template,
+                         Threshold)

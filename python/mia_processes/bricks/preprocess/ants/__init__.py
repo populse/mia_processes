@@ -8,4 +8,5 @@
 # for details.
 ##########################################################################
 
-from .processes import (N4BiasFieldCorrection, AffineInitializer)
+from .processes import (AffineInitializer, ApplyTransforms,
+                        N4BiasFieldCorrection, Registration)
