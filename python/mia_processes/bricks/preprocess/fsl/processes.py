@@ -31,6 +31,120 @@ import os
 from traits.api import Either, Enum, Float, String, Undefined, List, Bool
 
 
+class Segment(ProcessMIA):
+    """
+    * Brain tissue segmentation using fsl.FAST *
+
+    Please, see the complete documention for the `Segment' brick in the populse.mia_processes web site
+    <https://populse.github.io/mia_processes/documentation/bricks/preprocess/fsl/Smooth.html>`_
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instanciation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(Segment, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = ['fsl', 'nipype']
+
+        # Inputs description
+        in_file_desc = ('Files to Segment (a list of items which are existing '
+                         'file names).')
+        segments_desc = ('Outputs a separate binary image for each tissue type '
+                         '(a boolean).')
+        out_basename_desc = 'base name of output files (a file name).'
+
+        # Outputs description
+        tissue_class_map_desc = 'path/name of binary segmented volume file '
+        partial_volume_files_desc = ('Partial volume files (a list of items '
+                                     'which are file names.')
+
+        # Inputs traits
+        self.add_trait("in_file",
+                       File(output=False,
+                            optional=False,
+                            desc=in_file_desc))
+
+        self.add_trait("segments",
+                       Bool(True,
+                            output=False,
+                            optional=True,
+                            desc=segments_desc))
+
+        self.add_trait("out_basename",
+                       String('segment',
+                              output=False,
+                              optional=True,
+                              desc=out_basename_desc))
+
+        # Outputs traits
+        self.add_trait("tissue_class_map",
+                       File(output=True,
+                            desc=tissue_class_map_desc))
+
+        self.add_trait("partial_volume_files",
+                       List(File(),
+                            output=True,
+                            desc=partial_volume_files_desc))
+
+        self.init_default_traits()
+
+        # To suppress the "FSLOUTPUTTYPE environment
+        # variable is not set" nipype warning:
+        if not 'FSLOUTPUTTYPE' in os.environ:
+            os.environ['FSLOUTPUTTYPE'] = self.output_type
+
+        self.init_process('nipype.interfaces.fsl.FAST')
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(Segment, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.in_file:
+            if self.output_directory:
+                self.inheritance_dict[self.outputs[
+                    'tissue_class_map']] = self.in_file
+
+            else:
+                print('No output_directory was found...!\n')
+                return
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(Segment, self).run_process_mia()
+
+        self.process.in_files = self.in_file
+        self.process.segments = self.segments
+        self.process.out_basename = self.out_basename
+
+        self.process._tissue_class_map = self.tissue_class_map
+        self.process._partial_volume_files = self.partial_volume_files
+
+        return self.process.run(configuration_dict={})
+
+
 class Smooth(ProcessMIA):
     """
     *3D Gaussian smoothing of image volumes*
@@ -223,118 +337,4 @@ class Smooth(ProcessMIA):
 
         self.process.output_type = self.output_type
         self.process.smoothed_file = self.outf
-        return self.process.run(configuration_dict={})
-
-
-class Segment(ProcessMIA):
-    """
-    * Brain tissue segmentation using fsl.FAST *
-
-    Please, see the complete documention for the `Segment' brick in the populse.mia_processes web site
-    <https://populse.github.io/mia_processes/documentation/bricks/preprocess/fsl/Smooth.html>`_
-
-    """
-
-    def __init__(self):
-        """Dedicated to the attributes initialisation/instanciation.
-
-        The input and output plugs are defined here. The special
-        'self.requirement' attribute (optional) is used to define the
-        third-party products necessary for the running of the brick.
-        """
-        # Initialisation of the objects needed for the launch of the brick
-        super(Segment, self).__init__()
-
-        # Third party softwares required for the execution of the brick
-        self.requirement = ['fsl', 'nipype']
-
-        # Inputs description
-        in_file_desc = ('Files to Segment (a list of items which are existing '
-                         'file names).')
-        segments_desc = ('Outputs a separate binary image for each tissue type '
-                         '(a boolean).')
-        out_basename_desc = 'base name of output files (a file name).'
-
-        # Outputs description
-        tissue_class_map_desc = 'path/name of binary segmented volume file '
-        partial_volume_files_desc = ('Partial volume files (a list of items '
-                                     'which are file names.')
-
-        # Inputs traits
-        self.add_trait("in_file",
-                       File(output=False,
-                            optional=False,
-                            desc=in_file_desc))
-
-        self.add_trait("segments",
-                       Bool(True,
-                            output=False,
-                            optional=True,
-                            desc=segments_desc))
-
-        self.add_trait("out_basename",
-                       String('segment',
-                              output=False,
-                              optional=True,
-                              desc=out_basename_desc))
-
-        # Outputs traits
-        self.add_trait("tissue_class_map",
-                       File(output=True,
-                            desc=tissue_class_map_desc))
-
-        self.add_trait("partial_volume_files",
-                       List(File(),
-                            output=True,
-                            desc=partial_volume_files_desc))
-
-        self.init_default_traits()
-
-        # To suppress the "FSLOUTPUTTYPE environment
-        # variable is not set" nipype warning:
-        if not 'FSLOUTPUTTYPE' in os.environ:
-            os.environ['FSLOUTPUTTYPE'] = self.output_type
-
-        self.init_process('nipype.interfaces.fsl.FAST')
-
-    def list_outputs(self, is_plugged=None):
-        """Dedicated to the initialisation step of the brick.
-
-        The main objective of this method is to produce the outputs of the
-        bricks (self.outputs) and the associated tags (self.inheritance_dic),
-        if defined here. In order not to include an output in the database,
-        this output must be a value of the optional key 'notInDb' of the
-        self.outputs dictionary. To work properly this method must return
-        self.make_initResult() object.
-
-        :param is_plugged: the state, linked or not, of the plugs.
-        :returns: a dictionary with requirement, outputs and inheritance_dict.
-        """
-        # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Segment, self).list_outputs()
-
-        # Outputs definition and tags inheritance (optional)
-        if self.in_file:
-            if self.output_directory:
-                self.inheritance_dict[self.outputs[
-                    'tissue_class_map']] = self.in_file
-
-            else:
-                print('No output_directory was found...!\n')
-                return
-
-        # Return the requirement, outputs and inheritance_dict
-        return self.make_initResult()
-
-    def run_process_mia(self):
-        """Dedicated to the process launch step of the brick."""
-        super(Segment, self).run_process_mia()
-
-        self.process.in_files = self.in_file
-        self.process.segments = self.segments
-        self.process.out_basename = self.out_basename
-
-        self.process._tissue_class_map = self.tissue_class_map
-        self.process._partial_volume_files = self.partial_volume_files
-
         return self.process.run(configuration_dict={})
