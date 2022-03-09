@@ -1909,6 +1909,7 @@ class Template(ProcessMIA):
         template_spec = self.in_template_spec or {}
         template_spec["desc"] = template_spec.get("desc", None)
         template_spec["atlas"] = template_spec.get("atlas", None)
+        template_spec["suffix"] = template_spec.get("suffix", None)
         template_spec["resolution"] = template_spec.pop(
             "res", template_spec.get("resolution", self.default_resolution)
         )
@@ -1928,5 +1929,5 @@ class Template(ProcessMIA):
                   "template (got "{1}"). Please revise your template argument.""",
                   self.in_template, template_spec)
 
-        self.template_path = tpl_target_path
+        self.template_path = str(tpl_target_path)
         self.template_spec = common_spec
