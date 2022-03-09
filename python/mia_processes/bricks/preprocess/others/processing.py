@@ -27,7 +27,8 @@ import nibabel.processing as nibp
 
 # nipype import
 from nipype.interfaces.base import (OutputMultiPath, InputMultiPath, File,
-                                    traits, TraitListObject, Undefined)
+                                    traits, TraitListObject, Undefined,
+                                    DictStrStr, Str)
 from nipype.interfaces.spm.base import ImageFileSPM
 
 # populse_mia import
@@ -40,6 +41,9 @@ from soma.qt_gui.qt_backend.Qt import QMessageBox
 import os
 import numpy as np
 from scipy import ndimage as sim
+
+# import templateflow to get anatomical templates
+from templateflow import get as get_template
 
 class Resample(ProcessMIA):
     """
@@ -1613,6 +1617,7 @@ class ConformImage(ProcessMIA):
                                       file_extension))
             nib.save(out_img, file_out)
 
+
 class Mask(ProcessMIA):
     """
     * Mask image *
@@ -1816,3 +1821,112 @@ class Mask(ProcessMIA):
                                       self.suffix.strip() + '.' +
                                       file_extension))
             nib.save(maskimg, file_out)
+
+
+class Template(ProcessMIA):
+    """
+    * Get template image from templateflow *
+
+    Please, see the complete documentation for the `Template' brick in the populse.mia_processes website
+    https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/Binarize.html
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation / instanciation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(Template, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = []
+
+        # Inputs description
+        in_template_desc = 'Template Name (a string).'
+        in_template_spec_desc = 'Required specifications.'
+        default_resolution_desc = 'Default resolution of the template.'
+
+        # Outputs description
+        template_path_desc = ('Path of the template (a pathlike object '
+                              'or string representing a file).')
+        template_spec_desc = 'Spec of the template (a dictionary of strings)'
+
+        # Inputs traits
+        self.add_trait("in_template",
+                       traits.String(output=False,
+                                     optional=False,
+                                     desc=in_template_desc))
+
+        self.add_trait("in_template_spec",
+                       DictStrStr(None,
+                                  output=False,
+                                  optional=True,
+                                  desc=in_template_spec_desc))
+
+        self.add_trait("default_resolution",
+                       traits.Int(1,
+                                  output=False,
+                                  optional=True,
+                                  desc=default_resolution_desc))
+
+        # Outputs traits
+        self.add_trait("template_path",
+                       traits.String(output=True,
+                                     desc=template_path_desc))
+
+        self.add_trait("template_spec",
+                       DictStrStr(output=True,
+                                  desc=template_spec_desc))
+
+        self.init_default_traits()
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(Template, self).list_outputs()
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(Template, self).run_process_mia()
+
+        # Massage spec (start creating if None)
+        template_spec = self.in_template_spec or {}
+        template_spec["desc"] = template_spec.get("desc", None)
+        template_spec["atlas"] = template_spec.get("atlas", None)
+        template_spec["resolution"] = template_spec.pop(
+            "res", template_spec.get("resolution", self.default_resolution)
+        )
+
+        common_spec = {"resolution": template_spec["resolution"]}
+        if "cohort" in template_spec:
+            common_spec["cohort"] = template_spec["cohort"]
+
+        tpl_target_path = get_template(self.in_template, **template_spec)
+        if not tpl_target_path:
+            print("""\nCould not find template "{0}" with specs={1}. Please revise "
+                  "your template argument.""", self.in_template, template_spec)
+            tpl_target_path = ''
+
+        if isinstance(tpl_target_path, list):
+            print("""\nThe available template modifiers ({0}) did not select a unique "
+                  "template (got "{1}"). Please revise your template argument.""",
+                  self.in_template, template_spec)
+
+        self.template_path = tpl_target_path
+        self.template_spec = common_spec
