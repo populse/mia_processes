@@ -476,6 +476,7 @@ class Registration(ProcessMIA):
 
         self.add_trait("sampling_percentage",
                        List(Float(min=0.0, max=1.0),
+                            default=Undefined,
                             minlen=3, maxlen=3,
                             output=False,
                             optional=True,
@@ -485,6 +486,7 @@ class Registration(ProcessMIA):
                        List(Enum('None',
                                  'Regular',
                                  'Random'),
+                            default=Undefined,
                             minlen=3, maxlen=3,
                             output=False,
                             optional=True,
@@ -529,6 +531,12 @@ class Registration(ProcessMIA):
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
         super(Registration, self).list_outputs()
+
+        if (self.sampling_percentage == Undefined and self.sampling_strategy != Undefined) or \
+           (self.sampling_percentage != Undefined and self.sampling_strategy == Undefined):
+            print('\nInitialisation failed. Please, set both (or none) of the two input '
+                  'parameters sampling_percentage and sampling_strategy ...!')
+            return
 
         # Outputs definition and tags inheritance (optional)
         if self.moving_image:
