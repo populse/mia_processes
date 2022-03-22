@@ -51,7 +51,7 @@ import numpy as np
 from scipy import ndimage as sim
 
 # import templateflow to get anatomical templates
-from templateflow import get as get_template
+from templateflow.api import get as get_template
 from statsmodels.robust.scale import mad
 
 
