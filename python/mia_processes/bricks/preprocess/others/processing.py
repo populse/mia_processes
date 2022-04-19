@@ -517,7 +517,7 @@ class Binarize(ProcessMIA):
 
 class ConformImage(ProcessMIA):
     """
-    * Computes a threshold from the histogram of the magnitude gradient image *
+    * Conform image to standard *
 
     Please, see the complete documentation for the `ConformImage' brick in the populse.mia_processes website
     https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/ConformImage.html
@@ -543,7 +543,7 @@ class ConformImage(ProcessMIA):
         suffix_desc = 'Suffix of the output image (a string).'
 
         # Outputs description
-        out_file_desc = ('Path of the thresholded scan '
+        out_file_desc = ('Path of the conformed scan '
                           '(a pathlike object or string representing a file).')
 
         # Inputs traits
@@ -598,7 +598,7 @@ class ConformImage(ProcessMIA):
                     (self.prefix in [Undefined, "<undefined>"])):
                 self.prefix = " "
 
-            files = []
+            file = ''
 
             path, file_name = os.path.split(file_name)
 
@@ -620,11 +620,11 @@ class ConformImage(ProcessMIA):
                 if retval != QMessageBox.Abort:
                     (file_name_no_ext,
                      file_extension) = os.path.splitext(file_name)
-                    files.append(os.path.join(self.output_directory,
-                                              (self.prefix.strip() +
-                                               file_name_no_ext +
-                                               self.suffix.strip() +
-                                               file_extension)))
+                    file = os.path.join(self.output_directory,
+                                        (self.prefix.strip() +
+                                         file_name_no_ext +
+                                         self.suffix.strip() +
+                                         file_extension))
                     print('\nConformImage brick warning: the out_file output '
                           'parameter is the same as the in_files input '
                           'parameter (suffix and prefix are not defined):'
@@ -637,14 +637,14 @@ class ConformImage(ProcessMIA):
             else:
                 (file_name_no_ext,
                  file_extension) = os.path.splitext(file_name)
-                files.append(os.path.join(self.output_directory,
-                                          (self.prefix.strip() +
-                                           file_name_no_ext +
-                                           self.suffix.strip() +
-                                           file_extension)))
+                file = os.path.join(self.output_directory,
+                                    (self.prefix.strip() +
+                                     file_name_no_ext +
+                                     self.suffix.strip() +
+                                     file_extension))
 
             if file_name:
-                self.outputs['out_file'] = files
+                self.outputs['out_file'] = file
 
             else:
                 print('- There was no output file deducted during '
