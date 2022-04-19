@@ -40,7 +40,7 @@ class AffineInitializer(ProcessMIA):
     * A multi-start optimizer for affine registration *
 
     Please, see the complete documentation for the `AffineInitializer' brick in the populse.mia_processes website
-    <https://populse.github.io/mia_processes/documentation/bricks/preprocess/afni/N4BiasFieldCorrection.html>`_
+    <https://populse.github.io/mia_processes/documentation/bricks/preprocess/afni/AffineInitializer.html>`_
 
     """
 
@@ -172,7 +172,7 @@ class ApplyTransforms(ProcessMIA):
      Uses a sequence of three transforms: Rigid, Affine and SyN*
 
     Please, see the complete documentation for the `Registration' brick in the populse.mia_processes website
-    <https://populse.github.io/mia_processes/documentation/bricks/preprocess/afni/N4BiasFieldCorrection.html>`_
+    <https://populse.github.io/mia_processes/documentation/bricks/preprocess/afni/ApplyTransforms.html>`_
 
     """
 
@@ -396,7 +396,7 @@ class N4BiasFieldCorrection(ProcessMIA):
                             desc=dimension_desc))
 
         self.add_trait("out_prefix",
-                       String('n4c',
+                       String('n4c_',
                               output=False,
                               optional=True,
                               desc=out_prefix_desc))
@@ -438,7 +438,7 @@ class N4BiasFieldCorrection(ProcessMIA):
         if self.in_file:
 
             if self.out_prefix == Undefined:
-                self.out_prefix = 'n4c'
+                self.out_prefix = 'n4c_'
                 print('The out_prefix parameter is undefined. Automatically '
                       'set to "n4c" ...')
 
@@ -463,8 +463,17 @@ class N4BiasFieldCorrection(ProcessMIA):
                         self.output_directory,
                         self.out_prefix + ifile)
 
+                    ifile_no_ext, ifile_ext = os.path.splitext(ifile)
+                    self.outputs['bias_image'] = os.path.join(
+                        self.output_directory,
+                        self.out_prefix + ifile_no_ext
+                        + '_bias' + ifile_ext)
+
                     self.inheritance_dict[self.outputs[
                         'out_file']] = self.in_file
+
+                    self.inheritance_dict[self.outputs[
+                        'bias_image']] = self.in_file
 
             else:
                 print('No output_directory was found...!\n')
@@ -513,7 +522,7 @@ class Registration(ProcessMIA):
      Uses a sequence of three transforms: Rigid, Affine and SyN*
 
     Please, see the complete documentation for the `Registration' brick in the populse.mia_processes website
-    <https://populse.github.io/mia_processes/documentation/bricks/preprocess/afni/N4BiasFieldCorrection.html>`_
+    <https://populse.github.io/mia_processes/documentation/bricks/preprocess/afni/Registration.html>`_
 
     """
 
