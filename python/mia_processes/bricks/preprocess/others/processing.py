@@ -706,7 +706,7 @@ class ConformImage(ProcessMIA):
             file_out = os.path.join(self.output_directory,
                                      (self.prefix.strip() +
                                       file_name_no_ext +
-                                      self.suffix.strip() + '.' +
+                                      self.suffix.strip() +
                                       file_extension))
             nib.save(out_img, file_out)
 
