@@ -277,21 +277,21 @@ class ArtifactMask(ProcessMIA):
             art_file_out = os.path.join(self.output_directory,
                                         ('art_' +
                                          file_name_no_ext +
-                                         self.suffix.strip() + '.' +
+                                         self.suffix.strip() +
                                          file_extension))
             nib.save(art_img, art_file_out)
 
             hat_file_out = os.path.join(self.output_directory,
                                         ('hat_' +
                                          file_name_no_ext +
-                                         self.suffix.strip() + '.' +
+                                         self.suffix.strip() +
                                          file_extension))
             nib.save(hat_img, hat_file_out)
 
             air_file_out = os.path.join(self.output_directory,
                                         ('air_' +
                                          file_name_no_ext +
-                                         self.suffix.strip() + '.' +
+                                         self.suffix.strip() +
                                          file_extension))
             nib.save(air_img, air_file_out)
 
@@ -510,7 +510,7 @@ class Binarize(ProcessMIA):
                 file_out = os.path.join(self.output_directory,
                                          (self.prefix.strip() +
                                           file_name_no_ext +
-                                          self.suffix.strip() + '.' +
+                                          self.suffix.strip() +
                                           file_extension))
                 nib.save(maskimg, file_out)
 
@@ -600,7 +600,7 @@ class ConformImage(ProcessMIA):
 
             file = ''
 
-            path, file_name = os.path.split(file_name)
+            path, filename = os.path.split(file_name)
 
             if (self.suffix == " " and
                     self.prefix == " " and
@@ -613,13 +613,13 @@ class ConformImage(ProcessMIA):
                             "defined or consist only of one or more white "
                             "spaces.\nThe {0} input parameter will be "
                             "overwritten ...\n Yes or "
-                            "Abort?".format(file_name))
+                            "Abort?".format(filename))
                 msg.setStandardButtons(QMessageBox.Yes | QMessageBox.Abort)
                 retval = msg.exec_()
 
                 if retval != QMessageBox.Abort:
                     (file_name_no_ext,
-                     file_extension) = os.path.splitext(file_name)
+                     file_extension) = os.path.splitext(filename)
                     file = os.path.join(self.output_directory,
                                         (self.prefix.strip() +
                                          file_name_no_ext +
@@ -631,50 +631,50 @@ class ConformImage(ProcessMIA):
                           '\n{0} will be overwrited ...'.format(file_name))
 
                 else:
-                    file_name = []
+                    filename = []
                     print('\nAborted. Please check your input parameters ...')
 
             else:
                 (file_name_no_ext,
-                 file_extension) = os.path.splitext(file_name)
+                 file_extension) = os.path.splitext(filename)
                 file = os.path.join(self.output_directory,
                                     (self.prefix.strip() +
                                      file_name_no_ext +
                                      self.suffix.strip() +
                                      file_extension))
 
-            if file_name:
+            if filename:
                 self.outputs['out_file'] = file
 
             else:
                 print('- There was no output file deducted during '
                       'initialisation. Please check the input parameters...!')
 
-        # tags inheritance (optional)
-        if self.outputs:
+            # tags inheritance (optional)
+            if self.outputs:
 
-            for key, val in self.outputs.items():
+                for key, val in self.outputs.items():
 
-                if key == "out_file":
-                    in_val = file_name
-                    out_val = val
+                    if key == "out_file":
+                        in_val = file_name
+                        out_val = val
 
-                    _, fileOval = os.path.split(out_val)
-                    fileOval_no_ext, _ = os.path.splitext(fileOval)
-                    _, fileIval = os.path.split(in_val)
-                    fileIval_no_ext, _ = os.path.splitext(fileIval)
+                        _, fileOval = os.path.split(out_val)
+                        fileOval_no_ext, _ = os.path.splitext(fileOval)
+                        _, fileIval = os.path.split(in_val)
+                        fileIval_no_ext, _ = os.path.splitext(fileIval)
 
-                    if ((self.prefix) and
-                            (fileOval_no_ext.startswith(self.prefix))):
-                        fileOval_no_ext = fileOval_no_ext[len(self.prefix):]
+                        if ((self.prefix) and
+                                (fileOval_no_ext.startswith(self.prefix))):
+                            fileOval_no_ext = fileOval_no_ext[len(self.prefix):]
 
-                    if ((self.suffix) and
-                            (fileOval_no_ext.endswith(self.suffix))):
-                        fileOval_no_ext = fileOval_no_ext[:-len(
-                            self.suffix)]
+                        if ((self.suffix) and
+                                (fileOval_no_ext.endswith(self.suffix))):
+                            fileOval_no_ext = fileOval_no_ext[:-len(
+                                self.suffix)]
 
-                    if fileOval_no_ext == fileIval_no_ext:
-                        self.inheritance_dict[out_val] = in_val
+                        if fileOval_no_ext == fileIval_no_ext:
+                            self.inheritance_dict[out_val] = in_val
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -923,7 +923,7 @@ class Enhance(ProcessMIA):
                 file_out = os.path.join(self.output_directory,
                                          (self.prefix.strip() +
                                           file_name_no_ext +
-                                          self.suffix.strip() + '.' +
+                                          self.suffix.strip() +
                                           file_extension))
                 nib.save(out_image, file_out)
 
@@ -1159,7 +1159,7 @@ class GradientThreshold(ProcessMIA):
             file_out = os.path.join(self.output_directory,
                                      (self.prefix.strip() +
                                       file_name_no_ext +
-                                      self.suffix.strip() + '.' +
+                                      self.suffix.strip() +
                                       file_extension))
             nib.save(out_image, file_out)
 
@@ -1364,7 +1364,7 @@ class Mask(ProcessMIA):
             file_out = os.path.join(self.output_directory,
                                      (self.prefix.strip() +
                                       file_name_no_ext +
-                                      self.suffix.strip() + '.' +
+                                      self.suffix.strip() +
                                       file_extension))
             nib.save(maskimg, file_out)
 
@@ -2029,7 +2029,7 @@ class RotationMask(ProcessMIA):
             file_out = os.path.join(self.output_directory,
                                     (self.prefix.strip() +
                                      file_name_no_ext +
-                                     self.suffix.strip() + '.' +
+                                     self.suffix.strip() +
                                      file_extension))
             nib.save(out_img, file_out)
 
