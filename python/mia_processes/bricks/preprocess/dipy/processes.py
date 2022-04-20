@@ -67,6 +67,9 @@ class Denoise(ProcessMIA):
                     'estimated from in_file and seg_file. If seg_file also '
                     'undefined, SNR is estimated from in_file only. Mutually '
                     'exclusive with seg_file')
+        in_file_snr_desc = ('A input file to calculate SNR with seg_file. If'
+                            'not specified, equal to in_file (a pathlike object'
+                            ' or string representing a file).')
         out_prefix_desc = ('Specify the string to be prepended to the '
                            'filenames of the smoothed image file(s) '
                            '(a string).')
@@ -80,6 +83,11 @@ class Denoise(ProcessMIA):
                        File(output=False,
                             optional=False,
                             desc=in_file_desc))
+
+        self.add_trait("in_file_snr",
+                       File(output=False,
+                            optional=True,
+                            desc=in_file_snr_desc))
 
         self.add_trait("seg_file",
                        File(output=False,
@@ -177,7 +185,11 @@ class Denoise(ProcessMIA):
         self.process.in_file = self.in_file
 
         if self.seg_file:
-            file_name = self.in_file
+            if self.in_file_snr:
+                file_name = self.in_file_snr
+            else:
+                file_name = self.in_file
+
             seg_file_name = self.seg_file
 
             try:
