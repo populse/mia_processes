@@ -412,6 +412,7 @@ class N4BiasFieldCorrection(ProcessMIA):
 
         self.add_trait("negative_values",
                        Bool(output=True,
+                            optional=True,
                             desc=negative_values_desc))
 
         self.init_default_traits()
