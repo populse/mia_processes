@@ -128,11 +128,16 @@ class Segment(ProcessMIA):
                 _, fileIval = os.path.split(self.in_file)
                 self.process.out_basename = os.path.join(self.output_directory, fileIval)
 
-                for k in ('tissue_class_map', 'partial_volume_files'):
-                    self.outputs[k] = getattr(self.process, '_' + k)
+                self.outputs['tissue_class_map'] = \
+                    os.path.join(self.output_directory,
+                                 os.path.split(
+                                     self.process._tissue_class_map)[1])
 
-                self.outputs['tissue_class_map'] = self.process._tissue_class_map
-                self.outputs['partial_volume_files'] = self.process._partial_volume_files
+                self.outputs['partial_volume_files'] = []
+                for out_val in self.process._partial_volume_files:
+                    self.outputs['partial_volume_files'].append(
+                        os.path.join(self.output_directory,
+                                     os.path.split(out_val)[1]))
             else:
                 print('No output_directory was found...!\n')
                 return
