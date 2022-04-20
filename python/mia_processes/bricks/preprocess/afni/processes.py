@@ -138,7 +138,7 @@ class Calc(ProcessMIA):
         super(Calc, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
-        if self.in_file:
+        if self.in_file_a:
 
             if self.out_prefix == Undefined:
                 self.out_prefix = 'c'
@@ -146,7 +146,7 @@ class Calc(ProcessMIA):
                       'set to "c" ...')
 
             if self.output_directory:
-                ifile = os.path.split(self.in_file)[-1]
+                ifile = os.path.split(self.in_file_a)[-1]
 
                 try:
                     fileName, trail = ifile.rsplit('.', 1)
@@ -179,7 +179,7 @@ class Calc(ProcessMIA):
                               'launch ...!')
 
                     self.inheritance_dict[self.outputs[
-                        'out_file']] = self.in_file
+                        'out_file']] = self.in_file_a
 
             else:
                 print('No output_directory was found...!\n')
@@ -191,7 +191,10 @@ class Calc(ProcessMIA):
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
         super(Calc, self).run_process_mia()
-        self.process.in_file = self.in_file
+        self.process.in_file_a = self.in_file_a
+        self.process.in_file_b = self.in_file_b
+        self.process.in_file_c = self.in_file_c
+        self.process.expr = self.expr
         self.process.outputtype = self.output_type
         self.process.out_file = self.out_file
 
