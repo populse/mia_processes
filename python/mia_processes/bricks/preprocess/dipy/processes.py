@@ -102,13 +102,6 @@ class Denoise(ProcessMIA):
                               optional=True,
                               desc=snr_desc))
 
-        self.add_trait("out_prefix",
-                       String('d_',
-                              output=False,
-                              optional=True,
-                              desc=out_prefix_desc))
-
-
         # Outputs traits
         self.add_trait("out_file",
                        File(output=True,
@@ -142,11 +135,6 @@ class Denoise(ProcessMIA):
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
 
-            if self.out_prefix == Undefined:
-                self.out_prefix = 'd_'
-                print('The out_prefix parameter is undefined. Automatically '
-                      'set to "d" ...')
-
             if self.output_directory:
                 ifile = os.path.split(self.in_file)[-1]
 
@@ -166,7 +154,7 @@ class Denoise(ProcessMIA):
 
                     self.outputs['out_file'] = os.path.join(
                         self.output_directory,
-                        self.out_prefix + ifile)
+                        fileName + '_denoise.' + trail)
 
                     self.inheritance_dict[self.outputs[
                         'out_file']] = self.in_file
@@ -214,8 +202,5 @@ class Denoise(ProcessMIA):
                 self.process.snr = self.snr
 
         self.process._out_file = self.out_file
-
-        if self.out_prefix:
-            self.process.out_prefix = self.out_prefix
 
         return self.process.run(configuration_dict={})
