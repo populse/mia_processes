@@ -58,7 +58,6 @@ class Segment(ProcessMIA):
                          'file names).')
         segments_desc = ('Outputs a separate binary image for each tissue type '
                          '(a boolean).')
-        out_basename_desc = 'base name of output files (a file name).'
 
         # Outputs description
         tissue_class_map_desc = 'path/name of binary segmented volume file '
@@ -76,12 +75,6 @@ class Segment(ProcessMIA):
                             output=False,
                             optional=True,
                             desc=segments_desc))
-
-        self.add_trait("out_basename",
-                       String('segment',
-                              output=False,
-                              optional=True,
-                              desc=out_basename_desc))
 
         # Outputs traits
         self.add_trait("tissue_class_map",
@@ -121,8 +114,16 @@ class Segment(ProcessMIA):
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
             if self.output_directory:
+                _, fileIval = os.path.split(self.in_file)
+                self.process.out_basename = self.output_directory + fileIval
+
+                self.outputs['tissue_class_map'] = self.process._tissue_class_map
+                self.outputs['_partial_volume_files'] = self.process._partial_volume_files
+
                 self.inheritance_dict[self.outputs[
                     'tissue_class_map']] = self.in_file
+                self.inheritance_dict[self.outputs[
+                    'partial_volume_files']] = self.in_file
 
             else:
                 print('No output_directory was found...!\n')
@@ -137,7 +138,6 @@ class Segment(ProcessMIA):
 
         self.process.in_files = self.in_file
         self.process.segments = self.segments
-        self.process.out_basename = self.out_basename
 
         self.process._tissue_class_map = self.tissue_class_map
         self.process._partial_volume_files = self.partial_volume_files
