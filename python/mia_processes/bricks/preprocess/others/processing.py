@@ -628,7 +628,7 @@ class ConformImage(ProcessMIA):
                     print('\nConformImage brick warning: the out_file output '
                           'parameter is the same as the in_files input '
                           'parameter (suffix and prefix are not defined):'
-                          '\n{0} will be overwrited ...'.format(file_name))
+                          '\n{0} will be overwrited ...'.format(filename))
 
                 else:
                     filename = []
@@ -691,7 +691,7 @@ class ConformImage(ProcessMIA):
 
         except (nib.filebasedimages.ImageFileError,
                 FileNotFoundError, TypeError) as e:
-            print("\nError with file to enhance, during "
+            print("\nError with file to conform, during "
                   "initialisation: ", e)
             img = None
 
@@ -921,10 +921,10 @@ class Enhance(ProcessMIA):
                 file_name_no_ext, file_extension = os.path.splitext(file_name)
 
                 file_out = os.path.join(self.output_directory,
-                                         (self.prefix.strip() +
-                                          file_name_no_ext +
-                                          self.suffix.strip() +
-                                          file_extension))
+                                        (self.prefix.strip() +
+                                         file_name_no_ext +
+                                         self.suffix.strip() +
+                                         file_extension))
                 nib.save(out_image, file_out)
 
 
@@ -1019,7 +1019,7 @@ class GradientThreshold(ProcessMIA):
 
             files = []
 
-            path, file_name = os.path.split(file_name)
+            path, filename = os.path.split(file_name)
 
             if (self.suffix == " " and
                     self.prefix == " " and
@@ -1032,13 +1032,13 @@ class GradientThreshold(ProcessMIA):
                             "defined or consist only of one or more white "
                             "spaces.\nThe {0} input parameter will be "
                             "overwritten ...\n Yes or "
-                            "Abort?".format(file_name))
+                            "Abort?".format(filename))
                 msg.setStandardButtons(QMessageBox.Yes | QMessageBox.Abort)
                 retval = msg.exec_()
 
                 if retval != QMessageBox.Abort:
                     (file_name_no_ext,
-                     file_extension) = os.path.splitext(file_name)
+                     file_extension) = os.path.splitext(filename)
                     files.append(os.path.join(self.output_directory,
                                               (self.prefix.strip() +
                                                file_name_no_ext +
@@ -1047,22 +1047,22 @@ class GradientThreshold(ProcessMIA):
                     print('\nGradientThreshold brick warning: the out_file output '
                           'parameter is the same as the in_file input '
                           'parameter (suffix and prefix are not defined):'
-                          '\n{0} will be overwrited ...'.format(file_name))
+                          '\n{0} will be overwrited ...'.format(filename))
 
                 else:
-                    file_name = []
+                    filename = []
                     print('\nAborted. Please check your input parameters ...')
 
             else:
                 (file_name_no_ext,
-                 file_extension) = os.path.splitext(file_name)
+                 file_extension) = os.path.splitext(filename)
                 files.append(os.path.join(self.output_directory,
                                           (self.prefix.strip() +
                                            file_name_no_ext +
                                            self.suffix.strip() +
                                            file_extension)))
 
-            if file_name:
+            if filename:
                 self.outputs['out_file'] = files
 
             else:
@@ -2073,8 +2073,7 @@ class Template(ProcessMIA):
                                      desc=in_template_desc))
 
         self.add_trait("in_template_spec",
-                       DictStrStr(None,
-                                  output=False,
+                       DictStrStr(output=False,
                                   optional=True,
                                   desc=in_template_spec_desc))
 
