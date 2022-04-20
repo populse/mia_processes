@@ -501,7 +501,7 @@ class Binarize(ProcessMIA):
                 mask = data > self.thresh_low
                 data[~mask] = 0.0
                 img.header.set_data_dtype("uint8")
-                maskimg = img.__class__(data.astype("uint8"), img.affine, img.header)
+                maskimg = img.__class__(mask.astype("uint8"), img.affine, img.header)
 
                 # Image save
                 _, file_name = os.path.split(file_name)
