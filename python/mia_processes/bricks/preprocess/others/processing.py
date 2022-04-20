@@ -1899,7 +1899,7 @@ class RotationMask(ProcessMIA):
 
             files = []
 
-            path, file_name = os.path.split(file_name)
+            path, filename = os.path.split(file_name)
 
             if (self.suffix == " " and
                     self.prefix == " " and
@@ -1912,13 +1912,13 @@ class RotationMask(ProcessMIA):
                             "defined or consist only of one or more white "
                             "spaces.\nThe {0} input parameter will be "
                             "overwritten ...\n Yes or "
-                            "Abort?".format(file_name))
+                            "Abort?".format(filename))
                 msg.setStandardButtons(QMessageBox.Yes | QMessageBox.Abort)
                 retval = msg.exec_()
 
                 if retval != QMessageBox.Abort:
                     (file_name_no_ext,
-                     file_extension) = os.path.splitext(file_name)
+                     file_extension) = os.path.splitext(filename)
                     files.append(os.path.join(self.output_directory,
                                               (self.prefix.strip() +
                                                file_name_no_ext +
@@ -1927,21 +1927,22 @@ class RotationMask(ProcessMIA):
                     print('\nRotationMask brick warning: the out_file output '
                           'parameter is the same as the in_files input '
                           'parameter (suffix and prefix are not defined):'
-                          '\n{0} will be overwrited ...'.format(file_name))
+                          '\n{0} will be overwrited ...'.format(filename))
 
                 else:
+                    filename = []
                     print('\nAborted. Please check your input parameters ...')
 
             else:
                 (file_name_no_ext,
-                 file_extension) = os.path.splitext(file_name)
+                 file_extension) = os.path.splitext(filename)
                 files.append(os.path.join(self.output_directory,
                                           (self.prefix.strip() +
                                            file_name_no_ext +
                                            self.suffix.strip() +
                                            file_extension)))
 
-            if file_name:
+            if filename:
                 self.outputs['out_file'] = files
 
             else:
