@@ -118,7 +118,7 @@ class Segment(ProcessMIA):
                 self.process.out_basename = self.output_directory + fileIval
 
                 self.outputs['tissue_class_map'] = self.process._tissue_class_map
-                self.outputs['_partial_volume_files'] = self.process._partial_volume_files
+                self.outputs['partial_volume_files'] = self.process._partial_volume_files
 
                 self.inheritance_dict[self.outputs[
                     'tissue_class_map']] = self.in_file
