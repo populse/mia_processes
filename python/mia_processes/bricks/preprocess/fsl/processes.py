@@ -236,7 +236,7 @@ class Smooth(ProcessMIA):
                             desc=output_type_desc))
 
         self.add_trait("out_prefix",
-                       String('s',
+                       String('s_',
                               output=False,
                               optional=True,
                               desc=out_prefix_desc))
@@ -291,7 +291,7 @@ class Smooth(ProcessMIA):
         if self.in_file:
 
             if self.out_prefix == Undefined:
-                self.out_prefix = 's'
+                self.out_prefix = 's_'
                 print('The out_prefix parameter is undefined. Automatically '
                       'set to "s" ...')
 
