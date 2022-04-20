@@ -914,7 +914,7 @@ class Enhance(ProcessMIA):
                 data[excess] = 0
                 data[excess] = np.random.choice(data[data > range_min], size=len(excess[0]))
 
-                out_image = img.__class__(data.astype("uint8"), img.affine, img.header)
+                out_image = img.__class__(data, img.affine, img.header)
 
                 # Image save
                 _, file_name = os.path.split(file_name)
