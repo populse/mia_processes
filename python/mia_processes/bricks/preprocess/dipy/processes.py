@@ -95,7 +95,7 @@ class Denoise(ProcessMIA):
                               desc=snr_desc))
 
         self.add_trait("out_prefix",
-                       String('d',
+                       String('d_',
                               output=False,
                               optional=True,
                               desc=out_prefix_desc))
@@ -135,7 +135,7 @@ class Denoise(ProcessMIA):
         if self.in_file:
 
             if self.out_prefix == Undefined:
-                self.out_prefix = 'd'
+                self.out_prefix = 'd_'
                 print('The out_prefix parameter is undefined. Automatically '
                       'set to "d" ...')
 

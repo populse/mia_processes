@@ -290,7 +290,7 @@ class SkullStripping(ProcessMIA):
         if self.in_file:
 
             if self.out_prefix == Undefined:
-                self.out_prefix = 'ss'
+                self.out_prefix = 'ss_'
                 print('The out_prefix parameter is undefined. Automatically '
                       'set to "ss" ...')
 
