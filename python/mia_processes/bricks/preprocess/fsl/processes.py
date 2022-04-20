@@ -58,6 +58,8 @@ class Segment(ProcessMIA):
                          'file names).')
         segments_desc = ('Outputs a separate binary image for each tissue type '
                          '(a boolean).')
+        output_type_desc = ('Typecodes of the output NIfTI image formats (one '
+                            'of NIFTI, NIFTI_PAIR, NIFTI_GZ, NIFTI_PAIR_GZ).')
 
         # Outputs description
         tissue_class_map_desc = 'path/name of binary segmented volume file '
@@ -75,6 +77,15 @@ class Segment(ProcessMIA):
                             output=False,
                             optional=True,
                             desc=segments_desc))
+
+        self.add_trait("output_type",
+                       Enum('NIFTI',
+                            'NIFTI_PAIR',
+                            'NIFTI_GZ',
+                            'NIFTI_PAIR_GZ',
+                            output=False,
+                            optional=True,
+                            desc=output_type_desc))
 
         # Outputs traits
         self.add_trait("tissue_class_map",
@@ -115,19 +126,23 @@ class Segment(ProcessMIA):
         if self.in_file:
             if self.output_directory:
                 _, fileIval = os.path.split(self.in_file)
-                self.process.out_basename = self.output_directory + fileIval
+                self.process.out_basename = os.path.join(self.output_directory, fileIval)
+
+                for k in ('tissue_class_map', 'partial_volume_files'):
+                    self.outputs[k] = getattr(self.process, '_' + k)
 
                 self.outputs['tissue_class_map'] = self.process._tissue_class_map
                 self.outputs['partial_volume_files'] = self.process._partial_volume_files
-
-                self.inheritance_dict[self.outputs[
-                    'tissue_class_map']] = self.in_file
-                self.inheritance_dict[self.outputs[
-                    'partial_volume_files']] = self.in_file
-
             else:
                 print('No output_directory was found...!\n')
                 return
+
+        if self.outputs:
+            self.inheritance_dict[self.outputs[
+                'tissue_class_map']] = self.in_file
+            if self.outputs['partial_volume_files'][0]:
+                for out_val in self.outputs['partial_volume_files']:
+                    self.inheritance_dict[out_val] = self.in_file
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
