@@ -163,7 +163,7 @@ class Denoise(ProcessMIA):
                     self.inheritance_dict[self.outputs[
                         'out_file']] = self.in_file
 
-                self.outputs['out_file'] = self.process._out_file
+                # self.outputs['out_file'] = self.process._out_file
             else:
                 print('No output_directory was found...!\n')
                 return
@@ -199,9 +199,9 @@ class Denoise(ProcessMIA):
             if self.snr is Undefined:
                 self.process.snr = None
             else:
-                self.prcess.snr = self.snr
+                self.process.snr = self.snr
 
-        self.process.out_file = self.out_file
+        self.process._out_file = self.out_file
 
         if self.out_prefix:
             self.process.out_prefix = self.out_prefix
