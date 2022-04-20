@@ -126,7 +126,7 @@ class Denoise(ProcessMIA):
         # Using the inheritance to ProcessMIA class, list_outputs method
         super(Denoise, self).list_outputs()
 
-        if self.seg_file and self.snr is not Either(Undefined, None):
+        if self.seg_file and self.snr is not Undefined:
                 print('\nInitialisation failed. Please, do not set both seg_file '
                       'and snr ...!')
                 return
