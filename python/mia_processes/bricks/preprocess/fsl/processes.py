@@ -162,6 +162,7 @@ class Segment(ProcessMIA):
         self.process._tissue_class_map = self.tissue_class_map
         self.process._partial_volume_files = self.partial_volume_files
 
+        self.process.output_type = self.output_type
         return self.process.run(configuration_dict={})
 
 
