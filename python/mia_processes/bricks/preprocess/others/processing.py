@@ -2082,19 +2082,19 @@ class Template(ProcessMIA):
                                   desc=resolution_desc))
 
         self.add_trait("suffix",
-                       traits.Int(1,
+                       traits.String(None,
                                   output=False,
                                   optional=True,
                                   desc=suffix_desc))
 
         self.add_trait("atlas",
-                       traits.Int(1,
+                       traits.String(None,
                                   output=False,
                                   optional=True,
                                   desc=atlas_desc))
 
         self.add_trait("desc",
-                       traits.Int(1,
+                       traits.String(None,
                                   output=False,
                                   optional=True,
                                   desc=desc_desc))
