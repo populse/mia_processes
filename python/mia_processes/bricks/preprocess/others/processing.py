@@ -2084,7 +2084,7 @@ class Template(ProcessMIA):
         self.add_trait("suffix",
                        traits.Either(None,
                                      traits.String,
-                                     default = None,
+                                     default=None,
                                      output=False,
                                      optional=True,
                                      desc=suffix_desc))
@@ -2095,7 +2095,7 @@ class Template(ProcessMIA):
                                      default=None,
                                      output=False,
                                      optional=True,
-                                     desc=suffix_desc))
+                                     desc=atlas_desc))
 
         self.add_trait("desc",
                        traits.Either(None,
@@ -2103,7 +2103,7 @@ class Template(ProcessMIA):
                                      default=None,
                                      output=False,
                                      optional=True,
-                                     desc=suffix_desc))
+                                     desc=desc_desc))
 
         # Outputs traits
         self.add_trait("template_path",
