@@ -1017,7 +1017,7 @@ class GradientThreshold(ProcessMIA):
                     (self.prefix in [Undefined, "<undefined>"])):
                 self.prefix = " "
 
-            files = []
+            file = ''
 
             path, filename = os.path.split(file_name)
 
@@ -1039,11 +1039,11 @@ class GradientThreshold(ProcessMIA):
                 if retval != QMessageBox.Abort:
                     (file_name_no_ext,
                      file_extension) = os.path.splitext(filename)
-                    files.append(os.path.join(self.output_directory,
-                                              (self.prefix.strip() +
-                                               file_name_no_ext +
-                                               self.suffix.strip() +
-                                               file_extension)))
+                    file = os.path.join(self.output_directory,
+                                        (self.prefix.strip() +
+                                         file_name_no_ext +
+                                         self.suffix.strip() +
+                                         file_extension))
                     print('\nGradientThreshold brick warning: the out_file output '
                           'parameter is the same as the in_file input '
                           'parameter (suffix and prefix are not defined):'
@@ -1056,14 +1056,14 @@ class GradientThreshold(ProcessMIA):
             else:
                 (file_name_no_ext,
                  file_extension) = os.path.splitext(filename)
-                files.append(os.path.join(self.output_directory,
-                                          (self.prefix.strip() +
-                                           file_name_no_ext +
-                                           self.suffix.strip() +
-                                           file_extension)))
+                file = os.path.join(self.output_directory,
+                                    (self.prefix.strip() +
+                                     file_name_no_ext +
+                                     self.suffix.strip() +
+                                     file_extension))
 
             if filename:
-                self.outputs['out_file'] = files
+                self.outputs['out_file'] = file
 
             else:
                 print('- There was no output file deducted during '
@@ -1150,7 +1150,7 @@ class GradientThreshold(ProcessMIA):
 
             mask = sim.binary_fill_holes(mask, struc).astype(np.uint8)
 
-            out_image = img.__class__(mask.astype("uint8"), img.affine, img.header)
+            out_image = img.__class__(mask, img.affine, img.header)
 
             # Image save
             _, file_name = os.path.split(file_name)
