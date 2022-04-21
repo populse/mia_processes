@@ -2058,9 +2058,11 @@ class Template(ProcessMIA):
         self.requirement = []
 
         # Inputs description
-        in_template_desc = 'Template Name (a string).'
-        in_template_spec_desc = 'Required specifications.'
-        default_resolution_desc = 'Default resolution of the template.'
+        in_template_desc = 'Template Name (a String).'
+        resolution_desc = 'Resolution of the template  (Int or None)'
+        suffix_desc = 'BIDS suffix (String or None)'
+        atlas_desc = 'Name of a particular atlas (String or None)'
+        desc_desc = 'Description field (String or None)'
 
         # Outputs description
         template_path_desc = ('Path of the template (a pathlike object '
@@ -2073,25 +2075,34 @@ class Template(ProcessMIA):
                                      optional=False,
                                      desc=in_template_desc))
 
-        self.add_trait("in_template_spec",
-                       DictStrStr(output=False,
+        self.add_trait("resolution",
+                       traits.Int(2,
+                                  output=False,
                                   optional=True,
-                                  desc=in_template_spec_desc))
+                                  desc=resolution_desc))
 
-        self.add_trait("default_resolution",
+        self.add_trait("suffix",
                        traits.Int(1,
                                   output=False,
                                   optional=True,
-                                  desc=default_resolution_desc))
+                                  desc=suffix_desc))
+
+        self.add_trait("atlas",
+                       traits.Int(1,
+                                  output=False,
+                                  optional=True,
+                                  desc=atlas_desc))
+
+        self.add_trait("desc",
+                       traits.Int(1,
+                                  output=False,
+                                  optional=True,
+                                  desc=desc_desc))
 
         # Outputs traits
         self.add_trait("template_path",
                        traits.String(output=True,
                                      desc=template_path_desc))
-
-        self.add_trait("template_spec",
-                       DictStrStr(output=True,
-                                  desc=template_spec_desc))
 
         self.init_default_traits()
 
@@ -2109,39 +2120,28 @@ class Template(ProcessMIA):
         # Using the inheritance to ProcessMIA class, list_outputs method
         super(Template, self).list_outputs()
 
+        # Massage spec (start creating if None)
+        template_spec = {"resolution": self.resolution, "suffix": self.suffix, "atlas": self.atlas, "desc": self.desc}
+
+        tpl_target_path = get_template(self.in_template, **template_spec)
+        if not tpl_target_path:
+            print("""\nCould not find template "{0}" with specs={1}. Please revise "
+                          "your template argument.""", self.in_template, template_spec)
+            tpl_target_path = ''
+
+        if isinstance(tpl_target_path, list):
+            print("""\nThe available template modifiers ({0}) did not select a unique "
+                          "template (got "{1}"). Please revise your template argument.""",
+                  self.in_template, template_spec)
+
+        self.outputs['template_path'] = str(tpl_target_path)
+
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
         super(Template, self).run_process_mia()
-
-        # Massage spec (start creating if None)
-        template_spec = self.in_template_spec or {}
-        template_spec["desc"] = template_spec.get("desc", None)
-        template_spec["atlas"] = template_spec.get("atlas", None)
-        template_spec["suffix"] = template_spec.get("suffix", None)
-        template_spec["resolution"] = template_spec.pop(
-            "res", template_spec.get("resolution", self.default_resolution)
-        )
-
-        common_spec = {"resolution": template_spec["resolution"]}
-        if "cohort" in template_spec:
-            common_spec["cohort"] = template_spec["cohort"]
-
-        tpl_target_path = get_template(self.in_template, **template_spec)
-        if not tpl_target_path:
-            print("""\nCould not find template "{0}" with specs={1}. Please revise "
-                  "your template argument.""", self.in_template, template_spec)
-            tpl_target_path = ''
-
-        if isinstance(tpl_target_path, list):
-            print("""\nThe available template modifiers ({0}) did not select a unique "
-                  "template (got "{1}"). Please revise your template argument.""",
-                  self.in_template, template_spec)
-
-        self.template_path = str(tpl_target_path)
-        self.template_spec = common_spec
 
 
 class Threshold(ProcessMIA):
