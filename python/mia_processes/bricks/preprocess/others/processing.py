@@ -2078,32 +2078,26 @@ class Template(ProcessMIA):
         self.add_trait("resolution",
                        traits.Int(2,
                                   output=False,
-                                  optional=True,
+                                  optional=False,
                                   desc=resolution_desc))
 
         self.add_trait("suffix",
-                       traits.Either(None,
-                                     traits.String,
-                                     default=None,
+                       traits.String('',
                                      output=False,
                                      optional=True,
                                      desc=suffix_desc))
 
         self.add_trait("atlas",
-                       traits.Either(None,
-                                     traits.String,
-                                     default=None,
+                       traits.String('',
                                      output=False,
                                      optional=True,
-                                     desc=atlas_desc))
+                                     desc=suffix_desc))
 
         self.add_trait("desc",
-                       traits.Either(None,
-                                     traits.String,
-                                     default=None,
+                       traits.String('',
                                      output=False,
                                      optional=True,
-                                     desc=desc_desc))
+                                     desc=suffix_desc))
 
         # Outputs traits
         self.add_trait("template_path",
@@ -2126,19 +2120,34 @@ class Template(ProcessMIA):
         # Using the inheritance to ProcessMIA class, list_outputs method
         super(Template, self).list_outputs()
 
-        # Massage spec (start creating if None)
-        template_spec = {"resolution": self.resolution, "suffix": self.suffix, "atlas": self.atlas, "desc": self.desc}
+        if self.suffix is Undefined:
+            suffix = None
+        else:
+            suffix = self.suffix
+
+        if self.atlas is Undefined:
+            atlas = None
+        else:
+            atlas = self.atlas
+
+        if self.desc is Undefined:
+            desc = None
+        else:
+            desc = self.desc
+
+        template_spec = {"resolution": self.resolution, "suffix": suffix, "atlas": atlas, "desc": desc}
 
         tpl_target_path = get_template(self.in_template, **template_spec)
         if not tpl_target_path:
             print("""\nCould not find template "{0}" with specs={1}. Please revise "
                           "your template argument.""", self.in_template, template_spec)
-            tpl_target_path = ''
+            return
 
         if isinstance(tpl_target_path, list):
             print("""\nThe available template modifiers ({0}) did not select a unique "
                           "template (got "{1}"). Please revise your template argument.""",
                   self.in_template, template_spec)
+            return
 
         self.outputs['template_path'] = str(tpl_target_path)
 
