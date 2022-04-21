@@ -631,7 +631,7 @@ class ConformImage(ProcessMIA):
                           '\n{0} will be overwrited ...'.format(filename))
 
                 else:
-                    filename = []
+                    filename = ''
                     print('\nAborted. Please check your input parameters ...')
 
             else:
@@ -1050,7 +1050,7 @@ class GradientThreshold(ProcessMIA):
                           '\n{0} will be overwrited ...'.format(filename))
 
                 else:
-                    filename = []
+                    filename = ''
                     print('\nAborted. Please check your input parameters ...')
 
             else:
@@ -1199,13 +1199,13 @@ class Mask(ProcessMIA):
         # Inputs traits
         self.add_trait("in_file",
                        File(output=False,
-                                    optional=False,
-                                    desc=in_file_desc))
+                            optional=False,
+                            desc=in_file_desc))
 
         self.add_trait("mask_file",
                        File(output=False,
-                                    optional=False,
-                                    desc=mask_file_desc))
+                            optional=False,
+                            desc=mask_file_desc))
 
         self.add_trait("suffix",
                        traits.String("_masked",
@@ -1255,7 +1255,7 @@ class Mask(ProcessMIA):
 
             file = ''
 
-            path, file_name = os.path.split(file_name)
+            path, filename = os.path.split(file_name)
 
             if (self.suffix == " " and
                     self.prefix == " " and
@@ -1268,13 +1268,13 @@ class Mask(ProcessMIA):
                             "defined or consist only of one or more white "
                             "spaces.\nThe {0} input parameter will be "
                             "overwritten ...\n Yes or "
-                            "Abort?".format(file_name))
+                            "Abort?".format(filename))
                 msg.setStandardButtons(QMessageBox.Yes | QMessageBox.Abort)
                 retval = msg.exec_()
 
                 if retval != QMessageBox.Abort:
                     (file_name_no_ext,
-                     file_extension) = os.path.splitext(file_name)
+                     file_extension) = os.path.splitext(filename)
                     file = os.path.join(self.output_directory,
                                         (self.prefix.strip() +
                                          file_name_no_ext +
@@ -1283,21 +1283,22 @@ class Mask(ProcessMIA):
                     print('\nMask brick warning: the out_file output '
                           'parameter is the same as the in_files input '
                           'parameter (suffix and prefix are not defined):'
-                          '\n{0} will be overwrited ...'.format(file_name))
+                          '\n{0} will be overwrited ...'.format(filename))
 
                 else:
+                    filename = ''
                     print('\nAborted. Please check your input parameters ...')
 
             else:
                 (file_name_no_ext,
-                 file_extension) = os.path.splitext(file_name)
+                 file_extension) = os.path.splitext(filename)
                 file =os.path.join(self.output_directory,
                                    (self.prefix.strip() +
                                     file_name_no_ext +
                                     self.suffix.strip() +
                                     file_extension))
 
-            if file_name:
+            if filename:
                 self.outputs['out_file'] = file
 
             else:
@@ -1930,7 +1931,7 @@ class RotationMask(ProcessMIA):
                           '\n{0} will be overwrited ...'.format(filename))
 
                 else:
-                    filename = []
+                    filename = ''
                     print('\nAborted. Please check your input parameters ...')
 
             else:
