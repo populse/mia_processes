@@ -166,6 +166,12 @@ class ArtifactMask(ProcessMIA):
 
             (file_name_no_ext,
              file_extension) = os.path.splitext(file_name)
+            if file_extension == '.gz':
+                (file_name_no_ext_2,
+                 file_extension_2) = os.path.splitext(file_name_no_ext)
+                if file_extension_2 == '.nii':
+                    file_name_no_ext = file_name_no_ext_2
+                    file_extension = '.nii.gz'
 
             files_hat.append(os.path.join(self.output_directory,
                                           ('hat_' +
@@ -194,14 +200,14 @@ class ArtifactMask(ProcessMIA):
                 print('- There was no output file deducted during '
                       'initialisation. Please check the input parameters...!')
 
-        # tags inheritance (optional)
-        if self.outputs:
-            self.inheritance_dict[self.outputs[
-                'out_hat_mask']] = self.in_file
-            self.inheritance_dict[self.outputs[
-                'out_art_mask']] = self.in_file
-            self.inheritance_dict[self.outputs[
-                'out_air_mask']] = self.in_file
+            # tags inheritance (optional)
+            if self.outputs:
+                self.inheritance_dict[self.outputs[
+                    'out_hat_mask']] = self.in_file
+                self.inheritance_dict[self.outputs[
+                    'out_art_mask']] = self.in_file
+                self.inheritance_dict[self.outputs[
+                    'out_air_mask']] = self.in_file
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -273,6 +279,12 @@ class ArtifactMask(ProcessMIA):
             # Image save
             _, file_name = os.path.split(file_name)
             file_name_no_ext, file_extension = os.path.splitext(file_name)
+            if file_extension == '.gz':
+                (file_name_no_ext_2,
+                 file_extension_2) = os.path.splitext(file_name_no_ext)
+                if file_extension_2 == '.nii':
+                    file_name_no_ext = file_name_no_ext_2
+                    file_extension = '.nii.gz'
 
             art_file_out = os.path.join(self.output_directory,
                                         ('art_' +
@@ -416,6 +428,13 @@ class Binarize(ProcessMIA):
                     if retval != QMessageBox.Abort:
                         (file_name_no_ext,
                          file_extension) = os.path.splitext(file_name)
+                        if file_extension == '.gz':
+                            (file_name_no_ext_2,
+                             file_extension_2) = os.path.splitext(file_name_no_ext)
+                            if file_extension_2 == '.nii':
+                                file_name_no_ext = file_name_no_ext_2
+                                file_extension = '.nii.gz'
+
                         files.append(os.path.join(self.output_directory,
                                                   (self.prefix.strip() +
                                                    file_name_no_ext +
@@ -438,6 +457,13 @@ class Binarize(ProcessMIA):
                 else:
                     (file_name_no_ext,
                      file_extension) = os.path.splitext(file_name)
+                    if file_extension == '.gz':
+                        (file_name_no_ext_2,
+                         file_extension_2) = os.path.splitext(file_name_no_ext)
+                        if file_extension_2 == '.nii':
+                            file_name_no_ext = file_name_no_ext_2
+                            file_extension = '.nii.gz'
+
                     files.append(os.path.join(self.output_directory,
                                               (self.prefix.strip() +
                                                file_name_no_ext +
@@ -460,9 +486,22 @@ class Binarize(ProcessMIA):
 
                     for in_val, out_val in zip(files_name, val):
                         _, fileOval = os.path.split(out_val)
-                        fileOval_no_ext, _ = os.path.splitext(fileOval)
+                        fileOval_no_ext, file_extension = os.path.splitext(fileOval)
+
+                        if file_extension == '.gz':
+                            (fileOval_no_ext_2,
+                             file_extension_2) = os.path.splitext(fileOval_no_ext)
+                            if file_extension_2 == '.nii':
+                                fileOval_no_ext = fileOval_no_ext_2
+
                         _, fileIval = os.path.split(in_val)
-                        fileIval_no_ext, _ = os.path.splitext(fileIval)
+                        fileIval_no_ext, file_extension = os.path.splitext(fileIval)
+
+                        if file_extension == '.gz':
+                            (fileIval_no_ext_2,
+                             file_extension_2) = os.path.splitext(fileIval_no_ext)
+                            if file_extension_2 == '.nii':
+                                fileIval_no_ext = fileIval_no_ext_2
 
                         if ((self.prefix) and
                                 (fileOval_no_ext.startswith(self.prefix))):
@@ -506,6 +545,12 @@ class Binarize(ProcessMIA):
                 # Image save
                 _, file_name = os.path.split(file_name)
                 file_name_no_ext, file_extension = os.path.splitext(file_name)
+                if file_extension == '.gz':
+                    (file_name_no_ext_2,
+                     file_extension_2) = os.path.splitext(file_name_no_ext)
+                    if file_extension_2 == '.nii':
+                        file_name_no_ext = file_name_no_ext_2
+                        file_extension = '.nii.gz'
 
                 file_out = os.path.join(self.output_directory,
                                          (self.prefix.strip() +
@@ -620,6 +665,13 @@ class ConformImage(ProcessMIA):
                 if retval != QMessageBox.Abort:
                     (file_name_no_ext,
                      file_extension) = os.path.splitext(filename)
+                    if file_extension == '.gz':
+                        (file_name_no_ext_2,
+                         file_extension_2) = os.path.splitext(file_name_no_ext)
+                        if file_extension_2 == '.nii':
+                            file_name_no_ext = file_name_no_ext_2
+                            file_extension = '.nii.gz'
+
                     file = os.path.join(self.output_directory,
                                         (self.prefix.strip() +
                                          file_name_no_ext +
@@ -637,6 +689,13 @@ class ConformImage(ProcessMIA):
             else:
                 (file_name_no_ext,
                  file_extension) = os.path.splitext(filename)
+                if file_extension == '.gz':
+                    (file_name_no_ext_2,
+                     file_extension_2) = os.path.splitext(file_name_no_ext)
+                    if file_extension_2 == '.nii':
+                        file_name_no_ext = file_name_no_ext_2
+                        file_extension = '.nii.gz'
+
                 file = os.path.join(self.output_directory,
                                     (self.prefix.strip() +
                                      file_name_no_ext +
@@ -651,30 +710,8 @@ class ConformImage(ProcessMIA):
                       'initialisation. Please check the input parameters...!')
 
             # tags inheritance (optional)
-            if self.outputs:
-
-                for key, val in self.outputs.items():
-
-                    if key == "out_file":
-                        in_val = file_name
-                        out_val = val
-
-                        _, fileOval = os.path.split(out_val)
-                        fileOval_no_ext, _ = os.path.splitext(fileOval)
-                        _, fileIval = os.path.split(in_val)
-                        fileIval_no_ext, _ = os.path.splitext(fileIval)
-
-                        if ((self.prefix) and
-                                (fileOval_no_ext.startswith(self.prefix))):
-                            fileOval_no_ext = fileOval_no_ext[len(self.prefix):]
-
-                        if ((self.suffix) and
-                                (fileOval_no_ext.endswith(self.suffix))):
-                            fileOval_no_ext = fileOval_no_ext[:-len(
-                                self.suffix)]
-
-                        if fileOval_no_ext == fileIval_no_ext:
-                            self.inheritance_dict[out_val] = in_val
+            if self.outputs['out_file']:
+                self.inheritance_dict[self.outputs['out_file']] = self.in_file
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -702,6 +739,12 @@ class ConformImage(ProcessMIA):
             # Image save
             _, file_name = os.path.split(file_name)
             file_name_no_ext, file_extension = os.path.splitext(file_name)
+            if file_extension == '.gz':
+                (file_name_no_ext_2,
+                 file_extension_2) = os.path.splitext(file_name_no_ext)
+                if file_extension_2 == '.nii':
+                    file_name_no_ext = file_name_no_ext_2
+                    file_extension = '.nii.gz'
 
             file_out = os.path.join(self.output_directory,
                                      (self.prefix.strip() +
@@ -824,6 +867,13 @@ class Enhance(ProcessMIA):
                     if retval != QMessageBox.Abort:
                         (file_name_no_ext,
                          file_extension) = os.path.splitext(file_name)
+                        if file_extension == '.gz':
+                            (file_name_no_ext_2,
+                             file_extension_2) = os.path.splitext(file_name_no_ext)
+                            if file_extension_2 == '.nii':
+                                file_name_no_ext = file_name_no_ext_2
+                                file_extension = '.nii.gz'
+
                         files.append(os.path.join(self.output_directory,
                                                   (self.prefix.strip() +
                                                    file_name_no_ext +
@@ -846,6 +896,13 @@ class Enhance(ProcessMIA):
                 else:
                     (file_name_no_ext,
                      file_extension) = os.path.splitext(file_name)
+                    if file_extension == '.gz':
+                        (file_name_no_ext_2,
+                         file_extension_2) = os.path.splitext(file_name_no_ext)
+                        if file_extension_2 == '.nii':
+                            file_name_no_ext = file_name_no_ext_2
+                            file_extension = '.nii.gz'
+
                     files.append(os.path.join(self.output_directory,
                                               (self.prefix.strip() +
                                                file_name_no_ext +
@@ -868,9 +925,20 @@ class Enhance(ProcessMIA):
 
                     for in_val, out_val in zip(files_name, val):
                         _, fileOval = os.path.split(out_val)
-                        fileOval_no_ext, _ = os.path.splitext(fileOval)
+                        fileOval_no_ext, file_extension = os.path.splitext(fileOval)
+                        if file_extension == '.gz':
+                            (fileOval_no_ext_2,
+                             file_extension_2) = os.path.splitext(fileOval_no_ext)
+                            if file_extension_2 == '.nii':
+                                fileOval_no_ext = fileOval_no_ext_2
+
                         _, fileIval = os.path.split(in_val)
-                        fileIval_no_ext, _ = os.path.splitext(fileIval)
+                        fileIval_no_ext, file_extension = os.path.splitext(fileIval)
+                        if file_extension == '.gz':
+                            (fileIval_no_ext_2,
+                             file_extension_2) = os.path.splitext(fileIval_no_ext)
+                            if file_extension_2 == '.nii':
+                                fileIval_no_ext = fileIval_no_ext_2
 
                         if ((self.prefix) and
                                 (fileOval_no_ext.startswith(self.prefix))):
@@ -919,6 +987,12 @@ class Enhance(ProcessMIA):
                 # Image save
                 _, file_name = os.path.split(file_name)
                 file_name_no_ext, file_extension = os.path.splitext(file_name)
+                if file_extension == '.gz':
+                    (file_name_no_ext_2,
+                     file_extension_2) = os.path.splitext(file_name_no_ext)
+                    if file_extension_2 == '.nii':
+                        file_name_no_ext = file_name_no_ext_2
+                        file_extension = '.nii.gz'
 
                 file_out = os.path.join(self.output_directory,
                                         (self.prefix.strip() +
@@ -1039,6 +1113,13 @@ class GradientThreshold(ProcessMIA):
                 if retval != QMessageBox.Abort:
                     (file_name_no_ext,
                      file_extension) = os.path.splitext(filename)
+                    if file_extension == '.gz':
+                        (file_name_no_ext_2,
+                         file_extension_2) = os.path.splitext(file_name_no_ext)
+                        if file_extension_2 == '.nii':
+                            file_name_no_ext = file_name_no_ext_2
+                            file_extension = '.nii.gz'
+
                     file = os.path.join(self.output_directory,
                                         (self.prefix.strip() +
                                          file_name_no_ext +
@@ -1056,6 +1137,13 @@ class GradientThreshold(ProcessMIA):
             else:
                 (file_name_no_ext,
                  file_extension) = os.path.splitext(filename)
+                if file_extension == '.gz':
+                    (file_name_no_ext_2,
+                     file_extension_2) = os.path.splitext(file_name_no_ext)
+                    if file_extension_2 == '.nii':
+                        file_name_no_ext = file_name_no_ext_2
+                        file_extension = '.nii.gz'
+
                 file = os.path.join(self.output_directory,
                                     (self.prefix.strip() +
                                      file_name_no_ext +
@@ -1069,31 +1157,9 @@ class GradientThreshold(ProcessMIA):
                 print('- There was no output file deducted during '
                       'initialisation. Please check the input parameters...!')
 
-        # tags inheritance (optional)
-        if self.outputs:
-
-            for key, val in self.outputs.items():
-
-                if key == "out_file":
-                    in_val = file_name
-                    out_val = val
-
-                    _, fileOval = os.path.split(out_val)
-                    fileOval_no_ext, _ = os.path.splitext(fileOval)
-                    _, fileIval = os.path.split(in_val)
-                    fileIval_no_ext, _ = os.path.splitext(fileIval)
-
-                    if ((self.prefix) and
-                            (fileOval_no_ext.startswith(self.prefix))):
-                        fileOval_no_ext = fileOval_no_ext[len(self.prefix):]
-
-                    if ((self.suffix) and
-                            (fileOval_no_ext.endswith(self.suffix))):
-                        fileOval_no_ext = fileOval_no_ext[:-len(
-                            self.suffix)]
-
-                    if fileOval_no_ext == fileIval_no_ext:
-                        self.inheritance_dict[out_val] = in_val
+            # tags inheritance (optional)
+            if self.outputs['out_file']:
+                self.inheritance_dict[self.outputs['out_file']] = self.in_file
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -1155,6 +1221,12 @@ class GradientThreshold(ProcessMIA):
             # Image save
             _, file_name = os.path.split(file_name)
             file_name_no_ext, file_extension = os.path.splitext(file_name)
+            if file_extension == '.gz':
+                (file_name_no_ext_2,
+                 file_extension_2) = os.path.splitext(file_name_no_ext)
+                if file_extension_2 == '.nii':
+                    file_name_no_ext = file_name_no_ext_2
+                    file_extension = '.nii.gz'
 
             file_out = os.path.join(self.output_directory,
                                      (self.prefix.strip() +
@@ -1275,6 +1347,13 @@ class Mask(ProcessMIA):
                 if retval != QMessageBox.Abort:
                     (file_name_no_ext,
                      file_extension) = os.path.splitext(filename)
+                    if file_extension == '.gz':
+                        (file_name_no_ext_2,
+                         file_extension_2) = os.path.splitext(file_name_no_ext)
+                        if file_extension_2 == '.nii':
+                            file_name_no_ext = file_name_no_ext_2
+                            file_extension = '.nii.gz'
+
                     file = os.path.join(self.output_directory,
                                         (self.prefix.strip() +
                                          file_name_no_ext +
@@ -1292,6 +1371,13 @@ class Mask(ProcessMIA):
             else:
                 (file_name_no_ext,
                  file_extension) = os.path.splitext(filename)
+                if file_extension == '.gz':
+                    (file_name_no_ext_2,
+                     file_extension_2) = os.path.splitext(file_name_no_ext)
+                    if file_extension_2 == '.nii':
+                        file_name_no_ext = file_name_no_ext_2
+                        file_extension = '.nii.gz'
+
                 file =os.path.join(self.output_directory,
                                    (self.prefix.strip() +
                                     file_name_no_ext +
@@ -1306,30 +1392,8 @@ class Mask(ProcessMIA):
                       'initialisation. Please check the input parameters...!')
 
         # tags inheritance (optional)
-        if self.outputs:
-
-            for key, val in self.outputs.items():
-
-                if key == "out_file":
-                    in_val = file_name
-                    out_val = val
-
-                    _, fileOval = os.path.split(out_val)
-                    fileOval_no_ext, _ = os.path.splitext(fileOval)
-                    _, fileIval = os.path.split(in_val)
-                    fileIval_no_ext, _ = os.path.splitext(fileIval)
-
-                    if ((self.prefix) and
-                            (fileOval_no_ext.startswith(self.prefix))):
-                        fileOval_no_ext = fileOval_no_ext[len(self.prefix):]
-
-                    if ((self.suffix) and
-                            (fileOval_no_ext.endswith(self.suffix))):
-                        fileOval_no_ext = fileOval_no_ext[:-len(
-                            self.suffix)]
-
-                    if fileOval_no_ext == fileIval_no_ext:
-                        self.inheritance_dict[out_val] = in_val
+        if self.outputs['out_file']:
+            self.inheritance_dict[self.outputs['out_file']] = self.in_file
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -1361,6 +1425,12 @@ class Mask(ProcessMIA):
             # Image save
             _, file_name = os.path.split(file_name)
             file_name_no_ext, file_extension = os.path.splitext(file_name)
+            if file_extension == '.gz':
+                (file_name_no_ext_2,
+                 file_extension_2) = os.path.splitext(file_name_no_ext)
+                if file_extension_2 == '.nii':
+                    file_name_no_ext = file_name_no_ext_2
+                    file_extension = '.nii.gz'
 
             file_out = os.path.join(self.output_directory,
                                      (self.prefix.strip() +
@@ -1920,6 +1990,13 @@ class RotationMask(ProcessMIA):
                 if retval != QMessageBox.Abort:
                     (file_name_no_ext,
                      file_extension) = os.path.splitext(filename)
+                    if file_extension == '.gz':
+                        (file_name_no_ext_2,
+                         file_extension_2) = os.path.splitext(file_name_no_ext)
+                        if file_extension_2 == '.nii':
+                            file_name_no_ext = file_name_no_ext_2
+                            file_extension = '.nii.gz'
+
                     files.append(os.path.join(self.output_directory,
                                               (self.prefix.strip() +
                                                file_name_no_ext +
@@ -1937,6 +2014,13 @@ class RotationMask(ProcessMIA):
             else:
                 (file_name_no_ext,
                  file_extension) = os.path.splitext(filename)
+                if file_extension == '.gz':
+                    (file_name_no_ext_2,
+                     file_extension_2) = os.path.splitext(file_name_no_ext)
+                    if file_extension_2 == '.nii':
+                        file_name_no_ext = file_name_no_ext_2
+                        file_extension = '.nii.gz'
+
                 files.append(os.path.join(self.output_directory,
                                           (self.prefix.strip() +
                                            file_name_no_ext +
@@ -1950,31 +2034,9 @@ class RotationMask(ProcessMIA):
                 print('- There was no output file deducted during '
                       'initialisation. Please check the input parameters...!')
 
-        # tags inheritance (optional)
-        if self.outputs:
-
-            for key, val in self.outputs.items():
-
-                if key == "out_file":
-                    in_val = file_name
-                    out_val = val
-
-                    _, fileOval = os.path.split(out_val)
-                    fileOval_no_ext, _ = os.path.splitext(fileOval)
-                    _, fileIval = os.path.split(in_val)
-                    fileIval_no_ext, _ = os.path.splitext(fileIval)
-
-                    if ((self.prefix) and
-                            (fileOval_no_ext.startswith(self.prefix))):
-                        fileOval_no_ext = fileOval_no_ext[len(self.prefix):]
-
-                    if ((self.suffix) and
-                            (fileOval_no_ext.endswith(self.suffix))):
-                        fileOval_no_ext = fileOval_no_ext[:-len(
-                            self.suffix)]
-
-                    if fileOval_no_ext == fileIval_no_ext:
-                        self.inheritance_dict[out_val] = in_val
+            # tags inheritance (optional)
+            if self.outputs['out_file']:
+                self.inheritance_dict[self.outputs['out_file']] = self.in_file
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -2027,6 +2089,12 @@ class RotationMask(ProcessMIA):
             # Image save
             _, file_name = os.path.split(file_name)
             file_name_no_ext, file_extension = os.path.splitext(file_name)
+            if file_extension == '.gz':
+                (file_name_no_ext_2,
+                 file_extension_2) = os.path.splitext(file_name_no_ext)
+                if file_extension_2 == '.nii':
+                    file_name_no_ext = file_name_no_ext_2
+                    file_extension = '.nii.gz'
 
             file_out = os.path.join(self.output_directory,
                                     (self.prefix.strip() +
