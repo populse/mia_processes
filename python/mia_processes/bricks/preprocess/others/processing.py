@@ -2066,9 +2066,8 @@ class Template(ProcessMIA):
         desc_desc = 'Description field (String or None)'
 
         # Outputs description
-        template_path_desc = ('Path of the template (a pathlike object '
-                              'or string representing a file).')
-        template_spec_desc = 'Spec of the template (a dictionary of strings)'
+        template_desc = ('Path of the template (a pathlike object '
+                         'or string representing a file).')
 
         # Inputs traits
         self.add_trait("in_template",
@@ -2092,18 +2091,18 @@ class Template(ProcessMIA):
                        traits.String('',
                                      output=False,
                                      optional=True,
-                                     desc=suffix_desc))
+                                     desc=atlas_desc))
 
         self.add_trait("desc",
                        traits.String('',
                                      output=False,
                                      optional=True,
-                                     desc=suffix_desc))
+                                     desc=desc_desc))
 
         # Outputs traits
-        self.add_trait("template_path",
-                       traits.String(output=True,
-                                     desc=template_path_desc))
+        self.add_trait("template",
+                       traits.File(output=True,
+                                   desc=template_desc))
 
         self.init_default_traits()
 
@@ -2121,17 +2120,17 @@ class Template(ProcessMIA):
         # Using the inheritance to ProcessMIA class, list_outputs method
         super(Template, self).list_outputs()
 
-        if self.suffix is Undefined:
+        if not self.suffix:
             suffix = None
         else:
             suffix = self.suffix
 
-        if self.atlas is Undefined:
+        if not self.atlas:
             atlas = None
         else:
             atlas = self.atlas
 
-        if self.desc is Undefined:
+        if not self.desc:
             desc = None
         else:
             desc = self.desc
@@ -2150,7 +2149,7 @@ class Template(ProcessMIA):
                   self.in_template, template_spec)
             return
 
-        self.outputs['template_path'] = str(tpl_target_path)
+        self.outputs['template'] = str(tpl_target_path)
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
