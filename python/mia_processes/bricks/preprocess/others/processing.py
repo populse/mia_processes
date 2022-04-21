@@ -333,8 +333,8 @@ class Binarize(ProcessMIA):
 
         # Inputs traits
         self.add_trait("in_files",
-                       InputMultiPath(traits.Either(ImageFileSPM(),
-                                                    traits.List(ImageFileSPM())),
+                       InputMultiPath(traits.Either(File(),
+                                                    traits.List(File())),
                                       output=False,
                                       desc=in_files_desc))
 
@@ -548,7 +548,7 @@ class ConformImage(ProcessMIA):
 
         # Inputs traits
         self.add_trait("in_file",
-                       ImageFileSPM(output=False,
+                       File(output=False,
                                     optional=False,
                                     desc=in_file_desc))
 
@@ -747,8 +747,8 @@ class Enhance(ProcessMIA):
 
         # Inputs traits
         self.add_trait("in_files",
-                       InputMultiPath(traits.Either(ImageFileSPM(),
-                                                    traits.List(ImageFileSPM())),
+                       InputMultiPath(traits.Either(File(),
+                                                    traits.List(File())),
                                       output=False,
                                       desc=in_files_desc))
 
@@ -962,12 +962,12 @@ class GradientThreshold(ProcessMIA):
 
         # Inputs traits
         self.add_trait("in_file",
-                       ImageFileSPM(output=False,
+                       File(output=False,
                                     optional=False,
                                     desc=in_file_desc))
 
         self.add_trait("seg_file",
-                       ImageFileSPM(output=False,
+                       File(output=False,
                                     optional=False,
                                     desc=seg_file_desc))
 
@@ -1198,12 +1198,12 @@ class Mask(ProcessMIA):
 
         # Inputs traits
         self.add_trait("in_file",
-                       ImageFileSPM(output=False,
+                       File(output=False,
                                     optional=False,
                                     desc=in_file_desc))
 
         self.add_trait("mask_file",
-                       ImageFileSPM(output=False,
+                       File(output=False,
                                     optional=False,
                                     desc=mask_file_desc))
 
@@ -1253,7 +1253,7 @@ class Mask(ProcessMIA):
                     (self.prefix in [Undefined, "<undefined>"])):
                 self.prefix = " "
 
-            files = []
+            file = ''
 
             path, file_name = os.path.split(file_name)
 
@@ -1275,11 +1275,11 @@ class Mask(ProcessMIA):
                 if retval != QMessageBox.Abort:
                     (file_name_no_ext,
                      file_extension) = os.path.splitext(file_name)
-                    files.append(os.path.join(self.output_directory,
-                                              (self.prefix.strip() +
-                                               file_name_no_ext +
-                                               self.suffix.strip() +
-                                               file_extension)))
+                    file = os.path.join(self.output_directory,
+                                        (self.prefix.strip() +
+                                         file_name_no_ext +
+                                         self.suffix.strip() +
+                                         file_extension))
                     print('\nMask brick warning: the out_file output '
                           'parameter is the same as the in_files input '
                           'parameter (suffix and prefix are not defined):'
@@ -1291,14 +1291,14 @@ class Mask(ProcessMIA):
             else:
                 (file_name_no_ext,
                  file_extension) = os.path.splitext(file_name)
-                files.append(os.path.join(self.output_directory,
-                                          (self.prefix.strip() +
-                                           file_name_no_ext +
-                                           self.suffix.strip() +
-                                           file_extension)))
+                file =os.path.join(self.output_directory,
+                                   (self.prefix.strip() +
+                                    file_name_no_ext +
+                                    self.suffix.strip() +
+                                    file_extension))
 
             if file_name:
-                self.outputs['out_file'] = files
+                self.outputs['out_file'] = file
 
             else:
                 print('- There was no output file deducted during '
@@ -1847,7 +1847,7 @@ class RotationMask(ProcessMIA):
 
         # Inputs traits
         self.add_trait("in_file",
-                       ImageFileSPM(output=False,
+                       File(output=False,
                                     optional=False,
                                     desc=in_file_desc))
 
@@ -2184,8 +2184,8 @@ class Threshold(ProcessMIA):
 
         # Inputs traits
         self.add_trait("in_files",
-                       InputMultiPath(traits.Either(ImageFileSPM(),
-                                                    traits.List(ImageFileSPM())),
+                       InputMultiPath(traits.Either(File(),
+                                                    traits.List(File())),
                                       output=False,
                                       desc=in_files_desc))
 
