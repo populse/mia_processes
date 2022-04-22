@@ -132,14 +132,14 @@ class AffineInitializer(ProcessMIA):
 
                 else:
 
-                    if trail in ['nii', 'nii.gz', 'img']:
+                    if trail not in ['nii', 'nii.gz', 'img']:
                         print('\nThe input image format does not seem to be '
                               'nii or img. This can prevent the process '
                               'launch ...!')
 
                     self.outputs['out_file'] = os.path.join(
                         self.output_directory,
-                        self.out_prefix + ifile)
+                        self.out_prefix + fileName + '.mat')
 
                     self.inheritance_dict[self.outputs[
                         'out_file']] = self.moving_image
