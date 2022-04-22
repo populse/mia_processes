@@ -158,9 +158,9 @@ class ArtifactMask(ProcessMIA):
                     self.suffix in [Undefined, "<undefined>"]):
                 self.suffix = " "
 
-            files_hat = []
-            files_art = []
-            files_air = []
+            file_hat = ''
+            file_art = ''
+            file_air = ''
 
             path, file_name = os.path.split(file_name)
 
@@ -173,28 +173,28 @@ class ArtifactMask(ProcessMIA):
                     file_name_no_ext = file_name_no_ext_2
                     file_extension = '.nii.gz'
 
-            files_hat.append(os.path.join(self.output_directory,
-                                          ('hat_' +
-                                           file_name_no_ext +
-                                           self.suffix.strip() +
-                                           file_extension)))
+            file_hat = os.path.join(self.output_directory,
+                                    ('hat_' +
+                                     file_name_no_ext +
+                                     self.suffix.strip() +
+                                     file_extension))
 
-            files_art.append(os.path.join(self.output_directory,
-                                          ('art_' +
-                                           file_name_no_ext +
-                                           self.suffix.strip() +
-                                           file_extension)))
+            file_art = os.path.join(self.output_directory,
+                                    ('art_' +
+                                     file_name_no_ext +
+                                     self.suffix.strip() +
+                                     file_extension))
 
-            files_air.append(os.path.join(self.output_directory,
-                                          ('air_' +
-                                           file_name_no_ext +
-                                           self.suffix.strip() +
-                                           file_extension)))
+            file_air = os.path.join(self.output_directory,
+                                    ('air_' +
+                                     file_name_no_ext +
+                                     self.suffix.strip() +
+                                     file_extension))
 
             if file_name:
-                self.outputs['out_hat_mask'] = files_hat
-                self.outputs['out_art_mask'] = files_art
-                self.outputs['out_air_mask'] = files_air
+                self.outputs['out_hat_mask'] = file_hat
+                self.outputs['out_art_mask'] = file_art
+                self.outputs['out_air_mask'] = file_air
 
             else:
                 print('- There was no output file deducted during '
