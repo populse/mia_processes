@@ -515,13 +515,15 @@ class N4BiasFieldCorrection(ProcessMIA):
         return self.process.run(configuration_dict={})
 
 
-class Registration(ProcessMIA):
+class T1wFastRegistration(ProcessMIA):
     """
     * Registers a moving image to a fixed image using a predefined
-     (sequence of) cost function(s) and transformation operations*
+     (sequence of) cost function(s) and transformation operations
+     Uses parameters from
+     https://github.com/nipreps/niworkflows/blob/master/niworkflows/data/t1w-mni_registration_fast_000.json *
 
-    Please, see the complete documentation for the `Registration' brick in the populse.mia_processes website
-    <https://populse.github.io/mia_processes/documentation/bricks/preprocess/afni/Registration.html>`_
+    Please, see the complete documentation for the `T1wFastRegistration' brick in the populse.mia_processes website
+    <https://populse.github.io/mia_processes/documentation/bricks/preprocess/afni/T1wFastRegistration.html>`_
 
     """
 
@@ -533,7 +535,7 @@ class Registration(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(Registration, self).__init__()
+        super(T1wFastRegistration, self).__init__()
 
         # Third party softwares required for the execution of the brick
         self.requirement = ['ants', 'nipype']
@@ -551,35 +553,37 @@ class Registration(ProcessMIA):
                                          'which are a pathlike object or string '
                                          'representing an existing file).')
 
-        metric_desc = 'The metric to use for each stage (a list of strings which are ' \
-                      ' ''CC'' or ''MeanSquares'' or ''Demons'' or ''GC'' or ''MI'' ' \
-                      'or Mattes)'
-
-        shrink_factor_desc = '(A list of integers)'
-
-        smoothing_sigmas_desc = '(A list of floats)'
-
-        number_of_iterations_desc = '(A list of integers)'
-
         out_prefix_desc = ('Specify the string to be prepended to the '
                            'filename of the warped image file '
                            '(a string).')
 
-        radius_or_number_of_bins_desc = 'The number of bins in each stage for the MI ' \
-                                        'and Mattes metric, the radius for other metrics ' \
-                                        '(a list of integers)'
+        # Uncomment when bug 269 is solved
+        # metric_desc = 'The metric to use for each stage (a list of strings which are ' \
+        #               ' ''CC'' or ''MeanSquares'' or ''Demons'' or ''GC'' or ''MI'' ' \
+        #               'or Mattes)'
 
-        convergence_window_size_desc = 'a list of integer'
+        # shrink_factor_desc = '(A list of integers)'
 
-        sampling_percentage_desc = 'The metric sampling percentages to use for each stage ' \
-                                   '(a list of 0.0 <= floats <= 1; requires sampling strategy)'
+        # smoothing_sigmas_desc = '(A list of floats)'
 
-        sampling_strategy_desc = 'The metric sampling strategies for each stage (A list of ' \
-                                 'strings which are ''None'' or ''Regular'' or ''Random'').'
+        # number_of_iterations_desc = '(A list of integers)'
 
-        transforms_desc = '(A list of items)'
+        # radius_or_number_of_bins_desc = 'The number of bins in each stage for the MI ' \
+        #                                 'and Mattes metric, the radius for other metrics ' \
+        #                                 '(a list of integers)'
 
-        transforms_parameters_desc = '(A list of tuples)'
+        # convergence_window_size_desc = 'a list of integer'
+
+        # sampling_percentage_desc = 'The metric sampling percentages to use for each stage ' \
+        #                            '(a list of 0.0 <= floats <= 1; requires sampling strategy)'
+
+        # sampling_strategy_desc = 'The metric sampling strategies for each stage (A list of ' \
+        #                          'strings which are ''None'' or ''Regular'' or ''Random'').'
+
+        # transforms_desc = '(A list of items)'
+
+        # transforms_parameters_desc = '(A list of tuples)'
+        # End - Uncomment when bug 269 is solved
 
         # Outputs description
         composite_transform_desc = ('Output composite transform file (a pathlike '
@@ -617,86 +621,88 @@ class Registration(ProcessMIA):
                               optional=True,
                               desc=out_prefix_desc))
 
-        self.add_trait("transforms",
-                       List(Enum('Rigid',
-                                 'Affine',
-                                 'CompositeAffine',
-                                 'Similarity',
-                                 'Translation',
-                                 'BSpline',
-                                 'GaussianDisplacementField',
-                                 'TimeVaryingVelocityField',
-                                 'TimeVaryingBSplineVelocityField',
-                                 'SyN',
-                                 'BSplineSyN',
-                                 'Exponential',
-                                 'BSplineExponential'),
-                            output=False,
-                            optional=False,
-                            desc=transforms_desc))
+        # Uncomment when bug 269 is solved
+        # self.add_trait("transforms",
+        #                List(Enum('Rigid',
+        #                          'Affine',
+        #                          'CompositeAffine',
+        #                          'Similarity',
+        #                          'Translation',
+        #                          'BSpline',
+        #                          'GaussianDisplacementField',
+        #                          'TimeVaryingVelocityField',
+        #                          'TimeVaryingBSplineVelocityField',
+        #                          'SyN',
+        #                          'BSplineSyN',
+        #                          'Exponential',
+        #                          'BSplineExponential'),
+        #                     output=False,
+        #                     optional=False,
+        #                     desc=transforms_desc))
 
-        self.add_trait("transforms_parameters",
-                       List(List(),
-                            output=False,
-                            optional=False,
-                            desc=transforms_parameters_desc))
+        # self.add_trait("transforms_parameters",
+        #                List(List(),
+        #                     output=False,
+        #                     optional=False,
+        #                     desc=transforms_parameters_desc))
 
-        self.add_trait("metric",
-                       List(Enum('CC',
-                                 'MeanSquares',
-                                 'Demon',
-                                 'GC',
-                                 'MI',
-                                 'Mattes'),
-                            output=False,
-                            optional=False,
-                            desc=metric_desc))
+        # self.add_trait("metric",
+        #                List(Enum('CC',
+        #                          'MeanSquares',
+        #                          'Demon',
+        #                          'GC',
+        #                          'MI',
+        #                          'Mattes'),
+        #                     output=False,
+        #                     optional=False,
+        #                     desc=metric_desc))
 
-        self.add_trait("shrink_factor",
-                       List(List(Int()),
-                            output=False,
-                            optional=False,
-                            desc=shrink_factor_desc))
+        # self.add_trait("shrink_factor",
+        #                List(List(Int()),
+        #                     output=False,
+        #                     optional=False,
+        #                     desc=shrink_factor_desc))
 
-        self.add_trait("smoothing_sigmas",
-                       List(List(Float()),
-                            output=False,
-                            optional=False,
-                            desc=smoothing_sigmas_desc))
+        # self.add_trait("smoothing_sigmas",
+        #                List(List(Float()),
+        #                    output=False,
+        #                     optional=False,
+        #                     desc=smoothing_sigmas_desc))
 
-        self.add_trait("number_of_iterations",
-                       List(List(Int()),
-                            output=False,
-                            optional=False,
-                            desc=number_of_iterations_desc))
+        # self.add_trait("number_of_iterations",
+        #                List(List(Int()),
+        #                     output=False,
+        #                     optional=False,
+        #                     desc=number_of_iterations_desc))
 
-        self.add_trait("radius_or_number_of_bins",
-                       List(Int(),
-                            output=False,
-                            optional=False,
-                            desc=radius_or_number_of_bins_desc))
+        # self.add_trait("radius_or_number_of_bins",
+        #                List(Int(),
+        #                     output=False,
+        #                     optional=False,
+        #                     desc=radius_or_number_of_bins_desc))
 
-        self.add_trait("convergence_window_size",
-                       List(Int(),
-                            output=False,
-                            optional=False,
-                            desc=convergence_window_size_desc))
+        # self.add_trait("convergence_window_size",
+        #                List(Int(),
+        #                     output=False,
+        #                     optional=False,
+        #                     desc=convergence_window_size_desc))
 
-        self.add_trait("sampling_percentage",
-                       List(Float(min=0.0, max=1.0),
-                            default=Undefined,
-                            output=False,
-                            optional=True,
-                            desc=sampling_percentage_desc))
+        # self.add_trait("sampling_percentage",
+        #                List(Float(min=0.0, max=1.0),
+        #                     default=Undefined,
+        #                     output=False,
+        #                     optional=True,
+        #                     desc=sampling_percentage_desc))
 
-        self.add_trait("sampling_strategy",
-                       List(Enum('None',
-                                 'Regular',
-                                 'Random'),
-                            default=Undefined,
-                            output=False,
-                            optional=True,
-                            desc=sampling_strategy_desc))
+        # self.add_trait("sampling_strategy",
+        #                List(Enum('None',
+        #                          'Regular',
+        #                          'Random'),
+        #                     default=Undefined,
+        #                     output=False,
+        #                     optional=True,
+        #                     desc=sampling_strategy_desc))
+        # End - Uncomment when bug 269 is solved
 
         # Outputs traits
         self.add_trait("composite_transform",
@@ -735,13 +741,15 @@ class Registration(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Registration, self).list_outputs()
+        super(T1wFastRegistration, self).list_outputs()
 
-        if (self.sampling_percentage == Undefined and self.sampling_strategy != Undefined) or \
-           (self.sampling_percentage != Undefined and self.sampling_strategy == Undefined):
-            print('\nInitialisation failed. Please, set both (or none) of the two input '
-                  'parameters sampling_percentage and sampling_strategy ...!')
-            return
+        # Uncomment when bug 269 is solved
+        # if (self.sampling_percentage == Undefined and self.sampling_strategy != Undefined) or \
+        #    (self.sampling_percentage != Undefined and self.sampling_strategy == Undefined):
+        #     print('\nInitialisation failed. Please, set both (or none) of the two input '
+        #           'parameters sampling_percentage and sampling_strategy ...!')
+        #     return
+        # End - Uncomment when bug 269 is solved
 
         # Outputs definition and tags inheritance (optional)
         if self.moving_image:
@@ -798,51 +806,77 @@ class Registration(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(Registration, self).run_process_mia()
+        super(T1wFastRegistration, self).run_process_mia()
 
         self.process.fixed_image = self.fixed_image
         self.process.moving_image = self.moving_image
         self.process.initial_moving_transform = self.initial_moving_transform
 
-        self.process.metric = self.metric
-        self.process.shrink_factor = self.shrink_factor
-        self.process.smoothing_sigmas = self.smoothing_sigmas
-        self.process.number_of_iterations = self.number_of_iterations
-        self.process.radius_or_number_of_bins = self.radius_or_number_of_bins
-        self.process.sampling_percentage = self.sampling_percentage
-        self.process.sampling_strategy = self.sampling_strategy
-        self.process.convergence_window_size = self.convergence_window_size
-        self.process.transforms = self.transforms
-
-        self.process.transforms_parameters = []
-        for tf in self.transforms_parameters:
-            self.process.transforms_parameters.append(
-                tuple(tf))
-
-        # default inputs
-        self.process.metric_weight = []
-        for i in range(0, len(self.metric)):
-            self.process.metric_weight.append(1)
+        # Delete when bug 269 is solved
         self.process.collapse_output_transforms = True
-        self.process.convergence_threshold = []
-        for i in range(0, len(self.metric)):
-            self.process.convergence_threshold.append(1e-6)
-
-        self.process.interpolation = 'LanczosWindowedSinc'
+        self.process.convergence_threshold = [1e-06, 1e-06, 1e-06]
+        self.process.convergence_window_size = [20, 20, 10]
         self.process.dimension = 3
+        self.process.interpolation = 'LanczosWindowedSinc'
+        self.process.metric = ['Mattes', 'Mattes', 'Mattes']
+        self.process.metric_weight = [1, 1, 1]
+        self.process.number_of_iterations = [[1000], [500, 250, 100], [50, 20]]
+        self.process.output_transform_prefix = 'ants_t1_to_mni'
         self.process.output_warped_image = True
-        self.process.sigma_units = []
-        for i in range(0, len(self.metric)):
-            self.process.sigma_units.append('vox')
-        self.process.use_estimate_learning_rate_once = []
-        for i in range(0, len(self.metric)):
-            self.process.use_estimate_learning_rate_once.append(True)
-        self.process.use_histogram_matching = []
-        for i in range(0, len(self.metric)):
-            self.process.use_histogram_matching.append(True)
-        self.process.winsorize_lower_quantile = 0.005
-        self.process.winsorize_upper_quantile = 0.995
-        self.process.write_composite_transform = True
+        self.process.radius_or_number_of_bins = [32, 32, 56]
+        self.process.sampling_percentage = [0.15, 0.15, 0.25]
+        self.process.sampling_strategy = ['Random', 'Regular', 'Regular']
+        self.process.shrink_factors = [[4], [4, 2, 1], [2, 1]]
+        self.process.sigma_units = ['vox', 'vox', 'vox']
+        self.process.smoothing_sigmas = [[4], [4, 2, 0], [1, 0]]
+        self.process.transform_parameters = [[0.01], [0.08], [0.1, 3.0, 0.0]]
+        self.process.transforms = ['Rigid', 'Affine', 'SyN']
+        self.process.use_estimate_learning_rate_once = [True, True, True]
+        self.process.use_histogram_matching = [True, True, True]
+        self.process.write_composite_transform = False
+        # End - Delete when bug 269 is solved
+
+        # Uncomment when bug 269 is solved
+        # self.process.metric = self.metric
+        # self.process.shrink_factor = self.shrink_factor
+        # self.process.smoothing_sigmas = self.smoothing_sigmas
+        # self.process.number_of_iterations = self.number_of_iterations
+        # self.process.radius_or_number_of_bins = self.radius_or_number_of_bins
+        # self.process.sampling_percentage = self.sampling_percentage
+        # self.process.sampling_strategy = self.sampling_strategy
+        # self.process.convergence_window_size = self.convergence_window_size
+        # self.process.transforms = self.transforms
+
+        # self.process.transforms_parameters = []
+        # for tf in self.transforms_parameters:
+        #     self.process.transforms_parameters.append(
+        #         tuple(tf))
+        #
+        # # default inputs
+        # self.process.metric_weight = []
+        # for i in range(0, len(self.metric)):
+        #     self.process.metric_weight.append(1)
+        # self.process.collapse_output_transforms = True
+        # self.process.convergence_threshold = []
+        # for i in range(0, len(self.metric)):
+        #     self.process.convergence_threshold.append(1e-6)
+
+        # self.process.interpolation = 'LanczosWindowedSinc'
+        # self.process.dimension = 3
+        # self.process.output_warped_image = True
+        # self.process.sigma_units = []
+        # for i in range(0, len(self.metric)):
+        #     self.process.sigma_units.append('vox')
+        # self.process.use_estimate_learning_rate_once = []
+        # for i in range(0, len(self.metric)):
+        #     self.process.use_estimate_learning_rate_once.append(True)
+        # self.process.use_histogram_matching = []
+        # for i in range(0, len(self.metric)):
+        #     self.process.use_histogram_matching.append(True)
+        # self.process.winsorize_lower_quantile = 0.005
+        # self.process.winsorize_upper_quantile = 0.995
+        # self.process.write_composite_transform = True
+        # End - Uncomment when bug 269 is solved
 
         self.process.warped_image = self.warped_image
         self.process.composite_transform = self.composite_transform
