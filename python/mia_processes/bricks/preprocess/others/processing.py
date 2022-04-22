@@ -1923,7 +1923,7 @@ class RotationMask(ProcessMIA):
                                     desc=in_file_desc))
 
         self.add_trait("suffix",
-                       traits.String("_masked",
+                       traits.String("_rotmasked",
                                      output=False,
                                      optional=True,
                                      desc=suffix_desc))
@@ -1968,7 +1968,7 @@ class RotationMask(ProcessMIA):
                     (self.prefix in [Undefined, "<undefined>"])):
                 self.prefix = " "
 
-            files = []
+            file = ''
 
             path, filename = os.path.split(file_name)
 
@@ -1997,11 +1997,11 @@ class RotationMask(ProcessMIA):
                             file_name_no_ext = file_name_no_ext_2
                             file_extension = '.nii.gz'
 
-                    files.append(os.path.join(self.output_directory,
-                                              (self.prefix.strip() +
-                                               file_name_no_ext +
-                                               self.suffix.strip() +
-                                               file_extension)))
+                    file = os.path.join(self.output_directory,
+                                        (self.prefix.strip() +
+                                         file_name_no_ext +
+                                         self.suffix.strip() +
+                                         file_extension))
                     print('\nRotationMask brick warning: the out_file output '
                           'parameter is the same as the in_files input '
                           'parameter (suffix and prefix are not defined):'
@@ -2021,14 +2021,14 @@ class RotationMask(ProcessMIA):
                         file_name_no_ext = file_name_no_ext_2
                         file_extension = '.nii.gz'
 
-                files.append(os.path.join(self.output_directory,
-                                          (self.prefix.strip() +
-                                           file_name_no_ext +
-                                           self.suffix.strip() +
-                                           file_extension)))
+                file = os.path.join(self.output_directory,
+                                    (self.prefix.strip() +
+                                     file_name_no_ext +
+                                     self.suffix.strip() +
+                                     file_extension))
 
             if filename:
-                self.outputs['out_file'] = files
+                self.outputs['out_file'] = file
 
             else:
                 print('- There was no output file deducted during '
