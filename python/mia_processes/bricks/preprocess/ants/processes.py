@@ -58,9 +58,9 @@ class AffineInitializer(ProcessMIA):
         self.requirement = ['ants', 'nipype']
 
         # Inputs description
-        fixed_image_desc = ('The fixed reference image (a pathlike object or string '
-                        'representing a file).')
         moving_image_desc = 'The moving image to be mapped to the fixed space.'
+        fixed_image_desc = ('The fixed reference image (a pathlike object or string '
+                            'representing a file).')
         out_prefix_desc = ('Specify the string to be prepended to the '
                            'filenames of the corrected image file '
                            '(a string).')
@@ -70,16 +70,16 @@ class AffineInitializer(ProcessMIA):
                          'string representing a file).')
 
         # Inputs traits
+        self.add_trait("moving_image",
+                       File(output=False,
+                            optional=False,
+                            desc=moving_image_desc))
+
         self.add_trait("fixed_image",
                        File(value=Undefined,
                             output=False,
                             optional=True,
                             desc=fixed_image_desc))
-
-        self.add_trait("moving_image",
-                       File(output=False,
-                            optional=False,
-                            desc=moving_image_desc))
 
         self.add_trait("out_prefix",
                        String('AffineTransform_',
@@ -782,11 +782,11 @@ class T1wFastRegistration(ProcessMIA):
 
                     self.outputs['composite_transform'] = os.path.join(
                         self.output_directory,
-                        'comp_transf_' + ifile)
+                        fileName + '_Composite.h5')
 
                     self.outputs['inverse_composite_transform'] = os.path.join(
                         self.output_directory,
-                        'inv_comp_transf_' + ifile)
+                        fileName + '_InverseComposite.h5')
 
                     self.inheritance_dict[self.outputs[
                         'warped_image']] = self.moving_image
@@ -821,8 +821,10 @@ class T1wFastRegistration(ProcessMIA):
         self.process.metric = ['Mattes', 'Mattes', 'Mattes']
         self.process.metric_weight = [1, 1, 1]
         self.process.number_of_iterations = [[1000], [500, 250, 100], [50, 20]]
-        self.process.output_transform_prefix = 'ants_t1_to_mni'
-        self.process.output_warped_image = True
+        ifile = os.path.split(self.moving_image)[-1]
+        fileName, _ = ifile.rsplit('.', 1)
+        self.process.output_transform_prefix = fileName + '_'
+        self.process.output_warped_image = self.warped_image
         self.process.radius_or_number_of_bins = [32, 32, 56]
         self.process.sampling_percentage = [0.15, 0.15, 0.25]
         self.process.sampling_strategy = ['Random', 'Regular', 'Regular']
@@ -833,7 +835,7 @@ class T1wFastRegistration(ProcessMIA):
         self.process.transforms = ['Rigid', 'Affine', 'SyN']
         self.process.use_estimate_learning_rate_once = [True, True, True]
         self.process.use_histogram_matching = [True, True, True]
-        self.process.write_composite_transform = False
+        self.process.write_composite_transform = True
         # End - Delete when bug 269 is solved
 
         # Uncomment when bug 269 is solved
@@ -877,13 +879,6 @@ class T1wFastRegistration(ProcessMIA):
         # self.process.winsorize_upper_quantile = 0.995
         # self.process.write_composite_transform = True
         # End - Uncomment when bug 269 is solved
-
-        self.process.warped_image = self.warped_image
-        self.process.composite_transform = self.composite_transform
-        self.process.inverse_composite_transform = self.inverse_composite_transform
-
-        if self.out_prefix:
-            self.process.out_prefix = self.out_prefix
 
         return self.process.run(configuration_dict={})
 
