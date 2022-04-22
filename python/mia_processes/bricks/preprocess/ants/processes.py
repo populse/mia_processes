@@ -11,7 +11,7 @@ populse_mia.
         - AffineInitializer
         - ApplyTransforms
         - N4BiasFieldCorrection
-        - Registration
+        - T1wFastRegistration
 
 """
 
