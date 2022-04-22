@@ -167,11 +167,10 @@ class AffineInitializer(ProcessMIA):
 
 class ApplyTransforms(ProcessMIA):
     """
-    * Registers a moving image to a fixed image using a predefined
-     (sequence of) cost function(s) and transformation operations.
-     Uses a sequence of three transforms: Rigid, Affine and SyN*
+    * Transforms an image according to  a reference image and a
+      transformation (or set of transformation) *
 
-    Please, see the complete documentation for the `Registration' brick in the populse.mia_processes website
+    Please, see the complete documentation for the `ApplyTransforms' brick in the populse.mia_processes website
     <https://populse.github.io/mia_processes/documentation/bricks/preprocess/afni/ApplyTransforms.html>`_
 
     """
@@ -302,7 +301,7 @@ class ApplyTransforms(ProcessMIA):
 
                 else:
 
-                    if trail in ['nii', 'nii.gz', 'img']:
+                    if trail not in ['nii', 'nii.gz', 'img']:
                         print('\nThe input image format does not seem to be '
                               'nii or img. This can prevent the process '
                               'launch ...!')
@@ -455,7 +454,7 @@ class N4BiasFieldCorrection(ProcessMIA):
 
                 else:
 
-                    if trail in ['nii', 'nii.gz', 'img']:
+                    if trail not in ['nii', 'nii.gz', 'img']:
                         print('\nThe input image format does not seem to be '
                               'nii or img. This can prevent the process '
                               'launch ...!')
@@ -519,8 +518,7 @@ class N4BiasFieldCorrection(ProcessMIA):
 class Registration(ProcessMIA):
     """
     * Registers a moving image to a fixed image using a predefined
-     (sequence of) cost function(s) and transformation operations.
-     Uses a sequence of three transforms: Rigid, Affine and SyN*
+     (sequence of) cost function(s) and transformation operations*
 
     Please, see the complete documentation for the `Registration' brick in the populse.mia_processes website
     <https://populse.github.io/mia_processes/documentation/bricks/preprocess/afni/Registration.html>`_
@@ -567,13 +565,11 @@ class Registration(ProcessMIA):
                            'filename of the warped image file '
                            '(a string).')
 
-        output_transform_prefix_desc = ('Specify the string to be prepended to the '
-                                        'filename of the transform image file '
-                                        '(a string).')
-
         radius_or_number_of_bins_desc = 'The number of bins in each stage for the MI ' \
                                         'and Mattes metric, the radius for other metrics ' \
                                         '(a list of integers)'
+
+        convergence_window_size_desc = 'a list of integer'
 
         sampling_percentage_desc = 'The metric sampling percentages to use for each stage ' \
                                    '(a list of 0.0 <= floats <= 1; requires sampling strategy)'
@@ -581,7 +577,9 @@ class Registration(ProcessMIA):
         sampling_strategy_desc = 'The metric sampling strategies for each stage (A list of ' \
                                  'strings which are ''None'' or ''Regular'' or ''Random'').'
 
-        transform_parameters_desc = '(A list of tuples)'
+        transforms_desc = '(A list of items)'
+
+        transforms_parameters_desc = '(A list of tuples)'
 
         # Outputs description
         composite_transform_desc = ('Output composite transform file (a pathlike '
@@ -595,16 +593,16 @@ class Registration(ProcessMIA):
                              'or string representing an existing file).')
 
         # Inputs traits
+        self.add_trait("moving_image",
+                       File(output=False,
+                            optional=False,
+                            desc=moving_image_desc))
+
         self.add_trait("fixed_image",
                        File(value=Undefined,
                             output=False,
                             optional=True,
                             desc=fixed_image_desc))
-
-        self.add_trait("moving_image",
-                       File(output=False,
-                            optional=False,
-                            desc=moving_image_desc))
 
         self.add_trait("initial_moving_transform",
                        InputMultiPath(File(),
@@ -613,6 +611,36 @@ class Registration(ProcessMIA):
                                       optional=True,
                                       desc=initial_moving_transform_desc))
 
+        self.add_trait("out_prefix",
+                       String('w_',
+                              output=False,
+                              optional=True,
+                              desc=out_prefix_desc))
+
+        self.add_trait("transforms",
+                       List(Enum('Rigid',
+                                 'Affine',
+                                 'CompositeAffine',
+                                 'Similarity',
+                                 'Translation',
+                                 'BSpline',
+                                 'GaussianDisplacementField',
+                                 'TimeVaryingVelocityField',
+                                 'TimeVaryingBSplineVelocityField',
+                                 'SyN',
+                                 'BSplineSyN',
+                                 'Exponential',
+                                 'BSplineExponential'),
+                            output=False,
+                            optional=False,
+                            desc=transforms_desc))
+
+        self.add_trait("transforms_parameters",
+                       List(List(),
+                            output=False,
+                            optional=False,
+                            desc=transforms_parameters_desc))
+
         self.add_trait("metric",
                        List(Enum('CC',
                                  'MeanSquares',
@@ -620,55 +648,43 @@ class Registration(ProcessMIA):
                                  'GC',
                                  'MI',
                                  'Mattes'),
-                            minlen=3, maxlen=3,
                             output=False,
                             optional=False,
                             desc=metric_desc))
 
         self.add_trait("shrink_factor",
-                       List(Int(),
-                            minlen=3, maxlen=3,
+                       List(List(Int()),
                             output=False,
                             optional=False,
                             desc=shrink_factor_desc))
 
         self.add_trait("smoothing_sigmas",
-                       List(Float(),
-                            minlen=3, maxlen=3,
+                       List(List(Float()),
                             output=False,
                             optional=False,
                             desc=smoothing_sigmas_desc))
 
         self.add_trait("number_of_iterations",
                        List(List(Int()),
-                            minlen=3, maxlen=3,
                             output=False,
                             optional=False,
                             desc=number_of_iterations_desc))
 
-        self.add_trait("out_prefix",
-                       String('w_',
-                              output=False,
-                              optional=True,
-                              desc=out_prefix_desc))
-
-        self.add_trait("output_transform_prefix",
-                       String('transform_',
-                              output=False,
-                              optional=True,
-                              desc=output_transform_prefix_desc))
-
         self.add_trait("radius_or_number_of_bins",
                        List(Int(),
-                            minlen=3, maxlen=3,
                             output=False,
                             optional=False,
                             desc=radius_or_number_of_bins_desc))
 
+        self.add_trait("convergence_window_size",
+                       List(Int(),
+                            output=False,
+                            optional=False,
+                            desc=convergence_window_size_desc))
+
         self.add_trait("sampling_percentage",
                        List(Float(min=0.0, max=1.0),
                             default=Undefined,
-                            minlen=3, maxlen=3,
                             output=False,
                             optional=True,
                             desc=sampling_percentage_desc))
@@ -678,29 +694,27 @@ class Registration(ProcessMIA):
                                  'Regular',
                                  'Random'),
                             default=Undefined,
-                            minlen=3, maxlen=3,
                             output=False,
                             optional=True,
                             desc=sampling_strategy_desc))
 
-        self.add_trait("transform_parameters",
-                       List(Tuple(),
-                            minlen=3, maxlen=3,
-                            output=False,
-                            optional=False,
-                            desc=transform_parameters_desc))
-
         # Outputs traits
         self.add_trait("composite_transform",
-                       File(output=True,
+                       File(Undefined,
+                            output=True,
+                            optional=True,
                             desc=composite_transform_desc))
 
         self.add_trait("inverse_composite_transform",
-                       File(output=True,
+                       File(Undefined,
+                            output=True,
+                            optional=True,
                             desc=inverse_composite_transform_desc))
 
         self.add_trait("warped_image",
-                       File(output=True,
+                       File(Undefined,
+                            output=True,
+                            optional=True,
                             desc=warped_image_desc))
 
         self.init_default_traits()
@@ -735,7 +749,7 @@ class Registration(ProcessMIA):
             if self.out_prefix == Undefined:
                 self.out_prefix = 'w_'
                 print('The out_prefix parameter is undefined. Automatically '
-                      'set to "AffineTransform_" ...')
+                      'set to "w" ...')
 
             if self.output_directory:
                 ifile = os.path.split(self.moving_image)[-1]
@@ -749,7 +763,7 @@ class Registration(ProcessMIA):
 
                 else:
 
-                    if trail in ['nii', 'nii.gz', 'img']:
+                    if trail not in ['nii', 'nii.gz', 'img']:
                         print('\nThe input image format does not seem to be '
                               'nii or img. This can prevent the process '
                               'launch ...!')
@@ -760,11 +774,11 @@ class Registration(ProcessMIA):
 
                     self.outputs['composite_transform'] = os.path.join(
                         self.output_directory,
-                        'comp_transf' + ifile)
+                        'comp_transf_' + ifile)
 
                     self.outputs['inverse_composite_transform'] = os.path.join(
                         self.output_directory,
-                        'inv_comp_transf' + ifile)
+                        'inv_comp_transf_' + ifile)
 
                     self.inheritance_dict[self.outputs[
                         'warped_image']] = self.moving_image
@@ -794,24 +808,38 @@ class Registration(ProcessMIA):
         self.process.shrink_factor = self.shrink_factor
         self.process.smoothing_sigmas = self.smoothing_sigmas
         self.process.number_of_iterations = self.number_of_iterations
-        self.process.output_transform_prefix = self.output_transform_prefix
         self.process.radius_or_number_of_bins = self.radius_or_number_of_bins
         self.process.sampling_percentage = self.sampling_percentage
         self.process.sampling_strategy = self.sampling_strategy
-        self.process.transform_parameters = self.transform_parameters
+        self.process.convergence_window_size = self.convergence_window_size
+        self.process.transforms = self.transforms
+
+        self.process.transforms_parameters = []
+        for tf in self.transforms_parameters:
+            self.process.transforms_parameters.append(
+                tuple(tf))
 
         # default inputs
-        self.process.transforms = ['Rigid', 'Affine', 'SyN']
-        self.process.metric_weight = [1, 1, 1]
+        self.process.metric_weight = []
+        for i in range(0, len(self.metric)):
+            self.process.metric_weight.append(1)
         self.process.collapse_output_transforms = True
-        self.process.convergence_threshold = [1e-6, 1e-6, 1e-6]
-        self.process.convergence_window_size = [20, 20, 10]
+        self.process.convergence_threshold = []
+        for i in range(0, len(self.metric)):
+            self.process.convergence_threshold.append(1e-6)
+
         self.process.interpolation = 'LanczosWindowedSinc'
         self.process.dimension = 3
         self.process.output_warped_image = True
-        self.process.sigma_units = ['vox', 'vox', 'vox']
-        self.process.use_estimate_learning_rate_once = [True, True, True]
-        self.process.use_histogram_matching = [True, True, True]
+        self.process.sigma_units = []
+        for i in range(0, len(self.metric)):
+            self.process.sigma_units.append('vox')
+        self.process.use_estimate_learning_rate_once = []
+        for i in range(0, len(self.metric)):
+            self.process.use_estimate_learning_rate_once.append(True)
+        self.process.use_histogram_matching = []
+        for i in range(0, len(self.metric)):
+            self.process.use_histogram_matching.append(True)
         self.process.winsorize_lower_quantile = 0.005
         self.process.winsorize_upper_quantile = 0.995
         self.process.write_composite_transform = True
