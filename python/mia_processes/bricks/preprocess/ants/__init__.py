@@ -9,4 +9,4 @@
 ##########################################################################
 
 from .processes import (AffineInitializer, ApplyTransforms,
-                        N4BiasFieldCorrection, Registration)
+                        N4BiasFieldCorrection, T1wFastRegistration)
