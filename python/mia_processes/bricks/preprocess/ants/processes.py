@@ -125,6 +125,12 @@ class AffineInitializer(ProcessMIA):
 
                 try:
                     fileName, trail = ifile.rsplit('.', 1)
+                    if trail == 'gz':
+                        (fileName_2,
+                         trail_2) = os.path.splitext(fileName)
+                        if trail_2 == 'nii':
+                            fileName = fileName_2
+                            trail = 'nii.gz'
 
                 except ValueError:
                     print('\nThe input image format is not recognized ...!')
@@ -222,12 +228,10 @@ class ApplyTransforms(ProcessMIA):
                             desc=reference_image_desc))
 
         self.add_trait("transforms",
-                       Either(InputMultiPath(File()),
-                              'Identity',
-                              default='identity',
-                              output=False,
-                              optional=False,
-                              desc=transforms_desc))
+                       InputMultiPath(File(),
+                                      output=False,
+                                      optional=False,
+                                      desc=transforms_desc))
 
         self.add_trait("interpolation",
                        Enum('Linear',
@@ -275,12 +279,6 @@ class ApplyTransforms(ProcessMIA):
         # Using the inheritance to ProcessMIA class, list_outputs method
         super(ApplyTransforms, self).list_outputs()
 
-        if (self.sampling_percentage == Undefined and self.sampling_strategy != Undefined) or \
-           (self.sampling_percentage != Undefined and self.sampling_strategy == Undefined):
-            print('\nInitialisation failed. Please, set both (or none) of the two input '
-                  'parameters sampling_percentage and sampling_strategy ...!')
-            return
-
         # Outputs definition and tags inheritance (optional)
         if self.input_image:
 
@@ -290,11 +288,15 @@ class ApplyTransforms(ProcessMIA):
                       'set to "AffineTransform_" ...')
 
             if self.output_directory:
-                ifile = os.path.split(self.moving_image)[-1]
+                ifile = os.path.split(self.input_image)[-1]
 
                 try:
                     fileName, trail = ifile.rsplit('.', 1)
-
+                    if trail == 'gz':
+                        (fileName_2,
+                         trail_2) = os.path.splitext(fileName)
+                        if trail_2 == 'nii':
+                            trail = 'nii.gz'
                 except ValueError:
                     print('\nThe input image format is not recognized ...!')
                     return
@@ -333,8 +335,6 @@ class ApplyTransforms(ProcessMIA):
         self.process.interpolation = self.interpolation
 
         self.process.output_image = self.output_image
-        self.process.composite_transform = self.composite_transform
-        self.process.inverse_composite_transform = self.inverse_composite_transform
 
         if self.out_prefix:
             self.process.out_prefix = self.out_prefix
@@ -447,6 +447,11 @@ class N4BiasFieldCorrection(ProcessMIA):
 
                 try:
                     fileName, trail = ifile.rsplit('.', 1)
+                    if trail == 'gz':
+                        (fileName_2,
+                         trail_2) = os.path.splitext(fileName)
+                        if trail_2 == 'nii':
+                            trail = 'nii.gz'
 
                 except ValueError:
                     print('\nThe input image format is not recognized ...!')
@@ -764,6 +769,12 @@ class T1wFastRegistration(ProcessMIA):
 
                 try:
                     fileName, trail = ifile.rsplit('.', 1)
+                    if trail == 'gz':
+                        (fileName_2,
+                         trail_2) = os.path.splitext(fileName)
+                        if trail_2 == 'nii':
+                            fileName = fileName_2
+                            trail = 'nii.gz'
 
                 except ValueError:
                     print('\nThe input image format is not recognized ...!')
