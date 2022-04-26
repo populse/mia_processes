@@ -10,5 +10,6 @@
 
 from .processing import (ArtifactMask, Binarize, ConformImage,
                          Enhance, GradientThreshold, Mask,
-                         Resample, RotationMask, Template,
+                         NonSteadyStateDetector, Resample,
+                         RotationMask, Sanitize, Template,
                          Threshold)
