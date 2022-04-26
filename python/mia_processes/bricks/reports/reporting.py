@@ -1,11 +1,11 @@
-"""The other preprocess library of the mia_processes package.
+"""The reporting library of the mia_processes package.
 
-The purpose of this module is to provide bricks generally necessary for the
-pre-processing steps, which are not found in nipype.
+The purpose of this module is to provide the reporting bricks necessary to
+generate automatic report at the end of a pipeline calculation.
 
 :Contains:
     :Class:
-        - QC_AnatReport
+        - MRIQC_report
 
     :Function:
         -
@@ -20,29 +20,29 @@ pre-processing steps, which are not found in nipype.
 ##########################################################################
 
 # nibabel import
-import nibabel as nib
+#import nibabel as nib
 
 # nipype import
-from nipype.interfaces.base import (OutputMultiPath, InputMultiPath, File,
-                                    traits, TraitListObject, Undefined,
-                                    DictStrStr, Str)
+#from nipype.interfaces.base import (OutputMultiPath, InputMultiPath, File,
+#                                    traits, TraitListObject, Undefined,
+#                                    DictStrStr, Str)
 
 # populse_mia import
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 
 # soma-base imports
-from soma.qt_gui.qt_backend.Qt import QMessageBox
+#from soma.qt_gui.qt_backend.Qt import QMessageBox
 
 # Other import
-import os
+#import os
 
 
-class QC_AnatReport(ProcessMIA):
+class MRIQC_report(ProcessMIA):
     """
-        * Computes the artifact mask using the method described in [Mortamet2009] *
+        * Generates the report for MRIQC pipeline *
 
-        Please, see the complete documentation for the `ArtifactMask' brick in the populse.mia_processes website
-        https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/ArtifactMask.html
+        Please, see the complete documentation for the `MRIQC_report brick in the populse.mia_processes website
+        https://populse.github.io/mia_processes/documentation/bricks/reports/MRIQC_report.html
 
         """
 
@@ -54,9 +54,9 @@ class QC_AnatReport(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(QC_AnatReport, self).__init__()
+        super(MRIQC_report, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party software required for the execution of the brick
         self.requirement = []
 
         # Inputs description
@@ -81,11 +81,11 @@ class QC_AnatReport(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(QC_AnatReport, self).list_outputs()
+        super(MRIQC_report, self).list_outputs()
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(QC_AnatReport, self).run_process_mia()
+        super(MRIQC_report, self).run_process_mia()
