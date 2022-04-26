@@ -8,4 +8,5 @@
 # for details.
 ##########################################################################
 
-from .processes import (Calc, SkullStripping)
+from .processes import (Calc, Deoblique, Despike, DropTRs,
+                        SkullStripping, TShift, Volreg)

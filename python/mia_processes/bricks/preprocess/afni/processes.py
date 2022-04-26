@@ -29,8 +29,9 @@ from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 
 # Other import
 import os
-from traits.api import Either, Enum, Float, Int, List, String, Undefined
+from traits.api import Bool, Enum, Float, Int, List, String, Undefined
 import nibabel as nib
+
 
 class Calc(ProcessMIA):
     """
@@ -106,11 +107,10 @@ class Calc(ProcessMIA):
                             desc=output_type_desc))
 
         self.add_trait("out_prefix",
-                       String('c',
+                       String('c_',
                               output=False,
                               optional=True,
                               desc=out_prefix_desc))
-
 
         # Outputs traits
         self.add_trait("out_file",
@@ -141,7 +141,7 @@ class Calc(ProcessMIA):
         if self.in_file_a:
 
             if self.out_prefix == Undefined:
-                self.out_prefix = 'c'
+                self.out_prefix = 'c_'
                 print('The out_prefix parameter is undefined. Automatically '
                       'set to "c" ...')
 
@@ -209,6 +209,326 @@ class Calc(ProcessMIA):
         return self.process.run(configuration_dict={})
 
 
+class Deoblique(ProcessMIA):
+    """
+    * Deoblique dataset *
+
+    Please, see the complete documentation for the `Deoblique' brick in the populse.mia_processes website
+    <https://populse.github.io/mia_processes/documentation/bricks/preprocess/afni/Deoblique.html>`_
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instanciation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(Deoblique, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = ['afni', 'nipype']
+
+        # Inputs description
+        in_file_desc = ('First input 3D file (a pathlike object or string '
+                        'representing a file).')
+        deoblique_desc = 'Deoblique dataset only if true (boolean).'
+        output_type_desc = ('Typecodes of the output image formats (one '
+                            'of NIFTI, AFNI, NIFTI_GZ).')
+        out_prefix_desc = ('Specify the string to be prepended to the '
+                           'filenames of the output image file '
+                           '(a string).')
+
+        # Outputs description
+        out_file_desc = ('The deobliqued file (a pathlike object or a '
+                         'string representing a file).')
+
+        # Inputs traits
+        self.add_trait("in_file",
+                       File(output=False,
+                            optional=False,
+                            desc=in_file_desc))
+
+        self.add_trait("deoblique",
+                       Bool(True,
+                            output=False,
+                            optional=False,
+                            desc=deoblique_desc))
+
+        self.add_trait("output_type",
+                       Enum('NIFTI',
+                            'AFNI',
+                            'NIFTI_GZ',
+                            output=False,
+                            optional=True,
+                            desc=output_type_desc))
+
+        self.add_trait("out_prefix",
+                       String('do_',
+                              output=False,
+                              optional=True,
+                              desc=out_prefix_desc))
+
+        # Outputs traits
+        self.add_trait("out_file",
+                       File(output=True,
+                            desc=out_file_desc))
+
+        self.init_default_traits()
+
+        self.init_process('nipype.interfaces.afni.Refit')
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(Deoblique, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.in_file:
+            if self.out_prefix == Undefined:
+                self.out_prefix = 'do_'
+                print('The out_prefix parameter is undefined. Automatically '
+                      'set to "do" ...')
+
+            if self.output_directory:
+                ifile = os.path.split(self.in_file)[-1]
+
+                try:
+                    fileName, trail = ifile.rsplit('.', 1)
+                    if trail == 'gz':
+                        (fileName_2,
+                         trail_2) = os.path.splitext(fileName)
+                        if trail_2 == 'nii':
+                            trail = 'nii.gz'
+
+                except ValueError:
+                    print('\nThe input image format is not recognized ...!')
+                    return
+
+                else:
+
+                    if trail in ['nii', '3D', 'nii.gz']:
+
+                        if self.output_type == 'NIFTI':
+                            trail = 'nii'
+                        elif self.output_type == 'AFNI':
+                            trail = '3D'
+                        elif self.output_type == 'NIFTI_GZ':
+                            trail = 'nii.gz'
+
+                        self.outputs['out_file'] = os.path.join(
+                            self.output_directory,
+                            self.out_prefix + fileName + '.' + trail)
+
+                    else:
+                        self.outputs['out_file'] = os.path.join(
+                            self.output_directory,
+                            self.out_prefix + ifile)
+                        print('\nThe input image format does not seem to be '
+                              'nii or 3D. This can prevent the process '
+                              'launch ...!')
+
+                    self.inheritance_dict[self.outputs[
+                        'out_file']] = self.in_file
+
+            else:
+                print('No output_directory was found...!\n')
+                return
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(Deoblique, self).run_process_mia()
+        if not self.deoblique:
+            self.out_file = self.in_file
+            return
+
+        self.process.in_file = self.in_file
+        self.process.outputtype = self.output_type
+        self.process.deoblique = True
+        self.process.out_file = self.out_file
+
+        if self.out_prefix:
+            self.process.out_prefix = self.out_prefix
+
+        return self.process.run(configuration_dict={})
+
+
+class Despike(ProcessMIA):
+    """
+    * Removes ‘spikes’ from the 3D+time input dataset *
+
+    Please, see the complete documentation for the `Calc' brick in the populse.mia_processes website
+    <https://populse.github.io/mia_processes/documentation/bricks/preprocess/afni/Despike.html>`_
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instanciation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(Despike, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = ['afni', 'nipype']
+
+        # Inputs description
+        in_file_desc = ('First input 3D file (a pathlike object or string '
+                        'representing a file).')
+        despike_desc = 'Deoblique dataset only if true (boolean).'
+        output_type_desc = ('Typecodes of the output image formats (one '
+                            'of NIFTI, AFNI, NIFTI_GZ).')
+        out_prefix_desc = ('Specify the string to be prepended to the '
+                           'filenames of the output image file '
+                           '(a string).')
+
+        # Outputs description
+        out_file_desc = ('The despiked file (a pathlike object or a '
+                         'string representing a file).')
+
+        # Inputs traits
+        self.add_trait("in_file",
+                       File(output=False,
+                            optional=False,
+                            desc=in_file_desc))
+
+        self.add_trait("despike",
+                       Bool(True,
+                            output=False,
+                            optional=False,
+                            desc=despike_desc))
+
+        self.add_trait("output_type",
+                       Enum('NIFTI',
+                            'AFNI',
+                            'NIFTI_GZ',
+                            output=False,
+                            optional=True,
+                            desc=output_type_desc))
+
+        self.add_trait("out_prefix",
+                       String('d_',
+                              output=False,
+                              optional=True,
+                              desc=out_prefix_desc))
+
+        # Outputs traits
+        self.add_trait("out_file",
+                       File(output=True,
+                            desc=out_file_desc))
+
+        self.init_default_traits()
+
+        self.init_process('nipype.interfaces.afni.Despike')
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(Despike, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.in_file:
+
+            if self.out_prefix == Undefined:
+                self.out_prefix = 'd_'
+                print('The out_prefix parameter is undefined. Automatically '
+                      'set to "d" ...')
+
+            if self.output_directory:
+                ifile = os.path.split(self.in_file_a)[-1]
+
+                try:
+                    fileName, trail = ifile.rsplit('.', 1)
+                    if trail == 'gz':
+                        (fileName_2,
+                         trail_2) = os.path.splitext(fileName)
+                        if trail_2 == 'nii':
+                            trail = 'nii.gz'
+
+                except ValueError:
+                    print('\nThe input image format is not recognized ...!')
+                    return
+
+                else:
+
+                    if trail in ['nii', '3D', 'nii.gz']:
+
+                        if self.output_type == 'NIFTI':
+                            trail = 'nii'
+                        elif self.output_type == 'AFNI':
+                            trail = '3D'
+                        elif self.output_type == 'NIFTI_GZ':
+                            trail = 'nii.gz'
+
+                        self.outputs['out_file'] = os.path.join(
+                            self.output_directory,
+                            self.out_prefix + fileName + '.' + trail)
+
+                    else:
+                        self.outputs['out_file'] = os.path.join(
+                            self.output_directory,
+                            self.out_prefix + ifile)
+                        print('\nThe input image format does not seem to be '
+                              'nii or 3D. This can prevent the process '
+                              'launch ...!')
+
+                    self.inheritance_dict[self.outputs[
+                        'out_file']] = self.in_file_a
+
+            else:
+                print('No output_directory was found...!\n')
+                return
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(Despike, self).run_process_mia()
+        if not self.despike:
+            self.out_file = self.in_file
+            return
+
+        self.process.in_file = self.in_file
+        self.process.outputtype = self.output_type
+        self.process.out_file = self.out_file
+
+        if self.out_prefix:
+            self.process.out_prefix = self.out_prefix
+
+        return self.process.run(configuration_dict={})
+
+
 class DropTRs(ProcessMIA):
     """
     * DropTRs of bold datasets *
@@ -243,7 +563,7 @@ class DropTRs(ProcessMIA):
                            '(a string).')
 
         # Outputs description
-        out_file_desc = ('The outputted file (a pathlike object or a '
+        out_file_desc = ('The TR cropped file (a pathlike object or a '
                          'string representing a file).')
 
         # Inputs traits
@@ -275,7 +595,6 @@ class DropTRs(ProcessMIA):
                               output=False,
                               optional=True,
                               desc=out_prefix_desc))
-
 
         # Outputs traits
         self.add_trait("out_file",
@@ -446,7 +765,6 @@ class SkullStripping(ProcessMIA):
                               optional=True,
                               desc=out_prefix_desc))
 
-
         # Outputs traits
         self.add_trait("out_file",
                        File(output=True,
@@ -580,7 +898,7 @@ class TShift(ProcessMIA):
                            '(a string).')
 
         # Outputs description
-        out_file_desc = ('The skull-stripped files (a pathlike object or a '
+        out_file_desc = ('The time shifted file (a pathlike object or a '
                          'string representing a file).')
 
         # Inputs traits
@@ -589,14 +907,10 @@ class TShift(ProcessMIA):
                             optional=False,
                             desc=in_file_desc))
 
-        self.add_trait("in_file",
-                       File(output=False,
-                            optional=False,
-                            desc=in_file_desc))
-
         self.add_trait("slice_encoding_dir",
                        Enum('k',
                             'k-',
+                            default='k',
                             output=False,
                             optional=True,
                             desc=slice_encoding_dir_desc))
@@ -605,7 +919,7 @@ class TShift(ProcessMIA):
                        List(Float(),
                             output=False,
                             optional=True,
-                            desc=slice_encoding_dir_desc))
+                            desc=slice_timing_desc))
 
         self.add_trait("output_type",
                        Enum('NIFTI',
@@ -616,11 +930,10 @@ class TShift(ProcessMIA):
                             desc=output_type_desc))
 
         self.add_trait("out_prefix",
-                       String('ss_',
+                       String('st_corr_',
                               output=False,
                               optional=True,
                               desc=out_prefix_desc))
-
 
         # Outputs traits
         self.add_trait("out_file",
@@ -706,11 +1019,222 @@ class TShift(ProcessMIA):
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
         super(TShift, self).run_process_mia()
+        if not self.slice_timing:
+            self.out_file = self.in_file
+            return
+
         self.process.in_file = self.in_file
         self.process.outputtype = self.output_type
         self.process.slice_encoding_direction = self.slice_encoding_direction
         self.process.slice_timing = self.slice_timing
         self.process.out_file = self.out_file
+
+        if self.out_prefix:
+            self.process.out_prefix = self.out_prefix
+
+        return self.process.run(configuration_dict={})
+
+
+class Volreg(ProcessMIA):
+    """
+    * Register input volumes to a base volume using AFNI 3dvolreg command *
+
+    Please, see the complete documentation for the `Volreg' brick in the populse.mia_processes website
+    <https://populse.github.io/mia_processes/documentation/bricks/preprocess/afni/Volreg.html>`_
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instanciation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(Volreg, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = ['afni', 'nipype']
+
+        # Inputs description
+        in_file_desc = ('A bold file to be time-shifted (a pathlike object or string '
+                        'representing a file).')
+        interp_desc = (' Spatial interpolation methods (Either ‘Fourier’ or ‘cubic’ '
+                       'or ‘heptic’ or ‘quintic’ or ‘linear’ - default = heptic)')
+        two_pass_desc = ('Do two passes of the registration algorithm:'
+                         '(1) with smoothed base and data bricks, with linear'
+                         ' interpolation, to get a crude alignment, then'
+                         '(2) with the input base and data bricks, to get a fine '
+                         'alignment.'
+                         'This method is useful when aligning high-resolution datasets '
+                         'that may need to be moved more than a few voxels to be aligned.'
+                         '(a boolean).')
+        zpad_desc = ('Zeropad around the edges by ‘n’ voxels during rotations '
+                     '(an integer).')
+        output_type_desc = ('Typecodes of the output image formats (one '
+                            'of NIFTI, AFNI, NIFTI_GZ).')
+        out_prefix_desc = ('Specify the string to be prepended to the '
+                           'filenames of the skull-stripped image file(s) '
+                           '(a string).')
+
+        # Outputs description
+        out_file_desc = ('The registered file (a pathlike object or a '
+                         'string representing a file).')
+        oned_file_desc = ('The movement parameters file (a pathlike object or a '
+                         'string representing a file).')
+
+        # Inputs traits
+        self.add_trait("in_file",
+                       File(output=False,
+                            optional=False,
+                            desc=in_file_desc))
+
+        self.add_trait("interp",
+                       Enum('Fourier',
+                            'cubic',
+                            'heptic',
+                            'quintic',
+                            'linear',
+                            default='heptic',
+                            output=False,
+                            optional=True,
+                            desc=interp_desc))
+
+        self.add_trait("two_pass",
+                       Bool(False,
+                            output=False,
+                            optional=True,
+                            desc=two_pass_desc))
+
+        self.add_trait("zpad",
+                       Int(4,
+                           output=False,
+                           optional=True,
+                           desc=zpad_desc))
+
+        self.add_trait("output_type",
+                       Enum('NIFTI',
+                            'AFNI',
+                            'NIFTI_GZ',
+                            output=False,
+                            optional=True,
+                            desc=output_type_desc))
+
+        self.add_trait("out_prefix",
+                       String('reg_',
+                              output=False,
+                              optional=True,
+                              desc=out_prefix_desc))
+
+        # Outputs traits
+        self.add_trait("out_file",
+                       File(output=True,
+                            desc=out_file_desc))
+
+        self.add_trait("oned_file",
+                       File(output=True,
+                            desc=oned_file_desc))
+
+        self.init_default_traits()
+
+        self.init_process('nipype.interfaces.afni.TShift')
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(Volreg, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.in_file:
+
+            if self.out_prefix == Undefined:
+                self.out_prefix = 'reg_'
+                print('The out_prefix parameter is undefined. Automatically '
+                      'set to "reg" ...')
+
+            if self.output_directory:
+                ifile = os.path.split(self.in_file)[-1]
+
+                try:
+                    fileName, trail = ifile.rsplit('.', 1)
+                    if trail == 'gz':
+                        (fileName_2,
+                         trail_2) = os.path.splitext(fileName)
+                        if trail_2 == 'nii':
+                            trail = 'nii.gz'
+
+                except ValueError:
+                    print('\nThe input image format is not recognized ...!')
+                    return
+
+                else:
+
+                    if trail in ['nii', '3D', 'nii.gz']:
+
+                        if self.output_type == 'NIFTI':
+                            trail = 'nii'
+                        elif self.output_type == 'AFNI':
+                            trail = '3D'
+                        elif self.output_type == 'NIFTI_GZ':
+                            trail = 'nii.gz'
+
+                        self.outputs['out_file'] = os.path.join(
+                            self.output_directory,
+                            self.out_prefix + fileName + '.' + trail)
+
+                        self.outputs['oned_file'] = os.path.join(
+                            self.output_directory,
+                            self.out_prefix + fileName + '_oned.' + trail)
+
+                    else:
+                        self.outputs['out_file'] = os.path.join(
+                            self.output_directory,
+                            self.out_prefix + ifile)
+
+                        self.outputs['oned_file'] = os.path.join(
+                            self.output_directory,
+                            self.out_prefix + fileName + '_oned.' + trail)
+                        print('\nThe input image format does not seem to be '
+                              'nii or 3D. This can prevent the process '
+                              'launch ...!')
+
+                    self.inheritance_dict[self.outputs[
+                        'out_file']] = self.in_file
+
+                    self.inheritance_dict[self.outputs[
+                        'oned_file']] = self.in_file
+
+            else:
+                print('No output_directory was found...!\n')
+                return
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(Volreg, self).run_process_mia()
+        self.process.in_file = self.in_file
+        self.process.outputtype = self.output_type
+        self.process.interp = self.interp
+        if self.twopass:
+            self.process.args = '-twopass'
+        if self.zpad:
+            self.process.zpad = self.zpad
+        self.process.out_file = self.out_file
+        self.process.oned_file = self.oned_file
 
         if self.out_prefix:
             self.process.out_prefix = self.out_prefix
