@@ -29,7 +29,7 @@ from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 
 # Other import
 import os
-from traits.api import Either, Enum, Float, Int, String, Undefined
+from traits.api import Either, Enum, Float, Int, List, String, Undefined
 import nibabel as nib
 
 class Calc(ProcessMIA):
@@ -211,10 +211,10 @@ class Calc(ProcessMIA):
 
 class DropTRs(ProcessMIA):
     """
-    * Voxel-by-voxel arithmetic on 3D datasets *
+    * DropTRs of bold datasets *
 
-    Please, see the complete documentation for the `Calc' brick in the populse.mia_processes website
-    <https://populse.github.io/mia_processes/documentation/bricks/preprocess/afni/Calc.html>`_
+    Please, see the complete documentation for the `DropTRs' brick in the populse.mia_processes website
+    <https://populse.github.io/mia_processes/documentation/bricks/preprocess/afni/DropTRs.html>`_
 
     """
 
@@ -432,7 +432,6 @@ class SkullStripping(ProcessMIA):
                             optional=False,
                             desc=in_file_desc))
 
-
         self.add_trait("output_type",
                        Enum('NIFTI',
                             'AFNI',
@@ -534,6 +533,183 @@ class SkullStripping(ProcessMIA):
         super(SkullStripping, self).run_process_mia()
         self.process.in_file = self.in_file
         self.process.outputtype = self.output_type
+        self.process.out_file = self.out_file
+
+        if self.out_prefix:
+            self.process.out_prefix = self.out_prefix
+
+        return self.process.run(configuration_dict={})
+
+
+class TShift(ProcessMIA):
+    """
+    * Slice-time correction of bold images *
+
+    Please, see the complete documentation for the `TShift' brick in the populse.mia_processes website
+    <https://populse.github.io/mia_processes/documentation/bricks/preprocess/afni/TShift.html>`_
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instanciation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(TShift, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = ['afni', 'nipype']
+
+        # Inputs description
+        in_file_desc = ('A bold file to be time-shifted (a pathlike object or string '
+                        'representing a file).')
+        slice_encoding_dir_desc = ('Direction in which slice_timing is specified '
+                                   '(default: k). If negative,slice_timing is defined '
+                                   'in reverse order, that is, the first entry '
+                                   'corresponds to the slice with the largest index, '
+                                   'and the final entry corresponds to slice index zero.')
+        slice_timing_desc = ('Time offsets from the volume acquisition onset for each '
+                             'slice. (a list of floats).')
+        output_type_desc = ('Typecodes of the output image formats (one '
+                            'of NIFTI, AFNI, NIFTI_GZ).')
+        out_prefix_desc = ('Specify the string to be prepended to the '
+                           'filenames of the skull-stripped image file(s) '
+                           '(a string).')
+
+        # Outputs description
+        out_file_desc = ('The skull-stripped files (a pathlike object or a '
+                         'string representing a file).')
+
+        # Inputs traits
+        self.add_trait("in_file",
+                       File(output=False,
+                            optional=False,
+                            desc=in_file_desc))
+
+        self.add_trait("in_file",
+                       File(output=False,
+                            optional=False,
+                            desc=in_file_desc))
+
+        self.add_trait("slice_encoding_dir",
+                       Enum('k',
+                            'k-',
+                            output=False,
+                            optional=True,
+                            desc=slice_encoding_dir_desc))
+
+        self.add_trait("slice_timing",
+                       List(Float(),
+                            output=False,
+                            optional=True,
+                            desc=slice_encoding_dir_desc))
+
+        self.add_trait("output_type",
+                       Enum('NIFTI',
+                            'AFNI',
+                            'NIFTI_GZ',
+                            output=False,
+                            optional=True,
+                            desc=output_type_desc))
+
+        self.add_trait("out_prefix",
+                       String('ss_',
+                              output=False,
+                              optional=True,
+                              desc=out_prefix_desc))
+
+
+        # Outputs traits
+        self.add_trait("out_file",
+                       File(output=True,
+                            desc=out_file_desc))
+
+        self.init_default_traits()
+
+        self.init_process('nipype.interfaces.afni.TShift')
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(TShift, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.in_file:
+
+            if self.out_prefix == Undefined:
+                self.out_prefix = 'st_corr_'
+                print('The out_prefix parameter is undefined. Automatically '
+                      'set to "st_corr" ...')
+
+            if self.output_directory:
+                ifile = os.path.split(self.in_file)[-1]
+
+                try:
+                    fileName, trail = ifile.rsplit('.', 1)
+                    if trail == 'gz':
+                        (fileName_2,
+                         trail_2) = os.path.splitext(fileName)
+                        if trail_2 == 'nii':
+                            trail = 'nii.gz'
+
+                except ValueError:
+                    print('\nThe input image format is not recognized ...!')
+                    return
+
+                else:
+
+                    if trail in ['nii', '3D', 'nii.gz']:
+
+                        if self.output_type == 'NIFTI':
+                            trail = 'nii'
+                        elif self.output_type == 'AFNI':
+                            trail = '3D'
+                        elif self.output_type == 'NIFTI_GZ':
+                            trail = 'nii.gz'
+
+                        self.outputs['out_file'] = os.path.join(
+                            self.output_directory,
+                            self.out_prefix + fileName + '.' + trail)
+
+                    else:
+                        self.outputs['out_file'] = os.path.join(
+                            self.output_directory,
+                            self.out_prefix + ifile)
+                        print('\nThe input image format does not seem to be '
+                              'nii or 3D. This can prevent the process '
+                              'launch ...!')
+
+                    self.inheritance_dict[self.outputs[
+                        'out_file']] = self.in_file
+
+            else:
+                print('No output_directory was found...!\n')
+                return
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(TShift, self).run_process_mia()
+        self.process.in_file = self.in_file
+        self.process.outputtype = self.output_type
+        self.process.slice_encoding_direction = self.slice_encoding_direction
+        self.process.slice_timing = self.slice_timing
         self.process.out_file = self.out_file
 
         if self.out_prefix:
