@@ -2399,7 +2399,7 @@ class Sanitize(ProcessMIA):
 
             # Both match, qform valid (implicit with match), codes okay -> do nothing, empty report
             if matching_affines and qform_code > 0 and sform_code > 0:
-                self.out_file = self.inputs.in_file
+                self.out_file = self.in_file
 
             # Row 2:
             elif valid_qform and qform_code > 0:
@@ -2435,16 +2435,16 @@ class Sanitize(ProcessMIA):
                       "Analyses of this dataset MAY BE INVALID.")
 
             if (
-                    self.inputs.max_32bit and np.dtype(img.get_data_dtype()).itemsize > 4
-            ) or self.inputs.n_volumes_to_discard:
+                    self.max_32bit and np.dtype(img.get_data_dtype()).itemsize > 4
+            ) or self.n_volumes_to_discard:
                 # force float32 only if 64 bit dtype is detected
-                if self.inputs.max_32bit and np.dtype(img.get_data_dtype()).itemsize > 4:
+                if self.max_32bit and np.dtype(img.get_data_dtype()).itemsize > 4:
                     in_data = img.get_fdata(dtype=np.float32)
                 else:
                     in_data = img.dataobj
 
                 img = nib.Nifti1Image(
-                    in_data[:, :, :, self.inputs.n_volumes_to_discard:],
+                    in_data[:, :, :, self.n_volumes_to_discard:],
                     img.affine,
                     img.header,
                 )
