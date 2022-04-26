@@ -9,3 +9,4 @@
 ##########################################################################
 
 from .processes import QC_AnatReport
+from .reporting import MRIQC_report

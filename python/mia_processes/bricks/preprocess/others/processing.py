@@ -1,4 +1,4 @@
-"""The other preprocess library of the mia_processe package.
+"""The other preprocess library of the mia_processes package.
 
 The purpose of this module is to provide bricks generally necessary for the 
 pre-processing steps, which are not found in nipype.
