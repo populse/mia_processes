@@ -10,14 +10,17 @@ pre-processing steps, which are not found in nipype.
         - ConformImage
         - Enhance
         - GradientThreshold
+        - NonSteadyStateDetector
         - Mask
         - Resample
         - RotationMask
+        - Sanitize
         - Template
         - Threshold
 
     :Function:
         - artifact_mask
+        - is_outlier
         - threshold
 """
 
@@ -562,7 +565,7 @@ class Binarize(ProcessMIA):
 
 class ConformImage(ProcessMIA):
     """
-    * Conform image to standard *
+    * Conform T1w image to standard *
 
     Please, see the complete documentation for the `ConformImage' brick in the populse.mia_processes website
     https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/ConformImage.html
@@ -1234,6 +1237,91 @@ class GradientThreshold(ProcessMIA):
                                       self.suffix.strip() +
                                       file_extension))
             nib.save(out_image, file_out)
+
+
+class NonSteadyStateDetector(ProcessMIA):
+    """
+    * Detect non-steady-state at the beginning of a bold 4D image*
+
+    Please, see the complete documentation for the `NonSteadyStateDetector' brick in the populse.mia_processes website
+    https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/NonSteadyStateDetector.html
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation / instanciation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(NonSteadyStateDetector, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = []
+
+        # Inputs description
+        in_file_desc = 'An existing path file.'
+
+        # Outputs description
+        n_volumes_to_discard_desc = ('Number of non steady'
+                                     'state volumes')
+
+        # Inputs traits
+        self.add_trait("in_file",
+                       File(output=False,
+                            optional=False,
+                            desc=in_file_desc))
+
+        # Outputs traits
+        self.add_trait("n_volumes_to_discard",
+                       traits.Int(output=True,
+                                  desc=n_volumes_to_discard_desc))
+
+        self.init_default_traits()
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(NonSteadyStateDetector, self).list_outputs()
+
+        # Outputs definition
+        if self.in_file:
+            self.outputs['n_volumes_to_discard'] = 0
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(NonSteadyStateDetector, self).run_process_mia()
+
+        file_name = self.in_file
+
+        try:
+            in_nii = nib.load(file_name)
+        except (nib.filebasedimages.ImageFileError,
+                FileNotFoundError, TypeError) as e:
+            print("\nError with file to enhance, during "
+                  "initialisation: ", e)
+            in_nii = None
+
+        if in_nii is not None:
+            global_signal = (
+                in_nii.dataobj[:, :, :, :50].mean(axis=0).mean(axis=0).mean(axis=0)
+            )
+
+        self.n_volumes_to_discard = is_outlier(global_signal)
 
 
 class Mask(ProcessMIA):
@@ -2104,6 +2192,289 @@ class RotationMask(ProcessMIA):
             nib.save(out_img, file_out)
 
 
+class Sanitize(ProcessMIA):
+    """
+    * Sanitize input bold image *
+
+    Please, see the complete documentation for the `Sanitize' brick in the populse.mia_processes website
+    https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/Sanitize.html
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation / instanciation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(Sanitize, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = []
+
+        # Inputs description
+        in_file_desc = 'An existing path file.'
+        prefix_desc = 'Prefix of the output image (a string).'
+        suffix_desc = 'Suffix of the output image (a string).'
+        n_volumes_to_discard_desc = 'number of non steady-state volumes'
+        max_32bit_desc = "cast data to float32 if higher precision is " \
+                        "encountered"
+        # Outputs description
+        out_file_desc = ('Path of the scan after masking '
+                         '(a pathlike object or string representing a file).')
+
+        # Inputs traits
+        self.add_trait("in_file",
+                       File(output=False,
+                            optional=False,
+                            desc=in_file_desc))
+
+        self.add_trait("prefix",
+                       traits.String("",
+                                     output=False,
+                                     optional=True,
+                                     desc=prefix_desc))
+
+        self.add_trait("suffix",
+                       traits.String("_valid",
+                                     output=False,
+                                     optional=True,
+                                     desc=suffix_desc))
+
+        self.add_trait("n_volumes_to_discard",
+                       traits.Int(0,
+                                  output=False,
+                                  optional=True,
+                                  desc=n_volumes_to_discard_desc))
+
+        self.add_trait("max_32bit",
+                       traits.Bool(False,
+                                  output=False,
+                                  optional=True,
+                                  desc=max_32bit_desc))
+
+        # Outputs traits
+        self.add_trait("out_file",
+                       File(output=True,
+                            desc=out_file_desc))
+
+        self.init_default_traits()
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(Sanitize, self).list_outputs()
+
+        # Outputs definition
+        if self.in_file:
+
+            file_name = self.in_file
+
+            if ((not self.suffix) or (self.suffix.isspace()) or
+                    self.suffix in [Undefined, "<undefined>"]):
+                self.suffix = " "
+
+            if ((not self.prefix) or (self.prefix.isspace()) or
+                    (self.prefix in [Undefined, "<undefined>"])):
+                self.prefix = " "
+
+            file = ''
+
+            path, filename = os.path.split(file_name)
+
+            if (self.suffix == " " and
+                    self.prefix == " " and
+                    path == self.output_directory):
+                msg = QMessageBox()
+                msg.setIcon(QMessageBox.Warning)
+                msg.setWindowTitle("mia_processes - "
+                                   "Sanitize brick Warning!")
+                msg.setText("Suffix and prefix input parameters are not "
+                            "defined or consist only of one or more white "
+                            "spaces.\nThe {0} input parameter will be "
+                            "overwritten ...\n Yes or "
+                            "Abort?".format(filename))
+                msg.setStandardButtons(QMessageBox.Yes | QMessageBox.Abort)
+                retval = msg.exec_()
+
+                if retval != QMessageBox.Abort:
+                    (file_name_no_ext,
+                     file_extension) = os.path.splitext(filename)
+                    if file_extension == '.gz':
+                        (file_name_no_ext_2,
+                         file_extension_2) = os.path.splitext(file_name_no_ext)
+                        if file_extension_2 == '.nii':
+                            file_name_no_ext = file_name_no_ext_2
+                            file_extension = '.nii.gz'
+
+                    file = os.path.join(self.output_directory,
+                                        (self.prefix.strip() +
+                                         file_name_no_ext +
+                                         self.suffix.strip() +
+                                         file_extension))
+                    print('\nSanitize brick warning: the out_file output '
+                          'parameter is the same as the in_files input '
+                          'parameter (suffix and prefix are not defined):'
+                          '\n{0} will be overwrited ...'.format(filename))
+
+                else:
+                    filename = ''
+                    print('\nAborted. Please check your input parameters ...')
+
+            else:
+                (file_name_no_ext,
+                 file_extension) = os.path.splitext(filename)
+                if file_extension == '.gz':
+                    (file_name_no_ext_2,
+                     file_extension_2) = os.path.splitext(file_name_no_ext)
+                    if file_extension_2 == '.nii':
+                        file_name_no_ext = file_name_no_ext_2
+                        file_extension = '.nii.gz'
+
+                file = os.path.join(self.output_directory,
+                                    (self.prefix.strip() +
+                                     file_name_no_ext +
+                                     self.suffix.strip() +
+                                     file_extension))
+
+            if filename:
+                self.outputs['out_file'] = file
+
+            else:
+                print('- There was no output file deducted during '
+                      'initialisation. Please check the input parameters...!')
+
+            # tags inheritance (optional)
+            if self.outputs['out_file']:
+                self.inheritance_dict[self.outputs['out_file']] = self.in_file
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(Sanitize, self).run_process_mia()
+
+        file_name = self.in_file
+
+        # Image processing
+        try:
+            img = nib.load(file_name)
+
+        except (nib.filebasedimages.ImageFileError,
+                FileNotFoundError, TypeError) as e:
+            print("\nError with files to mask, during "
+                  "initialisation: ", e)
+            img = None
+
+        if img is not None:
+            # Retrieve xform codes
+            sform_code = int(img.header._structarr["sform_code"])
+            qform_code = int(img.header._structarr["qform_code"])
+
+            # Check qform is valid
+            valid_qform = False
+            try:
+                img.get_qform()
+                valid_qform = True
+            except ValueError:
+                pass
+
+            # Matching affines
+            matching_affines = valid_qform and np.allclose(img.get_qform(), img.get_sform())
+
+            save_file = False
+            warning_txt = ""
+
+            # Both match, qform valid (implicit with match), codes okay -> do nothing, empty report
+            if matching_affines and qform_code > 0 and sform_code > 0:
+                self.out_file = self.inputs.in_file
+
+            # Row 2:
+            elif valid_qform and qform_code > 0:
+                img.set_sform(img.get_qform(), qform_code)
+                save_file = True
+                print("\nNote on orientation: sform matrix set"
+                      "\nThe sform has been copied from qform.")
+
+            # Rows 3-4:
+            # Note: if qform is not valid, matching_affines is False
+            elif sform_code > 0 and (not matching_affines or qform_code == 0):
+                img.set_qform(img.get_sform(), sform_code)
+                save_file = True
+                print("\nNote on orientation: qform matrix overwritten"
+                      "\nThe qform has been copied from sform.")
+
+                if not valid_qform and qform_code > 0:
+                    print("\nWARNING - Invalid qform information."
+                          "\nThe qform matrix found in the file header is invalid."
+                          "The qform has been copied from sform."
+                          "Checking the original qform information from the data produced"
+                          "by the scanner is advised.")
+
+            # Rows 5-6:
+            else:
+                affine = img.affine
+                img.set_sform(affine, nib.nifti1.xform_codes["scanner"])
+                img.set_qform(affine, nib.nifti1.xform_codes["scanner"])
+                save_file = True
+                print("\nWARNING - Missing orientation information."
+                      "\nOrientation information could not be retrieved from the image header."
+                      "The qform and sform matrices have been set to a default, LAS-oriented affine."
+                      "Analyses of this dataset MAY BE INVALID.")
+
+            if (
+                    self.inputs.max_32bit and np.dtype(img.get_data_dtype()).itemsize > 4
+            ) or self.inputs.n_volumes_to_discard:
+                # force float32 only if 64 bit dtype is detected
+                if self.inputs.max_32bit and np.dtype(img.get_data_dtype()).itemsize > 4:
+                    in_data = img.get_fdata(dtype=np.float32)
+                else:
+                    in_data = img.dataobj
+
+                img = nib.Nifti1Image(
+                    in_data[:, :, :, self.inputs.n_volumes_to_discard:],
+                    img.affine,
+                    img.header,
+                )
+                save_file = True
+
+            if len(img.header.extensions) != 0:
+                img.header.extensions.clear()
+                save_file = True
+
+            # Store new file
+            if save_file:
+
+                # Image save
+                _, file_name = os.path.split(file_name)
+                file_name_no_ext, file_extension = os.path.splitext(file_name)
+                if file_extension == '.gz':
+                    (file_name_no_ext_2,
+                     file_extension_2) = os.path.splitext(file_name_no_ext)
+                    if file_extension_2 == '.nii':
+                        file_name_no_ext = file_name_no_ext_2
+                        file_extension = '.nii.gz'
+
+                file_out = os.path.join(self.output_directory,
+                                        (self.prefix.strip() +
+                                         file_name_no_ext +
+                                         self.suffix.strip() +
+                                         file_extension))
+                nib.save(img, file_out)
+
+
 class Template(ProcessMIA):
     """
     * Get template image from templateflow *
@@ -2502,6 +2873,39 @@ def artifact_mask(imdata, airdata, distance, zscore=10.0):
     qi1_img[airdata <= 0] = 0
 
     return qi1_img
+
+
+def is_outlier(points, thresh=3.5):
+    """
+    Returns a boolean array with True if points are outliers and False
+    otherwise.
+    :param nparray points: an numobservations by numdimensions numpy array of observations
+    :param float thresh: the modified z-score to use as a threshold. Observations with
+        a modified z-score (based on the median absolute deviation) greater
+        than this value will be classified as outliers.
+    :return: A bolean mask, of size numobservations-length array.
+    .. note:: References
+        Boris Iglewicz and David Hoaglin (1993), "Volume 16: How to Detect and
+        Handle Outliers", The ASQC Basic References in Quality Control:
+        Statistical Techniques, Edward F. Mykytka, Ph.D., Editor.
+    """
+    if len(points.shape) == 1:
+        points = points[:, None]
+    median = np.median(points, axis=0)
+    diff = np.sum((points - median) ** 2, axis=-1)
+    diff = np.sqrt(diff)
+    med_abs_deviation = np.median(diff)
+
+    modified_z_score = 0.6745 * diff / med_abs_deviation
+
+    timepoints_to_discard = 0
+    for i in range(len(modified_z_score)):
+        if modified_z_score[i] <= thresh:
+            break
+        else:
+            timepoints_to_discard += 1
+
+    return timepoints_to_discard
 
 
 def threshold(file_name, thresh):
