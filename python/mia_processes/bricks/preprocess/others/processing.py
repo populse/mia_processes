@@ -2843,6 +2843,311 @@ class Threshold(ProcessMIA):
             nib.save(img_final, out_file)
 
 
+class TSNR(ProcessMIA):
+    """
+    * Computes the time-course SNR for a time series *
+
+    Please, see the complete documentation for the `TSNR' brick in the populse.mia_processes website
+    https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/TSNR.html
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation / instanciation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(TSNR, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = []
+
+        # Inputs description
+        in_file_desc = 'An existing path file.'
+        prefix_tsnr_desc = 'Prefix of the tsnr image (a string).'
+        suffix_tsnr_desc = 'Suffix of the tsnr image (a string).'
+        prefix_stddev_desc = 'Prefix of the tsnr image (a string).'
+        suffix_stddev_desc = 'Suffix of the tsnr image (a string).'
+        
+        # Outputs description
+        out_tsnr_file_desc = ('Path of the scan after masking '
+                              '(a pathlike object or string representing a file).')
+
+        out_stddev_file_desc = ('Path of the scan after masking '
+                              '(a pathlike object or string representing a file).')
+
+        # Inputs traits
+        self.add_trait("in_file",
+                       File(output=False,
+                            optional=False,
+                            desc=in_file_desc))
+
+        self.add_trait("prefix_tsnr",
+                       traits.String("",
+                                     output=False,
+                                     optional=True,
+                                     desc=prefix_tsnr_desc))
+
+        self.add_trait("suffix_tsnr",
+                       traits.String("_tsnr",
+                                     output=False,
+                                     optional=True,
+                                     desc=suffix_tsnr_desc))
+
+        self.add_trait("prefix_stddev",
+                       traits.String("",
+                                     output=False,
+                                     optional=True,
+                                     desc=prefix_stddev_desc))
+
+        self.add_trait("suffix_stddev",
+                       traits.String("_stddev",
+                                     output=False,
+                                     optional=True,
+                                     desc=suffix_stddev_desc))
+
+        # Outputs traits
+        self.add_trait("out_tsnr_file",
+                       File(output=True,
+                            desc=out_tsnr_file_desc))
+
+        self.add_trait("out_stddev_file",
+                       File(output=True,
+                            desc=out_stddev_file_desc))
+
+        self.init_default_traits()
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(TSNR, self).list_outputs()
+
+        # Outputs definition
+        if self.in_file:
+
+            file_name = self.in_file
+
+            if ((not self.suffix_tsnr) or (self.suffix_tsnr.isspace()) or
+                    self.suffix_tsnr in [Undefined, "<undefined>"]):
+                self.suffix_tsnr = " "
+
+            if ((not self.prefix_tsnr) or (self.prefix_tsnr.isspace()) or
+                    (self.prefix_tsnr in [Undefined, "<undefined>"])):
+                self.prefix_tsnr = " "
+
+            file_tsnr = ''
+
+            path, filename = os.path.split(file_name)
+
+            if (self.suffix_tsnr == " " and
+                    self.prefix_tsnr == " " and
+                    path == self.output_directory):
+                msg = QMessageBox()
+                msg.setIcon(QMessageBox.Warning)
+                msg.setWindowTitle("mia_processes - "
+                                   "TSNR brick Warning!")
+                msg.setText("suffix_tsnr and prefix_tsnr input parameters are not "
+                            "defined or consist only of one or more white "
+                            "spaces.\nThe {0} input parameter will be "
+                            "overwritten ...\n Yes or "
+                            "Abort?".format(filename))
+                msg.setStandardButtons(QMessageBox.Yes | QMessageBox.Abort)
+                retval = msg.exec_()
+
+                if retval != QMessageBox.Abort:
+                    (file_name_no_ext,
+                     file_extension) = os.path.splitext(filename)
+                    if file_extension == '.gz':
+                        (file_name_no_ext_2,
+                         file_extension_2) = os.path.splitext(file_name_no_ext)
+                        if file_extension_2 == '.nii':
+                            file_name_no_ext = file_name_no_ext_2
+                            file_extension = '.nii.gz'
+
+                    file_tsnr = os.path.join(self.output_directory,
+                                        (self.prefix_tsnr.strip() +
+                                         file_name_no_ext +
+                                         self.suffix_tsnr.strip() +
+                                         file_extension))
+                    print('\nTSNR brick warning: the out_tsnr_file output '
+                          'parameter is the same as the in_file input '
+                          'parameter (suffix and prefix are not defined):'
+                          '\n{0} will be overwrited ...'.format(filename))
+
+                else:
+                    filename = ''
+                    print('\nAborted. Please check your input parameters ...')
+
+            else:
+                (file_name_no_ext,
+                 file_extension) = os.path.splitext(filename)
+                if file_extension == '.gz':
+                    (file_name_no_ext_2,
+                     file_extension_2) = os.path.splitext(file_name_no_ext)
+                    if file_extension_2 == '.nii':
+                        file_name_no_ext = file_name_no_ext_2
+                        file_extension = '.nii.gz'
+
+                file_tsnr = os.path.join(self.output_directory,
+                                    (self.prefix_tsnr.strip() +
+                                     file_name_no_ext +
+                                     self.suffix_tsnr.strip() +
+                                     file_extension))
+                
+            if ((not self.suffix_stddev) or (self.suffix_stddev.isspace()) or
+                    self.suffix_stddev in [Undefined, "<undefined>"]):
+                self.suffix_stddev = " "
+
+            if ((not self.prefix_stddev) or (self.prefix_stddev.isspace()) or
+                    (self.prefix_stddev in [Undefined, "<undefined>"])):
+                self.prefix_stddev = " "
+
+            file_stddev = ''
+
+            path, filename = os.path.split(file_name)
+
+            if (self.suffix_stddev == " " and
+                    self.prefix_stddev == " " and
+                    path == self.output_directory):
+                msg = QMessageBox()
+                msg.setIcon(QMessageBox.Warning)
+                msg.setWindowTitle("mia_processes - "
+                                   "TSNR brick Warning!")
+                msg.setText("suffix_stddev and prefix_stddev input parameters are not "
+                            "defined or consist only of one or more white "
+                            "spaces.\nThe {0} input parameter will be "
+                            "overwritten ...\n Yes or "
+                            "Abort?".format(filename))
+                msg.setStandardButtons(QMessageBox.Yes | QMessageBox.Abort)
+                retval = msg.exec_()
+
+                if retval != QMessageBox.Abort:
+                    (file_name_no_ext,
+                     file_extension) = os.path.splitext(filename)
+                    if file_extension == '.gz':
+                        (file_name_no_ext_2,
+                         file_extension_2) = os.path.splitext(file_name_no_ext)
+                        if file_extension_2 == '.nii':
+                            file_name_no_ext = file_name_no_ext_2
+                            file_extension = '.nii.gz'
+
+                    file_stddev = os.path.join(self.output_directory,
+                                        (self.prefix_stddev.strip() +
+                                         file_name_no_ext +
+                                         self.suffix_stddev.strip() +
+                                         file_extension))
+                    print('\nTSNR brick warning: the out_stddev_file output '
+                          'parameter is the same as the in_files input '
+                          'parameter (suffix and prefix are not defined):'
+                          '\n{0} will be overwrited ...'.format(filename))
+
+                else:
+                    filename = ''
+                    print('\nAborted. Please check your input parameters ...')
+
+            else:
+                (file_name_no_ext,
+                 file_extension) = os.path.splitext(filename)
+                if file_extension == '.gz':
+                    (file_name_no_ext_2,
+                     file_extension_2) = os.path.splitext(file_name_no_ext)
+                    if file_extension_2 == '.nii':
+                        file_name_no_ext = file_name_no_ext_2
+                        file_extension = '.nii.gz'
+
+                file_stddev = os.path.join(self.output_directory,
+                                    (self.prefix_stddev.strip() +
+                                     file_name_no_ext +
+                                     self.suffix_stddev.strip() +
+                                     file_extension))
+
+            if filename:
+                self.outputs['out_tsnr_file'] = file_tsnr
+                self.outputs['out_stddev_file'] = file_stddev
+
+            else:
+                print('- There was no output file deducted during '
+                      'initialisation. Please check the input parameters...!')
+
+            # tags inheritance (optional)
+            if self.outputs['out_tsnr_file']:
+                self.inheritance_dict[self.outputs['out_tsnr_file']] = self.in_file
+            if self.outputs['out_stddev_file']:
+                self.inheritance_dict[self.outputs['out_stddev_file']] = self.in_file
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(TSNR, self).run_process_mia()
+
+        file_name = self.in_file
+
+        try:
+            img = nib.load(file_name)
+        except (nib.filebasedimages.ImageFileError,
+                FileNotFoundError, TypeError) as e:
+            print("\nError with files to mask, during "
+                  "initialisation: ", e)
+            img = None
+
+        if img is not None:
+            header = img.header.copy()
+            data = img.get_fdata(dtype=np.float32).reshape(vol.shape[:3] + (-1,))
+            data = np.nan_to_num(data)
+    
+            if data.dtype.kind == "i":
+                header.set_data_dtype(np.float32)
+                data = data.astype(np.float32)
+
+            meanimg = np.mean(data, axis=3)
+            stddevimg = np.std(data, axis=3)
+            tsnr = np.zeros_like(meanimg)
+            stddevimg_nonzero = stddevimg > 1.0e-3
+            tsnr[stddevimg_nonzero] = (
+                    meanimg[stddevimg_nonzero] / stddevimg[stddevimg_nonzero]
+            )
+
+            # Image save
+            _, file_name = os.path.split(file_name)
+            file_name_no_ext, file_extension = os.path.splitext(file_name)
+            if file_extension == '.gz':
+                (file_name_no_ext_2,
+                 file_extension_2) = os.path.splitext(file_name_no_ext)
+                if file_extension_2 == '.nii':
+                    file_name_no_ext = file_name_no_ext_2
+                    file_extension = '.nii.gz'
+
+            tsnr_file_out = os.path.join(self.output_directory,
+                                         (self.prefix_tsnr.strip() +
+                                          file_name_no_ext +
+                                          self.suffix_tsnr.strip() +
+                                          file_extension))
+            tsnr_img = nib.Nifti1Image(tsnr, img.affine, header)
+            nib.save(tsnr_img, tsnr_file_out)
+
+            stddev_file_out = os.path.join(self.output_directory,
+                                           (self.prefix_stddev.strip() +
+                                            file_name_no_ext +
+                                            self.suffix_stddev.strip() +
+                                            file_extension))
+            stddev_img = nib.Nifti1Image(stddevimg, img.affine, header)
+            nib.save(stddev_img, stddev_file_out)
+        
+
 def artifact_mask(imdata, airdata, distance, zscore=10.0):
     """Computes a mask of artifacts found in the air region"""
 
