@@ -257,20 +257,6 @@ class Deoblique(ProcessMIA):
                             optional=False,
                             desc=deoblique_desc))
 
-        self.add_trait("output_type",
-                       Enum('NIFTI',
-                            'AFNI',
-                            'NIFTI_GZ',
-                            output=False,
-                            optional=True,
-                            desc=output_type_desc))
-
-        self.add_trait("out_prefix",
-                       String('do_',
-                              output=False,
-                              optional=True,
-                              desc=out_prefix_desc))
-
         # Outputs traits
         self.add_trait("out_file",
                        File(output=True,
@@ -298,55 +284,11 @@ class Deoblique(ProcessMIA):
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
-            if self.out_prefix == Undefined:
-                self.out_prefix = 'do_'
-                print('The out_prefix parameter is undefined. Automatically '
-                      'set to "do" ...')
 
-            if self.output_directory:
-                ifile = os.path.split(self.in_file)[-1]
+            self.outputs['out_file'] = self.in_file
 
-                try:
-                    fileName, trail = ifile.rsplit('.', 1)
-                    if trail == 'gz':
-                        (fileName_2,
-                         trail_2) = os.path.splitext(fileName)
-                        if trail_2 == 'nii':
-                            trail = 'nii.gz'
-
-                except ValueError:
-                    print('\nThe input image format is not recognized ...!')
-                    return
-
-                else:
-
-                    if trail in ['nii', '3D', 'nii.gz']:
-
-                        if self.output_type == 'NIFTI':
-                            trail = 'nii'
-                        elif self.output_type == 'AFNI':
-                            trail = '3D'
-                        elif self.output_type == 'NIFTI_GZ':
-                            trail = 'nii.gz'
-
-                        self.outputs['out_file'] = os.path.join(
-                            self.output_directory,
-                            self.out_prefix + fileName + '.' + trail)
-
-                    else:
-                        self.outputs['out_file'] = os.path.join(
-                            self.output_directory,
-                            self.out_prefix + ifile)
-                        print('\nThe input image format does not seem to be '
-                              'nii or 3D. This can prevent the process '
-                              'launch ...!')
-
-                    self.inheritance_dict[self.outputs[
+            self.inheritance_dict[self.outputs[
                         'out_file']] = self.in_file
-
-            else:
-                print('No output_directory was found...!\n')
-                return
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -354,17 +296,9 @@ class Deoblique(ProcessMIA):
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
         super(Deoblique, self).run_process_mia()
-        if not self.deoblique:
-            self.out_file = self.in_file
-            return
 
         self.process.in_file = self.in_file
-        self.process.outputtype = self.output_type
-        self.process.deoblique = True
-        self.process.out_file = self.out_file
-
-        if self.out_prefix:
-            self.process.out_prefix = self.out_prefix
+        self.process.deoblique = self.deoblique
 
         return self.process.run(configuration_dict={})
 
@@ -465,7 +399,7 @@ class Despike(ProcessMIA):
                       'set to "d" ...')
 
             if self.output_directory:
-                ifile = os.path.split(self.in_file_a)[-1]
+                ifile = os.path.split(self.in_file)[-1]
 
                 try:
                     fileName, trail = ifile.rsplit('.', 1)
@@ -503,7 +437,7 @@ class Despike(ProcessMIA):
                               'launch ...!')
 
                     self.inheritance_dict[self.outputs[
-                        'out_file']] = self.in_file_a
+                        'out_file']] = self.in_file
 
             else:
                 print('No output_directory was found...!\n')
@@ -623,23 +557,6 @@ class DropTRs(ProcessMIA):
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
-            if not self.stop_idx or self.stop_idx == -1:
-                try:
-                    imnii = nib.load(self.in_file)
-                    self.stop_idx = imnii.dataobj.shape[3]
-
-                except (nib.filebasedimages.ImageFileError,
-                        FileNotFoundError, TypeError) as e:
-                    print("\nError while setting automatically stop_idx"
-                          ": ", e)
-                    return
-
-                print("\nWarning: stop_idx has been automatically set to"
-                      "the length of input file")
-            if self.stop_idx <= self.start_idx:
-                print("\nError: stop_idx cannot be lower than or equal to"
-                      "start_idx")
-                return
 
             if self.out_prefix == Undefined:
                 self.out_prefix = 'cropped_'
@@ -697,6 +614,30 @@ class DropTRs(ProcessMIA):
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
         super(DropTRs, self).run_process_mia()
+
+        try:
+            imnii = nib.load(self.in_file)
+            nb_volumes = imnii.dataobj.shape[3]
+
+        except (nib.filebasedimages.ImageFileError,
+                FileNotFoundError, TypeError) as e:
+            print("\nError while opening input file"
+                  ": ", e)
+            return
+
+        if not self.stop_idx or self.stop_idx == -1:
+            self.stop_idx = nb_volumes
+            print("\nWarning: stop_idx has been automatically set to"
+                  "the length of input file")
+        if self.stop_idx <= self.start_idx:
+            print("\nError: stop_idx cannot be lower than or equal to"
+                  "start_idx")
+            return
+
+        if self.start_idx == 0 and self.stop_idx == nb_volumes:
+            self.out_file = self.in_file
+            return
+
         self.process.in_file_a = self.in_file
         self.process.expr = "a"
         self.process.outputtype = self.output_type
@@ -1101,7 +1042,7 @@ class Volreg(ProcessMIA):
                             optional=True,
                             desc=interp_desc))
 
-        self.add_trait("two_pass",
+        self.add_trait("twopass",
                        Bool(False,
                             output=False,
                             optional=True,
@@ -1138,7 +1079,7 @@ class Volreg(ProcessMIA):
 
         self.init_default_traits()
 
-        self.init_process('nipype.interfaces.afni.TShift')
+        self.init_process('nipype.interfaces.afni.Volreg')
 
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
@@ -1205,7 +1146,7 @@ class Volreg(ProcessMIA):
 
                         self.outputs['oned_file'] = os.path.join(
                             self.output_directory,
-                            self.out_prefix + fileName + '_oned.' + trail)
+                            self.out_prefix + fileName + '_oned.txt')
                         print('\nThe input image format does not seem to be '
                               'nii or 3D. This can prevent the process '
                               'launch ...!')
