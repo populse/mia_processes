@@ -3106,7 +3106,7 @@ class TSNR(ProcessMIA):
 
         if img is not None:
             header = img.header.copy()
-            data = img.get_fdata(dtype=np.float32).reshape(vol.shape[:3] + (-1,))
+            data = img.get_fdata(dtype=np.float32).reshape(img.shape[:3] + (-1,))
             data = np.nan_to_num(data)
     
             if data.dtype.kind == "i":
