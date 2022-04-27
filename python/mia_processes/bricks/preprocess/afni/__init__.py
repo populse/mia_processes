@@ -9,4 +9,4 @@
 ##########################################################################
 
 from .processes import (Calc, Deoblique, Despike, DropTRs,
-                        SkullStripping, TShift, Volreg)
+                        Mean, SkullStripping, TShift, Volreg)
