@@ -8,5 +8,6 @@
 # for details.
 ##########################################################################
 
-from .processes import (Calc, Deoblique, Despike, DropTRs,
-                        Mean, SkullStripping, TShift, Volreg)
+from .processes import (Automask, Calc, Deoblique, Despike,
+                        DropTRs, Mean, SkullStripping,
+                        TShift, Volreg)
