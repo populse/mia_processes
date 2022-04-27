@@ -83,7 +83,7 @@ class Automask(ProcessMIA):
                             desc=output_type_desc))
 
         self.add_trait("out_prefix",
-                       String('c_',
+                       String('mask_',
                               output=False,
                               optional=True,
                               desc=out_prefix_desc))
