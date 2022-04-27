@@ -541,56 +541,58 @@ class Despike(ProcessMIA):
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
+            if self.despike:
+                if self.out_prefix == Undefined:
+                    self.out_prefix = 'd_'
+                    print('The out_prefix parameter is undefined. Automatically '
+                          'set to "d" ...')
 
-            if self.out_prefix == Undefined:
-                self.out_prefix = 'd_'
-                print('The out_prefix parameter is undefined. Automatically '
-                      'set to "d" ...')
+                if self.output_directory:
+                    ifile = os.path.split(self.in_file)[-1]
 
-            if self.output_directory:
-                ifile = os.path.split(self.in_file)[-1]
+                    try:
+                        fileName, trail = ifile.rsplit('.', 1)
+                        if trail == 'gz':
+                            (fileName_2,
+                             trail_2) = os.path.splitext(fileName)
+                            if trail_2 == 'nii':
+                                trail = 'nii.gz'
 
-                try:
-                    fileName, trail = ifile.rsplit('.', 1)
-                    if trail == 'gz':
-                        (fileName_2,
-                         trail_2) = os.path.splitext(fileName)
-                        if trail_2 == 'nii':
-                            trail = 'nii.gz'
-
-                except ValueError:
-                    print('\nThe input image format is not recognized ...!')
-                    return
-
-                else:
-
-                    if trail in ['nii', '3D', 'nii.gz']:
-
-                        if self.output_type == 'NIFTI':
-                            trail = 'nii'
-                        elif self.output_type == 'AFNI':
-                            trail = '3D'
-                        elif self.output_type == 'NIFTI_GZ':
-                            trail = 'nii.gz'
-
-                        self.outputs['out_file'] = os.path.join(
-                            self.output_directory,
-                            self.out_prefix + fileName + '.' + trail)
+                    except ValueError:
+                        print('\nThe input image format is not recognized ...!')
+                        return
 
                     else:
-                        self.outputs['out_file'] = os.path.join(
-                            self.output_directory,
-                            self.out_prefix + ifile)
-                        print('\nThe input image format does not seem to be '
-                              'nii or 3D. This can prevent the process '
-                              'launch ...!')
 
-                    self.inheritance_dict[self.outputs[
-                        'out_file']] = self.in_file
+                        if trail in ['nii', '3D', 'nii.gz']:
 
+                            if self.output_type == 'NIFTI':
+                                trail = 'nii'
+                            elif self.output_type == 'AFNI':
+                                trail = '3D'
+                            elif self.output_type == 'NIFTI_GZ':
+                                trail = 'nii.gz'
+
+                            self.outputs['out_file'] = os.path.join(
+                                self.output_directory,
+                                self.out_prefix + fileName + '.' + trail)
+
+                        else:
+                            self.outputs['out_file'] = os.path.join(
+                                self.output_directory,
+                                self.out_prefix + ifile)
+                            print('\nThe input image format does not seem to be '
+                                  'nii or 3D. This can prevent the process '
+                                  'launch ...!')
+
+                else:
+                    print('No output_directory was found...!\n')
+                    return
             else:
-                print('No output_directory was found...!\n')
-                return
+                self.outputs['out_file'] = self.in_file
+
+            self.inheritance_dict[self.outputs[
+                'out_file']] = self.in_file
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -599,7 +601,6 @@ class Despike(ProcessMIA):
         """Dedicated to the process launch step of the brick."""
         super(Despike, self).run_process_mia()
         if not self.despike:
-            self.out_file = self.in_file
             return
 
         self.process.in_file = self.in_file
@@ -707,55 +708,77 @@ class DropTRs(ProcessMIA):
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
 
-            if self.out_prefix == Undefined:
-                self.out_prefix = 'cropped_'
-                print('The out_prefix parameter is undefined. Automatically '
-                      'set to "c" ...')
+            try:
+                imnii = nib.load(self.in_file)
+                nb_volumes = imnii.dataobj.shape[3]
 
-            if self.output_directory:
-                ifile = os.path.split(self.in_file)[-1]
+            except (nib.filebasedimages.ImageFileError,
+                    FileNotFoundError, TypeError) as e:
+                print("\nError while opening input file"
+                      ": ", e)
+                return
 
-                try:
-                    fileName, trail = ifile.rsplit('.', 1)
-                    if trail == 'gz':
-                        (fileName_2,
-                         trail_2) = os.path.splitext(fileName)
-                        if trail_2 == 'nii':
-                            trail = 'nii.gz'
+            if not self.stop_idx or self.stop_idx == -1:
+                self.stop_idx = nb_volumes
+                print("\nWarning: stop_idx has been automatically set to"
+                      "the length of input file")
+            if self.stop_idx <= self.start_idx:
+                print("\nError: stop_idx cannot be lower than or equal to"
+                      "start_idx")
+                return
 
-                except ValueError:
-                    print('\nThe input image format is not recognized ...!')
-                    return
+            if self.start_idx == 0 and self.stop_idx == nb_volumes:
+                self.outputs['out_file'] = self.in_file
+            else:
+                if self.out_prefix == Undefined:
+                    self.out_prefix = 'cropped_'
+                    print('The out_prefix parameter is undefined. Automatically '
+                          'set to "c" ...')
 
-                else:
+                if self.output_directory:
+                    ifile = os.path.split(self.in_file)[-1]
 
-                    if trail in ['nii', '3D', 'nii.gz']:
+                    try:
+                        fileName, trail = ifile.rsplit('.', 1)
+                        if trail == 'gz':
+                            (fileName_2,
+                             trail_2) = os.path.splitext(fileName)
+                            if trail_2 == 'nii':
+                                trail = 'nii.gz'
 
-                        if self.output_type == 'NIFTI':
-                            trail = 'nii'
-                        elif self.output_type == 'AFNI':
-                            trail = '3D'
-                        elif self.output_type == 'NIFTI_GZ':
-                            trail = 'nii.gz'
-
-                        self.outputs['out_file'] = os.path.join(
-                            self.output_directory,
-                            self.out_prefix + fileName + '.' + trail)
+                    except ValueError:
+                        print('\nThe input image format is not recognized ...!')
+                        return
 
                     else:
-                        self.outputs['out_file'] = os.path.join(
-                            self.output_directory,
-                            self.out_prefix + ifile)
-                        print('\nThe input image format does not seem to be '
-                              'nii or 3D. This can prevent the process '
-                              'launch ...!')
 
-                    self.inheritance_dict[self.outputs[
-                        'out_file']] = self.in_file
+                        if trail in ['nii', '3D', 'nii.gz']:
 
-            else:
-                print('No output_directory was found...!\n')
-                return
+                            if self.output_type == 'NIFTI':
+                                trail = 'nii'
+                            elif self.output_type == 'AFNI':
+                                trail = '3D'
+                            elif self.output_type == 'NIFTI_GZ':
+                                trail = 'nii.gz'
+
+                            self.outputs['out_file'] = os.path.join(
+                                self.output_directory,
+                                self.out_prefix + fileName + '.' + trail)
+
+                        else:
+                            self.outputs['out_file'] = os.path.join(
+                                self.output_directory,
+                                self.out_prefix + ifile)
+                            print('\nThe input image format does not seem to be '
+                                  'nii or 3D. This can prevent the process '
+                                  'launch ...!')
+
+                else:
+                    print('No output_directory was found...!\n')
+                    return
+
+            self.inheritance_dict[self.outputs[
+                'out_file']] = self.in_file
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -764,27 +787,7 @@ class DropTRs(ProcessMIA):
         """Dedicated to the process launch step of the brick."""
         super(DropTRs, self).run_process_mia()
 
-        try:
-            imnii = nib.load(self.in_file)
-            nb_volumes = imnii.dataobj.shape[3]
-
-        except (nib.filebasedimages.ImageFileError,
-                FileNotFoundError, TypeError) as e:
-            print("\nError while opening input file"
-                  ": ", e)
-            return
-
-        if not self.stop_idx or self.stop_idx == -1:
-            self.stop_idx = nb_volumes
-            print("\nWarning: stop_idx has been automatically set to"
-                  "the length of input file")
-        if self.stop_idx <= self.start_idx:
-            print("\nError: stop_idx cannot be lower than or equal to"
-                  "start_idx")
-            return
-
-        if self.start_idx == 0 and self.stop_idx == nb_volumes:
-            self.out_file = self.in_file
+        if self.in_file == self.out_file:
             return
 
         self.process.in_file_a = self.in_file
@@ -1203,56 +1206,58 @@ class TShift(ProcessMIA):
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
+            if self.slice_timing:
+                if self.out_prefix == Undefined:
+                    self.out_prefix = 'st_corr_'
+                    print('The out_prefix parameter is undefined. Automatically '
+                          'set to "st_corr" ...')
 
-            if self.out_prefix == Undefined:
-                self.out_prefix = 'st_corr_'
-                print('The out_prefix parameter is undefined. Automatically '
-                      'set to "st_corr" ...')
+                if self.output_directory:
+                    ifile = os.path.split(self.in_file)[-1]
 
-            if self.output_directory:
-                ifile = os.path.split(self.in_file)[-1]
+                    try:
+                        fileName, trail = ifile.rsplit('.', 1)
+                        if trail == 'gz':
+                            (fileName_2,
+                             trail_2) = os.path.splitext(fileName)
+                            if trail_2 == 'nii':
+                                trail = 'nii.gz'
 
-                try:
-                    fileName, trail = ifile.rsplit('.', 1)
-                    if trail == 'gz':
-                        (fileName_2,
-                         trail_2) = os.path.splitext(fileName)
-                        if trail_2 == 'nii':
-                            trail = 'nii.gz'
-
-                except ValueError:
-                    print('\nThe input image format is not recognized ...!')
-                    return
-
-                else:
-
-                    if trail in ['nii', '3D', 'nii.gz']:
-
-                        if self.output_type == 'NIFTI':
-                            trail = 'nii'
-                        elif self.output_type == 'AFNI':
-                            trail = '3D'
-                        elif self.output_type == 'NIFTI_GZ':
-                            trail = 'nii.gz'
-
-                        self.outputs['out_file'] = os.path.join(
-                            self.output_directory,
-                            self.out_prefix + fileName + '.' + trail)
+                    except ValueError:
+                        print('\nThe input image format is not recognized ...!')
+                        return
 
                     else:
-                        self.outputs['out_file'] = os.path.join(
-                            self.output_directory,
-                            self.out_prefix + ifile)
-                        print('\nThe input image format does not seem to be '
-                              'nii or 3D. This can prevent the process '
-                              'launch ...!')
 
-                    self.inheritance_dict[self.outputs[
-                        'out_file']] = self.in_file
+                        if trail in ['nii', '3D', 'nii.gz']:
 
+                            if self.output_type == 'NIFTI':
+                                trail = 'nii'
+                            elif self.output_type == 'AFNI':
+                                trail = '3D'
+                            elif self.output_type == 'NIFTI_GZ':
+                                trail = 'nii.gz'
+
+                            self.outputs['out_file'] = os.path.join(
+                                self.output_directory,
+                                self.out_prefix + fileName + '.' + trail)
+
+                        else:
+                            self.outputs['out_file'] = os.path.join(
+                                self.output_directory,
+                                self.out_prefix + ifile)
+                            print('\nThe input image format does not seem to be '
+                                  'nii or 3D. This can prevent the process '
+                                  'launch ...!')
+
+                else:
+                    print('No output_directory was found...!\n')
+                    return
             else:
-                print('No output_directory was found...!\n')
-                return
+                self.outputs['out_file'] = self.in_file
+
+            self.inheritance_dict[self.outputs[
+                'out_file']] = self.in_file
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -1261,7 +1266,6 @@ class TShift(ProcessMIA):
         """Dedicated to the process launch step of the brick."""
         super(TShift, self).run_process_mia()
         if not self.slice_timing:
-            self.out_file = self.in_file
             return
 
         self.process.in_file = self.in_file
