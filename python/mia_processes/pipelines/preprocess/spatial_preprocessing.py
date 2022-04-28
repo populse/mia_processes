@@ -7,7 +7,7 @@ or other pipelines provided in the mia_processes library.
 
 :Contains:
     :Class:
-        - Spatial_preprocessing_1
+        - Spatial_preprocessing
 
 """
 
@@ -26,7 +26,7 @@ from capsul.api import Pipeline
 import traits.api as traits
 
 
-class Spatial_preprocessing_1(Pipeline):
+class Spatial_preprocessing(Pipeline):
     """
     *Data pre-processing for cerebrovascular reserve analysis (CVRa) at CLUNI - IRMaGe (Grenoble - France)*
     Please, see the complete documention for the `Spatial_preprocessing_1 brick in the populse.mia_processes web site:

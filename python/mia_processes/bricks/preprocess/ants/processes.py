@@ -295,7 +295,7 @@ class ApplyTransforms(ProcessMIA):
                     if trail == 'gz':
                         (fileName_2,
                          trail_2) = os.path.splitext(fileName)
-                        if trail_2 == 'nii':
+                        if trail_2 == '.nii':
                             trail = 'nii.gz'
                 except ValueError:
                     print('\nThe input image format is not recognized ...!')
@@ -450,7 +450,7 @@ class N4BiasFieldCorrection(ProcessMIA):
                     if trail == 'gz':
                         (fileName_2,
                          trail_2) = os.path.splitext(fileName)
-                        if trail_2 == 'nii':
+                        if trail_2 == '.nii':
                             trail = 'nii.gz'
 
                 except ValueError:
