@@ -23,6 +23,7 @@ class Anat_airmask_pipeline(Pipeline):
         self.export_parameter("template", "in_template", "template", is_optional=False)
         self.export_parameter("template", "resolution", "tpl_res", is_optional=False)
         self.export_parameter("artifactmask", "head_mask", is_optional=False)
+        self.export_parameter("rotationmask", "out_file", "out_rot_mask", is_optional=False)
         self.add_link("rotationmask.out_file->artifactmask.rot_mask")
         self.add_link("applytransforms.output_image->artifactmask.nasion_post_mask")
         self.export_parameter("artifactmask", "out_hat_mask", is_optional=False)

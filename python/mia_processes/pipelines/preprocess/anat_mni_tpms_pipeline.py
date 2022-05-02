@@ -27,7 +27,7 @@ class Anat_mni_tpms_pipeline(Pipeline):
         self.nodes["applytransforms_WM"].process.out_prefix = 'wm_'
         self.add_process("applytransforms_GM", "mia_processes.bricks.preprocess.ants.processes.ApplyTransforms")
         self.nodes["applytransforms_GM"].process.out_prefix = 'gm_'
-        self.add_process("files_to_list_1", "mia_processes.bricks.tools.tools.Files_To_List")
+        self.add_process("files_to_list", "mia_processes.bricks.tools.tools.Files_To_List")
 
         # links
         self.export_parameter("applytransforms_CSF", "reference_image", "in_ras", is_optional=False)
@@ -46,12 +46,12 @@ class Anat_mni_tpms_pipeline(Pipeline):
         self.add_link("template_suffix->template_CSF.suffix")
         self.add_link("template_suffix->template_WM.suffix")
         self.add_link("template_CSF.template->applytransforms_CSF.input_image")
-        self.add_link("applytransforms_CSF.output_image->files_to_list_1.file1")
+        self.add_link("applytransforms_CSF.output_image->files_to_list.file1")
         self.add_link("template_GM.template->applytransforms_GM.input_image")
         self.add_link("template_WM.template->applytransforms_WM.input_image")
-        self.add_link("applytransforms_WM.output_image->files_to_list_1.file3")
-        self.add_link("applytransforms_GM.output_image->files_to_list_1.file2")
-        self.export_parameter("files_to_list_1", "file_list", "mni_tpms", is_optional=False)
+        self.add_link("applytransforms_WM.output_image->files_to_list.file3")
+        self.add_link("applytransforms_GM.output_image->files_to_list.file2")
+        self.export_parameter("files_to_list", "file_list", "mni_tpms", is_optional=False)
 
         # parameters order
 
@@ -71,18 +71,12 @@ class Anat_mni_tpms_pipeline(Pipeline):
             "template_WM": (-669.3920000000002, 52.54400000000007),
             "applytransforms_WM": (-382.3792000000001, 47.635200000000054),
             "applytransforms_GM": (-385.4448, -223.1727999999999),
-            "files_to_list_1": (-35.82719999999998, -185.29919999999998),
+            "files_to_list": (-35.82719999999998, -185.29919999999998),
             "outputs": (169.08355000000003, -150.73919999999998),
         }
 
         # nodes dimensions
         self.node_dimension = {
-            "applytransforms_1": (242.328125, 215.0),
-            "applytransforms_2": (242.328125, 215.0),
-            "applytransforms_3": (242.328125, 215.0),
-            "template_1": (177.640625, 215.0),
-            "template_2": (177.640625, 215.0),
-            "template_3": (180.640625, 215.0),
             "inputs": (244.08125, 215.0),
             "template_CSF": (177.640625, 250.0),
             "applytransforms_CSF": (242.328125, 215.0),
@@ -90,7 +84,7 @@ class Anat_mni_tpms_pipeline(Pipeline):
             "template_WM": (177.640625, 250.0),
             "applytransforms_WM": (242.328125, 215.0),
             "applytransforms_GM": (242.328125, 215.0),
-            "files_to_list_1": (119.125, 145.0),
+            "files_to_list": (119.125, 145.0),
             "outputs": (91.09375, 75.0),
         }
 
