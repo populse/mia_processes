@@ -60,7 +60,9 @@ class Files_To_List(ProcessMIA):
         # Inputs description
         file1_desc = 'A string corresponding to an existing path file.'
         file2_desc = ('An optional string corresponding '
-                     'to an existing path file.')
+                      'to an existing path file.')
+        file3_desc = ('An optional string corresponding '
+                      'to an existing path file.')
 
         # Outputs description
         file_list_desc = 'A list of items which are an existing file name.'
@@ -69,11 +71,16 @@ class Files_To_List(ProcessMIA):
         self.add_trait("file1",
                        traits.File(output=False,
                                    desc=file1_desc))
-        
+
         self.add_trait("file2",
                        traits.File(output=False,
                                    optional=True,
                                    desc=file2_desc))
+
+        self.add_trait("file3",
+                       traits.File(output=False,
+                                   optional=True,
+                                   desc=file3_desc))
 
         # Outputs traits
         self.add_trait("file_list",
@@ -100,11 +107,13 @@ class Files_To_List(ProcessMIA):
         if self.file1 and self.file1 not in ["<undefined>", traits.Undefined]:
         
             if ((not self.file2) or
-                (self.file2 in ["<undefined>", traits.Undefined])):
+                    (self.file2 in ["<undefined>", traits.Undefined])):
                 self.outputs['file_list'] = [self.file1]
-
-            else:
+            elif ((not self.file3) or
+                  (self.file3 in ["<undefined>", traits.Undefined])):
                 self.outputs['file_list'] = [self.file1, self.file2]
+            else:
+                self.outputs['file_list'] = [self.file1, self.file2, self.file3]
                 
             if self.outputs:
                 self.outputs["notInDb"] = ["file_list"]

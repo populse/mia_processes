@@ -10,6 +10,7 @@ pre-processing steps, which are not found in nipype.
         - ConformImage
         - Enhance
         - GradientThreshold
+        - Harmonize
         - NonSteadyStateDetector
         - Mask
         - Resample
@@ -1237,6 +1238,222 @@ class GradientThreshold(ProcessMIA):
                                       self.suffix.strip() +
                                       file_extension))
             nib.save(out_image, file_out)
+
+
+class Harmonize(ProcessMIA):
+    """
+    * Harmonize *
+
+    Please, see the complete documentation for the `Harmonize' brick in the populse.mia_processes website
+    https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/Harmonize.html
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation / instanciation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(Harmonize, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = []
+
+        # Inputs description
+        in_file_desc = 'An existing path file.'
+        wm_mask_desc = 'An existing path of a WM mask file.'
+        erodemask_desc = 'Boolean (a string).'
+        suffix_desc = 'Suffix of the output image (a string).'
+        prefix_desc = 'Prefix of the output image (a string).'
+
+        # Outputs description
+        out_file_desc = ('Path of the harmonized image '
+                         '(a pathlike object or string representing a file).')
+
+        # Inputs traits
+        self.add_trait("in_file",
+                       File(output=False,
+                            optional=False,
+                            desc=in_file_desc))
+
+        self.add_trait("wm_mask",
+                       File(output=False,
+                            optional=False,
+                            desc=wm_mask_desc))
+
+        self.add_trait("erodemask",
+                       traits.Bool(True,
+                                   output=False,
+                                   optional=True,
+                                   desc=erodemask_desc))
+        self.add_trait("suffix",
+                       traits.String("_harmonized",
+                                     output=False,
+                                     optional=True,
+                                     desc=suffix_desc))
+
+        self.add_trait("prefix",
+                       traits.String("",
+                                     output=False,
+                                     optional=True,
+                                     desc=prefix_desc))
+
+        # Outputs traits
+        self.add_trait("out_file",
+                       File(output=True,
+                            desc=out_file_desc))
+
+        self.init_default_traits()
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(Harmonize, self).list_outputs()
+
+        # Outputs definition
+        if self.in_file:
+
+            file_name = self.in_file
+
+            if ((not self.suffix) or (self.suffix.isspace()) or
+                    self.suffix in [Undefined, "<undefined>"]):
+                self.suffix = " "
+
+            if ((not self.prefix) or (self.prefix.isspace()) or
+                    (self.prefix in [Undefined, "<undefined>"])):
+                self.prefix = " "
+
+            file = ''
+
+            path, filename = os.path.split(file_name)
+
+            if (self.suffix == " " and
+                    self.prefix == " " and
+                    path == self.output_directory):
+                msg = QMessageBox()
+                msg.setIcon(QMessageBox.Warning)
+                msg.setWindowTitle("mia_processes - "
+                                   "Harmonize brick Warning!")
+                msg.setText("Suffix and prefix input parameters are not "
+                            "defined or consist only of one or more white "
+                            "spaces.\nThe {0} input parameter will be "
+                            "overwritten ...\n Yes or "
+                            "Abort?".format(filename))
+                msg.setStandardButtons(QMessageBox.Yes | QMessageBox.Abort)
+                retval = msg.exec_()
+
+                if retval != QMessageBox.Abort:
+                    (file_name_no_ext,
+                     file_extension) = os.path.splitext(filename)
+                    if file_extension == '.gz':
+                        (file_name_no_ext_2,
+                         file_extension_2) = os.path.splitext(file_name_no_ext)
+                        if file_extension_2 == '.nii':
+                            file_name_no_ext = file_name_no_ext_2
+                            file_extension = '.nii.gz'
+
+                    file = os.path.join(self.output_directory,
+                                        (self.prefix.strip() +
+                                         file_name_no_ext +
+                                         self.suffix.strip() +
+                                         file_extension))
+                    print('\nHarmonize brick warning: the out_file output '
+                          'parameter is the same as the in_file input '
+                          'parameter (suffix and prefix are not defined):'
+                          '\n{0} will be overwrited ...'.format(filename))
+
+                else:
+                    filename = ''
+                    print('\nAborted. Please check your input parameters ...')
+
+            else:
+                (file_name_no_ext,
+                 file_extension) = os.path.splitext(filename)
+                if file_extension == '.gz':
+                    (file_name_no_ext_2,
+                     file_extension_2) = os.path.splitext(file_name_no_ext)
+                    if file_extension_2 == '.nii':
+                        file_name_no_ext = file_name_no_ext_2
+                        file_extension = '.nii.gz'
+
+                file = os.path.join(self.output_directory,
+                                    (self.prefix.strip() +
+                                     file_name_no_ext +
+                                     self.suffix.strip() +
+                                     file_extension))
+
+            if filename:
+                self.outputs['out_file'] = file
+
+            else:
+                print('- There was no output file deducted during '
+                      'initialisation. Please check the input parameters...!')
+
+            # tags inheritance (optional)
+            if self.outputs['out_file']:
+                self.inheritance_dict[self.outputs['out_file']] = self.in_file
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(Harmonize, self).run_process_mia()
+
+        try:
+            img = nib.load(self.in_file)
+            wm_img = nib.load(self.wm_mask).get_data()
+        except (nib.filebasedimages.ImageFileError,
+                FileNotFoundError, TypeError) as e:
+            print("\nError with file to enhance, during "
+                  "initialisation: ", e)
+            img = None
+            wm_img = None
+
+        if (img is not None) and (wm_img is not None):
+            wm_img[wm_img < 0.9] = 0
+            wm_img[wm_img > 0] = 1
+            wm_mask = wm_img.astype(np.uint8)
+
+            if self.erodemask:
+                # Create a structural element to be used in an opening operation.
+                struc = sim.generate_binary_structure(3, 2)
+                # Perform an opening operation on the background data.
+                wm_mask = sim.binary_erosion(wm_mask, structure=struc).astype(np.uint8)
+
+            data = img.get_data()
+            data = data * (1000.0 / np.median(data[wm_mask > 0]))
+
+            out_img = img.__class__(data, img.affine, img.header)
+
+            # Image save
+            _, file_name = os.path.split(self.in_file)
+            file_name_no_ext, file_extension = os.path.splitext(file_name)
+            if file_extension == '.gz':
+                (file_name_no_ext_2,
+                 file_extension_2) = os.path.splitext(file_name_no_ext)
+                if file_extension_2 == '.nii':
+                    file_name_no_ext = file_name_no_ext_2
+                    file_extension = '.nii.gz'
+
+            file_out = os.path.join(self.output_directory,
+                                     (self.prefix.strip() +
+                                      file_name_no_ext +
+                                      self.suffix.strip() +
+                                      file_extension))
+            nib.save(out_img, file_out)
 
 
 class NonSteadyStateDetector(ProcessMIA):
@@ -2503,6 +2720,7 @@ class Template(ProcessMIA):
         suffix_desc = 'BIDS suffix (String or None)'
         atlas_desc = 'Name of a particular atlas (String or None)'
         desc_desc = 'Description field (String or None)'
+        label_desc = 'Label field (String or None)'
 
         # Outputs description
         template_desc = ('Path of the template (a pathlike object '
@@ -2537,6 +2755,12 @@ class Template(ProcessMIA):
                                      output=False,
                                      optional=True,
                                      desc=desc_desc))
+
+        self.add_trait("label",
+                       traits.String('',
+                                     output=False,
+                                     optional=True,
+                                     desc=label_desc))
 
         # Outputs traits
         self.add_trait("template",
@@ -2574,7 +2798,12 @@ class Template(ProcessMIA):
         else:
             desc = self.desc
 
-        template_spec = {"resolution": self.resolution, "suffix": suffix, "atlas": atlas, "desc": desc}
+        if not self.label:
+            label = None
+        else:
+            label = self.label
+
+        template_spec = {"resolution": self.resolution, "suffix": suffix, "atlas": atlas, "desc": desc, "label": label}
 
         tpl_target_path = get_template(self.in_template, **template_spec)
         if not tpl_target_path:
