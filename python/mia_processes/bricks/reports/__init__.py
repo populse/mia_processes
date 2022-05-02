@@ -8,5 +8,5 @@
 # for details.
 ##########################################################################
 
-from .processes import QC_AnatReport
+from .processes import AnatIQMs
 from .reporting import MRIQC_report
