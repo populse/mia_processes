@@ -14,4 +14,4 @@ Contains:
 # for details.
 ###############################################################################
 
-from .tools import recupCover
+from .tools import recupCover, PageNumCanvas, ReportLine

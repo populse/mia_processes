@@ -16,6 +16,9 @@ Module that contains multiple functions used across mia_processes
 
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import Paragraph
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import mm
+from reportlab.platypus import Flowable
 from os import listdir, system, makedirs, remove
 from os.path import isdir, isfile
 from datetime import datetime
@@ -24,6 +27,51 @@ from shutil import copyfile
 import readline as readlineComp
 import rlcompleter, getpass
 import logging # autocomp debug logfile
+
+class PageNumCanvas(canvas.Canvas):
+    "For  add \"page number of total\" in each footer."
+
+    def __init__(self, *args, **kwargs):
+        "Constructor."
+        canvas.Canvas.__init__(self, *args, **kwargs)
+        self.pages = []
+
+    def showPage(self):
+        "On a page break, add information to the list."
+        self.pages.append(dict(self.__dict__))
+        self._startPage()
+
+    def save(self):
+        "Add the page number to each page (page x of y)."
+        page_count = len(self.pages)
+
+        for page in self.pages:
+            self.__dict__.update(page)
+            self.draw_page_number(page_count)
+            canvas.Canvas.showPage(self)
+
+        canvas.Canvas.save(self)
+
+    def draw_page_number(self, page_count):
+        "Add the page number."
+        page = "Page %s of %s" % (self._pageNumber, page_count)
+        self.setFont("Helvetica", 7)
+        self.drawRightString(195*mm, 10*mm, page)
+
+class ReportLine(Flowable):
+    "Line flowable --- draws a line in a flowable"
+
+    def __init__(self, width, height=0):
+        Flowable.__init__(self)
+        self.width = width
+        self.height = height
+
+    def __repr__(self):
+        return "Line(w=%s)" % self.width
+
+    def draw(self):
+        "draw the line"
+        self.canv.line(0, self.height, self.width, self.height)
 
 
 def recupCover(afile):
