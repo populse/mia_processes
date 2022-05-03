@@ -29,7 +29,7 @@ from nipype.interfaces.base import (OutputMultiPath, InputMultiPath, File,
 from nipype.interfaces.spm.base import ImageFileSPM
 
 #mia_processes import:
-from mia_processes.utils import recupCover
+from mia_processes.utils import recupCover, PageNumCanvas, ReportLine
 
 # populse_mia import
 from populse_mia import sources_images
@@ -157,9 +157,10 @@ class MRIQC_report(ProcessMIA):
         # acquisition_date
         if ('AcquisitionDate' in
                 self.project.session.get_fields_names(COLLECTION_CURRENT)):
-            self.dict4runtime['acquisition_date'] = self.project.session.get_value(COLLECTION_CURRENT,
+            self.dict4runtime['acquisition_date'] = str(self.project.session.get_value(COLLECTION_CURRENT,
                                                   database_filename,
-                                                  ('AcquisitionDate'))
+                                                  ('AcquisitionDate')))
+
         # sex
         if ('Sex' in
                 self.project.session.get_fields_names(COLLECTION_CURRENT)):
@@ -209,66 +210,64 @@ class MRIQC_report(ProcessMIA):
         header_image = Image(header_image, 175.0 * mm,
                             30.0 * mm)  # 2508px × 430px
 
-        header_title = '<font size=30><b>MRI &nbsp Q</b></font><font size=11>uality</font>\
-                          <font size=30><b>&nbsp C</b></font><font size=11><ontrol/font>'
+        header_title = '<font size=30><b>MRI &nbsp Q</b></font>  <font size=11>uality</font>   <font size=30><b>&nbsp C</b></font>   <font size=11>ontrol</font>'
 
-
-        if self.dict4runtime['site'] in ('', Undefined):
-            site = "*Undefined site*"
-
-        else:
+        if 'site' in self.dict4runtime and self.dict4runtime['site'] not in ('', Undefined):
             site = self.dict4runtime['site']
 
-        if self.dict4runtime['study_name'] in ('', Undefined):
-            study_name = "*Undefined study name*"
-
         else:
+            site = "*Undefined site*"
+
+        if 'study_name' in self.dict4runtime and self.dict4runtime['study_name'] not in ('', Undefined):
             study_name = self.dict4runtime['study_name']
 
-        if self.dict4runtime['acquisition_date'] in ('', Undefined):
-            acqu_date = "*Undefined study name*"
-
         else:
+            study_name = "*Undefined study name*"
+
+        if 'acquisition_date' in self.dict4runtime and self.dict4runtime['acquisition_date'] not in ('', Undefined):
             acqu_date = self.dict4runtime['acquisition_date']
 
-        if self.dict4runtime['patient_name'] in ('', Undefined):
-            patient_ref = "*Undefined patient reference*"
-
         else:
+            acqu_date = "*Undefined study name*"
+
+        if 'patient_name' in self.dict4runtime and self.dict4runtime['patient_name'] not in ('', Undefined):
             patient_ref = self.dict4runtime['patient_name']
 
-        if self.dict4runtime['sex'] in ('', Undefined):
-            patient_sex = "*Undefined patient sex*"
-
         else:
+            patient_ref = "*Undefined patient reference*"
+
+        if 'sex' in self.dict4runtime and self.dict4runtime['sex'] not in ('', Undefined):
             patient_sex = self.dict4runtime['sex']
 
-        if self.dict4runtime['age'] in ('', Undefined):
-            patient_age = "*Undefined patient age*"
+        else:
+            patient_sex = "*Undefined patient sex*"
+
+        if 'age' in self.dict4runtime and self.dict4runtime['age'] not in ('', Undefined):
+            patient_age = self.dict4runtime['age']
 
         else:
-            patient_age = self.dict4runtime['age']
+            patient_age = "*Undefined patient age*"
 
 
         run_date = datetime.now()
 
-        with tempfile.TemporaryFile() as temp_file:
-            temp_file.write("SITE:%s" % site)
-            temp_file.write("\nMRI SCANNER:%s" % self.dict4runtime['mri_scanner'])
-            temp_file.write("\nSTUDY NAME:%s" % study_name)
-            temp_file.write("\nEXAMINATION DATE:%s" % acqu_date)
-            temp_file.write("\nPATIENT REFERENCE:%s" % patient_ref)
-            temp_file.write("\nPATIENT SEX:%s" % patient_sex)
-            temp_file.write("\nPATIENT AGE:%s" % patient_age)
-            temp_file.write("\nSOFTWARES:Python %s" % (version.split()[0]))
+        with tempfile.NamedTemporaryFile() as temp_file:
+            temp_file.write(bytes("SITE:{}".format('site'), encoding='utf8'))
+            temp_file.write(bytes("\nMRI SCANNER: {}".format(self.dict4runtime['mri_scanner']), encoding='utf8'))
+            temp_file.write(bytes("\nSTUDY NAME: {}".format(study_name), encoding='utf8'))
+            temp_file.write(bytes("\nEXAMINATION DATE: {}".format(acqu_date), encoding='utf8'))
+            temp_file.write(bytes("\nPATIENT REFERENCE: {}".format(patient_ref), encoding='utf8'))
+            temp_file.write(bytes("\nPATIENT SEX: {}".format(patient_sex), encoding='utf8'))
+            temp_file.write(bytes("\nPATIENT AGE: {}".format(patient_age), encoding='utf8'))
+            temp_file.write(bytes("\nSOFTWARES:Python {}".format(version.split()[0]), encoding='utf8'))
             from populse_mia import info as mia_info
-            temp_file.write("\n : populse_mia %s" % mia_info.__version__)
+            temp_file.write(bytes("\n : populse_mia {}".format(mia_info.__version__), encoding='utf8'))
             from capsul import info as capsul_info
-            temp_file.write("\n : capsul %s" % capsul_info.__version__)
+            temp_file.write(bytes("\n : capsul {}".format(capsul_info.__version__), encoding='utf8'))
             from nipype import info as nipype_info
-            temp_file.write("\n : nipype %s" % nipype_info.__version__)
+            temp_file.write(bytes("\n : nipype {}".format(nipype_info.__version__), encoding='utf8'))
             from mia_processes import info as mia_processes_info
-            temp_file.write("\n : mia_processes %s" % mia_processes_info.__version__)
+            temp_file.write(bytes("\n : mia_processes {}".format(mia_processes_info.__version__), encoding='utf8'))
 
             if platform.system() == 'Darwin':
                 os_sys = 'Mac OS X'
@@ -276,29 +275,30 @@ class MRIQC_report(ProcessMIA):
             else:
                 os_sys = platform.system()
 
-            temp_file.write("\n : Operating System %s %s" % (os_sys, platform.release()))
+            temp_file.write(bytes("\n : Operating System {0} {1}".format(os_sys, platform.release()), encoding='utf8'))
+            temp_file.flush()
 
-            cover_data = recupCover(temp_file)
+            cover_data = recupCover(temp_file.name)
 
         cover_data = Table(cover_data, [48*mm, 97*mm])  # colWidths, rowHeights
 
         output = self.report
 
         page = SimpleDocTemplate(output,
-                                 pagesize = portrait(A4),
+                                 pagesize=portrait(A4),
                                  rightMargin=20*mm,
                                  leftMargin=20*mm,
                                  topMargin=10*mm,
-                                 bottomMargin = 10*mm)                          # Output document template definition for page; margins and pages size.
+                                 bottomMargin=10*mm)                          # Output document template definition for page; margins and pages size.
 
         styles = getSampleStyleSheet()                                          # Initialises stylesheet with few basic heading and text styles, return a stylesheet object.
-        styles.add(ParagraphStyle(name = 'Center', alignment = TA_CENTER))      # ParagraphStyle gives all the attributes available for formatting paragraphs.
-        styles.add(ParagraphStyle(name = 'Center2', alignment = TA_CENTER))
-        styles['Center2'].leading=24 # If more than 1 line.
-        styles.add(ParagraphStyle(name = 'Justify', alignment = TA_JUSTIFY))
-        styles.add(ParagraphStyle(name = 'Right', alignment = TA_RIGHT))
-        styles.add(ParagraphStyle(name = 'Left', alignment = TA_LEFT))
-        styles.add(ParagraphStyle(name = 'Bullet1',
+        styles.add(ParagraphStyle(name='Center', alignment=TA_CENTER))      # ParagraphStyle gives all the attributes available for formatting paragraphs.
+        styles.add(ParagraphStyle(name='Center2', alignment=TA_CENTER))
+        styles['Center2'].leading = 24  # If more than 1 line.
+        styles.add(ParagraphStyle(name='Justify', alignment=TA_JUSTIFY))
+        styles.add(ParagraphStyle(name='Right', alignment=TA_RIGHT))
+        styles.add(ParagraphStyle(name='Left', alignment=TA_LEFT))
+        styles.add(ParagraphStyle(name='Bullet1',
                                   leftIndent=30,
                                   bulletOffsetY=2,
                                   bulletIndent=20,
@@ -306,7 +306,7 @@ class MRIQC_report(ProcessMIA):
                                   bulletColor='black',
                                   bulletText=u'●')
                                  )
-        styles.add(ParagraphStyle(name = 'Bullet2',
+        styles.add(ParagraphStyle(name='Bullet2',
                                   leftIndent=60,
                                   bulletOffsetY=1,
                                   bulletIndent=50,
@@ -316,8 +316,8 @@ class MRIQC_report(ProcessMIA):
                                  )
 
         title = ('<font size=18> <b> {0} report: </b> {1} '
-                '<br/> <br/></font>').format(patient_ref,
-                                            run_date.strftime('%Y.%m.%d'))     # Title:  patient_ref + report - running date.
+                 '<br/> <br/></font>').format(patient_ref,
+                                              run_date.strftime('%Y.%m.%d'))     # Title:  patient_ref + report - running date.
 
 
         textDisclaimer = ("<font size=7 ><i><b>DISCLAIMER</b><br/>Mia software,"
@@ -353,7 +353,7 @@ class MRIQC_report(ProcessMIA):
         # First page - cover
 
         header_image.hAlign = 'CENTER'
-        rapport.append(header_image)
+        report.append(header_image)
 
         report.append(Spacer(0 * mm, 10 * mm))  # (width, height)
 
@@ -390,4 +390,4 @@ class MRIQC_report(ProcessMIA):
 
         report.append(PageBreak())
 
-        page.build(rapport, canvasmaker = PageNumCanvas)
+        page.build(report, canvasmaker=PageNumCanvas)
