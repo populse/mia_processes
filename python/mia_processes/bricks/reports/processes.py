@@ -106,7 +106,7 @@ class AnatIQMs(ProcessMIA):
         in_fwhm_desc = ('FWHM (a float).')
 
         # Outputs description
-        out_file_desc = ('a json file containing IQMs')
+        out_file_desc = 'a json file containing IQMs'
 
         # Inputs traits
         self.add_trait("in_ras",
@@ -115,49 +115,49 @@ class AnatIQMs(ProcessMIA):
                             desc=in_ras_desc))
         self.add_trait("airmask",
                        File(output=False,
-                            optional=False,
+                            optional=True,
                             desc=airmask_desc))
         self.add_trait("artmask",
                        File(output=False,
-                            optional=False,
+                            optional=True,
                             desc=artmask_desc))
         self.add_trait("headmask",
                        File(output=False,
-                            optional=False,
+                            optional=True,
                             desc=headmask_desc))
         self.add_trait("rotmask",
                        File(output=False,
-                            optional=False,
+                            optional=True,
                             desc=rotmask_desc))
         self.add_trait("hatmask",
                        File(output=False,
-                            optional=False,
+                            optional=True,
                             desc=hatmask_desc))
         self.add_trait("segmentation",
                        File(output=False,
-                            optional=False,
+                            optional=True,
                             desc=segmentation_desc))
         self.add_trait("in_inu",
                        File(output=False,
-                            optional=False,
+                            optional=True,
                             desc=in_inu_desc))
         self.add_trait("in_noinu",
                        File(output=False,
-                            optional=False,
+                            optional=True,
                             desc=in_noinu_desc))
         self.add_trait("pvms",
                        traits.List(File(),
                                    output=False,
-                                   optional=False,
+                                   optional=True,
                                    desc=pvms_desc))
         self.add_trait("mni_tpms",
                        traits.List(File(),
                                    output=False,
-                                   optional=False,
+                                   optional=True,
                                    desc=mni_tpms_desc))
         self.add_trait("in_fwhm",
                        File(output=False,
-                            optional=False,
+                            optional=True,
                             desc=in_fwhm_desc))
 
         # Outputs traits
@@ -184,8 +184,6 @@ class AnatIQMs(ProcessMIA):
         if self.in_ras:
 
             file_name = self.in_ras
-
-            report_file = ''
 
             path, file_name = os.path.split(file_name)
 
@@ -224,85 +222,199 @@ class AnatIQMs(ProcessMIA):
 
         imdata = nb.load(self.in_ras).get_data()
 
-        imnii = nb.load(self.in_noinu)
-        erode = np.all(np.array(imnii.header.get_zooms()[:3], dtype=np.float32) < 1.9)
+        # Try to load files
+        has_in_noinu = True
+        if self.in_noinu:
+            try:
+                imnii = nb.load(self.in_noinu)
+            except (nb.filebasedimages.ImageFileError,
+                    FileNotFoundError, TypeError) as e:
+                has_in_noinu = False
+                print("\nError with in_noinu file: ", e)
+            else:
+                # Load image corrected for INU
+                inudata = np.nan_to_num(imnii.get_data())
+                inudata[inudata < 0] = 0
+        else:
+            has_in_noinu = False
 
-        # Load image corrected for INU
-        inudata = np.nan_to_num(imnii.get_data())
-        inudata[inudata < 0] = 0
+        has_segmentation = True
+        if self.segmentation:
+            try:
+                # Load binary segmentation from FSL FAST
+                segnii = nb.load(self.segmentation)
+            except (nb.filebasedimages.ImageFileError,
+                    FileNotFoundError, TypeError) as e:
+                has_segmentation = False
+                print("\nError with segmentation file: ", e)
+                pass
+            else:
+                segdata = segnii.get_data().astype(np.uint8)
+        else:
+            has_segmentation = False
 
-        # Load binary segmentation from FSL FAST
-        segnii = nb.load(self.segmentation)
-        segdata = segnii.get_data().astype(np.uint8)
+        has_airmask = True
+        if self.airmask:
+            try:
+                # Load binary segmentation from FSL FAST
+                airnii = nb.load(self.airmask)
+            except (nb.filebasedimages.ImageFileError,
+                    FileNotFoundError, TypeError) as e:
+                has_airmask = False
+                print("\nError with airmask file: ", e)
+                pass
+            else:
+                airdata = airnii.get_data().astype(np.uint8)
+        else:
+            has_airmask = False
 
-        # Load air, artifacts and head masks
-        airdata = nb.load(self.airmask).get_data().astype(np.uint8)
-        artdata = nb.load(self.artmask).get_data().astype(np.uint8)
-        headdata = nb.load(self.headmask).get_data().astype(np.uint8)
-        rotdata = nb.load(self.rotmask).get_data().astype(np.uint8)
+        has_artmask = True
+        if self.artmask:
+            try:
+                # Load binary segmentation from FSL FAST
+                artnii = nb.load(self.artmask)
+            except (nb.filebasedimages.ImageFileError,
+                    FileNotFoundError, TypeError) as e:
+                has_artmask = False
+                print("\nError with artmask file: ", e)
+                pass
+            else:
+                artdata = artnii.get_data().astype(np.uint8)
+        else:
+            has_artmask = False
 
-        # Load Partial Volume Maps (pvms) from FSL FAST
-        pvmdata = []
-        for fname in self.pvms:
-            pvmdata.append(nb.load(fname).get_data().astype(np.float32))
+        has_headmask = True
+        if self.headmask:
+            try:
+                # Load binary segmentation from FSL FAST
+                headnii = nb.load(self.headmask)
+            except (nb.filebasedimages.ImageFileError,
+                    FileNotFoundError, TypeError) as e:
+                has_headmask = False
+                print("\nError with headmask file: ", e)
+                pass
+            else:
+                headdata = headnii.get_data().astype(np.uint8)
+        else:
+            has_headmask = False
 
-        # Summary stats
-        stats = summary_stats(inudata, pvmdata, airdata, erode=erode)
-        results_dict["summary"] = stats
+        has_rotmask = True
+        if self.rotmask:
+            try:
+                # Load binary segmentation from FSL FAST
+                rotnii = nb.load(self.rotmask)
+            except (nb.filebasedimages.ImageFileError,
+                    FileNotFoundError, TypeError) as e:
+                has_rotmask = False
+                print("\nError with rotmask file: ", e)
+                pass
+            else:
+                rotdata = rotnii.get_data().astype(np.uint8)
+        else:
+            has_rotmask = False
 
-        # SNR
-        snrvals = []
-        results_dict["snr"] = {}
-        for tlabel in ["csf", "wm", "gm"]:
-            snrvals.append(
-                snr(
-                    stats[tlabel]["median"],
-                    stats[tlabel]["stdv"],
-                    int(stats[tlabel]["n"]),
+        has_pvms = True
+        if self.rotmask:
+            try:
+                # Load Partial Volume Maps (pvms) from FSL FAST
+                pvmniis = []
+                for fname in self.pvms:
+                    pvmniis.append(nb.load(fname))
+            except (nb.filebasedimages.ImageFileError,
+                    FileNotFoundError, TypeError) as e:
+                has_pvms = False
+                print("\nError with pvms files: ", e)
+                pass
+            else:
+                # Load Partial Volume Maps (pvms) from FSL FAST
+                pvmdata = []
+                for pvmnii in pvmniis:
+                    pvmdata.append(pvmnii.get_data().astype(np.float32))
+        else:
+            has_pvms = False
+
+        has_mni_tpms = True
+        if self.mni_tpms:
+            try:
+                mni_tpmsniis = []
+                for fname in self.mni_tpms:
+                    mni_tpmsniis.append(nb.load(fname))
+            except (nb.filebasedimages.ImageFileError,
+                    FileNotFoundError, TypeError) as e:
+                has_mni_tpms = False
+                print("\nError with mni_tpms files: ", e)
+                pass
+        else:
+            has_mni_tpms = False
+
+        has_stats = False
+        if has_in_noinu and has_pvms and has_airmask:
+            erode = np.all(np.array(imnii.header.get_zooms()[:3], dtype=np.float32) < 1.9)
+
+            # Summary stats
+            stats = summary_stats(inudata, pvmdata, airdata, erode=erode)
+            has_stats = True
+            results_dict["summary"] = stats
+
+            # SNR
+            snrvals = []
+            results_dict["snr"] = {}
+            for tlabel in ["csf", "wm", "gm"]:
+                snrvals.append(
+                    snr(
+                        stats[tlabel]["median"],
+                        stats[tlabel]["stdv"],
+                        int(stats[tlabel]["n"]),
+                    )
                 )
+                results_dict["snr"][tlabel] = snrvals[-1]
+            results_dict["snr"]["total"] = float(np.mean(snrvals))
+
+            snrvals = []
+            results_dict["snrd"] = {
+                tlabel: snr_dietrich(stats[tlabel]["median"], stats["bg"]["mad"])
+                for tlabel in ["csf", "wm", "gm"]
+            }
+            results_dict["snrd"]["total"] = float(
+                np.mean([val for _, val in list(results_dict["snrd"].items())])
             )
-            results_dict["snr"][tlabel] = snrvals[-1]
-        results_dict["snr"]["total"] = float(np.mean(snrvals))
 
-        snrvals = []
-        results_dict["snrd"] = {
-            tlabel: snr_dietrich(stats[tlabel]["median"], stats["bg"]["mad"])
-            for tlabel in ["csf", "wm", "gm"]
-        }
-        results_dict["snrd"]["total"] = float(
-            np.mean([val for _, val in list(results_dict["snrd"].items())])
-        )
+            # CNR
+            results_dict["cnr"] = cnr(
+                stats["wm"]["median"],
+                stats["gm"]["median"],
+                sqrt(sum(stats[k]["stdv"] ** 2 for k in ["bg", "gm", "wm"])),
+            )
 
-        # CNR
-        results_dict["cnr"] = cnr(
-            stats["wm"]["median"],
-            stats["gm"]["median"],
-            sqrt(sum(stats[k]["stdv"] ** 2 for k in ["bg", "gm", "wm"])),
-        )
+        if has_in_noinu and has_headmask and has_rotmask:
+            # FBER
+            results_dict["fber"] = fber(inudata, headdata, rotdata)
 
-        # FBER
-        results_dict["fber"] = fber(inudata, headdata, rotdata)
+        if has_in_noinu and has_rotmask:
+            # EFC
+            results_dict["efc"] = efc(inudata, rotdata)
 
-        # EFC
-        results_dict["efc"] = efc(inudata, rotdata)
+        if has_stats and has_in_noinu:
+            # M2WM
+            results_dict["wm2max"] = wm2max(inudata, stats["wm"]["median"])
 
-        # M2WM
-        results_dict["wm2max"] = wm2max(inudata, stats["wm"]["median"])
+        if has_airmask and has_artmask:
+            # Artifacts
+            results_dict["qi_1"] = art_qi1(airdata, artdata)
 
-        # Artifacts
-        results_dict["qi_1"] = art_qi1(airdata, artdata)
+        if has_airmask:
+            # Artifacts QI2
+            results_dict["qi_2"] = art_qi2(imdata, airdata)
 
-        # Artifacts QI2
-        results_dict["qi_2"] = art_qi2(imdata, airdata)
-
-        # CJV
-        results_dict["cjv"] = cjv(
-            # mu_wm, mu_gm, sigma_wm, sigma_gm
-            stats["wm"]["median"],
-            stats["gm"]["median"],
-            stats["wm"]["mad"],
-            stats["gm"]["mad"],
-        )
+        if has_stats:
+            # CJV
+            results_dict["cjv"] = cjv(
+                # mu_wm, mu_gm, sigma_wm, sigma_gm
+                stats["wm"]["median"],
+                stats["gm"]["median"],
+                stats["wm"]["mad"],
+                stats["gm"]["mad"],
+            )
 
         # FWHM
         try:
@@ -315,60 +427,66 @@ class AnatIQMs(ProcessMIA):
         except (FileNotFoundError, TypeError):
             print("\nError with fwhm file: ", e)
             fwhm = [0, 0, 0]
-
-        fwhm = np.array(fwhm[:3]) / np.array(
-            imnii.header.get_zooms()[:3]
-        )
-        results_dict["fwhm"] = {
-            "x": float(fwhm[0]),
-            "y": float(fwhm[1]),
-            "z": float(fwhm[2]),
-            "avg": float(np.average(fwhm)),
-        }
-
-        # ICVs
-        results_dict["icvs"] = volume_fraction(pvmdata)
-
-        # RPVE
-        results_dict["rpve"] = rpve(pvmdata, segdata)
-
-        # Image specs
-        results_dict["size"] = {
-            "x": int(inudata.shape[0]),
-            "y": int(inudata.shape[1]),
-            "z": int(inudata.shape[2]),
-        }
-        results_dict["spacing"] = {
-            i: float(v) for i, v in zip(["x", "y", "z"], imnii.header.get_zooms()[:3])
-        }
-
-        try:
-            results_dict["size"]["t"] = int(inudata.shape[3])
-        except IndexError:
             pass
+        else:
+            fwhm = np.array(fwhm[:3]) / np.array(
+                imnii.header.get_zooms()[:3]
+            )
+            results_dict["fwhm"] = {
+                "x": float(fwhm[0]),
+                "y": float(fwhm[1]),
+                "z": float(fwhm[2]),
+                "avg": float(np.average(fwhm)),
+            }
 
-        try:
-            results_dict["spacing"]["tr"] = float(imnii.header.get_zooms()[3])
-        except IndexError:
-            pass
+        if has_pvms:
+            # ICVs
+            results_dict["icvs"] = volume_fraction(pvmdata)
 
-        # Bias
-        bias = nb.load(self.in_inu).get_data()[segdata > 0]
-        results_dict["inu"] = {
-            "range": float(
-                np.abs(np.percentile(bias, 95.0) - np.percentile(bias, 5.0))
-            ),
-            "med": float(np.median(bias)),
-        }  # pylint: disable=E1101
+        if has_pvms and has_segmentation:
+            # RPVE
+            results_dict["rpve"] = rpve(pvmdata, segdata)
 
-        mni_tpms = [nb.load(tpm).get_data() for tpm in self.mni_tpms]
-        in_tpms = [nb.load(tpm).get_data() for tpm in self.pvms]
-        overlap = fuzzy_jaccard(in_tpms, mni_tpms)
-        results_dict["tpm_overlap"] = {
-            "csf": overlap[0],
-            "gm": overlap[1],
-            "wm": overlap[2],
-        }
+        if has_in_noinu:
+            # Image specs
+            results_dict["size"] = {
+                "x": int(inudata.shape[0]),
+                "y": int(inudata.shape[1]),
+                "z": int(inudata.shape[2]),
+            }
+            results_dict["spacing"] = {
+                i: float(v) for i, v in zip(["x", "y", "z"], imnii.header.get_zooms()[:3])
+            }
+
+            try:
+                results_dict["size"]["t"] = int(inudata.shape[3])
+            except IndexError:
+                pass
+
+            try:
+                results_dict["spacing"]["tr"] = float(imnii.header.get_zooms()[3])
+            except IndexError:
+                pass
+
+        if has_segmentation:
+            # Bias
+            bias = nb.load(self.in_inu).get_data()[segdata > 0]
+            results_dict["inu"] = {
+                "range": float(
+                    np.abs(np.percentile(bias, 95.0) - np.percentile(bias, 5.0))
+                ),
+                "med": float(np.median(bias)),
+            }  # pylint: disable=E1101
+
+        if has_mni_tpms and has_pvms:
+            mni_tpms = [tpm.get_data() for tpm in mni_tpmsniis]
+            in_tpms = [pvm.get_data() for pvm in pvmniis]
+            overlap = fuzzy_jaccard(in_tpms, mni_tpms)
+            results_dict["tpm_overlap"] = {
+                "csf": overlap[0],
+                "gm": overlap[1],
+                "wm": overlap[2],
+            }
 
         # Flatten the dictionary
         flat_results_dict = _flatten_dict(results_dict)

@@ -1209,6 +1209,148 @@ class Mean(ProcessMIA):
         return self.process.run(configuration_dict={})
 
 
+class OutlierCount(ProcessMIA):
+    """
+    * Computes FWHMs for all sub-bricks in the input dataset, each one separately *
+
+    Please, see the complete documentation for the `FWHMx' brick in the populse.mia_processes website
+    <https://populse.github.io/mia_processes/documentation/bricks/preprocess/afni/FWHMx.html>`_
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instanciation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(OutlierCount, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = ['afni', 'nipype']
+
+        # Inputs description
+        in_file_desc = ('Input image (a pathlike object or string '
+                        'representing a file).')
+        mask_file_desc = ('Mask image (a pathlike object or string '
+                        'representing a file).')
+        fraction_desc = 'Combine the final measurements along each axis (a bool).'
+        out_prefix_desc = ('Specify the string to be prepended to the '
+                           'filenames of the output image file '
+                           '(a string).')
+
+        # Outputs description
+        out_file_desc = ('The output text file (a pathlike object or a '
+                         'string representing a file).')
+
+        # Inputs traits
+        self.add_trait("in_file",
+                       File(output=False,
+                            optional=False,
+                            desc=in_file_desc))
+
+        self.add_trait("mask_file",
+                       File(Undefined,
+                            output=False,
+                            optional=True,
+                            desc=mask_file_desc))
+
+        self.add_trait("fraction",
+                       Bool(True,
+                            optional=True,
+                            output=False,
+                            desc=fraction_desc))
+
+        self.add_trait("out_prefix",
+                       String('outliers_',
+                              output=False,
+                              optional=True,
+                              desc=out_prefix_desc))
+
+        # Outputs traits
+        self.add_trait("out_file",
+                       File(output=True,
+                            desc=out_file_desc))
+
+        self.init_default_traits()
+
+        self.init_process('nipype.interfaces.afni.OutlierCount')
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(OutlierCount, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.in_file:
+
+            if self.out_prefix == Undefined:
+                self.out_prefix = 'outliers_'
+                print('The out_prefix parameter is undefined. Automatically '
+                      'set to "outliers" ...')
+
+            if self.output_directory:
+                ifile = os.path.split(self.in_file)[-1]
+
+                try:
+                    fileName, trail = ifile.rsplit('.', 1)
+                    if trail == 'gz':
+                        (fileName_2,
+                         trail_2) = os.path.splitext(fileName)
+                        if trail_2 == 'nii':
+                            trail = 'nii.gz'
+
+                except ValueError:
+                    print('\nThe input image format is not recognized ...!')
+                    return
+
+                else:
+                    self.outputs['out_file'] = os.path.join(
+                        self.output_directory,
+                        self.out_prefix + fileName + '.out')
+
+            else:
+                print('No output_directory was found...!\n')
+                return
+
+            self.inheritance_dict[self.outputs[
+                'out_file']] = self.in_file
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(OutlierCount, self).run_process_mia()
+
+        self.process.in_file = self.in_file
+        if self.mask_file:
+            self.process.autoclip = Undefined
+            self.process.automask = Undefined
+            self.process.mask = self.mask_file
+
+        self.process.fraction = self.fraction
+        self.process.out_file = self.out_file
+
+        if self.out_prefix:
+            self.process.out_prefix = self.out_prefix
+
+        return self.process.run(configuration_dict={})
+
+
 class QualityIndex(ProcessMIA):
     """
     * Computes a quality index for each sub-brick in a 3D+time dataset. The output is a 1D time
@@ -1313,17 +1455,14 @@ class QualityIndex(ProcessMIA):
                 else:
                     self.outputs['out_file'] = os.path.join(
                         self.output_directory,
-                        self.out_prefix + fileName + '.txt')
-                    print('\nThe input image format does not seem to be '
-                          'nii or 3D. This can prevent the process '
-                          'launch ...!')
-
-                    self.inheritance_dict[self.outputs[
-                        'out_file']] = self.in_file
+                        self.out_prefix + fileName + '.out')
 
             else:
                 print('No output_directory was found...!\n')
                 return
+
+            self.inheritance_dict[self.outputs[
+                'out_file']] = self.in_file
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -1334,6 +1473,7 @@ class QualityIndex(ProcessMIA):
 
         self.process.in_file = self.in_file
         self.process.automask = self.automask
+        self.process.out_file = self.out_file
 
         if self.out_prefix:
             self.process.out_prefix = self.out_prefix
