@@ -20,7 +20,7 @@ class Anat_mriqc_pipeline(Pipeline):
         self.nodes["anat_mni_tpms_pipeline"].process.nodes_activation = {'template_CSF': True, 'applytransforms_CSF': True, 'template_GM': True, 'template_WM': True, 'applytransforms_WM': True, 'applytransforms_GM': True, 'files_to_list': True}
         self.add_process("anatiqms", "mia_processes.bricks.reports.processes.AnatIQMs")
         self.add_process("harmonize", "mia_processes.bricks.preprocess.others.processing.Harmonize")
-        self.add_process("fwhmx", "mia_processes.bricks.preprocess.afni.processes.FWHMx")
+        self.add_process("fwhmx", "mia_processes.bricks.reports.processes.FWHMx")
         self.add_process("list_to_file", "mia_processes.bricks.tools.tools.List_To_File")
 
         # links

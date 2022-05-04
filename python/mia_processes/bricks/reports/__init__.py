@@ -8,5 +8,6 @@
 # for details.
 ##########################################################################
 
-from .processes import AnatIQMs
+from .processes import (AnatIQMs, FWHMx, GCOR,
+                        OutlierCount, QualityIndex)
 from .reporting import MRIQC_report

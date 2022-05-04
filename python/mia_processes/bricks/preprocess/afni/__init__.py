@@ -9,6 +9,5 @@
 ##########################################################################
 
 from .processes import (Automask, Calc, Deoblique, Despike,
-                        DropTRs, FWHMx, GCOR, Mean, OutlierCount,
-                        QualityIndex, SkullStripping, TShift,
+                        DropTRs, Mean, SkullStripping, TShift,
                         Volreg)
