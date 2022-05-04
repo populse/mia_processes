@@ -18,6 +18,7 @@ pre-processing steps, which are not found in nipype.
         - Sanitize
         - Template
         - Threshold
+        - TSNR
 
     :Function:
         - artifact_mask
