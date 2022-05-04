@@ -11,7 +11,7 @@ populse_mia.
         - AffineInitializer
         - ApplyTransforms
         - N4BiasFieldCorrection
-        - T1wFastRegistration
+        - Registration
 
 """
 
@@ -525,7 +525,10 @@ class Registration(ProcessMIA):
     * Registers a moving image to a fixed image *
 
     Please, see the complete documentation for the `Registration' brick in the populse.mia_processes website
-    <https://populse.github.io/mia_processes/documentation/bricks/preprocess/afni/Registration.html>`_
+    <https://populse.github.io/mia_processes/documentation/bricks/preprocess/afni/Registration.html>`
+
+    Here can be found some of classical registration parameters (used in fMRIPrep and MRIQC)
+    https://github.com/nipreps/niworkflows/tree/master/niworkflows/data
 
     """
 

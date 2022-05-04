@@ -8,8 +8,15 @@ populse_mia.
 
 :Contains:
     :Class:
-        - SkullStripping
+        - Automask
         - Calc
+        - Deoblique
+        - Despike
+        - DropTRs
+        - Mean
+        - SkullStripping
+        - TShift
+        - Volreg
 
 """
 

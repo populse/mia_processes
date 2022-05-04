@@ -8,6 +8,8 @@
 # for details.
 ##########################################################################
 
-from .processes import (AnatIQMs, FWHMx, GCOR,
-                        OutlierCount, QualityIndex)
+from .processes import (AnatIQMs, BoldIQMs, CarpetParcellation,
+                        ComputeDVARS, FramewiseDisplacement,
+                        FWHMx, GCOR, OutlierCount, QualityIndex,
+                        Spikes)
 from .reporting import MRIQC_report
