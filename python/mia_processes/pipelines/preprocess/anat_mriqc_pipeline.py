@@ -63,6 +63,7 @@ class Anat_mriqc_pipeline(Pipeline):
         self.add_link("conformimage.out_file->anat_skullstrip_pipeline.in_file")
         self.add_link("conformimage.out_file->anat_mni_tpms_pipeline.in_ras")
         self.add_link("anat_skullstrip_pipeline.out_file->segment.in_file")
+        self.export_parameter("anat_skullstrip_pipeline", "out_file", "ss_inu_corrected_file", is_optional=False)
         self.add_link("anat_skullstrip_pipeline.out_mask->anat_airmask_pipeline.in_mask")
         self.add_link("anat_skullstrip_pipeline.out_mask->fwhmx.mask_file")
         self.add_link("anat_skullstrip_pipeline.out_mask->anat_spatial_norm.moving_mask")
@@ -74,13 +75,16 @@ class Anat_mriqc_pipeline(Pipeline):
         self.add_link("segment.tissue_class_map->anatiqms.segmentation")
         self.add_link("segment.partial_volume_files->list_to_file.file_list")
         self.add_link("segment.partial_volume_files->anatiqms.pvms")
+        self.export_parameter("segment", "tissue_class_map", "brain_tissue_segmentation", is_optional=False)
         self.export_parameter("anat_spatial_norm", "composite_transform", "_composite_transform", is_optional=False)
         self.add_link("anat_spatial_norm.inverse_composite_transform->anat_airmask_pipeline.inverse_composite_transform")
         self.add_link("anat_spatial_norm.inverse_composite_transform->anat_mni_tpms_pipeline.inverse_composite_transform")
-        self.export_parameter("anat_spatial_norm", "warped_image", "_warped_image", is_optional=False)
+        self.export_parameter("anat_spatial_norm", "warped_image", "mni_norm_image", is_optional=False)
+        self.export_parameter("anat_headmask_pipeline", "out_file", "head_mask", is_optional=False)
         self.add_link("anat_headmask_pipeline.out_file->anat_airmask_pipeline.head_mask")
         self.add_link("anat_headmask_pipeline.out_file->anatiqms.headmask")
         self.add_link("anat_airmask_pipeline.out_hat_mask->anatiqms.hatmask")
+        self.export_parameter("anat_airmask_pipeline", "out_hat_mask", "hat_mask", is_optional=False)
         self.add_link("anat_airmask_pipeline.out_art_mask->anatiqms.artmask")
         self.add_link("anat_airmask_pipeline.out_air_mask->anatiqms.airmask")
         self.add_link("anat_airmask_pipeline.out_rot_mask->anatiqms.rotmask")
@@ -91,8 +95,7 @@ class Anat_mriqc_pipeline(Pipeline):
         self.add_link("list_to_file.file->harmonize.wm_mask")
 
         # parameters order
-
-        self.reorder_traits(("anat_file", "ss_expr_mask", "template", "reg_template_res", "mask_template_res", "AnatQC_out_file", "_composite_transform", "_warped_image", "reg_transforms", "reg_transform_parameters", "reg_metric", "reg_metric_weight", "reg_shrink_factors", "reg_smoothing_sigmas", "reg_number_of_iterations", "reg_radius_or_number_of_bins", "reg_convergence_threshold", "reg_convergence_window_size", "reg_sampling_percentage", "reg_sampling_strategy", "reg_interpolation", "fwhm_detrend", "conform_suffix", "conform_prefix", "reg_segments", "reg_output_type", "tpms_template_suffix", "harmonize_erodemask", "harmonize_suffix", "harmonize_prefix", "fwhm_combine", "fwhm_out_prefix", "wm_index_filter"))
+        self.reorder_traits(("anat_file", "ss_expr_mask", "template", "reg_template_res", "mask_template_res", "AnatQC_out_file", "mni_norm_image", "ss_inu_corrected_file", "head_mask", "hat_mask", "brain_tissue_segmentation", "_composite_transform", "reg_transforms", "reg_transform_parameters", "reg_metric", "reg_metric_weight", "reg_shrink_factors", "reg_smoothing_sigmas", "reg_number_of_iterations", "reg_radius_or_number_of_bins", "reg_convergence_threshold", "reg_convergence_window_size", "reg_sampling_percentage", "reg_sampling_strategy", "reg_interpolation", "fwhm_detrend", "conform_suffix", "conform_prefix", "reg_segments", "reg_output_type", "tpms_template_suffix", "harmonize_erodemask", "harmonize_suffix", "harmonize_prefix", "fwhm_combine", "fwhm_out_prefix", "wm_index_filter"))
 
         # default and initial values
         self.ss_expr_mask = 'a*step(b)'
