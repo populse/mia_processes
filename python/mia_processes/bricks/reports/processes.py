@@ -568,6 +568,8 @@ class BoldIQMs(ProcessMIA):
                               'representing a file).')
         in_fd_file_desc = ('FD file (a pathlike object or string '
                               'representing a file).')
+        in_spikes_file_desc = ('Spikes file (a pathlike object or string '
+                              'representing a file).')
         in_gcor_desc = 'Global correlation value (a float)'
         in_dummy_TRs_desc = 'Number of dummy scans (an int)'
 
@@ -616,6 +618,10 @@ class BoldIQMs(ProcessMIA):
                                     output=False,
                                     optional=True,
                                     desc=in_fd_thresh_desc))
+        self.add_trait("in_spikes_file",
+                       File(output=False,
+                            optional=True,
+                            desc=in_spikes_file_desc))
         self.add_trait("in_gcor",
                        traits.Float(output=False,
                                     optional=True,
@@ -760,15 +766,29 @@ class BoldIQMs(ProcessMIA):
                 results_dict["gsr"][axis] = gsr(epidata, mskdata, direction=axis)
 
         # DVARS
-        if self.in_dvars_file:
+        if self.in_outliers_file:
             try:
-                dvars_avg = np.loadtxt(
-                    self.in_dvars_file, skiprows=1, usecols=list(range(3))
-                ).mean(axis=0)
+                outliers = np.loadtxt(
+                    self.in_outliers_file, skiprows=0
+                )
             except (FileNotFoundError, TypeError):
                 print("\nError with dvars file: ", e)
                 pass
             else:
+                results_dict["vec_outliers"] = list(outliers)
+
+        # DVARS
+        if self.in_dvars_file:
+            try:
+                dvars = np.loadtxt(
+                    self.in_dvars_file, skiprows=1, usecols=list(range(3))
+                )
+            except (FileNotFoundError, TypeError):
+                print("\nError with dvars file: ", e)
+                pass
+            else:
+                results_dict["vec_dvars"] = list(dvars[:, 1])
+                dvars_avg = dvars.mean(axis=0)
                 dvars_col = ["std", "nstd", "vstd"]
                 results_dict["dvars"] = {
                     key: float(val) for key, val in zip(dvars_col, dvars_avg)
@@ -786,6 +806,7 @@ class BoldIQMs(ProcessMIA):
                 print("\nError with fd file: ", e)
                 pass
             else:
+                results_dict["vec_fd"] = list(fd_data)
                 if self.in_fd_thresh:
                     num_fd = np.float((fd_data > self.in_fd_thresh).sum())
                     results_dict["fd"] = {
@@ -857,6 +878,18 @@ class BoldIQMs(ProcessMIA):
              print("\ndummyTRs value error")
         else:
             results_dict["dummyTRs"] = dummyTRs
+
+        # Spikes
+        if self.in_spikes_file:
+            try:
+                spikes_data = np.loadtxt(self.in_spikes_file, skiprows=0)
+            except (FileNotFoundError, TypeError):
+                print("\nError with fd file: ", e)
+                pass
+            else:
+                for i in range(0,len(spikes_data[:, 0])):
+                    spike_name = "vec_spikes_" + str(i)
+                    results_dict[spike_name] = list(spikes_data[i, :])
 
         # Flatten the dictionary
         flat_results_dict = _flatten_dict(results_dict)
