@@ -24,9 +24,9 @@ from os.path import isdir, isfile
 from datetime import datetime
 from sys import exit
 from shutil import copyfile
-import readline as readlineComp
-import rlcompleter, getpass
-import logging # autocomp debug logfile
+# import readline as readlineComp
+# import rlcompleter, getpass
+# import logging # autocomp debug logfile
 
 class PageNumCanvas(canvas.Canvas):
     "For  add \"page number of total\" in each footer."
