@@ -718,7 +718,7 @@ class DropTRs(ProcessMIA):
             if not self.stop_idx or self.stop_idx == -1:
                 print("\nWarning: stop_idx will be automatically set to"
                       "the length of input file")
-            if self.stop_idx <= self.start_idx:
+            elif self.stop_idx <= self.start_idx:
                 print("\nError: stop_idx cannot be lower than or equal to"
                       "start_idx")
                 return
