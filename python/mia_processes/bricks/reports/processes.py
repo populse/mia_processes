@@ -83,6 +83,9 @@ class AnatIQMs(ProcessMIA):
         Please, see the complete documentation for the `AnatIQMs' brick in the populse.mia_processes website
         https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/AnatIQMs.html
 
+        adapted from:
+        https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/anatomical.py#L332
+
         """
 
     def __init__(self):
@@ -533,6 +536,9 @@ class BoldIQMs(ProcessMIA):
         Please, see the complete documentation for the `AnatIQMs' brick in the populse.mia_processes website
         https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/AnatIQMs.html
 
+        adapted from:
+        https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/functional.py#L243
+
         """
 
     def __init__(self):
@@ -919,6 +925,11 @@ class CarpetParcellation(ProcessMIA):
     Please, see the complete documentation for the `CarpetParcellation' brick in the populse.mia_processes website
     <https://populse.github.io/mia_processes/documentation/bricks/reports/CarpetParcellation.html>`_
 
+    adapted from:
+    https://github.com/nipreps/niworkflows/blob/45ab13e1bf6fdbf5e29c90cef44055b0b9cf391b/niworkflows/interfaces/morphology.py#L46
+    https://github.com/nipreps/niworkflows/blob/45ab13e1bf6fdbf5e29c90cef44055b0b9cf391b/niworkflows/interfaces/morphology.py#L79
+    https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/functional.py#L1022
+
     """
 
     def __init__(self):
@@ -1072,6 +1083,9 @@ class ComputeDVARS(ProcessMIA):
 
     Please, see the complete documentation for the `ComputeDVARS' brick in the populse.mia_processes website
     <https://populse.github.io/mia_processes/documentation/bricks/reports/ComputeDVARS.html>`_
+
+    adapted from:
+    https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5de5913b31/nipype/algorithms/confounds.py#L100
 
     """
 
@@ -1299,6 +1313,9 @@ class FramewiseDisplacement(ProcessMIA):
 
     Please, see the complete documentation for the `FramewiseDisplacement' brick in the populse.mia_processes website
     <https://populse.github.io/mia_processes/documentation/bricks/reports/FramewiseDisplacement.html>`_
+
+    adapted from:
+    https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5de5913b31/nipype/algorithms/confounds.py#L298
 
     """
 
@@ -1987,6 +2004,10 @@ class Spikes(ProcessMIA):
 
     Please, see the complete documentation for the `Spikes' brick in the populse.mia_processes website
     <https://populse.github.io/mia_processes/documentation/bricks/reports/Spikes.html>`_
+
+    adapted from:
+    https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/functional.py#L939
+    https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/interfaces/functional.py#L223
 
     """
 

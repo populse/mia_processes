@@ -67,6 +67,8 @@ class ArtifactMask(ProcessMIA):
     Please, see the complete documentation for the `ArtifactMask' brick in the populse.mia_processes website
     https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/ArtifactMask.html
 
+    adapted from
+    https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/interfaces/anatomical.py#L301
     """
 
     def __init__(self):
@@ -320,6 +322,9 @@ class Binarize(ProcessMIA):
     Please, see the complete documentation for the `Binarize' brick in the populse.mia_processes website
     https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/Binarize.html
 
+    adapted from:
+    https://github.com/nipreps/niworkflows/blob/45ab13e1bf6fdbf5e29c90cef44055b0b9cf391b/niworkflows/interfaces/nibabel.py#L92
+
     """
 
     def __init__(self):
@@ -572,6 +577,9 @@ class ConformImage(ProcessMIA):
     Please, see the complete documentation for the `ConformImage' brick in the populse.mia_processes website
     https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/ConformImage.html
 
+    adapted from:
+    https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/interfaces/common/conform_image.py#L75
+
     """
 
     def __init__(self):
@@ -765,6 +773,9 @@ class Enhance(ProcessMIA):
 
     Please, see the complete documentation for the `Enhance' brick in the populse.mia_processes website
     https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/Enhance.html
+
+    adapted from:
+    https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/anatomical.py#L974
 
     """
 
@@ -1014,6 +1025,9 @@ class GradientThreshold(ProcessMIA):
     Please, see the complete documentation for the `Gradient' brick in the populse.mia_processes website
     https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/Gradient.html
 
+    adapted from:
+    https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/anatomical.py#L1039
+
     """
 
     def __init__(self):
@@ -1248,6 +1262,9 @@ class Harmonize(ProcessMIA):
     Please, see the complete documentation for the `Harmonize' brick in the populse.mia_processes website
     https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/Harmonize.html
 
+    adapted from:
+    https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/interfaces/anatomical.py#L405
+
     """
 
     def __init__(self):
@@ -1464,6 +1481,9 @@ class NonSteadyStateDetector(ProcessMIA):
     Please, see the complete documentation for the `NonSteadyStateDetector' brick in the populse.mia_processes website
     https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/NonSteadyStateDetector.html
 
+    adapted from:
+    https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5de5913b31/nipype/algorithms/confounds.py#L974
+
     """
 
     def __init__(self):
@@ -1548,6 +1568,9 @@ class Mask(ProcessMIA):
 
     Please, see the complete documentation for the `Mask' brick in the populse.mia_processes website
     https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/Mask.html
+
+    adapted from:
+    https://github.com/nipreps/niworkflows/blob/45ab13e1bf6fdbf5e29c90cef44055b0b9cf391b/niworkflows/interfaces/norm.py#L474
 
     """
 
@@ -2198,6 +2221,9 @@ class RotationMask(ProcessMIA):
     Please, see the complete documentation for the `RotationMask' brick in the populse.mia_processes website
     https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/RotationMask.html
 
+    adapted from:
+    https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/interfaces/anatomical.py#L448
+
     """
 
     def __init__(self):
@@ -2416,6 +2442,9 @@ class Sanitize(ProcessMIA):
 
     Please, see the complete documentation for the `Sanitize' brick in the populse.mia_processes website
     https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/Sanitize.html
+
+    adapted from:
+    https://github.com/nipreps/niworkflows/blob/45ab13e1bf6fdbf5e29c90cef44055b0b9cf391b/niworkflows/interfaces/header.py#L394
 
     """
 
@@ -3079,6 +3108,9 @@ class TSNR(ProcessMIA):
 
     Please, see the complete documentation for the `TSNR' brick in the populse.mia_processes website
     https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/TSNR.html
+
+    adapted from:
+    https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5de5913b31/nipype/algorithms/confounds.py#L899
 
     """
 
