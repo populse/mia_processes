@@ -17,3 +17,4 @@ from .anat_skullstrip_pipeline import Anat_skullstrip_pipeline
 from .anat_spatial_norm import Anat_spatial_norm
 from .bold_hmc_pipeline import Bold_hmc_pipeline
 from .bold_mni_align import Bold_mni_align
+from .bold_mriqc_pipeline import Bold_mriqc_pipeline

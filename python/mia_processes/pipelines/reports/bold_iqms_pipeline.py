@@ -28,6 +28,8 @@ class Bold_iqms_pipeline(Pipeline):
         self.add_link("hmc_epi->outliercount.in_file")
         self.add_link("hmc_epi->gcor.in_file")
         self.export_parameter("boldiqms", "in_tsnr", "epi_tsnr", is_optional=True)
+        self.export_parameter("boldiqms", "in_fd_thresh", "fd_thresh", is_optional=True)
+        self.export_parameter("boldiqms", "in_dummy_TRs", "dummy_TRs", is_optional=True)
         self.export_parameter("gcor", "mask_file", "brainmask", is_optional=True)
         self.add_link("brainmask->fwhmx.mask_file")
         self.add_link("brainmask->carpetparcellation.brainmask")
@@ -62,7 +64,7 @@ class Bold_iqms_pipeline(Pipeline):
 
         # parameters order
 
-        self.reorder_traits(("epi_mean", "hmc_epi", "epi_tsnr", "brainmask", "epi_parc", "hmc_motion", "ras_epi", "carpet_seg", "BoldQC_out_file", "outlier_fraction", "quality_index_automask", "fwhm_combine", "fwhm_detrend", "dvars_remove_zero_variance", "dvars_intensity_normalization", "fd_parameter_source", "fd_radius", "fd_normalize", "spikes_no_zscore", "spikes_detrend", "spikes_spike_thresh", "spikes_skip_frames"))
+        self.reorder_traits(("ras_epi", "epi_mean", "hmc_epi", "epi_tsnr", "brainmask", "epi_parc", "hmc_motion", "carpet_seg", "BoldQC_out_file", "dummy_TRs", "outlier_fraction", "quality_index_automask", "fwhm_combine", "fwhm_detrend", "dvars_remove_zero_variance", "dvars_intensity_normalization", "fd_parameter_source", "fd_radius", "fd_normalize", "fd_thresh", "spikes_no_zscore", "spikes_detrend", "spikes_spike_thresh", "spikes_skip_frames"))
 
         # default and initial values
         self.fd_parameter_source = 'AFNI'
