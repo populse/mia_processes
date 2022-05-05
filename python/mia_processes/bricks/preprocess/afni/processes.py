@@ -715,26 +715,15 @@ class DropTRs(ProcessMIA):
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
 
-            try:
-                imnii = nib.load(self.in_file)
-                nb_volumes = imnii.dataobj.shape[3]
-
-            except (nib.filebasedimages.ImageFileError,
-                    FileNotFoundError, TypeError) as e:
-                print("\nError while opening input file"
-                      ": ", e)
-                return
-
             if not self.stop_idx or self.stop_idx == -1:
-                self.stop_idx = nb_volumes
-                print("\nWarning: stop_idx has been automatically set to"
+                print("\nWarning: stop_idx will be automatically set to"
                       "the length of input file")
             if self.stop_idx <= self.start_idx:
                 print("\nError: stop_idx cannot be lower than or equal to"
                       "start_idx")
                 return
 
-            if self.start_idx == 0 and self.stop_idx == nb_volumes:
+            if self.start_idx == 0 and self.stop_idx == -1:
                 self.outputs['out_file'] = self.in_file
             else:
                 if self.out_prefix == Undefined:
@@ -797,11 +786,24 @@ class DropTRs(ProcessMIA):
         if self.in_file == self.out_file:
             return
 
+        try:
+            imnii = nib.load(self.in_file)
+            nb_volumes = imnii.dataobj.shape[3]
+
+        except (nib.filebasedimages.ImageFileError,
+                FileNotFoundError, TypeError) as e:
+            print("\nError while opening input file"
+                  ": ", e)
+            return
+
         self.process.in_file_a = self.in_file
         self.process.expr = "a"
         self.process.outputtype = self.output_type
         self.process.start_idx = self.start_idx
-        self.process.stop_idx = self.stop_idx
+        if self.stop_idx == -1:
+            self.process.stop_idx = nb_volumes
+        else:
+            self.process.stop_idx = self.stop_idx
         self.process.out_file = self.out_file
 
         if self.out_prefix:
