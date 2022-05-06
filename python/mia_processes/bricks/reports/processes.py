@@ -2258,8 +2258,8 @@ def art_qi2(img, airmask, min_voxels=int(1e3), max_voxels=int(3e5)):
     # Compute goodness-of-fit (gof)
     gof = float(np.abs(kde[-kdethi:] - chi_pdf[-kdethi:]).mean())
 
-    hist_dict = {'x_grid': x_grid, 'ref_pdf': kde, 'fit_pdf': chi_pdf,
-                 'ref_data': modelx, 'cutoff_idx': kdethi}
+    hist_dict = {'x_grid': list(x_grid), 'ref_pdf': list(kde), 'fit_pdf': list(chi_pdf),
+                 'ref_data': list(modelx), 'cutoff_idx': list(kdethi)}
     return gof, hist_dict
 
 
@@ -2588,11 +2588,6 @@ def snr_dietrich(mu_fg, sigma_air):
     :return: the computed SNR for the foreground segmentation
     """
     if sigma_air < 1.0:
-        from .. import config
-
-        config.loggers.interface.warning(
-            f"SNRd - background sigma is too small ({sigma_air})"
-        )
         sigma_air += 1.0
 
     return float(DIETRICH_FACTOR * mu_fg / sigma_air)
