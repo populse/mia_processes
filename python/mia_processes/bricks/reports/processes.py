@@ -2258,8 +2258,8 @@ def art_qi2(img, airmask, min_voxels=int(1e3), max_voxels=int(3e5)):
     # Compute goodness-of-fit (gof)
     gof = float(np.abs(kde[-kdethi:] - chi_pdf[-kdethi:]).mean())
 
-    hist_dict = {'x_grid': list(x_grid), 'ref_pdf': list(kde), 'fit_pdf': list(chi_pdf),
-                 'ref_data': list(modelx), 'cutoff_idx': list(kdethi)}
+    hist_dict = {'x_grid': x_grid.tolist(), 'ref_pdf': kde.tolist(), 'fit_pdf': chi_pdf.tolist(),
+                 'ref_data': modelx.tolist(), 'cutoff_idx': float(kdethi)}
     return gof, hist_dict
 
 
