@@ -68,7 +68,7 @@ class Add_Floats(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        self.out = self.number1 + self.number2
+        self.output_number = self.number1 + self.number2
         return
 
 
