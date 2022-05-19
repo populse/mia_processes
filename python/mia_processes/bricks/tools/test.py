@@ -8,6 +8,20 @@ from nipype.interfaces.base import traits
 # populse_mia imports
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 
+
+
+
+from nipype.interfaces.afni import GCOR
+
+class FakeGCOR(GCOR):
+
+    def _run_interface(self, runtime):
+        setattr(self, "_gcor", 57.32)
+        return runtime
+
+
+
+
 class Add_Floats(ProcessMIA):
     """ajout de flottants pour tester la sortie qui devrait un flottant"""
 
