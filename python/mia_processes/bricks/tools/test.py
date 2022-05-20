@@ -8,11 +8,7 @@ from nipype.interfaces.base import traits
 # populse_mia imports
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 
-
-
-
 from nipype.interfaces.afni import GCOR
-
 
 import os
 import os.path as op
@@ -85,52 +81,11 @@ class GCOR2(CommandLine):
         return {"out": getattr(self, "_gcor")}
 
 
-class GCOR3(CommandLine):
-    """
-    Computes the average correlation between every voxel
-    and ever other voxel, over any give mask.
-
-
-    For complete details, see the `@compute_gcor Documentation.
-    <https://afni.nimh.nih.gov/pub/dist/doc/program_help/@compute_gcor.html>`_
-
-    Examples
-    --------
-    >>> from nipype.interfaces import afni
-    >>> gcor = afni.GCOR()
-    >>> gcor.inputs.in_file = 'structural.nii'
-    >>> gcor.inputs.nfirst = 4
-    >>> gcor.cmdline
-    '@compute_gcor -nfirst 4 -input structural.nii'
-    >>> res = gcor.run()  # doctest: +SKIP
-
-    """
-
-    _cmd = "echo GCOR = 45.5; #"
-    input_spec = GCORInputSpec
-    output_spec = GCOROutputSpec
-
-    def _run_interface(self, runtime):
-        runtime = super(GCOR2, self)._run_interface(runtime)
-
-        gcor_line = [
-            line.strip()
-            for line in runtime.stdout.split("\n")
-            if line.strip().startswith("GCOR = ")
-        ][-1]
-        setattr(self, "_gcor", float(gcor_line[len("GCOR = ") :]))
-        return runtime
-
-    def _list_outputs(self):
-        return {"out": getattr(self, "_gcor")}
-
 class FakeGCOR(GCOR):
 
     def _run_interface(self, runtime):
         setattr(self, "_gcor", 57.32)
         return runtime
-
-
 
 
 class Add_Floats(ProcessMIA):
