@@ -1668,6 +1668,7 @@ class GCOR(ProcessMIA):
         # Outputs traits
         self.add_trait("out",
                        traits.Float(output=True,
+                                    nipype_process_name="_out"
                                     desc=out_desc))
 
         self.init_default_traits()
@@ -1721,7 +1722,6 @@ class GCOR(ProcessMIA):
 
         self.process.in_file = self.in_file
         self.process.mask = self.mask_file
-        #self.process.out = self.out
 
         return self.process.run(configuration_dict={})
 
