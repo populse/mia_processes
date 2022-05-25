@@ -213,9 +213,13 @@ class MRIQC_report(ProcessMIA):
         """Dedicated to the process launch step of the brick."""
         super(MRIQC_report, self).run_process_mia()
 
-        header_image = os.path.join(sources_images.__path__[0],
+        header_image_1 = os.path.join(sources_images.__path__[0],
+                                    'Logo_populse_square.jpg')
+        header_image_1 = Image(header_image_1, 43.0 * mm, 43.0 * mm)  # 2156px x 2156px
+
+        header_image_2 = os.path.join(sources_images.__path__[0],
                                     'Logo_populse_mia_HR.jpeg')
-        header_image = Image(header_image, 40.8 * mm, 30.0 * mm)  # 2505px x 1843px
+        header_image_2 = Image(header_image_2, 54.4 * mm, 40.0 * mm)  # 2505px x 1843px
 
         header_title = '<font size=30><b>MRI&nbsp Q</b></font>  <font size=11>uality</font>   <font size=30><b>&nbsp C</b></font>   <font size=11>ontrol</font>'
 
@@ -354,9 +358,10 @@ class MRIQC_report(ProcessMIA):
 
         # First page - cover
 
-        header_image.hAlign = 'CENTER'
-        report.append(header_image)
-
+        #header_image_1.hAlign = 'LEFT'
+        #header_image_2.hAlign = 'RIGHT'
+        #report.append(header_image_1)
+        report.append(Table([[header_image_1, header_image_2]], [70*mm, 70*mm]))
         report.append(Spacer(0 * mm, 10 * mm))  # (width, height)
 
         report.append(Paragraph(header_title,
