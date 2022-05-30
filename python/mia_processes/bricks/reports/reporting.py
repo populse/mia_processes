@@ -361,7 +361,14 @@ class MRIQC_report(ProcessMIA):
         #header_image_1.hAlign = 'LEFT'
         #header_image_2.hAlign = 'RIGHT'
         #report.append(header_image_1)
-        report.append(Table([[header_image_1, header_image_2]], [70*mm, 70*mm]))
+        image_cov = Table([[header_image_1, header_image_2]], [70*mm, 70*mm])
+        image_cov.setStyle(TableStyle([
+                                  ('ALIGN', (0, 0), (0, 0), 'LEFT'),
+                                  ('ALIGN', (-1, 0), (-1, 0), 'RIGHT'),
+                                  ('VALIGN', (0, 0), (-1, 0), 'MIDDLE')
+                                      ]))
+
+        report.append(image_cov)
         report.append(Spacer(0 * mm, 10 * mm))  # (width, height)
 
         report.append(Paragraph(header_title,
