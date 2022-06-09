@@ -260,7 +260,7 @@ class MRIQC_report(ProcessMIA):
             patient_age = "*Undefined patient age*"
 
         with tempfile.NamedTemporaryFile() as temp_file:
-            temp_file.write(bytes("SITE:{}".format(self.dict4runtime['site']), encoding='utf8'))
+            temp_file.write(bytes("SITE:{}".format(site), encoding='utf8'))
             temp_file.write(bytes("\nMRI SCANNER: {}".format(self.dict4runtime['mri_scanner']), encoding='utf8'))
             temp_file.write(bytes("\nSTUDY NAME: {}".format(study_name), encoding='utf8'))
             temp_file.write(bytes("\nEXAMINATION DATE: {}".format(acqu_date), encoding='utf8'))
