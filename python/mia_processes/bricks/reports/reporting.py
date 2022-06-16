@@ -415,30 +415,30 @@ class MRIQC_report(ProcessMIA):
 
         report.append(Spacer(0*mm, 25*mm)) # (width, height)
 
-        fig_rows = 5
-        fig_cols = 5
-        n_subplots = fig_rows * fig_cols
-        brain_img = nib.load(self.anat)
-        brain_voxels = brain_img.get_fdata()
-
-        # axial
-        n_slice = brain_voxels.shape[1]
-        step_size = n_slice // n_subplots
-        plot_range = n_subplots * step_size
-        start_stop = int((n_slice - plot_range) / 2)
+        # fig_rows = 5
+        # fig_cols = 5
+        # n_subplots = fig_rows * fig_cols
+        # brain_img = nib.load(self.anat)
+        # brain_voxels = brain_img.get_fdata()
+        #
+        # # axial
+        # n_slice = brain_voxels.shape[1]
+        # step_size = n_slice // n_subplots
+        # plot_range = n_subplots * step_size
+        # start_stop = int((n_slice - plot_range) / 2)
 
         tmpdir = tempfile.TemporaryDirectory()
 
-        fig, axs = plt.subplots(fig_rows, fig_cols, figsize=[10, 10])
-
-        for idx, img in enumerate(range(start_stop, plot_range, step_size)):
-            #axs.flat[idx].imshow(ndi.rotate(t1_voxels[:, img, :], 270),  cmap='gray')
-            axs.flat[idx].imshow(brain_voxels[:, img, :],  cmap='gray')
-            axs.flat[idx].axis('off')
-
-        plt.tight_layout()
+        # fig, axs = plt.subplots(fig_rows, fig_cols, figsize=[10, 10])
+        #
+        # for idx, img in enumerate(range(start_stop, plot_range, step_size)):
+        #     #axs.flat[idx].imshow(ndi.rotate(t1_voxels[:, img, :], 270),  cmap='gray')
+        #     axs.flat[idx].imshow(brain_voxels[:, img, :],  cmap='gray')
+        #     axs.flat[idx].axis('off')
+        #
+        # plt.tight_layout()
         #plt.show()
-        plt.savefig(os.path.join(tmpdir.name, 'slices.png'), bbox_inches='tight')
+        #plt.savefig(os.path.join(tmpdir.name, 'slices.png'), bbox_inches='tight')
 
         #slices_image = os.path.join(sources_images.__path__[0],
         #                            'Logo_populse_mia_HR.jpeg')

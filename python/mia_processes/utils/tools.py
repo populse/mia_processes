@@ -135,3 +135,7 @@ def recupCover(afile):
                 matrix.append(temp)
 
     return matrix
+
+def slice_planes_plot(img, slice_numb=25, inf_slice_start=281, slices_gap=5, cmap="Greys_r", out_dir=None):
+    "blablabla"
+
