@@ -19,11 +19,17 @@ from reportlab.platypus import Paragraph
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import mm
 from reportlab.platypus import Flowable
-from os import listdir, system, makedirs, remove
-from os.path import isdir, isfile
-from datetime import datetime
-from sys import exit
-from shutil import copyfile
+import nibabel as nib
+import numpy as np
+from os.path import splitext, basename, join, abspath
+import matplotlib.pyplot as plt
+from matplotlib.cm import get_cmap
+
+#from os import listdir, system, makedirs, remove
+#from os.path import isdir, isfile
+#from datetime import datetime
+#from sys import exit
+#from shutil import copyfile
 # import readline as readlineComp
 # import rlcompleter, getpass
 # import logging # autocomp debug logfile
@@ -136,6 +142,93 @@ def recupCover(afile):
 
     return matrix
 
-def slice_planes_plot(img, slice_numb=25, inf_slice_start=281, slices_gap=5, cmap="Greys_r", out_dir=None):
+def slice_planes_plot(data, fig_rows=5, fig_cols=5, inf_slice_start=281, slices_gap=5, cmap="Greys_r", out_dir=None):
     "blablabla"
+
+    brain_img = nib.as_closest_canonical(nib.load(data))
+    brain_data = brain_img.get_fdata()
+    brain_data  = np.squeeze(brain_data)
+    min_thres = np.percentile(brain_data, 5)
+    mask_data = np.ones_like(brain_data)
+    mask_data[brain_data <= min_thres] = 0
+    ind_non_zero = np.argwhere(mask_data)
+    (ystart, xstart, zstart), (ystop, xstop, zstop) = (ind_non_zero.min(0),
+                                                      ind_non_zero.max(0) + 1)
+    brain_data = brain_data[ystart:ystop, xstart:xstop, zstart:zstop]
+    disp_slices = fig_rows * fig_cols
+
+    if inf_slice_start == None and slices_gap == None:
+        slices_gap = brain_data.shape[2] // disp_slices
+        memory = set()
+        while len(np.arange(start=0, stop=brain_data.shape[2], step=slices_gap)) != disp_slices:
+
+            if len(np.arange(start=0, stop=brain_data.shape[2], step=slices_gap)) > disp_slices:
+                if len(np.arange(start=0, stop=brain_data.shape[2], step=slices_gap)) in memory:
+
+                slices_gap += 1
+                memory.add(len(np.arange(start=0, stop=brain_data.shape[2], step=slices_gap)))
+            elif len(np.arange(start=0, stop=brain_data.shape[2], step=slices_gap)) < disp_slices:
+                slices_gap -= 1
+                memory.add(len(np.arange(start=0, stop=brain_data.shape[2], step=slices_gap)))
+        inf_slice_start = (brain_data.shape[2] - np.arange(start=0, stop=brain_data.shape[2], step=slices_gap)[len(np.arange(start=0, stop=brain_data.shape[2], step=slices_gap)) - 1]) // 2
+        ind_slices = np.arange(start=inf_slice_start, stop=brain_data.shape[2], step=slices_gap)
+
+    elif len(np.array(list(range(0, brain_data.shape[2])))) > disp_slices:
+        ind_slices = np.array(list(range(0, brain_data.shape[2])))[inf_slice_start:inf_slice_start + (slices_gap * disp_slices):slices_gap]
+
+    else:
+        ind_slices = np.array(list(range(0, brain_data.shape[2])))
+
+    fig = plt.figure(figsize=(1.9 * fig_cols, 3 * fig_rows))
+
+    mask_data = np.logical_not(np.isnan(brain_data))
+    vmin = np.percentile(brain_data[mask_data], 0.5)
+    vmax = np.percentile(brain_data[mask_data], 99.5)
+
+    axis_numb = 1
+    zooms = brain_img.header.get_zooms()
+
+    for ind_slice in ind_slices:
+        ax = fig.add_subplot(fig_rows, fig_cols, axis_numb)
+        axis_numb += 1
+        phys_sp = np.array(zooms[:2]) * brain_data[:, :, ind_slice].shape
+        cmap = get_cmap(cmap)
+
+        ax.imshow(np.swapaxes(brain_data[:, :, ind_slice], 0, 1),
+                  vmin=vmin,
+                  vmax=vmax,
+                  cmap=cmap,
+                  interpolation="nearest",
+                  origin="lower",
+                  extent=[0, phys_sp[0], 0, phys_sp[1]],)
+
+        ax.set_xticklabels([])
+        ax.set_yticklabels([])
+        ax.grid(False)
+        ax.axis("off")
+
+        bgcolor = cmap(min(vmin, 0.0))
+        fgcolor = cmap(vmax)
+
+        ax.text(0.98,
+                0.01,
+                "%d" % ind_slice,
+                color=fgcolor,
+                transform=ax.transAxes,
+                horizontalalignment="right",
+                verticalalignment="bottom",
+                size=18,
+                bbox=dict(boxstyle="square,pad=0", ec=bgcolor, fc=bgcolor))
+
+    fig.subplots_adjust(left=0.05, right=0.95, bottom=0.05, top=0.95,
+                        wspace=0.05, hspace=0.05)
+
+    fname, ext = splitext(basename(data))
+    if out_dir is None:
+        out_file = abspath(fname + "_slice_planes_plot.png")
+    else:
+        out_file = join(out_dir, fname + "_slice_planes_plot.png")
+    fig.savefig(out_file, format="png", dpi=300, bbox_inches="tight")
+
+    return out_file
 

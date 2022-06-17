@@ -29,7 +29,7 @@ from nipype.interfaces.base import (OutputMultiPath, InputMultiPath, File,
 from nipype.interfaces.spm.base import ImageFileSPM
 
 #mia_processes import:
-from mia_processes.utils import recupCover, PageNumCanvas, ReportLine
+from mia_processes.utils import recupCover, PageNumCanvas, ReportLine, slice_planes_plot
 
 # populse_mia import
 from populse_mia import sources_images
@@ -55,10 +55,10 @@ from reportlab.platypus import (SimpleDocTemplate, Paragraph, Spacer, Image,
                                  Table, TableStyle, PageBreak)
 import tempfile
 import platform
-import nibabel as nib
-from nibabel.processing import resample_from_to
-import matplotlib.pyplot as plt
-import scipy.ndimage as ndi
+#import numpy as np
+#from nibabel.processing import resample_from_to
+#import matplotlib.pyplot as plt
+#import scipy.ndimage as ndi
 
 
 
@@ -442,7 +442,11 @@ class MRIQC_report(ProcessMIA):
 
         #slices_image = os.path.join(sources_images.__path__[0],
         #                            'Logo_populse_mia_HR.jpeg')
-        slices_image = Image(os.path.join(tmpdir.name, 'slices.png'), 177.4 * mm, 222.0 * mm)  #791x990
+
+        #slices_image = slice_planes_plot(self.anat, fig_rows=5, fig_cols=5, inf_slice_start=None, slices_gap=None, cmap="Greys_r", out_dir=tmpdir.name)
+        slices_image = slice_planes_plot(self.anat, fig_rows=6, fig_cols=5, inf_slice_start=None, slices_gap=None, cmap="Greys_r", out_dir=tmpdir.name)
+
+        slices_image = Image(slices_image, 177.4 * mm, 222.0 * mm)  #791x990
         slices_image.hAlign = 'CENTER'
         report.append(slices_image)
 

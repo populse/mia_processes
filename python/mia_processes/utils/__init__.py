@@ -14,4 +14,4 @@ Contains:
 # for details.
 ###############################################################################
 
-from .tools import recupCover, PageNumCanvas, ReportLine
+from .tools import recupCover, PageNumCanvas, ReportLine, slice_planes_plot
