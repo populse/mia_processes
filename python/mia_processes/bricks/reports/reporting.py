@@ -88,6 +88,15 @@ class MRIQC_report(ProcessMIA):
         anat_desc = ('An existing, uncompressed anatomic image file (valid '
                        'extensions: .nii)')
 
+        fig_rows_desc = 'The number of lines for the slice planes plot'
+
+        fig_cols_desc = 'The number of columns for the slice planes plot'
+
+        inf_slice_start_desc = 'The first index displayed in slice planes plot'
+
+        slices_gap_desc = 'Gap between slices in slice planes plot'
+
+
         # Outputs description
         report_desc = 'The generated report (pdf)'
 
@@ -97,6 +106,13 @@ class MRIQC_report(ProcessMIA):
                                     output=False,
                                     optional=False,
                                     desc=anat_desc))
+
+
+        self.add_trait("fig_rows", traits.Int(5, output=False, optional=False, desc=fig_rows_desc))
+        self.add_trait("fig_cols", traits.Int(5, output=False, optional=False, desc=fig_cols_desc))
+        self.add_trait("inf_slice_start", traits.Either(Undefined, traits.Int, output=False, optional=True, desc=inf_slice_start_desc))
+        self.add_trait("slices_gap", traits.Either(Undefined, traits.Int, output=False, optional=True, desc=slices_gap_desc))
+
         # Outputs traits
         self.add_trait("report",
                        OutputMultiPath(File(),
@@ -265,6 +281,7 @@ class MRIQC_report(ProcessMIA):
             temp_file.write(bytes("\nSTUDY NAME: {}".format(study_name), encoding='utf8'))
             temp_file.write(bytes("\nEXAMINATION DATE: {}".format(acqu_date), encoding='utf8'))
             temp_file.write(bytes("\nMRIQC CALCULATION DATE: {}".format(datetime.now().strftime('%Y-%m-%d %H:%M:%S')), encoding='utf8'))
+            temp_file.write(bytes("\nNAME OF THE INPUT DATA: {}".format(self.anat), encoding='utf8'))
             temp_file.write(bytes("\nPATIENT REFERENCE: {}".format(patient_ref), encoding='utf8'))
             temp_file.write(bytes("\nPATIENT SEX: {}".format(patient_sex), encoding='utf8'))
             temp_file.write(bytes("\nPATIENT AGE: {}".format(patient_age), encoding='utf8'))
@@ -381,7 +398,7 @@ class MRIQC_report(ProcessMIA):
         line.hAlign = 'CENTER'
         report.append(line)
 
-        report.append(Spacer(0 * mm, 20 * mm))
+        report.append(Spacer(0 * mm, 15 * mm))
 
         report.append(Paragraph(title,
                                  styles['Center']))
@@ -413,7 +430,10 @@ class MRIQC_report(ProcessMIA):
         line.hAlign = 'CENTER'
         report.append(line)
 
-        report.append(Spacer(0*mm, 25*mm)) # (width, height)
+        report.append(Spacer(0*mm, 15*mm)) # (width, height)
+        report.append(Paragraph('<font size = 9 > <i> "Neurological" convention, the left side of the image corresponds to the left side of the brain. </i> <br/> </font>',
+                                     styles['Center']))
+        report.append(Spacer(0*mm, 1*mm)) # (width, height)
 
         # fig_rows = 5
         # fig_cols = 5
@@ -444,7 +464,7 @@ class MRIQC_report(ProcessMIA):
         #                            'Logo_populse_mia_HR.jpeg')
 
         #slices_image = slice_planes_plot(self.anat, fig_rows=5, fig_cols=5, inf_slice_start=None, slices_gap=None, cmap="Greys_r", out_dir=tmpdir.name)
-        slices_image = slice_planes_plot(self.anat, fig_rows=6, fig_cols=5, inf_slice_start=None, slices_gap=None, cmap="Greys_r", out_dir=tmpdir.name)
+        slices_image = slice_planes_plot(self.anat, self.fig_rows, self.fig_cols, self.inf_slice_start, self.slices_gap, cmap="Greys_r", out_dir=tmpdir.name)
 
         slices_image = Image(slices_image, 177.4 * mm, 222.0 * mm)  #791x990
         slices_image.hAlign = 'CENTER'

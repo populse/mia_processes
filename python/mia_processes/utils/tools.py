@@ -142,7 +142,7 @@ def recupCover(afile):
 
     return matrix
 
-def slice_planes_plot(data, fig_rows=5, fig_cols=5, inf_slice_start=281, slices_gap=5, cmap="Greys_r", out_dir=None):
+def slice_planes_plot(data, fig_rows, fig_cols, inf_slice_start, slices_gap, cmap="Greys_r", out_dir=None):
     "blablabla"
 
     brain_img = nib.as_closest_canonical(nib.load(data))
@@ -160,18 +160,35 @@ def slice_planes_plot(data, fig_rows=5, fig_cols=5, inf_slice_start=281, slices_
     if inf_slice_start == None and slices_gap == None:
         slices_gap = brain_data.shape[2] // disp_slices
         memory = set()
+        ind_slices = None
         while len(np.arange(start=0, stop=brain_data.shape[2], step=slices_gap)) != disp_slices:
 
-            if len(np.arange(start=0, stop=brain_data.shape[2], step=slices_gap)) > disp_slices:
-                if len(np.arange(start=0, stop=brain_data.shape[2], step=slices_gap)) in memory:
+            if len(np.arange(start=0, stop=brain_data.shape[2], step=slices_gap)) in memory:
+                ind_slices = np.arange(start=0, stop=brain_data.shape[2], step=slices_gap)
 
+                if len(ind_slices) > disp_slices:
+
+                    while len(ind_slices) != disp_slices:
+                        ind_slices = ind_slices[:-1]
+
+                    ind_slices = ind_slices[:-1]
+                    ind_slices = np.append(ind_slices, ind_slices[-1] + (brain_data.shape[2] - ind_slices[-1]) // 2)
+                    break
+
+                if len(ind_slices) < disp_slices:
+                    slices_gap -= 1
+
+            elif len(np.arange(start=0, stop=brain_data.shape[2], step=slices_gap)) > disp_slices:
+                memory.add(len(np.arange(start=0, stop=brain_data.shape[2], step=slices_gap)))
                 slices_gap += 1
-                memory.add(len(np.arange(start=0, stop=brain_data.shape[2], step=slices_gap)))
+
             elif len(np.arange(start=0, stop=brain_data.shape[2], step=slices_gap)) < disp_slices:
-                slices_gap -= 1
                 memory.add(len(np.arange(start=0, stop=brain_data.shape[2], step=slices_gap)))
-        inf_slice_start = (brain_data.shape[2] - np.arange(start=0, stop=brain_data.shape[2], step=slices_gap)[len(np.arange(start=0, stop=brain_data.shape[2], step=slices_gap)) - 1]) // 2
-        ind_slices = np.arange(start=inf_slice_start, stop=brain_data.shape[2], step=slices_gap)
+                slices_gap -= 1
+
+        if ind_slices is None:
+            inf_slice_start = (brain_data.shape[2] - np.arange(start=0, stop=brain_data.shape[2], step=slices_gap)[len(np.arange(start=0, stop=brain_data.shape[2], step=slices_gap)) - 1]) // 2
+            ind_slices = np.arange(start=inf_slice_start, stop=brain_data.shape[2], step=slices_gap)
 
     elif len(np.array(list(range(0, brain_data.shape[2])))) > disp_slices:
         ind_slices = np.array(list(range(0, brain_data.shape[2])))[inf_slice_start:inf_slice_start + (slices_gap * disp_slices):slices_gap]
