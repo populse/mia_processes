@@ -49,7 +49,7 @@ from sys import exit, path, version
 from reportlab.lib.enums import TA_JUSTIFY, TA_CENTER, TA_LEFT, TA_RIGHT
 from reportlab.lib.pagesizes import A4, landscape, portrait
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib.units import mm
+from reportlab.lib.units import mm, inch
 from reportlab.lib import colors
 from reportlab.platypus import (SimpleDocTemplate, Paragraph, Spacer, Image,
                                  Table, TableStyle, PageBreak)
@@ -465,8 +465,10 @@ class MRIQC_report(ProcessMIA):
 
         #slices_image = slice_planes_plot(self.anat, fig_rows=5, fig_cols=5, inf_slice_start=None, slices_gap=None, cmap="Greys_r", out_dir=tmpdir.name)
         slices_image = slice_planes_plot(self.anat, self.fig_rows, self.fig_cols, self.inf_slice_start, self.slices_gap, cmap="Greys_r", out_dir=tmpdir.name)
-
-        slices_image = Image(slices_image, 177.4 * mm, 222.0 * mm)  #791x990
+        # reminder: A4 == 210mmx297mm
+        #slices_image = Image(slices_image, width=177.4 * mm, height=222.0 * mm)  #791x990
+        #slices_image = Image(slices_image, width=190 * mm, height=230 * mm)
+        slices_image = Image(slices_image, width=7.4803 * inch, height=9.0551 * inch)
         slices_image.hAlign = 'CENTER'
         report.append(slices_image)
 

@@ -17,13 +17,14 @@ Module that contains multiple functions used across mia_processes
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import Paragraph
 from reportlab.pdfgen import canvas
-from reportlab.lib.units import mm
 from reportlab.platypus import Flowable
 import nibabel as nib
 import numpy as np
 from os.path import splitext, basename, join, abspath
 import matplotlib.pyplot as plt
 from matplotlib.cm import get_cmap
+from reportlab.lib.units import mm
+from mpl_toolkits.axes_grid1 import ImageGrid
 
 #from os import listdir, system, makedirs, remove
 #from os.path import isdir, isfile
@@ -196,7 +197,8 @@ def slice_planes_plot(data, fig_rows, fig_cols, inf_slice_start, slices_gap, cma
     else:
         ind_slices = np.array(list(range(0, brain_data.shape[2])))
 
-    fig = plt.figure(figsize=(1.9 * fig_cols, 3 * fig_rows))
+    #19cm == 7.4803inch; 23cm == 9.0551
+    fig = plt.figure(figsize=(7.4803, 9.0551)) # Width, height in inches.
 
     mask_data = np.logical_not(np.isnan(brain_data))
     vmin = np.percentile(brain_data[mask_data], 0.5)
@@ -204,21 +206,19 @@ def slice_planes_plot(data, fig_rows, fig_cols, inf_slice_start, slices_gap, cma
 
     axis_numb = 1
     zooms = brain_img.header.get_zooms()
+    grid = ImageGrid(fig, 111, nrows_ncols=(fig_rows, fig_cols), axes_pad=0)
+    cmap = get_cmap(cmap)
 
-    for ind_slice in ind_slices:
-        ax = fig.add_subplot(fig_rows, fig_cols, axis_numb)
-        axis_numb += 1
+    for ax, ind_slice in zip(grid, ind_slices):
         phys_sp = np.array(zooms[:2]) * brain_data[:, :, ind_slice].shape
-        cmap = get_cmap(cmap)
-
+        #cmap = get_cmap(cmap)
         ax.imshow(np.swapaxes(brain_data[:, :, ind_slice], 0, 1),
                   vmin=vmin,
                   vmax=vmax,
                   cmap=cmap,
                   interpolation="nearest",
                   origin="lower",
-                  extent=[0, phys_sp[0], 0, phys_sp[1]],)
-
+                  extent=[0, phys_sp[0], 0, phys_sp[1]])
         ax.set_xticklabels([])
         ax.set_yticklabels([])
         ax.grid(False)
@@ -234,18 +234,19 @@ def slice_planes_plot(data, fig_rows, fig_cols, inf_slice_start, slices_gap, cma
                 transform=ax.transAxes,
                 horizontalalignment="right",
                 verticalalignment="bottom",
-                size=18,
-                bbox=dict(boxstyle="square,pad=0", ec=bgcolor, fc=bgcolor))
+                fontsize=8,
+                bbox=dict(boxstyle="square,pad=0", edgecolor=bgcolor, facecolor=bgcolor))
 
-    fig.subplots_adjust(left=0.05, right=0.95, bottom=0.05, top=0.95,
-                        wspace=0.05, hspace=0.05)
-
+    #fig.subplots_adjust(left=0.05, right=0.95, bottom=0.05, top=0.95,
+    #                    wspace=0.05, hspace=0.05) ##########################################33
+    #fig.subplots_adjust(left=0, right=1, bottom=0, top=1,
+    #                    wspace=0, hspace=0)
     fname, ext = splitext(basename(data))
     if out_dir is None:
         out_file = abspath(fname + "_slice_planes_plot.png")
     else:
         out_file = join(out_dir, fname + "_slice_planes_plot.png")
-    fig.savefig(out_file, format="png", dpi=300, bbox_inches="tight")
+    fig.savefig(out_file, format="png", dpi=300, bbox_inches="tight") ####################
 
     return out_file
 
