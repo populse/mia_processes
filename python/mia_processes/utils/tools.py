@@ -143,7 +143,7 @@ def recupCover(afile):
 
     return matrix
 
-def slice_planes_plot(data, fig_rows, fig_cols, inf_slice_start, slices_gap, cmap="Greys_r", out_dir=None):
+def slice_planes_plot(data, fig_rows, fig_cols, inf_slice_start=None, slices_gap=None, cmap="Greys_r", out_dir=None):
     "blablabla"
 
     brain_img = nib.as_closest_canonical(nib.load(data))
@@ -204,14 +204,34 @@ def slice_planes_plot(data, fig_rows, fig_cols, inf_slice_start, slices_gap, cma
     vmin = np.percentile(brain_data[mask_data], 0.5)
     vmax = np.percentile(brain_data[mask_data], 99.5)
 
-    axis_numb = 1
     zooms = brain_img.header.get_zooms()
     grid = ImageGrid(fig, 111, nrows_ncols=(fig_rows, fig_cols), axes_pad=0)
     cmap = get_cmap(cmap)
 
+    if len(ind_slices) < 5:
+        fontsize = 18
+
+    elif len(ind_slices) < 10:
+        fontsize = 16
+
+    elif len(ind_slices) < 15:
+        fontsize = 14
+
+    elif len(ind_slices) < 20:
+        fontsize = 12
+
+    elif len(ind_slices) < 25:
+        fontsize = 10
+
+    elif len(ind_slices) < 40:
+        fontsize = 8
+
+    else:
+        fontsize = 6
+
     for ax, ind_slice in zip(grid, ind_slices):
         phys_sp = np.array(zooms[:2]) * brain_data[:, :, ind_slice].shape
-        #cmap = get_cmap(cmap)
+
         ax.imshow(np.swapaxes(brain_data[:, :, ind_slice], 0, 1),
                   vmin=vmin,
                   vmax=vmax,
@@ -234,7 +254,7 @@ def slice_planes_plot(data, fig_rows, fig_cols, inf_slice_start, slices_gap, cma
                 transform=ax.transAxes,
                 horizontalalignment="right",
                 verticalalignment="bottom",
-                fontsize=8,
+                fontsize=fontsize,
                 bbox=dict(boxstyle="square,pad=0", edgecolor=bgcolor, facecolor=bgcolor))
 
     #fig.subplots_adjust(left=0.05, right=0.95, bottom=0.05, top=0.95,
