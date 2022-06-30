@@ -24,6 +24,7 @@ scripts = []
 pkgdata = {
     # format is:
     # <python module>: <file extensions list>
+    'mia_processes.resources.spm12.tpm':  ['*.nii']
 }
 
 # Read the info.py file in mia_processes module
