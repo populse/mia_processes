@@ -20,8 +20,8 @@ import sys
 
 # Current version
 version_major = 2
-version_minor = 1
-version_micro = 1
+version_minor = 2
+version_micro = 0
 version_extra = "dev" # leave empty for release
 #version_extra = ""
 
@@ -110,7 +110,7 @@ VERSION = __version__
 CLASSIFIERS = CLASSIFIERS
 PLATFORMS = 'OS Independent'
 REQUIRES = [
-    'populse_mia >= 2.1.0',
+    'populse_mia >= 2.2.0',
     'populse_db >=2.1.0'
 ]
 EXTRA_REQUIRES = {
