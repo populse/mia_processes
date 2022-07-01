@@ -30,7 +30,7 @@ populse_mia.
 from capsul.api import capsul_engine
 
 # mia_processes import
-#from .nipype_extension import NewSegmentMia
+from mia_processes import resources
 
 # nipype imports
 from nipype.interfaces import spm
@@ -789,9 +789,7 @@ class NewSegment(ProcessMIA):
                                    'object or string representing a file).')     
 
         # Tissues parameter definition
-        config = Config()
-        resources_path = os.path.join(config.get_mia_path(), 'resources')
-        tpm_path = os.path.join(resources_path, 'spm12', 'tpm', 'TPM.nii')
+        tpm_path = os.path.join(resources.__path__[0], 'spm12', 'tpm', 'TPM.nii')
 
         if not Path(tpm_path).is_file():
             print('\nNewSegment brick warning!: The {} file seems to '
@@ -1122,9 +1120,7 @@ class Normalize12(ProcessMIA):
                                  'file).')
 
         # Tpm parameter definition
-        config = Config()
-        resources_path = os.path.join(config.get_mia_path(), 'resources')
-        tpm_path = os.path.join(resources_path, 'spm12', 'tpm', 'TPM.nii')
+        tpm_path = os.path.join(resources.__path__[0], 'spm12', 'tpm', 'TPM.nii')
         
         if not Path(tpm_path).is_file():
             print('\nThe {} file seems to not exists ...'.format(tpm_path))

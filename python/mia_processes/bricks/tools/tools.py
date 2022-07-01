@@ -396,6 +396,7 @@ class List_Duplicate(ProcessMIA):
         self.add_trait("out_file",
                        traits.File(output=True,
                                    desc=out_file_desc))
+        self.out_file = traits.Undefined
         
         self.add_trait("out_list",
                        traits.List(output=True,
