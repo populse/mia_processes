@@ -21,7 +21,7 @@ import sys
 # Current version
 version_major = 2
 version_minor = 2
-version_micro = 0
+version_micro = 1
 version_extra = "dev" # leave empty for release
 #version_extra = ""
 
