@@ -55,6 +55,7 @@ from reportlab.platypus import (SimpleDocTemplate, Paragraph, Spacer, Image,
                                  Table, TableStyle, PageBreak)
 import tempfile
 import platform
+import json
 #import numpy as np
 #from nibabel.processing import resample_from_to
 #import matplotlib.pyplot as plt
@@ -72,7 +73,7 @@ class MRIQC_report(ProcessMIA):
         """
 
     def __init__(self):
-        """Dedicated to the attributes initialisation / instanciation.
+        """Dedicated to the attributes initialisation / instantiation.
 
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
@@ -85,6 +86,9 @@ class MRIQC_report(ProcessMIA):
         self.requirement = []
 
         # Inputs description
+
+        IQMs_file_desc = 'A .JSON file containing the IQMs'
+
         anat_desc = ('An existing, uncompressed anatomic image file (valid '
                        'extensions: .nii)')
 
@@ -101,6 +105,12 @@ class MRIQC_report(ProcessMIA):
         report_desc = 'The generated report (pdf)'
 
         # Inputs traits
+        self.add_trait("IQMs_file",
+                       File(copyfile=False,
+                            output=False,
+                            optional=False,
+                            desc=IQMs_file_desc))
+
         self.add_trait("anat",
                        ImageFileSPM(copyfile=False,
                                     output=False,
@@ -420,6 +430,180 @@ class MRIQC_report(ProcessMIA):
                                  styles["Justify"]))
 
         report.append(PageBreak())
+
+        # Second page - IQMs
+
+        report.append(Paragraph("<font size = 18 > <b> Image parameters <br/> </b> </font>",
+                                     styles['Center']))
+
+        report.append(Spacer(0 * mm, 4 * mm))  # (width, height)
+
+        line = ReportLine(150)
+        line.hAlign = 'CENTER'
+        report.append(line)
+
+        report.append(Spacer(0 * mm, 10 * mm))
+
+        report.append(Paragraph(
+            "<font size = 15 > <b> NOISE </b> </font> impact of noise and/or evaluate the fitness of a noise model:",
+            styles['Bullet1']))
+
+        report.append(Spacer(0 * mm, 5 * mm))  # (width, height)
+
+        f = open(self.IQMs_file)
+        data = json.load(f)
+        f.close()
+
+        # snr_csf
+        try:
+            report.append(Paragraph(
+                '<font size = 11> <b> Signal-to-noise ratio for cerebrospinal fluid </b> </font>(snr_csf): ' + \
+                str(round(data.get('snr_csf'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 11> <b> Signal-to-noise ratio for cerebrospinal fluid </b> </font>(snr_csf): ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 1 * mm))  # (width, height)
+
+        # snr_wm
+        try:
+            report.append(Paragraph(
+                '<font size = 11> <b> Signal-to-noise ratio for white matter </b> </font>(snr_wm): ' + \
+                str(round(data.get('snr_wm'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 11> <b> Signal-to-noise ratio for white matter </b> </font>(snr_wm): ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 1 * mm))  # (width, height)
+
+        # snr_gm
+        try:
+            report.append(Paragraph(
+                '<font size = 11> <b> Signal-to-noise ratio for gray matter </b> </font>(snr_gm): ' + \
+                str(round(data.get('snr_gm'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 11> <b> Signal-to-noise ratio for gray matter </b> </font>(snr_gm): ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 1 * mm))  # (width, height)
+
+        # snr_total
+        try:
+            report.append(Paragraph(
+                '<font size = 11> <b> Signal-to-noise ratio for brain parenchyma </b> </font>(snr_total): ' + \
+                str(round(data.get('snr_total'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 11> <b> Signal-to-noise ratio for brain parenchyma </b> </font>(snr_total): ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 2.5 * mm))  # (width, height)
+
+        # snrd_csf
+        try:
+            report.append(Paragraph(
+                '<font size = 11> <b> <sup>$</sup>Dietrich’s SNR for cerebrospinal fluid </b> </font>(snrd_csf): ' + \
+                str(round(data.get('snrd_csf'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 11> <b> <sup>$</sup>Dietrich’s SNR for cerebrospinal fluid </b> </font>(snrd_csf): ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 1 * mm))  # (width, height)
+
+        # snrd_wm
+        try:
+            report.append(Paragraph(
+                '<font size = 11> <b> <sup>$</sup>Dietrich’s SNR for white matter </b> </font>(snrd_wm): ' + \
+                str(round(data.get('snrd_wm'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 11> <b> <sup>$</sup>Dietrich’s SNR for white matter </b> </font>(snrd_wm): ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 1 * mm))  # (width, height)
+
+        # snrd_gm
+        try:
+            report.append(Paragraph(
+                '<font size = 11> <b> <sup>$</sup>Dietrich’s SNR for gray matter </b> </font>(snrd_gm): ' + \
+                str(round(data.get('snrd_gm'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 11> <b> S<sup>$</sup>Dietrich’s SNR for gray matter </b> </font>(snrd_gm): ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 1 * mm))  # (width, height)
+
+        # snrd_total
+        try:
+            report.append(Paragraph(
+                '<font size = 11> <b> <sup>$</sup>Dietrich’s SNR for brain parenchyma </b> </font>(snrd_total): ' + \
+                str(round(data.get('snrd_total'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 11> <b> <sup>$</sup>Dietrich’s SNR for brain parenchyma </b> </font>(snrd_total): ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 2.5 * mm))  # (width, height)
+
+        line = ReportLine(500)
+        line.hAlign = 'CENTER'
+        report.append(line)
+
+        report.append(Spacer(0 * mm, 2.5 * mm))  # (width, height)
+
+        report.append(Paragraph(
+            "<font size = 8> <sup>$</sup>Dietrich et al., <i>Measurement of SNRs in MR images: influence of multichannel coils, parallel imaging and reconstruction filters </i>, JMRI 26(2):375–385. 2007 </font>",
+            styles['Left']))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        report.append(PageBreak())
+
+        # third page
+
 
         report.append(Paragraph("<font size = 18 > <b> MRI axial slice planes display <br/> </b> </font>",
                                      styles['Center']))
