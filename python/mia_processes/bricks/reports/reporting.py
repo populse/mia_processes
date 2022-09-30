@@ -334,6 +334,8 @@ class MRIQC_report(ProcessMIA):
         styles.add(ParagraphStyle(name='Justify', alignment=TA_JUSTIFY))
         styles.add(ParagraphStyle(name='Right', alignment=TA_RIGHT))
         styles.add(ParagraphStyle(name='Left', alignment=TA_LEFT))
+        styles.add(ParagraphStyle(name='Left2', alignment=TA_LEFT))
+        styles['Left2'].leftIndent = 30  # For left indent 30.
         styles.add(ParagraphStyle(name='Bullet1',
                                   leftIndent=30,
                                   bulletOffsetY=2,
@@ -458,10 +460,14 @@ class MRIQC_report(ProcessMIA):
 
         report.append(Spacer(0 * mm, 20 * mm))
 
-        # Spatial resolution
+        ### Spatial resolution ################################################
         report.append(Paragraph(
-            "<font size = 15 > <b>SPATIAL RESOLUTION</b> </font> length - spacing:",
+            "<font size = 15 > <b>SPATIAL RESOLUTION</b> </font>",
             styles['Bullet1']))
+
+        report.append(Spacer(0 * mm, 2 * mm))  # (width, height)
+
+        report.append(Paragraph("Length - Spacing", styles['Left2']))
 
         report.append(Spacer(0 * mm, 10 * mm))  # (width, height)
 
@@ -555,10 +561,16 @@ class MRIQC_report(ProcessMIA):
 
         report.append(Spacer(0 * mm, 20 * mm))
 
-        # Signal-to-noise
+        ### Signal-to-noise ###################################################
         report.append(Paragraph(
-            "<font size = 15 > <b>NOISE</b> </font> impact of noise and/or evaluation of the fitness of a noise model:",
+            "<font size = 15 > <b>NOISE</b> </font>",
             styles['Bullet1']))
+
+        report.append(Spacer(0 * mm, 2 * mm))  # (width, height)
+
+        report.append(Paragraph(
+            "Impact of noise and/or evaluation of the fitness of a noise model",
+            styles['Left2']))
 
         report.append(Spacer(0 * mm, 10 * mm))  # (width, height)
 
@@ -725,7 +737,7 @@ class MRIQC_report(ProcessMIA):
                 'Not determined',
                 styles['Bullet2']))
 
-        report.append(Spacer(0 * mm, 65 * mm))  # (width, height)
+        report.append(Spacer(0 * mm, 52 * mm))  # (width, height)
 
         # Footnote
         line = ReportLine(500)
@@ -762,10 +774,16 @@ class MRIQC_report(ProcessMIA):
 
         report.append(Spacer(0 * mm, 20 * mm))
 
-        # Spatial distribution
+        ### Spatial distribution ##############################################
         report.append(Paragraph(
-            "<font size = 15 > <b>SPATIAL DISTRIBUTION</b> </font> information theory to evaluate the spatial distribution of information:",
+            "<font size = 15 > <b>SPATIAL DISTRIBUTION</b> </font>",
             styles['Bullet1']))
+
+        report.append(Spacer(0 * mm, 2 * mm))  # (width, height)
+
+        report.append(Paragraph(
+            "Information theory to evaluate the spatial distribution of information",
+            styles['Left2']))
 
         report.append(Spacer(0 * mm, 10 * mm))  # (width, height)
 
@@ -799,23 +817,29 @@ class MRIQC_report(ProcessMIA):
 
         report.append(Spacer(0 * mm, 20 * mm))
 
-        # Artifacts
+        ### Artifacts #########################################################
         report.append(Paragraph(
-            "<font size = 15 > <b>ARTIFACTS</b> </font> look for the presence and impact of particular artifacts (specifically, the INU artifact), and the signal leakage due to rapid motion (e.g. eyes motion or blood vessel pulsation):",
+            "<font size = 15 > <b>ARTIFACTS</b> </font>",
             styles['Bullet1']))
+
+        report.append(Spacer(0 * mm, 2 * mm))  # (width, height)
+
+        report.append(Paragraph(
+            "Estimates artefacts and signal leakage due to rapid movement (e.g. eye movement or blood vessel pulsation)",
+            styles['Left2']))
 
         report.append(Spacer(0 * mm, 10 * mm))  # (width, height)
 
         # wm2max
         try:
             report.append(Paragraph(
-                '<font size = 9><sup>&</sup></font><font size = 11> <b> White-matter to maximum intensity ratio </b> </font>(wm2max): ' + \
+                '<font size = 9><sup>&</sup></font><font size = 11><b>White-matter to maximum intensity ratio </b> </font>(wm2max): ' + \
                 str(round(data.get('wm2max'), 2)),
                 styles['Bullet2']))
 
         except TypeError:
             report.append(Paragraph(
-                '<font size = 9><sup>&</sup></font><font size = 11> <b> White-matter to maximum intensity ratio </b> </font>(wm2max): ' + \
+                '<font size = 9><sup>&</sup></font><font size = 11><b>White-matter to maximum intensity ratio </b> </font>(wm2max): ' + \
                 'Not determined',
                 styles['Bullet2']))
 
@@ -824,20 +848,47 @@ class MRIQC_report(ProcessMIA):
         # qi_1
         try:
             report.append(Paragraph(
-                '<font size = 9><sup>$</sup></font><font size = 11> <b>Mortamet’s quality index 1</b> </font>(qi_1): ' + \
-                str(round(data.get('qi_1'), 2)),
+                '<font size = 9><sup>$</sup></font><font size = 11><b>Mortamet’s quality index 1</b> </font>(qi_1): ' + \
+                '{:.2e}'.format(data['qi_1']),
                 styles['Bullet2']))
 
         except TypeError:
             report.append(Paragraph(
-                '<font size = 9><sup>$</sup></font><font size = 11> <b>Mortamet’s quality index 1</b> </font>(qi_1): ' + \
+                '<font size = 9><sup>$</sup></font><font size = 11><b>Mortamet’s quality index 1</b> </font>(qi_1): ' + \
                 'Not determined',
                 styles['Bullet2']))
 
         report.append(Spacer(0 * mm, 2.5 * mm))  # (width, height)
 
+        # inu_range
+        try:
+            report.append(Paragraph(
+                '<font size = 9><sup>*</sup></font><font size = 11><b>Bias field range (95th percentile - 5th percentile)</b> </font>(inu_range): ' + \
+                str(round(data.get('inu_range'), 2)),
+                styles['Bullet2']))
 
-        report.append(Spacer(0 * mm, 65 * mm))  # (width, height)
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 9><sup>*</sup></font><font size = 11><b>Bias field range (95th percentile - 5th percentile)</b> </font>(inu_range): ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 1 * mm))  # (width, height)
+
+        # inu_med
+        try:
+            report.append(Paragraph(
+                '<font size = 9><sup>*</sup></font><font size = 11><b>Bias field median</b> </font>(inu_med): ' + \
+                str(round(data.get('inu_med'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 9><sup>*</sup></font><font size = 11><b>Bias field median</b> </font>(inu_med): ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 100 * mm))  # (width, height)
 
         # Footnote
         line = ReportLine(500)
@@ -858,10 +909,57 @@ class MRIQC_report(ProcessMIA):
         report.append(Paragraph(
             "<font size = 8><sup>$</sup>Mortamet B et al., <i>Automatic quality assessment in structural brain magnetic resonance imaging</i>, Mag Res Med 62(2):365-372, 2009. Lower values are better.</font>",
             styles['Left']))
+        report.append(Paragraph(
+            "<font size = 8><sup>*</sup>Tustison NJ et al., <i>N4ITK: improved N3 bias correction</i>, IEEE Trans Med Imag, 29(6):1310-20, 2010. Median closer to 1 and range closer to 0 are better.</font>",
+            styles['Left']))
 
         report.append(PageBreak())
 
-        #fourth page
+        # fourth page - IQMs
+
+        report.append(Paragraph(
+            "<font size = 18 > <b> Image parameters <br/> </b> </font>",
+            styles['Center']))
+
+        report.append(Spacer(0 * mm, 4 * mm))  # (width, height)
+
+        line = ReportLine(150)
+        line.hAlign = 'CENTER'
+        report.append(line)
+
+        report.append(Spacer(0 * mm, 20 * mm))
+
+        ### Tissues Quality ##############################################
+        report.append(Paragraph(
+            "<font size = 15 > <b>TISSUES QUALITY</b> </font>",
+            styles['Bullet1']))
+
+        report.append(Spacer(0 * mm, 2 * mm))  # (width, height)
+
+        report.append(Paragraph(
+            "Metrics that do not fall into the above categories: statistical properties of tissue distributions, volume overlap of tissues, image harpness/blurriness, etc.",
+            styles['Left2']))
+
+        report.append(Spacer(0 * mm, 10 * mm))  # (width, height)
+
+        # summary_csf_mean
+        try:
+            report.append(Paragraph(
+                '<font size = 9><sup>%</sup></font><font size = 11><b>Mean of the distribution of CSF</b></font> (summary_csf_mean): ' + \
+                str(round(data.get('summary_csf_mean'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 9><sup>%</sup></font><font size = 11><b>Mean of the distribution of CSF</b></font> (summary_csf_mean): ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 2.5 * mm))  # (width, height)
+
+        report.append(PageBreak())
+
+        # Fifth page - slice planes display
 
         report.append(Paragraph("<font size = 18 > <b> MRI axial slice planes display <br/> </b> </font>",
                                      styles['Center']))
