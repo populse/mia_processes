@@ -92,13 +92,13 @@ class MRIQC_report(ProcessMIA):
         anat_desc = ('An existing, uncompressed anatomic image file (valid '
                        'extensions: .nii)')
 
-        fig_rows_desc = 'The number of lines for the slice planes plot'
+        anat_fig_rows_desc = 'The number of lines for the slice planes plot'
 
-        fig_cols_desc = 'The number of columns for the slice planes plot'
+        anat_fig_cols_desc = 'The number of columns for the slice planes plot'
 
-        inf_slice_start_desc = 'The first index displayed in slice planes plot'
+        anat_inf_slice_start_desc = 'The first index displayed in slice planes plot'
 
-        slices_gap_desc = 'Gap between slices in slice planes plot'
+        anat_slices_gap_desc = 'Gap between slices in slice planes plot'
 
 
         # Outputs description
@@ -118,10 +118,10 @@ class MRIQC_report(ProcessMIA):
                                     desc=anat_desc))
 
 
-        self.add_trait("fig_rows", traits.Int(5, output=False, optional=False, desc=fig_rows_desc))
-        self.add_trait("fig_cols", traits.Int(5, output=False, optional=False, desc=fig_cols_desc))
-        self.add_trait("inf_slice_start", traits.Either(Undefined, traits.Int, output=False, optional=True, desc=inf_slice_start_desc))
-        self.add_trait("slices_gap", traits.Either(Undefined, traits.Int, output=False, optional=True, desc=slices_gap_desc))
+        self.add_trait("anat_fig_rows", traits.Int(5, output=False, optional=False, desc=anat_fig_rows_desc))
+        self.add_trait("anat_fig_cols", traits.Int(5, output=False, optional=False, desc=anat_fig_cols_desc))
+        self.add_trait("anat_inf_slice_start", traits.Either(Undefined, traits.Int, output=False, optional=True, desc=anat_inf_slice_start_desc))
+        self.add_trait("anat_slices_gap", traits.Either(Undefined, traits.Int, output=False, optional=True, desc=anat_slices_gap_desc))
 
         # Outputs traits
         self.add_trait("report",
@@ -248,7 +248,7 @@ class MRIQC_report(ProcessMIA):
         header_image_2 = Image(header_image_2, 54.4 * mm, 40.0 * mm)  # 2505px x 1843px
 
         #header_title = '<font size = 20><sup>$</sup></font><font size=30><b>MRI&nbsp Q</b></font>  <font size=11>uality</font>   <font size=30><b>&nbsp C</b></font>   <font size=11>ontrol</font>'
-        header_title = '<font size = 20><sup>$</sup></font><font size=30><b>MRIQ</b></font><font size=11>uality</font><font size=30><b>C</b></font><font size=11>ontrol</font>'
+        header_title = '<sup rise=20 size=9>$</sup><font size=30><b>MRIQ</b></font><font size=11>uality</font><font size=30><b>C</b></font><font size=11>ontrol</font>'
 
         if 'site' in self.dict4runtime and self.dict4runtime['site'] not in ('', Undefined):
             site = self.dict4runtime['site']
@@ -428,7 +428,7 @@ class MRIQC_report(ProcessMIA):
         report.append(Paragraph(textDisclaimer,
                                  styles["Justify"]))
 
-        report.append(Spacer(0 * mm, 5 * mm))  # (width, height)
+        report.append(Spacer(0 * mm, 6 * mm))  # (width, height)
 
         # Footnote
         line = ReportLine(500)
@@ -474,13 +474,13 @@ class MRIQC_report(ProcessMIA):
         # size_x
         try:
             report.append(Paragraph(
-                '<font size = 11> <b> Voxel size in X </b> </font>(size_x): ' + \
+                '<font size = 11> <b> Voxel size in X </b> </font>: ' + \
                 str(round(data.get('size_x'), 2)),
                 styles['Bullet2']))
 
         except TypeError:
             report.append(Paragraph(
-                '<font size = 11> <b> Voxel size in X </b> </font>(size_x): ' + \
+                '<font size = 11> <b> Voxel size in X </b> </font>: ' + \
                 'Not determined',
                 styles['Bullet2']))
 
@@ -489,13 +489,13 @@ class MRIQC_report(ProcessMIA):
         # size_y
         try:
             report.append(Paragraph(
-                '<font size = 11> <b> Voxel size in Y </b> </font>(size_y): ' + \
+                '<font size = 11> <b> Voxel size in Y </b> </font>: ' + \
                 str(round(data.get('size_y'), 2)),
                 styles['Bullet2']))
 
         except TypeError:
             report.append(Paragraph(
-                '<font size = 11> <b> Voxel size in Y </b> </font>(size_y): ' + \
+                '<font size = 11> <b> Voxel size in Y </b> </font>: ' + \
                 'Not determined',
                 styles['Bullet2']))
 
@@ -504,13 +504,13 @@ class MRIQC_report(ProcessMIA):
         # size_z
         try:
             report.append(Paragraph(
-                '<font size = 11> <b> Voxel size in Z </b> </font>(size_z): ' + \
+                '<font size = 11> <b> Voxel size in Z </b> </font>: ' + \
                 str(round(data.get('size_z'), 2)),
                 styles['Bullet2']))
 
         except TypeError:
             report.append(Paragraph(
-                '<font size = 11> <b> Voxel size in Z </b> </font>(size_z): ' + \
+                '<font size = 11> <b> Voxel size in Z </b> </font>: ' + \
                 'Not determined',
                 styles['Bullet2']))
 
@@ -519,13 +519,13 @@ class MRIQC_report(ProcessMIA):
         # spacing_x
         try:
             report.append(Paragraph(
-                '<font size = 11> <b> Spacing in X (mm)</b> </font>(spacing_x): ' + \
+                '<font size = 11> <b> Spacing in X (mm)</b> </font>: ' + \
                 str(round(data.get('spacing_x'), 2)),
                 styles['Bullet2']))
 
         except TypeError:
             report.append(Paragraph(
-                '<font size = 11> <b> Spacing in X (mm)</b> </font>(spacing_x): ' + \
+                '<font size = 11> <b> Spacing in X (mm)</b> </font>: ' + \
                 'Not determined',
                 styles['Bullet2']))
 
@@ -534,13 +534,13 @@ class MRIQC_report(ProcessMIA):
         # spacing_y
         try:
             report.append(Paragraph(
-                '<font size = 11> <b> Spacing in Y (mm)</b> </font>(spacing_y): ' + \
+                '<font size = 11> <b> Spacing in Y (mm)</b> </font>: ' + \
                 str(round(data.get('spacing_y'), 2)),
                 styles['Bullet2']))
 
         except TypeError:
             report.append(Paragraph(
-                '<font size = 11> <b> Spacing in Y (mm)</b> </font>(spacing_y): ' + \
+                '<font size = 11> <b> Spacing in Y (mm)</b> </font>: ' + \
                 'Not determined',
                 styles['Bullet2']))
 
@@ -549,13 +549,13 @@ class MRIQC_report(ProcessMIA):
         # spacing_z
         try:
             report.append(Paragraph(
-                '<font size = 11> <b> Spacing in Z (mm)</b> </font>(spacing_z): ' + \
+                '<font size = 11> <b> Spacing in Z (mm)</b> </font>: ' + \
                 str(round(data.get('spacing_z'), 2)),
                 styles['Bullet2']))
 
         except TypeError:
             report.append(Paragraph(
-                '<font size = 11> <b> Spacing in Z (mm)</b> </font>(spacing_z): ' + \
+                '<font size = 11> <b> Spacing in Z (mm)</b> </font>: ' + \
                 'Not determined',
                 styles['Bullet2']))
 
@@ -577,13 +577,13 @@ class MRIQC_report(ProcessMIA):
         # snr_csf
         try:
             report.append(Paragraph(
-                '<font size = 11> <b> Signal-to-noise ratio (SNR) for cerebrospinal fluid </b> </font>(snr_csf): ' + \
+                '<font size = 11> <b> Signal-to-noise ratio (SNR) for cerebrospinal fluid </b></font>: ' + \
                 str(round(data.get('snr_csf'), 2)),
                 styles['Bullet2']))
 
         except TypeError:
             report.append(Paragraph(
-                '<font size = 11> <b> Signal-to-noise ratio (SNR) for cerebrospinal fluid </b> </font>(snr_csf): ' + \
+                '<font size = 11> <b> Signal-to-noise ratio (SNR) for cerebrospinal fluid </b></font>: ' + \
                 'Not determined',
                 styles['Bullet2']))
 
@@ -592,13 +592,13 @@ class MRIQC_report(ProcessMIA):
         # snr_wm
         try:
             report.append(Paragraph(
-                '<font size = 11> <b> SNR for white matter </b> </font>(snr_wm): ' + \
+                '<font size = 11> <b> SNR for white matter </b></font>: ' + \
                 str(round(data.get('snr_wm'), 2)),
                 styles['Bullet2']))
 
         except TypeError:
             report.append(Paragraph(
-                '<font size = 11> <b> SNR for white matter </b> </font>(snr_wm): ' + \
+                '<font size = 11> <b> SNR for white matter </b></font>: ' + \
                 'Not determined',
                 styles['Bullet2']))
 
@@ -607,13 +607,13 @@ class MRIQC_report(ProcessMIA):
         # snr_gm
         try:
             report.append(Paragraph(
-                '<font size = 11> <b> SNR for gray matter </b> </font>(snr_gm): ' + \
+                '<font size = 11> <b> SNR for gray matter </b></font>: ' + \
                 str(round(data.get('snr_gm'), 2)),
                 styles['Bullet2']))
 
         except TypeError:
             report.append(Paragraph(
-                '<font size = 11> <b> SNR for gray matter </b> </font>(snr_gm): ' + \
+                '<font size = 11> <b> SNR for gray matter </b></font>: ' + \
                 'Not determined',
                 styles['Bullet2']))
 
@@ -622,13 +622,13 @@ class MRIQC_report(ProcessMIA):
         # snr_total
         try:
             report.append(Paragraph(
-                '<font size = 11> <b> SNR for brain parenchyma </b> </font>(snr_total): ' + \
+                '<font size = 11> <b> SNR for brain parenchyma </b></font>: ' + \
                 str(round(data.get('snr_total'), 2)),
                 styles['Bullet2']))
 
         except TypeError:
             report.append(Paragraph(
-                '<font size = 11> <b> SNR for brain parenchyma </b> </font>(snr_total): ' + \
+                '<font size = 11> <b> SNR for brain parenchyma </b></font>: ' + \
                 'Not determined',
                 styles['Bullet2']))
 
@@ -637,13 +637,13 @@ class MRIQC_report(ProcessMIA):
         # snrd_csf
         try:
             report.append(Paragraph(
-                '<font size = 9><sup>$</sup></font><font size = 11><b>Dietrich’s SNR for cerebrospinal fluid</b></font> (snrd_csf): ' + \
+                '<font size = 9><sup>$</sup></font><font size = 11><b>Dietrich’s SNR for cerebrospinal fluid</b></font>: ' + \
                 str(round(data.get('snrd_csf'), 2)),
                 styles['Bullet2']))
 
         except TypeError:
             report.append(Paragraph(
-                '<font size = 9><sup>$</sup></font><font size = 11><b>Dietrich’s SNR for cerebrospinal fluid</b></font> (snrd_csf): ' + \
+                '<font size = 9><sup>$</sup></font><font size = 11><b>Dietrich’s SNR for cerebrospinal fluid</b></font>: ' + \
                 'Not determined',
                 styles['Bullet2']))
 
@@ -652,13 +652,13 @@ class MRIQC_report(ProcessMIA):
         # snrd_wm
         try:
             report.append(Paragraph(
-                '<font size = 9><sup>$</sup></font><font size = 11><b>Dietrich’s SNR for white matter</b></font> (snrd_wm): ' + \
+                '<font size = 9><sup>$</sup></font><font size = 11><b>Dietrich’s SNR for white matter</b></font>: ' + \
                 str(round(data.get('snrd_wm'), 2)),
                 styles['Bullet2']))
 
         except TypeError:
             report.append(Paragraph(
-                '<font size = 9><sup>$</sup></font><font size = 11><b>Dietrich’s SNR for white matter</b></font> (snrd_wm): ' + \
+                '<font size = 9><sup>$</sup></font><font size = 11><b>Dietrich’s SNR for white matter</b></font>: ' + \
                 'Not determined',
                 styles['Bullet2']))
 
@@ -667,13 +667,13 @@ class MRIQC_report(ProcessMIA):
         # snrd_gm
         try:
             report.append(Paragraph(
-                '<font size = 9><sup>$</sup></font><font size = 11><b>Dietrich’s SNR for gray matter</b></font> (snrd_gm): ' + \
+                '<font size = 9><sup>$</sup></font><font size = 11><b>Dietrich’s SNR for gray matter</b></font>: ' + \
                 str(round(data.get('snrd_gm'), 2)),
                 styles['Bullet2']))
 
         except TypeError:
             report.append(Paragraph(
-                '<font size = 9><sup>$</sup></font><font size = 11><b>Dietrich’s SNR for gray matter</b></font> (snrd_gm): ' + \
+                '<font size = 9><sup>$</sup></font><font size = 11><b>Dietrich’s SNR for gray matter</b></font>: ' + \
                 'Not determined',
                 styles['Bullet2']))
 
@@ -682,13 +682,13 @@ class MRIQC_report(ProcessMIA):
         # snrd_total
         try:
             report.append(Paragraph(
-                '<font size = 9><sup>$</sup></font><font size = 11><b>Dietrich’s SNR for brain parenchyma</b></font> (snrd_total): ' + \
+                '<font size = 9><sup>$</sup></font><font size = 11><b>Dietrich’s SNR for brain parenchyma</b></font>: ' + \
                 str(round(data.get('snrd_total'), 2)),
                 styles['Bullet2']))
 
         except TypeError:
             report.append(Paragraph(
-                '<font size = 9><sup>$</sup></font><font size = 11><b>Dietrich’s SNR for brain parenchyma</b></font> (snrd_total): ' + \
+                '<font size = 9><sup>$</sup></font><font size = 11><b>Dietrich’s SNR for brain parenchyma</b></font>: ' + \
                 'Not determined',
                 styles['Bullet2']))
 
@@ -697,13 +697,13 @@ class MRIQC_report(ProcessMIA):
         # cnr
         try:
             report.append(Paragraph(
-                '<font size = 9><sup>#</sup></font><font size = 11><b>Contrast-to-noise ratio</b></font> (cnr): ' + \
+                '<font size = 9><sup>#</sup></font><font size = 11><b>Contrast-to-noise ratio</b></font>: ' + \
                 str(round(data.get('cnr'), 2)),
                 styles['Bullet2']))
 
         except TypeError:
             report.append(Paragraph(
-                '<font size = 9><sup>#</sup></font><font size = 11><b>Contrast-to-noise ratio</b></font> (cnr): ' + \
+                '<font size = 9><sup>#</sup></font><font size = 11><b>Contrast-to-noise ratio</b></font>: ' + \
                 'Not determined',
                 styles['Bullet2']))
 
@@ -712,13 +712,13 @@ class MRIQC_report(ProcessMIA):
         # qi_2
         try:
             report.append(Paragraph(
-                '<font size = 9><sup>&</sup></font><font size = 11><b>Mortamet’s quality index 2</b></font> (qi_2): ' + \
+                '<font size = 9><sup>&</sup></font><font size = 11><b>Mortamet’s quality index 2</b></font>: ' + \
                 '{:.2e}'.format(data['qi_2']),
                 styles['Bullet2']))
 
         except TypeError:
             report.append(Paragraph(
-                '<font size = 9><sup>&</sup></font><font size = 11><b>Mortamet’s quality index 2</b></font> (qi_2): ' + \
+                '<font size = 9><sup>&</sup></font><font size = 11><b>Mortamet’s quality index 2</b></font>: ' + \
                 'Not determined',
                 styles['Bullet2']))
 
@@ -727,13 +727,13 @@ class MRIQC_report(ProcessMIA):
         # cjv
         try:
             report.append(Paragraph(
-                '<font size = 9><sup>%</sup></font><font size = 11><b>Coefficient of joint variation</b></font> (cjv): ' + \
+                '<font size = 9><sup>%</sup></font><font size = 11><b>Coefficient of joint variation</b></font>: ' + \
                 str(round(data.get('cjv'), 2)),
                 styles['Bullet2']))
 
         except TypeError:
             report.append(Paragraph(
-                '<font size = 9><sup>%</sup></font><font size = 11><b>Coefficient of joint variation</b></font> (cjv): ' + \
+                '<font size = 9><sup>%</sup></font><font size = 11><b>Coefficient of joint variation</b></font>: ' + \
                 'Not determined',
                 styles['Bullet2']))
 
@@ -790,13 +790,13 @@ class MRIQC_report(ProcessMIA):
         # fber
         try:
             report.append(Paragraph(
-                '<font size = 9><sup>%</sup></font><font size = 11><b>FBER</b></font> (fber): ' + \
+                '<font size = 9><sup>%</sup></font><font size = 11><b>FBER</b></font>: ' + \
                 str(round(data.get('fber'), 2)),
                 styles['Bullet2']))
 
         except TypeError:
             report.append(Paragraph(
-                '<font size = 9><sup>%</sup></font><font size = 11><b>FBER</b></font> (fber): ' + \
+                '<font size = 9><sup>%</sup></font><font size = 11><b>FBER</b></font>: ' + \
                 'Not determined',
                 styles['Bullet2']))
 
@@ -805,13 +805,13 @@ class MRIQC_report(ProcessMIA):
         # efc
         try:
             report.append(Paragraph(
-                '<font size = 9><sup>#</sup></font><font size = 11><b>EFC</b></font> (efc): ' + \
+                '<font size = 9><sup>#</sup></font><font size = 11><b>EFC</b></font>: ' + \
                 str(round(data.get('efc'), 2)),
                 styles['Bullet2']))
 
         except TypeError:
             report.append(Paragraph(
-                '<font size = 9><sup>#</sup></font><font size = 11><b>EFC</b></font> (efc): ' + \
+                '<font size = 9><sup>#</sup></font><font size = 11><b>EFC</b></font>: ' + \
                 'Not determined',
                 styles['Bullet2']))
 
@@ -833,13 +833,13 @@ class MRIQC_report(ProcessMIA):
         # wm2max
         try:
             report.append(Paragraph(
-                '<font size = 9><sup>&</sup></font><font size = 11><b>White-matter to maximum intensity ratio </b> </font>(wm2max): ' + \
+                '<font size = 9><sup>&</sup></font><font size = 11><b>White-matter to maximum intensity ratio </b></font>: ' + \
                 str(round(data.get('wm2max'), 2)),
                 styles['Bullet2']))
 
         except TypeError:
             report.append(Paragraph(
-                '<font size = 9><sup>&</sup></font><font size = 11><b>White-matter to maximum intensity ratio </b> </font>(wm2max): ' + \
+                '<font size = 9><sup>&</sup></font><font size = 11><b>White-matter to maximum intensity ratio </b></font>: ' + \
                 'Not determined',
                 styles['Bullet2']))
 
@@ -848,13 +848,13 @@ class MRIQC_report(ProcessMIA):
         # qi_1
         try:
             report.append(Paragraph(
-                '<font size = 9><sup>$</sup></font><font size = 11><b>Mortamet’s quality index 1</b> </font>(qi_1): ' + \
+                '<font size = 9><sup>$</sup></font><font size = 11><b>Mortamet’s quality index 1</b></font>: ' + \
                 '{:.2e}'.format(data['qi_1']),
                 styles['Bullet2']))
 
         except TypeError:
             report.append(Paragraph(
-                '<font size = 9><sup>$</sup></font><font size = 11><b>Mortamet’s quality index 1</b> </font>(qi_1): ' + \
+                '<font size = 9><sup>$</sup></font><font size = 11><b>Mortamet’s quality index 1</b></font>: ' + \
                 'Not determined',
                 styles['Bullet2']))
 
@@ -863,13 +863,13 @@ class MRIQC_report(ProcessMIA):
         # inu_range
         try:
             report.append(Paragraph(
-                '<font size = 9><sup>*</sup></font><font size = 11><b>Bias field range (95th percentile - 5th percentile)</b> </font>(inu_range): ' + \
+                '<font size = 9><sup>*</sup></font><font size = 11><b>Bias field range (95th percentile - 5th percentile)</b></font>: ' + \
                 str(round(data.get('inu_range'), 2)),
                 styles['Bullet2']))
 
         except TypeError:
             report.append(Paragraph(
-                '<font size = 9><sup>*</sup></font><font size = 11><b>Bias field range (95th percentile - 5th percentile)</b> </font>(inu_range): ' + \
+                '<font size = 9><sup>*</sup></font><font size = 11><b>Bias field range (95th percentile - 5th percentile)</b></font>: ' + \
                 'Not determined',
                 styles['Bullet2']))
 
@@ -878,13 +878,13 @@ class MRIQC_report(ProcessMIA):
         # inu_med
         try:
             report.append(Paragraph(
-                '<font size = 9><sup>*</sup></font><font size = 11><b>Bias field median</b> </font>(inu_med): ' + \
+                '<font size = 9><sup>*</sup></font><font size = 11><b>Bias field median</b></font>: ' + \
                 str(round(data.get('inu_med'), 2)),
                 styles['Bullet2']))
 
         except TypeError:
             report.append(Paragraph(
-                '<font size = 9><sup>*</sup></font><font size = 11><b>Bias field median</b> </font>(inu_med): ' + \
+                '<font size = 9><sup>*</sup></font><font size = 11><b>Bias field median</b></font>: ' + \
                 'Not determined',
                 styles['Bullet2']))
 
@@ -945,23 +945,740 @@ class MRIQC_report(ProcessMIA):
         # summary_csf_mean
         try:
             report.append(Paragraph(
-                '<font size = 9><sup>%</sup></font><font size = 11><b>Mean of the distribution of CSF</b></font> (summary_csf_mean): ' + \
+                '<font size = 11><b>Mean of the distribution of cerebrospinal fluid</b></font>: ' + \
                 str(round(data.get('summary_csf_mean'), 2)),
                 styles['Bullet2']))
 
         except TypeError:
             report.append(Paragraph(
-                '<font size = 9><sup>%</sup></font><font size = 11><b>Mean of the distribution of CSF</b></font> (summary_csf_mean): ' + \
+                '<font size = 11><b>Mean of the distribution of cerebrospinal fluid</b></font>: ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 1 * mm))  # (width, height)
+
+        # summary_csf_stdv
+        try:
+            report.append(Paragraph(
+                '<font size = 11><b>Standard deviation of the distribution of cerebrospinal fluid</b></font>: ' + \
+                str(round(data.get('summary_csf_stdv'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 11><b>Standard deviation of the distribution of cerebrospinal fluid</b></font>: ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 1 * mm))  # (width, height)
+
+        # summary_csf_median
+        try:
+            report.append(Paragraph(
+                '<font size = 11><b>Median of the distribution of cerebrospinal fluid</b></font>: ' + \
+                str(round(data.get('summary_csf_median'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 11><b>Median of the distribution of cerebrospinal fluid</b></font>: ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 1 * mm))  # (width, height)
+
+        # summary_csf_mad
+        try:
+            report.append(Paragraph(
+                '<font size = 11><b>Median absolute deviation of the distribution of cerebrospinal fluid</b></font>: ' + \
+                str(round(data.get('summary_csf_mad'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 11><b>Median absolute deviation of the distribution of cerebrospinal fluid</b></font>: ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 1 * mm))  # (width, height)
+
+        # summary_csf_p95
+        try:
+            report.append(Paragraph(
+                '<font size = 11><b>95% percentile of the distribution of cerebrospinal fluid</b></font>: ' + \
+                str(round(data.get('summary_csf_p95'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 11><b>95% percentile of the distribution of cerebrospinal fluid</b></font>: ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 1 * mm))  # (width, height)
+
+        # summary_csf_p05
+        try:
+            report.append(Paragraph(
+                '<font size = 11><b>5% percentile of the distribution of cerebrospinal fluid</b></font>: ' + \
+                str(round(data.get('summary_csf_p05'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 11><b>5% percentile of the distribution of cerebrospinal fluid</b></font>: ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 1 * mm))  # (width, height)
+
+        # summary_csf_k
+        try:
+            report.append(Paragraph(
+                '<font size = 9><sup>*</sup></font><font size = 11><b>Kurtosis of the distribution of cerebrospinal fluid</b></font>: ' + \
+                str(round(data.get('summary_csf_k'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 9><sup>*</sup></font><font size = 11><b>Kurtosis of the distribution of cerebrospinal fluid</b></font>: ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 1 * mm))  # (width, height)
+
+        # summary_csf_n
+        try:
+            report.append(Paragraph(
+                '<font size = 11><b>Number of voxels in the distribution of cerebrospinal fluid</b></font>: ' + \
+                '{:.2e}'.format(data['summary_csf_n']),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 11><b>Number of voxels in the distribution of cerebrospinal fluid</b></font>: ' + \
                 'Not determined',
                 styles['Bullet2']))
 
         report.append(Spacer(0 * mm, 2.5 * mm))  # (width, height)
 
+        # summary_gm_mean
+        try:
+            report.append(Paragraph(
+                '<font size = 11><b>Mean of the distribution of gray matter</b></font>: ' + \
+                str(round(data.get('summary_gm_mean'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 11><b>Mean of the distribution of gray matter</b></font>: ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 1 * mm))  # (width, height)
+
+        # summary_gm_stdv
+        try:
+            report.append(Paragraph(
+                '<font size = 11><b>Standard deviation of the distribution of gray matter</b></font>: ' + \
+                str(round(data.get('summary_gm_stdv'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 11><b>Standard deviation of the distribution of gray matter</b></font>: ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 1 * mm))  # (width, height)
+
+        # summary_gm_median
+        try:
+            report.append(Paragraph(
+                '<font size = 11><b>Median of the distribution of gray matter</b></font>: ' + \
+                str(round(data.get('summary_gm_median'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 11><b>Median of the distribution of gray matter</b></font>: ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 1 * mm))  # (width, height)
+
+        # summary_gm_mad
+        try:
+            report.append(Paragraph(
+                '<font size = 11><b>Median absolute deviation of the distribution of gray matter</b></font>: ' + \
+                str(round(data.get('summary_gm_mad'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 11><b>Median absolute deviation of the distribution of gray matter</b></font>: ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 1 * mm))  # (width, height)
+
+        # summary_gm_p95
+        try:
+            report.append(Paragraph(
+                '<font size = 11><b>95% percentile of the distribution of gray matter</b></font>: ' + \
+                str(round(data.get('summary_gm_p95'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 11><b>95% percentile of the distribution of gray matter</b></font>: ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 1 * mm))  # (width, height)
+
+        # summary_gm_p05
+        try:
+            report.append(Paragraph(
+                '<font size = 11><b>5% percentile of the distribution of gray matter</b></font>: ' + \
+                str(round(data.get('summary_gm_p05'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 11><b>5% percentile of the distribution of gray matter</b></font>: ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 1 * mm))  # (width, height)
+
+        # summary_gm_k
+        try:
+            report.append(Paragraph(
+                '<font size = 9><sup>*</sup></font><font size = 11><b>Kurtosis of the distribution of gray matter</b></font>: ' + \
+                str(round(data.get('summary_gm_k'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 9><sup>*</sup></font><font size = 11><b>Kurtosis of the distribution of gray matter</b></font>: ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 1 * mm))  # (width, height)
+
+        # summary_gm_n
+        try:
+            report.append(Paragraph(
+                '<font size = 11><b>Number of voxels in the distribution of gray matter</b></font>: ' + \
+                '{:.2e}'.format(data['summary_gm_n']),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 11><b>Number of voxels in the distribution of gray matter</b></font>: ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 2.5 * mm))  # (width, height)
+
+        # summary_wm_mean
+        try:
+            report.append(Paragraph(
+                '<font size = 11><b>Mean of the distribution of white matter</b></font>: ' + \
+                str(round(data.get('summary_wm_mean'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 11><b>Mean of the distribution of white matter</b></font>: ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 1 * mm))  # (width, height)
+
+        # summary_wm_stdv
+        try:
+            report.append(Paragraph(
+                '<font size = 11><b>Standard deviation of the distribution of white matter</b></font>: ' + \
+                str(round(data.get('summary_wm_stdv'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 11><b>Standard deviation of the distribution of white matter</b></font>: ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 1 * mm))  # (width, height)
+
+        # summary_wm_median
+        try:
+            report.append(Paragraph(
+                '<font size = 11><b>Median of the distribution of white matter</b></font>: ' + \
+                str(round(data.get('summary_wm_median'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 11><b>Median of the distribution of white matter</b></font>: ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 1 * mm))  # (width, height)
+
+        # summary_wm_mad
+        try:
+            report.append(Paragraph(
+                '<font size = 11><b>Median absolute deviation of the distribution of white matter</b></font>: ' + \
+                str(round(data.get('summary_wm_mad'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 11><b>Median absolute deviation of the distribution of white matter</b></font>: ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 1 * mm))  # (width, height)
+
+        # summary_wm_p95
+        try:
+            report.append(Paragraph(
+                '<font size = 11><b>95% percentile of the distribution of white matter</b></font>: ' + \
+                str(round(data.get('summary_wm_p95'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 11><b>95% percentile of the distribution of white matter</b></font>: ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 1 * mm))  # (width, height)
+
+        # summary_wm_p05
+        try:
+            report.append(Paragraph(
+                '<font size = 11><b>5% percentile of the distribution of white matter</b></font>: ' + \
+                str(round(data.get('summary_wm_p05'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 11><b>5% percentile of the distribution of white matter</b></font>: ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 1 * mm))  # (width, height)
+
+        # summary_wm_k
+        try:
+            report.append(Paragraph(
+                '<font size = 9><sup>*</sup></font><font size = 11><b>Kurtosis of the distribution of white matter</b></font>: ' + \
+                str(round(data.get('summary_wm_k'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 9><sup>*</sup></font><font size = 11><b>Kurtosis of the distribution of white matter</b></font>: ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 1 * mm))  # (width, height)
+
+        # summary_wm_n
+        try:
+            report.append(Paragraph(
+                '<font size = 11><b>Number of voxels in the distribution of white matter</b></font>: ' + \
+                '{:.2e}'.format(data['summary_wm_n']),
+
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 11><b>Number of voxels in the distribution of white matter</b></font>: ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 2.5 * mm))  # (width, height)
+
+        # summary_bg_mean
+        try:
+            report.append(Paragraph(
+                '<font size = 11><b>Mean of the distribution of background</b></font>: ' + \
+                str(round(data.get('summary_bg_mean'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 11><b>Mean of the distribution of background</b></font>: ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 1 * mm))  # (width, height)
+
+        # summary_bg_stdv
+        try:
+            report.append(Paragraph(
+                '<font size = 11><b>Standard deviation of the distribution of background</b></font>: ' + \
+                str(round(data.get('summary_bg_stdv'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 11><b>Standard deviation of the distribution of background</b></font>: ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 1 * mm))  # (width, height)
+
+        # summary_bg_median
+        try:
+            report.append(Paragraph(
+                '<font size = 11><b>Median of the distribution of background</b></font>: ' + \
+                str(round(data.get('summary_bg_median'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 11><b>Median of the distribution of background</b></font>: ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 1 * mm))  # (width, height)
+
+        # summary_bg_mad
+        try:
+            report.append(Paragraph(
+                '<font size = 11><b>Median absolute deviation of the distribution of background</b></font>: ' + \
+                str(round(data.get('summary_bg_mad'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 11><b>Median absolute deviation of the distribution of background</b></font>: ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 1 * mm))  # (width, height)
+
+        # summary_bg_p95
+        try:
+            report.append(Paragraph(
+                '<font size = 11><b>95% percentile of the distribution of background</b></font>: ' + \
+                str(round(data.get('summary_bg_p95'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 11><b>95% percentile of the distribution of background</b></font>: ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 1 * mm))  # (width, height)
+
+        # summary_bg_p05
+        try:
+            report.append(Paragraph(
+                '<font size = 11><b>5% percentile of the distribution of background</b></font>: ' + \
+                str(round(data.get('summary_bg_p05'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 11><b>5% percentile of the distribution of background</b></font>: ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 1 * mm))  # (width, height)
+
+        # summary_bg_k
+        try:
+            report.append(Paragraph(
+                '<font size = 9><sup>*</sup></font><font size = 11><b>Kurtosis of the distribution of background</b></font>: ' + \
+                str(round(data.get('summary_bg_k'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 9><sup>*</sup></font><font size = 11><b>Kurtosis of the distribution of background</b></font>: ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 1 * mm))  # (width, height)
+
+        # summary_bg_n
+        try:
+            report.append(Paragraph(
+                '<font size = 11><b>Number of voxels in the distribution of background</b></font>: ' + \
+                '{:.2e}'.format(data['summary_bg_n']),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 11><b>Number of voxels in the distribution of background</b></font>: ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 2.5 * mm))  # (width, height)
+
+        # fwhm_x
+        try:
+            report.append(Paragraph(
+                '<font size = 9><sup>#</sup></font><font size = 11><b>FWHM of the distribution in units of voxels, along x dimension</b></font>: ' + \
+                str(round(data.get('fwhm_x'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 9><sup>#</sup></font><font size = 11><b>FWHM of the distribution in units of voxels, along x dimension</b></font>: ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 1 * mm))  # (width, height)
+
+        # fwhm_y
+        try:
+            report.append(Paragraph(
+                '<font size = 9><sup>#</sup></font><font size = 11><b>FWHM of the distribution in units of voxels, along y dimension</b></font>: ' + \
+                str(round(data.get('fwhm_y'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 9><sup>#</sup></font><font size = 11><b>FWHM of the distribution in units of voxels, along y dimension</b></font>: ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 1 * mm))  # (width, height)
+
+        # fwhm_z
+        try:
+            report.append(Paragraph(
+                '<font size = 9><sup>#</sup></font><font size = 11><b>FWHM of the distribution in units of voxels, along z dimension</b></font>: ' + \
+                str(round(data.get('fwhm_z'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 9><sup>#</sup></font><font size = 11><b>FWHM of the distribution in units of voxels, along z dimension</b></font>: ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 1 * mm))  # (width, height)
+
+        # fwhm_avg
+        try:
+            report.append(Paragraph(
+                '<font size = 9><sup>#</sup></font><font size = 11><b>FWHM of the distribution in units of voxels, average</b></font>: ' + \
+                str(round(data.get('fwhm_avg'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 9><sup>#</sup></font><font size = 11><b>FWHM of the distribution in units of voxels, average</b></font>: ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 7 * mm))  # (width, height)
+
+        # Footnote
+        line = ReportLine(500)
+        line.hAlign = 'CENTER'
+        report.append(line)
+
+        report.append(Spacer(0 * mm, 2.5 * mm))  # (width, height)
+
+        report.append(Paragraph(
+            "<font size = 8><sup>*</sup>K is always ≥ -2. If the distribution is Gaussian, K = 0. If a distribution has less weight on its center and tails compared to a Gaussian of the same variance, then K < 0. If the distribution has more weight on its center and tails, then K > 0.</font>",
+            styles['Left']))
+        report.append(Paragraph(
+            "<font size = 8><sup>#</sup>Forman SD et al., <i>Improved assessment of significant activation in functional magnetic resonance imaging(fMRI): use of a cluster - size threshold</i>, Magn.Reson.Med. 33(5), 636–647, 1995. Lower values are better, higher values indicate a blurrier image.</font>",
+            styles['Left']))
+
         report.append(PageBreak())
 
-        # Fifth page - slice planes display
+        # Fifth page page - IQMs
 
-        report.append(Paragraph("<font size = 18 > <b> MRI axial slice planes display <br/> </b> </font>",
+        report.append(Paragraph(
+            "<font size = 18 > <b> Image parameters <br/> </b> </font>",
+            styles['Center']))
+
+        report.append(Spacer(0 * mm, 4 * mm))  # (width, height)
+
+        line = ReportLine(150)
+        line.hAlign = 'CENTER'
+        report.append(line)
+
+        report.append(Spacer(0 * mm, 20 * mm))
+
+        ### Tissues Quality ##############################################
+        report.append(Paragraph(
+            "<font size = 15 > <b>TISSUES QUALITY</b> </font>",
+            styles['Bullet1']))
+
+        report.append(Spacer(0 * mm, 2 * mm))  # (width, height)
+
+        report.append(Paragraph(
+            "Metrics that do not fall into the above categories: statistical properties of tissue distributions, volume overlap of tissues, image harpness/blurriness, etc.",
+            styles['Left2']))
+
+        report.append(Spacer(0 * mm, 10 * mm))  # (width, height)
+
+        # icvs_csf
+        try:
+            report.append(Paragraph(
+                '<font size = 11><b>Intracranial volume fraction of cerebrospinal fluid</b></font>: ' + \
+                str(round(data.get('icvs_csf'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 11><b>Intracranial volume fraction of cerebrospinal fluid</b></font>: ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 1 * mm))  # (width, height)
+
+        # icvs_gm
+        try:
+            report.append(Paragraph(
+                '<font size = 11><b>Intracranial volume fraction of gray matter</b></font>: ' + \
+                str(round(data.get('icvs_gm'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 11><b>Intracranial volume fraction of gray matter</b></font>: ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 1 * mm))  # (width, height)
+
+        # icvs_wm
+        try:
+            report.append(Paragraph(
+                '<font size = 11><b>Intracranial volume fraction of white matter</b></font>: ' + \
+                str(round(data.get('icvs_wm'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 11><b>Intracranial volume fraction of white matter</b></font>: ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 2.5 * mm))  # (width, height)
+
+        # rpve_csf
+        try:
+            report.append(Paragraph(
+                '<font size = 9><sup>%</sup></font><font size = 11><b>Residual partial voluming error of cerebrospinal fluid</b></font>: ' + \
+                str(round(data.get('rpve_csf'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 9><sup>%</sup></font><font size = 11><b>Residual partial voluming error of cerebrospinal fluid</b></font>: ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 1 * mm))  # (width, height)
+
+        # rpve_gm
+        try:
+            report.append(Paragraph(
+                '<font size = 9><sup>%</sup></font><font size = 11><b>Residual partial voluming error of gray matter</b></font>: ' + \
+                str(round(data.get('rpve_gm'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 9><sup>%</sup></font><font size = 11><b>Residual partial voluming error of gray matter</b></font>: ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 1 * mm))  # (width, height)
+
+        # rpve_wm
+        try:
+            report.append(Paragraph(
+                '<font size = 9><sup>%</sup></font><font size = 11><b>Residual partial voluming error of white matter</b></font>: ' + \
+                str(round(data.get('rpve_wm'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 9><sup>%</sup></font><font size = 11><b>Residual partial voluming error of gray matter</b></font>: ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 2.5 * mm))  # (width, height)
+
+        # tpm_overlap_csf
+        try:
+            report.append(Paragraph(
+                '<font size = 9><sup>&</sup></font><font size = 11><b>Overlap of the tissue probability map and the corresponding ICBM nonlinear-asymmetric 2009c template, for cerebrospinal fluid</b></font>: ' + \
+                str(round(data.get('tpm_overlap_csf'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 9><sup>&</sup></font><font size = 11><b>Overlap of the tissue probability map and the corresponding ICBM nonlinear-asymmetric 2009c template, for cerebrospinal fluid</b></font>: ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 1 * mm))  # (width, height)
+
+        # tpm_overlap_gm
+        try:
+            report.append(Paragraph(
+                '<font size = 9><sup>%</sup></font><font size = 11><b>Overlap of the tissue probability map and the corresponding ICBM nonlinear-asymmetric 2009c template, for gray matter</b></font>: ' + \
+                str(round(data.get('tpm_overlap_gm'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 9><sup>%</sup></font><font size = 11><b>Overlap of the tissue probability map and the corresponding ICBM nonlinear-asymmetric 2009c template, for gray matter</b></font>: ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 1 * mm))  # (width, height)
+
+        # tpm_overlap_wm
+        try:
+            report.append(Paragraph(
+                '<font size = 9><sup>%</sup></font><font size = 11><b>Overlap of the tissue probability map and the corresponding ICBM nonlinear-asymmetric 2009c template, for  white matter</b></font>: ' + \
+                str(round(data.get('tpm_overlap_wm'), 2)),
+                styles['Bullet2']))
+
+        except TypeError:
+            report.append(Paragraph(
+                '<font size = 9><sup>%</sup></font><font size = 11><b>Overlap of the tissue probability map and the corresponding ICBM nonlinear-asymmetric 2009c template, for  white matter</b></font>: ' + \
+                'Not determined',
+                styles['Bullet2']))
+
+        report.append(Spacer(0 * mm, 147 * mm))  # (width, height)
+
+        # Footnote
+        line = ReportLine(500)
+        line.hAlign = 'CENTER'
+        report.append(line)
+
+        report.append(Spacer(0 * mm, 2.5 * mm))  # (width, height)
+
+        report.append(Paragraph(
+            "<font size = 8><sup>%</sup>Lower values are better.</font>",
+            styles['Left']))
+        report.append(Paragraph(
+            "<font size = 8><sup>%</sup>Higher values are better.</font>",
+            styles['Left']))
+        report.append(PageBreak())
+
+        # Sixth page - slice planes display - Raw anatomic
+
+        report.append(Paragraph("<font size = 18 > <b>MRI axial slice planes display</b> </font>",
                                      styles['Center']))
 
         report.append(Spacer(0*mm, 4*mm)) # (width, height) ## In Linux
@@ -970,48 +1687,55 @@ class MRIQC_report(ProcessMIA):
         line.hAlign = 'CENTER'
         report.append(line)
 
-        report.append(Spacer(0*mm, 15*mm)) # (width, height)
+        report.append(Spacer(0 * mm, 10 * mm))  # (width, height)
+
+        report.append(Paragraph(
+            "<font size = 14 >Raw anatomic images</font>",
+            styles['Center']))
+
+        report.append(Spacer(0*mm, 10*mm))  # (width, height)
         report.append(Paragraph('<font size = 9 > <i> "Neurological" convention, the left side of the image corresponds to the left side of the brain. </i> <br/> </font>',
                                      styles['Center']))
-        report.append(Spacer(0*mm, 1*mm)) # (width, height)
-
-        # fig_rows = 5
-        # fig_cols = 5
-        # n_subplots = fig_rows * fig_cols
-        # brain_img = nib.load(self.anat)
-        # brain_voxels = brain_img.get_fdata()
-        #
-        # # axial
-        # n_slice = brain_voxels.shape[1]
-        # step_size = n_slice // n_subplots
-        # plot_range = n_subplots * step_size
-        # start_stop = int((n_slice - plot_range) / 2)
+        report.append(Spacer(0*mm, 1*mm))  # (width, height)
 
         tmpdir = tempfile.TemporaryDirectory()
 
-        # fig, axs = plt.subplots(fig_rows, fig_cols, figsize=[10, 10])
-        #
-        # for idx, img in enumerate(range(start_stop, plot_range, step_size)):
-        #     #axs.flat[idx].imshow(ndi.rotate(t1_voxels[:, img, :], 270),  cmap='gray')
-        #     axs.flat[idx].imshow(brain_voxels[:, img, :],  cmap='gray')
-        #     axs.flat[idx].axis('off')
-        #
-        # plt.tight_layout()
-        #plt.show()
-        #plt.savefig(os.path.join(tmpdir.name, 'slices.png'), bbox_inches='tight')
-
-        #slices_image = os.path.join(sources_images.__path__[0],
-        #                            'Logo_populse_mia_HR.jpeg')
-
-        #slices_image = slice_planes_plot(self.anat, fig_rows=5, fig_cols=5, inf_slice_start=None, slices_gap=None, cmap="Greys_r", out_dir=tmpdir.name)
-        slices_image = slice_planes_plot(self.anat, self.fig_rows, self.fig_cols, inf_slice_start=self.inf_slice_start, slices_gap=self.slices_gap, cmap="Greys_r", out_dir=tmpdir.name)
+        slices_image = slice_planes_plot(self.anat, self.anat_fig_rows, self.anat_fig_cols, inf_slice_start=self.anat_inf_slice_start, slices_gap=self.anat_slices_gap, cmap="Greys_r", out_dir=tmpdir.name)
         # reminder: A4 == 210mmx297mm
-        #slices_image = Image(slices_image, width=177.4 * mm, height=222.0 * mm)  #791x990
-        #slices_image = Image(slices_image, width=190 * mm, height=230 * mm)
         slices_image = Image(slices_image, width=7.4803 * inch, height=9.0551 * inch)
         slices_image.hAlign = 'CENTER'
         report.append(slices_image)
 
+        report.append(PageBreak())
 
+        # Seventh page - slice planes display - Normalised anatomic (MNI)
+
+        report.append(Paragraph("<font size = 18 > <b>MRI axial slice planes display</b> </font>",
+                                     styles['Center']))
+
+        report.append(Spacer(0*mm, 4*mm)) # (width, height) ## In Linux
+
+        line = ReportLine(150)
+        line.hAlign = 'CENTER'
+        report.append(line)
+
+        report.append(Spacer(0 * mm, 10 * mm))  # (width, height)
+
+        report.append(Paragraph(
+            "<font size = 14 >Normalised anatomic (MNI)</font>",
+            styles['Center']))
+
+        report.append(Spacer(0*mm, 10*mm))  # (width, height)
+        report.append(Paragraph('<font size = 9 > <i> "Neurological" convention, the left side of the image corresponds to the left side of the brain. </i> <br/> </font>',
+                                     styles['Center']))
+        report.append(Spacer(0*mm, 1*mm))  # (width, height)
+
+        #tmpdir = tempfile.TemporaryDirectory()
+
+        #slices_image = slice_planes_plot(self.anat, self.anat_fig_rows, self.anat_fig_cols, inf_slice_start=self.anat_inf_slice_start, slices_gap=self.anat_slices_gap, cmap="Greys_r", out_dir=tmpdir.name)
+        # reminder: A4 == 210mmx297mm
+        #slices_image = Image(slices_image, width=7.4803 * inch, height=9.0551 * inch)
+        #slices_image.hAlign = 'CENTER'
+        #report.append(slices_image)
         page.build(report, canvasmaker=PageNumCanvas)
         tmpdir.cleanup()
