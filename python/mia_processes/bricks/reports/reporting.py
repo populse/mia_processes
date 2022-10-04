@@ -23,20 +23,24 @@ generate automatic report at the end of a pipeline calculation.
 import nibabel as nib
 
 # nipype import
+from nipype import info as nipype_info
 from nipype.interfaces.base import (OutputMultiPath, InputMultiPath, File,
                                     traits, TraitListObject, Undefined,
                                     DictStrStr, Str)
 from nipype.interfaces.spm.base import ImageFileSPM
 
-#mia_processes import:
+# capsul import
+from capsul import info as capsul_info
+
+# mia_processes import:
+from mia_processes import info as mia_processes_info
 from mia_processes.utils import recupCover, PageNumCanvas, ReportLine, slice_planes_plot
 
 # populse_mia import
+from populse_mia import info as mia_info
 from populse_mia import sources_images
 from populse_mia.data_manager.project import COLLECTION_CURRENT
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
-
-
 
 # soma-base imports
 from soma.qt_gui.qt_backend.Qt import QMessageBox
@@ -89,16 +93,36 @@ class MRIQC_report(ProcessMIA):
 
         IQMs_file_desc = 'A .JSON file containing the IQMs'
 
-        anat_desc = ('An existing, uncompressed anatomic image file (valid '
-                       'extensions: .nii)')
+        anat_desc = ('An existing, uncompressed anatomical image file (valid '
+                     'extensions: .nii)')
 
-        anat_fig_rows_desc = 'The number of lines for the slice planes plot'
+        anat_fig_rows_desc = ('The number of lines for the anatomical slice '
+                              'planes plot')
 
-        anat_fig_cols_desc = 'The number of columns for the slice planes plot'
+        anat_fig_cols_desc = ('The number of columns for the anatomical slice '
+                              'planes plot')
 
-        anat_inf_slice_start_desc = 'The first index displayed in slice planes plot'
+        anat_inf_slice_start_desc = ('The first index displayed in anatomical '
+                                     'slice planes plot')
 
-        anat_slices_gap_desc = 'Gap between slices in slice planes plot'
+        anat_slices_gap_desc = ('Gap between slices in anatomical slice planes '
+                                'plot')
+
+        norm_anat_desc = ('An existing, uncompressed normalised anatomical '
+                          'image file (valid extensions: .nii)')
+
+        norm_anat_fig_rows_desc = ('The number of lines for the normalised '
+                                   'anatomical slice planes plot')
+
+        norm_anat_fig_cols_desc = ('The number of columns for the normalised '
+                                   'anatomical slice planes plot')
+
+        norm_anat_inf_slice_start_desc = ('The first index displayed in '
+                                          'normalised anatomical slice planes '
+                                          'plot')
+
+        norm_anat_slices_gap_desc = ('Gap between slices in normalised '
+                                     'anatomical slice planes plot')
 
 
         # Outputs description
@@ -117,11 +141,63 @@ class MRIQC_report(ProcessMIA):
                                     optional=False,
                                     desc=anat_desc))
 
+        self.add_trait("anat_fig_rows",
+                       traits.Int(5,
+                                  output=False,
+                                  optional=False,
+                                  desc=anat_fig_rows_desc))
 
-        self.add_trait("anat_fig_rows", traits.Int(5, output=False, optional=False, desc=anat_fig_rows_desc))
-        self.add_trait("anat_fig_cols", traits.Int(5, output=False, optional=False, desc=anat_fig_cols_desc))
-        self.add_trait("anat_inf_slice_start", traits.Either(Undefined, traits.Int, output=False, optional=True, desc=anat_inf_slice_start_desc))
-        self.add_trait("anat_slices_gap", traits.Either(Undefined, traits.Int, output=False, optional=True, desc=anat_slices_gap_desc))
+        self.add_trait("anat_fig_cols",
+                       traits.Int(5,
+                                  output=False,
+                                  optional=False,
+                                  desc=anat_fig_cols_desc))
+
+        self.add_trait("anat_inf_slice_start",
+                       traits.Either(Undefined,
+                                     traits.Int,
+                                     output=False,
+                                     optional=True,
+                                     desc=anat_inf_slice_start_desc))
+
+        self.add_trait("anat_slices_gap",
+                       traits.Either(Undefined,
+                                     traits.Int,
+                                     output=False,
+                                     optional=True,
+                                     desc=anat_slices_gap_desc))
+
+        self.add_trait("norm_anat",
+                       ImageFileSPM(copyfile=False,
+                                    output=False,
+                                    optional=False,
+                                    desc=norm_anat_desc))
+
+        self.add_trait("norm_anat_fig_rows",
+                       traits.Int(5,
+                                  output=False,
+                                  optional=False,
+                                  desc=norm_anat_fig_rows_desc))
+
+        self.add_trait("norm_anat_fig_cols",
+                       traits.Int(5,
+                                  output=False,
+                                  optional=False,
+                                  desc=norm_anat_fig_cols_desc))
+
+        self.add_trait("norm_anat_inf_slice_start",
+                       traits.Either(Undefined,
+                                     traits.Int,
+                                     output=False,
+                                     optional=True,
+                                     desc=norm_anat_inf_slice_start_desc))
+
+        self.add_trait("norm_anat_slices_gap",
+                       traits.Either(Undefined,
+                                     traits.Int,
+                                     output=False,
+                                     optional=True,
+                                     desc=norm_anat_slices_gap_desc))
 
         # Outputs traits
         self.add_trait("report",
@@ -159,66 +235,78 @@ class MRIQC_report(ProcessMIA):
         # Using the inheritance to ProcessMIA class, list_outputs method
         super(MRIQC_report, self).list_outputs()
 
-        # As we do not have access to the database at the runtime (see #272),
-        # we prepare here the data that the run_process_mia method will need
-        # via dict4runtime dictionary
-        # patient_name
         file_position = (self.anat.find(self.project.getName())
                          + len(self.project.getName()) + 1)
         database_filename = self.anat[file_position:]
 
-
+        # As we do not have access to the database at the runtime (see #272),
+        # we prepare here the data that the run_process_mia method will need
+        # via dict4runtime dictionary:
+        # patient_name
         if ('PatientName' in
                 self.project.session.get_fields_names(COLLECTION_CURRENT)):
-            self.dict4runtime['patient_name'] = self.project.session.get_value(COLLECTION_CURRENT,
-                                                  database_filename,
-                                                  ('PatientName'))
+            self.dict4runtime['patient_name'] = self.project.session.get_value(
+                                                             COLLECTION_CURRENT,
+                                                             database_filename,
+                                                             'PatientName')
 
         if self.dict4runtime['patient_name'] in ('', Undefined):
             self.dict4runtime['patient_name'] = "Undefined_name_ref"
 
+        # Generate an output name
         if self.anat and self.anat not in ["<undefined>", traits.Undefined]:
-            self.outputs['report'] = os.path.join(self.output_directory, self.dict4runtime['patient_name'] + '_mriqcReport_' + datetime.now().strftime('%Y_%m_%d_%H_%M_%S_%f')[:22] +'.pdf')
-
-
+            self.outputs['report'] = os.path.join(
+                                   self.output_directory,
+                                   self.dict4runtime['patient_name'] +
+                                   '_mriqcReport_' +
+                                   datetime.now().strftime('%Y_%m_%d_'
+                                                           '%H_%M_%S_%f')[:22] +
+                                   '.pdf')
 
         # study_name
         if ('StudyName' in
                 self.project.session.get_fields_names(COLLECTION_CURRENT)):
-            self.dict4runtime['study_name'] = self.project.session.get_value(COLLECTION_CURRENT,
-                                                  database_filename,
-                                                  ('StudyName'))
+            self.dict4runtime['study_name'] = self.project.session.get_value(
+                                                             COLLECTION_CURRENT,
+                                                             database_filename,
+                                                             'StudyName')
+
         # acquisition_date
         if ('AcquisitionDate' in
                 self.project.session.get_fields_names(COLLECTION_CURRENT)):
-            self.dict4runtime['acquisition_date'] = str(self.project.session.get_value(COLLECTION_CURRENT,
-                                                  database_filename,
-                                                  ('AcquisitionDate')))
+            self.dict4runtime['acquisition_date'] = str(
+                              self.project.session.get_value(COLLECTION_CURRENT,
+                                                             database_filename,
+                                                             'AcquisitionDate'))
 
         # sex
         if ('Sex' in
                 self.project.session.get_fields_names(COLLECTION_CURRENT)):
-            self.dict4runtime['sex'] = self.project.session.get_value(COLLECTION_CURRENT,
-                                                  database_filename,
-                                                  ('Sex'))
+            self.dict4runtime['sex'] = self.project.session.get_value(
+                                                             COLLECTION_CURRENT,
+                                                             database_filename,
+                                                             'Sex')
         # site
         if ('Site' in
                 self.project.session.get_fields_names(COLLECTION_CURRENT)):
-            self.dict4runtime['site'] = self.project.session.get_value(COLLECTION_CURRENT,
-                                                  database_filename,
-                                                  ('Site'))
+            self.dict4runtime['site'] = self.project.session.get_value(
+                                                             COLLECTION_CURRENT,
+                                                             database_filename,
+                                                             'Site')
         # mri_scanner
         if ('Spectro' in
                 self.project.session.get_fields_names(COLLECTION_CURRENT)):
-            self.dict4runtime['mri_scanner'] = self.project.session.get_value(COLLECTION_CURRENT,
-                                                  database_filename,
-                                                  ('Spectro'))
+            self.dict4runtime['mri_scanner'] = self.project.session.get_value(
+                                                             COLLECTION_CURRENT,
+                                                             database_filename,
+                                                             'Spectro')
         # age
         if ('Age' in
                 self.project.session.get_fields_names(COLLECTION_CURRENT)):
-            self.dict4runtime['age'] = self.project.session.get_value(COLLECTION_CURRENT,
-                                                  database_filename,
-                                                  ('Age'))
+            self.dict4runtime['age'] = self.project.session.get_value(
+                                                             COLLECTION_CURRENT,
+                                                             database_filename,
+                                                             'Age')
 
         # FIXME: Currently the following data is hard-coded. A solution should
         #        be found to retrieve them automatically or to put them in the
@@ -231,6 +319,7 @@ class MRIQC_report(ProcessMIA):
         if self.dict4runtime['mri_scanner'] in ('', Undefined):
             self.dict4runtime['mri_scanner'] = 'Philips Achieva 3.0T TX'
 
+        # FIXME: Do we need tags inheritance ?
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -239,72 +328,100 @@ class MRIQC_report(ProcessMIA):
         """Dedicated to the process launch step of the brick."""
         super(MRIQC_report, self).run_process_mia()
 
+        # Logo populse
         header_image_1 = os.path.join(sources_images.__path__[0],
-                                    'Logo_populse_square.jpg')
-        header_image_1 = Image(header_image_1, 43.0 * mm, 43.0 * mm)  # 2156px x 2156px
-
+                                      'Logo_populse_square.jpg')
+        # 2156px x 2156px
+        header_image_1 = Image(header_image_1, 43.0 * mm, 43.0 * mm)
+        # Logo Mia
         header_image_2 = os.path.join(sources_images.__path__[0],
-                                    'Logo_populse_mia_HR.jpeg')
-        header_image_2 = Image(header_image_2, 54.4 * mm, 40.0 * mm)  # 2505px x 1843px
+                                      'Logo_populse_mia_HR.jpeg')
+        # 2505px x 1843px
+        header_image_2 = Image(header_image_2, 54.4 * mm, 40.0 * mm)
+        header_title = ('<sup rise=20 size=9>$</sup>'
+                        '<font size=30><b>MRIQ</b></font>'
+                        '<font size=11>uality</font>'
+                        '<font size=30><b>C</b></font>'
+                        '<font size=11>ontrol</font>')
 
-        #header_title = '<font size = 20><sup>$</sup></font><font size=30><b>MRI&nbsp Q</b></font>  <font size=11>uality</font>   <font size=30><b>&nbsp C</b></font>   <font size=11>ontrol</font>'
-        header_title = '<sup rise=20 size=9>$</sup><font size=30><b>MRIQ</b></font><font size=11>uality</font><font size=30><b>C</b></font><font size=11>ontrol</font>'
-
-        if 'site' in self.dict4runtime and self.dict4runtime['site'] not in ('', Undefined):
+        if (('site' in self.dict4runtime) and
+                            (self.dict4runtime['site'] not in ('', Undefined))):
             site = self.dict4runtime['site']
 
         else:
-            site = "*Undefined site*"
+            site = "Undefined site"
 
-        if 'study_name' in self.dict4runtime and self.dict4runtime['study_name'] not in ('', Undefined):
+        if (('study_name' in self.dict4runtime) and
+                      (self.dict4runtime['study_name'] not in ('', Undefined))):
             study_name = self.dict4runtime['study_name']
 
         else:
-            study_name = "*Undefined study name*"
+            study_name = "Undefined study name"
 
-        if 'acquisition_date' in self.dict4runtime and self.dict4runtime['acquisition_date'] not in ('', Undefined):
+        if (('acquisition_date' in self.dict4runtime) and
+                (self.dict4runtime['acquisition_date'] not in ('', Undefined))):
             acqu_date = self.dict4runtime['acquisition_date']
 
         else:
-            acqu_date = "*Undefined study name*"
+            acqu_date = "Undefined study name"
 
-        if 'patient_name' in self.dict4runtime and self.dict4runtime['patient_name'] not in ('', Undefined):
+        if (('patient_name' in self.dict4runtime) and
+                    (self.dict4runtime['patient_name'] not in ('', Undefined))):
             patient_ref = self.dict4runtime['patient_name']
 
         else:
-            patient_ref = "*Undefined patient reference*"
+            patient_ref = "Undefined patient reference"
 
-        if 'sex' in self.dict4runtime and self.dict4runtime['sex'] not in ('', Undefined):
+        if (('sex' in self.dict4runtime) and
+                             (self.dict4runtime['sex'] not in ('', Undefined))):
             patient_sex = self.dict4runtime['sex']
 
         else:
-            patient_sex = "*Undefined patient sex*"
+            patient_sex = "Undefined patient sex"
 
-        if 'age' in self.dict4runtime and self.dict4runtime['age'] not in ('', Undefined):
+        if (('age' in self.dict4runtime) and
+                             (self.dict4runtime['age'] not in ('', Undefined))):
             patient_age = self.dict4runtime['age']
 
         else:
-            patient_age = "*Undefined patient age*"
+            patient_age = "Undefined patient age"
 
         with tempfile.NamedTemporaryFile() as temp_file:
             temp_file.write(bytes("SITE:{}".format(site), encoding='utf8'))
-            temp_file.write(bytes("\nMRI SCANNER: {}".format(self.dict4runtime['mri_scanner']), encoding='utf8'))
-            temp_file.write(bytes("\nSTUDY NAME: {}".format(study_name), encoding='utf8'))
-            temp_file.write(bytes("\nEXAMINATION DATE: {}".format(acqu_date), encoding='utf8'))
-            temp_file.write(bytes("\nMRIQC CALCULATION DATE: {}".format(datetime.now().strftime('%Y-%m-%d %H:%M:%S')), encoding='utf8'))
-            temp_file.write(bytes("\nNAME OF THE INPUT DATA: {}".format(self.anat), encoding='utf8'))
-            temp_file.write(bytes("\nPATIENT REFERENCE: {}".format(patient_ref), encoding='utf8'))
-            temp_file.write(bytes("\nPATIENT SEX: {}".format(patient_sex), encoding='utf8'))
-            temp_file.write(bytes("\nPATIENT AGE: {}".format(patient_age), encoding='utf8'))
-            temp_file.write(bytes("\nSOFTWARES:Python {}".format(version.split()[0]), encoding='utf8'))
-            from populse_mia import info as mia_info
-            temp_file.write(bytes("\n : populse_mia {}".format(mia_info.__version__), encoding='utf8'))
-            from capsul import info as capsul_info
-            temp_file.write(bytes("\n : capsul {}".format(capsul_info.__version__), encoding='utf8'))
-            from nipype import info as nipype_info
-            temp_file.write(bytes("\n : nipype {}".format(nipype_info.__version__), encoding='utf8'))
-            from mia_processes import info as mia_processes_info
-            temp_file.write(bytes("\n : mia_processes {}".format(mia_processes_info.__version__), encoding='utf8'))
+            temp_file.write(bytes("\nMRI SCANNER: {}".format(
+                                              self.dict4runtime['mri_scanner']),
+                                  encoding='utf8'))
+            temp_file.write(bytes("\nSTUDY NAME: {}".format(study_name),
+                                  encoding='utf8'))
+            temp_file.write(bytes("\nEXAMINATION DATE: {}".format(acqu_date),
+                                  encoding='utf8'))
+            temp_file.write(bytes("\nMRIQC CALCULATION DATE: {}".format(
+                                  datetime.now().strftime('%Y-%m-%d %H:%M:%S')),
+                                  encoding='utf8'))
+            temp_file.write(bytes("\nNAME OF THE INPUT DATA: {}".format(
+                                                                     self.anat),
+                                  encoding='utf8'))
+            temp_file.write(bytes("\nPATIENT REFERENCE: {}".format(patient_ref),
+                                  encoding='utf8'))
+            temp_file.write(bytes("\nPATIENT SEX: {}".format(patient_sex),
+                                  encoding='utf8'))
+            temp_file.write(bytes("\nPATIENT AGE: {}".format(patient_age),
+                                  encoding='utf8'))
+            temp_file.write(bytes("\nSOFTWARES:Python {}".format(
+                                                            version.split()[0]),
+                                  encoding='utf8'))
+            temp_file.write(bytes("\n : populse_mia {}".format(
+                                                          mia_info.__version__),
+                                  encoding='utf8'))
+            temp_file.write(bytes("\n : capsul {}".format(
+                                                       capsul_info.__version__),
+                                  encoding='utf8'))
+            temp_file.write(bytes("\n : nipype {}".format(
+                                                       nipype_info.__version__),
+                                  encoding='utf8'))
+            temp_file.write(bytes("\n : mia_processes {}".format(
+                                                mia_processes_info.__version__),
+                                  encoding='utf8'))
 
             if platform.system() == 'Darwin':
                 os_sys = 'Mac OS X'
@@ -312,48 +429,53 @@ class MRIQC_report(ProcessMIA):
             else:
                 os_sys = platform.system()
 
-            temp_file.write(bytes("\n : Operating System {0} {1}".format(os_sys, platform.release()), encoding='utf8'))
+            temp_file.write(bytes("\n : Operating System {0} {1}".format(
+                                                            os_sys,
+                                                            platform.release()),
+                                  encoding='utf8'))
             temp_file.flush()
-
             cover_data = recupCover(temp_file.name)
 
-        cover_data = Table(cover_data, [60*mm, 97*mm])  # colWidths, rowHeights
-        output = self.report
-
-        page = SimpleDocTemplate(output,
+        # colWidths, rowHeights
+        cover_data = Table(cover_data, [60*mm, 97*mm])
+        # Output document template definition for page; margins and pages size
+        page = SimpleDocTemplate(self.report,
                                  pagesize=portrait(A4),
                                  rightMargin=20*mm,
                                  leftMargin=20*mm,
                                  topMargin=10*mm,
-                                 bottomMargin=10*mm)                          # Output document template definition for page; margins and pages size.
-
-        styles = getSampleStyleSheet()                                          # Initialises stylesheet with few basic heading and text styles, return a stylesheet object.
-        styles.add(ParagraphStyle(name='Center', alignment=TA_CENTER))      # ParagraphStyle gives all the attributes available for formatting paragraphs.
+                                 bottomMargin=10*mm)
+        # Initialises stylesheet with few basic heading and text styles,
+        # return a stylesheet object
+        styles = getSampleStyleSheet()
+        # ParagraphStyle gives all the attributes available for formatting
+        # paragraphs
+        styles.add(ParagraphStyle(name='Center', alignment=TA_CENTER))
         styles.add(ParagraphStyle(name='Center2', alignment=TA_CENTER))
-        styles['Center2'].leading = 24  # If more than 1 line.
+        # If more than 1 line
+        styles['Center2'].leading = 24
         styles.add(ParagraphStyle(name='Justify', alignment=TA_JUSTIFY))
         styles.add(ParagraphStyle(name='Right', alignment=TA_RIGHT))
         styles.add(ParagraphStyle(name='Left', alignment=TA_LEFT))
         styles.add(ParagraphStyle(name='Left2', alignment=TA_LEFT))
-        styles['Left2'].leftIndent = 30  # For left indent 30.
+        # For left indent 30
+        styles['Left2'].leftIndent = 30
         styles.add(ParagraphStyle(name='Bullet1',
                                   leftIndent=30,
                                   bulletOffsetY=2,
                                   bulletIndent=20,
                                   bulletFontSize=6,
                                   bulletColor='black',
-                                  bulletText=u'●')
-                                 )
+                                  bulletText=u'●'))
         styles.add(ParagraphStyle(name='Bullet2',
                                   leftIndent=60,
                                   bulletOffsetY=1,
                                   bulletIndent=50,
                                   bulletFontSize=6,
                                   bulletColor='black',
-                                  bulletText=u'❍')
-                                 )
-
-        title = ('<font size=18> <b>Image-Quality Metrics summary report</b><br/> <br/></font>')
+                                  bulletText=u'❍'))
+        title = ('<font size=18> <b>Image-Quality Metrics '
+                 'summary report</b></font>')
 
 
         textDisclaimer = ("<font size=7 ><i><b>DISCLAIMER</b><br/>Mia software,"
@@ -388,71 +510,51 @@ class MRIQC_report(ProcessMIA):
 
         # First page - cover
         image_cov = Table([[header_image_1, header_image_2]], [70*mm, 70*mm])
-        image_cov.setStyle(TableStyle([
-                                  ('ALIGN', (0, 0), (0, 0), 'LEFT'),
-                                  ('ALIGN', (-1, 0), (-1, 0), 'RIGHT'),
-                                  ('VALIGN', (0, 0), (-1, 0), 'MIDDLE')
-                                      ]))
-
+        image_cov.setStyle(TableStyle([('ALIGN', (0, 0), (0, 0), 'LEFT'),
+                                       ('ALIGN', (-1, 0), (-1, 0), 'RIGHT'),
+                                       ('VALIGN', (0, 0), (-1, 0), 'MIDDLE')]))
         report.append(image_cov)
-        report.append(Spacer(0 * mm, 8 * mm))  # (width, height)
-
-        report.append(Paragraph(header_title,
-                                 styles['Center']))
-
-        report.append(Spacer(0 * mm, 10 * mm))  # (width, height)
-
-        #line = ReportLine(250)
+        # width, height
+        report.append(Spacer(0 * mm, 8 * mm))
+        report.append(Paragraph(header_title, styles['Center']))
+        report.append(Spacer(0 * mm, 10 * mm))
         line = ReportLine(150)
         line.hAlign = 'CENTER'
         report.append(line)
-
         report.append(Spacer(0 * mm, 10 * mm))
-
-        report.append(Paragraph(title,
-                                 styles['Center']))
-
+        report.append(Paragraph(title, styles['Center']))
         report.append(Spacer(0 * mm, 10 * mm))
-
+        # Carefull: Table use (col, raw) and 0-base for top left start as usual
+        # OR -1-base for lower right start
         cover_data.setStyle(TableStyle([
-            ('LINEABOVE', (0, 0), (-1, 0), 2, colors.black),
-            ('LINEBELOW', (0, -1), (-1, -1), 2, colors.black),
-            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE')
-        ]))  # Carefull: Table use (col,raw) and 0-base for top left start as usual OR -1-base for lower right start.
-
+                              ('LINEABOVE', (0, 0), (-1, 0), 2, colors.black),
+                              ('LINEBELOW', (0, -1), (-1, -1), 2, colors.black),
+                              ('VALIGN', (0, 0), (-1, -1), 'MIDDLE')]))
         cover_data.hAlign = 'CENTER'
         report.append(cover_data)
-
         report.append(Spacer(0 * mm, 5 * mm))
-
-        report.append(Paragraph(textDisclaimer,
-                                 styles["Justify"]))
-
-        report.append(Spacer(0 * mm, 6 * mm))  # (width, height)
-
+        report.append(Paragraph(textDisclaimer, styles["Justify"]))
+        report.append(Spacer(0 * mm, 6 * mm))
         # Footnote
         line = ReportLine(500)
         line.hAlign = 'CENTER'
         report.append(line)
-
-        report.append(Spacer(0 * mm, 2.5 * mm))  # (width, height)
-
-        report.append(Paragraph(
-            "<font size = 8><sup>$</sup>Esteban O et al., <i>MRIQC: Advancing the Automatic Prediction of Image Quality in MRI from Unseen Sites</i>, PLOS ONE 12(9):e0184661.</font>",
-            styles['Left']))
-
+        report.append(Spacer(0 * mm, 2.5 * mm))
+        report.append(Paragraph("<font size = 8><sup>$</sup>Esteban O et al., "
+                                "<i>MRIQC: Advancing the Automatic Prediction "
+                                "of Image Quality in MRI from Unseen Sites</i>"
+                                ", PLOS ONE 12(9):e0184661.</font>",
+                                styles['Left']))
         report.append(PageBreak())
 
         # Second page - IQMs
-
         f = open(self.IQMs_file)
         data = json.load(f)
         f.close()
-
-        report.append(Paragraph("<font size = 18 > <b> Image parameters <br/> </b> </font>",
-                                     styles['Center']))
-
-        report.append(Spacer(0 * mm, 4 * mm))  # (width, height)
+        report.append(Paragraph("<font size = 18 ><b>Image parameters"
+                                "</b></font>",
+                                styles['Center']))
+        report.append(Spacer(0 * mm, 4 * mm))
 
         line = ReportLine(150)
         line.hAlign = 'CENTER'
@@ -1634,13 +1736,13 @@ class MRIQC_report(ProcessMIA):
         # tpm_overlap_gm
         try:
             report.append(Paragraph(
-                '<font size = 9><sup>%</sup></font><font size = 11><b>Overlap of the tissue probability map and the corresponding ICBM nonlinear-asymmetric 2009c template, for gray matter</b></font>: ' + \
+                '<font size = 9><sup>&</sup></font><font size = 11><b>Overlap of the tissue probability map and the corresponding ICBM nonlinear-asymmetric 2009c template, for gray matter</b></font>: ' + \
                 str(round(data.get('tpm_overlap_gm'), 2)),
                 styles['Bullet2']))
 
         except TypeError:
             report.append(Paragraph(
-                '<font size = 9><sup>%</sup></font><font size = 11><b>Overlap of the tissue probability map and the corresponding ICBM nonlinear-asymmetric 2009c template, for gray matter</b></font>: ' + \
+                '<font size = 9><sup>&</sup></font><font size = 11><b>Overlap of the tissue probability map and the corresponding ICBM nonlinear-asymmetric 2009c template, for gray matter</b></font>: ' + \
                 'Not determined',
                 styles['Bullet2']))
 
@@ -1649,13 +1751,13 @@ class MRIQC_report(ProcessMIA):
         # tpm_overlap_wm
         try:
             report.append(Paragraph(
-                '<font size = 9><sup>%</sup></font><font size = 11><b>Overlap of the tissue probability map and the corresponding ICBM nonlinear-asymmetric 2009c template, for  white matter</b></font>: ' + \
+                '<font size = 9><sup>&</sup></font><font size = 11><b>Overlap of the tissue probability map and the corresponding ICBM nonlinear-asymmetric 2009c template, for  white matter</b></font>: ' + \
                 str(round(data.get('tpm_overlap_wm'), 2)),
                 styles['Bullet2']))
 
         except TypeError:
             report.append(Paragraph(
-                '<font size = 9><sup>%</sup></font><font size = 11><b>Overlap of the tissue probability map and the corresponding ICBM nonlinear-asymmetric 2009c template, for  white matter</b></font>: ' + \
+                '<font size = 9><sup>&</sup></font><font size = 11><b>Overlap of the tissue probability map and the corresponding ICBM nonlinear-asymmetric 2009c template, for  white matter</b></font>: ' + \
                 'Not determined',
                 styles['Bullet2']))
 
@@ -1672,7 +1774,7 @@ class MRIQC_report(ProcessMIA):
             "<font size = 8><sup>%</sup>Lower values are better.</font>",
             styles['Left']))
         report.append(Paragraph(
-            "<font size = 8><sup>%</sup>Higher values are better.</font>",
+            "<font size = 8><sup>&</sup>Higher values are better.</font>",
             styles['Left']))
         report.append(PageBreak())
 
