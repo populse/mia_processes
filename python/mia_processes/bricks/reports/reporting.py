@@ -5,7 +5,7 @@ generate automatic report at the end of a pipeline calculation.
 
 :Contains:
     :Class:
-        - MRIQC_report
+        - MRIQC_anat_report
 
     :Function:
         -
@@ -21,6 +21,7 @@ generate automatic report at the end of a pipeline calculation.
 
 # nibabel import
 import nibabel as nib
+#from nibabel.processing import resample_from_to
 
 # nipype import
 from nipype import info as nipype_info
@@ -34,7 +35,8 @@ from capsul import info as capsul_info
 
 # mia_processes import:
 from mia_processes import info as mia_processes_info
-from mia_processes.utils import recupCover, PageNumCanvas, ReportLine, slice_planes_plot
+from mia_processes.utils import (recupCover, PageNumCanvas, ReportLine,
+                                 slice_planes_plot, plot_qi2)
 
 # populse_mia import
 from populse_mia import info as mia_info
@@ -60,14 +62,14 @@ from reportlab.platypus import (SimpleDocTemplate, Paragraph, Spacer, Image,
 import tempfile
 import platform
 import json
-#import numpy as np
-#from nibabel.processing import resample_from_to
+import numpy as np
+
 #import matplotlib.pyplot as plt
 #import scipy.ndimage as ndi
 
 
 
-class MRIQC_report(ProcessMIA):
+class MRIQC_anat_report(ProcessMIA):
     """
         * Generates the report for MRIQC pipeline *
 
@@ -84,7 +86,7 @@ class MRIQC_report(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(MRIQC_report, self).__init__()
+        super(MRIQC_anat_report, self).__init__()
 
         # Third party software required for the execution of the brick
         self.requirement = []
@@ -233,7 +235,7 @@ class MRIQC_report(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(MRIQC_report, self).list_outputs()
+        super(MRIQC_anat_report, self).list_outputs()
 
         file_position = (self.anat.find(self.project.getName())
                          + len(self.project.getName()) + 1)
@@ -326,7 +328,7 @@ class MRIQC_report(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(MRIQC_report, self).run_process_mia()
+        super(MRIQC_anat_report, self).run_process_mia()
 
         # Logo populse
         header_image_1 = os.path.join(sources_images.__path__[0],
@@ -474,7 +476,7 @@ class MRIQC_report(ProcessMIA):
                                   bulletFontSize=6,
                                   bulletColor='black',
                                   bulletText=u'❍'))
-        title = ('<font size=18> <b>Image-Quality Metrics '
+        title = ('<font size=18><b>Anatomical Image-Quality Metrics '
                  'summary report</b></font>')
         textDisclaimer = ("<font size=7 ><i><b>DISCLAIMER</b><br/>Mia software,"
                           " from the Populse project, is executed in a "
@@ -1897,70 +1899,20 @@ class MRIQC_report(ProcessMIA):
                                  inf_slice_start=self.norm_anat_inf_slice_start,
                                  slices_gap=self.norm_anat_slices_gap,
                                  cmap="Greys_r", out_dir=tmpdir.name)
+        # Currently, we make and save (in derived_data) the qi2 graph, but we
+        # don't include it in the report because the result with the test data
+        # looks strange.
+        _ = plot_qi2(np.asarray(data['histogram_qi2_x_grid']),
+                     np.asarray(data['histogram_qi2_ref_pdf']),
+                     np.asarray(data['histogram_qi2_fit_pdf']),
+                     np.asarray(data['histogram_qi2_ref_data']),
+                     int(data['histogram_qi2_cutoff_idx']),
+                     out_file=os.path.join(
+                         os.path.split(os.path.split(self.anat)[0])[0],
+                         'derived_data', 'qi2_plot.svg'))
         # reminder: A4 == 210mmx297mm
         slices_image = Image(slices_image, width=7.4803 * inch, height=9.0551 * inch)
         slices_image.hAlign = 'CENTER'
         report.append(slices_image)
         page.build(report, canvasmaker=PageNumCanvas)
         tmpdir.cleanup()
-
-        def plot_qi2(x_grid, ref_pdf, fit_pdf, ref_data, cutoff_idx, out_file=None):
-            #import matplotlib.pyplot as plt
-            #import numpy as np
-            fig, ax = plt.subplots()
-
-            ax.plot(
-                x_grid,
-                ref_pdf,
-                linewidth=2,
-                alpha=0.5,
-                label="background",
-                color="dodgerblue",
-            )
-
-            refmax = np.percentile(ref_data, 99.95)
-            x_max = x_grid[-1]
-
-            ax.hist(
-                ref_data,
-                40 * max(int(refmax / x_max), 1),
-                fc="dodgerblue",
-                histtype="stepfilled",
-                alpha=0.2,
-                density=True,
-            )
-
-            #fit_pdf = np.asarray(fit_pdf)
-            fit_pdf[fit_pdf > 1.0] = np.nan
-
-            ax.plot(
-                x_grid,
-                fit_pdf,
-                linewidth=2,
-                alpha=0.5,
-                label="chi2",
-                color="darkorange",
-            )
-
-            ylims = ax.get_ylim()
-
-            ax.axvline(
-                x_grid[-cutoff_idx],
-                ymax=ref_pdf[-cutoff_idx] / ylims[1],
-                color="dodgerblue",
-            )
-
-            plt.xlabel('Intensity within "hat" mask')
-            plt.ylabel("Frequency")
-            ax.set_xlim([0, x_max])
-            plt.legend()
-
-            if out_file is None:
-                out_file = os.path.abspath("qi2_plot.svg")
-
-            fig.savefig(out_file, bbox_inches="tight", pad_inches=0, dpi=300)
-            return out_file
-
-        import matplotlib.pyplot as plt
-        import numpy as np
-        _ = plot_qi2(np.asarray(data['histogram_qi2_x_grid']), np.asarray(data['histogram_qi2_ref_pdf']), np.asarray(data['histogram_qi2_fit_pdf']), np.asarray(data['histogram_qi2_ref_data']), int(data['histogram_qi2_cutoff_idx']), out_file=os.path.join(os.path.split(os.path.split(self.anat)[0])[0], 'derived_data', 'qi2_plot.svg'))
