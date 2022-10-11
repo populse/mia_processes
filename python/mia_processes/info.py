@@ -110,8 +110,15 @@ VERSION = __version__
 CLASSIFIERS = CLASSIFIERS
 PLATFORMS = 'OS Independent'
 REQUIRES = [
+    'nilearn',
+    'nipy',
+    'nipype',
+    'nitime',
+    'populse_db >=2.1.0',
     'populse_mia >= 2.2.0',
-    'populse_db >=2.1.0'
+    'reportlab',
+    'statsmodels',
+    'templateflow'
 ]
 EXTRA_REQUIRES = {
     'doc': [
