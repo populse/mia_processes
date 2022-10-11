@@ -10,14 +10,11 @@ class Anat_skullstrip_pipeline(Pipeline):
         self.nodes["n4_bias_field_correction"].process.dimension = 3
         self.add_process("skull_stripping", "mia_processes.bricks.preprocess.afni.processes.SkullStripping")
         self.add_process("calc", "mia_processes.bricks.preprocess.afni.processes.Calc")
-        self.nodes["calc"].process.expr = 'a*step(b)'
-        self.nodes["calc"].process.out_prefix = 'ss_orig_'
         self.add_process("binarize", "mia_processes.bricks.preprocess.others.processing.Binarize")
 
         # links
         self.export_parameter("calc", "in_file_a", "in_file", is_optional=False)
         self.add_link("in_file->n4_bias_field_correction.in_file")
-        self.export_parameter("calc", "expr", "expr_mask", is_optional=False)
         self.add_link("n4_bias_field_correction.out_file->skull_stripping.in_file")
         self.export_parameter("n4_bias_field_correction", "out_file", "bias_corrected", is_optional=False)
         self.export_parameter("n4_bias_field_correction", "bias_image", is_optional=False)
@@ -28,10 +25,11 @@ class Anat_skullstrip_pipeline(Pipeline):
 
         # parameters order
 
-        self.reorder_traits(("out_file", "out_mask", "bias_corrected", "bias_image", "in_file", "expr_mask"))
+        self.reorder_traits(("out_file", "out_mask", "bias_corrected", "bias_image", "in_file"))
 
         # default and initial values
-        self.expr_mask = 'a*step(b)'
+        self.nodes["calc"].process.expr = 'a*step(b)'
+        self.nodes["calc"].process.out_prefix = 'ss_orig_'
 
         # nodes positions
         self.node_position = {

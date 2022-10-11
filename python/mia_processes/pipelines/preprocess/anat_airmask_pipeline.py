@@ -20,8 +20,6 @@ class Anat_airmask_pipeline(Pipeline):
         self.add_link("in_file->rotationmask.in_file")
         self.export_parameter("applytransforms", "reference_image", "in_mask", is_optional=False)
         self.export_parameter("applytransforms", "transforms", "inverse_composite_transform", is_optional=False)
-        self.export_parameter("template", "in_template", "template", is_optional=False)
-        self.export_parameter("template", "resolution", "tpl_res", is_optional=False)
         self.export_parameter("artifactmask", "head_mask", is_optional=False)
         self.export_parameter("rotationmask", "out_file", "out_rot_mask", is_optional=False)
         self.add_link("rotationmask.out_file->artifactmask.rot_mask")
@@ -33,7 +31,7 @@ class Anat_airmask_pipeline(Pipeline):
 
         # parameters order
 
-        self.reorder_traits(("in_file", "in_mask", "inverse_composite_transform", "template", "tpl_res", "head_mask", "out_hat_mask", "out_art_mask", "out_air_mask"))
+        self.reorder_traits(("in_file", "in_mask", "inverse_composite_transform", "head_mask", "out_hat_mask", "out_art_mask", "out_air_mask"))
 
         # default and initial values
         self.template = 'MNI152NLin2009cAsym'

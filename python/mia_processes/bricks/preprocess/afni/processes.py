@@ -251,8 +251,9 @@ class Calc(ProcessMIA):
         self.add_trait("expr",
                        String(Undefined,
                               output=False,
-                              optional=False,
+                              optional=True,
                               desc=expr_desc))
+        self.expr = 'a*step(b)'
 
         self.add_trait("output_type",
                        Enum('NIFTI',

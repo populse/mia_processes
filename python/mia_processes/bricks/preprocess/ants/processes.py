@@ -677,9 +677,9 @@ class Registration(ProcessMIA):
                                  'BSplineSyN',
                                  'Exponential',
                                  'BSplineExponential'),
-                            default=Undefined,
+                            default=['Rigid', 'Affine', 'SyN'],
                             output=False,
-                            optional=False,
+                            optional=True,
                             desc=transforms_desc))
 
         self.add_trait("transform_parameters",
@@ -690,9 +690,9 @@ class Registration(ProcessMIA):
                            Tuple(Float, Int, Float, Float, Float, Float),
                            Tuple(Float, Float, Float, Int),
                            Tuple(Float, Int, Int, Int, Int)),
-                           default=Undefined,
+                           default=[(0.01,), (0.08,), (0.1, 3.0, 0.0)],
                            output=False,
-                           optional=False,
+                           optional=True,
                            desc=transform_parameters_desc))
 
         self.add_trait("metric",
@@ -702,30 +702,31 @@ class Registration(ProcessMIA):
                                  'GC',
                                  'MI',
                                  'Mattes'),
-                            default=Undefined,
+                            default=['Mattes', 'Mattes', 'Mattes'],
                             output=False,
-                            optional=False,
+                            optional=True,
                             desc=metric_desc))
 
         self.add_trait("metric_weight",
                        List(Int(),
-                            default=Undefined,
+                            default=[1, 1, 1],
                             output=False,
-                            optional=False,
+                            optional=True,
                             desc=metric_weight_desc))
 
         self.add_trait("shrink_factors",
                        List(List(Int()),
-                            default=Undefined,
+                            default=[[4], [4, 2, 1], [2, 1]],
                             output=False,
-                            optional=False,
+                            optional=True,
                             desc=shrink_factors_desc))
 
         self.add_trait("smoothing_sigmas",
                        List(List(Float()),
-                            default=Undefined,
+                            #default=Undefined,
+                            default=[[4.0], [4.0, 2.0, 0.0], [1.0, 0.0]],
                             output=False,
-                            optional=False,
+                            optional=True,
                             desc=smoothing_sigmas_desc))
 
         self.add_trait("number_of_iterations",
@@ -792,6 +793,7 @@ class Registration(ProcessMIA):
         self.add_trait("composite_transform",
                        File(Undefined,
                             output=True,
+                            optional=True,
                             desc=composite_transform_desc))
 
         self.add_trait("inverse_composite_transform",

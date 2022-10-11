@@ -2758,14 +2758,15 @@ class Template(ProcessMIA):
 
         # Inputs traits
         self.add_trait("in_template",
-                       traits.String(output=False,
-                                     optional=False,
+                       traits.String(default='MNI152NLin2009cAsym',
+                                     output=False,
+                                     optional=True,
                                      desc=in_template_desc))
 
         self.add_trait("resolution",
                        traits.Int(2,
                                   output=False,
-                                  optional=False,
+                                  optional=True,
                                   desc=resolution_desc))
 
         self.add_trait("suffix",

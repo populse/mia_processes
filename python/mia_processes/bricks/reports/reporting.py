@@ -146,18 +146,19 @@ class MRIQC_anat_report(ProcessMIA):
         self.add_trait("anat_fig_rows",
                        traits.Int(5,
                                   output=False,
-                                  optional=False,
+                                  optional=True,
                                   desc=anat_fig_rows_desc))
 
         self.add_trait("anat_fig_cols",
                        traits.Int(5,
                                   output=False,
-                                  optional=False,
+                                  optional=True,
                                   desc=anat_fig_cols_desc))
 
         self.add_trait("anat_inf_slice_start",
                        traits.Either(Undefined,
                                      traits.Int,
+                                     default=Undefined,
                                      output=False,
                                      optional=True,
                                      desc=anat_inf_slice_start_desc))
@@ -165,6 +166,7 @@ class MRIQC_anat_report(ProcessMIA):
         self.add_trait("anat_slices_gap",
                        traits.Either(Undefined,
                                      traits.Int,
+                                     default=Undefined,
                                      output=False,
                                      optional=True,
                                      desc=anat_slices_gap_desc))
@@ -178,18 +180,19 @@ class MRIQC_anat_report(ProcessMIA):
         self.add_trait("norm_anat_fig_rows",
                        traits.Int(5,
                                   output=False,
-                                  optional=False,
+                                  optional=True,
                                   desc=norm_anat_fig_rows_desc))
 
         self.add_trait("norm_anat_fig_cols",
                        traits.Int(5,
                                   output=False,
-                                  optional=False,
+                                  optional=True,
                                   desc=norm_anat_fig_cols_desc))
 
         self.add_trait("norm_anat_inf_slice_start",
                        traits.Either(Undefined,
                                      traits.Int,
+                                     default=Undefined,
                                      output=False,
                                      optional=True,
                                      desc=norm_anat_inf_slice_start_desc))
@@ -197,6 +200,7 @@ class MRIQC_anat_report(ProcessMIA):
         self.add_trait("norm_anat_slices_gap",
                        traits.Either(Undefined,
                                      traits.Int,
+                                     default=Undefined,
                                      output=False,
                                      optional=True,
                                      desc=norm_anat_slices_gap_desc))
@@ -210,7 +214,7 @@ class MRIQC_anat_report(ProcessMIA):
 
         self.add_trait("dict4runtime",
                        traits.Dict(output=False,
-                                   optional=False,
+                                   optional=True,
                                    userlevel=1))
         self.dict4runtime['patient_name'] = Undefined
         self.dict4runtime['study_name'] = Undefined

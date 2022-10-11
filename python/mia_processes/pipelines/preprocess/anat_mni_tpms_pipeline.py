@@ -36,15 +36,6 @@ class Anat_mni_tpms_pipeline(Pipeline):
         self.export_parameter("applytransforms_WM", "transforms", "inverse_composite_transform", is_optional=False)
         self.add_link("inverse_composite_transform->applytransforms_CSF.transforms")
         self.add_link("inverse_composite_transform->applytransforms_GM.transforms")
-        self.export_parameter("template_GM", "in_template", "template", is_optional=False)
-        self.add_link("template->template_CSF.in_template")
-        self.add_link("template->template_WM.in_template")
-        self.export_parameter("template_GM", "resolution", "template_res", is_optional=False)
-        self.add_link("template_res->template_WM.resolution")
-        self.add_link("template_res->template_CSF.resolution")
-        self.export_parameter("template_GM", "suffix", "template_suffix", is_optional=True)
-        self.add_link("template_suffix->template_CSF.suffix")
-        self.add_link("template_suffix->template_WM.suffix")
         self.add_link("template_CSF.template->applytransforms_CSF.input_image")
         self.add_link("applytransforms_CSF.output_image->files_to_list.file1")
         self.add_link("template_GM.template->applytransforms_GM.input_image")
@@ -55,7 +46,7 @@ class Anat_mni_tpms_pipeline(Pipeline):
 
         # parameters order
 
-        self.reorder_traits(("in_ras", "inverse_composite_transform", "template", "template_res", "template_suffix", "mni_tpms"))
+        self.reorder_traits(("in_ras", "inverse_composite_transform", "mni_tpms"))
 
         # default and initial values
         self.template = 'MNI152NLin2009cAsym'

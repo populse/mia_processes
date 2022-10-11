@@ -26,35 +26,22 @@ class Anat_spatial_norm(Pipeline):
         self.add_process("template_mask", "mia_processes.bricks.preprocess.others.processing.Template")
         self.nodes["template_mask"].process.suffix = 'mask'
         self.nodes["template_mask"].process.desc = 'brain'
+        self.nodes["template_mask"].process.in_template = 'MNI152NLin2009cAsym'
+        self.nodes["template_mask"].process.resolution = 2
         self.add_process("template", "mia_processes.bricks.preprocess.others.processing.Template")
         self.nodes["template"].process.suffix = 'T1w'
+        self.nodes["template"].process.in_template = 'MNI152NLin2009cAsym'
+        self.nodes["template"].process.resolution = 2
 
         # links
         self.export_parameter("mask_moving_image", "in_file", "moving_image", is_optional=False)
         self.export_parameter("mask_moving_image", "mask_file", "moving_mask", is_optional=False)
-        self.export_parameter("template_mask", "in_template", "template", is_optional=False)
-        self.add_link("template->template.in_template")
-        self.export_parameter("template", "resolution", "template_res", is_optional=False)
-        self.add_link("template_res->template_mask.resolution")
-        self.export_parameter("registration", "transforms", "reg_transforms", is_optional=False)
-        self.export_parameter("registration", "transform_parameters", "reg_transform_parameters", is_optional=False)
-        self.export_parameter("registration", "metric", "reg_metric", is_optional=False)
-        self.export_parameter("registration", "metric_weight", "reg_metric_weight", is_optional=False)
-        self.export_parameter("registration", "shrink_factors", "reg_shrink_factors", is_optional=False)
-        self.export_parameter("registration", "smoothing_sigmas", "reg_smoothing_sigmas", is_optional=False)
-        self.export_parameter("registration", "number_of_iterations", "reg_number_of_iterations", is_optional=True)
-        self.export_parameter("registration", "radius_or_number_of_bins", "reg_radius_or_number_of_bins", is_optional=True)
-        self.export_parameter("registration", "convergence_threshold", "reg_convergence_threshold", is_optional=True)
-        self.export_parameter("registration", "convergence_window_size", "reg_convergence_window_size", is_optional=True)
-        self.export_parameter("registration", "sampling_percentage", "reg_sampling_percentage", is_optional=True)
-        self.export_parameter("registration", "sampling_strategy", "reg_sampling_strategy", is_optional=True)
-        self.export_parameter("registration", "interpolation", "reg_interpolation", is_optional=True)
         self.add_link("mask_moving_image.out_file->affine_initializer.moving_image")
         self.add_link("mask_moving_image.out_file->registration.moving_image")
         self.add_link("mask_fixed_image.out_file->affine_initializer.fixed_image")
         self.add_link("mask_fixed_image.out_file->registration.fixed_image")
         self.add_link("affine_initializer.out_file->registration.initial_moving_transform")
-        self.export_parameter("registration", "composite_transform", is_optional=False)
+        self.export_parameter("registration", "composite_transform", is_optional=True)
         self.export_parameter("registration", "inverse_composite_transform", is_optional=False)
         self.export_parameter("registration", "warped_image", is_optional=False)
         self.add_link("template_mask.template->mask_fixed_image.mask_file")
@@ -62,7 +49,7 @@ class Anat_spatial_norm(Pipeline):
 
         # parameters order
 
-        self.reorder_traits(("moving_image", "moving_mask", "composite_transform", "inverse_composite_transform", "warped_image", "template", "template_res", "reg_transforms", "reg_transform_parameters", "reg_metric", "reg_metric_weight", "reg_shrink_factors", "reg_smoothing_sigmas", "reg_number_of_iterations", "reg_radius_or_number_of_bins", "reg_convergence_threshold", "reg_convergence_window_size", "reg_sampling_percentage", "reg_sampling_strategy", "reg_interpolation"))
+        self.reorder_traits(("moving_image", "moving_mask", "composite_transform", "inverse_composite_transform", "warped_image"))
 
         # default and initial values
         self.template = 'MNI152NLin2009cAsym'

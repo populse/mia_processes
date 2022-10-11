@@ -25,6 +25,7 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import mm
 from reportlab.pdfgen import canvas
 from reportlab.platypus import Flowable, Paragraph
+from traits.api import Undefined
 
 #from datetime import datetime
 #from sys import exit
@@ -198,7 +199,7 @@ def slice_planes_plot(data, fig_rows, fig_cols, inf_slice_start=None,
 
     brain_img = nib.as_closest_canonical(nib.load(data))
     brain_data = brain_img.get_fdata()
-    brain_data  = np.squeeze(brain_data)
+    brain_data = np.squeeze(brain_data)
     min_thres = np.percentile(brain_data, 5)
     mask_data = np.ones_like(brain_data)
     mask_data[brain_data <= min_thres] = 0
@@ -208,10 +209,11 @@ def slice_planes_plot(data, fig_rows, fig_cols, inf_slice_start=None,
     brain_data = brain_data[ystart:ystop, xstart:xstop, zstart:zstop]
     disp_slices = fig_rows * fig_cols
 
-    if inf_slice_start == None and slices_gap == None:
+    if inf_slice_start in (None, Undefined) and slices_gap in (None, Undefined):
         slices_gap = brain_data.shape[2] // disp_slices
         memory = set()
         ind_slices = None
+
         while len(np.arange(start=0, stop=brain_data.shape[2],
                             step=slices_gap)) != disp_slices:
 
