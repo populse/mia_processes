@@ -2,8 +2,15 @@
 Module that contains multiple functions used across mia_processes
 
 :Contains:
+    :Class:
+        - PageNumCanvas
+        - ReportLine
     :Functions:
+        - dict4runtime_update
+        - plot_qi2
         - recupCover
+        - slice_planes_plot
+        -
 """
 
 ##########################################################################
@@ -14,10 +21,13 @@ Module that contains multiple functions used across mia_processes
 # for details.
 ##########################################################################
 
+import datetime
 import matplotlib.pyplot as plt
 import nibabel as nib
 import numpy as np
 import os
+
+from populse_mia.data_manager.project import COLLECTION_CURRENT
 
 from matplotlib.cm import get_cmap
 from mpl_toolkits.axes_grid1 import ImageGrid
@@ -27,7 +37,6 @@ from reportlab.pdfgen import canvas
 from reportlab.platypus import Flowable, Paragraph
 from traits.api import Undefined
 
-#from datetime import datetime
 #from sys import exit
 #from shutil import copyfile
 # import readline as readlineComp
@@ -63,6 +72,44 @@ class PageNumCanvas(canvas.Canvas):
         page = "Page %s of %s" % (self._pageNumber, page_count)
         self.setFont("Helvetica", 7)
         self.drawRightString(195*mm, 10*mm, page)
+
+
+class ReportLine(Flowable):
+    "Line flowable --- draws a line in a flowable"
+
+    def __init__(self, width, height=0):
+        Flowable.__init__(self)
+        self.width = width
+        self.height = height
+
+    def __repr__(self):
+        return "Line(w=%s)" % self.width
+
+    def draw(self):
+        "draw the line"
+        self.canv.line(0, self.height, self.width, self.height)
+
+
+def dict4runtime_update(dict4runtime, database, db_filename, *args):
+    """blabla"""
+
+    for tag in args:
+
+        if tag in database.get_fields_names(COLLECTION_CURRENT):
+            dict4runtime[tag] = database.get_value(COLLECTION_CURRENT,
+                                                   db_filename,
+                                                   tag)
+
+        else:
+            dict4runtime[tag] = "Undefined"
+
+        if isinstance(dict4runtime[tag], datetime.date):
+            dict4runtime[tag] = str(dict4runtime[tag])
+
+
+
+
+
 
 
 def plot_qi2(x_grid, ref_pdf, fit_pdf, ref_data, cutoff_idx, out_file=None):
@@ -177,21 +224,6 @@ def recupCover(afile):
                 matrix.append(temp)
 
     return matrix
-
-class ReportLine(Flowable):
-    "Line flowable --- draws a line in a flowable"
-
-    def __init__(self, width, height=0):
-        Flowable.__init__(self)
-        self.width = width
-        self.height = height
-
-    def __repr__(self):
-        return "Line(w=%s)" % self.width
-
-    def draw(self):
-        "draw the line"
-        self.canv.line(0, self.height, self.width, self.height)
 
 def slice_planes_plot(data, fig_rows, fig_cols, inf_slice_start=None,
                       slices_gap=None, cmap="Greys_r", out_dir=None):

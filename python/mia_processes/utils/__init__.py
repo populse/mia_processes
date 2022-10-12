@@ -15,4 +15,4 @@ Contains:
 ###############################################################################
 
 from .tools import (PageNumCanvas, plot_qi2, recupCover, ReportLine,
-                    slice_planes_plot)
+                    slice_planes_plot, dict4runtime_update)

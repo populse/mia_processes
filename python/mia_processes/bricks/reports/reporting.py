@@ -36,7 +36,7 @@ from capsul import info as capsul_info
 # mia_processes import:
 from mia_processes import info as mia_processes_info
 from mia_processes.utils import (recupCover, PageNumCanvas, ReportLine,
-                                 slice_planes_plot, plot_qi2)
+                                 slice_planes_plot, plot_qi2, dict4runtime_update)
 
 # populse_mia import
 from populse_mia import info as mia_info
@@ -71,7 +71,7 @@ import numpy as np
 
 class MRIQC_anat_report(ProcessMIA):
     """
-        * Generates the report for MRIQC pipeline *
+        * Generates the report for anatomical data in MRIQC pipeline *
 
         Please, see the complete documentation for the `MRIQC_report brick in the populse.mia_processes website
         https://populse.github.io/mia_processes/documentation/bricks/reports/MRIQC_report.html
@@ -216,14 +216,6 @@ class MRIQC_anat_report(ProcessMIA):
                        traits.Dict(output=False,
                                    optional=True,
                                    userlevel=1))
-        self.dict4runtime['patient_name'] = Undefined
-        self.dict4runtime['study_name'] = Undefined
-        self.dict4runtime['acquisition_date'] = Undefined
-        self.dict4runtime['sex'] = Undefined
-        self.dict4runtime['site'] = Undefined
-        self.dict4runtime['mri_scanner'] = Undefined
-        self.dict4runtime['age'] = Undefined
-
 
         self.init_default_traits()
 
@@ -248,82 +240,28 @@ class MRIQC_anat_report(ProcessMIA):
         # As we do not have access to the database at the runtime (see #272),
         # we prepare here the data that the run_process_mia method will need
         # via dict4runtime dictionary:
-        # patient_name
-        if ('PatientName' in
-                self.project.session.get_fields_names(COLLECTION_CURRENT)):
-            self.dict4runtime['patient_name'] = self.project.session.get_value(
-                                                             COLLECTION_CURRENT,
-                                                             database_filename,
-                                                             'PatientName')
+        dict4runtime_update(self.dict4runtime, self.project.session,
+                            database_filename,
+                            'PatientName', 'StudyName', 'AcquisitionDate',
+                            'Sex', 'Site', 'Spectro', 'Age')
 
-        if self.dict4runtime['patient_name'] in ('', Undefined):
-            self.dict4runtime['patient_name'] = "Undefined_name_ref"
+        # FIXME: Currently, Site and Spectro data is hard-coded. A solution
+        #        should be found to retrieve them automatically or to put them
+        #        in the input parameters of the brick:
+        # Site
+        if self.dict4runtime['Site'] in ("", "Undefined"):
+            self.dict4runtime['Site'] = 'Grenoble University Hospital - CLUNI'
+
+        # MriScanner
+        if self.dict4runtime['Spectro'] in ("", "Undefined"):
+            self.dict4runtime['Spectro'] = 'Philips Achieva 3.0T TX'
 
         # Generate an output name
         if self.anat and self.anat not in ["<undefined>", traits.Undefined]:
             self.outputs['report'] = os.path.join(
-                                   self.output_directory,
-                                   self.dict4runtime['patient_name'] +
-                                   '_mriqcReport_' +
-                                   datetime.now().strftime('%Y_%m_%d_'
-                                                           '%H_%M_%S_%f')[:22] +
-                                   '.pdf')
-
-        # study_name
-        if ('StudyName' in
-                self.project.session.get_fields_names(COLLECTION_CURRENT)):
-            self.dict4runtime['study_name'] = self.project.session.get_value(
-                                                             COLLECTION_CURRENT,
-                                                             database_filename,
-                                                             'StudyName')
-
-        # acquisition_date
-        if ('AcquisitionDate' in
-                self.project.session.get_fields_names(COLLECTION_CURRENT)):
-            self.dict4runtime['acquisition_date'] = str(
-                              self.project.session.get_value(COLLECTION_CURRENT,
-                                                             database_filename,
-                                                             'AcquisitionDate'))
-
-        # sex
-        if ('Sex' in
-                self.project.session.get_fields_names(COLLECTION_CURRENT)):
-            self.dict4runtime['sex'] = self.project.session.get_value(
-                                                             COLLECTION_CURRENT,
-                                                             database_filename,
-                                                             'Sex')
-        # site
-        if ('Site' in
-                self.project.session.get_fields_names(COLLECTION_CURRENT)):
-            self.dict4runtime['site'] = self.project.session.get_value(
-                                                             COLLECTION_CURRENT,
-                                                             database_filename,
-                                                             'Site')
-        # mri_scanner
-        if ('Spectro' in
-                self.project.session.get_fields_names(COLLECTION_CURRENT)):
-            self.dict4runtime['mri_scanner'] = self.project.session.get_value(
-                                                             COLLECTION_CURRENT,
-                                                             database_filename,
-                                                             'Spectro')
-        # age
-        if ('Age' in
-                self.project.session.get_fields_names(COLLECTION_CURRENT)):
-            self.dict4runtime['age'] = self.project.session.get_value(
-                                                             COLLECTION_CURRENT,
-                                                             database_filename,
-                                                             'Age')
-
-        # FIXME: Currently the following data is hard-coded. A solution should
-        #        be found to retrieve them automatically or to put them in the
-        #        input parameters of the brick:
-        # Site
-        if self.dict4runtime['site'] in ('', Undefined):
-            self.dict4runtime['site'] = 'Grenoble University Hospital - CLUNI'
-
-        # MriScanner
-        if self.dict4runtime['mri_scanner'] in ('', Undefined):
-            self.dict4runtime['mri_scanner'] = 'Philips Achieva 3.0T TX'
+                            self.output_directory,
+                            "{0}_mriqcReport_{1}.pdf".format(self.dict4runtime['PatientName'] if self.dict4runtime['PatientName'] != "Undefined" else "Undefined_name_ref",
+                                                             datetime.now().strftime('%Y_%m_%d_%H_%M_%S_%f')[:22]))
 
         # FIXME: Do we need tags inheritance ?
 
@@ -349,53 +287,17 @@ class MRIQC_anat_report(ProcessMIA):
                         '<font size=11>uality</font>'
                         '<font size=30><b>C</b></font>'
                         '<font size=11>ontrol</font>')
-
-        if (('site' in self.dict4runtime) and
-                            (self.dict4runtime['site'] not in ('', Undefined))):
-            site = self.dict4runtime['site']
-
-        else:
-            site = "Undefined site"
-
-        if (('study_name' in self.dict4runtime) and
-                      (self.dict4runtime['study_name'] not in ('', Undefined))):
-            study_name = self.dict4runtime['study_name']
-
-        else:
-            study_name = "Undefined study name"
-
-        if (('acquisition_date' in self.dict4runtime) and
-                (self.dict4runtime['acquisition_date'] not in ('', Undefined))):
-            acqu_date = self.dict4runtime['acquisition_date']
-
-        else:
-            acqu_date = "Undefined study name"
-
-        if (('patient_name' in self.dict4runtime) and
-                    (self.dict4runtime['patient_name'] not in ('', Undefined))):
-            patient_ref = self.dict4runtime['patient_name']
-
-        else:
-            patient_ref = "Undefined patient reference"
-
-        if (('sex' in self.dict4runtime) and
-                             (self.dict4runtime['sex'] not in ('', Undefined))):
-            patient_sex = self.dict4runtime['sex']
-
-        else:
-            patient_sex = "Undefined patient sex"
-
-        if (('age' in self.dict4runtime) and
-                             (self.dict4runtime['age'] not in ('', Undefined))):
-            patient_age = self.dict4runtime['age']
-
-        else:
-            patient_age = "Undefined patient age"
+        patient_ref = self.dict4runtime['PatientName']
+        study_name = self.dict4runtime['StudyName']
+        acqu_date = self.dict4runtime['AcquisitionDate']
+        patient_sex = self.dict4runtime['Sex']
+        site = self.dict4runtime['Site']
+        mri_scanner = self.dict4runtime['Spectro']
+        patient_age = self.dict4runtime['Age']
 
         with tempfile.NamedTemporaryFile() as temp_file:
             temp_file.write(bytes("SITE:{}".format(site), encoding='utf8'))
-            temp_file.write(bytes("\nMRI SCANNER: {}".format(
-                                              self.dict4runtime['mri_scanner']),
+            temp_file.write(bytes("\nMRI SCANNER: {}".format(mri_scanner),
                                   encoding='utf8'))
             temp_file.write(bytes("\nSTUDY NAME: {}".format(study_name),
                                   encoding='utf8'))
