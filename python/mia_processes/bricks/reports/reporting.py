@@ -25,9 +25,9 @@ import nibabel as nib
 
 # nipype import
 from nipype import info as nipype_info
-from nipype.interfaces.base import (OutputMultiPath, InputMultiPath, File,
-                                    traits, TraitListObject, Undefined,
-                                    DictStrStr, Str)
+from nipype.interfaces.base import (DictStrStr, File, InputMultiPath,
+                                    OutputMultiPath, Str, traits,
+                                    TraitListObject, Undefined,)
 from nipype.interfaces.spm.base import ImageFileSPM
 
 # capsul import
@@ -35,8 +35,9 @@ from capsul import info as capsul_info
 
 # mia_processes import:
 from mia_processes import info as mia_processes_info
-from mia_processes.utils import (recupCover, PageNumCanvas, ReportLine,
-                                 slice_planes_plot, plot_qi2, dict4runtime_update)
+from mia_processes.utils import (dict4runtime_update, PageNumCanvas, plot_qi2,
+                                 recupCover, ReportLine, slice_planes_plot)
+from mia_processes.utils import Report
 
 # populse_mia import
 from populse_mia import info as mia_info
@@ -49,20 +50,14 @@ from soma.qt_gui.qt_backend.Qt import QMessageBox
 
 
 # Other import
-from datetime import datetime
-import os
-from sys import exit, path, version
-from reportlab.lib.enums import TA_JUSTIFY, TA_CENTER, TA_LEFT, TA_RIGHT
-from reportlab.lib.pagesizes import A4, landscape, portrait
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib.units import mm, inch
-from reportlab.lib import colors
-from reportlab.platypus import (SimpleDocTemplate, Paragraph, Spacer, Image,
-                                 Table, TableStyle, PageBreak)
-import tempfile
-import platform
 import json
 import numpy as np
+import os
+import platform
+import tempfile
+from datetime import datetime
+
+from sys import exit, path, version
 
 #import matplotlib.pyplot as plt
 #import scipy.ndimage as ndi
@@ -211,7 +206,7 @@ class MRIQC_anat_report(ProcessMIA):
                                        output=True,
                                        optional=True,
                                        desc=report_desc))
-
+        # Special parameter used as a messenger for the run_process_mia method
         self.add_trait("dict4runtime",
                        traits.Dict(output=False,
                                    optional=True,
@@ -239,7 +234,7 @@ class MRIQC_anat_report(ProcessMIA):
 
         # As we do not have access to the database at the runtime (see #272),
         # we prepare here the data that the run_process_mia method will need
-        # via dict4runtime dictionary:
+        # via dict4runtime parameter:
         dict4runtime_update(self.dict4runtime, self.project.session,
                             database_filename,
                             'PatientName', 'StudyName', 'AcquisitionDate',
@@ -259,9 +254,13 @@ class MRIQC_anat_report(ProcessMIA):
         # Generate an output name
         if self.anat and self.anat not in ["<undefined>", traits.Undefined]:
             self.outputs['report'] = os.path.join(
-                            self.output_directory,
-                            "{0}_mriqcReport_{1}.pdf".format(self.dict4runtime['PatientName'] if self.dict4runtime['PatientName'] != "Undefined" else "Undefined_name_ref",
-                                                             datetime.now().strftime('%Y_%m_%d_%H_%M_%S_%f')[:22]))
+                        self.output_directory,
+                        "{0}_mriqcReport_{1}.pdf".format(
+                            self.dict4runtime['PatientName'] if
+                            self.dict4runtime['PatientName'] != "Undefined" else
+                            "Undefined_name_ref",
+                            datetime.now().strftime('%Y_%m_%d_'
+                                                    '%H_%M_%S_%f')[:22]))
 
         # FIXME: Do we need tags inheritance ?
 
@@ -272,503 +271,18 @@ class MRIQC_anat_report(ProcessMIA):
         """Dedicated to the process launch step of the brick."""
         super(MRIQC_anat_report, self).run_process_mia()
 
-        # Logo populse
-        header_image_1 = os.path.join(sources_images.__path__[0],
-                                      'Logo_populse_square.jpg')
-        # 2156px x 2156px
-        header_image_1 = Image(header_image_1, 43.0 * mm, 43.0 * mm)
-        # Logo Mia
-        header_image_2 = os.path.join(sources_images.__path__[0],
-                                      'Logo_populse_mia_HR.jpeg')
-        # 2505px x 1843px
-        header_image_2 = Image(header_image_2, 54.4 * mm, 40.0 * mm)
-        header_title = ('<sup rise=20 size=9>$</sup>'
-                        '<font size=30><b>MRIQ</b></font>'
-                        '<font size=11>uality</font>'
-                        '<font size=30><b>C</b></font>'
-                        '<font size=11>ontrol</font>')
-        patient_ref = self.dict4runtime['PatientName']
-        study_name = self.dict4runtime['StudyName']
-        acqu_date = self.dict4runtime['AcquisitionDate']
-        patient_sex = self.dict4runtime['Sex']
-        site = self.dict4runtime['Site']
-        mri_scanner = self.dict4runtime['Spectro']
-        patient_age = self.dict4runtime['Age']
+        report = Report(self.dict4runtime, self.IQMs_file, self.anat,
+                        self.norm_anat, self.report)
+        report.make_report()
 
-        with tempfile.NamedTemporaryFile() as temp_file:
-            temp_file.write(bytes("SITE:{}".format(site), encoding='utf8'))
-            temp_file.write(bytes("\nMRI SCANNER: {}".format(mri_scanner),
-                                  encoding='utf8'))
-            temp_file.write(bytes("\nSTUDY NAME: {}".format(study_name),
-                                  encoding='utf8'))
-            temp_file.write(bytes("\nEXAMINATION DATE: {}".format(acqu_date),
-                                  encoding='utf8'))
-            temp_file.write(bytes("\nMRIQC CALCULATION DATE: {}".format(
-                                  datetime.now().strftime('%Y-%m-%d %H:%M:%S')),
-                                  encoding='utf8'))
-            temp_file.write(bytes("\nNAME OF THE INPUT DATA: {}".format(
-                                                                     self.anat),
-                                  encoding='utf8'))
-            temp_file.write(bytes("\nPATIENT REFERENCE: {}".format(patient_ref),
-                                  encoding='utf8'))
-            temp_file.write(bytes("\nPATIENT SEX: {}".format(patient_sex),
-                                  encoding='utf8'))
-            temp_file.write(bytes("\nPATIENT AGE: {}".format(patient_age),
-                                  encoding='utf8'))
-            temp_file.write(bytes("\nSOFTWARES:Python {}".format(
-                                                            version.split()[0]),
-                                  encoding='utf8'))
-            temp_file.write(bytes("\n : populse_mia {}".format(
-                                                          mia_info.__version__),
-                                  encoding='utf8'))
-            temp_file.write(bytes("\n : capsul {}".format(
-                                                       capsul_info.__version__),
-                                  encoding='utf8'))
-            temp_file.write(bytes("\n : nipype {}".format(
-                                                       nipype_info.__version__),
-                                  encoding='utf8'))
-            temp_file.write(bytes("\n : mia_processes {}".format(
-                                                mia_processes_info.__version__),
-                                  encoding='utf8'))
 
-            if platform.system() == 'Darwin':
-                os_sys = 'Mac OS X'
 
-            else:
-                os_sys = platform.system()
 
-            temp_file.write(bytes("\n : Operating System {0} {1}".format(
-                                                            os_sys,
-                                                            platform.release()),
-                                  encoding='utf8'))
-            temp_file.flush()
-            cover_data = recupCover(temp_file.name)
 
-        # colWidths, rowHeights
-        cover_data = Table(cover_data, [60*mm, 97*mm])
-        # Output document template definition for page; margins and pages size
-        page = SimpleDocTemplate(self.report,
-                                 pagesize=portrait(A4),
-                                 rightMargin=20*mm,
-                                 leftMargin=20*mm,
-                                 topMargin=10*mm,
-                                 bottomMargin=10*mm)
-        # Initialises stylesheet with few basic heading and text styles,
-        # return a stylesheet object
-        styles = getSampleStyleSheet()
-        # ParagraphStyle gives all the attributes available for formatting
-        # paragraphs
-        styles.add(ParagraphStyle(name='Center', alignment=TA_CENTER))
-        styles.add(ParagraphStyle(name='Center2', alignment=TA_CENTER))
-        # If more than 1 line
-        styles['Center2'].leading = 24
-        styles.add(ParagraphStyle(name='Justify', alignment=TA_JUSTIFY))
-        styles.add(ParagraphStyle(name='Right', alignment=TA_RIGHT))
-        styles.add(ParagraphStyle(name='Left', alignment=TA_LEFT))
-        styles.add(ParagraphStyle(name='Left2', alignment=TA_LEFT))
-        # For left indent 30
-        styles['Left2'].leftIndent = 30
-        styles.add(ParagraphStyle(name='Bullet1',
-                                  leftIndent=30,
-                                  bulletOffsetY=2,
-                                  bulletIndent=20,
-                                  bulletFontSize=6,
-                                  bulletColor='black',
-                                  bulletText=u'●'))
-        styles.add(ParagraphStyle(name='Bullet2',
-                                  leftIndent=60,
-                                  bulletOffsetY=1,
-                                  bulletIndent=50,
-                                  bulletFontSize=6,
-                                  bulletColor='black',
-                                  bulletText=u'❍'))
-        title = ('<font size=18><b>Anatomical Image-Quality Metrics '
-                 'summary report</b></font>')
-        textDisclaimer = ("<font size=7 ><i><b>DISCLAIMER</b><br/>Mia software,"
-                          " from the Populse project, is executed in a "
-                          "research environment on anonymized data. The "
-                          "conclusions obtained with Mia software are an help "
-                          "to diagnose and prognosticate. They do not "
-                          "substitute themselves to the clinical care of the "
-                          "physicians and remain under their responsibilities. "
-                          "Consequently, Populse team is not responsible for "
-                          "any direct or indirect damages resulting from the "
-                          "use of data, informations, or results stemming from "
-                          "the Mia software. The user recognizes to use these "
-                          "informations under his sole and exclusive "
-                          "responsibility.<br/> <br/> <b>DECHARGE DE "
-                          "RESPONSABILITE</b><br/>Le logiciel Mia, provenant du"
-                          " projet Populse, est exécuté dans un environnement "
-                          "de recherche sur des données anonymisées. Les "
-                          "conclusions obtenues grâce au logiciel Mia sont une "
-                          "aide au diagnostic et au pronostic. Elles ne se "
-                          "substituent pas à la prise en charge médicale des "
-                          "médecins et demeurent sous leurs responsabilités. "
-                          "Par conséquent, l'équipe Populse ne peut être tenu "
-                          "responsable de dommage direct ou indirect résultant "
-                          "de l'utilisation des données, des informations ou "
-                          "des résultats issus du logiciel Mia. L'utilisateur "
-                          "reconnaît utiliser ces informations sous sa seule et"
-                          " entière responsabilité.</i> </font>")
 
-        #Canvas creation
-        report = []
 
         # First page - cover ##################################################
-        #######################################################################
-        image_cov = Table([[header_image_1, header_image_2]], [70*mm, 70*mm])
-        image_cov.setStyle(TableStyle([('ALIGN', (0, 0), (0, 0), 'LEFT'),
-                                       ('ALIGN', (-1, 0), (-1, 0), 'RIGHT'),
-                                       ('VALIGN', (0, 0), (-1, 0), 'MIDDLE')]))
-        report.append(image_cov)
-        # width, height
-        report.append(Spacer(0 * mm, 8 * mm))
-        report.append(Paragraph(header_title, styles['Center']))
-        report.append(Spacer(0 * mm, 10 * mm))
-        line = ReportLine(150)
-        line.hAlign = 'CENTER'
-        report.append(line)
-        report.append(Spacer(0 * mm, 10 * mm))
-        report.append(Paragraph(title, styles['Center']))
-        report.append(Spacer(0 * mm, 10 * mm))
-        # Careful: Table use (col, raw) and 0-base for top left start as usual
-        # OR -1-base for lower right start
-        cover_data.setStyle(TableStyle([
-                              ('LINEABOVE', (0, 0), (-1, 0), 2, colors.black),
-                              ('LINEBELOW', (0, -1), (-1, -1), 2, colors.black),
-                              ('VALIGN', (0, 0), (-1, -1), 'MIDDLE')]))
-        cover_data.hAlign = 'CENTER'
-        report.append(cover_data)
-        report.append(Spacer(0 * mm, 5 * mm))
-        report.append(Paragraph(textDisclaimer, styles["Justify"]))
-        report.append(Spacer(0 * mm, 6 * mm))
-        # Footnote
-        line = ReportLine(500)
-        line.hAlign = 'CENTER'
-        report.append(line)
-        report.append(Spacer(0 * mm, 2.5 * mm))
-        report.append(Paragraph("<font size = 8><sup>$</sup>Esteban O et al., "
-                                "<i>MRIQC: Advancing the Automatic Prediction "
-                                "of Image Quality in MRI from Unseen Sites</i>"
-                                ", PLOS ONE 12(9):e0184661.</font>",
-                                styles['Left']))
-        report.append(PageBreak())
-
-        # Second page - IQMs ##################################################
-        #######################################################################
-        f = open(self.IQMs_file)
-        data = json.load(f)
-        f.close()
-        report.append(Paragraph("<font size = 18 ><b>Image parameters"
-                                "</b></font>",
-                                styles['Center']))
-        report.append(Spacer(0 * mm, 4 * mm))
-
-        line = ReportLine(150)
-        line.hAlign = 'CENTER'
-        report.append(line)
-
-        report.append(Spacer(0 * mm, 20 * mm))
-        ### Spatial resolution ################################################
-        report.append(Paragraph(
-                          "<font size = 15 > <b>SPATIAL RESOLUTION</b> </font>",
-                          styles['Bullet1']))
-        report.append(Spacer(0 * mm, 2 * mm))
-        report.append(Paragraph("Length - Spacing", styles['Left2']))
-        report.append(Spacer(0 * mm, 10 * mm))
-
-        # size_x
-        try:
-            report.append(Paragraph(
-                         '<font size = 11> <b> Voxel size in X </b> </font>: ' +
-                         str(round(data.get('size_x'), 2)),
-                         styles['Bullet2']))
-
-        except TypeError:
-            report.append(Paragraph(
-                         '<font size = 11> <b> Voxel size in X </b> </font>: ' +
-                         'Not determined',
-                         styles['Bullet2']))
-
-        report.append(Spacer(0 * mm, 1 * mm))
-        # size_y
-        try:
-            report.append(Paragraph(
-                         '<font size = 11> <b> Voxel size in Y </b> </font>: ' +
-                         str(round(data.get('size_y'), 2)),
-                         styles['Bullet2']))
-
-        except TypeError:
-            report.append(Paragraph(
-                         '<font size = 11> <b> Voxel size in Y </b> </font>: ' +
-                         'Not determined',
-                         styles['Bullet2']))
-
-        report.append(Spacer(0 * mm, 1 * mm))
-        # size_z
-        try:
-            report.append(Paragraph(
-                         '<font size = 11> <b> Voxel size in Z </b> </font>: ' +
-                         str(round(data.get('size_z'), 2)),
-                         styles['Bullet2']))
-
-        except TypeError:
-            report.append(Paragraph(
-                         '<font size = 11> <b> Voxel size in Z </b> </font>: ' +
-                         'Not determined',
-                         styles['Bullet2']))
-
-        report.append(Spacer(0 * mm, 2.5 * mm))
-        # spacing_x
-        try:
-            report.append(Paragraph(
-                        '<font size = 11> <b> Spacing in X (mm)</b> </font>: ' +
-                        str(round(data.get('spacing_x'), 2)),
-                        styles['Bullet2']))
-
-        except TypeError:
-            report.append(Paragraph(
-                        '<font size = 11> <b> Spacing in X (mm)</b> </font>: ' +
-                        'Not determined',
-                        styles['Bullet2']))
-
-        report.append(Spacer(0 * mm, 1 * mm))
-        # spacing_y
-        try:
-            report.append(Paragraph(
-                        '<font size = 11> <b> Spacing in Y (mm)</b> </font>: ' +
-                        str(round(data.get('spacing_y'), 2)),
-                        styles['Bullet2']))
-
-        except TypeError:
-            report.append(Paragraph(
-                        '<font size = 11> <b> Spacing in Y (mm)</b> </font>: ' +
-                        'Not determined',
-                        styles['Bullet2']))
-
-        report.append(Spacer(0 * mm, 1 * mm))
-        # spacing_z
-        try:
-            report.append(Paragraph(
-                        '<font size = 11> <b> Spacing in Z (mm)</b> </font>: ' +
-                        str(round(data.get('spacing_z'), 2)),
-                        styles['Bullet2']))
-
-        except TypeError:
-            report.append(Paragraph(
-                        '<font size = 11> <b> Spacing in Z (mm)</b> </font>: ' +
-                        'Not determined',
-                        styles['Bullet2']))
-
-        report.append(Spacer(0 * mm, 20 * mm))
-        ### Signal-to-noise ###################################################
-        report.append(Paragraph("<font size = 15 > <b>NOISE</b> </font>",
-                                styles['Bullet1']))
-        report.append(Spacer(0 * mm, 2 * mm))
-        report.append(Paragraph(
-            "Impact of noise and/or evaluation of the fitness of a noise model",
-            styles['Left2']))
-        report.append(Spacer(0 * mm, 10 * mm))
-        # snr_csf
-        try:
-            report.append(Paragraph(
-                             "<font size = 11> <b> Signal-to-noise ratio (SNR) "
-                             "for cerebrospinal fluid </b></font>: " +
-                             str(round(data.get('snr_csf'), 2)),
-                             styles['Bullet2']))
-
-        except TypeError:
-            report.append(Paragraph(
-                             '<font size = 11> <b> Signal-to-noise ratio (SNR) '
-                             'for cerebrospinal fluid </b></font>: ' +
-                             'Not determined',
-                             styles['Bullet2']))
-
-        report.append(Spacer(0 * mm, 1 * mm))
-        # snr_wm
-        try:
-            report.append(Paragraph(
-                     '<font size = 11> <b> SNR for white matter </b></font>: ' +
-                     str(round(data.get('snr_wm'), 2)),
-                     styles['Bullet2']))
-
-        except TypeError:
-            report.append(Paragraph(
-                     '<font size = 11> <b> SNR for white matter </b></font>: ' +
-                     'Not determined',
-                     styles['Bullet2']))
-
-        report.append(Spacer(0 * mm, 1 * mm))
-        # snr_gm
-        try:
-            report.append(Paragraph(
-                      '<font size = 11> <b> SNR for gray matter </b></font>: ' +
-                      str(round(data.get('snr_gm'), 2)),
-                      styles['Bullet2']))
-
-        except TypeError:
-            report.append(Paragraph(
-                      '<font size = 11> <b> SNR for gray matter </b></font>: ' +
-                      'Not determined',
-                      styles['Bullet2']))
-
-        report.append(Spacer(0 * mm, 1 * mm))
-        # snr_total
-        try:
-            report.append(Paragraph(
-                 '<font size = 11> <b> SNR for brain parenchyma </b></font>: ' +
-                 str(round(data.get('snr_total'), 2)),
-                 styles['Bullet2']))
-
-        except TypeError:
-            report.append(Paragraph(
-                 '<font size = 11> <b> SNR for brain parenchyma </b></font>: ' +
-                 'Not determined',
-                 styles['Bullet2']))
-
-        report.append(Spacer(0 * mm, 2.5 * mm))
-        # snrd_csf
-        try:
-            report.append(Paragraph(
-                         '<font size = 9><sup>$</sup></font><font size = 11><b>'
-                         'Dietrich’s SNR for cerebrospinal fluid</b></font>: ' +
-                         str(round(data.get('snrd_csf'), 2)),
-                         styles['Bullet2']))
-
-        except TypeError:
-            report.append(Paragraph(
-                         '<font size = 9><sup>$</sup></font><font size = 11><b>'
-                         'Dietrich’s SNR for cerebrospinal fluid</b></font>: ' +
-                         'Not determined',
-                         styles['Bullet2']))
-
-        report.append(Spacer(0 * mm, 1 * mm))
-        # snrd_wm
-        try:
-            report.append(Paragraph(
-                         '<font size = 9><sup>$</sup></font><font size = 11><b>'
-                         'Dietrich’s SNR for white matter</b></font>: ' +
-                         str(round(data.get('snrd_wm'), 2)),
-                         styles['Bullet2']))
-
-        except TypeError:
-            report.append(Paragraph(
-                         '<font size = 9><sup>$</sup></font><font size = 11><b>'
-                         'Dietrich’s SNR for white matter</b></font>: ' +
-                         'Not determined',
-                         styles['Bullet2']))
-
-        report.append(Spacer(0 * mm, 1 * mm))
-        # snrd_gm
-        try:
-            report.append(Paragraph(
-                         '<font size = 9><sup>$</sup></font><font size = 11><b>'
-                         'Dietrich’s SNR for gray matter</b></font>: ' +
-                         str(round(data.get('snrd_gm'), 2)),
-                         styles['Bullet2']))
-
-        except TypeError:
-            report.append(Paragraph(
-                         '<font size = 9><sup>$</sup></font><font size = 11><b>'
-                        'Dietrich’s SNR for gray matter</b></font>: ' +
-                        'Not determined',
-                        styles['Bullet2']))
-
-        report.append(Spacer(0 * mm, 1 * mm))
-        # snrd_total
-        try:
-            report.append(Paragraph(
-                         '<font size = 9><sup>$</sup></font><font size = 11><b>'
-                         'Dietrich’s SNR for brain parenchyma</b></font>: ' +
-                         str(round(data.get('snrd_total'), 2)),
-                         styles['Bullet2']))
-
-        except TypeError:
-            report.append(Paragraph(
-                         '<font size = 9><sup>$</sup></font><font size = 11><b>'
-                         'Dietrich’s SNR for brain parenchyma</b></font>: ' +
-                         'Not determined',
-                         styles['Bullet2']))
-
-        report.append(Spacer(0 * mm, 2.5 * mm))
-        # cnr
-        try:
-            report.append(Paragraph(
-                         '<font size = 9><sup>#</sup></font><font size = 11><b>'
-                         'Contrast-to-noise ratio</b></font>: ' +
-                         str(round(data.get('cnr'), 2)),
-                         styles['Bullet2']))
-
-        except TypeError:
-            report.append(Paragraph(
-                         '<font size = 9><sup>#</sup></font><font size = 11><b>'
-                        'Contrast-to-noise ratio</b></font>: ' +
-                        'Not determined',
-                        styles['Bullet2']))
-
-        report.append(Spacer(0 * mm, 2.5 * mm))
-        # qi_2
-        try:
-            report.append(Paragraph(
-                         '<font size = 9><sup>&</sup></font><font size = 11><b>'
-                         'Mortamet’s quality index 2</b></font>: ' +
-                         '{:.2e}'.format(data['qi_2']),
-                         styles['Bullet2']))
-
-        except TypeError:
-            report.append(Paragraph(
-                         '<font size = 9><sup>&</sup></font><font size = 11><b>'
-                         'Mortamet’s quality index 2</b></font>: ' +
-                         'Not determined',
-                         styles['Bullet2']))
-
-        report.append(Spacer(0 * mm, 2.5 * mm))
-        # cjv
-        try:
-            report.append(Paragraph(
-                         '<font size = 9><sup>%</sup></font><font size = 11><b>'
-                         'Coefficient of joint variation</b></font>: ' +
-                         str(round(data.get('cjv'), 2)),
-                         styles['Bullet2']))
-
-        except TypeError:
-            report.append(Paragraph(
-                         '<font size = 9><sup>%</sup></font><font size = 11><b>'
-                         'Coefficient of joint variation</b></font>: ' +
-                         'Not determined',
-                         styles['Bullet2']))
-
-        report.append(Spacer(0 * mm, 52 * mm))
-        # Footnote
-        line = ReportLine(500)
-        line.hAlign = 'CENTER'
-        report.append(line)
-        report.append(Spacer(0 * mm, 2.5 * mm))
-        report.append(Paragraph(
-            "<font size = 8><sup>$</sup>Dietrich et al., <i>Measurement of SNRs"
-            " in MR images: influence of multichannel coils, parallel imaging "
-            "and reconstruction filters</i>, JMRI 26(2):375–385, 2007. "
-            "Higher values are better.</font>",
-            styles['Left']))
-        report.append(Paragraph(
-            "<font size = 8><sup>#</sup>Magnotta, VA., & Friedman, L., <i>"
-            "Measurement of signal-to-noise and contrast-to-noise in the fBIRN "
-            "multicenter imaging study</i>, J Dig Imag 19(2):140-147, 2006. "
-            "Higher values are better.</font>",
-            styles['Left']))
-        report.append(Paragraph(
-            "<font size = 8><sup>&</sup>Mortamet B et al., <i>Automatic "
-            "quality assessment in structural brain magnetic resonance imaging"
-            "</i>, Mag Res Med 62(2):365-372, 2009. Lower values are better."
-            "</font>",
-            styles['Left']))
-        report.append(Paragraph(
-            "<font size = 8><sup>%</sup>Ganzetti et al., <i>Intensity "
-            "inhomogeneity correction of structural MR images: a data-driven "
-            "approach to define input algorithm parameters</i>, Front "
-            "Neuroinform 10:10, 2016. Lower values are better.</font>",
-            styles['Left']))
-        report.append(PageBreak())
+        ######################################################################
 
         # Third page - IQMs ###################################################
         #######################################################################
