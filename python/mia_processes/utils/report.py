@@ -31,8 +31,9 @@ from capsul import info as capsul_info
 
 # mia_processes import:
 from mia_processes import info as mia_processes_info
-from mia_processes.utils import (recupCover, PageNumCanvas, ReportLine,
-                                 slice_planes_plot, plot_qi2, dict4runtime_update)
+from mia_processes.utils import (PageNumCanvas, ReportLine,
+                                 slice_planes_plot, plot_qi2,
+                                 dict4runtime_update)
 
 # populse_mia import
 from populse_mia import info as mia_info
@@ -68,16 +69,30 @@ import numpy as np
 class Report():
     """blabla"""
 
-    def __init__(self, dict4runtime, IQMs_file, anat_file, norm_anat_file,
+    def __init__(self, dict4runtime, IQMs_file,
+                 anat_file, anat_fig_rows, anat_fig_cols, anat_inf_slice_start,
+                    anat_slices_gap,
+                 norm_anat_file, norm_anat_fig_rows, norm_anat_fig_cols,
+                    norm_anat_inf_slice_start, norm_anat_slices_gap,
                  report_file):
         """blabla"""
 
+        self.dict4runtime = dict4runtime
         self.anat = anat_file
+        self.anat_fig_rows = anat_fig_rows
+        self.anat_fig_cols = anat_fig_cols
+        self.anat_inf_slice_start = anat_inf_slice_start
+        self.anat_slices_gap = anat_slices_gap
         self.norm_anat = norm_anat_file
+        self.norm_anat_fig_rows = norm_anat_fig_rows
+        self.norm_anat_fig_cols = norm_anat_fig_cols
+        self.norm_anat_inf_slice_start = norm_anat_inf_slice_start
+        self.norm_anat_slices_gap = norm_anat_slices_gap
 
         f = open(IQMs_file)
         self.data = json.load(f)
         f.close()
+
         # Initialises stylesheet with few basic heading and text styles,
         # return a stylesheet object
         self.styles = getSampleStyleSheet()
@@ -130,7 +145,8 @@ class Report():
                              '<font size=30><b>C</b></font>'
                              '<font size=11>ontrol</font>')
 
-        infos = [dict4runtime[i] for i in ('Site', 'Spectro', 'StudyName',
+        infos = [self.dict4runtime[i] for i in (
+                                           'Site', 'Spectro', 'StudyName',
                                            'AcquisitionDate', 'PatientName',
                                            'Sex', 'Age')]
         infos.insert(4, datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
@@ -291,7 +307,7 @@ class Report():
                           "<font size = 15 > <b>SPATIAL RESOLUTION</b> </font>",
                           self.styles['Bullet1']))
         self.report.append(Spacer(0 * mm, 2 * mm))
-        self.report.append(Paragraph("Length - Spacing", styles['Left2']))
+        self.report.append(Paragraph("Length - Spacing", self.styles['Left2']))
         self.report.append(Spacer(0 * mm, 10 * mm))
 
         # size_x
@@ -336,181 +352,444 @@ class Report():
         self.report.append(self.get_iqms_data('snrd_csf'))
         self.report.append(Spacer(0 * mm, 1 * mm))
         # snrd_wm
-        try:
-            report.append(Paragraph(
-                         '<font size = 9><sup>$</sup></font><font size = 11><b>'
-                         'Dietrich’s SNR for white matter</b></font>: ' +
-                         str(round(data.get('snrd_wm'), 2)),
-                         styles['Bullet2']))
-
-        except TypeError:
-            report.append(Paragraph(
-                         '<font size = 9><sup>$</sup></font><font size = 11><b>'
-                         'Dietrich’s SNR for white matter</b></font>: ' +
-                         'Not determined',
-                         styles['Bullet2']))
-
-        report.append(Spacer(0 * mm, 1 * mm))
+        self.report.append(self.get_iqms_data('snrd_wm'))
+        self.report.append(Spacer(0 * mm, 1 * mm))
         # snrd_gm
-        try:
-            report.append(Paragraph(
-                         '<font size = 9><sup>$</sup></font><font size = 11><b>'
-                         'Dietrich’s SNR for gray matter</b></font>: ' +
-                         str(round(data.get('snrd_gm'), 2)),
-                         styles['Bullet2']))
-
-        except TypeError:
-            report.append(Paragraph(
-                         '<font size = 9><sup>$</sup></font><font size = 11><b>'
-                        'Dietrich’s SNR for gray matter</b></font>: ' +
-                        'Not determined',
-                        styles['Bullet2']))
-
-        report.append(Spacer(0 * mm, 1 * mm))
+        self.report.append(self.get_iqms_data('snrd_gm'))
+        self.report.append(Spacer(0 * mm, 1 * mm))
         # snrd_total
-        try:
-            report.append(Paragraph(
-                         '<font size = 9><sup>$</sup></font><font size = 11><b>'
-                         'Dietrich’s SNR for brain parenchyma</b></font>: ' +
-                         str(round(data.get('snrd_total'), 2)),
-                         styles['Bullet2']))
-
-        except TypeError:
-            report.append(Paragraph(
-                         '<font size = 9><sup>$</sup></font><font size = 11><b>'
-                         'Dietrich’s SNR for brain parenchyma</b></font>: ' +
-                         'Not determined',
-                         styles['Bullet2']))
-
-        report.append(Spacer(0 * mm, 2.5 * mm))
+        self.report.append(self.get_iqms_data('snrd_total'))
+        self.report.append(Spacer(0 * mm, 2.5 * mm))
         # cnr
-        try:
-            report.append(Paragraph(
-                         '<font size = 9><sup>#</sup></font><font size = 11><b>'
-                         'Contrast-to-noise ratio</b></font>: ' +
-                         str(round(data.get('cnr'), 2)),
-                         styles['Bullet2']))
-
-        except TypeError:
-            report.append(Paragraph(
-                         '<font size = 9><sup>#</sup></font><font size = 11><b>'
-                        'Contrast-to-noise ratio</b></font>: ' +
-                        'Not determined',
-                        styles['Bullet2']))
-
-        report.append(Spacer(0 * mm, 2.5 * mm))
+        self.report.append(self.get_iqms_data('cnr'))
+        self.report.append(Spacer(0 * mm, 2.5 * mm))
         # qi_2
-        try:
-            report.append(Paragraph(
-                         '<font size = 9><sup>&</sup></font><font size = 11><b>'
-                         'Mortamet’s quality index 2</b></font>: ' +
-                         '{:.2e}'.format(data['qi_2']),
-                         styles['Bullet2']))
-
-        except TypeError:
-            report.append(Paragraph(
-                         '<font size = 9><sup>&</sup></font><font size = 11><b>'
-                         'Mortamet’s quality index 2</b></font>: ' +
-                         'Not determined',
-                         styles['Bullet2']))
-
-        report.append(Spacer(0 * mm, 2.5 * mm))
+        self.report.append(self.get_iqms_data('qi_2'))
+        self.report.append(Spacer(0 * mm, 2.5 * mm))
         # cjv
-        try:
-            report.append(Paragraph(
-                         '<font size = 9><sup>%</sup></font><font size = 11><b>'
-                         'Coefficient of joint variation</b></font>: ' +
-                         str(round(data.get('cjv'), 2)),
-                         styles['Bullet2']))
-
-        except TypeError:
-            report.append(Paragraph(
-                         '<font size = 9><sup>%</sup></font><font size = 11><b>'
-                         'Coefficient of joint variation</b></font>: ' +
-                         'Not determined',
-                         styles['Bullet2']))
-
-        report.append(Spacer(0 * mm, 52 * mm))
+        self.report.append(self.get_iqms_data('cjv'))
+        self.report.append(Spacer(0 * mm, 52 * mm))
         # Footnote
         line = ReportLine(500)
         line.hAlign = 'CENTER'
-        report.append(line)
-        report.append(Spacer(0 * mm, 2.5 * mm))
-        report.append(Paragraph(
-            "<font size = 8><sup>$</sup>Dietrich et al., <i>Measurement of SNRs"
-            " in MR images: influence of multichannel coils, parallel imaging "
-            "and reconstruction filters</i>, JMRI 26(2):375–385, 2007. "
-            "Higher values are better.</font>",
-            styles['Left']))
-        report.append(Paragraph(
-            "<font size = 8><sup>#</sup>Magnotta, VA., & Friedman, L., <i>"
-            "Measurement of signal-to-noise and contrast-to-noise in the fBIRN "
-            "multicenter imaging study</i>, J Dig Imag 19(2):140-147, 2006. "
-            "Higher values are better.</font>",
-            styles['Left']))
-        report.append(Paragraph(
-            "<font size = 8><sup>&</sup>Mortamet B et al., <i>Automatic "
-            "quality assessment in structural brain magnetic resonance imaging"
-            "</i>, Mag Res Med 62(2):365-372, 2009. Lower values are better."
-            "</font>",
-            styles['Left']))
-        report.append(Paragraph(
-            "<font size = 8><sup>%</sup>Ganzetti et al., <i>Intensity "
-            "inhomogeneity correction of structural MR images: a data-driven "
-            "approach to define input algorithm parameters</i>, Front "
-            "Neuroinform 10:10, 2016. Lower values are better.</font>",
-            styles['Left']))
-        report.append(PageBreak())
+        self.report.append(line)
+        self.report.append(Spacer(0 * mm, 2.5 * mm))
+
+        for param in ("snrd_csf", "cnr", "qi_2", "cjv"):
+            self.report.append(Paragraph(
+                "<font size = 8><sup>" +
+                    self.dict4runtime['extra_info'][param][2] +
+                    "</sup>" + self.dict4runtime['extra_info'][param][3] +
+                    "</font>",
+                self.styles['Left']))
+
+        self.report.append(PageBreak())
+
+        # Third page - IQMs ###################################################
+        #######################################################################
+        self.report.append(Paragraph("<font size = 18 ><b>Image parameters"
+                                        "</b></font>",
+                                     self.styles['Center']))
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        line = ReportLine(150)
+        line.hAlign = 'CENTER'
+        self.report.append(line)
+        self.report.append(Spacer(0 * mm, 20 * mm))
+        ### Spatial distribution ##############################################
+        self.report.append(Paragraph("<font size = 15 ><b>SPATIAL DISTRIBUTION"
+                                        "</b></font>",
+                                     self.styles['Bullet1']))
+        self.report.append(Spacer(0 * mm, 2 * mm))
+        self.report.append(Paragraph("Information theory to evaluate the "
+                                        "spatial distribution of information",
+                                     self.styles['Left2']))
+        self.report.append(Spacer(0 * mm, 10 * mm))
+        # fber
+        self.report.append(self.get_iqms_data('fber'))
+        self.report.append(Spacer(0 * mm, 2.5 * mm))
+        # efc
+        self.report.append(self.get_iqms_data('efc'))
+        self.report.append(Spacer(0 * mm, 20 * mm))
+        ### Artifacts #########################################################
+        self.report.append(Paragraph("<font size = 15 ><b>ARTIFACTS"
+                                        "</b></font>",
+                                     self.styles['Bullet1']))
+        self.report.append(Spacer(0 * mm, 2 * mm))
+        self.report.append(
+                      Paragraph("Estimates artefacts and signal leakage due to "
+                                   "rapid movement (e.g. eye movement or blood "
+                                   "vessel pulsation, etc.)",
+                                self.styles['Left2']))
+
+        self.report.append(Spacer(0 * mm, 10 * mm))
+        # wm2max
+        self.report.append(self.get_iqms_data('wm2max'))
+        self.report.append(Spacer(0 * mm, 2.5 * mm))
+        # qi_1
+        self.report.append(self.get_iqms_data('qi_1'))
+        self.report.append(Spacer(0 * mm, 2.5 * mm))
+        # inu_range
+        self.report.append(self.get_iqms_data('inu_range'))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # inu_med
+        self.report.append(self.get_iqms_data('inu_med'))
+        self.report.append(Spacer(0 * mm, 100 * mm))
+        # Footnote
+        line = ReportLine(500)
+        line.hAlign = 'CENTER'
+        self.report.append(line)
+        self.report.append(Spacer(0 * mm, 2.5 * mm))
+
+        for param in ("fber", "efc", "wm2max", "qi_1", "inu_range"):
+            self.report.append(Paragraph(
+                "<font size = 8><sup>" +
+                    self.dict4runtime['extra_info'][param][2] +
+                    "</sup>" + self.dict4runtime['extra_info'][param][3] +
+                    "</font>",
+                self.styles['Left']))
+
+        self.report.append(PageBreak())
+
+        # fourth page - IQMs ##################################################
+        #######################################################################
+        self.report.append(Paragraph("<font size = 18 ><b>Image parameters"
+                                        "</b></font>",
+                                     self.styles['Center']))
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        line = ReportLine(150)
+        line.hAlign = 'CENTER'
+        self.report.append(line)
+        self.report.append(Spacer(0 * mm, 20 * mm))
+        ### Tissues Quality ###################################################
+        self.report.append(Paragraph("<font size = 15 ><b>TISSUES QUALITY"
+                                        "</b></font>",
+                                     self.styles['Bullet1']))
+        self.report.append(Spacer(0 * mm, 2 * mm))
+        self.report.append(Paragraph("Metrics that do not fall into the above "
+                                        "categories: statistical properties of "
+                                        "tissue distributions, volume overlap "
+                                        "of tissues, image harpness/blurriness,"
+                                        " etc.",
+                                     self.styles['Left2']))
+        self.report.append(Spacer(0 * mm, 10 * mm))
+        # summary_csf_mean
+        self.report.append(self.get_iqms_data('summary_csf_mean'))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # summary_csf_stdv
+        self.report.append(self.get_iqms_data('summary_csf_stdv'))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # summary_csf_median
+        self.report.append(self.get_iqms_data('summary_csf_median'))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # summary_csf_mad
+        self.report.append(self.get_iqms_data('summary_csf_mad'))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # summary_csf_p95
+        self.report.append(self.get_iqms_data('summary_csf_p95'))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # summary_csf_p05
+        self.report.append(self.get_iqms_data('summary_csf_p05'))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # summary_csf_k
+        self.report.append(self.get_iqms_data('summary_csf_k'))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # summary_csf_n
+        self.report.append(self.get_iqms_data('summary_csf_n'))
+        self.report.append(Spacer(0 * mm, 2.5 * mm))
+        # summary_gm_mean
+        self.report.append(self.get_iqms_data('summary_gm_mean'))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # summary_gm_stdv
+        self.report.append(self.get_iqms_data('summary_gm_stdv'))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # summary_gm_median
+        self.report.append(self.get_iqms_data('summary_gm_median'))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # summary_gm_mad
+        self.report.append(self.get_iqms_data('summary_gm_mad'))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # summary_gm_p95
+        self.report.append(self.get_iqms_data('summary_gm_p95'))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # summary_gm_p05
+        self.report.append(self.get_iqms_data('summary_gm_p05'))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # summary_gm_k
+        self.report.append(self.get_iqms_data('summary_gm_k'))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # summary_gm_n
+        self.report.append(self.get_iqms_data('summary_gm_n'))
+        self.report.append(Spacer(0 * mm, 2.5 * mm))
+        # summary_wm_mean
+        self.report.append(self.get_iqms_data('summary_wm_mean'))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # summary_wm_stdv
+        self.report.append(self.get_iqms_data('summary_wm_stdv'))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # summary_wm_median
+        self.report.append(self.get_iqms_data('summary_wm_median'))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # summary_wm_mad
+        self.report.append(self.get_iqms_data('summary_wm_mad'))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # summary_wm_p95
+        self.report.append(self.get_iqms_data('summary_wm_p95'))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # summary_wm_p05
+        self.report.append(self.get_iqms_data('summary_wm_p05'))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # summary_wm_k
+        self.report.append(self.get_iqms_data('summary_wm_k'))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # summary_wm_n
+        self.report.append(self.get_iqms_data('summary_wm_n'))
+        self.report.append(Spacer(0 * mm, 2.5 * mm))
+        # summary_bg_mean
+        self.report.append(self.get_iqms_data('summary_bg_mean'))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # summary_bg_stdv
+        self.report.append(self.get_iqms_data('summary_bg_stdv'))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # summary_bg_median
+        self.report.append(self.get_iqms_data('summary_bg_median'))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # summary_bg_mad
+        self.report.append(self.get_iqms_data('summary_bg_mad'))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # summary_bg_p95
+        self.report.append(self.get_iqms_data('summary_bg_p95'))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # summary_bg_p05
+        self.report.append(self.get_iqms_data('summary_bg_p05'))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # summary_bg_k
+        self.report.append(self.get_iqms_data('summary_bg_k'))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # summary_bg_n
+        self.report.append(self.get_iqms_data('summary_bg_n'))
+        self.report.append(Spacer(0 * mm, 2.5 * mm))
+        # fwhm_x
+        self.report.append(self.get_iqms_data('fwhm_x'))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # fwhm_y
+        self.report.append(self.get_iqms_data('fwhm_y'))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # fwhm_z
+        self.report.append(self.get_iqms_data('fwhm_z'))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # fwhm_avg
+        self.report.append(self.get_iqms_data('fwhm_avg'))
+        self.report.append(Spacer(0 * mm, 7 * mm))
+        # Footnote
+        line = ReportLine(500)
+        line.hAlign = 'CENTER'
+        self.report.append(line)
+        self.report.append(Spacer(0 * mm, 2.5 * mm))
+
+        for param in ("summary_csf_k", "fwhm_x"):
+            self.report.append(Paragraph(
+                "<font size = 8><sup>" +
+                    self.dict4runtime['extra_info'][param][2] +
+                    "</sup>" + self.dict4runtime['extra_info'][param][3] +
+                    "</font>",
+                self.styles['Left']))
+
+        self.report.append(PageBreak())
+
+       # Fifth page page - IQMs###############################################
+        #######################################################################
+        self.report.append(Paragraph("<font size = 18 ><b>Image parameters</b>"
+                                        "</font>",
+                                     self.styles['Center']))
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        line = ReportLine(150)
+        line.hAlign = 'CENTER'
+        self.report.append(line)
+        self.report.append(Spacer(0 * mm, 20 * mm))
+        ### Tissues Quality ###################################################
+        self.report.append(Paragraph("<font size = 15 ><b>TISSUES QUALITY</b>"
+                                        "</font>",
+                                     self.styles['Bullet1']))
+        self.report.append(Spacer(0 * mm, 2 * mm))
+        self.report.append(Paragraph(
+              "Metrics that do not fall into the above categories: statistical "
+                "properties of tissue distributions, volume overlap of "
+                "tissues, image harpness/blurriness, etc.",
+              self.styles['Left2']))
+        self.report.append(Spacer(0 * mm, 10 * mm))
+        # icvs_csf
+        self.report.append(self.get_iqms_data('icvs_csf'))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # icvs_gm
+        self.report.append(self.get_iqms_data('icvs_gm'))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # icvs_wm
+        self.report.append(self.get_iqms_data('icvs_wm'))
+        self.report.append(Spacer(0 * mm, 2.5 * mm))
+        # rpve_csf
+        self.report.append(self.get_iqms_data('rpve_csf'))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # rpve_gm
+        self.report.append(self.get_iqms_data('rpve_gm'))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # rpve_wm
+        self.report.append(self.get_iqms_data('rpve_wm'))
+        self.report.append(Spacer(0 * mm, 2.5 * mm))
+        # tpm_overlap_csf
+        self.report.append(self.get_iqms_data('tpm_overlap_csf'))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # tpm_overlap_gm
+        self.report.append(self.get_iqms_data('tpm_overlap_gm'))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # tpm_overlap_wm
+        self.report.append(self.get_iqms_data('tpm_overlap_wm'))
+        self.report.append(Spacer(0 * mm, 147 * mm))
+        # Footnote
+        line = ReportLine(500)
+        line.hAlign = 'CENTER'
+        self.report.append(line)
+        self.report.append(Spacer(0 * mm, 2.5 * mm))
+
+        for param in ("rpve_csf", "tpm_overlap_csf"):
+            self.report.append(Paragraph(
+                "<font size = 8><sup>" +
+                self.dict4runtime['extra_info'][param][2] +
+                "</sup>" + self.dict4runtime['extra_info'][param][3] +
+                "</font>",
+                self.styles['Left']))
+
+        self.report.append(PageBreak())
+
+        # Sixth page - slice planes display - Raw anatomic ####################
+        #######################################################################
+        self.report.append(Paragraph("<font size = 18 > <b>MRI axial slice "
+                                        "planes display</b> </font>",
+                                     self.styles['Center']))
+        self.report.append(Spacer(0*mm, 4*mm))
+        line = ReportLine(150)
+        line.hAlign = 'CENTER'
+        self.report.append(line)
+        self.report.append(Spacer(0 * mm, 10 * mm))
+        self.report.append(Paragraph("<font size = 14 >Raw anatomic "
+                                        "images</font>",
+                                     self.styles['Center']))
+        self.report.append(Spacer(0*mm, 10*mm))
+        self.report.append(Paragraph('<font size = 9 ><i>"Neurological" '
+                                        'convention, the left side of the '
+                                        'image corresponds to the left side of '
+                                        'the brain.</i></font>',
+                                     self.styles['Center']))
+        self.report.append(Spacer(0*mm, 1*mm))
+        tmpdir = tempfile.TemporaryDirectory()
+        slices_image = slice_planes_plot(
+                                      self.anat, self.anat_fig_rows,
+                                      self.anat_fig_cols,
+                                      inf_slice_start=self.anat_inf_slice_start,
+                                      slices_gap=self.anat_slices_gap,
+                                      cmap="Greys_r", out_dir=tmpdir.name)
+        # reminder: A4 == 210mmx297mm
+        slices_image = Image(slices_image,
+                             width=7.4803 * inch, height=9.0551 * inch)
+        slices_image.hAlign = 'CENTER'
+        self.report.append(slices_image)
+        self.report.append(PageBreak())
+
+        # Seventh page - slice planes display - Normalised anatomic (MNI) #####
+        #######################################################################
+        self.report.append(Paragraph("<font size = 18 > <b>MRI axial slice "
+                                        "planes display</b> </font>",
+                                     self.styles['Center']))
+        self.report.append(Spacer(0*mm, 4*mm))
+        line = ReportLine(150)
+        line.hAlign = 'CENTER'
+        self.report.append(line)
+        self.report.append(Spacer(0 * mm, 10 * mm))
+        self.report.append(Paragraph("<font size = 14 >Normalised anatomic "
+                                        "(MNI)</font>",
+                                     self.styles['Center']))
+
+        self.report.append(Spacer(0*mm, 10*mm))
+        self.report.append(Paragraph('<font size = 9 > <i> "Neurological" '
+                                        'convention, the left side of the '
+                                        'image corresponds to the left side of '
+                                        'the brain. </i> <br/> </font>',
+                                     self.styles['Center']))
+        self.report.append(Spacer(0*mm, 1*mm))
+        slices_image = slice_planes_plot(
+                                 self.norm_anat,
+                                 self.norm_anat_fig_rows,
+                                 self.norm_anat_fig_cols,
+                                 inf_slice_start=self.norm_anat_inf_slice_start,
+                                 slices_gap=self.norm_anat_slices_gap,
+                                 cmap="Greys_r", out_dir=tmpdir.name)
+        # reminder: A4 == 210mmx297mm
+        slices_image = Image(slices_image, width=7.4803 * inch,
+                             height=9.0551 * inch)
+        slices_image.hAlign = 'CENTER'
+        self.report.append(slices_image)
+
+
+        # Currently, we make and save (in derived_data) the qi2 graph, but we
+        # don't include it in the report because the result with the test data
+        # looks strange.
+        _ = plot_qi2(np.asarray(self.data['histogram_qi2_x_grid']),
+                     np.asarray(self.data['histogram_qi2_ref_pdf']),
+                     np.asarray(self.data['histogram_qi2_fit_pdf']),
+                     np.asarray(self.data['histogram_qi2_ref_data']),
+                     int(self.data['histogram_qi2_cutoff_idx']),
+                     out_file=os.path.join(
+                         os.path.split(os.path.split(self.anat)[0])[0],
+                         'derived_data', 'qi2_plot.svg'))
+
+        self.page.build(self.report, canvasmaker=PageNumCanvas)
+        tmpdir.cleanup()
 
     def get_iqms_data(self, param):
         """blabla"""
 
-        extra_info = {'size_x': ['Voxel size in X', 2, None],
-                      'size_y': ['Voxel size in Y', 2, None],
-                      'size_z': ['Voxel size in Z', 2, None],
-                      'spacing_x': ['Spacing in X (mm)', 2, None],
-                      'spacing_y': ['Spacing in Y (mm)', 2, None],
-                      'spacing_z': ['Spacing in Z (mm)', 2, None],
-                      'snr_csf': ['Signal-to-noise ratio (SNR) for '
-                                    'cerebrospinal fluid',
-                                  2, None],
-                      'snr_wm': ['SNR for white matter', 2, None],
-                      'snr_gm': ['SNR for gray matter', 2, None],
-                      'snr_total': ['SNR for brain parenchyma', 2, None],
-                      'snrd_csf': ["Dietrich’s SNR for cerebrospinal fluid",
-                                   2, '$']
-                      }
-
         if self.data.get(param) is None:
 
-            if extra_info[param][2] is None:
+            if self.dict4runtime['extra_info'][param][2] is None:
                 return Paragraph(
-                         "<font size = 11> <b> " + extra_info[param][0] +
+                         "<font size = 11> <b> " +
+                            self.dict4runtime['extra_info'][param][0] +
                             " </b> </font>: Not determined",
                          self.styles['Bullet2'])
             else:
                 return Paragraph(
-                        "<font size = 9><sup>" + extra_info[param][2] +
+                        "<font size = 9><sup>" +
+                            self.dict4runtime['extra_info'][param][2] +
                             "</sup></font><font size = 11><b>" +
-                            extra_info[param][0] +
+                            self.dict4runtime['extra_info'][param][0] +
                             "</b></font>: Not determined",
                         self.styles['Bullet2'])
 
         else:
 
-            if extra_info[param][2] is None:
+            if self.dict4runtime['extra_info'][param][2] is None:
                 return Paragraph(
-                         "<font size = 11> <b> " + extra_info[param][0] +
-                            " </b> </font>: " +
-                            str(round(self.data.get(param),
-                                      extra_info[param][1])),
-                         self.styles['Bullet2'])
+                    "<font size = 11> <b>{0}</b> </font>: {1}".format(
+                    self.dict4runtime['extra_info'][param][0],
+                    str(round(self.data.get(param),
+                              self.dict4runtime['extra_info'][param][1])) if
+                        isinstance(self.dict4runtime['extra_info'][param][1],
+                                   int) else
+                    self.dict4runtime['extra_info'][param][1].format(
+                                                             self.data[param])),
+                    self.styles['Bullet2'])
 
             else:
                 return Paragraph(
-                        "<font size = 9><sup>" + extra_info[param][2] +
-                            "</sup></font><font size = 11><b>" +
-                            extra_info[param][0] + "</b></font>: " +
-                            str(round(self.data.get(param),
-                                      extra_info[param][1])),
-                        self.styles['Bullet2'])
+                    "<font size = 9><sup>{0}</sup></font><font size = 11><b>"
+                    "{1}</b></font>: {2}".format(
+                    self.dict4runtime['extra_info'][param][2],
+                    self.dict4runtime['extra_info'][param][0],
+                    str(round(self.data.get(param),
+                              self.dict4runtime['extra_info'][param][1])) if
+                        isinstance(self.dict4runtime['extra_info'][param][1],
+                                   int) else
+                    self.dict4runtime['extra_info'][param][1].format(
+                                                             self.data[param])),
+                    self.styles['Bullet2'])
+
+
