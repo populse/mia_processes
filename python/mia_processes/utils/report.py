@@ -69,29 +69,37 @@ import numpy as np
 class Report():
     """blabla"""
 
-    def __init__(self, dict4runtime, IQMs_file,
-                 anat_file, anat_fig_rows, anat_fig_cols, anat_inf_slice_start,
-                    anat_slices_gap,
-                 norm_anat_file, norm_anat_fig_rows, norm_anat_fig_cols,
-                    norm_anat_inf_slice_start, norm_anat_slices_gap,
-                 report_file):
+    def __init__(self, report_file, dict4runtime, **kwargs):
         """blabla"""
 
         self.dict4runtime = dict4runtime
-        self.anat = anat_file
-        self.anat_fig_rows = anat_fig_rows
-        self.anat_fig_cols = anat_fig_cols
-        self.anat_inf_slice_start = anat_inf_slice_start
-        self.anat_slices_gap = anat_slices_gap
-        self.norm_anat = norm_anat_file
-        self.norm_anat_fig_rows = norm_anat_fig_rows
-        self.norm_anat_fig_cols = norm_anat_fig_cols
-        self.norm_anat_inf_slice_start = norm_anat_inf_slice_start
-        self.norm_anat_slices_gap = norm_anat_slices_gap
+        ref_exp = "Undefined"
 
-        f = open(IQMs_file)
-        self.data = json.load(f)
-        f.close()
+        for key in kwargs:
+            setattr(self, key, kwargs[key])
+
+        if "IQMs_file" in kwargs:
+
+            with open(self.IQMs_file) as f:
+                self.iqms_data = json.load(f)
+
+            if "anat" in kwargs:
+                self.make_report = self.mriqc_anat_make_report
+                ref_exp = self.anat
+                self.title = ('<font size=18><b>Anatomical Image-Quality '
+                              'Metrics summary report</b></font>')
+
+            elif "func" in kwargs:
+                self.make_report = self.mriqc_func_make_report
+                ref_exp = self.func
+                self.title = ('<font size=18><b>Functional Image-Quality '
+                              'Metrics summary report</b></font>')
+
+            self.header_title = ('<sup rise=20 size=9>$</sup>'
+                                 '<font size=30><b>MRIQ</b></font>'
+                                 '<font size=11>uality</font>'
+                                 '<font size=30><b>C</b></font>'
+                                 '<font size=11>ontrol</font>')
 
         # Initialises stylesheet with few basic heading and text styles,
         # return a stylesheet object
@@ -139,21 +147,17 @@ class Report():
                                         ('ALIGN', (-1, 0), (-1, 0), 'RIGHT'),
                                         ('VALIGN', (0, 0), (-1, 0), 'MIDDLE')]))
 
-        self.header_title = ('<sup rise=20 size=9>$</sup>'
-                             '<font size=30><b>MRIQ</b></font>'
-                             '<font size=11>uality</font>'
-                             '<font size=30><b>C</b></font>'
-                             '<font size=11>ontrol</font>')
-
         infos = [self.dict4runtime[i] for i in (
                                            'Site', 'Spectro', 'StudyName',
                                            'AcquisitionDate', 'PatientName',
                                            'Sex', 'Age')]
         infos.insert(4, datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
-        infos.insert(5, self.anat)
-        infos.extend((version.split()[0], mia_info.__version__,
-                      capsul_info.__version__, nipype_info.__version__,
-                      mia_processes_info.__version__,
+        infos.insert(5, ref_exp)
+        infos.extend(("Python " + version.split()[0],
+                      "Populse_mia " + mia_info.__version__,
+                      "Capsul " + capsul_info.__version__,
+                      "Nipype " + nipype_info.__version__,
+                      "Mia_processes " + mia_processes_info.__version__,
                       "Operating System {0} {1}".format(
                                         'Mac OS X' if
                                             platform.system() == 'Darwin' else
@@ -214,16 +218,7 @@ class Report():
                               ('LINEBELOW', (0, -1), (-1, -1), 2, colors.black),
                               ('VALIGN', (0, 0), (-1, -1), 'MIDDLE')]))
         self.cover_data.hAlign = 'CENTER'
-        # Output document template definition for page; margins and pages size
-        self.page = SimpleDocTemplate(report_file,
-                                      pagesize=portrait(A4),
-                                      rightMargin=20*mm,
-                                      leftMargin=20*mm,
-                                      topMargin=10*mm,
-                                      bottomMargin=10*mm)
 
-        self.title = ('<font size=18><b>Anatomical Image-Quality Metrics '
-                      'summary report</b></font>')
         self.textDisclaimer = ("<font size=7 ><i><b>DISCLAIMER</b><br/>Mia "
                                "software, from the Populse project, is executed"
                                " in a research environment on anonymized data. "
@@ -254,10 +249,23 @@ class Report():
                                "informations sous sa seule et entière "
                                "responsabilité.</i> </font>")
 
+        # Output document template definition for page; margins and pages size
+        self.page = SimpleDocTemplate(report_file,
+                                      pagesize=portrait(A4),
+                                      rightMargin=20*mm,
+                                      leftMargin=20*mm,
+                                      topMargin=10*mm,
+                                      bottomMargin=10*mm)
+
         #Canvas creation
         self.report = []
 
-    def make_report(self,):
+    def mriqc_func_make_report(self,):
+        """blabla"""
+
+        pass
+
+    def mriqc_anat_make_report(self,):
         """blabla"""
 
        # First page - cover ##################################################
@@ -275,7 +283,7 @@ class Report():
         self.report.append(Paragraph(self.title, self.styles['Center']))
         self.report.append(Spacer(0 * mm, 10 * mm))
         self.report.append(self.cover_data)
-        self.report.append(Spacer(0 * mm, 5 * mm))
+        self.report.append(Spacer(0 * mm, 6 * mm))
         self.report.append(Paragraph(self.textDisclaimer,
                                      self.styles["Justify"]))
         self.report.append(Spacer(0 * mm, 6 * mm))
@@ -732,11 +740,11 @@ class Report():
         # Currently, we make and save (in derived_data) the qi2 graph, but we
         # don't include it in the report because the result with the test data
         # looks strange.
-        _ = plot_qi2(np.asarray(self.data['histogram_qi2_x_grid']),
-                     np.asarray(self.data['histogram_qi2_ref_pdf']),
-                     np.asarray(self.data['histogram_qi2_fit_pdf']),
-                     np.asarray(self.data['histogram_qi2_ref_data']),
-                     int(self.data['histogram_qi2_cutoff_idx']),
+        _ = plot_qi2(np.asarray(self.iqms_data['histogram_qi2_x_grid']),
+                     np.asarray(self.iqms_data['histogram_qi2_ref_pdf']),
+                     np.asarray(self.iqms_data['histogram_qi2_fit_pdf']),
+                     np.asarray(self.iqms_data['histogram_qi2_ref_data']),
+                     int(self.iqms_data['histogram_qi2_cutoff_idx']),
                      out_file=os.path.join(
                          os.path.split(os.path.split(self.anat)[0])[0],
                          'derived_data', 'qi2_plot.svg'))
@@ -747,7 +755,7 @@ class Report():
     def get_iqms_data(self, param):
         """blabla"""
 
-        if self.data.get(param) is None:
+        if self.iqms_data.get(param) is None:
 
             if self.dict4runtime['extra_info'][param][2] is None:
                 return Paragraph(
@@ -770,12 +778,12 @@ class Report():
                 return Paragraph(
                     "<font size = 11> <b>{0}</b> </font>: {1}".format(
                     self.dict4runtime['extra_info'][param][0],
-                    str(round(self.data.get(param),
+                    str(round(self.iqms_data.get(param),
                               self.dict4runtime['extra_info'][param][1])) if
                         isinstance(self.dict4runtime['extra_info'][param][1],
                                    int) else
                     self.dict4runtime['extra_info'][param][1].format(
-                                                             self.data[param])),
+                                                        self.iqms_data[param])),
                     self.styles['Bullet2'])
 
             else:
@@ -784,12 +792,12 @@ class Report():
                     "{1}</b></font>: {2}".format(
                     self.dict4runtime['extra_info'][param][2],
                     self.dict4runtime['extra_info'][param][0],
-                    str(round(self.data.get(param),
+                    str(round(self.iqms_data.get(param),
                               self.dict4runtime['extra_info'][param][1])) if
                         isinstance(self.dict4runtime['extra_info'][param][1],
                                    int) else
                     self.dict4runtime['extra_info'][param][1].format(
-                                                             self.data[param])),
+                                                        self.iqms_data[param])),
                     self.styles['Bullet2'])
 
 

@@ -691,14 +691,17 @@ class MRIQC_anat_report(ProcessMIA):
         """Dedicated to the process launch step of the brick."""
         super(MRIQC_anat_report, self).run_process_mia()
 
-        report = Report(self.dict4runtime, self.IQMs_file,
-                        self.anat, self.anat_fig_rows, self.anat_fig_cols,
-                            self.anat_inf_slice_start, self.anat_slices_gap,
-                        self.norm_anat, self.norm_anat_fig_rows,
-                            self.norm_anat_fig_cols,
-                            self.norm_anat_inf_slice_start,
-                            self.norm_anat_slices_gap,
-                        self.report)
-
+        report = Report(
+                self.report, self.dict4runtime,
+                IQMs_file=self.IQMs_file,
+                anat=self.anat, anat_fig_rows=self.anat_fig_rows,
+                    anat_fig_cols=self.anat_fig_cols,
+                    anat_inf_slice_start=self.anat_inf_slice_start,
+                    anat_slices_gap=self.anat_slices_gap,
+                norm_anat=self.norm_anat,
+                    norm_anat_fig_rows=self.norm_anat_fig_rows,
+                    norm_anat_fig_cols=self.norm_anat_fig_cols,
+                    norm_anat_inf_slice_start=self.norm_anat_inf_slice_start,
+                    norm_anat_slices_gap=self.norm_anat_slices_gap)
 
         report.make_report()
