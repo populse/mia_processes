@@ -8,6 +8,7 @@ compute necessary values for reporting.
         - AnatIQMs
         - BoldIQMs
         - ComputeDVARS
+        - CarpetParcellation
         - FramewiseDisplacement
         - FWHMx
         - GCOR
