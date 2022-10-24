@@ -1193,14 +1193,14 @@ class MRIQC_func_report(ProcessMIA):
         report = Report(
                 self.report, self.dict4runtime,
                 IQMs_file=self.IQMs_file,
-                anat=self.func, anat_fig_rows=self.func_fig_rows,
-                    anat_fig_cols=self.func_fig_cols,
-                    anat_inf_slice_start=self.func_inf_slice_start,
-                    anat_slices_gap=self.func_slices_gap,
-                norm_anat=self.norm_func,
-                    norm_anat_fig_rows=self.norm_func_fig_rows,
-                    norm_anat_fig_cols=self.norm_func_fig_cols,
-                    norm_anat_inf_slice_start=self.norm_func_inf_slice_start,
-                    norm_anat_slices_gap=self.norm_func_slices_gap)
+                func=self.func, func_fig_rows=self.func_fig_rows,
+                    func_fig_cols=self.func_fig_cols,
+                    func_inf_slice_start=self.func_inf_slice_start,
+                    func_slices_gap=self.func_slices_gap,
+                norm_func=self.norm_func,
+                    norm_func_fig_rows=self.norm_func_fig_rows,
+                    norm_func_fig_cols=self.norm_func_fig_cols,
+                    norm_func_inf_slice_start=self.norm_func_inf_slice_start,
+                    norm_func_slices_gap=self.norm_func_slices_gap)
 
         report.make_report()
