@@ -204,7 +204,11 @@ class Report():
                     temp = [Paragraph("<para align=right><b>" + header +
                                         "&nbsp&nbsp&nbsp :</b></para>",
                                       self.styles["BodyText"]),
-                            Paragraph("<para align=justify>" + info + "</para>",
+                            Paragraph("<para align=justify><font size = 7>" +
+                                      info +
+                                      "</font></para>" if
+                                      header == "NAME OF THE INPUT DATA" else
+                                      "<para align=justify>" + info + "</para>",
                                       self.styles["Normal"])]
 
                 cover_data.append(temp)
@@ -305,7 +309,7 @@ class Report():
         line.hAlign = 'CENTER'
         self.report.append(line)
         self.report.append(Spacer(0 * mm, 20 * mm))
-        ### Spatial resolution ################################################
+        ### Spatial and temporal resolution ###################################
         self.report.append(Paragraph(
             "<font size = 15 > <b>SPATIAL AND TEMPORAL RESOLUTION</b> </font>",
             self.styles['Bullet1']))
@@ -321,7 +325,7 @@ class Report():
         self.report.append(Spacer(0 * mm, 1 * mm))
         # size_z
         self.report.append(self.get_iqms_data('size_z'))
-        self.report.append(Spacer(0 * mm, 2.5 * mm))
+        self.report.append(Spacer(0 * mm, 1 * mm))
         # size_t
         self.report.append(self.get_iqms_data('size_t'))
         self.report.append(Spacer(0 * mm, 2.5 * mm))
@@ -359,7 +363,7 @@ class Report():
         self.report.append(Spacer(0 * mm, 2.5 * mm))
         # dummyTRs
         self.report.append(self.get_iqms_data('dummyTRs'))
-        self.report.append(Spacer(0 * mm, 52 * mm))
+        self.report.append(Spacer(0 * mm, 90 * mm))
         # Footnote
         line = ReportLine(500)
         line.hAlign = 'CENTER'
@@ -446,7 +450,7 @@ class Report():
         self.report.append(self.get_iqms_data('fber'))
         self.report.append(Spacer(0 * mm, 2.5 * mm))
         # efc
-        self.report.append(self.get_iqms_data('fber'))
+        self.report.append(self.get_iqms_data('efc'))
         self.report.append(Spacer(0 * mm, 2.5 * mm))
         # fwhm_x
         self.report.append(self.get_iqms_data('fwhm_x'))
@@ -458,9 +462,9 @@ class Report():
         self.report.append(self.get_iqms_data('fwhm_z'))
         self.report.append(Spacer(0 * mm, 1 * mm))
         # fwhm_avg
-        self.report.append(self.get_iqms_data('fwhm_y'))
+        self.report.append(self.get_iqms_data('fwhm_avg'))
         self.report.append(Spacer(0 * mm, 1 * mm))
-        self.report.append(Spacer(0 * mm, 20 * mm))
+        self.report.append(Spacer(0 * mm, 66 * mm))
         # Footnote
         line = ReportLine(500)
         line.hAlign = 'CENTER'
@@ -506,7 +510,7 @@ class Report():
         self.report.append(Spacer(0 * mm, 2.5 * mm))
         # gcor
         self.report.append(self.get_iqms_data('gcor'))
-        self.report.append(Spacer(0 * mm, 70 * mm))
+        self.report.append(Spacer(0 * mm, 170 * mm))
         # Footnote
         line = ReportLine(500)
         line.hAlign = 'CENTER'

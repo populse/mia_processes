@@ -157,12 +157,20 @@ def plot_qi2(x_grid, ref_pdf, fit_pdf, ref_data, cutoff_idx, out_file=None):
     return out_file
 
 def slice_planes_plot(data, fig_rows, fig_cols, inf_slice_start=None,
-                      slices_gap=None, cmap="Greys_r", out_dir=None):
+                      slices_gap=None, dyn=1, cmap="Greys_r", out_dir=None):
     "blablabla"
 
     brain_img = nib.as_closest_canonical(nib.load(data))
     brain_data = brain_img.get_fdata()
     brain_data = np.squeeze(brain_data)
+
+    if len(brain_data.shape) == 4:
+        brain_data = brain_data[:, :, :, dyn]
+
+    elif len(brain_data.shape) > 4:
+        # TODO: what we do in this case?
+        pass
+
     min_thres = np.percentile(brain_data, 5)
     mask_data = np.ones_like(brain_data)
     mask_data[brain_data <= min_thres] = 0

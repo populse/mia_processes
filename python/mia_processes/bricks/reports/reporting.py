@@ -364,7 +364,7 @@ class MRIQC_anat_report(ProcessMIA):
                         "Neuroinform 10:10, 2016. Lower values are better."
                     ],
             "fber": ["FBER",
-                     2,
+                     "{:.2e}",
                      "%",
                      "Shehzad Z et al., <i>The Preprocessed Connectomes "
                         "Project Quality Assessment Protocol - a resource for "
@@ -938,7 +938,7 @@ class MRIQC_func_report(ProcessMIA):
                           2,
                           None
                          ],
-            "spacing_tr": ["Dynamic spacing (mm)",
+            "spacing_tr": ["Dynamic spacing (s)",
                            2,
                            None
                          ],
@@ -989,12 +989,12 @@ class MRIQC_func_report(ProcessMIA):
                         None
                         ],
             "summary_bg_mean": ["Mean of the distribution of background",
-                                 2,
+                                "{:.2e}",
                                  None
                                ],
             "summary_bg_stdv": ["Standard deviation of the distribution of "
                                 "background",
-                                 2,
+                                "{:.2e}",
                                  None
                                ],
             "summary_bg_median": ["Median of the distribution of background",
@@ -1008,7 +1008,7 @@ class MRIQC_func_report(ProcessMIA):
                               ],
             "summary_bg_p95": ["95% percentile of the distribution of "
                                 "background",
-                                2,
+                                "{:.2e}",
                                 None
                               ],
             "summary_bg_p05": ["5% percentile of the distribution of "
@@ -1032,31 +1032,31 @@ class MRIQC_func_report(ProcessMIA):
                               None
                             ],
             "summary_fg_mean": ["Mean of the distribution of foreground",
-                                2,
+                                "{:.2e}",
                                 None
                                ],
             "summary_fg_stdv": ["Standard deviation of the distribution of "
                                 "foreground",
-                                2,
+                                "{:.2e}",
                                 None
                                ],
             "summary_fg_median": ["Median of the distribution of foreground",
-                                  2,
+                                  "{:.2e}",
                                   None
                                  ],
             "summary_fg_mad": ["Median absolute deviation of the distribution"
                                " of foreground",
-                               2,
+                               "{:.2e}",
                                None
                               ],
             "summary_fg_p95": ["95% percentile of the distribution of "
                                "foreground",
-                               2,
+                               "{:.2e}",
                                None
                               ],
             "summary_fg_p05": ["5% percentile of the distribution of "
                                "foreground",
-                               2,
+                               "{:.2e}",
                                None
                               ],
             "summary_fg_k": ["Kurtosis of the distribution of foreground",
@@ -1079,7 +1079,7 @@ class MRIQC_func_report(ProcessMIA):
                     None
                    ],
             "fber": ["FBER",
-                     2,
+                     "{:.2e}",
                      "%",
                      "Shehzad Z et al., <i>The Preprocessed Connectomes "
                      "Project Quality Assessment Protocol - a resource for "
@@ -1140,7 +1140,7 @@ class MRIQC_func_report(ProcessMIA):
                         ],
             "dvars_nstd": ["DVARS, per-image standard deviation of the temporal "
                            "derivative of the BOLD signal, scaled to 1000",
-                           "{:.2e}",
+                           2,
                            "*",
                            "Power et al., <i>Spurious but systematic "
                            "correlations in functional connectivity MRI "
@@ -1149,7 +1149,7 @@ class MRIQC_func_report(ProcessMIA):
                           ],
             "dvars_std": ["Normalization of DVARS with the standard deviation "
                           "of the temporal difference time series",
-                          "{:.2e}",
+                          2,
                           "*",
                           "Power et al., <i>Spurious but systematic "
                           "correlations in functional connectivity MRI "
@@ -1157,7 +1157,7 @@ class MRIQC_func_report(ProcessMIA):
                           "59(3):2142-2154, 2012."
                          ],
             "dvars_vstd": ["Voxel-wise standardization of DVARS",
-                          "{:.2e}",
+                          2,
                           "*",
                           "Power et al., <i>Spurious but systematic "
                           "correlations in functional connectivity MRI "
