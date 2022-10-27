@@ -15,10 +15,10 @@ class Bold_hmc_pipeline(Pipeline):
 
         # links
         self.export_parameter("droptrs", "in_file", is_optional=False)
-        self.export_parameter("droptrs", "start_idx", is_optional=False)
-        self.export_parameter("droptrs", "stop_idx", is_optional=False)
-        self.export_parameter("despike", "despike", is_optional=False)
-        self.export_parameter("deoblique", "deoblique", is_optional=False)
+        self.export_parameter("droptrs", "start_idx", is_optional=True)
+        self.export_parameter("droptrs", "stop_idx", is_optional=True)
+        self.export_parameter("despike", "despike", is_optional=True)
+        self.export_parameter("deoblique", "deoblique", is_optional=True)
         self.add_link("droptrs.out_file->tshift.in_file")
         self.add_link("tshift.out_file->despike.in_file")
         self.add_link("despike.out_file->deoblique.in_file")

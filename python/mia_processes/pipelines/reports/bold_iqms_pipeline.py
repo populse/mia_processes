@@ -40,12 +40,12 @@ class Bold_iqms_pipeline(Pipeline):
         self.export_parameter("framewisedisplacement", "in_file", "hmc_motion", is_optional=False)
         self.export_parameter("spikes", "in_file", "ras_epi", is_optional=False)
         self.export_parameter("outliercount", "fraction", "outlier_fraction", is_optional=True)
-        self.export_parameter("qualityindex", "automask", "quality_index_automask", is_optional=False)
+        self.export_parameter("qualityindex", "automask", "quality_index_automask", is_optional=True)
         self.export_parameter("fwhmx", "combine", "fwhm_combine", is_optional=True)
-        self.export_parameter("fwhmx", "detrend", "fwhm_detrend", is_optional=False)
+        self.export_parameter("fwhmx", "detrend", "fwhm_detrend", is_optional=True)
         self.export_parameter("computedvars", "remove_zero_variance", "dvars_remove_zero_variance", is_optional=True)
         self.export_parameter("computedvars", "intensity_normalization", "dvars_intensity_normalization", is_optional=True)
-        self.export_parameter("framewisedisplacement", "parameter_source", "fd_parameter_source", is_optional=False)
+        self.export_parameter("framewisedisplacement", "parameter_source", "fd_parameter_source", is_optional=True)
         self.export_parameter("framewisedisplacement", "radius", "fd_radius", is_optional=True)
         self.export_parameter("framewisedisplacement", "normalize", "fd_normalize", is_optional=True)
         self.export_parameter("spikes", "no_zscore", "spikes_no_zscore", is_optional=True)
@@ -54,7 +54,7 @@ class Bold_iqms_pipeline(Pipeline):
         self.export_parameter("spikes", "skip_frames", "spikes_skip_frames", is_optional=True)
         self.add_link("outliercount.out_file->boldiqms.in_outliers_file")
         self.export_parameter("boldiqms", "out_file", "BoldQC_out_file", is_optional=False)
-        self.export_parameter("carpetparcellation", "out_file", "carpet_seg", is_optional=False)
+        self.export_parameter("carpetparcellation", "out_file", "carpet_seg", is_optional=True)
         self.add_link("framewisedisplacement.out_file->boldiqms.in_fd_file")
         self.add_link("spikes.out_file->boldiqms.in_spikes_file")
         self.add_link("gcor.out->boldiqms.in_gcor")
@@ -64,10 +64,18 @@ class Bold_iqms_pipeline(Pipeline):
 
         # parameters order
 
-        self.reorder_traits(("ras_epi", "epi_mean", "hmc_epi", "epi_tsnr", "brainmask", "epi_parc", "hmc_motion", "carpet_seg", "BoldQC_out_file", "dummy_TRs", "outlier_fraction", "quality_index_automask", "fwhm_combine", "fwhm_detrend", "dvars_remove_zero_variance", "dvars_intensity_normalization", "fd_parameter_source", "fd_radius", "fd_normalize", "fd_thresh", "spikes_no_zscore", "spikes_detrend", "spikes_spike_thresh", "spikes_skip_frames"))
+        self.reorder_traits(("ras_epi", "epi_mean", "hmc_epi", "epi_tsnr",
+                             "brainmask", "epi_parc", "hmc_motion",
+                             "carpet_seg", "BoldQC_out_file", "dummy_TRs",
+                             "outlier_fraction", "quality_index_automask",
+                             "fwhm_combine", "fwhm_detrend",
+                             "dvars_remove_zero_variance",
+                             "dvars_intensity_normalization",
+                             "fd_parameter_source", "fd_radius", "fd_normalize",
+                             "fd_thresh", "spikes_no_zscore", "spikes_detrend",
+                             "spikes_spike_thresh", "spikes_skip_frames"))
 
         # default and initial values
-        self.fd_parameter_source = 'AFNI'
 
         # nodes positions
         self.node_position = {
@@ -86,15 +94,6 @@ class Bold_iqms_pipeline(Pipeline):
 
         # nodes dimensions
         self.node_dimension = {
-            "boldiqms_1": (185.15625, 495.0),
-            "spikes_1": (169.953125, 250.0),
-            "qualityindex_1": (152.234375, 145.0),
-            "outliercount_1": (152.234375, 180.0),
-            "gcor_1": (119.765625, 110.0),
-            "framewisedisplacement_1": (239.28125, 215.0),
-            "fwhmx_1": (152.234375, 215.0),
-            "computedvars_1": (243.0625, 215.0),
-            "carpetparcellation_1": (180.9375, 145.0),
             "outliercount": (152.234375, 180.0),
             "boldiqms": (185.15625, 495.0),
             "carpetparcellation": (179.5, 145.0),

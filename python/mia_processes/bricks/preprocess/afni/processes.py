@@ -392,11 +392,6 @@ class Deoblique(ProcessMIA):
         in_file_desc = ('First input 3D file (a pathlike object or string '
                         'representing a file).')
         deoblique_desc = 'Deoblique dataset only if true (boolean).'
-        output_type_desc = ('Typecodes of the output image formats (one '
-                            'of NIFTI, AFNI, NIFTI_GZ).')
-        out_prefix_desc = ('Specify the string to be prepended to the '
-                           'filenames of the output image file '
-                           '(a string).')
 
         # Outputs description
         out_file_desc = ('The deobliqued file (a pathlike object or a '
@@ -411,7 +406,7 @@ class Deoblique(ProcessMIA):
         self.add_trait("deoblique",
                        Bool(True,
                             output=False,
-                            optional=False,
+                            optional=True,
                             desc=deoblique_desc))
 
         # Outputs traits
@@ -485,7 +480,7 @@ class Despike(ProcessMIA):
         # Inputs description
         in_file_desc = ('First input 3D file (a pathlike object or string '
                         'representing a file).')
-        despike_desc = 'Deoblique dataset only if true (boolean).'
+        despike_desc = 'Despike dataset only if true (boolean).'
         output_type_desc = ('Typecodes of the output image formats (one '
                             'of NIFTI, AFNI, NIFTI_GZ).')
         out_prefix_desc = ('Specify the string to be prepended to the '
@@ -505,7 +500,7 @@ class Despike(ProcessMIA):
         self.add_trait("despike",
                        Bool(True,
                             output=False,
-                            optional=False,
+                            optional=True,
                             desc=despike_desc))
 
         self.add_trait("output_type",
@@ -667,11 +662,13 @@ class DropTRs(ProcessMIA):
         self.add_trait("start_idx",
                        Int(0,
                            output=False,
+                           optional=True,
                            desc=start_idx_desc))
 
         self.add_trait("stop_idx",
                        Int(-1,
                            output=False,
+                           optional=True,
                            desc=stop_idx_desc))
 
         self.add_trait("output_type",
