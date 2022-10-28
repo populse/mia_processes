@@ -8,33 +8,77 @@ class Bold_mriqc_pipeline(Pipeline):
 
     def pipeline_definition(self):
         # nodes
-        self.add_process("bold_iqms_pipeline", "mia_processes.pipelines.reports.bold_iqms_pipeline.Bold_iqms_pipeline")
-        self.nodes["bold_iqms_pipeline"].process.nodes_activation = {'outliercount': True, 'boldiqms': True, 'carpetparcellation': True, 'framewisedisplacement': True, 'spikes': True, 'gcor': True, 'computedvars': True, 'fwhmx': True, 'qualityindex': True}
-        self.add_process("nonsteadystatedetector", "mia_processes.bricks.preprocess.others.processing.NonSteadyStateDetector")
-        self.add_process("sanitize", "mia_processes.bricks.preprocess.others.processing.Sanitize")
-        self.add_process("tsnr", "mia_processes.bricks.preprocess.others.processing.TSNR")
-        self.add_process("mean", "mia_processes.bricks.preprocess.afni.processes.Mean")
-        self.add_process("automask", "mia_processes.bricks.preprocess.afni.processes.Automask")
-        self.add_process("bold_hmc_pipeline", "mia_processes.pipelines.preprocess.bold_hmc_pipeline.Bold_hmc_pipeline")
-        self.nodes["bold_hmc_pipeline"].process.nodes_activation = {'droptrs': True, 'tshift': True, 'despike': True, 'deoblique': True, 'volreg': True}
-        self.add_process("bold_mni_align", "mia_processes.pipelines.preprocess.bold_mni_align.Bold_mni_align")
-        self.nodes["bold_mni_align"].set_plug_value("epi_mask", traits.Undefined)
-        self.nodes["bold_mni_align"].process.nodes["registration"].set_plug_value("moving_image_masks", traits.Undefined)
-        self.nodes["bold_mni_align"].process.nodes_activation = {'affineinitializer': True, 'registration': True, 'n4biasfieldcorrection': True, 'applytransforms': True, 'template': True, 'template_mask': True, 'seg_template': True}
+        self.add_process("bold_iqms_pipeline",
+                         "mia_processes.pipelines.reports.bold_iqms_pipeline."
+                             "Bold_iqms_pipeline")
+        self.nodes["bold_iqms_pipeline"].process.nodes_activation = {
+            'outliercount': True,
+            'boldiqms': True,
+            'carpetparcellation': True,
+            'framewisedisplacement': True,
+            'spikes': True,
+            'gcor': True,
+            'computedvars': True,
+            'fwhmx': True,
+            'qualityindex': True}
+        self.add_process("nonsteadystatedetector",
+                         "mia_processes.bricks.preprocess.others.processing."
+                             "NonSteadyStateDetector")
+        self.add_process("sanitize",
+                         "mia_processes.bricks.preprocess.others.processing."
+                             "Sanitize")
+        self.add_process("tsnr",
+                         "mia_processes.bricks.preprocess.others.processing."
+                             "TSNR")
+        self.add_process("mean",
+                         "mia_processes.bricks.preprocess.afni.processes."
+                             "Mean")
+        self.add_process("automask",
+                         "mia_processes.bricks.preprocess.afni.processes."
+                             "Automask")
+        self.add_process("bold_hmc_pipeline",
+                         "mia_processes.pipelines.preprocess.bold_hmc_pipeline."
+                             "Bold_hmc_pipeline")
+        self.nodes["bold_hmc_pipeline"].process.nodes_activation = {
+            'droptrs': True,
+            'tshift': True,
+            'despike': True,
+            'deoblique': True,
+            'volreg': True}
+        self.add_process("bold_mni_align",
+                         "mia_processes.pipelines.preprocess.bold_mni_align."
+                             "Bold_mni_align")
+        self.nodes["bold_mni_align"].set_plug_value("epi_mask",
+                                                    traits.Undefined)
+        self.nodes["bold_mni_align"].process.nodes[
+                            "registration"].set_plug_value("moving_image_masks",
+                                                           traits.Undefined)
+        self.nodes["bold_mni_align"].process.nodes_activation = {
+            'affineinitializer': True,
+            'registration': True,
+            'n4biasfieldcorrection': True,
+            'applytransforms': True,
+            'template': True,
+            'template_mask': True,
+            'seg_template': True}
         self.nodes["bold_mni_align"].process.epi_mask = traits.Undefined
-        self.add_process("mriqc_func_report", "mia_processes.bricks.reports.reporting.MRIQC_func_report")
+        self.add_process("mriqc_func_report",
+                         "mia_processes.bricks.reports.reporting."
+                             "MRIQC_func_report")
 
         # links
         self.export_parameter("sanitize", "in_file", is_optional=False)
         self.add_link("in_file->nonsteadystatedetector.in_file")
         self.add_link("in_file->mriqc_func_report.func")
-        self.add_link("bold_iqms_pipeline.BoldQC_out_file->mriqc_func_report.IQMs_file")
-        self.add_link("nonsteadystatedetector.n_volumes_to_discard->sanitize.n_volumes_to_discard")
-        self.add_link("nonsteadystatedetector.n_volumes_to_discard->bold_iqms_pipeline.dummy_TRs")
+        self.add_link("bold_iqms_pipeline.BoldQC_out_file->"
+                          "mriqc_func_report.IQMs_file")
+        self.add_link("nonsteadystatedetector.n_volumes_to_discard->"
+                          "sanitize.n_volumes_to_discard")
+        self.add_link("nonsteadystatedetector.n_volumes_to_discard->"
+                          "bold_iqms_pipeline.dummy_TRs")
         self.add_link("sanitize.out_file->bold_iqms_pipeline.ras_epi")
         self.add_link("sanitize.out_file->bold_hmc_pipeline.in_file")
         self.add_link("tsnr.out_tsnr_file->bold_iqms_pipeline.epi_tsnr")
-        #self.export_parameter("tsnr", "out_stddev_file", "stddev_file", is_optional=False)
         self.add_link("mean.out_file->bold_mni_align.epi_mean")
         self.add_link("mean.out_file->automask.in_file")
         self.add_link("mean.out_file->bold_iqms_pipeline.epi_mean")
@@ -43,19 +87,17 @@ class Bold_mriqc_pipeline(Pipeline):
         self.add_link("bold_hmc_pipeline.out_file->tsnr.in_file")
         self.add_link("bold_hmc_pipeline.out_file->mean.in_file")
         self.add_link("bold_hmc_pipeline.out_file->bold_iqms_pipeline.hmc_epi")
-        self.add_link("bold_hmc_pipeline.oned_file->bold_iqms_pipeline.hmc_motion")
+        self.add_link("bold_hmc_pipeline.oned_file->"
+                          "bold_iqms_pipeline.hmc_motion")
         self.add_link("bold_mni_align.epi_parc->bold_iqms_pipeline.epi_parc")
         self.add_link("bold_mni_align.epi_mni->mriqc_func_report.norm_func")
-        self.export_parameter("bold_mni_align", "composite_transform", "_composite_transform", is_optional=False)
-        self.export_parameter("bold_mni_align", "inverse_composite_transform", "_inverse_composite_transform", is_optional=False)
-        self.export_parameter("bold_mni_align", "bias_image", "_bias_image", is_optional=False)
         self.export_parameter("mriqc_func_report", "report", is_optional=True)
+        self.export_parameter("bold_iqms_pipeline", "carpet_seg",
+                              is_optional=True)
 
         # parameters order
 
-        self.reorder_traits(("in_file", "_composite_transform",
-                             "_inverse_composite_transform", "_bias_image",
-                             "report"))
+        self.reorder_traits(("in_file", "carpet_seg", "report"))
 
         # default and initial values
 

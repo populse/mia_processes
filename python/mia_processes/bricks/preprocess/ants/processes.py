@@ -407,6 +407,7 @@ class N4BiasFieldCorrection(ProcessMIA):
 
         self.add_trait("bias_image",
                        File(output=True,
+                            optional=True,
                             desc=bias_image_desc))
 
         self.add_trait("negative_values",
@@ -799,6 +800,7 @@ class Registration(ProcessMIA):
         self.add_trait("inverse_composite_transform",
                        File(Undefined,
                             output=True,
+                            optional=True,
                             desc=inverse_composite_transform_desc))
 
         self.add_trait("warped_image",

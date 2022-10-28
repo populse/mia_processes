@@ -3179,6 +3179,7 @@ class TSNR(ProcessMIA):
 
         self.add_trait("out_stddev_file",
                        File(output=True,
+                            optional=True,
                             desc=out_stddev_file_desc))
 
         self.init_default_traits()

@@ -979,6 +979,7 @@ class CarpetParcellation(ProcessMIA):
         # Outputs traits
         self.add_trait("out_file",
                        File(output=True,
+                            optional=True,
                             desc=out_file_desc))
 
         self.init_default_traits()
@@ -1360,7 +1361,7 @@ class FramewiseDisplacement(ProcessMIA):
                                    'FSFAST',
                                    'NIPY',
                                    output=False,
-                                   optional=False,
+                                   optional=True,
                                    desc=parameter_source_desc))
 
         self.add_trait("radius",
@@ -1536,6 +1537,7 @@ class FWHMx(ProcessMIA):
                                      traits.Int,
                                      default=True,
                                      output=False,
+                                     optional=True,
                                      desc=detrend_desc))
 
         self.add_trait("out_prefix",
@@ -1913,7 +1915,7 @@ class QualityIndex(ProcessMIA):
         self.add_trait("automask",
                        traits.Bool(True,
                                    output=False,
-                                   optional=False,
+                                   optional=True,
                                    desc=automask_desc))
 
         self.add_trait("out_prefix",

@@ -60,13 +60,13 @@ class Bold_mni_align(Pipeline):
         self.export_parameter("registration", "sampling_strategy", "reg_sampling_strategy", is_optional=True)
         self.export_parameter("registration", "interpolation", "reg_interpolation", is_optional=True)
         self.add_link("affineinitializer.out_file->registration.initial_moving_transform")
-        self.export_parameter("registration", "composite_transform", is_optional=False)
-        self.export_parameter("registration", "inverse_composite_transform", is_optional=False)
+        self.export_parameter("registration", "composite_transform", is_optional=True)
+        self.export_parameter("registration", "inverse_composite_transform", is_optional=True)
         self.add_link("registration.inverse_composite_transform->applytransforms.transforms")
         self.export_parameter("registration", "warped_image", "epi_mni", is_optional=False)
         self.add_link("n4biasfieldcorrection.out_file->registration.moving_image")
         self.add_link("n4biasfieldcorrection.out_file->affineinitializer.moving_image")
-        self.export_parameter("n4biasfieldcorrection", "bias_image", is_optional=False)
+        self.export_parameter("n4biasfieldcorrection", "bias_image", is_optional=True)
         self.export_parameter("applytransforms", "output_image", "epi_parc", is_optional=False)
         self.add_link("template.template->registration.fixed_image")
         self.add_link("template.template->affineinitializer.fixed_image")
@@ -75,7 +75,19 @@ class Bold_mni_align(Pipeline):
 
         # parameters order
 
-        self.reorder_traits(("epi_mask", "epi_mean", "epi_parc", "template", "template_res", "epi_mni", "composite_transform", "inverse_composite_transform", "seg_template_res", "bias_image", "reg_transforms", "reg_transform_parameters", "reg_metric", "reg_metric_weight", "reg_shrink_factors", "reg_smoothing_sigmas", "reg_number_of_iterations", "reg_radius_or_number_of_bins", "reg_convergence_threshold", "reg_convergence_window_size", "reg_sampling_percentage", "reg_sampling_strategy", "reg_interpolation"))
+        self.reorder_traits(("epi_mask", "epi_mean", "epi_parc", "template",
+                             "template_res", "epi_mni", "composite_transform",
+                             "inverse_composite_transform",
+                             "seg_template_res", "bias_image",
+                             "reg_transforms", "reg_transform_parameters",
+                             "reg_metric", "reg_metric_weight",
+                             "reg_shrink_factors", "reg_smoothing_sigmas",
+                             "reg_number_of_iterations",
+                             "reg_radius_or_number_of_bins",
+                             "reg_convergence_threshold",
+                             "reg_convergence_window_size",
+                             "reg_sampling_percentage",
+                             "reg_sampling_strategy", "reg_interpolation"))
 
         # default and initial values
         self.template = 'MNI152NLin2009cAsym'

@@ -30,9 +30,10 @@ class Bold_iqms_pipeline(Pipeline):
         self.export_parameter("boldiqms", "in_tsnr", "epi_tsnr", is_optional=True)
         self.export_parameter("boldiqms", "in_fd_thresh", "fd_thresh", is_optional=True)
         self.export_parameter("boldiqms", "in_dummy_TRs", "dummy_TRs", is_optional=True)
-        self.export_parameter("gcor", "mask_file", "brainmask", is_optional=True)
+        self.export_parameter("carpetparcellation", "brainmask",
+                              is_optional=False)
+        self.add_link("brainmask->gcor.mask_file")
         self.add_link("brainmask->fwhmx.mask_file")
-        self.add_link("brainmask->carpetparcellation.brainmask")
         self.add_link("brainmask->computedvars.in_mask")
         self.add_link("brainmask->boldiqms.in_mask")
         self.add_link("brainmask->outliercount.mask_file")
@@ -54,7 +55,8 @@ class Bold_iqms_pipeline(Pipeline):
         self.export_parameter("spikes", "skip_frames", "spikes_skip_frames", is_optional=True)
         self.add_link("outliercount.out_file->boldiqms.in_outliers_file")
         self.export_parameter("boldiqms", "out_file", "BoldQC_out_file", is_optional=False)
-        self.export_parameter("carpetparcellation", "out_file", "carpet_seg", is_optional=True)
+        self.export_parameter("carpetparcellation", "out_file", "carpet_seg",
+                              is_optional=True)
         self.add_link("framewisedisplacement.out_file->boldiqms.in_fd_file")
         self.add_link("spikes.out_file->boldiqms.in_spikes_file")
         self.add_link("gcor.out->boldiqms.in_gcor")
@@ -66,7 +68,7 @@ class Bold_iqms_pipeline(Pipeline):
 
         self.reorder_traits(("ras_epi", "epi_mean", "hmc_epi", "epi_tsnr",
                              "brainmask", "epi_parc", "hmc_motion",
-                             "carpet_seg", "BoldQC_out_file", "dummy_TRs",
+                             "BoldQC_out_file", "carpet_seg", "dummy_TRs",
                              "outlier_fraction", "quality_index_automask",
                              "fwhm_combine", "fwhm_detrend",
                              "dvars_remove_zero_variance",
