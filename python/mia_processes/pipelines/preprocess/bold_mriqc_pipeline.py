@@ -67,9 +67,10 @@ class Bold_mriqc_pipeline(Pipeline):
                              "MRIQC_func_report")
 
         # links
-        self.export_parameter("sanitize", "in_file", is_optional=False)
-        self.add_link("in_file->nonsteadystatedetector.in_file")
-        self.add_link("in_file->mriqc_func_report.func")
+        self.export_parameter("sanitize", "in_file",
+                              pipeline_parameter="func_file", is_optional=False)
+        self.add_link("func_file->nonsteadystatedetector.in_file")
+        self.add_link("func_file->mriqc_func_report.func")
         self.add_link("bold_iqms_pipeline.BoldQC_out_file->"
                           "mriqc_func_report.IQMs_file")
         self.add_link("nonsteadystatedetector.n_volumes_to_discard->"
@@ -91,13 +92,15 @@ class Bold_mriqc_pipeline(Pipeline):
                           "bold_iqms_pipeline.hmc_motion")
         self.add_link("bold_mni_align.epi_parc->bold_iqms_pipeline.epi_parc")
         self.add_link("bold_mni_align.epi_mni->mriqc_func_report.norm_func")
-        self.export_parameter("mriqc_func_report", "report", is_optional=True)
+        self.export_parameter("mriqc_func_report", "report",
+                              pipeline_parameter="func_report",
+                              is_optional=True)
         self.export_parameter("bold_iqms_pipeline", "carpet_seg",
                               is_optional=True)
 
         # parameters order
 
-        self.reorder_traits(("in_file", "carpet_seg", "report"))
+        self.reorder_traits(("func_file", "carpet_seg", "func_report"))
 
         # default and initial values
 

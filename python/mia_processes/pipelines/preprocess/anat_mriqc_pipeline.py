@@ -78,11 +78,13 @@ class Anat_mriqc_pipeline(Pipeline):
         self.add_link("harmonize.out_file->anatiqms.in_noinu")
         self.add_link("fwhmx.out_file->anatiqms.in_fwhm")
         self.add_link("list_to_file.file->harmonize.wm_mask")
-        self.export_parameter("mriqc_anat_report", "report", is_optional=False)
+        self.export_parameter("mriqc_anat_report", "report",
+                              pipeline_parameter="anat_report",
+                              is_optional=False)
 
         # parameters order
 
-        self.reorder_traits(("anat_file", "report"))
+        self.reorder_traits(("anat_file", "anat_report"))
 
         # default and initial values
         self.nodes["conformimage"].process.suffix = ' '
