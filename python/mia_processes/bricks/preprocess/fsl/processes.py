@@ -155,14 +155,13 @@ class Segment(ProcessMIA):
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
         super(Segment, self).run_process_mia()
-
+        _, fileIval = os.path.split(self.in_file)
+        self.process.out_basename = os.path.join(self.output_directory,
+                                                 fileIval)
+        self.process.output_type = self.output_type
         self.process.in_files = self.in_file
         self.process.segments = self.segments
 
-        self.process._tissue_class_map = self.tissue_class_map
-        self.process._partial_volume_files = self.partial_volume_files
-
-        self.process.output_type = self.output_type
         return self.process.run(configuration_dict={})
 
 
