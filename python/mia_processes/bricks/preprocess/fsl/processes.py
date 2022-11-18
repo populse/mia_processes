@@ -124,6 +124,8 @@ class Segment(ProcessMIA):
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
+            self.process.output_type = self.output_type
+
             if self.output_directory:
                 _, fileIval = os.path.split(self.in_file)
                 self.process.out_basename = os.path.join(self.output_directory, fileIval)
@@ -138,6 +140,7 @@ class Segment(ProcessMIA):
                     self.outputs['partial_volume_files'].append(
                         os.path.join(self.output_directory,
                                      os.path.split(out_val)[1]))
+
             else:
                 print('No output_directory was found...!\n')
                 return
