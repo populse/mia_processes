@@ -884,7 +884,7 @@ class MRIQC_func_report(ProcessMIA):
                             'PatientName', 'StudyName', 'AcquisitionDate',
                             'Sex', 'Site', 'Spectro', 'Age')
 
-        # FIXME: Currently, Site and Spectro data is hard-coded. A solution
+        # FIXME: Currently, Site and Spectro data are hard-coded. A solution
         #        should be found to retrieve them automatically or to put them
         #        in the input parameters of the brick:
         # Site
@@ -905,6 +905,9 @@ class MRIQC_func_report(ProcessMIA):
                             "Undefined_name_ref",
                             datetime.now().strftime('%Y_%m_%d_'
                                                     '%H_%M_%S_%f')[:22]))
+
+        else:
+            return self.make_initResult()
 
         # Add additional information for report generation
         # {iqms parameter: [parameter header, parameter rounding,
@@ -1181,7 +1184,8 @@ class MRIQC_func_report(ProcessMIA):
                      ]
         }
 
-        # FIXME: Do we need tags inheritance ?
+        # We force tags inheritance (see mia_processes issue #13)
+        self.inheritance_dict[self.outputs['report']] = self.func
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
