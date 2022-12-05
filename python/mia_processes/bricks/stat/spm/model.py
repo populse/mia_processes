@@ -410,6 +410,12 @@ class Level1Design(ProcessMIA):
                        File(output=True,
                             desc=spm_mat_file_desc))
 
+        # Special parameter used as a messenger for the run_process_mia method
+        self.add_trait("dict4runtime",
+                       traits.Dict(output=False,
+                                   optional=True,
+                                   userlevel=1))
+
         self.init_default_traits()
         self.init_process('nipype.interfaces.spm.Level1Design')
 
@@ -716,7 +722,8 @@ class Level1Design(ProcessMIA):
             if self.volterra_expansion_order == 2:
                 beta += int((cond_totNb + 1) * cond_totNb / 2)
 
-            self.sessions = sessions  # The session_info for nipype
+            #self.sessions = sessions  # The session_info for nipype
+            self.dict4runtime['sessions'] = sessions
 
             ## Some tests to check that the definition of the parameters for
             ## the self.sessions went well:
@@ -726,9 +733,10 @@ class Level1Design(ProcessMIA):
             check = True  # Flag to stop the check processes
             init_res = []  # Initialisation result; True: Ok, False: Fail
 
-            print('n self.sessions: ', self.sessions)
+            #print('n self.sessions: ', self.sessions)
+            print('n sessions: ', sessions)  # To Remove after debug
 
-            for i in self.sessions:
+            for i in sessions:
 
                 for j in ['cond', 'multi', 'regress', 'multi_reg']:
 
@@ -744,11 +752,15 @@ class Level1Design(ProcessMIA):
                           'session parameters. The initialisation failed, '
                           'please, check your settings  ...')
 
-            # - If sess_multi_reg is plugged and self.sessions have no multi_reg
+            # - If sess_multi_reg is plugged and sessions have no multi_reg
             #   key, we can think there is an initialisation issue ...
-            if is_plugged['sess_multi_reg'] and check:
+
+            print('n self.sess_multi_reg: ', self.sess_multi_reg) # To Remove after debug
+
+            #if is_plugged['sess_multi_reg'] and check:
+            if self.sess_multi_reg != [[]] and check:
                 init_res = []
-                [init_res.append(True) for i in self.sessions
+                [init_res.append(True) for i in sessions
                  if 'multi_reg' in i.keys()]
 
                 if not any(init_res):
@@ -760,11 +772,15 @@ class Level1Design(ProcessMIA):
                           'failure. Please, unplug the sess_multi_reg plug if '
                           'not needed or check your settings ...')
 
-            # - If sess_multi is plugged and self.sessions have no multi key,
+            # - If sess_multi is plugged and sessions have no multi key,
             #   we can think there is an initialisation issue ...
-            if is_plugged['sess_multi'] and check:
+
+            print('n self.sess_multi: ', self.sess_multi) # To Remove after debug
+
+            #if is_plugged['sess_multi'] and check:
+            if self.sess_multi != [] and check:
                 init_res = []
-                [init_res.append(True) for i in self.sessions
+                [init_res.append(True) for i in sessions
                  if 'multi' in i.keys()]
 
                 if not any(init_res):
@@ -839,26 +855,35 @@ class Level1Design(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        # Removing the spm_mat_file to avoid a bug (nipy/nipype Issues #2612)
-        cur_dir = os.getcwd()
-        out_file = os.path.join(cur_dir, 'SPM.mat')
-
-        if os.path.isfile(out_file):
-            os.remove(out_file)
-
         super(Level1Design, self).run_process_mia()
-        self.process.inputs.timing_units = self.timing_units
-        self.process.inputs.interscan_interval = self.interscan_interval
-        self.process.inputs.microtime_resolution = self.microtime_resolution
-        self.process.inputs.microtime_onset = self.microtime_onset
-        self.process.inputs.session_info = self.sessions
-        self.process.inputs.factor_info = self.factor_info
-        self.process.inputs.bases = self.bases
-        (self.process.inputs.
-         volterra_expansion_order) = self.volterra_expansion_order
-        (self.process.inputs.
+        # Removing the spm_mat_file to avoid a bug (nipy/nipype Issues #2612)
+        #cur_dir = os.getcwd()
+        #out_file = os.path.join(cur_dir, 'SPM.mat')
+
+        if self.output_directory:
+            out_file = os.path.join(self.output_directory, "SPM.mat")
+
+            if os.path.isfile(out_file):
+                os.remove(out_file)
+
+        else:
+            print('No output_directory was found...!\n')
+
+        #if os.path.isfile(out_file):
+        #    os.remove(out_file)
+
+        self.process.timing_units = self.timing_units
+        self.process.interscan_interval = self.interscan_interval
+        self.process.microtime_resolution = self.microtime_resolution
+        self.process.microtime_onset = self.microtime_onset
+        #self.process.session_info = self.sessions
+        self.process.session_info = self.dict4runtime['sessions']
+        self.process.factor_info = self.factor_info
+        self.process.bases = self.bases
+        self.process.volterra_expansion_order = self.volterra_expansion_order
+        (self.process.
          global_intensity_normalization) = self.global_intensity_normalization
-        self.process.inputs.mask_threshold = self.mask_threshold
+        self.process.mask_threshold = self.mask_threshold
 
         # Only one mask can be defined in spm. If more than one is given, only
         # the first one will be used for all sessions ...
@@ -867,26 +892,24 @@ class Level1Design(ProcessMIA):
             if type(self.mask_image) in [list,
                                          traits.TraitListObject,
                                          traits.List]:
-                (self.process.inputs.
-                 mask_image) = os.path.abspath(self.mask_image[0])
+                self.process.mask_image = os.path.abspath(self.mask_image[0])
 
             else:
-                (self.process.inputs.
-                 mask_image) = os.path.abspath(self.mask_image)
+                self.process.mask_image = os.path.abspath(self.mask_image)
 
-        (self.process.inputs.
-         model_serial_correlations) = self.model_serial_correlations
+        self.process.model_serial_correlations = self.model_serial_correlations
 
-        self.process.run()
+        #self.process.run()
+        return self.process.run(configuration_dict={})
 
         # Copying the generated SPM.mat file in the data directory
-        if ((self.sess_scans) and
-                (self.sess_scans not in ['<undefined>', Undefined]) and
-                (self.sess_scans[0] not in ['<undefined>', Undefined])):
-            scan_image = os.path.abspath(self.sess_scans[0])
-            scan_folder, _ = os.path.split(scan_image)
+        #if ((self.sess_scans) and
+        #        (self.sess_scans not in ['<undefined>', Undefined]) and
+        #        (self.sess_scans[0] not in ['<undefined>', Undefined])):
+        #    scan_image = os.path.abspath(self.sess_scans[0])
+        #    scan_folder, _ = os.path.split(scan_image)
 
-        copy2(out_file, scan_folder)
+        #copy2(out_file, scan_folder)
 
-        if os.path.isfile(out_file):
-            os.remove(out_file)
+        #if os.path.isfile(out_file):
+        #    os.remove(out_file)
