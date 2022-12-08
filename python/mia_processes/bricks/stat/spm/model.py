@@ -209,6 +209,7 @@ class Level1Design(ProcessMIA):
                                   output=False,
                                   optional=True,
                                   desc=microtime_onset_desc))
+        #TODO: mictotime onset (fmri_spec.timing.fmri_t0) = 1 in Amigo
 
         self.add_trait("sess_scans",
                        InputMultiPath(File(exists=True),
@@ -334,6 +335,13 @@ class Level1Design(ProcessMIA):
                                    output=False,
                                    optional=True,
                                    desc=sess_hpf_desc))
+        #TODO: 427.2 corresponds to the value used in Amigo
+        # Duration * TR * 3.56 = 427.2 if Duration == 40; TR = 3s; why 3.56 ?
+        # I was expecting rather to:
+        # (time between first block start - second block start) * TR *2 = 80 *3 *2 = 480
+        # Can we code an automatic recovery procedure for the hpf parameter ?
+        # (in this case, the user would have to declare additional tags in the
+        # database, like the block duration !)
 
         self.add_trait("factor_info",
                        traits.List(traits.Dict(traits.Enum("name", "levels"),
