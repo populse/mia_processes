@@ -8,5 +8,5 @@
 # for details.
 ##########################################################################
 
-from .model import Level1Design
+from .model import Level1Design, EstimateModel
 

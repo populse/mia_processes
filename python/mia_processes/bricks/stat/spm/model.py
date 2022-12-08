@@ -9,6 +9,7 @@ in populse_mia.
 
 :Contains:
     :Class:
+        - EstimateModel
         - Level1Design
 
 """
@@ -61,6 +62,444 @@ from shutil import copy2
 from traits.api import Undefined
 import numpy as np
 
+
+class EstimateModel(ProcessMIA):
+    """
+ - EstimateModel (User_processes.stats.spm.stats.EstimateModel) <=> Model estimation (SPM12 name).
+*** Estimation of model parameters using classical (ReML - Restricted Maximum Likelihood) or Bayesian algorithms.***
+    * Input parameters:
+        # spm_mat_file <=> spmmat: The SPM.mat file that contains the design specification (a file object).
+            <ex. /home/ArthurBlair/data/raw_data/SPM.mat>
+        # estimation_method <=> method: Estimation  procedures for fMRI models (A dictionary with keys which are ‘Classical’ or ‘Bayesian’ or ‘Bayesian2’ and with values which are 1).
+                                        - Classical: Restricted Maximum Likelihood (ReML) estimation of first or second level models
+                                        - Bayesian: Bayesian estimation of first level models (not yet fully implemented)
+                                        - Bayesian2: Bayesian estimation of second level models (not yet fully implemented)
+             <ex. {'Classical': 1}>
+        # write_residuals <=> write_residuals: Write images of residuals to disk. This is only implemented for classical inference (a boolean)
+             <ex. True>
+        # flags: Additional arguments (a dictionary with keys which are any value and with values which are any value)
+             <ex. {}>
+        # version: Version of spm (a string)
+             <ex. spm12>
+        # tot_reg_num: The total number of estimated regression coefficients (an integer).
+             <ex. 8>
+    * Output parameters:
+        # out_spm_mat_file: The SPM.mat file containing specification of the design and estimated model parameters (a pathlike object or string representing an existing file).
+             <ex. /home/ArthurBlair/data/raw_data/SPM.mat>
+        # beta_images: Images of estimated regression coefficients beta_000k.img where k indexes the kth regression coefficient (a list of items which are a pathlike object or string representing an existing file).
+             <ex. ['/home/ArthurBlair/data/raw_data/beta_0001.nii',
+                   '/home/ArthurBlair/data/raw_data/beta_0002.nii',
+                   '/home/ArthurBlair/data/raw_data/beta_0003.nii',
+                   '/home/ArthurBlair/data/raw_data/beta_0004.nii',
+                   '/home/ArthurBlair/data/raw_data/beta_0005.nii',
+                   '/home/ArthurBlair/data/raw_data/beta_0006.nii',
+                   '/home/ArthurBlair/data/raw_data/beta_0007.nii',
+                   '/home/ArthurBlair/data/raw_data/beta_0008.nii']>
+        # mask_image: The mask.img image indicating which voxels were included in the analysis (a pathlike object or string representing an existing file).
+             <ex. /home/ArthurBlair/data/raw_data/mask.nii>
+        # residual_image: The ResMS.img image of the variance of the error (a pathlike object or string representing an existing file).
+             <ex. /home/ArthurBlair/data/raw_data/ResMS.nii >
+        # residual_images: The individual error Res_000k.img images (a list of items which are a pathlike object or string representing an existing file) where k indexes the kth dynamic (fourth dimensional points of the fuctional). These images are generated only if write_residuals is True.
+             <ex. ['/home/ArthurBlair/data/raw_data/Res_0001.nii',
+                   '/home/ArthurBlair/data/raw_data/Res_0002.nii',
+                   '/home/ArthurBlair/data/raw_data/Res_0003.nii',
+                    ...,
+                   '/home/ArthurBlair/data/raw_data/Res_0238.nii',
+                   '/home/ArthurBlair/data/raw_data/Res_0239.nii',
+                   '/home/ArthurBlair/data/raw_data/Res_0240.nii']>
+        # RPVimage: The RPV.img image of the estimated resolution elements per voxel (a pathlike object or string representing an existing file).
+             <ex. /home/ArthurBlair/data/raw_data/RPV.nii>
+        # labels:
+             <ex. >
+        # SDerror:
+             <ex. >
+        # ARcoef: Images of the autoregressive (AR) coefficient (a list of items which are a pathlike object or string representing an existing file).
+             <ex. >
+        # Cbetas:
+             <ex. >
+        # SDbetas:
+             <ex. >
+
+    """
+    def __init__(self):
+        """Dedicated to the attributes initialisation / instanciation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(EstimateModel, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = ['matlab', 'spm'] # 07.2020 release, matlab should be removed
+
+        # Inputs description
+        spm_mat_file_desc = ('The SPM.mat file that contains the design '
+                             'specification (a file object)')
+        estimation_method_desc = ('A dictionary of either Classical: 1, '
+                                  'Bayesian: 1, or Bayesian2: 1')
+        write_residuals_desc = 'Write individual residual images (a boolean)'
+        flags_desc = ('Additional arguments (a dictionary with keys which are '
+                      'any value and with values which are any value)')
+        version_desc = 'Version of spm (a string)'
+        tot_reg_num_desc = ('The total number of estimated regression'
+                             'coefficients (an integer)')
+
+        # Outputs description
+        out_spm_mat_file_desc = ('The file containing specification of the '
+                                 'design and estimated model parameters (a '
+                                 'pathlike object or string representing an '
+                                 'existing file)')
+        beta_images_desc = ('Images of estimated regression coefficients (a '
+                            'list of items which are a pathlike object or '
+                            'string representing an existing file)')
+        mask_image_desc = ('The image indicating which voxels were included in '
+                           'the analysis (a pathlike object or string '
+                           'representing an existing file)')
+        residual_image_desc = ('The image of the variance of the error (a '
+                               'pathlike object or string representing an '
+                               'existing file)')
+        residual_images_desc = ('The individual error images (a list of items '
+                                'which are a pathlike object or string '
+                                'representing an existing file)')
+        RPVimage_desc = ('The image of the estimated resolution elements per '
+                         'voxel (a pathlike object or string representing an '
+                         'existing file).')
+        labels_desc = 'blabla'
+        SDerror_desc = 'blabla'
+        ARcoef_desc = ('Images of the autoregressive (AR) coefficient (a list '
+                       'of items which are a pathlike object or string '
+                       'representing an existing file).')
+        Cbetas_desc = 'blabla'
+        SDbetas_desc = 'blabla'
+
+        # Inputs traits
+        self.add_trait("spm_mat_file",
+                       File(output=False,
+                            optional=False,
+                            desc=spm_mat_file_desc))
+
+        self.add_trait("estimation_method",
+                       traits.Dict(
+                           traits.Enum("Classical", "Bayesian", "Bayesian2"),
+                           traits.Enum(1),
+                           usedefault=True,
+                           output=False,
+                           optional=False,
+                           desc=estimation_method_desc))
+        self.estimation_method = {'Classical': 1}
+
+        self.add_trait("write_residuals",
+                       traits.Bool(usedefault=True,
+                                   output=False,
+                                   optional=True,
+                                   desc=write_residuals_desc))
+
+        self.add_trait("flags",
+                       traits.Dict(output=False,
+                                   optional=True,
+                                   desc=flags_desc))
+
+        self.add_trait("version",
+                       traits.String("spm12",
+                                     usedefault=True,
+                                     output=False,
+                                     optional=True,
+                                     desc=version_desc))
+
+        self.add_trait("tot_reg_num",
+                       traits.Either((traits.Int(), Undefined),
+                                     output=False,
+                                     optional=True,
+                                     desc=tot_reg_num_desc))
+        self.tot_reg_num = Undefined
+
+        # Output traits
+        self.add_trait("out_spm_mat_file",
+                       File(output=True,
+                            optional=False,
+                            desc=out_spm_mat_file_desc))
+
+        self.add_trait("beta_images",
+                       OutputMultiPath(ImageFileSPM(),
+                                       output=True,
+                                       optional=True,
+                                       desc=beta_images_desc))
+
+        self.add_trait("mask_image",
+                       ImageFileSPM(output=True,
+                                    optional=True,
+                                    desc=mask_image_desc))
+
+        self.add_trait("residual_image",
+                       ImageFileSPM(output=True,
+                                    optional=True,
+                                    desc=residual_image_desc))
+
+        self.add_trait("residual_images",
+                       OutputMultiPath(ImageFileSPM(),
+                                       output=True,
+                                       optional=True,
+                                       desc=residual_images_desc))
+
+        self.add_trait("RPVimage",
+                       ImageFileSPM(output=True,
+                                    optional=True,
+                                    desc=RPVimage_desc))
+
+        self.add_trait("labels",
+                       ImageFileSPM(output=True,
+                                    optional=True,
+                                    desc=labels_desc))
+
+        self.add_trait("SDerror",
+                       OutputMultiPath(ImageFileSPM(),
+                                       output=True,
+                                       optional=True,
+                                       desc=SDerror_desc))
+
+        self.add_trait("ARcoef",
+                       OutputMultiPath(ImageFileSPM(),
+                                       output=True,
+                                       optional=True,
+                                       desc=ARcoef_desc))
+
+        self.add_trait("Cbetas",
+                       OutputMultiPath(ImageFileSPM(),
+                                       output=True,
+                                       optional=True,
+                                       desc=Cbetas_desc))
+
+        self.add_trait("SDbetas",
+                       OutputMultiPath(ImageFileSPM(),
+                                       output=True,
+                                       optional=True,
+                                       desc=SDbetas_desc))
+
+        # process instanciation
+        self.process = spm.EstimateModel()
+        self.change_dir = True
+
+    def _get_dbFieldValue(self, document, field):
+        """Return, for a document, the field value from the database.
+
+        :param document: the absolute path of the document.
+        :param : the field name.
+        :returns: the value of the field for the document in the database.
+        """
+        complete_path = document
+        file_position = (complete_path.find(self.project.getName()) + len(self.project.getName()) + 1)
+        database_filename = complete_path[file_position:]
+        return self.project.session.get_value(COLLECTION_CURRENT,
+                                              database_filename,
+                                              field)
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dict),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(EstimateModel, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.outputs:
+            self.outputs = {}
+
+        if self.inheritance_dict:
+            self.inheritance_dict = {}
+
+        # Old version calling Nipype's method
+        '''
+        process = spm.EstimateModel()
+        if not self.spm_mat_file:
+            return {}, {}
+        else:
+            process.inputs.spm_mat_file = self.spm_mat_file
+        if not self.estimation_method:
+            return {}, {}
+        else:
+            process.inputs.estimation_method = self.estimation_method
+
+        process.inputs.write_residuals = self.write_residuals
+        process.inputs.flags = self.flags
+
+        outputs = process._list_outputs()
+        outputs["out_spm_mat_file"] = outputs.pop("spm_mat_file")
+        '''
+
+        # Own list_outputs to avoid to read in the SPM.mat file
+        if (  (self.spm_mat_file) and
+              (self.spm_mat_file not in ['<undefined>', Undefined]) and
+              (self.estimation_method) and
+              (self.estimation_method not in ['<undefined>', Undefined])  ):
+            im_form = "nii" if "12" in self.version else "img"
+            path, _ = os.path.split(self.spm_mat_file)
+            self.outputs['out_spm_mat_file'] = self.spm_mat_file
+            # Detecting the number of beta files to create
+            betas = []
+            # Those lines are false, we cannot read in the
+            # self.spm_mat_file because it is not created yet! (1)
+            """
+            try:
+                spm_matFile = scipy.io.loadmat(self.spm_mat_file)
+                nb_reg = spm_matFile['SPM'][0,0]['Sess'][0,0]['col'].shape[1]
+                print('\n EstimateModel brick: {} regressors found ...\n'.format(nb_reg))
+                nb_reg += 1  # Adding the constant value
+
+            except Exception as e:
+                print('\nEstimateModel brick exception; {0}: {1}\n'.format(e.__class__, e))
+            """
+            nb_reg = self._get_dbFieldValue(self.spm_mat_file, 'Regress num')
+            """
+            if (  (not nb_reg) and (self.multi_reg) and
+              (self.multi_reg not in ['<undefined>', Undefined])  ):
+
+                for reg_file in self.multi_reg:
+                    # Those lines are false, we cannot read in all files in
+                    # self.multi_reg because they are not created yet! (2)
+                    '''
+                    if os.path.splitext(reg_file)[1] == '.txt':
+
+                        with open(reg_file) as f:
+                            first_line = f.readline()
+                            print('FIRST LINE', first_line)
+                            nb_reg += len(first_line.split()) + 1  # Adding the constant value
+
+                    # and for other reg_file?
+                    '''
+
+                    # The current workaround to try to detect the number of
+                    # beta files to be created!
+                    # TODO: find a better way
+                    if os.path.basename(reg_file)[0:3] == 'rp_':
+                        nb_reg += 6
+
+                    if os.path.basename(reg_file)[0:22] == 'regressor_physio_EtCO2':
+                        nb_reg += 1
+
+                if nb_reg:
+                    nb_reg += 1 # Adding the constant value
+                """
+
+            if ((self.tot_reg_num) and (self.tot_reg_num not in ['<undefined>', Undefined])):
+                nb_reg = self.tot_reg_num
+
+            elif nb_reg:
+                self.tot_reg_num =  nb_reg
+
+            # Bayesian and Bayesian2 are yet not yet fully implemented
+            if (('Bayesian' in self.estimation_method.keys()) or
+                  ('Bayesian2' in self.estimation_method.keys())):
+                self.outputs['labels'] = os.path.join(path, "labels.{}".format(im_form))
+                '''
+                outputs['SDerror'] = glob(os.path.join(path, 'Sess*_SDerror*'))
+                outputs['ARcoef'] = glob(os.path.join(path, 'Sess*_AR_*'))
+                '''
+
+            if 'Classical' in self.estimation_method.keys():
+                self.outputs['residual_image'] = os.path.join(path, "ResMS.{}".format(im_form))
+                self.outputs['RPVimage'] = os.path.join(path, "RPV.{}".format(im_form))
+                self.outputs['mask_image'] = os.path.join(path, "mask.{}".format(im_form))
+
+                if self.write_residuals:
+                    nb_dyn = self._get_dbFieldValue(self.spm_mat_file, 'Dynamic Number')
+
+                    if nb_dyn:
+                        nb_dyn =  sum(nb_dyn)
+                        ress = []
+
+                        for i in range(nb_dyn):
+                            i += 1
+                            ress.append('Res_{:04d}.{}'.format(i, im_form))
+
+                        if ress:
+                            self.outputs['residual_images'] = [os.path.join(path, res) for res in ress]
+
+                    else:
+                        print('- The number of dynamics could not be determined '
+                              'automatically. It is not possible to safely '
+                              'create the residual_images output parameter ...')
+
+                for i in range(int(0 if nb_reg is None else nb_reg)):
+                    i += 1
+                    betas.append('beta_{:04d}.{}'.format(i, im_form))
+
+                if betas:
+                    self.outputs['beta_images'] = [os.path.join(path, beta) for beta in betas]
+
+                else:
+                    print('- No beta image were found to be added to the database ...')
+
+            if (not nb_reg) or (self.write_residuals and not nb_dyn):
+                self.outputs = {}
+
+        if self.outputs:
+
+            for key, value in self.outputs.items():
+
+                if key == "out_spm_mat_file":
+                    self.inheritance_dict[value] = self.spm_mat_file
+
+                if key == "beta_images":
+
+                    for fullname in value:
+                        self.inheritance_dict[fullname] =  self.spm_mat_file
+
+                if key == "mask_image":
+                    self.inheritance_dict[value] =  self.spm_mat_file
+
+                if key == "residual_image":
+                    self.inheritance_dict[value] =  self.spm_mat_file
+
+                if key == "residual_images":
+
+                    for fullname in value:
+                        self.inheritance_dict[fullname] =  self.spm_mat_file
+
+                if key == "RPVimage":
+                    self.inheritance_dict[value] =  self.spm_mat_file
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(EstimateModel, self).run_process_mia()
+        self.process.inputs.spm_mat_file = os.path.abspath(self.spm_mat_file)
+        self.process.inputs.estimation_method = self.estimation_method
+        self.process.inputs.write_residuals = self.write_residuals
+        self.process.inputs.flags = self.flags
+
+        # Removing the image files to avoid a bug
+        for key, value in self.outputs.items():
+
+            if key not in ["out_spm_mat_file"]:
+
+                if value not in ["<undefined>", Undefined]:
+
+                    if type(value) in [list, traits.TraitListObject, traits.List]:
+
+                        for element in value:
+
+                            if os.path.isfile(element):
+                                os.remove(element)
+
+                    else:
+
+                        if os.path.isfile(value):
+                            os.remove(value)
+
+        self.process.run()
 
 
 class Level1Design(ProcessMIA):
