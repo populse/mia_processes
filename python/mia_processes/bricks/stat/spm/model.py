@@ -132,7 +132,7 @@ class EstimateModel(ProcessMIA):
         super(EstimateModel, self).__init__()
 
         # Third party softwares required for the execution of the brick
-        self.requirement = ['matlab', 'spm'] # 07.2020 release, matlab should be removed
+        self.requirement = ['spm', 'nipype']
 
         # Inputs description
         spm_mat_file_desc = ('The SPM.mat file that contains the design '
@@ -277,9 +277,8 @@ class EstimateModel(ProcessMIA):
                                        optional=True,
                                        desc=SDbetas_desc))
 
-        # process instanciation
-        self.process = spm.EstimateModel()
-        self.change_dir = True
+        self.init_default_traits()
+        self.init_process('nipype.interfaces.spm.EstimateModel')
 
     def _get_dbFieldValue(self, document, field):
         """Return, for a document, the field value from the database.
@@ -312,11 +311,11 @@ class EstimateModel(ProcessMIA):
         super(EstimateModel, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
-        if self.outputs:
-            self.outputs = {}
+        #if self.outputs:
+        #    self.outputs = {}
 
-        if self.inheritance_dict:
-            self.inheritance_dict = {}
+        #if self.inheritance_dict:
+        #    self.inheritance_dict = {}
 
         # Old version calling Nipype's method
         '''
@@ -337,14 +336,28 @@ class EstimateModel(ProcessMIA):
         outputs["out_spm_mat_file"] = outputs.pop("spm_mat_file")
         '''
 
-        # Own list_outputs to avoid to read in the SPM.mat file
-        if (  (self.spm_mat_file) and
+        # Own list_outputs to avoid reading in the SPM.mat file
+        if ( (self.spm_mat_file) and
               (self.spm_mat_file not in ['<undefined>', Undefined]) and
               (self.estimation_method) and
-              (self.estimation_method not in ['<undefined>', Undefined])  ):
+              (self.estimation_method not in ['<undefined>', Undefined]) ):
             im_form = "nii" if "12" in self.version else "img"
-            path, _ = os.path.split(self.spm_mat_file)
-            self.outputs['out_spm_mat_file'] = self.spm_mat_file
+
+            # The management of self.process.output_directory could be delegated
+            # to the populse_mia.user_interface.pipeline_manager.process_mia
+            # module. We can't do it at the moment because the
+            # sync_process_output_traits() of the capsul/process/nipype_process
+            # module raises an exception in nipype if the mandatory parameters
+            # are not yet defined!
+            if self.output_directory:
+                self.process.output_directory = self.output_directory
+
+            else:
+                print('No output_directory was found...!\n')
+
+            _, spm_mat_file = os.path.split(self.spm_mat_file)
+            self.outputs['out_spm_mat_file'] = os.path.join(self.output_directory,
+                                                            spm_mat_file)
             # Detecting the number of beta files to create
             betas = []
             # Those lines are false, we cannot read in the
@@ -395,27 +408,27 @@ class EstimateModel(ProcessMIA):
                 nb_reg = self.tot_reg_num
 
             elif nb_reg:
-                self.tot_reg_num =  nb_reg
+                self.tot_reg_num = nb_reg
 
-            # Bayesian and Bayesian2 are yet not yet fully implemented
+            # Bayesian and Bayesian2 are not yet fully implemented
             if (('Bayesian' in self.estimation_method.keys()) or
                   ('Bayesian2' in self.estimation_method.keys())):
-                self.outputs['labels'] = os.path.join(path, "labels.{}".format(im_form))
+                self.outputs['labels'] = os.path.join(self.output_directory, "labels.{}".format(im_form))
                 '''
                 outputs['SDerror'] = glob(os.path.join(path, 'Sess*_SDerror*'))
                 outputs['ARcoef'] = glob(os.path.join(path, 'Sess*_AR_*'))
                 '''
 
             if 'Classical' in self.estimation_method.keys():
-                self.outputs['residual_image'] = os.path.join(path, "ResMS.{}".format(im_form))
-                self.outputs['RPVimage'] = os.path.join(path, "RPV.{}".format(im_form))
-                self.outputs['mask_image'] = os.path.join(path, "mask.{}".format(im_form))
+                self.outputs['residual_image'] = os.path.join(self.output_directory, "ResMS.{}".format(im_form))
+                self.outputs['RPVimage'] = os.path.join(self.output_directory, "RPV.{}".format(im_form))
+                self.outputs['mask_image'] = os.path.join(self.output_directory, "mask.{}".format(im_form))
 
                 if self.write_residuals:
                     nb_dyn = self._get_dbFieldValue(self.spm_mat_file, 'Dynamic Number')
 
                     if nb_dyn:
-                        nb_dyn =  sum(nb_dyn)
+                        nb_dyn = sum(nb_dyn)
                         ress = []
 
                         for i in range(nb_dyn):
@@ -423,7 +436,7 @@ class EstimateModel(ProcessMIA):
                             ress.append('Res_{:04d}.{}'.format(i, im_form))
 
                         if ress:
-                            self.outputs['residual_images'] = [os.path.join(path, res) for res in ress]
+                            self.outputs['residual_images'] = [os.path.join(self.output_directory, res) for res in ress]
 
                     else:
                         print('- The number of dynamics could not be determined '
@@ -435,7 +448,7 @@ class EstimateModel(ProcessMIA):
                     betas.append('beta_{:04d}.{}'.format(i, im_form))
 
                 if betas:
-                    self.outputs['beta_images'] = [os.path.join(path, beta) for beta in betas]
+                    self.outputs['beta_images'] = [os.path.join(self.output_directory, beta) for beta in betas]
 
                 else:
                     print('- No beta image were found to be added to the database ...')
@@ -453,21 +466,21 @@ class EstimateModel(ProcessMIA):
                 if key == "beta_images":
 
                     for fullname in value:
-                        self.inheritance_dict[fullname] =  self.spm_mat_file
+                        self.inheritance_dict[fullname] = self.spm_mat_file
 
                 if key == "mask_image":
-                    self.inheritance_dict[value] =  self.spm_mat_file
+                    self.inheritance_dict[value] = self.spm_mat_file
 
                 if key == "residual_image":
-                    self.inheritance_dict[value] =  self.spm_mat_file
+                    self.inheritance_dict[value] = self.spm_mat_file
 
                 if key == "residual_images":
 
                     for fullname in value:
-                        self.inheritance_dict[fullname] =  self.spm_mat_file
+                        self.inheritance_dict[fullname] = self.spm_mat_file
 
                 if key == "RPVimage":
-                    self.inheritance_dict[value] =  self.spm_mat_file
+                    self.inheritance_dict[value] = self.spm_mat_file
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -475,12 +488,14 @@ class EstimateModel(ProcessMIA):
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
         super(EstimateModel, self).run_process_mia()
-        self.process.inputs.spm_mat_file = os.path.abspath(self.spm_mat_file)
-        self.process.inputs.estimation_method = self.estimation_method
-        self.process.inputs.write_residuals = self.write_residuals
-        self.process.inputs.flags = self.flags
+        self.process.spm_mat_file = os.path.abspath(self.spm_mat_file)
+        self.process.estimation_method = self.estimation_method
+        self.process.write_residuals = self.write_residuals
+        self.process.flags = self.flags
 
         # Removing the image files to avoid a bug
+        # TODO: In fact, self.outputs is == {} at this point(see issue #272).
+        #  If necessary, we can use the dict4runtine object?
         for key, value in self.outputs.items():
 
             if key not in ["out_spm_mat_file"]:
@@ -499,8 +514,8 @@ class EstimateModel(ProcessMIA):
                         if os.path.isfile(value):
                             os.remove(value)
 
-        self.process.run()
-
+        #self.process.run()
+        return self.process.run(configuration_dict={})
 
 class Level1Design(ProcessMIA):
     """
