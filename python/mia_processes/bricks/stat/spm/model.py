@@ -372,7 +372,6 @@ class EstimateModel(ProcessMIA):
             except Exception as e:
                 print('\nEstimateModel brick exception; {0}: {1}\n'.format(e.__class__, e))
             """
-            nb_reg = self._get_dbFieldValue(self.spm_mat_file, 'Regress num')
             """
             if (  (not nb_reg) and (self.multi_reg) and
               (self.multi_reg not in ['<undefined>', Undefined])  ):
@@ -404,11 +403,9 @@ class EstimateModel(ProcessMIA):
                     nb_reg += 1 # Adding the constant value
                 """
 
-            if ((self.tot_reg_num) and (self.tot_reg_num not in ['<undefined>', Undefined])):
-                nb_reg = self.tot_reg_num
-
-            elif nb_reg:
-                self.tot_reg_num = nb_reg
+            if (self.tot_reg_num in ['<undefined>', Undefined] and
+                self._get_dbFieldValue(self.spm_mat_file, 'Regress num') is not None):
+                self.tot_reg_num = self._get_dbFieldValue(self.spm_mat_file, 'Regress num')
 
             # Bayesian and Bayesian2 are not yet fully implemented
             if (('Bayesian' in self.estimation_method.keys()) or
@@ -443,7 +440,7 @@ class EstimateModel(ProcessMIA):
                               'automatically. It is not possible to safely '
                               'create the residual_images output parameter ...')
 
-                for i in range(int(0 if nb_reg is None else nb_reg)):
+                for i in range(int(0 if self.tot_reg_num in ['<undefined>', Undefined] else self.tot_reg_num)):
                     i += 1
                     betas.append('beta_{:04d}.{}'.format(i, im_form))
 
@@ -453,7 +450,8 @@ class EstimateModel(ProcessMIA):
                 else:
                     print('- No beta image were found to be added to the database ...')
 
-            if (not nb_reg) or (self.write_residuals and not nb_dyn):
+            if ((self.tot_reg_num in ['<undefined>', Undefined]) or
+                                         (self.write_residuals and not nb_dyn)):
                 self.outputs = {}
 
         if self.outputs:
@@ -494,25 +492,27 @@ class EstimateModel(ProcessMIA):
         self.process.flags = self.flags
 
         # Removing the image files to avoid a bug
+        # I do not observe the bug now, i comment the following lines:
         # TODO: In fact, self.outputs is == {} at this point(see issue #272).
         #  If necessary, we can use the dict4runtine object?
-        for key, value in self.outputs.items():
+        #
+        # for key, value in self.outputs.items():
 
-            if key not in ["out_spm_mat_file"]:
+        #   if key not in ["out_spm_mat_file"]:
 
-                if value not in ["<undefined>", Undefined]:
+        #        if value not in ["<undefined>", Undefined]:
 
-                    if type(value) in [list, traits.TraitListObject, traits.List]:
+        #            if type(value) in [list, traits.TraitListObject, traits.List]:
 
-                        for element in value:
+        #                for element in value:
 
-                            if os.path.isfile(element):
-                                os.remove(element)
+        #                    if os.path.isfile(element):
+        #                        os.remove(element)
 
-                    else:
+        #           else:
 
-                        if os.path.isfile(value):
-                            os.remove(value)
+        #                if os.path.isfile(value):
+        #                    os.remove(value)
 
         #self.process.run()
         return self.process.run(configuration_dict={})
