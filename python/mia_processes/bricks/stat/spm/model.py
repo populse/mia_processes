@@ -9,6 +9,7 @@ in populse_mia.
 
 :Contains:
     :Class:
+        - EstimateContrast
         - EstimateModel
         - Level1Design
 
@@ -62,6 +63,191 @@ from shutil import copy2
 from traits.api import Undefined
 import numpy as np
 
+
+class EstimateContrast(ProcessMIA):
+    """blabla"""
+    def __init__(self):
+        """Dedicated to the attributes initialisation / instanciation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(EstimateContrast, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = ['spm', 'nipype']
+
+        # Inputs
+        self.add_trait("spm_mat_file",
+                       File(output=False,
+                            copyfile=True))
+
+        self.add_trait("session_type",
+                       traits.Enum("tcon",
+                                   "fcon",
+                                   "tconsess",
+                                   output=False,
+                                   optional=False))
+
+        self.add_trait("contrast_session_name",
+                       traits.String(output=False,
+                                     optional=False))
+
+        self.add_trait("contrast_weight",
+                       traits.Either(traits.Float(),
+                                     traits.List(traits.Float()),
+                                     traits.List(traits.List(traits.Float())),
+                                     output=False,
+                                     optional=False))
+
+        self.add_trait("replicate",
+                       traits.Enum("none",
+                                   "repl",
+                                   "replsc",
+                                   "sess",
+                                   "both",
+                                   "bothsc",
+                                   output=False,
+                                   optional=True))
+
+        self.add_trait("multi_reg", traits.List(output=False, optional=True))
+        # self.add_trait("contrasts", traits.List([('+', 'T', ['R1_1'], [1])], output=False, optional=True))
+        self.add_trait("beta_images", InputMultiPath(File(), output=False, copyfile=False))
+        self.add_trait("residual_image", File(output=False, copyfile=False))
+        self.add_trait("use_derivs", traits.Bool(output=False, optional=True, xor=['group_contrast']))
+        self.add_trait("group_contrast", traits.Bool(output=False, optional=True, xor=['use_derivs']))
+
+        # Outputs
+        self.add_trait("con_images", OutputMultiPath(File(), optional=True, output=True))
+        self.add_trait("spmT_images", OutputMultiPath(File(), optional=True, output=True))
+        self.add_trait("spmF_images", OutputMultiPath(File(), optional=True, output=True))
+        self.add_trait("out_spm_mat_file", File(output=True, copyfile=False))
+
+        self.init_default_traits()
+        self.init_process('nipype.interfaces.spm.EstimateContrast')
+
+    def _get_contrast(self, session_type):
+        """blabla"""
+        contrast = tuple()
+        if session_type == 'tcon':
+            contrast[0] = self.contrast_session_name
+            contrast[1] = 'T'
+            contrast[2] = self.contrast_weight
+            contrast[3] = self.replicate
+        if session_type == 'fcon':
+            contrast[0] = self.contrast_session_name
+            contrast[1] = 'F'
+            contrast[2] = self.contrast_weight
+            contrast[3] = self.replicate
+        if session_type == 'tconsess':
+            pass
+
+    def list_outputs(self):
+        """blabla"""
+        super(EstimateContrast, self).list_outputs()
+
+        # Old version calling Nipype's method
+        '''process = spm.EstimateContrast()
+        if not self.spm_mat_file:
+            return {}, {}
+        else:
+            process.inputs.spm_mat_file = self.spm_mat_file
+
+        if not self.contrasts:
+            return {}, {}
+        else:
+            process.inputs.contrasts = self.contrasts
+
+        if not self.beta_images:
+            return {}, {}
+        else:
+            process.inputs.beta_images = self.beta_images
+
+        if not self.residual_image:
+            return {}, {}
+        else:
+            process.inputs.residual_image = self.residual_image
+
+        outputs = process._list_outputs()
+        outputs["out_spm_mat_file"] = outputs.pop("spm_mat_file")
+        return outputs, {}'''
+
+        # Own list_outputs to avoid to read in the SPM.mat file
+        # if not self.spm_mat_file:
+        #     return {}, {}
+        #
+        # if not self.contrasts:
+        #     return {}, {}
+        #
+        # if not self.beta_images:
+        #     return {}, {}
+        #
+        # if not self.residual_image:
+        #     return {}, {}
+
+        #if self.outputs:
+        #    self.outputs = {}
+
+        #if self.inheritance_dict:
+        #    self.inheritance_dict = {}
+
+        if ((self.spm_mat_file) and
+                (self.spm_mat_file not in ['<undefined>', Undefined])):
+            # The management of self.process.output_directory could be delegated
+            # to the populse_mia.user_interface.pipeline_manager.process_mia
+            # module. We can't do it at the moment because the
+            # sync_process_output_traits() of the capsul/process/nipype_process
+            # module raises an exception in nipype if the mandatory parameters
+            # are not yet defined!
+            if self.output_directory:
+                self.process.output_directory = self.output_directory
+
+            else:
+                print('No output_directory was found...!\n')
+
+            _, spm_mat_file = os.path.split(self.spm_mat_file)
+            self.outputs['out_spm_mat_file'] = os.path.join(self.output_directory,
+                                                            spm_mat_file)
+
+        # Counting the number of spmT and con files to create
+        if self.multi_reg is not Undefined:
+            nb_spmT = 0
+            for reg_file in self.multi_reg:
+                if os.path.splitext(reg_file)[1] != '.txt':
+                    nb_spmT += 1
+
+            spmT_files = []
+            con_files = []
+            for i in range(nb_spmT):
+                i += 1
+                spmT_files.append(os.path.join(path, 'spmT_{:04d}.nii'.format(i)))
+                con_files.append(os.path.join(path, 'con_{:04d}.nii'.format(i)))
+
+            if spmT_files:
+                outputs['spmT_images'] = spmT_files
+                outputs['con_images'] = con_files
+
+        # What about spmF images ?
+        return outputs
+
+    def run_process_mia(self):
+
+        super(EstimateContrast, self).run_process_mia()
+
+        self.process.inputs.spm_mat_file = os.path.abspath(self.spm_mat_file)
+        self.process.inputs.contrasts = self._get_contrast(self.session_type)
+        self.process.inputs.beta_images = self.beta_images
+        self.process.inputs.residual_image = os.path.abspath(self.residual_image)
+        if self.use_derivs is not None:
+            self.process.inputs.use_derivs = self.use_derivs
+        else:
+            if self.group_contrast is not None:
+                self.process.inputs.group_contrast = self.group_contrast
+            else:
+                self.process.inputs.use_derivs = False
+        self.process.run()
 
 class EstimateModel(ProcessMIA):
     """
