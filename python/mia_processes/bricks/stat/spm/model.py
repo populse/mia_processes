@@ -330,7 +330,7 @@ class EstimateModel(ProcessMIA):
                       'any value and with values which are any value)')
         version_desc = 'Version of spm (a string)'
         tot_reg_num_desc = ('The total number of estimated regression'
-                             'coefficients (an integer)')
+                            'coefficients (an integer)')
 
         # Outputs description
         out_spm_mat_file_desc = ('The file containing specification of the '
@@ -589,8 +589,8 @@ class EstimateModel(ProcessMIA):
                     nb_reg += 1 # Adding the constant value
                 """
 
-            if (self.tot_reg_num in ['<undefined>', Undefined] and
-                self._get_dbFieldValue(self.spm_mat_file, 'Regress num') is not None):
+            if self.tot_reg_num in ['<undefined>', Undefined]: #and
+                #self._get_dbFieldValue(self.spm_mat_file, 'Regress num') is not None):
                 self.tot_reg_num = self._get_dbFieldValue(self.spm_mat_file, 'Regress num')
 
             # Bayesian and Bayesian2 are not yet fully implemented
@@ -626,7 +626,7 @@ class EstimateModel(ProcessMIA):
                               'automatically. It is not possible to safely '
                               'create the residual_images output parameter ...')
 
-                for i in range(int(0 if self.tot_reg_num in ['<undefined>', Undefined] else self.tot_reg_num)):
+                for i in range(int(0 if self.tot_reg_num in ['<undefined>', Undefined, None] else self.tot_reg_num)):
                     i += 1
                     betas.append('beta_{:04d}.{}'.format(i, im_form))
 
@@ -636,7 +636,7 @@ class EstimateModel(ProcessMIA):
                 else:
                     print('- No beta image were found to be added to the database ...')
 
-            if ((self.tot_reg_num in ['<undefined>', Undefined]) or
+            if ((self.tot_reg_num in ['<undefined>', Undefined, None]) or
                                          (self.write_residuals and not nb_dyn)):
                 self.outputs = {}
 
@@ -1189,7 +1189,7 @@ class Level1Design(ProcessMIA):
         :param idx_session: session index.
         :returns: session_info, beta_sess parameters and condition number
         """
-        session_info = dict()  # The informations for this session
+        session_info = dict()  # The information for this session
         beta_sess = 0  # The regressors number for this session
         cond_nb = 0  # The condition number for this session
 
@@ -1244,8 +1244,8 @@ class Level1Design(ProcessMIA):
                 for i in range(len(mat['tmod'])):
                     beta_sess += mat['tmod'][i]
 
-        # Don't understand what's the point of multiplier attribut.
-        # Moreover it does not seem to be used afterwards!
+        # Don't understand what's the point of multiplier attribute.
+        # Moreover, it does not seem to be used afterwards!
         # multiplier = 1
 
         # if 'hrf' in self.bases.keys():
@@ -1308,6 +1308,51 @@ class Level1Design(ProcessMIA):
         return self.project.session.get_value(COLLECTION_CURRENT,
                                               database_filename,
                                               field)
+
+    def _set_dbFieldValue(self, document, tag_to_add):
+        """blabla
+        """
+        file_position = (document.find(self.project.getName()) +
+                         len(self.project.getName()) +
+                         1)
+        database_filename = document[file_position:]
+
+        field_names = self.project.session.get_fields_names(COLLECTION_CURRENT)
+
+        if tag_to_add["name"] not in field_names:
+            (self.project.session.add_field)(
+                COLLECTION_CURRENT,
+                tag_to_add["name"],
+                tag_to_add["field_type"],
+                tag_to_add["description"],
+                tag_to_add["visibility"],
+                tag_to_add["origin"],
+                tag_to_add["unit"],
+                tag_to_add["default_value"],
+            )
+
+        if tag_to_add["name"] not in (
+                self.project.session.get_fields_names)(COLLECTION_INITIAL):
+            (self.project.session.add_field)(
+                COLLECTION_INITIAL,
+                tag_to_add["name"],
+                tag_to_add["field_type"],
+                tag_to_add["description"],
+                tag_to_add["visibility"],
+                tag_to_add["origin"],
+                tag_to_add["unit"],
+                tag_to_add["default_value"],
+            )
+
+        if self.project.session.get_document(COLLECTION_CURRENT, database_filename):
+            print("Path {0} already in database.".format(database_filename))
+
+        else:
+            self.project.session.add_document(COLLECTION_CURRENT, database_filename)
+            self.project.session.add_document(COLLECTION_INITIAL, database_filename)
+
+        self.project.session.set_values(COLLECTION_CURRENT, database_filename, {tag_to_add["name"]: tag_to_add['value']})
+        self.project.session.set_values(COLLECTION_INITIAL, database_filename, {tag_to_add["name"]: tag_to_add['value']})
 
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
@@ -1403,7 +1448,7 @@ class Level1Design(ProcessMIA):
             # - If sess_multi_reg is plugged and sessions have no multi_reg
             #   key, we can think there is an initialisation issue ...
 
-            print('n self.sess_multi_reg: ', self.sess_multi_reg) # To Remove after debug
+            #print('n self.sess_multi_reg: ', self.sess_multi_reg) # To Remove after debug
 
             #if is_plugged['sess_multi_reg'] and check:
             if self.sess_multi_reg != [[]] and check:
@@ -1461,6 +1506,14 @@ class Level1Design(ProcessMIA):
             tag_to_add['value'] = beta
             self.inheritance_dict[self.outputs['spm_mat_file']][
                 'own_tags'].append(tag_to_add)
+            # FIXME: In the latest version of mia, indexing of the database with
+            #        particular tags defined in the processes is done only at
+            #        the end of the initialisation of the whole pipeline. So we
+            #        cannot use the value of these tags in other processes of
+            #        the pipeline at the time of initialisation
+            #        (see populse_mia #290). Until better I use a quick and
+            #        dirty hack with the _set_dbFieldValue() method !
+            self._set_dbFieldValue(self.outputs['spm_mat_file'], tag_to_add)
             dyn_num = 0
 
             for scan in self.sess_scans:
@@ -1484,6 +1537,15 @@ class Level1Design(ProcessMIA):
                     tag_to_add['value'] = dyn_num
                     self.inheritance_dict[self.outputs['spm_mat_file']
                     ]['own_tags'].append(tag_to_add)
+                    # FIXME: In the latest version of mia, indexing of the database with
+                    #        particular tags defined in the processes is done only at
+                    #        the end of the initialisation of the whole pipeline. So we
+                    #        cannot use the value of these tags in other processes of
+                    #        the pipeline at the time of initialisation
+                    #        (see populse_mia #290). Until better I use a quick and
+                    #        dirty hack with the _set_dbFieldValue() method !
+                    self._set_dbFieldValue(self.outputs['spm_mat_file'],
+                                           tag_to_add)
 
                 else:
                     print('\nWarning! The dynamics number for at least one '
