@@ -680,7 +680,7 @@ class EstimateModel(ProcessMIA):
         # Removing the image files to avoid a bug
         # I do not observe the bug now, i comment the following lines:
         # TODO: In fact, self.outputs is == {} at this point(see issue #272).
-        #  If necessary, we can use the dict4runtine object?
+        #       If necessary, we can use the dict4runtine object?
         #
         # for key, value in self.outputs.items():
 
