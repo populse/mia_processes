@@ -67,7 +67,7 @@ import numpy as np
 class EstimateContrast(ProcessMIA):
     """blabla"""
     def __init__(self):
-        """Dedicated to the attributes initialisation / instanciation.
+        """Dedicated to the attributes initialisation / instantiation.
 
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
@@ -112,7 +112,13 @@ class EstimateContrast(ProcessMIA):
                                    output=False,
                                    optional=True))
 
-        self.add_trait("multi_reg", traits.List(output=False, optional=True))
+        self.add_trait("multi_reg",
+                       traits.Either(Undefined,
+                                     traits.List(),
+                                     output=False,
+                                     optional=True))
+
+        #self.add_trait("multi_reg", traits.List(output=False, optional=True))
         # self.add_trait("contrasts", traits.List([('+', 'T', ['R1_1'], [1])], output=False, optional=True))
         self.add_trait("beta_images", InputMultiPath(File(), output=False, copyfile=False))
         self.add_trait("residual_image", File(output=False, copyfile=False))
@@ -131,20 +137,25 @@ class EstimateContrast(ProcessMIA):
     def _get_contrast(self, session_type):
         """blabla"""
         contrast = tuple()
+
         if session_type == 'tcon':
             contrast[0] = self.contrast_session_name
             contrast[1] = 'T'
             contrast[2] = self.contrast_weight
             contrast[3] = self.replicate
-        if session_type == 'fcon':
+
+        elif session_type == 'fcon':
             contrast[0] = self.contrast_session_name
             contrast[1] = 'F'
             contrast[2] = self.contrast_weight
             contrast[3] = self.replicate
-        if session_type == 'tconsess':
+
+        elif session_type == 'tconsess':
             pass
 
-    def list_outputs(self):
+        return contrast
+
+    def list_outputs(self, is_plugged=None):
         """blabla"""
         super(EstimateContrast, self).list_outputs()
 
@@ -194,7 +205,8 @@ class EstimateContrast(ProcessMIA):
         #    self.inheritance_dict = {}
 
         if ((self.spm_mat_file) and
-                (self.spm_mat_file not in ['<undefined>', Undefined])):
+                (self.spm_mat_file not in ['<undefined>', Undefined]) and
+                          self.multi_reg not in [Undefined, '<undefined>', []]):
             # The management of self.process.output_directory could be delegated
             # to the populse_mia.user_interface.pipeline_manager.process_mia
             # module. We can't do it at the moment because the
@@ -211,43 +223,57 @@ class EstimateContrast(ProcessMIA):
             self.outputs['out_spm_mat_file'] = os.path.join(self.output_directory,
                                                             spm_mat_file)
 
-        # Counting the number of spmT and con files to create
-        if self.multi_reg is not Undefined:
+            # Counting the number of spmT and con files to create
+            #if self.multi_reg not in [Undefined, '<undefined>', []]:
             nb_spmT = 0
+
             for reg_file in self.multi_reg:
                 if os.path.splitext(reg_file)[1] != '.txt':
                     nb_spmT += 1
 
             spmT_files = []
             con_files = []
+
             for i in range(nb_spmT):
                 i += 1
-                spmT_files.append(os.path.join(path, 'spmT_{:04d}.nii'.format(i)))
-                con_files.append(os.path.join(path, 'con_{:04d}.nii'.format(i)))
+                spmT_files.append(os.path.join(self.output_directory, 'spmT_{:04d}.nii'.format(i)))
+                con_files.append(os.path.join(self.output_directory, 'con_{:04d}.nii'.format(i)))
+                #spmT_files.append(os.path.join(path, 'spmT_{:04d}.nii'.format(i)))
+                #con_files.append(os.path.join(path, 'con_{:04d}.nii'.format(i)))
 
             if spmT_files:
-                outputs['spmT_images'] = spmT_files
-                outputs['con_images'] = con_files
+                self.outputs['spmT_images'] = spmT_files
+                self.outputs['con_images'] = con_files
 
         # What about spmF images ?
-        return outputs
+        #return outputs
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
 
     def run_process_mia(self):
+        """blabla"""
 
         super(EstimateContrast, self).run_process_mia()
 
-        self.process.inputs.spm_mat_file = os.path.abspath(self.spm_mat_file)
-        self.process.inputs.contrasts = self._get_contrast(self.session_type)
-        self.process.inputs.beta_images = self.beta_images
-        self.process.inputs.residual_image = os.path.abspath(self.residual_image)
+        self.process.spm_mat_file = os.path.abspath(self.spm_mat_file)
+        self.process.contrasts = self._get_contrast(self.session_type)
+        self.process.beta_images = self.beta_images
+        self.process.residual_image = os.path.abspath(self.residual_image)
+
         if self.use_derivs is not None:
-            self.process.inputs.use_derivs = self.use_derivs
+            self.process.use_derivs = self.use_derivs
+
         else:
+
             if self.group_contrast is not None:
-                self.process.inputs.group_contrast = self.group_contrast
+                self.process.group_contrast = self.group_contrast
+
             else:
-                self.process.inputs.use_derivs = False
-        self.process.run()
+                self.process.use_derivs = False
+        #self.process.run()
+
+        return self.process.run(configuration_dict={})
 
 class EstimateModel(ProcessMIA):
     """
