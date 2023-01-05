@@ -65,7 +65,7 @@ import numpy as np
 
 
 class EstimateContrast(ProcessMIA):
-    """blabla"""
+    """Estimate contrasts of interest"""
     def __init__(self):
         """Dedicated to the attributes initialisation / instantiation.
 
@@ -79,44 +79,81 @@ class EstimateContrast(ProcessMIA):
         # Third party softwares required for the execution of the brick
         self.requirement = ['spm', 'nipype']
 
+        # Inputs description
+        spm_mat_file_desc = ('SPM.mat file (a pathlike object or string '
+                             'representing a file)')
+        session_type_desc = ('Selects the contrast type. One of tcon '
+                             '(T-contrast), fcon (F-contrast) or tconsess '
+                             '(T-contrast cond/sess based)')
+        contrast_name_desc = 'Name of contrasts (a list of string)'
+        condition_name_desc = 'Conditions information (a list of list of string)'
+        contrast_weight_desc = 'Contrast weights (list of list of float)'
+        session_desc = 'Session list (a list of list of float)'
+        multi_reg_desc = '(a list of file)'
+
         # Inputs
         self.add_trait("spm_mat_file",
                        File(output=False,
-                            copyfile=True))
+                            copyfile=True,
+                            desc=spm_mat_file_desc))
 
         self.add_trait("session_type",
                        traits.Enum("tcon",
                                    "fcon",
                                    "tconsess",
                                    output=False,
-                                   optional=False))
+                                   optional=False,
+                                   desc=session_type_desc))
 
-        self.add_trait("contrast_session_name",
-                       traits.String(output=False,
-                                     optional=False))
+        # self.add_trait("contrast_session_name",
+        #                traits.String(output=False,
+        #                              optional=False))
+        self.add_trait("contrast_name",
+                       traits.List(traits.String(),
+                                   output=False,
+                                   optional=False,
+                                   desc=contrast_name_desc))
+        self.contrast_name = ['+']
+
+        self.add_trait("condition_name",
+                       traits.List(traits.List(traits.String()),
+                                   output=False,
+                                   optional=False,
+                                   desc=condition_name_desc))
+        self.condition_name = [['R1_1']]
 
         self.add_trait("contrast_weight",
-                       traits.Either(traits.Float(),
-                                     traits.List(traits.Float()),
-                                     traits.List(traits.List(traits.Float())),
-                                     output=False,
-                                     optional=False))
-
-        self.add_trait("replicate",
-                       traits.Enum("none",
-                                   "repl",
-                                   "replsc",
-                                   "sess",
-                                   "both",
-                                   "bothsc",
+                       traits.List(traits.List(traits.Float()),
                                    output=False,
-                                   optional=True))
+                                   optional=False,
+                                   desc=contrast_weight_desc))
+        self.contrast_weight = [[1.0]]
+
+        self.add_trait("session",
+                       traits.Either(Undefined,
+                                     traits.List(traits.Either(Undefined,
+                                                               traits.List(traits.Float()))),
+                                     output=False,
+                                     optional=True,
+                                     desc=session_desc))
+        self.session = Undefined
+
+        # self.add_trait("replicate",
+        #                traits.Enum("none",
+        #                            "repl",
+        #                            "replsc",
+        #                            "sess",
+        #                            "both",
+        #                            "bothsc",
+        #                            output=False,
+        #                            optional=True))
 
         self.add_trait("multi_reg",
                        traits.Either(Undefined,
-                                     traits.List(),
+                                     traits.List(File()),
                                      output=False,
-                                     optional=True))
+                                     optional=True,
+                                     desc=multi_reg_desc))
 
         #self.add_trait("multi_reg", traits.List(output=False, optional=True))
         # self.add_trait("contrasts", traits.List([('+', 'T', ['R1_1'], [1])], output=False, optional=True))
@@ -134,26 +171,48 @@ class EstimateContrast(ProcessMIA):
         self.init_default_traits()
         self.init_process('nipype.interfaces.spm.EstimateContrast')
 
-    def _get_contrast(self, session_type):
+    def _get_contrasts(self, session_type):
         """blabla"""
-        contrast = tuple()
+        #contrast = tuple()
+        contrasts = [tuple()]
 
+        # if session_type == 'tcon':
+        #     contrast[0] = self.contrast_session_name
+        #     contrast[1] = 'T'
+        #     contrast[2] = self.contrast_weight
+        #     contrast[3] = self.replicate
+        #
+        # elif session_type == 'fcon':
+        #     contrast[0] = self.contrast_session_name
+        #     contrast[1] = 'F'
+        #     contrast[2] = self.contrast_weight
+        #     contrast[3] = self.replicate
+        #
+        # elif session_type == 'tconsess':
+        #     pass
         if session_type == 'tcon':
-            contrast[0] = self.contrast_session_name
-            contrast[1] = 'T'
-            contrast[2] = self.contrast_weight
-            contrast[3] = self.replicate
+            stat = 'T'
 
         elif session_type == 'fcon':
-            contrast[0] = self.contrast_session_name
-            contrast[1] = 'F'
-            contrast[2] = self.contrast_weight
-            contrast[3] = self.replicate
+            stat = 'F'
 
-        elif session_type == 'tconsess':
-            pass
+        else:
+            stat = None
 
-        return contrast
+        if stat is not None:
+
+            if self.session is Undefined:
+                contrasts = [(cont_name, stat, condition, cont_weight)
+                         for cont_name, condition, cont_weight in
+                         zip(self.contrast_name, self.condition_name,
+                             self.contrast_weight)]
+            else:
+                contrasts = [(cont_name, stat, condition, cont_weight, sess) if sess is not Undefined else (cont_name, stat, condition, cont_weight)
+                         for cont_name, condition, cont_weight, sess in
+                         zip(self.contrast_name, self.condition_name,
+                             self.contrast_weight, self.session)]
+
+        return contrasts
 
     def list_outputs(self, is_plugged=None):
         """blabla"""
@@ -256,10 +315,12 @@ class EstimateContrast(ProcessMIA):
 
         super(EstimateContrast, self).run_process_mia()
 
-        self.process.spm_mat_file = os.path.abspath(self.spm_mat_file)
-        self.process.contrasts = self._get_contrast(self.session_type)
+        #self.process.spm_mat_file = os.path.abspath(self.spm_mat_file)
+        self.process.spm_mat_file = self.spm_mat_file
+        self.process.contrasts = self._get_contrasts(self.session_type)
         self.process.beta_images = self.beta_images
-        self.process.residual_image = os.path.abspath(self.residual_image)
+        #self.process.residual_image = os.path.abspath(self.residual_image)
+        self.process.residual_image = self.residual_image
 
         if self.use_derivs is not None:
             self.process.use_derivs = self.use_derivs
