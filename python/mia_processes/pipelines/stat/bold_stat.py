@@ -35,7 +35,7 @@ class Bold_stat(Pipeline):
         self.nodes["level1design"].set_plug_value("sess_multi_reg", traits.Undefined)
         self.nodes["level1design"].process.sess_multi_reg = traits.Undefined
         self.add_process("estimatemodel", "mia_processes.bricks.stat.spm.model.EstimateModel")
-        self.add_process("make_a_list", "User_processes_ECdev.tools.tools.Make_A_List")
+        self.add_process("make_a_list", "mia_processes.bricks.tools.Make_A_List")
         self.nodes["make_a_list"].set_plug_value("obj1", traits.Undefined)
         self.nodes["make_a_list"].process.obj1 = traits.Undefined
 
