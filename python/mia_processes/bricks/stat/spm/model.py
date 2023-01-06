@@ -937,7 +937,7 @@ class Level1Design(ProcessMIA):
                        traits.Either(traits.Float(), Undefined,
                                      usedefault=True,
                                      output=False,
-                                     optional=True,
+                                     optional=False,
                                      desc=interscan_interval_desc))
         self.interscan_interval = Undefined
 
@@ -1662,9 +1662,25 @@ class Level1Design(ProcessMIA):
             if ((self.interscan_interval is Undefined) and ('RepetitionTime' in
                                                             self.project.session.get_fields_names(
                                                                 COLLECTION_CURRENT))):
-                self.interscan_interval = self._get_dbFieldValue(
-                    self.sess_scans[0],
-                    'RepetitionTime')[0] / 1000
+
+                if self._get_dbFieldValue(self.sess_scans[0], 'RepetitionTime') is not None:
+                    self.interscan_interval = self._get_dbFieldValue(
+                                                    self.sess_scans[0],
+                                                    'RepetitionTime')[0] / 1000
+
+                else:
+                    self.outputs = {}
+                    print('\nThe interscan_interval parameter (repetition time '
+                          'in seconds) could not be determined automatically '
+                          'for the Level1Design brick. Please set this value '
+                          'and launch the calculation again!\n')
+
+            elif self.interscan_interval is Undefined:
+                self.outputs = {}
+                print('\nThe interscan_interval parameter (repetition time '
+                      'in seconds) could not be determined automatically '
+                      'for the Level1Design brick. Please set this value '
+                      'and launch the calculation again!\n')
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
