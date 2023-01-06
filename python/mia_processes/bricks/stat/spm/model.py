@@ -102,7 +102,7 @@ class EstimateContrast(ProcessMIA):
                                    "fcon",
                                    "tconsess",
                                    output=False,
-                                   optional=False,
+                                   optional=True,
                                    desc=session_type_desc))
 
         # self.add_trait("contrast_session_name",
@@ -111,21 +111,21 @@ class EstimateContrast(ProcessMIA):
         self.add_trait("contrast_name",
                        traits.List(traits.String(),
                                    output=False,
-                                   optional=False,
+                                   optional=True,
                                    desc=contrast_name_desc))
         self.contrast_name = ['+']
 
         self.add_trait("condition_name",
                        traits.List(traits.List(traits.String()),
                                    output=False,
-                                   optional=False,
+                                   optional=True,
                                    desc=condition_name_desc))
         self.condition_name = [['R1_1']]
 
         self.add_trait("contrast_weight",
                        traits.List(traits.List(traits.Float()),
                                    output=False,
-                                   optional=False,
+                                   optional=True,
                                    desc=contrast_weight_desc))
         self.contrast_weight = [[1.0]]
 
@@ -311,6 +311,18 @@ class EstimateContrast(ProcessMIA):
                 self.outputs['spmT_images'] = spmT_files
                 self.outputs['con_images'] = con_files
 
+        if self.outputs:
+            # FIXME: Quick and dirty. This brick was written quickly and will
+            #        need to be reworked to cover all cases. At that time,
+            #        inheritance will also need to be reviewed. Currently we
+            #        take the first element of the lists, but in the general
+            #        case there can be several elements in the lists
+            self.inheritance_dict[self.outputs['out_spm_mat_file']] = self.spm_mat_file
+
+            if spmT_files:
+                self.inheritance_dict[self.outputs['spmT_images'][0]] = self.spm_mat_file
+                self.inheritance_dict[self.outputs['con_images'][0]] = self.spm_mat_file
+
         # What about spmF images ?
         #return outputs
 
@@ -466,7 +478,7 @@ class EstimateModel(ProcessMIA):
                            traits.Enum(1),
                            usedefault=True,
                            output=False,
-                           optional=False,
+                           optional=True,
                            desc=estimation_method_desc))
         self.estimation_method = {'Classical': 1}
 
@@ -917,7 +929,7 @@ class Level1Design(ProcessMIA):
                                    'secs',
                                    usedefault=True,
                                    output=False,
-                                   optional=False,
+                                   optional=True,
                                    desc=timing_units_desc))
 
         # Plan to retrieve this parameter automatically from the database?
@@ -1582,7 +1594,7 @@ class Level1Design(ProcessMIA):
 
         if self.outputs:
             self.inheritance_dict[self.outputs['spm_mat_file']] = dict()
-            # Currently spm_mat_file will only inherit the first scan if there
+            # Currently, spm_mat_file will only inherit the first scan if there
             # are several scans in self.scans. This would require some thought
             # for this particular case!
             self.inheritance_dict[self.outputs['spm_mat_file']]['parent'] = (
