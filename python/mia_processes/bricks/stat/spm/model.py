@@ -89,7 +89,7 @@ class EstimateContrast(ProcessMIA):
         condition_name_desc = 'Conditions information (a list of list of string)'
         contrast_weight_desc = 'Contrast weights (list of list of float)'
         session_desc = 'Session list (a list of list of float)'
-        multi_reg_desc = '(a list of file)'
+        multi_reg_desc = 'The regressor files(a list of file)'
 
         # Inputs
         self.add_trait("spm_mat_file",
@@ -131,8 +131,10 @@ class EstimateContrast(ProcessMIA):
 
         self.add_trait("session",
                        traits.Either(Undefined,
-                                     traits.List(traits.Either(Undefined,
-                                                               traits.List(traits.Float()))),
+                                     traits.List(traits.Either(
+                                                        Undefined,
+                                                        traits.List(
+                                                            traits.Float()))),
                                      output=False,
                                      optional=True,
                                      desc=session_desc))
@@ -203,14 +205,16 @@ class EstimateContrast(ProcessMIA):
 
             if self.session is Undefined:
                 contrasts = [(cont_name, stat, condition, cont_weight)
-                         for cont_name, condition, cont_weight in
-                         zip(self.contrast_name, self.condition_name,
-                             self.contrast_weight)]
+                             for cont_name, condition, cont_weight in
+                                 zip(self.contrast_name, self.condition_name,
+                                     self.contrast_weight)]
             else:
-                contrasts = [(cont_name, stat, condition, cont_weight, sess) if sess is not Undefined else (cont_name, stat, condition, cont_weight)
-                         for cont_name, condition, cont_weight, sess in
-                         zip(self.contrast_name, self.condition_name,
-                             self.contrast_weight, self.session)]
+                contrasts = [(cont_name, stat, condition, cont_weight, sess) if
+                             sess is not Undefined else
+                             (cont_name, stat, condition, cont_weight)
+                             for cont_name, condition, cont_weight, sess in
+                                 zip(self.contrast_name, self.condition_name,
+                                     self.contrast_weight, self.session)]
 
         return contrasts
 
@@ -279,8 +283,9 @@ class EstimateContrast(ProcessMIA):
                 print('No output_directory was found...!\n')
 
             _, spm_mat_file = os.path.split(self.spm_mat_file)
-            self.outputs['out_spm_mat_file'] = os.path.join(self.output_directory,
-                                                            spm_mat_file)
+            self.outputs['out_spm_mat_file'] = os.path.join(
+                                                          self.output_directory,
+                                                          spm_mat_file)
 
             # Counting the number of spmT and con files to create
             #if self.multi_reg not in [Undefined, '<undefined>', []]:
@@ -295,8 +300,10 @@ class EstimateContrast(ProcessMIA):
 
             for i in range(nb_spmT):
                 i += 1
-                spmT_files.append(os.path.join(self.output_directory, 'spmT_{:04d}.nii'.format(i)))
-                con_files.append(os.path.join(self.output_directory, 'con_{:04d}.nii'.format(i)))
+                spmT_files.append(os.path.join(self.output_directory,
+                                               'spmT_{:04d}.nii'.format(i)))
+                con_files.append(os.path.join(self.output_directory,
+                                              'con_{:04d}.nii'.format(i)))
                 #spmT_files.append(os.path.join(path, 'spmT_{:04d}.nii'.format(i)))
                 #con_files.append(os.path.join(path, 'con_{:04d}.nii'.format(i)))
 
