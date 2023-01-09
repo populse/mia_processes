@@ -14,6 +14,7 @@ Contains:
 # for details.
 ###############################################################################
 
-from .tools import (PageNumCanvas, plot_qi2, ReportLine,
-                    slice_planes_plot, dict4runtime_update)
+from .tools import (dict4runtime_update, get_dbFieldValue,
+                    PageNumCanvas, plot_qi2, ReportLine, set_dbFieldValue,
+                    slice_planes_plot)
 from .report import Report

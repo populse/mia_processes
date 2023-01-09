@@ -43,7 +43,6 @@ class Bold_stat(Pipeline):
         self.export_parameter("estimatecontrast", "multi_reg", "regressors", is_optional=False)
         self.add_link("regressors->make_a_list.obj1")
         self.export_parameter("level1design", "sess_scans", "smoothed_func", is_optional=False)
-        self.export_parameter("level1design", "interscan_interval", "interscan_interval_lev1_des", is_optional=True)
         self.export_parameter("level1design", "mask_image", "mask_002", is_optional=True)
         self.export_parameter("estimatecontrast", "spmT_images", is_optional=True)
         self.export_parameter("estimatecontrast", "out_spm_mat_file", is_optional=False)
@@ -56,7 +55,7 @@ class Bold_stat(Pipeline):
 
         # parameters order
 
-        self.reorder_traits(("interscan_interval_lev1_des", "regressors", "smoothed_func", "mask_002", "spmT_images", "out_spm_mat_file", "beta_images"))
+        self.reorder_traits(("regressors", "smoothed_func", "mask_002", "spmT_images", "out_spm_mat_file", "beta_images"))
 
         # nodes positions
         self.node_position = {

@@ -24,6 +24,7 @@ in populse_mia.
 ##########################################################################
 
 # mia_processes import
+from mia_processes.utils import get_dbFieldValue, set_dbFieldValue
 #from .stats_pop_ups import _SessionQuery # currently in ec_dev package
 
 # nibabel import
@@ -572,20 +573,6 @@ class EstimateModel(ProcessMIA):
         self.init_default_traits()
         self.init_process('nipype.interfaces.spm.EstimateModel')
 
-    def _get_dbFieldValue(self, document, field):
-        """Return, for a document, the field value from the database.
-
-        :param document: the absolute path of the document.
-        :param : the field name.
-        :returns: the value of the field for the document in the database.
-        """
-        complete_path = document
-        file_position = (complete_path.find(self.project.getName()) + len(self.project.getName()) + 1)
-        database_filename = complete_path[file_position:]
-        return self.project.session.get_value(COLLECTION_CURRENT,
-                                              database_filename,
-                                              field)
-
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
 
@@ -696,8 +683,9 @@ class EstimateModel(ProcessMIA):
                 """
 
             if self.tot_reg_num in ['<undefined>', Undefined]: #and
-                #self._get_dbFieldValue(self.spm_mat_file, 'Regress num') is not None):
-                self.tot_reg_num = self._get_dbFieldValue(self.spm_mat_file, 'Regress num')
+                self.tot_reg_num = get_dbFieldValue(self.project,
+                                                    self.spm_mat_file,
+                                                    'Regress num')
 
             # Bayesian and Bayesian2 are not yet fully implemented
             if (('Bayesian' in self.estimation_method.keys()) or
@@ -714,7 +702,9 @@ class EstimateModel(ProcessMIA):
                 self.outputs['mask_image'] = os.path.join(self.output_directory, "mask.{}".format(im_form))
 
                 if self.write_residuals:
-                    nb_dyn = self._get_dbFieldValue(self.spm_mat_file, 'Dynamic Number')
+                    nb_dyn = get_dbFieldValue(self.project,
+                                              self.spm_mat_file,
+                                              'Dynamic Number')
 
                     if nb_dyn:
                         nb_dyn = sum(nb_dyn)
@@ -937,7 +927,7 @@ class Level1Design(ProcessMIA):
                        traits.Either(traits.Float(), Undefined,
                                      usedefault=True,
                                      output=False,
-                                     optional=False,
+                                     optional=True,
                                      desc=interscan_interval_desc))
         self.interscan_interval = Undefined
 
@@ -1399,67 +1389,6 @@ class Level1Design(ProcessMIA):
         beta_sess += 1
         return session_info, beta_sess, cond_nb
 
-    def _get_dbFieldValue(self, document, field):
-        """Return, for a document, the field value from the database.
-
-        :param document: the absolute path of the document.
-        :param : the field name.
-        :returns: the value of the field for the document in the database.
-        """
-        file_position = (document.find(self.project.getName()) +
-                         len(self.project.getName()) +
-                         1)
-        database_filename = document[file_position:]
-
-        return self.project.session.get_value(COLLECTION_CURRENT,
-                                              database_filename,
-                                              field)
-
-    def _set_dbFieldValue(self, document, tag_to_add):
-        """blabla
-        """
-        file_position = (document.find(self.project.getName()) +
-                         len(self.project.getName()) +
-                         1)
-        database_filename = document[file_position:]
-
-        field_names = self.project.session.get_fields_names(COLLECTION_CURRENT)
-
-        if tag_to_add["name"] not in field_names:
-            (self.project.session.add_field)(
-                COLLECTION_CURRENT,
-                tag_to_add["name"],
-                tag_to_add["field_type"],
-                tag_to_add["description"],
-                tag_to_add["visibility"],
-                tag_to_add["origin"],
-                tag_to_add["unit"],
-                tag_to_add["default_value"],
-            )
-
-        if tag_to_add["name"] not in (
-                self.project.session.get_fields_names)(COLLECTION_INITIAL):
-            (self.project.session.add_field)(
-                COLLECTION_INITIAL,
-                tag_to_add["name"],
-                tag_to_add["field_type"],
-                tag_to_add["description"],
-                tag_to_add["visibility"],
-                tag_to_add["origin"],
-                tag_to_add["unit"],
-                tag_to_add["default_value"],
-            )
-
-        if self.project.session.get_document(COLLECTION_CURRENT, database_filename):
-            print("Path {0} already in database.".format(database_filename))
-
-        else:
-            self.project.session.add_document(COLLECTION_CURRENT, database_filename)
-            self.project.session.add_document(COLLECTION_INITIAL, database_filename)
-
-        self.project.session.set_values(COLLECTION_CURRENT, database_filename, {tag_to_add["name"]: tag_to_add['value']})
-        self.project.session.set_values(COLLECTION_INITIAL, database_filename, {tag_to_add["name"]: tag_to_add['value']})
-
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
 
@@ -1532,9 +1461,6 @@ class Level1Design(ProcessMIA):
             check = True  # Flag to stop the check processes
             init_res = []  # Initialisation result; True: Ok, False: Fail
 
-            #print('n self.sessions: ', self.sessions)
-            print('n sessions: ', sessions)  # To Remove after debug
-
             for i in sessions:
 
                 for j in ['cond', 'multi', 'regress', 'multi_reg']:
@@ -1554,9 +1480,6 @@ class Level1Design(ProcessMIA):
             # - If sess_multi_reg is plugged and sessions have no multi_reg
             #   key, we can think there is an initialisation issue ...
 
-            #print('n self.sess_multi_reg: ', self.sess_multi_reg) # To Remove after debug
-
-            #if is_plugged['sess_multi_reg'] and check:
             if self.sess_multi_reg != [[]] and check:
                 init_res = []
                 [init_res.append(True) for i in sessions
@@ -1573,8 +1496,6 @@ class Level1Design(ProcessMIA):
 
             # - If sess_multi is plugged and sessions have no multi key,
             #   we can think there is an initialisation issue ...
-
-            print('n self.sess_multi: ', self.sess_multi) # To Remove after debug
 
             #if is_plugged['sess_multi'] and check:
             if self.sess_multi != [] and check:
@@ -1617,20 +1538,24 @@ class Level1Design(ProcessMIA):
             #        the end of the initialisation of the whole pipeline. So we
             #        cannot use the value of these tags in other processes of
             #        the pipeline at the time of initialisation
-            #        (see populse_mia #290). Until better I use a quick and
-            #        dirty hack with the _set_dbFieldValue() method !
-            self._set_dbFieldValue(self.outputs['spm_mat_file'], tag_to_add)
+            #        (see populse_mia #290). Until better we use a quick and
+            #        dirty hack with the set_dbFieldValue() method !
+            set_dbFieldValue(self.project, self.outputs['spm_mat_file'],
+                             tag_to_add)
             dyn_num = 0
 
             for scan in self.sess_scans:
-                dimensions = self._get_dbFieldValue(scan,
-                                                    'Dataset dimensions (Count, X,Y,Z,T...)')
+                dimensions = get_dbFieldValue(
+                                       self.project,
+                                       scan,
+                                       'Dataset dimensions (Count, X,Y,Z,T...)')
 
                 if ((dimensions is not None) and
                         (isinstance(dimensions, list)) and
                         (len(dimensions) == 5)):
-                    dyn_num += dimensions[
-                        4]  # to check with EstimateModel brick; total sum of the dynamics in self.sess_scans -> strange !
+                    # to check with EstimateModel brick; total sum of the
+                    # dynamics in self.sess_scans -> strange !
+                    dyn_num += dimensions[4]
                     tag_to_add = dict()
                     tag_to_add['name'] = 'Dynamic Number'
                     tag_to_add['field_type'] = FIELD_TYPE_INTEGER
@@ -1648,10 +1573,11 @@ class Level1Design(ProcessMIA):
                     #        the end of the initialisation of the whole pipeline. So we
                     #        cannot use the value of these tags in other processes of
                     #        the pipeline at the time of initialisation
-                    #        (see populse_mia #290). Until better I use a quick and
-                    #        dirty hack with the _set_dbFieldValue() method !
-                    self._set_dbFieldValue(self.outputs['spm_mat_file'],
-                                           tag_to_add)
+                    #        (see populse_mia #290). Until better we use a quick and
+                    #        dirty hack with the set_dbFieldValue() function !
+                    set_dbFieldValue(self.project,
+                                     self.outputs['spm_mat_file'],
+                                     tag_to_add)
 
                 else:
                     print('\nWarning! The dynamics number for at least one '
@@ -1663,8 +1589,10 @@ class Level1Design(ProcessMIA):
                                                             self.project.session.get_fields_names(
                                                                 COLLECTION_CURRENT))):
 
-                if self._get_dbFieldValue(self.sess_scans[0], 'RepetitionTime') is not None:
-                    self.interscan_interval = self._get_dbFieldValue(
+                if get_dbFieldValue(self.project, self.sess_scans[0],
+                                    'RepetitionTime') is not None:
+                    self.interscan_interval = get_dbFieldValue(
+                                                    self.project,
                                                     self.sess_scans[0],
                                                     'RepetitionTime')[0] / 1000
 

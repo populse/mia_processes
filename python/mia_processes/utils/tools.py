@@ -7,9 +7,9 @@ Module that contains multiple functions used across mia_processes
         - ReportLine
     :Functions:
         - dict4runtime_update
+        - get_dbFieldValue
         - plot_qi2
         - slice_planes_plot
-        -
 """
 
 ##########################################################################
@@ -26,7 +26,8 @@ import nibabel as nib
 import numpy as np
 import os
 
-from populse_mia.data_manager.project import COLLECTION_CURRENT
+from populse_mia.data_manager.project import (COLLECTION_CURRENT,
+                                              COLLECTION_INITIAL)
 
 from matplotlib.cm import get_cmap
 from mpl_toolkits.axes_grid1 import ImageGrid
@@ -105,6 +106,24 @@ def dict4runtime_update(dict4runtime, database, db_filename, *args):
         if isinstance(dict4runtime[tag], datetime.date):
             dict4runtime[tag] = str(dict4runtime[tag])
 
+def get_dbFieldValue(project, document, field):
+    """blabla"""
+
+    """Return, for a document, the field value from the database.
+
+     :param project: the project.
+     :param document: the absolute path of the document.
+     :param : the field name.
+     :returns: the value of the field for the document in the database.
+     """
+    file_position = (document.find(project.getName()) +
+                     len(project.getName()) + 1)
+    database_filename = document[file_position:]
+
+    return project.session.get_value(COLLECTION_CURRENT,
+                                     database_filename,
+                                     field)
+
 def plot_qi2(x_grid, ref_pdf, fit_pdf, ref_data, cutoff_idx, out_file=None):
     """bla bla"""
     fig, ax = plt.subplots()
@@ -155,6 +174,48 @@ def plot_qi2(x_grid, ref_pdf, fit_pdf, ref_data, cutoff_idx, out_file=None):
 
     fig.savefig(out_file, bbox_inches="tight", pad_inches=0, dpi=300)
     return out_file
+
+def set_dbFieldValue(project, document, tag_to_add):
+    """blabla
+    """
+    file_position = (document.find(project.getName()) +
+                     len(project.getName()) +
+                     1)
+    database_filename = document[file_position:]
+
+    if tag_to_add["name"] not in project.session.get_fields_names(
+                                                            COLLECTION_CURRENT):
+        project.session.add_field(COLLECTION_CURRENT,
+                                  tag_to_add["name"],
+                                  tag_to_add["field_type"],
+                                  tag_to_add["description"],
+                                  tag_to_add["visibility"],
+                                  tag_to_add["origin"],
+                                  tag_to_add["unit"],
+                                  tag_to_add["default_value"])
+
+    if tag_to_add["name"] not in project.session.get_fields_names(
+                                                            COLLECTION_INITIAL):
+        project.session.add_field(COLLECTION_INITIAL,
+                                  tag_to_add["name"],
+                                  tag_to_add["field_type"],
+                                  tag_to_add["description"],
+                                  tag_to_add["visibility"],
+                                  tag_to_add["origin"],
+                                  tag_to_add["unit"],
+                                  tag_to_add["default_value"])
+
+    if project.session.get_document(COLLECTION_CURRENT, database_filename):
+        print("Path {0} already in database.".format(database_filename))
+
+    else:
+        project.session.add_document(COLLECTION_CURRENT, database_filename)
+        project.session.add_document(COLLECTION_INITIAL, database_filename)
+
+    project.session.set_values(COLLECTION_CURRENT, database_filename,
+                               {tag_to_add["name"]: tag_to_add['value']})
+    project.session.set_values(COLLECTION_INITIAL, database_filename,
+                               {tag_to_add["name"]: tag_to_add['value']})
 
 def slice_planes_plot(data, fig_rows, fig_cols, inf_slice_start=None,
                       slices_gap=None, dyn=1, cmap="Greys_r", out_dir=None):

@@ -31,6 +31,7 @@ from capsul.api import capsul_engine
 
 # mia_processes import
 from mia_processes import resources
+from mia_processes.utils import get_dbFieldValue, set_dbFieldValue
 
 # nipype imports
 from nipype.interfaces import spm
@@ -355,6 +356,74 @@ class Coregister(ProcessMIA):
 
             if out_coregfiles:
                 self.outputs["coregistered_files"] = out_coregfiles
+
+                if not isinstance(out_coregfiles, list):
+                    out_coregfiles = [out_coregfiles]
+
+                # FIXME: In the latest version of mia, indexing of the database with
+                #        particular tags defined in the processes is done only at
+                #        the end of the initialisation of the whole pipeline. So we
+                #        cannot use the value of these tags in other processes of
+                #        the pipeline at the time of initialisation
+                #        (see populse_mia #290). Until better we use a quick and
+                #        dirty hack with the set_dbFieldValue() method !
+                for in_val, out_val in zip(self.apply_to_files, out_coregfiles):
+                    tag_to_add = dict()
+                    tag_to_add['name'] = 'RepetitionTime'
+                    tag_to_add['field_type'] = "float"
+                    tag_to_add['description'] = ("The period of time "
+                                                 "in msec between the "
+                                                 "beginning of a pulse "
+                                                 "sequence and the "
+                                                 "beginning of the "
+                                                 "succeeding pulse "
+                                                 "sequence")
+                    tag_to_add['visibility'] = True
+                    tag_to_add['origin'] = "user"
+                    tag_to_add['unit'] = "ms"
+                    tag_to_add['default_value'] = None
+                    tag_to_add['value'] = get_dbFieldValue(self.project,
+                                                           in_val,
+                                                           'RepetitionTime')
+
+                    if tag_to_add['value'] is not None:
+                        set_dbFieldValue(self.project, out_val, tag_to_add)
+
+                    else:
+                        print("\nIn the Coregister brick, the "
+                              "'RepetitionTime' tag could not be added "
+                              "to the database for the '{}' parameter. "
+                              "This can lead to a subsequent issue "
+                              "during initialization!!\n".format(out_val))
+
+                    tag_to_add = dict()
+                    tag_to_add['name'] = ("Dataset dimensions "
+                                          "(Count, X,Y,Z,T...)")
+                    tag_to_add['field_type'] = "int"
+                    tag_to_add['description'] = ("data array dimensions"
+                                                 " (from Nifti header)")
+                    tag_to_add['visibility'] = True
+                    tag_to_add['origin'] = "user"
+                    tag_to_add['unit'] = None
+                    tag_to_add['default_value'] = None
+                    tag_to_add['value'] = get_dbFieldValue(
+                        self.project,
+                        in_val,
+                        ("Dataset dimensions "
+                         "(Count, X,Y,Z,T...)"))
+
+                    if tag_to_add['value'] is not None:
+                        set_dbFieldValue(self.project,
+                                         out_val,
+                                         tag_to_add)
+
+                    else:
+                        print("\nIn the Coregister brick, the "
+                              "'Dataset dimensions (Count, X,Y,Z,T...)'"
+                              " tag could not be added to the database "
+                              "for the '{}' parameter. This can lead to"
+                              " a subsequent issue during "
+                              "initialization!!\n".format(out_val))
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -1328,6 +1397,72 @@ class Normalize12(ProcessMIA):
                         val = [val]
 
                     for in_val, out_val in zip(self.apply_to_files, val):
+                        # FIXME: In the latest version of mia, indexing of the database with
+                        #        particular tags defined in the processes is done only at
+                        #        the end of the initialisation of the whole pipeline. So we
+                        #        cannot use the value of these tags in other processes of
+                        #        the pipeline at the time of initialisation
+                        #        (see populse_mia #290). Until better we use a quick and
+                        #        dirty hack with the set_dbFieldValue() method !
+                        tag_to_add = dict()
+                        tag_to_add['name'] = 'RepetitionTime'
+                        tag_to_add['field_type'] = "float"
+                        tag_to_add['description'] = ("The period of time "
+                                                         "in msec between the "
+                                                         "beginning of a pulse "
+                                                         "sequence and the "
+                                                         "beginning of the "
+                                                         "succeeding pulse "
+                                                         "sequence")
+                        tag_to_add['visibility'] = True
+                        tag_to_add['origin'] = "user"
+                        tag_to_add['unit'] = "ms"
+                        tag_to_add['default_value'] = None
+                        tag_to_add['value'] = get_dbFieldValue(self.project,
+                                                               in_val,
+                                                               'RepetitionTime')
+
+                        if tag_to_add['value'] is not None:
+                            set_dbFieldValue(self.project,
+                                             out_val,
+                                             tag_to_add)
+
+                        else:
+                            print("\nIn the Normalize12 brick, the "
+                                  "'RepetitionTime' tag could not be added "
+                                  "to the database for the '{}' parameter. "
+                                  "This can lead to a subsequent issue "
+                                  "during initialization!!\n".format(out_val))
+
+                        tag_to_add = dict()
+                        tag_to_add['name'] = ("Dataset dimensions "
+                                              "(Count, X,Y,Z,T...)")
+                        tag_to_add['field_type'] = "int"
+                        tag_to_add['description'] = ("data array dimensions"
+                                                     " (from Nifti header)")
+                        tag_to_add['visibility'] = True
+                        tag_to_add['origin'] = "user"
+                        tag_to_add['unit'] = None
+                        tag_to_add['default_value'] = None
+                        tag_to_add['value'] = get_dbFieldValue(
+                            self.project,
+                            in_val,
+                            ("Dataset dimensions "
+                             "(Count, X,Y,Z,T...)"))
+
+                        if tag_to_add['value'] is not None:
+                            set_dbFieldValue(self.project,
+                                             out_val,
+                                             tag_to_add)
+
+                        else:
+                            print("\nIn the Normalize12 brick, the "
+                                  "'Dataset dimensions (Count, X,Y,Z,T...)'"
+                                  " tag could not be added to the database "
+                                  "for the '{}' parameter. This can lead to"
+                                  " a subsequent issue during "
+                                  "initialization!!\n".format(out_val))
+
                         pathOval, fileOval = os.path.split(out_val)
                         _, fileIval = os.path.split(in_val)
                         fileOvalNoPref = fileOval[1:]
@@ -1658,15 +1793,83 @@ class Realign(ProcessMIA):
 
                     if ((self.jobtype == 'estimate') or
                      (self.write_which == [0, 1] and
-                     (self.jobtype == 'write' or  self.jobtype == 'estwrite'))):
+                     (self.jobtype == 'write' or self.jobtype == 'estwrite'))):
                         self.outputs['realigned_files'] = Undefined
 
                     else:
-                        
+
                         if not isinstance(val, list):
                             val = [val]
-                            
+
                         for in_val, out_val in zip(self.in_files, val):
+                            # FIXME: In the latest version of mia, indexing of the database with
+                            #        particular tags defined in the processes is done only at
+                            #        the end of the initialisation of the whole pipeline. So we
+                            #        cannot use the value of these tags in other processes of
+                            #        the pipeline at the time of initialisation
+                            #        (see populse_mia #290). Until better we use a quick and
+                            #        dirty hack with the set_dbFieldValue() method !
+                            tag_to_add = dict()
+                            tag_to_add['name'] = 'RepetitionTime'
+                            tag_to_add['field_type'] = "float"
+                            tag_to_add['description'] = ("The period of time "
+                                                         "in msec between the "
+                                                         "beginning of a pulse "
+                                                         "sequence and the "
+                                                         "beginning of the "
+                                                         "succeeding pulse "
+                                                         "sequence")
+                            tag_to_add['visibility'] = True
+                            tag_to_add['origin'] = "user"
+                            tag_to_add['unit'] = "ms"
+                            tag_to_add['default_value'] = None
+                            tag_to_add['value'] = get_dbFieldValue(
+                                                               self.project,
+                                                               in_val,
+                                                               'RepetitionTime')
+
+                            if tag_to_add['value'] is not None:
+                                set_dbFieldValue(self.project,
+                                                 out_val,
+                                                 tag_to_add)
+
+                            else:
+                                print("\nIn the Realign brick, the "
+                                      "'RepetitionTime' tag could not be added "
+                                      "to the database for the '{}' parameter. "
+                                      "This can lead to a subsequent issue "
+                                      "during initialization!!\n".format(
+                                                                       out_val))
+
+                            tag_to_add = dict()
+                            tag_to_add['name'] = ("Dataset dimensions "
+                                                  "(Count, X,Y,Z,T...)")
+                            tag_to_add['field_type'] = "int"
+                            tag_to_add['description'] = ("data array dimensions"
+                                                         " (from Nifti header)")
+                            tag_to_add['visibility'] = True
+                            tag_to_add['origin'] = "user"
+                            tag_to_add['unit'] = None
+                            tag_to_add['default_value'] = None
+                            tag_to_add['value'] = get_dbFieldValue(
+                                                        self.project,
+                                                        in_val,
+                                                        ("Dataset dimensions "
+                                                         "(Count, X,Y,Z,T...)"))
+
+                            if tag_to_add['value'] is not None:
+                                set_dbFieldValue(self.project,
+                                                 out_val,
+                                                 tag_to_add)
+
+                            else:
+                                print("\nIn the Realign brick, the "
+                                      "'Dataset dimensions (Count, X,Y,Z,T...)'"
+                                      " tag could not be added to the database "
+                                      "for the '{}' parameter. This can lead to"
+                                      " a subsequent issue during "
+                                      "initialization!!\n".format(out_val))
+
                             _, fileOval = os.path.split(out_val)
                             _, fileIval = os.path.split(in_val)
 
@@ -1941,7 +2144,7 @@ class SliceTiming(ProcessMIA):
             else:
                 msg = QMessageBox()
                 msg.setIcon(QMessageBox.Warning)
-                msg.setWindowTitle("User_processes_ECdev - "
+                msg.setWindowTitle("Mia_processes - "
                                    "SliceTiming Error!")
                 msg.setText("Warning: the value of the num_slices parameter "
                             "was not found in the database. "
@@ -1958,7 +2161,7 @@ class SliceTiming(ProcessMIA):
                 if self.num_slices != temp:
                     msg = QMessageBox()
                     msg.setIcon(QMessageBox.Warning)
-                    msg.setWindowTitle("User_processes_ECdev - "
+                    msg.setWindowTitle("Mia_processes - "
                                        "SliceTiming Error!")
                     msg.setText("Warning: The value for the num_slices "
                                 "parameter does not match the value in the "
@@ -1984,7 +2187,7 @@ class SliceTiming(ProcessMIA):
             else:
                 msg = QMessageBox()
                 msg.setIcon(QMessageBox.Warning)
-                msg.setWindowTitle("User_processes_ECdev - "
+                msg.setWindowTitle("Mia_processes - "
                                    "SliceTiming Error!")
                 msg.setText("Warning: the value of the TR parameter "
                             "was not found in the database. "
@@ -2001,7 +2204,7 @@ class SliceTiming(ProcessMIA):
                 if self.TR != temp:
                     msg = QMessageBox()
                     msg.setIcon(QMessageBox.Warning)
-                    msg.setWindowTitle("User_processes_ECdev - "
+                    msg.setWindowTitle("Mia_processes - "
                                        "SliceTiming Error!")
                     msg.setText("Warning: The value for the TR "
                                 "parameter does not match the value in the "
@@ -2025,7 +2228,7 @@ class SliceTiming(ProcessMIA):
                     if self.TA != self.TR - (self.TR / self.num_slices):
                         msg = QMessageBox()
                         msg.setIcon(QMessageBox.Warning)
-                        msg.setWindowTitle("User_processes_ECdev - "
+                        msg.setWindowTitle("Mia_processes - "
                                            "SliceTiming Error!")
                         msg.setText("Warning: the value of the TA parameter "
                                     "doesn't exactly match the other "
@@ -2041,7 +2244,7 @@ class SliceTiming(ProcessMIA):
             elif self.TA == Undefined:
                 msg = QMessageBox()
                 msg.setIcon(QMessageBox.Warning)
-                msg.setWindowTitle("User_processes_ECdev - "
+                msg.setWindowTitle("Mia_processes - "
                                    "SliceTiming Error!")
                 msg.setText("The value of TR or num_slices parameters was not "
                             "found in the database, then the TA parameter "
@@ -2057,7 +2260,7 @@ class SliceTiming(ProcessMIA):
             if len(self.slice_order) != self.num_slices:
                 msg = QMessageBox()
                 msg.setIcon(QMessageBox.Warning)
-                msg.setWindowTitle("User_processes_ECdev - SliceTiming Error!")
+                msg.setWindowTitle("Mia_processes - SliceTiming Error!")
                 msg.setText("Warning: the slice_order parameter doesn't "
                             "match the num_slices parameter. Please check the "
                             "data.")
@@ -2110,7 +2313,7 @@ class SliceTiming(ProcessMIA):
         else:
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Warning)
-            msg.setWindowTitle("User_processes_ECdev - SliceTiming Error!")
+            msg.setWindowTitle("Mia_processes - SliceTiming Error!")
             msg.setText("Warning: As the num_slices parameter was not found in "
                         "the database, it was not possible to determine the "
                         "slice_order parameter automatically. Please check the "
@@ -2131,7 +2334,7 @@ class SliceTiming(ProcessMIA):
                 else:
                     msg = QMessageBox()
                     msg.setIcon(QMessageBox.Warning)
-                    msg.setWindowTitle("User_processes_ECdev - SliceTiming "
+                    msg.setWindowTitle("Mia_processes - SliceTiming "
                                        "Error!")
                     msg.setText("Warning: It was not possible to determine the "
                                 "ref_slice parameter automatically. Please "
@@ -2382,6 +2585,72 @@ class Smooth(ProcessMIA):
                         val = [val]
 
                     for in_val, out_val in zip(self.in_files, val):
+                        # FIXME: In the latest version of mia, indexing of the database with
+                        #        particular tags defined in the processes is done only at
+                        #        the end of the initialisation of the whole pipeline. So we
+                        #        cannot use the value of these tags in other processes of
+                        #        the pipeline at the time of initialisation
+                        #        (see populse_mia #290). Until better we use a quick and
+                        #        dirty hack with the set_dbFieldValue() method !
+                        tag_to_add = dict()
+                        tag_to_add['name'] = 'RepetitionTime'
+                        tag_to_add['field_type'] = "float"
+                        tag_to_add['description'] = ("The period of time "
+                                                     "in msec between the "
+                                                     "beginning of a pulse "
+                                                     "sequence and the "
+                                                     "beginning of the "
+                                                     "succeeding pulse "
+                                                     "sequence")
+                        tag_to_add['visibility'] = True
+                        tag_to_add['origin'] = "user"
+                        tag_to_add['unit'] = "ms"
+                        tag_to_add['default_value'] = None
+                        tag_to_add['value'] = get_dbFieldValue(self.project,
+                                                               in_val,
+                                                               'RepetitionTime')
+
+                        if tag_to_add['value'] is not None:
+                            set_dbFieldValue(self.project,
+                                             out_val,
+                                             tag_to_add)
+
+                        else:
+                            print("\nIn the Smooth brick, the "
+                                  "'RepetitionTime' tag could not be added "
+                                  "to the database for the '{}' parameter. "
+                                  "This can lead to a subsequent issue "
+                                  "during initialization!!\n".format(out_val))
+
+                        tag_to_add = dict()
+                        tag_to_add['name'] = ("Dataset dimensions "
+                                              "(Count, X,Y,Z,T...)")
+                        tag_to_add['field_type'] = "int"
+                        tag_to_add['description'] = ("data array dimensions"
+                                                     " (from Nifti header)")
+                        tag_to_add['visibility'] = True
+                        tag_to_add['origin'] = "user"
+                        tag_to_add['unit'] = None
+                        tag_to_add['default_value'] = None
+                        tag_to_add['value'] = get_dbFieldValue(
+                            self.project,
+                            in_val,
+                            ("Dataset dimensions "
+                             "(Count, X,Y,Z,T...)"))
+
+                        if tag_to_add['value'] is not None:
+                            set_dbFieldValue(self.project,
+                                             out_val,
+                                             tag_to_add)
+
+                        else:
+                            print("\nIn the Smooth brick, the "
+                                  "'Dataset dimensions (Count, X,Y,Z,T...)'"
+                                  " tag could not be added to the database "
+                                  "for the '{}' parameter. This can lead to"
+                                  " a subsequent issue during "
+                                  "initialization!!\n".format(out_val))
+
                         _, fileOval = os.path.split(out_val)
                         _, fileIval = os.path.split(in_val)
                         
