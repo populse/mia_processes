@@ -38,7 +38,7 @@ import os
 
 class Files_To_List(ProcessMIA):
     """
-    *From 2 file names, generating a list containing all theses file names*
+    *From 2 file names, generating a list containing all these file names*
 
     Please, see the complete documention for the `Files_To_List in the populse.mia_processes web site
     <https://populse.github.io/mia_processes/documentation/bricks/tools/Files_To_List.html>`_
@@ -47,7 +47,7 @@ class Files_To_List(ProcessMIA):
 
     def __init__(self):
         """Dedicated to the attributes initialisation/instanciation.
-        
+
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
         third-party products necessary for the running of the brick.
@@ -56,7 +56,7 @@ class Files_To_List(ProcessMIA):
         super(Files_To_List, self).__init__()
 
         # Third party softwares required for the execution of the brick
-        self.requirement = [] # no need of third party software!
+        self.requirement = []  # no need of third party software!
 
         # Inputs description
         file1_desc = 'A string corresponding to an existing path file.'
