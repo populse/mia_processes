@@ -30,7 +30,6 @@ populse_mia.
 from capsul.api import capsul_engine
 
 # mia_processes import
-from mia_processes import resources
 from mia_processes.utils import get_dbFieldValue, set_dbFieldValue
 
 # nipype imports
@@ -858,20 +857,30 @@ class NewSegment(ProcessMIA):
                                    'object or string representing a file).')     
 
         # Tissues parameter definition
-        tpm_path = os.path.join(resources.__path__[0], 'spm12', 'tpm', 'TPM.nii')
+        config = Config()
+        tissues_list = Undefined
 
-        if not Path(tpm_path).is_file():
-            print('\nNewSegment brick warning!: The {} file seems to '
-                  'not exists ...'.format(tpm_path))
-            tissues_list = Undefined
+        if config.get_resources_path():
+            tpm_path = os.path.join(config.get_resources_path(), 'spm12',
+                                    'tpm', 'TPM.nii')
 
-        else:
-            tissues_list = [((tpm_path, 1), 2, (True, False), (False, False)),
-                            ((tpm_path, 2), 2, (True, False), (False, False)),
-                            ((tpm_path, 3), 2, (True, False), (False, False)),
-                            ((tpm_path, 4), 3, (True, False), (False, False)),
-                            ((tpm_path, 5), 4, (True, False), (False, False)),
-                            ((tpm_path, 6), 2, (True, False), (False, False))]
+            if not Path(tpm_path).is_file():
+                print('\nNewSegment brick:\n  - The {} file '
+                      'seems to not exists ...'.format(tpm_path))
+
+            else:
+                tissues_list = [((tpm_path, 1), 2, (True, False),
+                                 (False, False)),
+                                ((tpm_path, 2), 2, (True, False),
+                                 (False, False)),
+                                ((tpm_path, 3), 2, (True, False),
+                                 (False, False)),
+                                ((tpm_path, 4), 3, (True, False),
+                                 (False, False)),
+                                ((tpm_path, 5), 4, (True, False),
+                                 (False, False)),
+                                ((tpm_path, 6), 2, (True, False),
+                                 (False, False))]
 
         # Inputs traits
         self.add_trait("channel_files",
@@ -1189,11 +1198,17 @@ class Normalize12(ProcessMIA):
                                  'file).')
 
         # Tpm parameter definition
-        tpm_path = os.path.join(resources.__path__[0], 'spm12', 'tpm', 'TPM.nii')
+        config = Config()
+        tpm_path = Undefined
+
+        if config.get_resources_path():
+            tpm_path = os.path.join(config.get_resources_path(), 'spm12',
+                                    'tpm', 'TPM.nii')
         
-        if not Path(tpm_path).is_file():
-            print('\nThe {} file seems to not exists ...'.format(tpm_path))
-            tpm_path = Undefined
+            if not Path(tpm_path).is_file():
+                print('\nNormalize12 brick:\n  - The {} file '
+                      'seems to not exists ...'.format(tpm_path))
+                tpm_path = Undefined
 
         # Inputs traits
         self.add_trait("image_to_align",
