@@ -49,6 +49,9 @@ from nipype.interfaces.spm.base import ImageFileSPM
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 from populse_mia.software_properties import Config
 
+# mia_processes import
+from mia_processes.utils import get_dbFieldValue
+
 # soma-base imports
 from soma.qt_gui.qt_backend.Qt import QMessageBox
 
@@ -780,10 +783,12 @@ class Conv_ROI(ProcessMIA):
       doublet_list[0][0] + doublet_list[0][1] + '.nii',
       doublet_list[1][0] + doublet_list[1][1] + '.nii',
       etc.
-    - The output_directory/"roi" directory is created with the corresponding ROI
-      files (need to use the miaresources package).
-    - The output_directory/"roi"/"convROI_BOLD" directory is created in order to
-      receive the convolution results realised during the runtime.
+    - The output_directory"/roi_"PatientName directory is created with the
+      corresponding ROI files (the miaresources package must be installed).
+    - The output_directory"/roi_"PatientName"/convROI_BOLD" directory is
+      created to receive the convolution results from the runtime.
+    - To work correctly, the database entry for the in_image parameter must
+      have the "PatientName" tag filled in.
     """
 
     def __init__(self):
@@ -820,6 +825,12 @@ class Conv_ROI(ProcessMIA):
                                        output=True,
                                        desc=out_images_desc))
 
+        # Special parameter used as a messenger for the run_process_mia method
+        self.add_trait("dict4runtime",
+                       traits.Dict(output=False,
+                                   optional=True,
+                                   userlevel=1))
+
         self.init_default_traits()
 
     def list_outputs(self, is_plugged=None):
@@ -840,21 +851,32 @@ class Conv_ROI(ProcessMIA):
 
         # Outputs definition and tags inheritance (optional)
         if self.doublet_list != [] and self.in_image:
-            roi_dir = os.path.join(self.output_directory, 'roi')
+            patient_name = get_dbFieldValue(self.project,
+                                            self.in_image,
+                                            'PatientName')
 
-            # if not existing, creates self.output_directory/'roi' folder
-            # If already existing, overwrite it.
+            if patient_name is None:
+                print('\nConv_ROI brick:\n The PatientName tag is not filled '
+                      'in the database for the {} file ...\n The calculation'
+                      'is aborted...'.format(self.in_image))
+                return self.make_initResult()
+
+            self.dict4runtime['patient_name'] = patient_name
+            roi_dir = os.path.join(self.output_directory, 'roi_' + patient_name)
+
+            # if not existing, creates self.output_directory'/roi_'patient_name
+            # folder. If already existing, overwrite it.
             if (os.path.exists(roi_dir)):
                 tmp = tempfile.mktemp(dir=os.path.dirname(roi_dir))
                 shutil.move(roi_dir, tmp)
                 shutil.rmtree(tmp)
-                print('\nA folder {} already exists, '
+                print('\nA {} folder already exists, '
                       'it is overwritten by the new one...'.format(roi_dir))
 
             os.mkdir(roi_dir)
 
             # Copying the ROIs from the resources folder
-            # to self.output_directory/'roi'
+            # to self.output_directory'cd /roi_'patient_name
             config = Config()
             ref_dir = os.path.join(config.get_resources_path(), 'ROIs')
             copy_tree(ref_dir, roi_dir)
@@ -880,7 +902,8 @@ class Conv_ROI(ProcessMIA):
         # No need the next line (we don't use self.process et SPM)
         #super(Conv_ROI, self).run_process_mia()
 
-        roi_dir = os.path.join(self.output_directory, 'roi')
+        roi_dir = os.path.join(self.output_directory,
+                               'roi_' + self.dict4runtime['patient_name'])
         conv_dir = os.path.join(roi_dir, 'convROI_BOLD')
 
         # Resizing the self.in_image to the size of the ROIs, using the
