@@ -7,8 +7,10 @@ needed to run other higher-level bricks.
 
 :Contains:
     :Class:
+        - Concat_to_list_of_list
         - Files_To_List
         - Filter_Files_List
+        - Find_In_List
         - Input_Filter
         - List_Duplicate
         - List_To_File
@@ -25,7 +27,8 @@ needed to run other higher-level bricks.
 ##########################################################################
 
 # nipype import
-from nipype.interfaces.base import traits
+from nipype.interfaces.base import traits, InputMultiPath
+from nipype.interfaces.spm.base import ImageFileSPM
 
 # populse_mia imports
 from populse_mia.data_manager.filter import Filter
@@ -34,6 +37,88 @@ from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 
 # Other imports
 import os
+
+
+class Concat_to_list_of_list(ProcessMIA):
+    """Make an output list of list containing the iteration of the input list1
+    with each element of the input list2
+
+    Ex. ['a', 'b', 'c'] and ['_1', '_2'] gives
+    [['a', '_1'], ['a', '_2'],
+     ['b', '_1'], ['b', '_2'],
+     ['c', '_1'], ['c', '_2']
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instanciation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # initialisation of the objects needed for the launch of the brick
+        super(Concat_to_list_of_list, self).__init__()
+
+        LIST1 = ['ROI_OCC', 'ROI_PAR', 'ROI_TEMP', 'ROI_INSULA',
+                 'ROI_FRON', 'ROI_CING', 'ROI_THA', 'ROI_STR',
+                 'ACP', 'ACA', 'ACM', 'PICA', 'SCA']
+        LIST2 = ['_L', '_R']
+
+        # Inputs description
+        list1_desc = 'A list of string'
+        list2_desc = 'A list of string'
+
+        # Outputs description
+        listOflist_desc = 'A list of list'
+
+        # Inputs traits
+        self.add_trait("list1",
+                       traits.List(LIST1,
+                                   output=False,
+                                   optional=True,
+                                   desc=list1_desc))
+
+        self.add_trait("list2",
+                       traits.List(LIST2,
+                                   output=False,
+                                   optional=True,
+                                   desc=list2_desc))
+
+        # Outputs traits
+        self.add_trait("listOflist",
+                       traits.List(output=True,
+                                   desc=listOflist_desc))
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(Concat_to_list_of_list, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.list1 != [] and self.list2 != []:
+            self.outputs['listOflist'] = [[i, j] for i in self.list1
+                                                     for j in self.list2]
+
+            if self.outputs:
+                self.outputs["notInDb"] = ["listOflist"]
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        return
 
 
 class Files_To_List(ProcessMIA):
@@ -241,6 +326,87 @@ class Filter_Files_List(ProcessMIA):
 
             if self.outputs:
                 self.outputs["notInDb"] = ["filtered_list"]
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        return
+
+
+class Find_In_List(ProcessMIA):
+    """
+    From a list of files, select the 1rst element that contains a pattern.
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instantiation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(Find_In_List, self).__init__()
+
+        # Inputs description
+        in_list_desc = ('List of files to parse. A list of items which are '
+                        'an existing, uncompressed file '
+                        '(valid extensions: [.img, .nii, .hdr]).')
+        pattern_desc = 'Pattern to look for (a string).'
+
+        # Outputs description
+        out_file_desc = ('The first file found in the in_list parameter with '
+                         'the pattern in its name.')
+
+        # Input traits
+        self.add_trait("in_list",
+                       InputMultiPath(traits.Either(ImageFileSPM(),
+                                      traits.Undefined),
+                                      copyfile=False,
+                                      output=False,
+                                      optional=False,
+                                      desc=in_list_desc))
+        self.add_trait("pattern",
+                       traits.String("0001",
+                                     output=False,
+                                     optional=True,
+                                     desc=pattern_desc))
+
+        # Output traits
+        self.add_trait("out_file",
+                       ImageFileSPM(output=True,
+                                    desc=out_file_desc))
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(Find_In_List, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.in_list and self.in_list not in ["<undefined>",
+                                                 traits.Undefined]:
+
+            for fil in self.in_list:
+
+                if self.pattern in fil:
+                    self.outputs['out_file'] = fil
+                    break
+
+            if self.outputs:
+                self.outputs["notInDb"] = ['out_file']
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()

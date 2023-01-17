@@ -8,11 +8,12 @@ pre-processing steps, which are not found in nipype.
         - ArtifactMask
         - Binarize
         - ConformImage
+        - Conv_ROI
         - Enhance
         - GradientThreshold
         - Harmonize
-        - NonSteadyStateDetector
         - Mask
+        - NonSteadyStateDetector
         - Resample
         - RotationMask
         - Sanitize
@@ -46,14 +47,19 @@ from nipype.interfaces.spm.base import ImageFileSPM
 
 # populse_mia import
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
+from populse_mia.software_properties import Config
 
 # soma-base imports
 from soma.qt_gui.qt_backend.Qt import QMessageBox
 
 # Other import
-import os
-import numpy as np
+from distutils.dir_util import copy_tree
 from scipy import ndimage as sim
+from skimage.transform import resize
+import numpy as np
+import os
+import shutil
+import tempfile
 
 # import templateflow to get anatomical templates
 from templateflow.api import get as get_template
@@ -767,6 +773,143 @@ class ConformImage(ProcessMIA):
             nib.save(out_img, file_out)
 
 
+class Conv_ROI(ProcessMIA):
+    """Convolve regions of interest with a mask.
+
+    - ROIs are defined from doublet_list parameter as
+      doublet_list[0][0] + doublet_list[0][1] + '.nii',
+      doublet_list[1][0] + doublet_list[1][1] + '.nii',
+      etc.
+    - The output_directory/"roi" directory is created with the corresponding ROI
+      files (need to use the miaresources package).
+    - The output_directory/"roi"/"convROI_BOLD" directory is created in order to
+      receive the convolution results realised during the runtime.
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instanciation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(Conv_ROI, self).__init__()
+
+        # Inputs description
+        doublet_list_desc = ('A list of lists containing doublets of strings '
+                             '(e.g. ["ROI_OCC", "_L"], ["ROI_OCC", "_R"], '
+                             '["ROI_PAR", "_l"], ...]')
+        in_image_desc = 'An image (an existing, uncompressed file)'
+
+        # Outputs description
+        out_images_desc = 'The convoluted  images'
+
+        # Inputs traits
+        self.add_trait("doublet_list",
+                       traits.List(output=False,
+                                   desc=doublet_list_desc))
+
+        self.add_trait("in_image",
+                       ImageFileSPM(output=False,
+                                    desc=in_image_desc))
+
+        # Outputs traits
+        self.add_trait("out_images",
+                       OutputMultiPath(File(),
+                                       output=True,
+                                       desc=out_images_desc))
+
+        self.init_default_traits()
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(Conv_ROI, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.doublet_list != [] and self.in_image:
+            roi_dir = os.path.join(self.output_directory, 'roi')
+
+            # if not existing, creates self.output_directory/'roi' folder
+            # If already existing, overwrite it.
+            if (os.path.exists(roi_dir)):
+                tmp = tempfile.mktemp(dir=os.path.dirname(roi_dir))
+                shutil.move(roi_dir, tmp)
+                shutil.rmtree(tmp)
+                print('\nA folder {} already exists, '
+                      'it is overwritten by the new one...'.format(roi_dir))
+
+            os.mkdir(roi_dir)
+
+            # Copying the ROIs from the resources folder
+            # to self.output_directory/'roi'
+            config = Config()
+            ref_dir = os.path.join(config.get_resources_path(), 'ROIs')
+            copy_tree(ref_dir, roi_dir)
+
+            # Creates roi_dir/'convROI_BOLD' folder
+            conv_dir = os.path.join(roi_dir, 'convROI_BOLD')
+            os.mkdir(conv_dir)
+
+            list_out = []
+
+            for roi in self.doublet_list:
+                list_out.append(os.path.join(conv_dir,
+                                             'conv' + roi[0] + roi[1] + '.nii'))
+
+            self.outputs['out_images'] = list_out
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+
+        # No need the next line (we don't use self.process et SPM)
+        #super(Conv_ROI, self).run_process_mia()
+
+        roi_dir = os.path.join(self.output_directory, 'roi')
+        conv_dir = os.path.join(roi_dir, 'convROI_BOLD')
+
+        # Resizing the self.in_image to the size of the ROIs, using the
+        # first ROI in self.doublet_list
+        roi_1 = self.doublet_list[0]
+        roi_file = os.path.join(roi_dir, roi_1[0] + roi_1[1] + '.nii')
+        roi_img = nib.load(roi_file)
+        roi_data = roi_img.get_data()
+        roi_size = roi_data.shape[:3]
+        mask_thresh = threshold(self.in_image, 0.5).get_data()
+        resized_mask = resize(mask_thresh, roi_size)
+
+        # Convolve each ROI with resized self.in_image[0]
+        for roi in self.doublet_list:
+            roi_file = os.path.join(roi_dir, roi[0] + roi[1] + '.nii')
+            roi_img = nib.load(roi_file)
+            roi_data = roi_img.get_data()
+            mult = (roi_data * resized_mask).astype(float)
+            # TODO: Should we take info from ROI or from the mask ?
+            #       Currently we take from ROI images
+            mult_img = nib.Nifti1Image(mult, roi_img.affine, roi_img.header)
+
+            # Image save in
+            # self.output_directory/'roi'/'convROI_BOLD'/
+            # 'conv'self.doublet_list[0]self.doublet_list[1]'.nii'
+            out_file = os.path.join(conv_dir, 'conv' + roi[0] + roi[1] + '.nii')
+            nib.save(mult_img, out_file)
+            print('{0} saved'.format(os.path.basename(out_file)))
+
 class Enhance(ProcessMIA):
     """
     *Image enhancing*
@@ -1474,94 +1617,6 @@ class Harmonize(ProcessMIA):
             nib.save(out_img, file_out)
 
 
-class NonSteadyStateDetector(ProcessMIA):
-    """
-    * Detect non-steady-state at the beginning of a bold 4D image*
-
-    Please, see the complete documentation for the `NonSteadyStateDetector' brick in the populse.mia_processes website
-    https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/NonSteadyStateDetector.html
-
-    adapted from:
-    https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5de5913b31/nipype/algorithms/confounds.py#L974
-
-    """
-
-    def __init__(self):
-        """Dedicated to the attributes initialisation / instanciation.
-
-        The input and output plugs are defined here. The special
-        'self.requirement' attribute (optional) is used to define the
-        third-party products necessary for the running of the brick.
-        """
-        # Initialisation of the objects needed for the launch of the brick
-        super(NonSteadyStateDetector, self).__init__()
-
-        # Third party softwares required for the execution of the brick
-        self.requirement = []
-
-        # Inputs description
-        in_file_desc = 'An existing path file.'
-
-        # Outputs description
-        n_volumes_to_discard_desc = ('Number of non steady'
-                                     'state volumes')
-
-        # Inputs traits
-        self.add_trait("in_file",
-                       File(output=False,
-                            optional=False,
-                            desc=in_file_desc))
-
-        # Outputs traits
-        self.add_trait("n_volumes_to_discard",
-                       traits.Int(output=True,
-                                  desc=n_volumes_to_discard_desc))
-
-        self.init_default_traits()
-
-    def list_outputs(self, is_plugged=None):
-        """Dedicated to the initialisation step of the brick.
-
-        The main objective of this method is to produce the outputs of the
-        bricks (self.outputs) and the associated tags (self.inheritance_dic),
-        if defined here. To work properly this method must return
-        self.make_initResult() object.
-
-        :param is_plugged: the state, linked or not, of the plugs.
-        :returns: a dictionary with requirement, outputs and inheritance_dict.
-        """
-        # Using the inheritance to ProcessMIA class, list_outputs method
-        super(NonSteadyStateDetector, self).list_outputs()
-
-        # Outputs definition
-        if self.in_file:
-            self.outputs['n_volumes_to_discard'] = 0
-
-        # Return the requirement, outputs and inheritance_dict
-        return self.make_initResult()
-
-    def run_process_mia(self):
-        """Dedicated to the process launch step of the brick."""
-        super(NonSteadyStateDetector, self).run_process_mia()
-
-        file_name = self.in_file
-
-        try:
-            in_nii = nib.load(file_name)
-        except (nib.filebasedimages.ImageFileError,
-                FileNotFoundError, TypeError) as e:
-            print("\nError with file to enhance, during "
-                  "initialisation: ", e)
-            in_nii = None
-
-        if in_nii is not None:
-            global_signal = (
-                in_nii.dataobj[:, :, :, :50].mean(axis=0).mean(axis=0).mean(axis=0)
-            )
-
-        self.n_volumes_to_discard = is_outlier(global_signal)
-
-
 class Mask(ProcessMIA):
     """
     * Mask image *
@@ -1767,6 +1822,94 @@ class Mask(ProcessMIA):
                                       self.suffix.strip() +
                                       file_extension))
             nib.save(maskimg, file_out)
+
+
+class NonSteadyStateDetector(ProcessMIA):
+    """
+    * Detect non-steady-state at the beginning of a bold 4D image*
+
+    Please, see the complete documentation for the `NonSteadyStateDetector' brick in the populse.mia_processes website
+    https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/NonSteadyStateDetector.html
+
+    adapted from:
+    https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5de5913b31/nipype/algorithms/confounds.py#L974
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation / instanciation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(NonSteadyStateDetector, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = []
+
+        # Inputs description
+        in_file_desc = 'An existing path file.'
+
+        # Outputs description
+        n_volumes_to_discard_desc = ('Number of non steady'
+                                     'state volumes')
+
+        # Inputs traits
+        self.add_trait("in_file",
+                       File(output=False,
+                            optional=False,
+                            desc=in_file_desc))
+
+        # Outputs traits
+        self.add_trait("n_volumes_to_discard",
+                       traits.Int(output=True,
+                                  desc=n_volumes_to_discard_desc))
+
+        self.init_default_traits()
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(NonSteadyStateDetector, self).list_outputs()
+
+        # Outputs definition
+        if self.in_file:
+            self.outputs['n_volumes_to_discard'] = 0
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(NonSteadyStateDetector, self).run_process_mia()
+
+        file_name = self.in_file
+
+        try:
+            in_nii = nib.load(file_name)
+        except (nib.filebasedimages.ImageFileError,
+                FileNotFoundError, TypeError) as e:
+            print("\nError with file to enhance, during "
+                  "initialisation: ", e)
+            in_nii = None
+
+        if in_nii is not None:
+            global_signal = (
+                in_nii.dataobj[:, :, :, :50].mean(axis=0).mean(axis=0).mean(axis=0)
+            )
+
+        self.n_volumes_to_discard = is_outlier(global_signal)
 
 
 class Resample(ProcessMIA):

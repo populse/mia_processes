@@ -8,8 +8,7 @@
 # for details.
 ##########################################################################
 
-from .processing import (ArtifactMask, Binarize, ConformImage,
-                         Enhance, GradientThreshold, Harmonize,
-                         Mask, NonSteadyStateDetector, Resample,
-                         RotationMask, Sanitize, Template,
-                         Threshold, TSNR)
+from .processing import (ArtifactMask, Binarize, ConformImage, Conv_ROI,
+                         Enhance, GradientThreshold, Harmonize, Mask,
+                         NonSteadyStateDetector, Resample, RotationMask,
+                         Sanitize, Template, Threshold, TSNR)
