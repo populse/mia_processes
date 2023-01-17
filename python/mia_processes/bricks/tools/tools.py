@@ -59,9 +59,9 @@ class Concat_to_list_of_list(ProcessMIA):
         # initialisation of the objects needed for the launch of the brick
         super(Concat_to_list_of_list, self).__init__()
 
-        LIST1 = ['ROI_OCC', 'ROI_PAR', 'ROI_TEMP', 'ROI_INSULA',
-                 'ROI_FRON', 'ROI_CING', 'ROI_THA', 'ROI_STR',
-                 'ACP', 'ACA', 'ACM', 'PICA', 'SCA']
+        LIST1 = ['ACA', 'ACM', 'ACP', 'PICA', 'ROI_CING', 'ROI_FRON',
+                 'ROI_INSULA', 'ROI_OCC', 'ROI_PAR', 'ROI_STR', 'ROI_TEMP',
+                 'ROI_THA', 'SCA']
         LIST2 = ['_L', '_R']
 
         # Inputs description
