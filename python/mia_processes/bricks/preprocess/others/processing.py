@@ -803,7 +803,7 @@ class Conv_ROI(ProcessMIA):
 
         # Inputs description
         doublet_list_desc = ('A list of lists containing doublets of strings '
-                             '(e.g. ["ROI_OCC", "_L"], ["ROI_OCC", "_R"], '
+                             '(e.g. [["ROI_OCC", "_L"], ["ROI_OCC", "_R"], '
                              '["ROI_PAR", "_l"], ...]')
         in_image_desc = 'An image (an existing, uncompressed file)'
 
