@@ -279,7 +279,7 @@ class ArtifactMask(ProcessMIA):
 
             # Apply rotation mask (if supplied)
             if rot_mask_name:
-                rotmskdata = rmnii.get_data()
+                rotmskdata = rmnii.get_fdata()
                 airdata[rotmskdata == 1] = 0
 
             # Run the artifact detection
@@ -949,16 +949,16 @@ class Conv_ROI(ProcessMIA):
         roi_1 = self.doublet_list[0]
         roi_file = os.path.join(roi_dir, roi_1[0] + roi_1[1] + '.nii')
         roi_img = nib.load(roi_file)
-        roi_data = roi_img.get_data()
+        roi_data = roi_img.get_fdata()
         roi_size = roi_data.shape[:3]
-        mask_thresh = threshold(self.in_image, 0.5).get_data()
+        mask_thresh = threshold(self.in_image, 0.5).get_fdata()
         resized_mask = resize(mask_thresh, roi_size)
 
-        # Convolve each ROI with resized self.in_image[0]
+        # Convolve each ROI with resized self.in_image
         for roi in self.doublet_list:
             roi_file = os.path.join(roi_dir, roi[0] + roi[1] + '.nii')
             roi_img = nib.load(roi_file)
-            roi_data = roi_img.get_data()
+            roi_data = roi_img.get_fdata()
             mult = (roi_data * resized_mask).astype(float)
             # TODO: Should we take info from ROI or from the mask ?
             #       Currently we take from ROI images
@@ -973,8 +973,12 @@ class Conv_ROI(ProcessMIA):
 
 
 class Conv_ROI2(ProcessMIA):
-    """Blabla
+    """Setting regions of interest to the resolution of the in_image
 
+    - ROIs are defined from doublet_list parameter as
+      doublet_list[0][0] + doublet_list[0][1] + '.nii',
+      doublet_list[1][0] + doublet_list[1][1] + '.nii',
+      etc.
     - The output_directory"/roi_"PatientName"/convROI_BOLD2" directory is
       created to receive the convolution results from the runtime.
     - To work correctly, the database entry for the in_image parameter must
@@ -996,20 +1000,18 @@ class Conv_ROI2(ProcessMIA):
         in_image_desc = 'An image (an existing, uncompressed file)'
 
         # Outputs description
-        out_images_desc = 'The convoluted  images'
+        out_images_desc = 'The resampled  images'
 
         # Inputs traits
-        # roi_list
         self.add_trait("doublet_list",
                        traits.List(output=False,
                                    desc=doublet_list_desc))
-        # mask
+
         self.add_trait("in_image",
                        ImageFileSPM(output=False,
                                     desc=in_image_desc))
 
         # Outputs traits
-        # out_masks2
         self.add_trait("out_images",
                        OutputMultiPath(File(),
                                        output=True,
@@ -1068,7 +1070,7 @@ class Conv_ROI2(ProcessMIA):
                     os.mkdir(tmp)
                     shutil.move(os.path.join(roi_dir, 'convROI_BOLD2'),
                                 os.path.join(tmp, 'convROI_BOLD2'))
-                    print('\nConv_ROI brick:\nA "{}" folder already exists, '
+                    print('\nConv_ROI2 brick:\nA "{}" folder already exists, '
                           'it will be overwritten by this new '
                           'calculation...'.format(os.path.join(
                                                               roi_dir,
@@ -1097,27 +1099,37 @@ class Conv_ROI2(ProcessMIA):
         return self.make_initResult()
 
     def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
 
-        roi_dir = os.path.join(os.path.dirname(self.mask), 'roi')
+        # No need the next line (we don't use self.process et SPM)
+        #super(Conv_ROI2, self).run_process_mia()
+
+        roi_dir = os.path.join(self.output_directory,
+                               'roi_' + self.dict4runtime['patient_name'])
         conv_dir = os.path.join(roi_dir, 'convROI_BOLD')
         conv_dir2 = os.path.join(roi_dir, 'convROI_BOLD2')
 
-        # Setting ROIs to the resolution of the functional
-        mask = nib.load(self.mask).get_data()
+        # Setting ROIs to the resolution of the in_image
+        mask = nib.load(self.in_image).get_fdata()
         mask_size = mask.shape[:3]
 
-        for roi in self.roi_list:
+        for roi in self.doublet_list:
             roi_file = os.path.join(conv_dir, 'conv' + roi[0] + roi[1] + '.nii')
             roi_img = nib.load(roi_file)
-            roi_data = roi_img.get_data()
+            roi_data = roi_img.get_fdata()
             resized_roi = resize(roi_data, mask_size)
-            resized_img = nib.Nifti1Image(resized_roi, roi_img.affine, roi_img.header)
+            # TODO: Should we take info from ROI or from the mask ?
+            #       Currently we take from ROI images
+            resized_img = nib.Nifti1Image(resized_roi, roi_img.affine,
+                                          roi_img.header)
 
             # Image save
-            out_file = os.path.join(conv_dir2, 'conv' + roi[0] + roi[1] + '2.nii')
+            out_file = os.path.join(conv_dir2,
+                                    'conv' + roi[0] + roi[1] + '2.nii')
             nib.save(resized_img, out_file)
 
-            print('{0} saved'.format(os.path.basename(out_file)))
+            print('\nConv_ROI2 brick:{0} saved'.format(os.path.basename(
+                                                                     out_file)))
 
 
 class Enhance(ProcessMIA):
@@ -1785,7 +1797,7 @@ class Harmonize(ProcessMIA):
 
         try:
             img = nib.load(self.in_file)
-            wm_img = nib.load(self.wm_mask).get_data()
+            wm_img = nib.load(self.wm_mask).get_fdata()
         except (nib.filebasedimages.ImageFileError,
                 FileNotFoundError, TypeError) as e:
             print("\nError with file to enhance, during "
@@ -1804,7 +1816,7 @@ class Harmonize(ProcessMIA):
                 # Perform an opening operation on the background data.
                 wm_mask = sim.binary_erosion(wm_mask, structure=struc).astype(np.uint8)
 
-            data = img.get_data()
+            data = img.get_fdata()
             data = data * (1000.0 / np.median(data[wm_mask > 0]))
 
             out_img = img.__class__(data, img.affine, img.header)
@@ -3035,10 +3047,10 @@ class Sanitize(ProcessMIA):
                       "Analyses of this dataset MAY BE INVALID.")
 
             if (
-                    self.max_32bit and np.dtype(img.get_data_dtype()).itemsize > 4
+                    self.max_32bit and np.dtype(img.get_fdata_dtype()).itemsize > 4
             ) or self.n_volumes_to_discard:
                 # force float32 only if 64 bit dtype is detected
-                if self.max_32bit and np.dtype(img.get_data_dtype()).itemsize > 4:
+                if self.max_32bit and np.dtype(img.get_fdata_dtype()).itemsize > 4:
                     in_data = img.get_fdata(dtype=np.float32)
                 else:
                     in_data = img.dataobj
