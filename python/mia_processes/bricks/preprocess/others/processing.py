@@ -9,6 +9,7 @@ pre-processing steps, which are not found in nipype.
         - Binarize
         - ConformImage
         - Conv_ROI
+        - Conv_ROI2
         - Enhance
         - GradientThreshold
         - Harmonize
@@ -969,6 +970,155 @@ class Conv_ROI(ProcessMIA):
             out_file = os.path.join(conv_dir, 'conv' + roi[0] + roi[1] + '.nii')
             nib.save(mult_img, out_file)
             print('{0} saved'.format(os.path.basename(out_file)))
+
+
+class Conv_ROI2(ProcessMIA):
+    """Blabla
+
+    - The output_directory"/roi_"PatientName"/convROI_BOLD2" directory is
+      created to receive the convolution results from the runtime.
+    - To work correctly, the database entry for the in_image parameter must
+      have the "PatientName" tag filled in.
+    """
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instanciation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        super(Conv_ROI2, self).__init__()
+
+        # Inputs description
+        doublet_list_desc = ('A list of lists containing doublets of strings '
+                             '(e.g. [["ROI_OCC", "_L"], ["ROI_OCC", "_R"], '
+                             '["ROI_PAR", "_l"], ...]')
+        in_image_desc = 'An image (an existing, uncompressed file)'
+
+        # Outputs description
+        out_images_desc = 'The convoluted  images'
+
+        # Inputs traits
+        # roi_list
+        self.add_trait("doublet_list",
+                       traits.List(output=False,
+                                   desc=doublet_list_desc))
+        # mask
+        self.add_trait("in_image",
+                       ImageFileSPM(output=False,
+                                    desc=in_image_desc))
+
+        # Outputs traits
+        # out_masks2
+        self.add_trait("out_images",
+                       OutputMultiPath(File(),
+                                       output=True,
+                                       desc=out_images_desc))
+
+        # Special parameter used as a messenger for the run_process_mia method
+        self.add_trait("dict4runtime",
+                       traits.Dict(output=False,
+                                   optional=True,
+                                   userlevel=1))
+
+        self.init_default_traits()
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(Conv_ROI2, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.doublet_list != [] and self.in_image:
+            patient_name = get_dbFieldValue(self.project,
+                                            self.in_image,
+                                            'PatientName')
+
+            if patient_name is None:
+                print('\nConv_ROI2 brick:\n The PatientName tag is not filled '
+                      'in the database for the {} file ...\n The calculation'
+                      'is aborted...'.format(self.in_image))
+                return self.make_initResult()
+
+            self.dict4runtime['patient_name'] = patient_name
+            roi_dir = os.path.join(self.output_directory, 'roi_' + patient_name)
+
+            # if not existing, creates self.output_directory'/roi_'patient_name
+            # folder. If already existing, remove the roi_dir'/convROI_BOLD2'
+            if os.path.exists(roi_dir):
+                elts = os.listdir(roi_dir)
+                # filtering only the directories
+                dirs = [d for d in elts
+                             if os.path.isdir(os.path.join(roi_dir, d))]
+                tmp = False
+
+                if 'convROI_BOLD2' in dirs:
+                    tmp = tempfile.mktemp(dir=os.path.dirname(roi_dir))
+                    os.mkdir(tmp)
+                    shutil.move(os.path.join(roi_dir, 'convROI_BOLD2'),
+                                os.path.join(tmp, 'convROI_BOLD2'))
+                    print('\nConv_ROI brick:\nA "{}" folder already exists, '
+                          'it will be overwritten by this new '
+                          'calculation...'.format(os.path.join(
+                                                              roi_dir,
+                                                              'convROI_BOLD2')))
+
+                if os.path.isdir(tmp):
+                    shutil.rmtree(tmp)
+
+            else:
+                os.mkdir(roi_dir)
+
+            # Creates roi_dir/'convROI_BOLD2' folder
+            conv_dir = os.path.join(roi_dir, 'convROI_BOLD2')
+            os.mkdir(conv_dir)
+
+            list_out = []
+
+            for roi in self.doublet_list:
+                list_out.append(os.path.join(
+                                            conv_dir,
+                                            'conv' + roi[0] + roi[1] + '2.nii'))
+
+            self.outputs['out_images'] = list_out
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+
+        roi_dir = os.path.join(os.path.dirname(self.mask), 'roi')
+        conv_dir = os.path.join(roi_dir, 'convROI_BOLD')
+        conv_dir2 = os.path.join(roi_dir, 'convROI_BOLD2')
+
+        # Setting ROIs to the resolution of the functional
+        mask = nib.load(self.mask).get_data()
+        mask_size = mask.shape[:3]
+
+        for roi in self.roi_list:
+            roi_file = os.path.join(conv_dir, 'conv' + roi[0] + roi[1] + '.nii')
+            roi_img = nib.load(roi_file)
+            roi_data = roi_img.get_data()
+            resized_roi = resize(roi_data, mask_size)
+            resized_img = nib.Nifti1Image(resized_roi, roi_img.affine, roi_img.header)
+
+            # Image save
+            out_file = os.path.join(conv_dir2, 'conv' + roi[0] + roi[1] + '2.nii')
+            nib.save(resized_img, out_file)
+
+            print('{0} saved'.format(os.path.basename(out_file)))
+
 
 class Enhance(ProcessMIA):
     """
