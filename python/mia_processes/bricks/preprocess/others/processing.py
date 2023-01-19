@@ -3047,10 +3047,10 @@ class Sanitize(ProcessMIA):
                       "Analyses of this dataset MAY BE INVALID.")
 
             if (
-                    self.max_32bit and np.dtype(img.get_fdata_dtype()).itemsize > 4
+                    self.max_32bit and np.dtype(img.get_data_dtype()).itemsize > 4
             ) or self.n_volumes_to_discard:
                 # force float32 only if 64 bit dtype is detected
-                if self.max_32bit and np.dtype(img.get_fdata_dtype()).itemsize > 4:
+                if self.max_32bit and np.dtype(img.get_data_dtype()).itemsize > 4:
                     in_data = img.get_fdata(dtype=np.float32)
                 else:
                     in_data = img.dataobj
