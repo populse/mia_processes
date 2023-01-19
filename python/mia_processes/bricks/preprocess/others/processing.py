@@ -779,6 +779,8 @@ class ConformImage(ProcessMIA):
 class Conv_ROI(ProcessMIA):
     """Convolve regions of interest with a mask.
 
+    - Resampling the mask to the size of the ROIs, using the first ROI.
+    - Then convolve each ROI with resized mask.
     - ROIs are defined from doublet_list parameter as
       doublet_list[0][0] + doublet_list[0][1] + '.nii',
       doublet_list[1][0] + doublet_list[1][1] + '.nii',
@@ -866,7 +868,7 @@ class Conv_ROI(ProcessMIA):
 
             # if not existing, creates self.output_directory'/roi_'patient_name
             # folder. If already existing, remove old reference ROIs in roi_dir
-            # and remove the roi_dir'/convROI_BOLD'
+            # and remove the old roi_dir'/convROI_BOLD'
             if os.path.exists(roi_dir):
                 elts = os.listdir(roi_dir)
                 # filtering only the files
@@ -887,37 +889,28 @@ class Conv_ROI(ProcessMIA):
                           'calculation...'.format(os.path.join(roi_dir,
                                                                'convROI_BOLD')))
 
-                for fil in ['ACA_L.nii', 'ACA_R.nii',
-                            'ACM_L.nii', 'ACM_R.nii',
-                            'ACP_L.nii', 'ACP_R.nii',
-                            'PICA_L.nii', 'PICA_R.nii',
-                            'ROI_CING_L.nii', 'ROI_CING_R.nii',
-                            'ROI_FRON_L.nii', 'ROI_FRON_R.nii',
-                            'ROI_INSULA_L.nii', 'ROI_INSULA_R.nii',
-                            'ROI_OCC_L.nii', 'ROI_OCC_R.nii',
-                            'ROI_PAR_L.nii', 'ROI_PAR_R.nii',
-                            'ROI_STR_L.nii', 'ROI_STR_R.nii',
-                            'ROI_TEMP_L.nii', 'ROI_TEMP_R.nii',
-                            'ROI_THA_L.nii', 'ROI_THA_R.nii',
-                            'SCA_L.nii', 'SCA_R.nii']:
+                for start_fil in [i[0]+i[1] for i in self.doublet_list]:
 
-                    if fil in files:
+                    for fil in files:
 
-                        if not os.path.isdir(tmp):
-                            tmp = tempfile.mktemp(dir=os.path.dirname(roi_dir))
-                            os.mkdir(tmp)
+                        if fil.startswith(start_fil):
 
-                        shutil.move(os.path.join(roi_dir, fil), tmp)
-                        print('\nConv_ROI brick:\nA "{}" file already exists, '
-                          'it will be overwritten by this new '
-                          'calculation...'.format(os.path.join(roi_dir, fil)))
+                            if not os.path.isdir(tmp):
+                                tmp = tempfile.mktemp(dir=os.path.dirname(
+                                                                       roi_dir))
+                                os.mkdir(tmp)
+
+                            shutil.move(os.path.join(roi_dir, fil), tmp)
+                            print('\nConv_ROI brick:\nA "{}" file already '
+                                  'exists, it will be overwritten by this new '
+                                  'calculation...'.format(os.path.join(roi_dir,
+                                                                       fil)))
 
                 if os.path.isdir(tmp):
                     shutil.rmtree(tmp)
 
             else:
                 os.mkdir(roi_dir)
-
 
             # Copying the ROIs from the resources folder
             # to self.output_directory'cd /roi_'patient_name
@@ -950,7 +943,7 @@ class Conv_ROI(ProcessMIA):
                                'roi_' + self.dict4runtime['patient_name'])
         conv_dir = os.path.join(roi_dir, 'convROI_BOLD')
 
-        # Resizing the self.in_image to the size of the ROIs, using the
+        # Resampling the self.in_image to the size of the ROIs, using the
         # first ROI in self.doublet_list
         roi_1 = self.doublet_list[0]
         roi_file = os.path.join(roi_dir, roi_1[0] + roi_1[1] + '.nii')
