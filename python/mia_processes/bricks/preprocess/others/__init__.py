@@ -10,5 +10,5 @@
 
 from .processing import (ArtifactMask, Binarize, ConformImage, Conv_ROI,
                          Conv_ROI2, Enhance, GradientThreshold, Harmonize,
-                         Mask, NonSteadyStateDetector, Resample, RotationMask,
+                         Mask, NonSteadyStateDetector, Resample_1, RotationMask,
                          Sanitize, Template, Threshold, TSNR)

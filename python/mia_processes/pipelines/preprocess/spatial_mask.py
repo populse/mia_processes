@@ -52,7 +52,7 @@ class Spatial_mask(Pipeline):
         self.nodes["threshold2"].process.suffix = traits.Undefined
         self.nodes["threshold2"].process.prefix = 'mask_'
 
-        self.add_process("resample1", "mia_processes.bricks.preprocess.others.Resample")
+        self.add_process("resample1", "mia_processes.bricks.preprocess.others.Resample_1")
         self.nodes["resample1"].process.files_to_resample = traits.Undefined
         self.nodes["resample1"].process.prefix = traits.Undefined
 
