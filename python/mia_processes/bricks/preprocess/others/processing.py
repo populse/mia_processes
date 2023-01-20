@@ -9,13 +9,13 @@ pre-processing steps, which are not found in nipype.
         - Binarize
         - ConformImage
         - Conv_ROI
-        - Conv_ROI2
         - Enhance
         - GradientThreshold
         - Harmonize
         - Mask
         - NonSteadyStateDetector
         - Resample_1
+        - Resample_2
         - RotationMask
         - Sanitize
         - Template
@@ -972,7 +972,7 @@ class Conv_ROI(ProcessMIA):
             print('{0} saved'.format(os.path.basename(out_file)))
 
 
-class Conv_ROI2(ProcessMIA):
+class Resample_2(ProcessMIA):
     """Setting regions of interest to the resolution of the in_image
 
     - ROIs are defined from doublet_list parameter as
@@ -991,7 +991,7 @@ class Conv_ROI2(ProcessMIA):
         'self.requirement' attribute (optional) is used to define the
         third-party products necessary for the running of the brick.
         """
-        super(Conv_ROI2, self).__init__()
+        super(Resample_2, self).__init__()
 
         # Inputs description
         doublet_list_desc = ('A list of lists containing doublets of strings '
@@ -1039,7 +1039,7 @@ class Conv_ROI2(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Conv_ROI2, self).list_outputs()
+        super(Resample_2, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.doublet_list != [] and self.in_image:
@@ -1048,7 +1048,7 @@ class Conv_ROI2(ProcessMIA):
                                             'PatientName')
 
             if patient_name is None:
-                print('\nConv_ROI2 brick:\n The PatientName tag is not filled '
+                print('\nResample_2 brick:\n The PatientName tag is not filled '
                       'in the database for the {} file ...\n The calculation'
                       'is aborted...'.format(self.in_image))
                 return self.make_initResult()
@@ -1070,7 +1070,7 @@ class Conv_ROI2(ProcessMIA):
                     os.mkdir(tmp)
                     shutil.move(os.path.join(roi_dir, 'convROI_BOLD2'),
                                 os.path.join(tmp, 'convROI_BOLD2'))
-                    print('\nConv_ROI2 brick:\nA "{}" folder already exists, '
+                    print('\nResample_2 brick:\nA "{}" folder already exists, '
                           'it will be overwritten by this new '
                           'calculation...'.format(os.path.join(
                                                               roi_dir,
@@ -1102,7 +1102,7 @@ class Conv_ROI2(ProcessMIA):
         """Dedicated to the process launch step of the brick."""
 
         # No need the next line (we don't use self.process et SPM)
-        #super(Conv_ROI2, self).run_process_mia()
+        #super(Resample_2, self).run_process_mia()
 
         roi_dir = os.path.join(self.output_directory,
                                'roi_' + self.dict4runtime['patient_name'])
@@ -1128,7 +1128,7 @@ class Conv_ROI2(ProcessMIA):
                                     'conv' + roi[0] + roi[1] + '2.nii')
             nib.save(resized_img, out_file)
 
-            print('\nConv_ROI2 brick:{0} saved'.format(os.path.basename(
+            print('\nResample_2 brick:{0} saved'.format(os.path.basename(
                                                                      out_file)))
 
 
