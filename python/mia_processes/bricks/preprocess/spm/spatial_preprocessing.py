@@ -965,25 +965,25 @@ class NewSegment(ProcessMIA):
                                        desc=bias_field_images_desc))
 
         self.add_trait("native_class_images",
-                       List(List(File()),
+                       OutputMultiPath(List(File()),
                             output=True,
                             optional=True,
                             desc=native_class_images_desc))
 
         self.add_trait("dartel_input_images",
-                       List(List(File()),
+                       OutputMultiPath(List(File()),
                             output=True,
                             optional=True,
                             desc=dartel_input_images_desc))
 
         self.add_trait("modulated_class_images",
-                       List(List(File()),
+                       OutputMultiPath(List(File()),
                             output=True,
                             optional=True,
                             desc=modulated_class_images_desc))
 
         self.add_trait("normalized_class_images",
-                       List(List(File()),
+                       OutputMultiPath(List(File()),
                             output=True,
                             optional=True,
                             desc=normalized_class_images_desc))

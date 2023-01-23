@@ -88,6 +88,7 @@ class Concat_to_list_of_list(ProcessMIA):
         self.add_trait("listOflist",
                        traits.List(output=True,
                                    desc=listOflist_desc))
+        self.listOflist = traits.Undefined
 
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
@@ -172,6 +173,7 @@ class Files_To_List(ProcessMIA):
         self.add_trait("file_list",
                        traits.List(output=True,
                                    desc=file_list_desc))
+        self.file_list = traits.Undefined
 
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
@@ -568,6 +570,7 @@ class List_Duplicate(ProcessMIA):
         self.add_trait("out_list",
                        traits.List(output=True,
                                    desc=out_list_desc))
+        self.out_list = traits.Undefined
 
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
@@ -735,6 +738,7 @@ class Make_A_List(ProcessMIA):
         self.add_trait("obj_list",
                        traits.List(output=True,
                                    desc=obj_list_desc))
+        self.obj_list = traits.Undefined
 
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
