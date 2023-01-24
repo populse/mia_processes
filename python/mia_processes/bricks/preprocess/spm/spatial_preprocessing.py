@@ -389,10 +389,9 @@ class Coregister(ProcessMIA):
                         set_dbFieldValue(self.project, out_val, tag_to_add)
 
                     else:
-                        print("\nIn the Coregister brick, the "
-                              "'RepetitionTime' tag could not be added "
-                              "to the database for the '{}' parameter. "
-                              "This can lead to a subsequent issue "
+                        print("\nCoregister:\n the 'RepetitionTime' tag could "
+                              "not be added to the database for the '{}' "
+                              "parameter. This can lead to a subsequent issue "
                               "during initialization!!\n".format(out_val))
 
                     tag_to_add = dict()
@@ -417,12 +416,36 @@ class Coregister(ProcessMIA):
                                          tag_to_add)
 
                     else:
-                        print("\nIn the Coregister brick, the "
-                              "'Dataset dimensions (Count, X,Y,Z,T...)'"
-                              " tag could not be added to the database "
-                              "for the '{}' parameter. This can lead to"
+                        print("\nCoregister:\nThe 'Dataset dimensions (Count, "
+                              "X,Y,Z,T...)' tag could not be added to the "
+                              "database for the '{}' parameter. This can lead to"
                               " a subsequent issue during "
                               "initialization!!\n".format(out_val))
+
+                    tag_to_add = dict()
+                    tag_to_add['name'] = "PatientName"
+                    tag_to_add['field_type'] = "string"
+                    tag_to_add['description'] = ""
+                    tag_to_add['visibility'] = True
+                    tag_to_add['origin'] = "user"
+                    tag_to_add['unit'] = None
+                    tag_to_add['default_value'] = None
+                    tag_to_add['value'] = get_dbFieldValue(self.project,
+                                                           in_val,
+                                                           "PatientName")
+
+                    if tag_to_add['value'] is not None:
+                        set_dbFieldValue(self.project,
+                                         out_val,
+                                         tag_to_add)
+
+                    else:
+                        print(
+                            "\nCoregister:\nThe 'PatientName' tag could not "
+                            "be added to the database for the '{}' "
+                            "parameter. This can lead to a subsequent "
+                            "issue during "
+                            "initialization!!\n".format(out_val))
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -1423,12 +1446,12 @@ class Normalize12(ProcessMIA):
                         tag_to_add['name'] = 'RepetitionTime'
                         tag_to_add['field_type'] = "float"
                         tag_to_add['description'] = ("The period of time "
-                                                         "in msec between the "
-                                                         "beginning of a pulse "
-                                                         "sequence and the "
-                                                         "beginning of the "
-                                                         "succeeding pulse "
-                                                         "sequence")
+                                                     "in msec between the "
+                                                     "beginning of a pulse "
+                                                     "sequence and the "
+                                                     "beginning of the "
+                                                     "succeeding pulse "
+                                                     "sequence")
                         tag_to_add['visibility'] = True
                         tag_to_add['origin'] = "user"
                         tag_to_add['unit'] = "ms"
@@ -1443,11 +1466,11 @@ class Normalize12(ProcessMIA):
                                              tag_to_add)
 
                         else:
-                            print("\nIn the Normalize12 brick, the "
-                                  "'RepetitionTime' tag could not be added "
-                                  "to the database for the '{}' parameter. "
-                                  "This can lead to a subsequent issue "
-                                  "during initialization!!\n".format(out_val))
+                            print("\nNormalize12:\nThe 'RepetitionTime' tag "
+                                  "could not be added to the database for the "
+                                  "'{}' parameter. This can lead to a "
+                                  "subsequent issue during "
+                                  "initialization!!\n".format(out_val))
 
                         tag_to_add = dict()
                         tag_to_add['name'] = ("Dataset dimensions "
@@ -1460,10 +1483,10 @@ class Normalize12(ProcessMIA):
                         tag_to_add['unit'] = None
                         tag_to_add['default_value'] = None
                         tag_to_add['value'] = get_dbFieldValue(
-                            self.project,
-                            in_val,
-                            ("Dataset dimensions "
-                             "(Count, X,Y,Z,T...)"))
+                                                        self.project,
+                                                        in_val,
+                                                        ("Dataset dimensions "
+                                                         "(Count, X,Y,Z,T...)"))
 
                         if tag_to_add['value'] is not None:
                             set_dbFieldValue(self.project,
@@ -1471,11 +1494,34 @@ class Normalize12(ProcessMIA):
                                              tag_to_add)
 
                         else:
-                            print("\nIn the Normalize12 brick, the "
-                                  "'Dataset dimensions (Count, X,Y,Z,T...)'"
-                                  " tag could not be added to the database "
-                                  "for the '{}' parameter. This can lead to"
-                                  " a subsequent issue during "
+                            print("\nNormalize12:\nThe 'Dataset dimensions "
+                                  "(Count, X,Y,Z,T...)' tag could not be added "
+                                  "to the database for the '{}' parameter. "
+                                  "This can lead to a subsequent issue during "
+                                  "initialization!!\n".format(out_val))
+
+                        tag_to_add = dict()
+                        tag_to_add['name'] = "PatientName"
+                        tag_to_add['field_type'] = "string"
+                        tag_to_add['description'] = ""
+                        tag_to_add['visibility'] = True
+                        tag_to_add['origin'] = "user"
+                        tag_to_add['unit'] = None
+                        tag_to_add['default_value'] = None
+                        tag_to_add['value'] = get_dbFieldValue(self.project,
+                                                               in_val,
+                                                               "PatientName")
+
+                        if tag_to_add['value'] is not None:
+                            set_dbFieldValue(self.project,
+                                             out_val,
+                                             tag_to_add)
+
+                        else:
+                            print("\nNormalize12:\nThe 'PatientName' tag could not "
+                                  "be added to the database for the '{}' "
+                                  "parameter. This can lead to a subsequent "
+                                  "issue during "
                                   "initialization!!\n".format(out_val))
 
                         pathOval, fileOval = os.path.split(out_val)
@@ -1849,12 +1895,11 @@ class Realign(ProcessMIA):
                                                  tag_to_add)
 
                             else:
-                                print("\nIn the Realign brick, the "
-                                      "'RepetitionTime' tag could not be added "
-                                      "to the database for the '{}' parameter. "
-                                      "This can lead to a subsequent issue "
-                                      "during initialization!!\n".format(
-                                                                       out_val))
+                                print("\nRealign:\nThe 'RepetitionTime' tag "
+                                      "could not be added to the database for "
+                                      "the '{}' parameter. This can lead to a "
+                                      "subsequent issue during "
+                                      "initialization!!\n".format(out_val))
 
                             tag_to_add = dict()
                             tag_to_add['name'] = ("Dataset dimensions "
@@ -1878,12 +1923,38 @@ class Realign(ProcessMIA):
                                                  tag_to_add)
 
                             else:
-                                print("\nIn the Realign brick, the "
-                                      "'Dataset dimensions (Count, X,Y,Z,T...)'"
-                                      " tag could not be added to the database "
-                                      "for the '{}' parameter. This can lead to"
-                                      " a subsequent issue during "
+                                print("\nRealign:\nThe 'Dataset dimensions "
+                                      "(Count, X,Y,Z,T...)' tag could not be "
+                                      "added to the database for the '{}' "
+                                      "parameter. This can lead to a "
+                                      "subsequent issue during "
                                       "initialization!!\n".format(out_val))
+
+                            tag_to_add = dict()
+                            tag_to_add['name'] = "PatientName"
+                            tag_to_add['field_type'] = "string"
+                            tag_to_add['description'] = ""
+                            tag_to_add['visibility'] = True
+                            tag_to_add['origin'] = "user"
+                            tag_to_add['unit'] = None
+                            tag_to_add['default_value'] = None
+                            tag_to_add['value'] = get_dbFieldValue(
+                                self.project,
+                                in_val,
+                                "PatientName")
+
+                            if tag_to_add['value'] is not None:
+                                set_dbFieldValue(self.project,
+                                                 out_val,
+                                                 tag_to_add)
+
+                            else:
+                                print(
+                                    "\nRealign:\nThe 'PatientName' tag could not "
+                                    "be added to the database for the '{}' "
+                                    "parameter. This can lead to a subsequent "
+                                    "issue during "
+                                    "initialization!!\n".format(out_val))
 
                             _, fileOval = os.path.split(out_val)
                             _, fileIval = os.path.split(in_val)
@@ -2631,11 +2702,11 @@ class Smooth(ProcessMIA):
                                              tag_to_add)
 
                         else:
-                            print("\nIn the Smooth brick, the "
-                                  "'RepetitionTime' tag could not be added "
-                                  "to the database for the '{}' parameter. "
-                                  "This can lead to a subsequent issue "
-                                  "during initialization!!\n".format(out_val))
+                            print("\nSmooth:\nThe 'RepetitionTime' tag could "
+                                  "not be added to the database for the '{}' "
+                                  "parameter. This can lead to a subsequent "
+                                  "issue during "
+                                  "initialization!!\n".format(out_val))
 
                         tag_to_add = dict()
                         tag_to_add['name'] = ("Dataset dimensions "
@@ -2659,11 +2730,34 @@ class Smooth(ProcessMIA):
                                              tag_to_add)
 
                         else:
-                            print("\nIn the Smooth brick, the "
-                                  "'Dataset dimensions (Count, X,Y,Z,T...)'"
-                                  " tag could not be added to the database "
-                                  "for the '{}' parameter. This can lead to"
-                                  " a subsequent issue during "
+                            print("\nSmooth:\nThe 'Dataset dimensions (Count, "
+                                  "X,Y,Z,T...)' tag could not be added to the "
+                                  "database for the '{}' parameter. This can "
+                                  "lead to a subsequent issue during "
+                                  "initialization!!\n".format(out_val))
+
+                        tag_to_add = dict()
+                        tag_to_add['name'] = "PatientName"
+                        tag_to_add['field_type'] = "string"
+                        tag_to_add['description'] = ""
+                        tag_to_add['visibility'] = True
+                        tag_to_add['origin'] = "user"
+                        tag_to_add['unit'] = None
+                        tag_to_add['default_value'] = None
+                        tag_to_add['value'] = get_dbFieldValue(self.project,
+                                                               in_val,
+                                                               "PatientName")
+
+                        if tag_to_add['value'] is not None:
+                            set_dbFieldValue(self.project,
+                                             out_val,
+                                             tag_to_add)
+
+                        else:
+                            print("\nSmooth:\nThe 'PatientName' tag could not "
+                                  "be added to the database for the '{}' "
+                                  "parameter. This can lead to a subsequent "
+                                  "issue during "
                                   "initialization!!\n".format(out_val))
 
                         _, fileOval = os.path.split(out_val)

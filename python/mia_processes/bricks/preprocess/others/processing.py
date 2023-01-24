@@ -859,7 +859,7 @@ class Conv_ROI(ProcessMIA):
                                             'PatientName')
 
             if patient_name is None:
-                print('\nConv_ROI brick:\n The PatientName tag is not filled '
+                print('\nConv_ROI:\n The "PatientName" tag is not filled '
                       'in the database for the {} file ...\n The calculation'
                       'is aborted...'.format(self.in_image))
                 return self.make_initResult()
@@ -2497,7 +2497,7 @@ class Resample_2(ProcessMIA):
                                             'PatientName')
 
             if patient_name is None:
-                print('\nResample_2 brick:\n The PatientName tag is not filled '
+                print('\nResample_2:\n The PatientName tag is not filled '
                       'in the database for the {} file ...\n The calculation'
                       'is aborted...'.format(self.reference_image))
                 return self.make_initResult()

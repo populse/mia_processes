@@ -39,7 +39,7 @@ from nipype.interfaces.spm.base import ImageFileSPM
 # populse_db and populse_mia import
 from populse_mia.data_manager.project import (COLLECTION_CURRENT,
                                               COLLECTION_INITIAL)
-from populse_db.database import FIELD_TYPE_INTEGER
+from populse_db.database import FIELD_TYPE_INTEGER, FIELD_TYPE_STRING
 from populse_mia.data_manager.database_mia import (TAG_ORIGIN_USER,
                                                    TAG_UNIT_DEGREE)
 
@@ -682,24 +682,45 @@ class EstimateModel(ProcessMIA):
                     nb_reg += 1 # Adding the constant value
                 """
 
-            if self.tot_reg_num in ['<undefined>', Undefined]: #and
-                self.tot_reg_num = get_dbFieldValue(self.project,
+            if self.tot_reg_num in ['<undefined>', Undefined]:
+                tot_reg_numb = get_dbFieldValue(self.project,
                                                     self.spm_mat_file,
                                                     'Regress num')
+
+                if tot_reg_numb is not None:
+                    self.tot_reg_num = tot_reg_numb
+
+                else:
+                    print('\nEstimateModel:\n The "tot_reg_num" parameter '
+                          'could not be determined automatically because the '
+                          '"Regress num" tag for the {} file is not filled '
+                          'in the database. Please set this value and launch '
+                          'the calculation '
+                          'again!\n'.format(self.spm_mat_file))
+                    self.outputs = {}
+                    return self.make_initResult()
 
             # Bayesian and Bayesian2 are not yet fully implemented
             if (('Bayesian' in self.estimation_method.keys()) or
                   ('Bayesian2' in self.estimation_method.keys())):
-                self.outputs['labels'] = os.path.join(self.output_directory, "labels.{}".format(im_form))
+                self.outputs['labels'] = os.path.join(
+                                                    self.output_directory,
+                                                    "labels.{}".format(im_form))
                 '''
                 outputs['SDerror'] = glob(os.path.join(path, 'Sess*_SDerror*'))
                 outputs['ARcoef'] = glob(os.path.join(path, 'Sess*_AR_*'))
                 '''
 
             if 'Classical' in self.estimation_method.keys():
-                self.outputs['residual_image'] = os.path.join(self.output_directory, "ResMS.{}".format(im_form))
-                self.outputs['RPVimage'] = os.path.join(self.output_directory, "RPV.{}".format(im_form))
-                self.outputs['mask_image'] = os.path.join(self.output_directory, "mask.{}".format(im_form))
+                self.outputs['residual_image'] = os.path.join(
+                                                     self.output_directory,
+                                                     "ResMS.{}".format(im_form))
+                self.outputs['RPVimage'] = os.path.join(
+                                                       self.output_directory,
+                                                       "RPV.{}".format(im_form))
+                self.outputs['mask_image'] = os.path.join(
+                                                      self.output_directory,
+                                                      "mask.{}".format(im_form))
 
                 if self.write_residuals:
                     nb_dyn = get_dbFieldValue(self.project,
@@ -718,11 +739,17 @@ class EstimateModel(ProcessMIA):
                             self.outputs['residual_images'] = [os.path.join(self.output_directory, res) for res in ress]
 
                     else:
-                        print('- The number of dynamics could not be determined '
-                              'automatically. It is not possible to safely '
-                              'create the residual_images output parameter ...')
+                        print('\nEstimateModel:\nThe number of dynamics could '
+                              'not be determined automatically because the '
+                              '"Dynamic Number" tag is not filled in the'
+                              'database for the {} file.\nAs a result, it is '
+                              'not possible to safely create the '
+                              '"residual_images" output '
+                              'parameter!\n'.format(self.spm_mat_file))
 
-                for i in range(int(0 if self.tot_reg_num in ['<undefined>', Undefined, None] else self.tot_reg_num)):
+                for i in range(int(0 if self.tot_reg_num in ['<undefined>',
+                                                             Undefined, None]
+                                      else self.tot_reg_num)):
                     i += 1
                     betas.append('beta_{:04d}.{}'.format(i, im_form))
 
@@ -1515,13 +1542,14 @@ class Level1Design(ProcessMIA):
 
         if self.outputs:
             self.inheritance_dict[self.outputs['spm_mat_file']] = dict()
-            # Currently, spm_mat_file will only inherit the first scan if there
-            # are several scans in self.scans. This would require some thought
-            # for this particular case!
+            # FIXME: Currently, spm_mat_file will only inherit the first scan
+            #        if there are several scans in self.sess_scans. This
+            #        requires some thought on how to operate in a more general
+            #        framework
             self.inheritance_dict[self.outputs['spm_mat_file']]['parent'] = (
-                self.sess_scans[0])
+                                                             self.sess_scans[0])
             self.inheritance_dict[self.outputs['spm_mat_file']][
-                'own_tags'] = []
+                                                                'own_tags'] = []
             tag_to_add = dict()
             tag_to_add['name'] = 'Regress num'
             tag_to_add['field_type'] = FIELD_TYPE_INTEGER
@@ -1545,6 +1573,38 @@ class Level1Design(ProcessMIA):
             dyn_num = 0
 
             for scan in self.sess_scans:
+                patient_name = get_dbFieldValue(self.project, scan,
+                                                'PatientName')
+
+                if patient_name is not None:
+                    tag_to_add = dict()
+                    tag_to_add['name'] = 'PatientName'
+                    tag_to_add['field_type'] = FIELD_TYPE_STRING
+                    tag_to_add['description'] = ""
+                    tag_to_add['visibility'] = True
+                    tag_to_add['origin'] = TAG_ORIGIN_USER
+                    tag_to_add['unit'] = None
+                    tag_to_add['default_value'] = None
+                    tag_to_add['value'] = patient_name
+                    self.inheritance_dict[self.outputs['spm_mat_file']
+                    ]['own_tags'].append(tag_to_add)
+                    # FIXME: In the latest version of mia, indexing of the database with
+                    #        particular tags defined in the processes is done only at
+                    #        the end of the initialisation of the whole pipeline. So we
+                    #        cannot use the value of these tags in other processes of
+                    #        the pipeline at the time of initialisation
+                    #        (see populse_mia #290). Until better we use a quick and
+                    #        dirty hack with the set_dbFieldValue() function !
+                    set_dbFieldValue(self.project,
+                                     self.outputs['spm_mat_file'],
+                                     tag_to_add)
+
+                else:
+                    print('\nLevel1Design:\n The PatientName tag is not filled '
+                          'in the database for the {} file ...\nThis may cause '
+                          'issues in the further operation of the '
+                          'pipeline...\n'.format(scan))
+
                 dimensions = get_dbFieldValue(
                                        self.project,
                                        scan,
@@ -1553,8 +1613,6 @@ class Level1Design(ProcessMIA):
                 if ((dimensions is not None) and
                         (isinstance(dimensions, list)) and
                         (len(dimensions) == 5)):
-                    # to check with EstimateModel brick; total sum of the
-                    # dynamics in self.sess_scans -> strange !
                     dyn_num += dimensions[4]
                     tag_to_add = dict()
                     tag_to_add['name'] = 'Dynamic Number'
@@ -1580,35 +1638,38 @@ class Level1Design(ProcessMIA):
                                      tag_to_add)
 
                 else:
-                    print('\nWarning! The dynamics number for at least one '
-                          'scan could not be found in the database. This can '
-                          'cause a running issue in next bricks (for example '
-                          'the EstimateModel brick) ... !')
+                    print('\nLevel1Design:\nThe "dynamics number" tag is not '
+                          'filled in the database for the {} file ...\nThis '
+                          'may cause issues in the further operation of the '
+                          'pipeline...\n'.format(scan))
 
-            if ((self.interscan_interval is Undefined) and ('RepetitionTime' in
-                                                            self.project.session.get_fields_names(
-                                                                COLLECTION_CURRENT))):
-
-                if get_dbFieldValue(self.project, self.sess_scans[0],
-                                    'RepetitionTime') is not None:
-                    self.interscan_interval = get_dbFieldValue(
-                                                    self.project,
-                                                    self.sess_scans[0],
-                                                    'RepetitionTime')[0] / 1000
+            if ((self.interscan_interval is Undefined) and
+                    ('RepetitionTime' in self.project.session.get_fields_names(
+                                                          COLLECTION_CURRENT))):
+            # FIXME: Currently, spm_mat_file will only inherit the first scan
+            #        if there are several scans in self.sess_scans. This
+            #        requires some thought on how to operate in a more general
+            #        framework
+                rep_time = get_dbFieldValue(self.project, self.sess_scans[0],
+                                            'RepetitionTime')
+                if rep_time is not None:
+                    self.interscan_interval = rep_time[0] / 1000
 
                 else:
                     self.outputs = {}
-                    print('\nThe interscan_interval parameter (repetition time '
-                          'in seconds) could not be determined automatically '
-                          'for the Level1Design brick. Please set this value '
-                          'and launch the calculation again!\n')
+                    print('\nLevel1Design:\n The interscan_interval parameter '
+                          'could not be determined automatically because the '
+                          '"repetition time" tag for the {} file is not filled '
+                          'in the database. Please set this value and launch '
+                          'the calculation again!\n'.format(self.sess_scans[0]))
+
 
             elif self.interscan_interval is Undefined:
                 self.outputs = {}
-                print('\nThe interscan_interval parameter (repetition time '
-                      'in seconds) could not be determined automatically '
-                      'for the Level1Design brick. Please set this value '
-                      'and launch the calculation again!\n')
+                print('\nLevel1Design:\nThe interscan_interval parameter '
+                      '(repetition time in seconds) could not be determined '
+                      'automatically. Please set this value and launch the '
+                      'calculation again!\n')
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
