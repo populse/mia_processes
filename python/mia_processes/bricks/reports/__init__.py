@@ -10,6 +10,6 @@
 
 from .processes import (AnatIQMs, BoldIQMs, CarpetParcellation,
                         ComputeDVARS, FramewiseDisplacement,
-                        FWHMx, GCOR, OutlierCount, QualityIndex,
-                        Spikes)
+                        FWHMx, GCOR, Mean_stdDev_calc, OutlierCount,
+                        QualityIndex, Spikes)
 from .reporting import MRIQC_anat_report, MRIQC_func_report

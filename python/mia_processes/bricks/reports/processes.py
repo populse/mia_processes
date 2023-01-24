@@ -12,6 +12,7 @@ compute necessary values for reporting.
         - FramewiseDisplacement
         - FWHMx
         - GCOR
+        - Mean_stdDev_calc
         - OutlierCount
         - QualityIndex
         - Spikes
@@ -56,21 +57,26 @@ from nipype.interfaces.base import (OutputMultiPath, InputMultiPath, File,
 # populse_mia import
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 
+# mia_processes import
+from mia_processes.utils import get_dbFieldValue
+
 # soma-base imports
 from soma.qt_gui.qt_backend.Qt import QMessageBox
 
 # Other import
-import os
+import json
+from math import pi, sqrt
+from nilearn.signal import clean
+from nipy.algorithms.registration import to_matrix44, aff2euler
+from nitime.algorithms import AR_est_YW
 import numpy as np
 from numpy.polynomial import Legendre
-from math import pi, sqrt
+import os
+import re
 import scipy.ndimage as nd
 from scipy.stats import kurtosis  # pylint: disable=E0611
-import json
-import re
-from nitime.algorithms import AR_est_YW
-from nipy.algorithms.registration import to_matrix44, aff2euler
-from nilearn.signal import clean
+import shutil
+from skimage.transform import resize
 
 DIETRICH_FACTOR = 1.0 / sqrt(2 / (4 - pi))
 FSL_FAST_LABELS = {"csf": 1, "gm": 2, "wm": 3, "bg": 0}
@@ -1727,6 +1733,276 @@ class GCOR(ProcessMIA):
         self.process.mask = self.mask_file
 
         return self.process.run(configuration_dict={})
+
+
+class Mean_stdDev_calc(ProcessMIA):
+    """Makes the mean and standard deviation of the parametric_maps
+
+    - The parametric_maps are first convolved with the ROIs corresponding
+      to doublet_list.
+    - ROIs are defined from doublet_list parameter as
+      doublet_list[0][0] + doublet_list[0][1] + '.nii',
+      doublet_list[1][0] + doublet_list[1][1] + '.nii',
+      etc.
+    - To work correctly, the database entry for the parametric_maps items must
+      have the "PatientName" tag filled in
+    - To work correctly, the output_directory "/roi_"PatientName"/convROI_BOLD"
+      must exist and contain a previous convolution results (normally using
+      the Conv_ROI brick)
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instantiation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(Mean_stdDev_calc, self).__init__()
+
+        # Inputs description
+        parametric_maps_desc = "A list of files (existing, uncompressed file)"
+        doublet_list_desc = ('A list of lists containing doublets of strings '
+                             '(e.g. [["ROI_OCC", "_L"], ["ROI_OCC", "_R"], '
+                             '["ROI_PAR", "_l"], ...]')
+
+        # Outputs description
+        mean_out_files_desc = ("A list of .txt files with the calculated "
+                               "average for each ROI determined after "
+                               "convolution")
+        std_out_files_desc = ("A list of .txt files with the standard "
+                              "deviation for each ROI determined "
+                              "after convolution")
+
+        # Inputs traits
+        self.add_trait("parametric_maps",
+                       traits.List(traits.File(exists=True),
+                                   output=False,
+                                   desc=parametric_maps_desc))
+
+        self.add_trait("doublet_list",
+                       traits.List(output=False,
+                                   desc=doublet_list_desc))
+
+        # Output traits
+        self.add_trait("mean_out_files",
+                       OutputMultiPath(File(),
+                                       output=True,
+                                       desc=mean_out_files_desc))
+
+        self.add_trait("std_out_files",
+                        OutputMultiPath(File(),
+                                        output=True,
+                                        desc=std_out_files_desc))
+
+        # Special parameter used as a messenger for the run_process_mia method
+        self.add_trait("dict4runtime",
+                       traits.Dict(output=False,
+                                   optional=True,
+                                   userlevel=1))
+
+        self.init_default_traits()
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(Mean_stdDev_calc, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.doublet_list != [] and self.parametric_maps != []:
+            # FIXME: We retrieve the name of the patient from the first element
+            #        of parametric_maps. This is only fine if all the elements
+            #        of parametric_maps correspond to the same patient.
+            patient_name = get_dbFieldValue(self.project,
+                                            self.parametric_maps[0],
+                                            'PatientName')
+
+            if patient_name is None:
+                print('\nMean_stdDev_cal brick:\nThe PatientName tag is not '
+                      'filled in the database for the {} file ...\n The '
+                      'initialization is '
+                      'aborted...'.format(self.parametric_maps[0]))
+                return self.make_initResult()
+
+
+            self.dict4runtime['patient_name'] = patient_name
+            roi_dir = os.path.join(self.output_directory, 'roi_' + patient_name)
+
+            if not os.path.isdir(roi_dir):
+                print(
+                    "\nMean_stdDev_cal brick:\nNo {} folder detected ...\nThe "
+                    "initialization is aborted ...".format(roi_dir))
+                return self.make_initResult()
+
+            conv_dir = os.path.join(roi_dir, 'convROI_BOLD')
+
+            if not os.path.isdir(conv_dir):
+                print(
+                    "\nMean_stdDev_cal brick:\nNo {} folder detected ...\nThe "
+                    "initialization is aborted ...".format(conv_dir))
+                return self.make_initResult()
+
+            analysis_dir = os.path.join(roi_dir, 'ROI_analysis')
+
+            if os.path.isdir(analysis_dir):
+                shutil.rmtree(analysis_dir)
+
+            os.mkdir(analysis_dir)
+            mean_out_files = []
+            std_out_files = []
+
+            for parametric_map in self.parametric_maps:
+
+                for roi in self.doublet_list:
+                    # spmT_BOLD or beta_BOLD
+                    map_name = os.path.basename(parametric_map)[0:4] + '_BOLD'
+                    mean_out_files.append(os.path.join(
+                                 analysis_dir,
+                                 roi[0] + roi[1] + '_mean' + map_name + '.txt'))
+                    std_out_files.append(os.path.join(
+                                  analysis_dir,
+                                  roi[0] + roi[1] + '_std' + map_name + '.txt'))
+
+            self.outputs['mean_out_files'] = mean_out_files
+            self.outputs['std_out_files'] = std_out_files
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        # No need the next line (we don't use self.process and SPM)
+        #super(Mean_stdDev_calc, self).run_process_mia()
+
+        roi_dir = os.path.join(self.output_directory,
+                               'roi_' + self.dict4runtime['patient_name'])
+        conv_dir = os.path.join(roi_dir, 'convROI_BOLD')
+
+        if not os.path.isdir(conv_dir):
+            print("\nMean_stdDev_cal brick:\nNo {} folder detected ...".format(
+                                                                      conv_dir))
+            #return
+
+        analysis_dir = os.path.join(roi_dir, 'ROI_analysis')
+
+        if not os.path.isdir(analysis_dir):
+            print("\nMean_stdDev_cal brick:\nNo {} folder detected ...".format(
+                                                                  analysis_dir))
+            #return
+
+        for parametric_map in self.parametric_maps:
+            # Resampling, if necessary, the parametric_map to the size of the
+            # ROIs, using the first ROI in doublet_list. The
+            # roi_1[0]roi_1[1]'.nii' file must exist in roi_dir.
+            # I think it would make more sense to take
+            # conv_dir'/conv'roi_1[0]roi_1[1]'.nii, as the size of
+            # conv_dir'/conv'roi_1[0]roi_1[1]'.nii and
+            # roi_dir'/'roi_1[0]roi_1[1]'.nii' should be the same given the
+            # pipeline used for the CVR
+            roi_1 = self.doublet_list[0]
+            roi_file = os.path.join(roi_dir, roi_1[0] + roi_1[1] + '.nii')
+            roi_img = nb.load(roi_file)
+            roi_data = roi_img.get_fdata()
+            roi_size = roi_data.shape[:3]
+
+            # Reading parametric map
+            map_img = nb.load(parametric_map)
+            map_data = map_img.get_fdata()
+
+            # Setting the NaN to 0 in parametric map
+            map_data = np.nan_to_num(map_data)
+
+            # Give name with spmT_BOLD or beta_BOLD
+            map_name = os.path.basename(parametric_map)[0:4] + '_BOLD'
+
+            # Making sure that the ROI and parametric images
+            # are at the same size
+            if roi_size != map_data.shape[:3]:
+                map_data_max = max(map_data.max(), -map_data.min())
+                map_data = resize(
+                               map_data / map_data_max, roi_size) * map_data_max
+
+            for roi in self.doublet_list:
+                # Reading ROI file
+                roi_file = os.path.join(conv_dir,
+                                        'conv' + roi[0] + roi[1] + '.nii')
+
+                # it seems that it is necessary to leave a little time so that
+                # the data calculated previously are well recorded on the disc!
+                # In order not to be stuck indefinitely, the maximum waiting
+                # time is set to 15s.
+                wait_time = 0
+
+                while True:
+
+                    if wait_time > 15:
+                        print('Mean_stdDev_calc:\nThe {} file has not been '
+                              'found ...\n'.format(roi_file))
+                        roi_img = None
+                        break
+
+                    try:
+                        roi_img = nb.load(roi_file)
+                        break
+
+                    except FileNotFoundError:
+                        print('Mean_stdDev_calc:\n{} does not exist yet ... '
+                              'waiting 1s ...'.format(roi_file))
+                        import time
+                        time.sleep(1)
+                        wait_time += 1
+                        continue
+
+                roi_data = roi_img.get_fdata()
+
+                # Setting the NaN to 0 in ROI images
+                roi_data = np.nan_to_num(roi_data)
+
+                # Convolution of the parametric map with the ROI images
+                roi_thresh = (roi_data > 0).astype(float)
+                result = map_data * roi_thresh
+
+                # Calculating mean and standard deviation
+                if np.size(result[result.nonzero()]) == 0:
+                    print("\nMean_stdDev_cal brick:\nWarning: No result found "
+                          "after convolution of the {0} ROI and the {1} "
+                          "data".format(roi[0] + roi[1], parametric_map))
+                    mean_result = 0
+                    std_result = 0
+
+                else:
+                    mean_result = result[result.nonzero()].mean()
+                    std_result = result[result.nonzero()].std()
+
+                # Writing the value in the corresponding file:
+                # analysis_dir'/'roi[0]roi[1]'_mean'map_name'.txt')
+                mean_out_file = os.path.join(
+                                  analysis_dir,
+                                  roi[0] + roi[1] + '_mean' + map_name + '.txt')
+
+                with open(mean_out_file, 'w') as f:
+                    f.write("%.3f" % mean_result)
+
+                # Writing the value in the corresponding file:
+                # analysis_dir'/'roi[0]roi[1]'_std'map_name'.txt')
+                std_out_file = os.path.join(
+                                   analysis_dir,
+                                   roi[0] + roi[1] + '_std' + map_name + '.txt')
+
+                with open(std_out_file, 'w') as f:
+                    f.write("%.3f" % std_result)
 
 
 class OutlierCount(ProcessMIA):
