@@ -50,7 +50,7 @@ class Concat_to_list_of_list(ProcessMIA):
     """
 
     def __init__(self):
-        """Dedicated to the attributes initialisation/instanciation.
+        """Dedicated to the attributes initialisation/instantiation.
 
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
@@ -132,7 +132,7 @@ class Files_To_List(ProcessMIA):
     """
 
     def __init__(self):
-        """Dedicated to the attributes initialisation/instanciation.
+        """Dedicated to the attributes initialisation/instantiation.
 
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
@@ -224,7 +224,7 @@ class Filter_Files_List(ProcessMIA):
     """
 
     def __init__(self):
-        """Dedicated to the attributes initialisation/instanciation.
+        """Dedicated to the attributes initialisation/instantiation.
         
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
@@ -428,7 +428,7 @@ class Input_Filter(ProcessMIA):
     """
 
     def __init__(self):
-        """Dedicated to the attributes initialisation/instanciation.
+        """Dedicated to the attributes initialisation/instantiation.
 
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
@@ -536,7 +536,7 @@ class List_Duplicate(ProcessMIA):
     """
 
     def __init__(self):
-        """Dedicated to the attributes initialisation / instanciation.
+        """Dedicated to the attributes initialisation / instantiation.
 
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
@@ -612,7 +612,7 @@ class List_To_File(ProcessMIA):
     """
 
     def __init__(self):
-        """Dedicated to the attributes initialisation / instanciation.
+        """Dedicated to the attributes initialisation / instantiation.
         
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
@@ -705,7 +705,7 @@ class Make_A_List(ProcessMIA):
     """
 
     def __init__(self):
-        """Dedicated to the attributes initialisation / instanciation.
+        """Dedicated to the attributes initialisation / instantiation.
 
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the

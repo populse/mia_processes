@@ -45,7 +45,7 @@ class AffineInitializer(ProcessMIA):
     """
 
     def __init__(self):
-        """Dedicated to the attributes initialisation/instanciation.
+        """Dedicated to the attributes initialisation/instantiation.
 
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
@@ -182,7 +182,7 @@ class ApplyTransforms(ProcessMIA):
     """
 
     def __init__(self):
-        """Dedicated to the attributes initialisation/instanciation.
+        """Dedicated to the attributes initialisation/instantiation.
 
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
@@ -352,7 +352,7 @@ class N4BiasFieldCorrection(ProcessMIA):
     """
 
     def __init__(self):
-        """Dedicated to the attributes initialisation/instanciation.
+        """Dedicated to the attributes initialisation/instantiation.
 
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
@@ -534,7 +534,7 @@ class Registration(ProcessMIA):
     """
 
     def __init__(self):
-        """Dedicated to the attributes initialisation/instanciation.
+        """Dedicated to the attributes initialisation/instantiation.
 
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the

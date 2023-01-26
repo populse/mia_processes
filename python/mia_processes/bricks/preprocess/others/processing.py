@@ -82,7 +82,7 @@ class ArtifactMask(ProcessMIA):
     """
 
     def __init__(self):
-        """Dedicated to the attributes initialisation / instanciation.
+        """Dedicated to the attributes initialisation / instantiation.
 
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
@@ -338,7 +338,7 @@ class Binarize(ProcessMIA):
     """
 
     def __init__(self):
-        """Dedicated to the attributes initialisation / instanciation.
+        """Dedicated to the attributes initialisation / instantiation.
 
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
@@ -593,7 +593,7 @@ class ConformImage(ProcessMIA):
     """
 
     def __init__(self):
-        """Dedicated to the attributes initialisation / instanciation.
+        """Dedicated to the attributes initialisation / instantiation.
 
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
@@ -795,7 +795,7 @@ class Conv_ROI(ProcessMIA):
     """
 
     def __init__(self):
-        """Dedicated to the attributes initialisation/instanciation.
+        """Dedicated to the attributes initialisation/instantiation.
 
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
@@ -985,7 +985,7 @@ class Enhance(ProcessMIA):
     """
 
     def __init__(self):
-        """Dedicated to the attributes initialisation / instanciation.
+        """Dedicated to the attributes initialisation / instantiation.
 
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
@@ -1236,7 +1236,7 @@ class GradientThreshold(ProcessMIA):
     """
 
     def __init__(self):
-        """Dedicated to the attributes initialisation / instanciation.
+        """Dedicated to the attributes initialisation / instantiation.
 
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
@@ -1473,7 +1473,7 @@ class Harmonize(ProcessMIA):
     """
 
     def __init__(self):
-        """Dedicated to the attributes initialisation / instanciation.
+        """Dedicated to the attributes initialisation / instantiation.
 
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
@@ -1692,7 +1692,7 @@ class Mask(ProcessMIA):
     """
 
     def __init__(self):
-        """Dedicated to the attributes initialisation / instanciation.
+        """Dedicated to the attributes initialisation / instantiation.
 
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
@@ -1899,7 +1899,7 @@ class NonSteadyStateDetector(ProcessMIA):
     """
 
     def __init__(self):
-        """Dedicated to the attributes initialisation / instanciation.
+        """Dedicated to the attributes initialisation / instantiation.
 
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
@@ -1984,7 +1984,7 @@ class Resample_1(ProcessMIA):
    """
 
     def __init__(self):
-        """Dedicated to the attributes initialisation / instanciation.
+        """Dedicated to the attributes initialisation / instantiation.
 
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
@@ -2433,7 +2433,7 @@ class Resample_2(ProcessMIA):
       must have the "PatientName" tag filled in.
     """
     def __init__(self):
-        """Dedicated to the attributes initialisation/instanciation.
+        """Dedicated to the attributes initialisation/instantiation.
 
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
@@ -2594,7 +2594,7 @@ class RotationMask(ProcessMIA):
     """
 
     def __init__(self):
-        """Dedicated to the attributes initialisation / instanciation.
+        """Dedicated to the attributes initialisation / instantiation.
 
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
@@ -2816,7 +2816,7 @@ class Sanitize(ProcessMIA):
     """
 
     def __init__(self):
-        """Dedicated to the attributes initialisation / instanciation.
+        """Dedicated to the attributes initialisation / instantiation.
 
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
@@ -3099,7 +3099,7 @@ class Template(ProcessMIA):
     """
 
     def __init__(self):
-        """Dedicated to the attributes initialisation / instanciation.
+        """Dedicated to the attributes initialisation / instantiation.
 
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
@@ -3235,7 +3235,7 @@ class Threshold(ProcessMIA):
     """
 
     def __init__(self):
-        """Dedicated to the attributes initialisation / instanciation.
+        """Dedicated to the attributes initialisation / instantiation.
 
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
@@ -3483,7 +3483,7 @@ class TSNR(ProcessMIA):
     """
 
     def __init__(self):
-        """Dedicated to the attributes initialisation / instanciation.
+        """Dedicated to the attributes initialisation / instantiation.
 
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the

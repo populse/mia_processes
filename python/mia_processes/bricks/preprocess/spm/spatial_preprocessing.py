@@ -68,7 +68,7 @@ class Coregister(ProcessMIA):
     """
 
     def __init__(self):
-        """Dedicated to the attributes initialisation/instanciation.
+        """Dedicated to the attributes initialisation/instantiation.
         
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
@@ -483,7 +483,7 @@ class GM_WM_Normalize(ProcessMIA):
     """
     
     def __init__(self):
-        """Dedicated to the attributes initialisation / instanciation.
+        """Dedicated to the attributes initialisation / instantiation.
         
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
@@ -797,7 +797,7 @@ class NewSegment(ProcessMIA):
     """
 
     def __init__(self):
-        """Dedicated to the attributes initialisation/instanciation.
+        """Dedicated to the attributes initialisation/instantiation.
         
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
@@ -1033,7 +1033,7 @@ class NewSegment(ProcessMIA):
         self.init_process('nipype.interfaces.spm.NewSegment')
 
         """ To be removed for V2
-        # process instanciation
+        # process instantiation
         self.process = NewSegmentMia() # workaround to try to decrease the
                                        # instantiation time of the NewSegment
                                        # class
@@ -1147,7 +1147,7 @@ class Normalize12(ProcessMIA):
     """
 
     def __init__(self):
-        """Dedicated to the attributes initialisation/instanciation.
+        """Dedicated to the attributes initialisation/instantiation.
         
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
@@ -1588,7 +1588,7 @@ class Realign(ProcessMIA):
     """
 
     def __init__(self):
-        """Dedicated to the attributes initialisation/instanciation.
+        """Dedicated to the attributes initialisation/instantiation.
         
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
@@ -2065,7 +2065,7 @@ class SliceTiming(ProcessMIA):
     """
 
     def __init__(self):
-        """Dedicated to the attributes initialisation / instanciation.
+        """Dedicated to the attributes initialisation / instantiation.
 
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
@@ -2548,7 +2548,7 @@ class Smooth(ProcessMIA):
     """
 
     def __init__(self):
-        """Dedicated to the attributes initialisation/instanciation.
+        """Dedicated to the attributes initialisation/instantiation.
         
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the

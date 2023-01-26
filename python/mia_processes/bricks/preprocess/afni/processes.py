@@ -50,7 +50,7 @@ class Automask(ProcessMIA):
     """
 
     def __init__(self):
-        """Dedicated to the attributes initialisation/instanciation.
+        """Dedicated to the attributes initialisation/instantiation.
 
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
@@ -199,7 +199,7 @@ class Calc(ProcessMIA):
     """
 
     def __init__(self):
-        """Dedicated to the attributes initialisation/instanciation.
+        """Dedicated to the attributes initialisation/instantiation.
 
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
@@ -376,7 +376,7 @@ class Deoblique(ProcessMIA):
     """
 
     def __init__(self):
-        """Dedicated to the attributes initialisation/instanciation.
+        """Dedicated to the attributes initialisation/instantiation.
 
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
@@ -465,7 +465,7 @@ class Despike(ProcessMIA):
     """
 
     def __init__(self):
-        """Dedicated to the attributes initialisation/instanciation.
+        """Dedicated to the attributes initialisation/instantiation.
 
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
@@ -626,7 +626,7 @@ class DropTRs(ProcessMIA):
     """
 
     def __init__(self):
-        """Dedicated to the attributes initialisation/instanciation.
+        """Dedicated to the attributes initialisation/instantiation.
 
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
@@ -820,7 +820,7 @@ class Mean(ProcessMIA):
     """
 
     def __init__(self):
-        """Dedicated to the attributes initialisation/instanciation.
+        """Dedicated to the attributes initialisation/instantiation.
 
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
@@ -971,7 +971,7 @@ class SkullStripping(ProcessMIA):
     """
 
     def __init__(self):
-        """Dedicated to the attributes initialisation/instanciation.
+        """Dedicated to the attributes initialisation/instantiation.
 
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
@@ -1120,7 +1120,7 @@ class TShift(ProcessMIA):
     """
 
     def __init__(self):
-        """Dedicated to the attributes initialisation/instanciation.
+        """Dedicated to the attributes initialisation/instantiation.
 
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
@@ -1297,7 +1297,7 @@ class Volreg(ProcessMIA):
     """
 
     def __init__(self):
-        """Dedicated to the attributes initialisation/instanciation.
+        """Dedicated to the attributes initialisation/instantiation.
 
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the

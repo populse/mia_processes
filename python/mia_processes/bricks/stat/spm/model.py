@@ -415,7 +415,7 @@ class EstimateModel(ProcessMIA):
 
     """
     def __init__(self):
-        """Dedicated to the attributes initialisation / instanciation.
+        """Dedicated to the attributes initialisation / instantiation.
 
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
@@ -836,7 +836,7 @@ class Level1Design(ProcessMIA):
     """
 
     def __init__(self):
-        """Dedicated to the attributes initialisation / instanciation.
+        """Dedicated to the attributes initialisation / instantiation.
 
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
