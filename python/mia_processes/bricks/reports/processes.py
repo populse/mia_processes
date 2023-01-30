@@ -15,6 +15,7 @@ compute necessary values for reporting.
         - Mean_stdDev_calc
         - OutlierCount
         - QualityIndex
+        - Result_collector
         - Spikes
 
     :Function:
@@ -2275,6 +2276,416 @@ class QualityIndex(ProcessMIA):
             self.process.out_prefix = self.out_prefix
 
         return self.process.run(configuration_dict={})
+
+
+class Result_collector(ProcessMIA):
+    """Blabla"""
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instantiation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(Result_collector, self).__init__()
+
+        patient_info_dict = {"name": "alej170316_testMIA24052018", "patho": "ACMD", "age": 64, "sex": "M",
+                             "mr": "3T", "gas": "BACTAL", "admin": "MASK"}
+
+        # Inputs description
+        parametric_maps_desc = "A list of files (existing, uncompressed file)"
+        data_desc = "Defines the data type (a string, e.g. BOLD)"
+        calculs_desc = ('Defines the type of calculation (a list of strings, '
+                       'e.g. ["mean", "std", "IL_mean", "IL_std"]')
+        mean_in_files_desc = ("A list of .txt files containing the average "
+                              "value of a parameter for a given territory or "
+                              "region of interest (a list of files)")
+        std_in_files_desc = ("A list of .txt files containing the standard "
+                             "deviation for a parameter in a given territory "
+                             "or region of interest (a list of files)")
+        doublet_list_desc = ('A list of lists containing doublets of strings '
+                             '(e.g. [["ROI_OCC", "_L"], ["ROI_OCC", "_R"], '
+                             '["ROI_PAR", "_l"], ...]')
+        patient_info_desc = ("A dictionary whose keys/values correspond to "
+                            "information about the patient "
+                             "(e.g. {"
+                             "'name': 'ablair','patho': 'ACMD', "
+                             "'age': 64, 'sex': 'M', 'mr': '3T', "
+                             "'gas': 'BACTAL', 'admin': 'MASK'}")
+
+        # Outputs description
+        out_files_desc = ""
+
+        # Inputs description
+        self.add_trait("parametric_maps",
+                       traits.List(traits.File(exists=True),
+                                   output=False,
+                                   desc=parametric_maps_desc))
+
+        self.add_trait("data",
+                       traits.String("BOLD",
+                                     output=False,
+                                     optional=True,
+                                     desc=data_desc))
+
+        self.add_trait("calculs",
+                        traits.List(traits.String(),
+                                    value=["mean", "std", "IL_mean", "IL_std"],
+                                    output=False,
+                                    optional=True,
+                                    desc=calculs_desc))
+
+        self.add_trait("mean_in_files",
+                       traits.List(traits.File(),
+                                   output=False,
+                                   desc=mean_in_files_desc))
+
+        self.add_trait("std_in_files",
+                       traits.List(traits.File(),
+                                   output=False,
+                                   desc=std_in_files_desc))
+
+        self.add_trait("doublet_list",
+                       traits.List(output=False,
+                                   desc=doublet_list_desc))
+
+        self.add_trait("patient_info",
+                       traits.Dict(patient_info_dict,
+                                   output=False,
+                                   optional=True,
+                                   desc=patient_info_desc))
+
+        # Inputs description
+        self.add_trait("out_files",
+                       traits.List(traits.File(),
+                                   output=True,
+                                   desc=out_files_desc))
+
+        # Special parameter used as a messenger for the run_process_mia method
+        self.add_trait("dict4runtime",
+                       traits.Dict(output=False,
+                                   optional=True,
+                                   userlevel=1))
+
+        self.init_default_traits()
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(Result_collector, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.calculs != Undefined and self.parametric_maps != Undefined:
+            # FIXME: We retrieve the name of the patient from the first element
+            #        of parametric_maps. This is only fine if all the elements
+            #        of parametric_maps correspond to the same patient.
+            patient_name = get_dbFieldValue(self.project,
+                                            self.parametric_maps[0],
+                                            'PatientName')
+
+            if patient_name is None:
+                print('\nResult_collector brick:\nThe PatientName tag is not '
+                      'filled in the database for the {} file ...\n The '
+                      'initialization is '
+                      'aborted...'.format(self.parametric_maps[0]))
+                return self.make_initResult()
+
+            self.dict4runtime['patient_name'] = patient_name
+            roi_dir = os.path.join(self.output_directory, 'roi_' + patient_name)
+
+            if not os.path.isdir(roi_dir):
+                print("\nResult_collector brick:\nNo {} folder detected ..."
+                      "\nThe initialization is aborted ...".format(roi_dir))
+                return self.make_initResult()
+
+            analysis_dir = os.path.join(roi_dir, 'ROI_analysis')
+
+            if not os.path.isdir(analysis_dir):
+                print("\nMean_stdDev_cal brick:\nNo {} folder detected ..."
+                      "\nThe initialization is "
+                      "aborted ...".format(analysis_dir))
+                return self.make_initResult()
+
+            out_files = []
+
+            for parametric_map in self.parametric_maps:
+
+                for calcul in self.calculs:
+                    out_files.append(os.path.join(analysis_dir,
+                                                  "{0}_{1}_{2}.xls".format(
+                                        self.data,
+                                        calcul,
+                                        os.path.basename(parametric_map)[0:9])))
+
+            self.outputs['out_files'] = out_files
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        # No need the next line (we don't use self.process and SPM)
+        #super(Mean_stdDev_calc, self).run_process_mia()
+
+        # Getting the C (doublet_list without hemisphere)
+        roi_list = []  # list of all ROIs
+
+        for roi in self.doublet_list:
+            pos = roi[0]
+            if pos not in roi_list:
+                roi_list.append(pos)
+
+        roi_dir = os.path.join(self.output_directory,
+                               'roi_' + self.dict4runtime['patient_name'])
+        analysis_dir = os.path.join(roi_dir, 'ROI_analysis')
+
+        if not os.path.isdir(analysis_dir):
+            print("No 'ROI_analysis' folder in the working directory {0}.".
+                  format(os.path.dirname(self.parametric_maps[0])))
+            return {}  # FIXME: Test what exactly happens in this case
+
+        for parametric_map in self.parametric_maps:
+            map_name_file = os.path.basename(parametric_map)[0:9]
+            map_name = map_name_file[0:4]
+
+            for calcul in self.calculs:
+                out_file = os.path.join(analysis_dir,
+                                        "{0}_{1}_{2}.xls".format(self.data,
+                                                                 calcul,
+                                                                 map_name_file))
+
+                with open(out_file, 'w') as f:
+                    f.write("{0}\t".format('subjects'))
+                    f.write("{0}\t".format('patho'))
+                    f.write("{0}\t".format('age'))
+                    f.write("{0}\t".format('sex'))
+                    f.write("{0}\t".format('MR'))
+                    f.write("{0}\t".format('Gaz'))
+                    f.write("{0}\t".format('Admin'))
+
+                    if calcul not in ['IL_mean', 'IL_std']:
+
+                        for roi in self.doublet_list:
+                            f.write("{0}_{1}\t".format(map_name,
+                                                       roi[0] + roi[1]))
+
+                    else:
+                        for pos in roi_list:
+                            f.write("{0}_{1}\t".format(map_name, pos))
+
+                    # FIXME: We should iterate on each patient here ?
+                    f.write("\n{0}\t".format(self.patient_info["name"]))
+
+                    if "patho" in self.patient_info.keys():
+                        f.write("{0}\t".format(self.patient_info["patho"]))
+
+                    else:
+                        f.write("Undefined\t")
+
+                    if "age" in self.patient_info.keys():
+                        f.write("%3.1f\t" % self.patient_info["age"])
+
+                    else:
+                        f.write("Undefined\t")
+
+                    if "sex" in self.patient_info.keys():
+                        f.write("{0}\t".format(self.patient_info["sex"]))
+
+                    else:
+                        f.write("Undefined\t")
+
+                    if "mr" in self.patient_info.keys():
+                        f.write("{0}\t".format(self.patient_info["mr"]))
+
+                    else:
+                        f.write("Undefined\t")
+
+                    if "gas" in self.patient_info.keys():
+                        f.write("{0}\t".format(self.patient_info["gas"]))
+
+                    else:
+                        f.write("Undefined\t")
+
+                    if "admin" in self.patient_info.keys():
+                        f.write("{0}\t".format(self.patient_info["admin"]))
+
+                    else:
+                        f.write("Undefined\t")
+
+                    if calcul == 'mean':
+
+                        for roi in self.doublet_list:
+                            roi_file = os.path.join(
+                                analysis_dir,
+                                "{0}_mean{1}_{2}.txt".format(roi[0] + roi[1],
+                                                             map_name,
+                                                             self.data))
+                            try:
+
+                                with open(roi_file, 'r') as f_read:
+                                    final_res = float(f_read.read())
+
+                                f.write("{0}\t".format(final_res))
+
+                            except FileNotFoundError:
+                                print('\nResult_collector brick:\n {} not '
+                                      'found ...\n'.format(roi_file))
+                                f.write("Undefined\t")
+
+
+                    elif calcul == 'IL_mean':
+                        roi_checked = []
+
+                        for roi in self.doublet_list:
+
+                            if roi[0] in roi_checked:
+                                continue
+
+                            roi_file = os.path.join(analysis_dir,
+                                "{0}_mean{1}_{2}.txt".format(roi[0] + roi[1],
+                                                             map_name,
+                                                             self.data))
+                            try:
+
+                                with open(roi_file, 'r') as f_read:
+                                    roi_value = float(f_read.read())
+
+                            except FileNotFoundError:
+                                print('\nResult_collector brick:\n {} not '
+                                      'found ...\n'.format(roi_file))
+                                roi_value = None
+
+                            # Searching the ROI that has the same first element
+                            roi_2 = [s for s in self.doublet_list
+                                                if roi[0] in s[0] and
+                                                        roi[1] != s[1]][0]
+                            roi_file_2 = os.path.join(
+                                                analysis_dir,
+                                                "{0}_mean{1}_{2}."
+                                                "txt".format(
+                                                            roi_2[0] + roi_2[1],
+                                                            map_name,
+                                                            self.data))
+                            try:
+                                with open(roi_file_2, 'r') as f_read:
+                                    roi_value_2 = float(f_read.read())
+
+                            except FileNotFoundError:
+                                print('\nResult_collector brick:\n {} not '
+                                      'found ...\n'.format(roi_file_2))
+                                roi_value_2 = None
+
+                            # IL = (Left - Right) / ((Left + Right)
+                            if roi[1] == '_L':
+                                sub_1 = roi_value
+                                sub_2 = roi_value_2
+
+                            else:
+                                sub_1 = roi_value_2
+                                sub_2 = roi_value
+
+                            if sub_1 is not None and sub_2 is not None:
+                                final_res = (sub_1 - sub_2) / (sub_1 + sub_2)
+                                f.write("{0}\t".format(final_res))
+
+                            else:
+                                f.write("Undefined\t")
+
+                            roi_checked.append(roi[0])
+
+                    elif calcul == "std":
+
+                        for roi in self.doublet_list:
+                            roi_file = os.path.join(
+                                    analysis_dir,
+                                    "{0}_std{1}_{2}.txt".format(roi[0] + roi[1],
+                                                                map_name,
+                                                                self.data))
+
+                            try:
+
+                                with open(roi_file, 'r') as f_read:
+                                    final_res = float(f_read.read())
+
+                                f.write("{0}\t".format(final_res))
+
+                            except FileNotFoundError:
+                                print('\nResult_collector brick:\n {} not '
+                                      'found ...\n'.format(roi_file))
+                                f.write("Undefined\t")
+
+                    elif calcul == 'IL_std':
+                        roi_checked = []
+
+                        for roi in self.doublet_list:
+
+                            if roi[0] in roi_checked:
+                                continue
+
+                            roi_file = os.path.join(
+                                    analysis_dir,
+                                    "{0}_std{1}_{2}.txt".format(roi[0] + roi[1],
+                                                                map_name,
+                                                                self.data))
+
+                            try:
+
+                                with open(roi_file, 'r') as f_read:
+                                    roi_value = float(f_read.read())
+
+                            except FileNotFoundError:
+                                print('\nResult_collector brick:\n {} not '
+                                      'found ...\n'.format(roi_file))
+                                roi_value = None
+
+                            # Searching the roi that has the same first element
+                            roi_2 = [s for s in self.doublet_list if
+                                             roi[0] in s[0] and
+                                                 roi[1] != s[1]][0]
+
+                            roi_file_2 = os.path.join(
+                                analysis_dir,
+                                "{0}_std{1}_{2}.txt".format(roi_2[0] + roi_2[1],
+                                                            map_name,
+                                                            self.data))
+
+                            try:
+                                with open(roi_file_2, 'r') as f_read:
+                                    roi_value_2 = float(f_read.read())
+
+                            except FileNotFoundError:
+                                print('\nResult_collector brick:\n {} not '
+                                      'found ...\n'.format(roi_file_2))
+                                roi_value_2 = None
+
+                            # IL = (Left - Right) / ((Left + Right)
+                            if roi[1] == '_L':
+                                sub_1 = roi_value
+                                sub_2 = roi_value_2
+                            else:
+                                sub_1 = roi_value_2
+                                sub_2 = roi_value
+
+                            if sub_1 is not None and sub_2 is not None:
+                                final_res = (sub_1 - sub_2) / (sub_1 + sub_2)
+                                f.write("{0}\t".format(final_res))
+
+                            else:
+                                f.write("Undefined\t")
+
+                            roi_checked.append(roi[0])
 
 
 class Spikes(ProcessMIA):

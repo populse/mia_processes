@@ -9,3 +9,4 @@
 ##########################################################################
 
 from .bold_iqms_pipeline import Bold_iqms_pipeline
+from .rois_1 import Rois_1
