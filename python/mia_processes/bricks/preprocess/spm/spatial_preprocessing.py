@@ -751,7 +751,39 @@ class GM_WM_Normalize(ProcessMIA):
 
                     if self.in_filter == 'GM + WM':
                         self.inheritance_dict[val] = self.apply_to_files[0]
-                        
+                        # FIXME: In the latest version of mia, indexing of the database with
+                        #        particular tags defined in the processes is done only at
+                        #        the end of the initialisation of the whole pipeline. So we
+                        #        cannot use the value of these tags in other processes of
+                        #        the pipeline at the time of initialisation
+                        #        (see populse_mia #290). Until better we use a quick and
+                        #        dirty hack with the set_dbFieldValue() method !
+                        tag_to_add = dict()
+                        tag_to_add['name'] = "PatientName"
+                        tag_to_add['field_type'] = "string"
+                        tag_to_add['description'] = ""
+                        tag_to_add['visibility'] = True
+                        tag_to_add['origin'] = "user"
+                        tag_to_add['unit'] = None
+                        tag_to_add['default_value'] = None
+                        tag_to_add['value'] = get_dbFieldValue(
+                                                      self.project,
+                                                      self.apply_to_files[0][0],
+                                                      "PatientName")
+
+                        if tag_to_add['value'] is not None:
+                            set_dbFieldValue(self.project,
+                                             val,
+                                             tag_to_add)
+
+                        else:
+                            print(
+                                "\nGM_WM_Normalize brick:\nThe 'PatientName'"
+                                " tag could not be added to the "
+                                "database for the '{}' parameter. This "
+                                "can lead to a subsequent issue during "
+                                "initialization!!\n".format(val))
+
                     else:
 
                         if not isinstance(val, list):
@@ -765,6 +797,39 @@ class GM_WM_Normalize(ProcessMIA):
 
                             if fileOvalNoPref == fileIval:
                                 self.inheritance_dict[out_val] = in_val
+                                # FIXME: In the latest version of mia, indexing of the database with
+                                #        particular tags defined in the processes is done only at
+                                #        the end of the initialisation of the whole pipeline. So we
+                                #        cannot use the value of these tags in other processes of
+                                #        the pipeline at the time of initialisation
+                                #        (see populse_mia #290). Until better we use a quick and
+                                #        dirty hack with the set_dbFieldValue() method !
+                                tag_to_add = dict()
+                                tag_to_add['name'] = "PatientName"
+                                tag_to_add['field_type'] = "string"
+                                tag_to_add['description'] = ""
+                                tag_to_add['visibility'] = True
+                                tag_to_add['origin'] = "user"
+                                tag_to_add['unit'] = None
+                                tag_to_add['default_value'] = None
+                                tag_to_add['value'] = get_dbFieldValue(
+                                                                  self.project,
+                                                                  in_val,
+                                                                  "PatientName")
+
+                                if tag_to_add['value'] is not None:
+                                    set_dbFieldValue(self.project,
+                                                     out_val,
+                                                     tag_to_add)
+
+                                else:
+                                    print(
+                                        "\nGM_WM_Normalize brick:\nThe "
+                                        "'PatientName' tag could not be added "
+                                        "to the database for the '{}' "
+                                        "parameter. This can lead to a "
+                                        "subsequent issue during "
+                                        "initialization!!\n".format(out_val))
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -1085,10 +1150,10 @@ class NewSegment(ProcessMIA):
                 self.outputs[k] = getattr(self.process, '_' + k)
         
         """
-         When there is only one image at the input, the tags inheritance is
-         directly managed in PipelineManagerTab.add_plug_value_to_database().
-         However the inheritance of 2 output parameters is defined below, as
-         an example
+        When there is only one image at the input, the tags inheritance is
+        directly managed in PipelineManagerTab.add_plug_value_to_database().
+        However the inheritance of 2 output parameters is defined below, as
+        an example
         """
         if self.outputs:
 
@@ -1107,6 +1172,38 @@ class NewSegment(ProcessMIA):
 
                             if fileOvalNoPref == fileIval:
                                 self.inheritance_dict[out_val] = in_val
+                                # FIXME: In the latest version of mia, indexing of the database with
+                                #        particular tags defined in the processes is done only at
+                                #        the end of the initialisation of the whole pipeline. So we
+                                #        cannot use the value of these tags in other processes of
+                                #        the pipeline at the time of initialisation
+                                #        (see populse_mia #290). Until better we use a quick and
+                                #        dirty hack with the set_dbFieldValue() method !
+                                tag_to_add = dict()
+                                tag_to_add['name'] = "PatientName"
+                                tag_to_add['field_type'] = "string"
+                                tag_to_add['description'] = ""
+                                tag_to_add['visibility'] = True
+                                tag_to_add['origin'] = "user"
+                                tag_to_add['unit'] = None
+                                tag_to_add['default_value'] = None
+                                tag_to_add['value'] = get_dbFieldValue(
+                                                                  self.project,
+                                                                  in_val,
+                                                                  "PatientName")
+
+                                if tag_to_add['value'] is not None:
+                                    set_dbFieldValue(self.project,
+                                                     out_val,
+                                                     tag_to_add)
+
+                                else:
+                                    print(
+                                        "\nNewSegment brick:\nThe 'PatientName'"
+                                        " tag could not be added to the "
+                                        "database for the '{}' parameter. This "
+                                        "can lead to a subsequent issue during "
+                                        "initialization!!\n".format(out_val))
 
                 if key == "forward_deformation_field":
 
