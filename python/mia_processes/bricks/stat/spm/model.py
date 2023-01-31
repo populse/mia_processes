@@ -322,6 +322,37 @@ class EstimateContrast(ProcessMIA):
 
             if spmT_files:
                 self.inheritance_dict[self.outputs['spmT_images'][0]] = self.spm_mat_file
+                # FIXME: In the latest version of mia, indexing of the database with
+                #        particular tags defined in the processes is done only at
+                #        the end of the initialisation of the whole pipeline. So we
+                #        cannot use the value of these tags in other processes of
+                #        the pipeline at the time of initialisation
+                #        (see populse_mia #290). Until better we use a quick and
+                #        dirty hack with the set_dbFieldValue() method !
+                tag_to_add = dict()
+                tag_to_add['name'] = "PatientName"
+                tag_to_add['field_type'] = "string"
+                tag_to_add['description'] = ""
+                tag_to_add['visibility'] = True
+                tag_to_add['origin'] = "user"
+                tag_to_add['unit'] = None
+                tag_to_add['default_value'] = None
+                tag_to_add['value'] = get_dbFieldValue(self.project,
+                                                       self.spm_mat_file,
+                                                       'PatientName')
+
+                if tag_to_add['value'] is not None:
+                    set_dbFieldValue(self.project,
+                                     spmT_files[0],
+                                     tag_to_add)
+
+                else:
+                    print("\nEstimateContrast brick:\nThe 'PatientName' "
+                          "tag could not be added to the database for "
+                          "the '{}' parameter. This can lead to a "
+                          "subsequent issue during "
+                          "initialization!!\n".format(fullname))
+
                 self.inheritance_dict[self.outputs['con_images'][0]] = self.spm_mat_file
 
         # What about spmF images ?
@@ -691,8 +722,8 @@ class EstimateModel(ProcessMIA):
                     self.tot_reg_num = tot_reg_numb
 
                 else:
-                    print('\nEstimateModel:\n The "tot_reg_num" parameter '
-                          'could not be determined automatically because the '
+                    print('\nEstimateModel brick:\n The "tot_reg_num" parameter'
+                          ' could not be determined automatically because the '
                           '"Regress num" tag for the {} file is not filled '
                           'in the database. Please set this value and launch '
                           'the calculation '
@@ -739,9 +770,9 @@ class EstimateModel(ProcessMIA):
                             self.outputs['residual_images'] = [os.path.join(self.output_directory, res) for res in ress]
 
                     else:
-                        print('\nEstimateModel:\nThe number of dynamics could '
-                              'not be determined automatically because the '
-                              '"Dynamic Number" tag is not filled in the'
+                        print('\nEstimateModel brick:\nThe number of dynamics '
+                              'could not be determined automatically because '
+                              'the "Dynamic Number" tag is not filled in the'
                               'database for the {} file.\nAs a result, it is '
                               'not possible to safely create the '
                               '"residual_images" output '
@@ -757,7 +788,8 @@ class EstimateModel(ProcessMIA):
                     self.outputs['beta_images'] = [os.path.join(self.output_directory, beta) for beta in betas]
 
                 else:
-                    print('- No beta image were found to be added to the database ...')
+                    print('\nEstimateModel brick:\nNo beta image were found to'
+                          ' be added to the database ...')
 
             if ((self.tot_reg_num in ['<undefined>', Undefined, None]) or
                                          (self.write_residuals and not nb_dyn)):
@@ -770,23 +802,54 @@ class EstimateModel(ProcessMIA):
                 if key == "out_spm_mat_file":
                     self.inheritance_dict[value] = self.spm_mat_file
 
-                if key == "beta_images":
+                elif key == "beta_images":
+                    patient_name = get_dbFieldValue(self.project,
+                                                    self.spm_mat_file,
+                                                    "PatientName")
 
                     for fullname in value:
                         self.inheritance_dict[fullname] = self.spm_mat_file
 
-                if key == "mask_image":
+                        # FIXME: In the latest version of mia, indexing of the database with
+                        #        particular tags defined in the processes is done only at
+                        #        the end of the initialisation of the whole pipeline. So we
+                        #        cannot use the value of these tags in other processes of
+                        #        the pipeline at the time of initialisation
+                        #        (see populse_mia #290). Until better we use a quick and
+                        #        dirty hack with the set_dbFieldValue() method !
+                        if patient_name is not None:
+                            tag_to_add = dict()
+                            tag_to_add['name'] = "PatientName"
+                            tag_to_add['field_type'] = "string"
+                            tag_to_add['description'] = ""
+                            tag_to_add['visibility'] = True
+                            tag_to_add['origin'] = "user"
+                            tag_to_add['unit'] = None
+                            tag_to_add['default_value'] = None
+                            tag_to_add['value'] = patient_name
+                            set_dbFieldValue(self.project,
+                                             fullname,
+                                             tag_to_add)
+
+                        else:
+                            print("\nEstimateModel brick:\nThe 'PatientName' "
+                                  "tag could not be added to the database for "
+                                  "the '{}' parameter. This can lead to a "
+                                  "subsequent issue during "
+                                  "initialization!!\n".format(fullname))
+
+                elif key == "mask_image":
                     self.inheritance_dict[value] = self.spm_mat_file
 
-                if key == "residual_image":
+                elif key == "residual_image":
                     self.inheritance_dict[value] = self.spm_mat_file
 
-                if key == "residual_images":
+                elif key == "residual_images":
 
                     for fullname in value:
                         self.inheritance_dict[fullname] = self.spm_mat_file
 
-                if key == "RPVimage":
+                elif key == "RPVimage":
                     self.inheritance_dict[value] = self.spm_mat_file
 
         # Return the requirement, outputs and inheritance_dict
