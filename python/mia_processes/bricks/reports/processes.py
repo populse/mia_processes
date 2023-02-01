@@ -2290,6 +2290,9 @@ class Result_collector(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(Result_collector, self).__init__()
 
+        # FIXME: We need to use the database to retrieve information such as
+        #        name, pathology, etc.
+        #        This cannot be hard-coded into the script.
         patient_info_dict = {"name": "alej170316_testMIA24052018", "patho": "ACMD", "age": 64, "sex": "M",
                              "mr": "3T", "gas": "BACTAL", "admin": "MASK"}
 
