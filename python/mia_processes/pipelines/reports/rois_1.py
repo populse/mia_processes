@@ -77,6 +77,8 @@ class Rois_1(Pipeline):
                       "result_collector1.mean_in_files")
         self.add_link("mean_&_stdDev_calc1.std_out_files->"
                       "result_collector1.std_in_files")
+        self.export_parameter("result_collector1", "patient_info",
+                              is_optional=True)
 
         # nodes positions
         self.node_position = {
