@@ -89,7 +89,7 @@ class Anat_mriqc_pipeline(Pipeline):
         # default and initial values
         self.nodes["conformimage"].process.suffix = ' '
         self.nodes["conformimage"].process.prefix = ' '
-        self.nodes["list_to_file"].process.index_filter = [2]
+        self.nodes["list_to_file"].process.index_filter = [3]
         self.nodes["harmonize"].process.prefix = ' '
 
         # nodes positions
