@@ -1513,6 +1513,7 @@ class FWHMx(ProcessMIA):
                         'representing a file).')
         combine_desc = 'Combine the final measurements along each axis (a bool).'
         detrend_desc = 'detrend to the specified order (a bool or an int).'
+        classic_desc = 'use classic computation method'
         out_prefix_desc = ('Specify the string to be prepended to the '
                            'filenames of the output image file '
                            '(a string).')
@@ -1546,6 +1547,12 @@ class FWHMx(ProcessMIA):
                                      output=False,
                                      optional=True,
                                      desc=detrend_desc))
+
+        self.add_trait("classic",
+                       traits.String('-ShowMeClassicFWHM',
+                                     output=False,
+                                     optional=True,
+                                     desc=classic_desc))
 
         self.add_trait("out_prefix",
                        traits.String('fwhm_',
@@ -1624,6 +1631,7 @@ class FWHMx(ProcessMIA):
         self.process.mask = self.mask_file
         self.process.combine = self.combine
         self.process.detrend = self.detrend
+        self.process.classic = '-ShowMeClassicFWHM'
         self.process.out_file = self.out_file
 
         if self.out_prefix:
