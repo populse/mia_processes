@@ -368,6 +368,21 @@ class EstimateContrast(ProcessMIA):
                     tag_to_add['value'] = age
                     set_dbFieldValue(self.project, spmT_files[0], tag_to_add)
 
+                pathology = get_dbFieldValue(self.project, self.spm_mat_file,
+                                             'Pathology')
+
+                if pathology is not None:
+                    tag_to_add = dict()
+                    tag_to_add['name'] = "Pathology"
+                    tag_to_add['field_type'] = "string"
+                    tag_to_add['description'] = ""
+                    tag_to_add['visibility'] = True
+                    tag_to_add['origin'] = "user"
+                    tag_to_add['unit'] = None
+                    tag_to_add['default_value'] = None
+                    tag_to_add['value'] = pathology
+                    set_dbFieldValue(self.project, spmT_files[0], tag_to_add)
+
                 self.inheritance_dict[self.outputs['con_images'][0]] = self.spm_mat_file
 
         # What about spmF images ?
@@ -866,6 +881,23 @@ class EstimateModel(ProcessMIA):
                             tag_to_add['unit'] = None
                             tag_to_add['default_value'] = None
                             tag_to_add['value'] = age
+                            set_dbFieldValue(self.project, fullname,
+                                             tag_to_add)
+
+                        pathology = get_dbFieldValue(self.project,
+                                                     self.spm_mat_file,
+                                                     'Pathology')
+
+                        if pathology is not None:
+                            tag_to_add = dict()
+                            tag_to_add['name'] = "Pathology"
+                            tag_to_add['field_type'] = "string"
+                            tag_to_add['description'] = ""
+                            tag_to_add['visibility'] = True
+                            tag_to_add['origin'] = "user"
+                            tag_to_add['unit'] = None
+                            tag_to_add['default_value'] = None
+                            tag_to_add['value'] = pathology
                             set_dbFieldValue(self.project, fullname,
                                              tag_to_add)
 
@@ -1712,6 +1744,22 @@ class Level1Design(ProcessMIA):
                     tag_to_add['default_value'] = None
                     tag_to_add['value'] = age
                     set_dbFieldValue(self.project, self.outputs['spm_mat_file'],
+                                     tag_to_add)
+
+                pathology = get_dbFieldValue(self.project, scan, 'Pathology')
+
+                if pathology is not None:
+                    tag_to_add = dict()
+                    tag_to_add['name'] = "Pathology"
+                    tag_to_add['field_type'] = "string"
+                    tag_to_add['description'] = ""
+                    tag_to_add['visibility'] = True
+                    tag_to_add['origin'] = "user"
+                    tag_to_add['unit'] = None
+                    tag_to_add['default_value'] = None
+                    tag_to_add['value'] = pathology
+                    set_dbFieldValue(self.project,
+                                     self.outputs['spm_mat_file'],
                                      tag_to_add)
 
                 dimensions = get_dbFieldValue(

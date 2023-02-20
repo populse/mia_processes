@@ -461,6 +461,21 @@ class Coregister(ProcessMIA):
                         tag_to_add['value'] = age
                         set_dbFieldValue(self.project, out_val, tag_to_add)
 
+                    pathology = get_dbFieldValue(self.project, in_val,
+                                                 'Pathology')
+
+                    if pathology is not None:
+                        tag_to_add = dict()
+                        tag_to_add['name'] = "Pathology"
+                        tag_to_add['field_type'] = "string"
+                        tag_to_add['description'] = ""
+                        tag_to_add['visibility'] = True
+                        tag_to_add['origin'] = "user"
+                        tag_to_add['unit'] = None
+                        tag_to_add['default_value'] = None
+                        tag_to_add['value'] = pathology
+                        set_dbFieldValue(self.project, out_val, tag_to_add)
+
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
 
@@ -1650,6 +1665,22 @@ class Normalize12(ProcessMIA):
                             set_dbFieldValue(self.project, out_val,
                                              tag_to_add)
 
+                        pathology = get_dbFieldValue(self.project, in_val,
+                                                     'Pathology')
+
+                        if pathology is not None:
+                            tag_to_add = dict()
+                            tag_to_add['name'] = "Pathology"
+                            tag_to_add['field_type'] = "string"
+                            tag_to_add['description'] = ""
+                            tag_to_add['visibility'] = True
+                            tag_to_add['origin'] = "user"
+                            tag_to_add['unit'] = None
+                            tag_to_add['default_value'] = None
+                            tag_to_add['value'] = pathology
+                            set_dbFieldValue(self.project, out_val,
+                                             tag_to_add)
+
                         pathOval, fileOval = os.path.split(out_val)
                         _, fileIval = os.path.split(in_val)
                         fileOvalNoPref = fileOval[1:]
@@ -2094,6 +2125,22 @@ class Realign(ProcessMIA):
                                 tag_to_add['unit'] = None
                                 tag_to_add['default_value'] = None
                                 tag_to_add['value'] = age
+                                set_dbFieldValue(self.project, out_val,
+                                                 tag_to_add)
+
+                            pathology = get_dbFieldValue(self.project, in_val,
+                                                         'Pathology')
+
+                            if pathology is not None:
+                                tag_to_add = dict()
+                                tag_to_add['name'] = "Pathology"
+                                tag_to_add['field_type'] = "string"
+                                tag_to_add['description'] = ""
+                                tag_to_add['visibility'] = True
+                                tag_to_add['origin'] = "user"
+                                tag_to_add['unit'] = None
+                                tag_to_add['default_value'] = None
+                                tag_to_add['value'] = pathology
                                 set_dbFieldValue(self.project, out_val,
                                                  tag_to_add)
 
@@ -2915,6 +2962,20 @@ class Smooth(ProcessMIA):
                             tag_to_add['value'] = age
                             set_dbFieldValue(self.project, out_val, tag_to_add)
 
+                        pathology = get_dbFieldValue(self.project, in_val,
+                                                     'Pathology')
+
+                        if pathology is not None:
+                            tag_to_add = dict()
+                            tag_to_add['name'] = "Pathology"
+                            tag_to_add['field_type'] = "string"
+                            tag_to_add['description'] = ""
+                            tag_to_add['visibility'] = True
+                            tag_to_add['origin'] = "user"
+                            tag_to_add['unit'] = None
+                            tag_to_add['default_value'] = None
+                            tag_to_add['value'] = pathology
+                            set_dbFieldValue(self.project, out_val, tag_to_add)
 
                         _, fileOval = os.path.split(out_val)
                         _, fileIval = os.path.split(in_val)
