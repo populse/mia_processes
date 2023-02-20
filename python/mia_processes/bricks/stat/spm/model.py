@@ -313,14 +313,14 @@ class EstimateContrast(ProcessMIA):
                 self.outputs['con_images'] = con_files
 
         if self.outputs:
-            # FIXME: Quick and dirty. This brick was written quickly and will
-            #        need to be reworked to cover all cases. At that time,
-            #        inheritance will also need to be reviewed. Currently we
-            #        take the first element of the lists, but in the general
-            #        case there can be several elements in the lists
             self.inheritance_dict[self.outputs['out_spm_mat_file']] = self.spm_mat_file
 
             if spmT_files:
+                # FIXME: Quick and dirty. This brick was written quickly and will
+                #        need to be reworked to cover all cases. At that time,
+                #        inheritance will also need to be reviewed. Currently we
+                #        take the first element of the lists, but in the general
+                #        case there can be several elements in the lists
                 self.inheritance_dict[self.outputs['spmT_images'][0]] = self.spm_mat_file
                 # FIXME: In the latest version of mia, indexing of the database with
                 #        particular tags defined in the processes is done only at
@@ -351,7 +351,22 @@ class EstimateContrast(ProcessMIA):
                           "tag could not be added to the database for "
                           "the '{}' parameter. This can lead to a "
                           "subsequent issue during "
-                          "initialization!!\n".format(fullname))
+                          "initialization!!\n".format(spmT_files[0]))
+
+                age = get_dbFieldValue(self.project, self.spm_mat_file,
+                                       'Age')
+
+                if age is not None:
+                    tag_to_add = dict()
+                    tag_to_add['name'] = "Age"
+                    tag_to_add['field_type'] = "int"
+                    tag_to_add['description'] = ""
+                    tag_to_add['visibility'] = True
+                    tag_to_add['origin'] = "user"
+                    tag_to_add['unit'] = None
+                    tag_to_add['default_value'] = None
+                    tag_to_add['value'] = age
+                    set_dbFieldValue(self.project, spmT_files[0], tag_to_add)
 
                 self.inheritance_dict[self.outputs['con_images'][0]] = self.spm_mat_file
 
@@ -837,6 +852,22 @@ class EstimateModel(ProcessMIA):
                                   "the '{}' parameter. This can lead to a "
                                   "subsequent issue during "
                                   "initialization!!\n".format(fullname))
+
+                        age = get_dbFieldValue(self.project, self.spm_mat_file,
+                                               'Age')
+
+                        if age is not None:
+                            tag_to_add = dict()
+                            tag_to_add['name'] = "Age"
+                            tag_to_add['field_type'] = "int"
+                            tag_to_add['description'] = ""
+                            tag_to_add['visibility'] = True
+                            tag_to_add['origin'] = "user"
+                            tag_to_add['unit'] = None
+                            tag_to_add['default_value'] = None
+                            tag_to_add['value'] = age
+                            set_dbFieldValue(self.project, fullname,
+                                             tag_to_add)
 
                 elif key == "mask_image":
                     self.inheritance_dict[value] = self.spm_mat_file
@@ -1667,6 +1698,21 @@ class Level1Design(ProcessMIA):
                           'in the database for the {} file ...\nThis may cause '
                           'issues in the further operation of the '
                           'pipeline...\n'.format(scan))
+
+                age = get_dbFieldValue(self.project, scan, 'Age')
+
+                if age is not None:
+                    tag_to_add = dict()
+                    tag_to_add['name'] = "Age"
+                    tag_to_add['field_type'] = "int"
+                    tag_to_add['description'] = ""
+                    tag_to_add['visibility'] = True
+                    tag_to_add['origin'] = "user"
+                    tag_to_add['unit'] = None
+                    tag_to_add['default_value'] = None
+                    tag_to_add['value'] = age
+                    set_dbFieldValue(self.project, self.outputs['spm_mat_file'],
+                                     tag_to_add)
 
                 dimensions = get_dbFieldValue(
                                        self.project,

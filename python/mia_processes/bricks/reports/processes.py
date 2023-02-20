@@ -2535,7 +2535,7 @@ class Result_collector(ProcessMIA):
         # No need the next line (we don't use self.process and SPM)
         #super(Mean_stdDev_calc, self).run_process_mia()
 
-        # Getting the C (doublet_list without hemisphere)
+        # Getting the list of all positions (doublet_list without hemisphere)
         roi_list = []  # list of all ROIs
 
         for roi in self.doublet_list:
