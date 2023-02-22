@@ -450,7 +450,7 @@ class AnatIQMs(ProcessMIA):
             try:
                 f = open(self.in_fwhm)
                 lines = f.readlines()
-                str_fwhm = re.findall(r"[-+]?\d*\.*\d+", lines[1])
+                str_fwhm = re.findall(r"[-+]?\d*\.*\d+", lines[0])
                 fwhm = []
                 for item in str_fwhm:
                     fwhm.append(float(item))
@@ -779,17 +779,29 @@ class BoldIQMs(ProcessMIA):
             for axis in epidir:
                 results_dict["gsr"][axis] = gsr(epidata, mskdata, direction=axis)
 
-        # DVARS
+        # aor
         if self.in_outliers_file:
             try:
                 outliers = np.loadtxt(
                     self.in_outliers_file, skiprows=0
                 )
             except (FileNotFoundError, TypeError):
-                print("\nError with dvars file: ", e)
+                print("\nError with aor file: ", e)
                 pass
             else:
                 results_dict["vec_outliers"] = list(outliers)
+                results_dict["aor"] = outliers.mean()
+
+        # aqi
+        if self.in_QI_file:
+            try:
+                with open(self.in_QI_file, "r") as fin:
+                    lines = fin.readlines()
+            except (FileNotFoundError, TypeError):
+                print("\nError with aqi file: ", e)
+                pass
+            else:
+                results_dict["aqi"] = np.mean([float(line.strip()) for line in lines if not line.startswith("++")])
 
         # DVARS
         if self.in_dvars_file:
@@ -838,7 +850,7 @@ class BoldIQMs(ProcessMIA):
             try:
                 f = open(self.in_fwhm_file)
                 lines = f.readlines()
-                str_fwhm = re.findall(r"[-+]?\d*\.*\d+", lines[1])
+                str_fwhm = re.findall(r"[-+]?\d*\.*\d+", lines[0])
                 fwhm = []
                 for item in str_fwhm:
                     fwhm.append(float(item))
@@ -1513,7 +1525,6 @@ class FWHMx(ProcessMIA):
                         'representing a file).')
         combine_desc = 'Combine the final measurements along each axis (a bool).'
         detrend_desc = 'detrend to the specified order (a bool or an int).'
-        classic_desc = 'use classic computation method'
         out_prefix_desc = ('Specify the string to be prepended to the '
                            'filenames of the output image file '
                            '(a string).')
@@ -1547,12 +1558,6 @@ class FWHMx(ProcessMIA):
                                      output=False,
                                      optional=True,
                                      desc=detrend_desc))
-
-        self.add_trait("classic",
-                       traits.String('-ShowMeClassicFWHM',
-                                     output=False,
-                                     optional=True,
-                                     desc=classic_desc))
 
         self.add_trait("out_prefix",
                        traits.String('fwhm_',
@@ -1631,8 +1636,10 @@ class FWHMx(ProcessMIA):
         self.process.mask = self.mask_file
         self.process.combine = self.combine
         self.process.detrend = self.detrend
-        self.process.classic = '-ShowMeClassicFWHM'
         self.process.out_file = self.out_file
+
+        # default inputs
+        self.process.args = '-ShowMeClassicFWHM'
 
         if self.out_prefix:
             self.process.out_prefix = self.out_prefix
