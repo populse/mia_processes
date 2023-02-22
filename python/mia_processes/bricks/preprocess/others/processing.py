@@ -3045,7 +3045,7 @@ class Sanitize(ProcessMIA):
 
             # Both match, qform valid (implicit with match), codes okay -> do nothing, empty report
             if matching_affines and qform_code > 0 and sform_code > 0:
-                self.out_file = self.in_file
+                save_file = True
 
             # Row 2:
             elif valid_qform and qform_code > 0:
