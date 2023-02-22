@@ -799,7 +799,7 @@ class DropTRs(ProcessMIA):
         self.process.outputtype = self.output_type
         self.process.start_idx = self.start_idx
         if self.stop_idx == -1:
-            self.process.stop_idx = nb_volumes
+            self.process.stop_idx = nb_volumes - 1
         else:
             self.process.stop_idx = self.stop_idx
         self.process.out_file = self.out_file
