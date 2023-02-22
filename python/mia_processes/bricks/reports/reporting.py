@@ -1181,6 +1181,14 @@ class MRIQC_func_report(ProcessMIA):
                      "Saad et al., <i>Correcting Brain-Wide Correlation "
                      "Differences in Resting-State FMRI</i>, Brain Conn "
                      "3(4):339-352, 2013."
+                     ],
+            "aor": ["AFNI s outlier ratio",
+                     "{:.2e}",
+                     None
+                     ],
+            "aqi": ["AFNI s quality index",
+                     "{:.2e}",
+                     None
                      ]
         }
 

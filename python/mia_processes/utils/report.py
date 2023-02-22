@@ -346,6 +346,12 @@ class Report():
                                          "ARTIFACTS AND OTHER</b> </font>",
                                      self.styles['Bullet1']))
         self.report.append(Spacer(0 * mm, 10 * mm))
+        # aor
+        self.report.append(self.get_iqms_data('aor'))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # aor
+        self.report.append(self.get_iqms_data('aqi'))
+        self.report.append(Spacer(0 * mm, 2.5 * mm))
         # gsr_x
         self.report.append(self.get_iqms_data('gsr_x'))
         self.report.append(Spacer(0 * mm, 1 * mm))
