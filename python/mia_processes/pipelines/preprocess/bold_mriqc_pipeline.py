@@ -10,7 +10,7 @@ class Bold_mriqc_pipeline(Pipeline):
         # nodes
         self.add_process("bold_iqms_pipeline",
                          "mia_processes.pipelines.reports.bold_iqms_pipeline."
-                             "Bold_iqms_pipeline")
+                         "Bold_iqms_pipeline")
         self.nodes["bold_iqms_pipeline"].process.nodes_activation = {
             'outliercount': True,
             'boldiqms': True,
@@ -23,36 +23,34 @@ class Bold_mriqc_pipeline(Pipeline):
             'qualityindex': True}
         self.add_process("nonsteadystatedetector",
                          "mia_processes.bricks.preprocess.others.processing."
-                             "NonSteadyStateDetector")
+                         "NonSteadyStateDetector")
         self.add_process("sanitize",
                          "mia_processes.bricks.preprocess.others.processing."
-                             "Sanitize")
+                         "Sanitize")
         self.add_process("tsnr",
                          "mia_processes.bricks.preprocess.others.processing."
-                             "TSNR")
+                         "TSNR")
         self.add_process("mean",
                          "mia_processes.bricks.preprocess.afni.processes."
-                             "Mean")
+                         "Mean")
         self.add_process("automask",
                          "mia_processes.bricks.preprocess.afni.processes."
-                             "Automask")
+                         "Automask")
         self.add_process("bold_hmc_pipeline",
                          "mia_processes.pipelines.preprocess.bold_hmc_pipeline."
-                             "Bold_hmc_pipeline")
+                         "Bold_hmc_pipeline")
         self.nodes["bold_hmc_pipeline"].process.nodes_activation = {
-            'droptrs': True,
-            'tshift': True,
-            'despike': True,
-            'deoblique': True,
+            'despike': False,
+            'deoblique': False,
             'volreg': True}
         self.add_process("bold_mni_align",
                          "mia_processes.pipelines.preprocess.bold_mni_align."
-                             "Bold_mni_align")
+                         "Bold_mni_align")
         self.nodes["bold_mni_align"].set_plug_value("epi_mask",
                                                     traits.Undefined)
         self.nodes["bold_mni_align"].process.nodes[
-                            "registration"].set_plug_value("moving_image_masks",
-                                                           traits.Undefined)
+            "registration"].set_plug_value("moving_image_masks",
+                                           traits.Undefined)
         self.nodes["bold_mni_align"].process.nodes_activation = {
             'affineinitializer': True,
             'registration': True,
@@ -64,19 +62,24 @@ class Bold_mriqc_pipeline(Pipeline):
         self.nodes["bold_mni_align"].process.epi_mask = traits.Undefined
         self.add_process("mriqc_func_report",
                          "mia_processes.bricks.reports.reporting."
-                             "MRIQC_func_report")
+                         "MRIQC_func_report")
 
         # links
+        self.export_parameter("bold_hmc_pipeline", "despike",
+                              pipeline_parameter="hmc_despike")
+        self.export_parameter("bold_hmc_pipeline", "deoblique",
+                              pipeline_parameter="hmc_deoblique")
         self.export_parameter("sanitize", "in_file",
-                              pipeline_parameter="func_file", is_optional=False)
+                              pipeline_parameter="func_file",
+                              is_optional=False)
         self.add_link("func_file->nonsteadystatedetector.in_file")
         self.add_link("func_file->mriqc_func_report.func")
         self.add_link("bold_iqms_pipeline.BoldQC_out_file->"
-                          "mriqc_func_report.IQMs_file")
+                      "mriqc_func_report.IQMs_file")
         self.add_link("nonsteadystatedetector.n_volumes_to_discard->"
-                          "sanitize.n_volumes_to_discard")
+                      "sanitize.n_volumes_to_discard")
         self.add_link("nonsteadystatedetector.n_volumes_to_discard->"
-                          "bold_iqms_pipeline.dummy_TRs")
+                      "bold_iqms_pipeline.dummy_TRs")
         self.add_link("sanitize.out_file->bold_iqms_pipeline.ras_epi")
         self.add_link("sanitize.out_file->bold_hmc_pipeline.in_file")
         self.add_link("tsnr.out_tsnr_file->bold_iqms_pipeline.epi_tsnr")
@@ -89,7 +92,7 @@ class Bold_mriqc_pipeline(Pipeline):
         self.add_link("bold_hmc_pipeline.out_file->mean.in_file")
         self.add_link("bold_hmc_pipeline.out_file->bold_iqms_pipeline.hmc_epi")
         self.add_link("bold_hmc_pipeline.oned_file->"
-                          "bold_iqms_pipeline.hmc_motion")
+                      "bold_iqms_pipeline.hmc_motion")
         self.add_link("bold_mni_align.epi_parc->bold_iqms_pipeline.epi_parc")
         self.add_link("bold_mni_align.epi_mni->mriqc_func_report.norm_func")
         self.export_parameter("mriqc_func_report", "report",
