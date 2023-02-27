@@ -479,13 +479,27 @@ class SurfacesExtraction(ProcessMIA):
             self.process.surfaces = True
 
             if self.output_directory:
-                self.outputs['outskin_mask_file'] = os.path.join(self.output_directory,os.path.split(self.process._outskin_mask_file)[1])
-                self.outputs['outskin_mesh_file'] = os.path.join(self.output_directory,os.path.split(self.process._outskin_mesh_file)[1])
-                self.outputs['outskull_mask_file'] = os.path.join(self.output_directory,os.path.split(self.process._outskull_mask_file)[1])
-                self.outputs['outskull_mesh_file'] = os.path.join(self.output_directory,os.path.split(self.process._outskull_mesh_file)[1])
-                self.outputs['inskull_mask_file'] = os.path.join(self.output_directory,os.path.split(self.process._inskull_mask_file)[1])
-                self.outputs['inskull_mesh_file'] = os.path.join(self.output_directory,os.path.split(self.process._inskull_mesh_file)[1])
-                self.outputs['skull_mask_file'] = os.path.join(self.output_directory,os.path.split(self.process._skull_mask_file)[1])
+                self.outputs['outskin_mask_file'] = os.path.join(
+                    self.output_directory, os.path.split(
+                        self.process._outskin_mask_file)[1])
+                self.outputs['outskin_mesh_file'] = os.path.join(
+                    self.output_directory, os.path.split(
+                        self.process._outskin_mesh_file)[1])
+                self.outputs['outskull_mask_file'] = os.path.join(
+                    self.output_directory, os.path.split(
+                        self.process._outskull_mask_file)[1])
+                self.outputs['outskull_mesh_file'] = os.path.join(
+                    self.output_directory, os.path.split(
+                        self.process._outskull_mesh_file)[1])
+                self.outputs['inskull_mask_file'] = os.path.join(
+                    self.output_directory, os.path.split(
+                        self.process._inskull_mask_file)[1])
+                self.outputs['inskull_mesh_file'] = os.path.join(
+                    self.output_directory, os.path.split(
+                        self.process._inskull_mesh_file)[1])
+                self.outputs['skull_mask_file'] = os.path.join(
+                    self.output_directory, os.path.split(
+                        self.process._skull_mask_file)[1])
         if self.outputs:
             self.inheritance_dict[self.outputs[
                 'outskin_mask_file']] = self.in_file
