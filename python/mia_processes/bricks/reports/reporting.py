@@ -245,11 +245,11 @@ class MRIQC_anat_report(ProcessMIA):
         #        should be found to retrieve them automatically or to put them
         #        in the input parameters of the brick:
         # Site
-        if self.dict4runtime['Site'] in ("", "Undefined"):
+        if self.dict4runtime['Site'] in ("", "Undefined", None):
             self.dict4runtime['Site'] = 'Grenoble University Hospital - CLUNI'
 
         # MriScanner
-        if self.dict4runtime['Spectro'] in ("", "Undefined"):
+        if self.dict4runtime['Spectro'] in ("", "Undefined", None):
             self.dict4runtime['Spectro'] = 'Philips Achieva 3.0T TX'
 
         # Generate an output name
@@ -888,11 +888,11 @@ class MRIQC_func_report(ProcessMIA):
         #        should be found to retrieve them automatically or to put them
         #        in the input parameters of the brick:
         # Site
-        if self.dict4runtime['Site'] in ("", "Undefined"):
+        if self.dict4runtime['Site'] in ("", "Undefined", None):
             self.dict4runtime['Site'] = 'Grenoble University Hospital - CLUNI'
 
         # MriScanner
-        if self.dict4runtime['Spectro'] in ("", "Undefined"):
+        if self.dict4runtime['Spectro'] in ("", "Undefined", None):
             self.dict4runtime['Spectro'] = 'Philips Achieva 3.0T TX'
 
         # Generate an output name
