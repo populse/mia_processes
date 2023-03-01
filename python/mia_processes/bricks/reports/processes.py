@@ -3068,7 +3068,7 @@ def fber(img, headmask, rotmask=None):
         airmask[rotmask > 0] = 0
     bg_mu = np.median(np.abs(img[airmask == 1]) ** 2)
     if bg_mu < 1.0e-3:
-        return 0
+        return -1.0
     return float(fg_mu / bg_mu)
 
 
