@@ -397,6 +397,9 @@ class SurfacesExtraction(ProcessMIA):
         in_file_desc = ('File to delete non-brain tissue (a pathlike object'
                         'string representing a file)')
 
+        output_type_desc = ('Typecodes of the output NIfTI image formats (one '
+                            'of NIFTI, NIFTI_PAIR, NIFTI_GZ, NIFTI_PAIR_GZ).')
+
         # Outputs description
         outskin_mask_file_desc = 'outskin mask file'
         outskin_mesh_file_desc = 'outskin mesh file'
@@ -411,6 +414,15 @@ class SurfacesExtraction(ProcessMIA):
                        File(output=False,
                             optional=False,
                             desc=in_file_desc))
+
+        self.add_trait("output_type",
+                       Enum('NIFTI',
+                            'NIFTI_PAIR',
+                            'NIFTI_GZ',
+                            'NIFTI_PAIR_GZ',
+                            output=False,
+                            optional=True,
+                            desc=output_type_desc))
 
         # Outputs traits
         self.add_trait("outskin_mask_file",
@@ -475,6 +487,7 @@ class SurfacesExtraction(ProcessMIA):
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
+            self.process.output_type = self.output_type
             self.process.in_file = self.in_file
             self.process.surfaces = True
 
@@ -522,6 +535,7 @@ class SurfacesExtraction(ProcessMIA):
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
         super(SurfacesExtraction, self).run_process_mia()
+        self.process.output_type = self.output_type
         self.process.in_file = self.in_file
 
         # default inputs
