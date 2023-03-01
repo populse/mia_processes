@@ -1076,18 +1076,17 @@ class Report():
         self.report.append(slices_image)
 
 
-        # Currently, we make and save (in derived_data) the qi2 graph, but we
-        # don't include it in the report because the result with the test data
-        # looks strange.
-        # FIXME: Commented since 27/02/2027 because KeyError: 'histogram_qi2_x_grid'
-        #_ = plot_qi2(np.asarray(self.iqms_data['histogram_qi2_x_grid']),
-        #             np.asarray(self.iqms_data['histogram_qi2_ref_pdf']),
-        #             np.asarray(self.iqms_data['histogram_qi2_fit_pdf']),
-        #             np.asarray(self.iqms_data['histogram_qi2_ref_data']),
-        #             int(self.iqms_data['histogram_qi2_cutoff_idx']),
-        #             out_file=os.path.join(
-        #                 os.path.split(os.path.split(self.anat)[0])[0],
-        #                 'derived_data', 'qi2_plot.svg'))
+        # FIXME: Currently, we make and save (in derived_data) the
+        # qi2 graph, but we don't include it in the report because
+        # the result with the test data looks strange.
+        _ = plot_qi2(np.asarray(self.iqms_data['histogram_qi2_x_grid']),
+                     np.asarray(self.iqms_data['histogram_qi2_ref_pdf']),
+                     np.asarray(self.iqms_data['histogram_qi2_fit_pdf']),
+                     np.asarray(self.iqms_data['histogram_qi2_ref_data']),
+                     int(self.iqms_data['histogram_qi2_cutoff_idx']),
+                     out_file=os.path.join(
+                         os.path.split(os.path.split(self.anat)[0])[0],
+                         'derived_data', 'qi2_plot.svg'))
 
         self.page.build(self.report, canvasmaker=PageNumCanvas)
         tmpdir.cleanup()
