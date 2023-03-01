@@ -1182,11 +1182,11 @@ class MRIQC_func_report(ProcessMIA):
                      "Differences in Resting-State FMRI</i>, Brain Conn "
                      "3(4):339-352, 2013."
                      ],
-            "aor": ["AFNI s outlier ratio",
+            "aor": ["AFNI's outlier ratio",
                      "{:.2e}",
                      None
                      ],
-            "aqi": ["AFNI s quality index",
+            "aqi": ["AFNI's quality index",
                      "{:.2e}",
                      None
                      ]

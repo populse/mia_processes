@@ -349,7 +349,7 @@ class Report():
         # aor
         self.report.append(self.get_iqms_data('aor'))
         self.report.append(Spacer(0 * mm, 1 * mm))
-        # aor
+        # aqi
         self.report.append(self.get_iqms_data('aqi'))
         self.report.append(Spacer(0 * mm, 2.5 * mm))
         # gsr_x
@@ -369,7 +369,7 @@ class Report():
         self.report.append(Spacer(0 * mm, 2.5 * mm))
         # dummyTRs
         self.report.append(self.get_iqms_data('dummyTRs'))
-        self.report.append(Spacer(0 * mm, 90 * mm))
+        self.report.append(Spacer(0 * mm, 82 * mm))
         # Footnote
         line = ReportLine(500)
         line.hAlign = 'CENTER'
