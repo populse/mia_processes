@@ -36,13 +36,9 @@ class Bold_mriqc_pipeline(Pipeline):
         self.add_process("automask",
                          "mia_processes.bricks.preprocess.afni.processes."
                          "Automask")
-        self.add_process("bold_hmc_pipeline",
-                         "mia_processes.pipelines.preprocess.bold_hmc_pipeline."
-                         "Bold_hmc_pipeline")
-        self.nodes["bold_hmc_pipeline"].process.nodes_activation = {
-            'despike': False,
-            'deoblique': False,
-            'volreg': True}
+        self.add_process("volreg",
+                         "mia_processes.bricks.preprocess.afni.processes.Volreg")
+        self.nodes["volreg"].process.twopass = True
         self.add_process("bold_mni_align",
                          "mia_processes.pipelines.preprocess.bold_mni_align."
                          "Bold_mni_align")
@@ -65,10 +61,6 @@ class Bold_mriqc_pipeline(Pipeline):
                          "MRIQC_func_report")
 
         # links
-        self.export_parameter("bold_hmc_pipeline", "despike",
-                              pipeline_parameter="hmc_despike")
-        self.export_parameter("bold_hmc_pipeline", "deoblique",
-                              pipeline_parameter="hmc_deoblique")
         self.export_parameter("sanitize", "in_file",
                               pipeline_parameter="func_file",
                               is_optional=False)
@@ -81,17 +73,17 @@ class Bold_mriqc_pipeline(Pipeline):
         self.add_link("nonsteadystatedetector.n_volumes_to_discard->"
                       "bold_iqms_pipeline.dummy_TRs")
         self.add_link("sanitize.out_file->bold_iqms_pipeline.ras_epi")
-        self.add_link("sanitize.out_file->bold_hmc_pipeline.in_file")
+        self.add_link("sanitize.out_file->volreg.in_file")
         self.add_link("tsnr.out_tsnr_file->bold_iqms_pipeline.epi_tsnr")
         self.add_link("mean.out_file->bold_mni_align.epi_mean")
         self.add_link("mean.out_file->automask.in_file")
         self.add_link("mean.out_file->bold_iqms_pipeline.epi_mean")
         self.add_link("automask.out_file->bold_mni_align.epi_mask")
         self.add_link("automask.out_file->bold_iqms_pipeline.brainmask")
-        self.add_link("bold_hmc_pipeline.out_file->tsnr.in_file")
-        self.add_link("bold_hmc_pipeline.out_file->mean.in_file")
-        self.add_link("bold_hmc_pipeline.out_file->bold_iqms_pipeline.hmc_epi")
-        self.add_link("bold_hmc_pipeline.oned_file->"
+        self.add_link("volreg.out_file->tsnr.in_file")
+        self.add_link("volreg.out_file->mean.in_file")
+        self.add_link("volreg.out_file->bold_iqms_pipeline.hmc_epi")
+        self.add_link("volreg.oned_file->"
                       "bold_iqms_pipeline.hmc_motion")
         self.add_link("bold_mni_align.epi_parc->bold_iqms_pipeline.epi_parc")
         self.add_link("bold_mni_align.epi_mni->mriqc_func_report.norm_func")
@@ -102,10 +94,7 @@ class Bold_mriqc_pipeline(Pipeline):
                               is_optional=True)
 
         # parameters order
-
         self.reorder_traits(("func_file", "carpet_seg", "func_report"))
-
-        # default and initial values
 
         # nodes positions
         self.node_position = {
@@ -115,7 +104,7 @@ class Bold_mriqc_pipeline(Pipeline):
             "tsnr": (-127.7391993962027, 60.050718720000134),
             "mean": (-173.11641600000007, -181.6966963199999),
             "automask": (144.1320191999998, -189.81009407999983),
-            "bold_hmc_pipeline": (-527.8792115199997, -149.2405196799998),
+            "volreg": (-527.8792115199997, -149.2405196799998),
             "bold_mni_align": (283.31445431594545, 116.08725895240536),
             "inputs": (-890.4021152762024, 569.7810895696218),
             "outputs": (1530.1459691893501, 147.22476292910784),
@@ -130,7 +119,7 @@ class Bold_mriqc_pipeline(Pipeline):
             "tsnr": (194.03125, 215.0),
             "mean": (146.0, 145.0),
             "automask": (146.0, 145.0),
-            "bold_hmc_pipeline": (154.453125, 215.0),
+            "volreg": (154.453125, 215.0),
             "bold_mni_align": (377.796875, 670.0),
             "inputs": (243.9375, 1265.0),
             "outputs": (203.16492003946317, 355.0),
