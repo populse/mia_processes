@@ -9,7 +9,7 @@ class Anat_mriqc_pipeline(Pipeline):
         self.add_process("conformimage",
                          "mia_processes.bricks.preprocess.others.processing.ConformImage")
         self.add_process("anat_skullstrip_pipeline",
-                         "mia_processes.pipelines.preprocess.anat_skullstrip_pipeline.Anat_skullstrip_pipeline")
+                         "mia_processes.pipelines.preprocess.anat_skullstrip_synthstrip_pipeline.Anat_skullstrip_synthstrip_pipeline")
         self.add_process("segment",
                          "mia_processes.bricks.preprocess.fsl.processes.Segment")
         self.add_process("anat_spatial_norm",
@@ -42,18 +42,19 @@ class Anat_mriqc_pipeline(Pipeline):
         self.add_link("conformimage.out_file->fwhmx.in_file")
         self.add_link("conformimage.out_file->anat_mni_tpms_pipeline.in_ras")
         self.add_link("conformimage.out_file->anat_airmask_pipeline.in_file")
-        self.add_link("anat_skullstrip_pipeline.out_file->segment.in_file")
-        self.add_link("anat_skullstrip_pipeline.out_mask->fwhmx.mask_file")
+        self.add_link("anat_skullstrip_pipeline.out_brain->segment.in_file")
         self.add_link(
-            "anat_skullstrip_pipeline.out_mask->anat_spatial_norm.moving_mask")
+            "anat_skullstrip_pipeline.out_mask_synthstrip->fwhmx.mask_file")
         self.add_link(
-            "anat_skullstrip_pipeline.out_mask->anat_airmask_pipeline.in_mask")
+            "anat_skullstrip_pipeline.out_mask_synthstrip->anat_spatial_norm.moving_mask")
         self.add_link(
-            "anat_skullstrip_pipeline.bias_corrected->harmonize.in_file")
+            "anat_skullstrip_pipeline.out_mask_synthstrip->anat_airmask_pipeline.in_mask")
         self.add_link(
-            "anat_skullstrip_pipeline.bias_corrected->anat_headmask.in_file")
+            "anat_skullstrip_pipeline.out_corrected->harmonize.in_file")
         self.add_link(
-            "anat_skullstrip_pipeline.bias_corrected->anat_spatial_norm.moving_image")
+            "anat_skullstrip_pipeline.out_corrected->anat_headmask.in_file")
+        self.add_link(
+            "anat_skullstrip_pipeline.out_corrected->anat_spatial_norm.moving_image")
         self.add_link("anat_skullstrip_pipeline.bias_image->anatiqms.in_inu")
         self.add_link("segment.tissue_class_map->anatiqms.segmentation")
         self.add_link("segment.partial_volume_files->list_to_file.file_list")
