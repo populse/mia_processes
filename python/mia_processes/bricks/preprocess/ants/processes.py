@@ -195,26 +195,30 @@ class ApplyTransforms(ProcessMIA):
         self.requirement = ['ants', 'nipype']
 
         # Inputs description
-        input_image_desc = ('Image to apply transformation to. (a pathlike object '
-                            'or string representing an existing file)')
+        input_image_desc = ('Image to apply transformation to. (a pathlike'
+                            'object or string representing an existing file)')
 
-        reference_image_desc = 'Reference image space that you wish to warp into ' \
-                               '(a pathlike object or string representing an existing file)'
+        reference_image_desc = ('Reference image space that you wish to warp'
+                                'into (a pathlike object or string'
+                                ' representing an existing file)')
 
-        transforms_desc = 'Transform files that will be applied in reverse order.'
+        transforms_desc = ('Transform files that will be applied in'
+                           'reverse order.')
 
-        interpolation_desc = 'Choice of interpolator. (‘Linear’ or ‘NearestNeighbor’ ' \
-                             'or ‘CosineWindowedSinc’ or ‘WelchWindowedSinc’ or ' \
-                             '‘HammingWindowedSinc’ or ‘LanczosWindowedSinc’ or ' \
-                             '‘MultiLabel’ or ‘Gaussian’ or ‘BSpline’)'
+        interpolation_desc = ('Choice of interpolator.'
+                              '(‘Linear’ or ‘NearestNeighbor’ '
+                              'or ‘CosineWindowedSinc’ or ‘WelchWindowedSinc’'
+                              'or ‘HammingWindowedSinc’ or'
+                              '‘LanczosWindowedSinc’ or ‘MultiLabel’ or '
+                              '‘Gaussian’ or ‘BSpline’)')
 
         out_prefix_desc = ('Specify the string to be prepended to the '
                            'filenames of the corrected image file '
                            '(a string).')
 
         # Outputs description
-        output_image_desc = ('Warped image (a pathlike object or string representing '
-                        'an existing file).')
+        output_image_desc = ('Warped image (a pathlike object or string'
+                             'representing an existing file).')
 
         # Inputs traits
         self.add_trait("input_image",
@@ -365,20 +369,27 @@ class N4BiasFieldCorrection(ProcessMIA):
         self.requirement = ['ants', 'nipype']
 
         # Inputs description
-        in_file_desc = ('A image file (2D, 3D or 4D) to correct (a pathlike object or string '
-                        'representing a file).')
+        in_file_desc = ('A image file (2D, 3D or 4D) to correct (a pathlike'
+                        'object or stringrepresenting a file).')
         dimension_desc = ('Image dimension (2, 3 or 4).')
         out_prefix_desc = ('Specify the string to be prepended to the '
                            'filenames of the corrected image file '
                            '(a string).')
+        weight_image_desc = ('image for relative weighting (e.g. probability'
+                             'map of the white matter) of voxels'
+                             'during the B-spline fitting.')
+        rescale_intensities_desc = (' rescales to the [min,max] range of the'
+                                    'original image intensities within the '
+                                    'user-specified mask')
+        n_iterations_desc = 'Number of iterations (convergence option)'
 
         # Outputs description
         out_file_desc = ('The corrected file (a pathlike object or a '
                          'string representing a file).')
         bias_image_desc = ('Estimated bias (a pathlike object or a '
-                         'string representing a file).')
-        negative_values_desc = 'True if negative values are present in input data file, ' \
-                               'False otherwise.'
+                           'string representing a file).')
+        negative_values_desc = ('True if negative values are present in'
+                                'False otherwise.')
 
         # Inputs traits
         self.add_trait("in_file",
@@ -399,6 +410,22 @@ class N4BiasFieldCorrection(ProcessMIA):
                               output=False,
                               optional=True,
                               desc=out_prefix_desc))
+
+        self.add_trait("weight_image",
+                       File(output=False,
+                            optional=True,
+                            desc=weight_image_desc))
+
+        self.add_trait("rescale_intensities",
+                       Bool(output=False,
+                            optional=True,
+                            desc=rescale_intensities_desc))
+
+        self.add_trait("n_iterations",
+                       List(Int(),
+                            output=False,
+                            optional=True,
+                            desc=n_iterations_desc))
 
         # Outputs traits
         self.add_trait("out_file",
@@ -447,20 +474,17 @@ class N4BiasFieldCorrection(ProcessMIA):
                 ifile = os.path.split(self.in_file)[-1]
 
                 try:
-                    fileName, trail = ifile.rsplit('.', 1)
-                    if trail == 'gz':
-                        (fileName_2,
-                         trail_2) = os.path.splitext(fileName)
-                        if trail_2 == '.nii':
-                            trail = 'nii.gz'
-
+                    file_name, in_ext = ifile.rsplit('.', 1)
+                    if in_ext == 'gz':
+                        (file_name_2, in_ext_2) = file_name.rsplit('.', 1)
+                        if in_ext_2 == 'nii':
+                            in_ext = 'nii.gz'
                 except ValueError:
                     print('\nThe input image format is not recognized ...!')
                     return
 
                 else:
-
-                    if trail not in ['nii', 'nii.gz', 'img']:
+                    if in_ext not in ['nii', 'nii.gz', 'img']:
                         print('\nThe input image format does not seem to be '
                               'nii or img. This can prevent the process '
                               'launch ...!')
@@ -469,11 +493,11 @@ class N4BiasFieldCorrection(ProcessMIA):
                         self.output_directory,
                         self.out_prefix + ifile)
 
-                    ifile_no_ext, ifile_ext = os.path.splitext(ifile)
                     self.outputs['bias_image'] = os.path.join(
                         self.output_directory,
-                        self.out_prefix + ifile_no_ext
-                        + '_bias' + ifile_ext)
+                        self.out_prefix + os.path.split(ifile)[1].replace(
+                            '.' + in_ext,
+                            '_bias.' + in_ext))
 
                     self.inheritance_dict[self.outputs[
                         'out_file']] = self.in_file
@@ -510,10 +534,16 @@ class N4BiasFieldCorrection(ProcessMIA):
         self.process.input_image = self.in_file
         self.process.output_image = self.out_file
         self.process.save_bias = True
-        self.process.rescale_intensities = True
+        self.process.rescale_intensities = self.rescale_intensities
         self.process.copy_header = True
         self.process.out_file = self.out_file
         self.process.bias_image = self.bias_image
+
+        if self.weight_image:
+            self.process.weight_image = self.weight_image
+
+        if self.n_iterations:
+            self.process.n_iterations = self.n_iterations
 
         if self.out_prefix:
             self.process.out_prefix = self.out_prefix
@@ -551,37 +581,41 @@ class Registration(ProcessMIA):
                             'transformed (a pathlike object or string '
                             'representing an existing file).')
 
-        moving_image_desc = 'Image that will be registered to the space ' \
-                            'of the fixed image (a pathlike object or string ' \
-                            'representing an existing file).'
+        moving_image_desc = ('Image that will be registered to the space '
+                             'of the fixed image (a pathlike object'
+                             'or string representing an existing file).')
 
         fixed_image_masks_desc = ('Mask used to limit metric sampling region '
-                                  'of the fixed image in all stages (a list of items '
-                                  'which are a pathlike object or string representing '
-                                  'an existing file or ‘NULL’).')
+                                  'of the fixed image in all stages (a list'
+                                  'of items which are a pathlike object or'
+                                  'string representing an existing file'
+                                  'or ‘NULL’).')
 
-        moving_image_masks_desc = 'Masks used to limit metric sampling region of the ' \
-                                  'moving image, defined per registration stage ' \
-                                  '(Use “NULL” to omit a mask at a given stage - a list ' \
-                                  'of items which are a pathlike object or string ' \
-                                  'representing an existing file or ‘NULL’).'
+        moving_image_masks_desc = ('Masks used to limit metric sampling'
+                                   'region of the moving image, defined'
+                                   'per registration stage (Use “NULL” to omit'
+                                   'a mask at a given stage - a list of items'
+                                   'which are a pathlike object or string '
+                                   'representing an existing file or ‘NULL’).')
 
         initial_moving_transform_desc = ('A transform or a list of transform '
                                          'that should be applied before the '
-                                         'registration begin. (a list of items '
-                                         'which are a pathlike object or string '
-                                         'representing an existing file).')
+                                         'registration begin. (a list of items'
+                                         'which are a pathlike object or'
+                                         'string representing an existing'
+                                         'file).')
 
         out_prefix_desc = ('Specify the string to be prepended to the '
                            'filename of the warped image file '
                            '(a string).')
 
-        metric_desc = 'The metric to use for each stage (a list of strings which are ' \
-                      ' ''CC'' or ''MeanSquares'' or ''Demons'' or ''GC'' or ''MI'' ' \
-                      'or Mattes)'
+        metric_desc = ('The metric to use for each stage (a list of strings'
+                       'which are ''CC'' or ''MeanSquares'' or ''Demons'''
+                       'or ''GC'' or ''MI'' or Mattes)')
 
-        metric_weight_desc = 'The metric weight(s) for each stage. The weights must ' \
-                             'sum to 1 per stage (A list of floats).'
+        metric_weight_desc = ('The metric weight(s) for each stage.'
+                              'The weights must sum to 1 per stage'
+                              '(A list of floats).')
 
         shrink_factors_desc = '(A list of integers)'
 
@@ -589,36 +623,46 @@ class Registration(ProcessMIA):
 
         number_of_iterations_desc = '(A list of integers)'
 
-        radius_or_number_of_bins_desc = 'The number of bins in each stage for the MI ' \
-                                        'and Mattes metric, the radius for other metrics ' \
-                                        '(a list of integers)'
+        radius_or_number_of_bins_desc = ('The number of bins in each stage for'
+                                         ' the MI  and Mattes metric,'
+                                         'the radius for other metrics'
+                                         '(a list of integers)')
 
-        convergence_threshold_desc = '(a list of at least 1 float) – Requires inputs: ' \
-                                     'number_of_iterations'
+        convergence_threshold_desc = ('(a list of at least 1 float)'
+                                      'Requires inputs: number_of_iterations')
 
         convergence_window_size_desc = 'a list of integer'
 
-        sampling_percentage_desc = 'The metric sampling percentages to use for each stage ' \
-                                   '(a list of 0.0 <= floats <= 1; requires sampling strategy)'
+        sampling_percentage_desc = ('The metric sampling percentages to use'
+                                    'for each stage (a list of'
+                                    ' 0.0 <= floats <=1; requires sampling'
+                                    'strategy)')
 
-        sampling_strategy_desc = 'The metric sampling strategies for each stage (A list of ' \
-                                 'strings which are ''None'' or ''Regular'' or ''Random'').'
+        sampling_strategy_desc = ('The metric sampling strategies for each'
+                                  'stage (A list of strings which are ''None'''
+                                  'or ''Regular'' or ''Random'').')
 
         transforms_desc = '(A list of items)'
 
         transform_parameters_desc = '(A list of tuples)'
 
-        interpolation_desc = '(‘Linear’ or ‘NearestNeighbor’ or ‘CosineWindowedSinc’ or ' \
-                             '‘WelchWindowedSinc’ or ‘HammingWindowedSinc’ or ‘LanczosWindowedSinc’' \
-                             ' or ‘BSpline’ or ‘MultiLabel’ or ‘Gaussian’ or ‘GenericLabel’)'
+        interpolation_desc = ('(‘Linear’ or ‘NearestNeighbor’ or'
+                              '‘CosineWindowedSinc’ or ‘WelchWindowedSinc’ '
+                              'or ‘HammingWindowedSinc’ or'
+                              '‘LanczosWindowedSinc’ or ‘BSpline’ or'
+                              '‘MultiLabel’ or ‘Gaussian’ or ‘GenericLabel’)')
+
+        use_histogram_matching_desc = 'Used histogram matching '
 
         # Outputs description
-        composite_transform_desc = ('Output composite transform file (a pathlike '
-                                    'object or a string representing a file).')
+        composite_transform_desc = ('Output composite transform file'
+                                    '(a pathlike object or a string'
+                                    'representing a file).')
 
-        inverse_composite_transform_desc = ('Output inverse composite transform'
-                                            ' file (a pathlike object or a '
-                                            'string representing a file).')
+        inverse_composite_transform_desc = ('Output inverse composite'
+                                            'transform file (a pathlike object'
+                                            'or a string representing'
+                                            'a file).')
 
         warped_image_desc = ('Outputs the warped image. (a pathlike object '
                              'or string representing an existing file).')
@@ -724,7 +768,6 @@ class Registration(ProcessMIA):
 
         self.add_trait("smoothing_sigmas",
                        List(List(Float()),
-                            #default=Undefined,
                             default=[[4.0], [4.0, 2.0, 0.0], [1.0, 0.0]],
                             output=False,
                             optional=True,
@@ -750,7 +793,7 @@ class Registration(ProcessMIA):
                             output=False,
                             optional=True,
                             desc=convergence_threshold_desc))
-        
+
         self.add_trait("convergence_window_size",
                        List(Int(),
                             default=Undefined,
@@ -789,7 +832,14 @@ class Registration(ProcessMIA):
                             output=False,
                             optional=True,
                             desc=interpolation_desc))
-        
+
+        self.add_trait("use_histogram_matching",
+                       List(Bool(),
+                            default=Undefined,
+                            output=False,
+                            optional=True,
+                            desc=use_histogram_matching_desc))
+
         # Outputs traits
         self.add_trait("composite_transform",
                        File(Undefined,
@@ -833,7 +883,7 @@ class Registration(ProcessMIA):
             print('\nInitialisation failed. Please, set both (or none) of the two input '
                   'parameters sampling_percentage and sampling_strategy ...!')
             return
-        
+
         if self.convergence_threshold != Undefined and self.number_of_iterations == Undefined:
             print('\nInitialisation failed. Please, set number_of_iterations input if'
                   'convergence_threshold input is set...!')
@@ -843,7 +893,7 @@ class Registration(ProcessMIA):
             print('\nInitialisation failed. Please, set convergence_threshold input if'
                   'convergence_window_size input is set...!')
             return
-        
+
         # Outputs definition and tags inheritance (optional)
         if self.moving_image:
 
@@ -912,7 +962,6 @@ class Registration(ProcessMIA):
         self.process.initial_moving_transform = self.initial_moving_transform
         self.process.fixed_image_masks = self.fixed_image_masks
         self.process.moving_image_masks = self.moving_image_masks
-        
         self.process.metric = self.metric
         self.process.metric_weight = self.metric_weight
         self.process.shrink_factors = self.shrink_factors
@@ -926,13 +975,17 @@ class Registration(ProcessMIA):
         self.process.transforms = self.transforms
         self.process.transform_parameters = self.transform_parameters
         self.process.interpolation = self.interpolation
-        
+
+        if self.use_histogram_matching:
+            self.process.use_histogram_matching = self.use_histogram_matching
+        else:
+            self.process.use_histogram_matching = [True] * len(self.metric)
+
         # default inputs
         self.process.dimension = 3
         self.process.output_warped_image = self.warped_image
         self.process.sigma_units = ['vox'] * len(self.metric)
         self.process.use_estimate_learning_rate_once = [True] * len(self.metric)
-        self.process.use_histogram_matching = [True] * len(self.metric)
         self.process.winsorize_lower_quantile = 0.005
         self.process.winsorize_upper_quantile = 0.995
         self.process.write_composite_transform = True
@@ -940,5 +993,6 @@ class Registration(ProcessMIA):
         fileName, _ = ifile.rsplit('.', 1)
         self.process.output_transform_prefix = fileName + '_'
         self.process.collapse_output_transforms = True
-        
+        self.process.radius_bins_item_trait = 5
+
         return self.process.run(configuration_dict={})
