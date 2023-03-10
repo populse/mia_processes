@@ -79,7 +79,7 @@ from scipy.stats import kurtosis  # pylint: disable=E0611
 import shutil
 from skimage.transform import resize
 
-DIETRICH_FACTOR = 1.0 / sqrt(2 / (4 - pi))
+DIETRICH_FACTOR = 0.6551364 #1.0 / sqrt(2 / (4 - pi))
 FSL_FAST_LABELS = {"csf": 1, "gm": 2, "wm": 3, "bg": 0}
 RAS_AXIS_ORDER = {"x": 0, "y": 1, "z": 2}
 
@@ -117,9 +117,9 @@ class AnatIQMs(ProcessMIA):
         artmask_desc = ('Artifact mask image (a pathlike object or string '
                         'representing a file).')
         headmask_desc = ('Head mask image (a pathlike object or string '
-                        'representing a file).')
-        rotmask_desc = ('Rotation mask image (a pathlike object or string '
                          'representing a file).')
+        rotmask_desc = ('Rotation mask image (a pathlike object or string '
+                        'representing a file).')
         hatmask_desc = ('Hat mask image (a pathlike object or string '
                         'representing a file).')
         segmentation_desc = ('Segmentation mask image (a pathlike object or '
@@ -401,7 +401,9 @@ class AnatIQMs(ProcessMIA):
 
             snrvals = []
             results_dict["snrd"] = {
-                tlabel: snr_dietrich(stats[tlabel]["median"], stats["bg"]["mad"])
+                tlabel: snr_dietrich(stats[tlabel]["median"],
+                                     mad_air=stats["bg"]["mad"],
+                                     sigma_air=stats["bg"]["stdv"])
                 for tlabel in ["csf", "wm", "gm"]
             }
             results_dict["snrd"]["total"] = float(
@@ -1522,7 +1524,7 @@ class FWHMx(ProcessMIA):
         in_file_desc = ('Input image (a pathlike object or string '
                         'representing a file).')
         mask_file_desc = ('Mask image (a pathlike object or string '
-                        'representing a file).')
+                          'representing a file).')
         combine_desc = 'Combine the final measurements along each axis (a bool).'
         detrend_desc = 'detrend to the specified order (a bool or an int).'
         out_prefix_desc = ('Specify the string to be prepended to the '
@@ -1673,7 +1675,7 @@ class GCOR(ProcessMIA):
         in_file_desc = ('Input image (a pathlike object or string '
                         'representing a file).')
         mask_file_desc = ('Mask image (a pathlike object or string '
-                        'representing a file).')
+                          'representing a file).')
 
         # Outputs description
         out_desc = 'Global correlation value (a float).'
@@ -1808,9 +1810,9 @@ class Mean_stdDev_calc(ProcessMIA):
                                        desc=mean_out_files_desc))
 
         self.add_trait("std_out_files",
-                        OutputMultiPath(File(),
-                                        output=True,
-                                        desc=std_out_files_desc))
+                       OutputMultiPath(File(),
+                                       output=True,
+                                       desc=std_out_files_desc))
 
         # Special parameter used as a messenger for the run_process_mia method
         self.add_trait("dict4runtime",
@@ -1852,9 +1854,9 @@ class Mean_stdDev_calc(ProcessMIA):
                       'aborted...'.format(self.parametric_maps[0]))
                 return self.make_initResult()
 
-
             self.dict4runtime['patient_name'] = patient_name
-            roi_dir = os.path.join(self.output_directory, 'roi_' + patient_name)
+            roi_dir = os.path.join(self.output_directory,
+                                   'roi_' + patient_name)
 
             if not os.path.isdir(roi_dir):
                 print(
@@ -1885,11 +1887,11 @@ class Mean_stdDev_calc(ProcessMIA):
                     # spmT_BOLD or beta_BOLD
                     map_name = os.path.basename(parametric_map)[0:4] + '_BOLD'
                     mean_out_files.append(os.path.join(
-                                 analysis_dir,
-                                 roi[0] + roi[1] + '_mean' + map_name + '.txt'))
+                        analysis_dir,
+                        roi[0] + roi[1] + '_mean' + map_name + '.txt'))
                     std_out_files.append(os.path.join(
-                                  analysis_dir,
-                                  roi[0] + roi[1] + '_std' + map_name + '.txt'))
+                        analysis_dir,
+                        roi[0] + roi[1] + '_std' + map_name + '.txt'))
 
             self.outputs['mean_out_files'] = mean_out_files
             self.outputs['std_out_files'] = std_out_files
@@ -1900,7 +1902,7 @@ class Mean_stdDev_calc(ProcessMIA):
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
         # No need the next line (we don't use self.process and SPM)
-        #super(Mean_stdDev_calc, self).run_process_mia()
+        # super(Mean_stdDev_calc, self).run_process_mia()
 
         roi_dir = os.path.join(self.output_directory,
                                'roi_' + self.dict4runtime['patient_name'])
@@ -1948,7 +1950,7 @@ class Mean_stdDev_calc(ProcessMIA):
             if roi_size != map_data.shape[:3]:
                 map_data_max = max(map_data.max(), -map_data.min())
                 map_data = resize(
-                               map_data / map_data_max, roi_size) * map_data_max
+                    map_data / map_data_max, roi_size) * map_data_max
 
             for roi in self.doublet_list:
                 # Reading ROI file
@@ -2005,8 +2007,8 @@ class Mean_stdDev_calc(ProcessMIA):
                 # Writing the value in the corresponding file:
                 # analysis_dir'/'roi[0]roi[1]'_mean'map_name'.txt')
                 mean_out_file = os.path.join(
-                                  analysis_dir,
-                                  roi[0] + roi[1] + '_mean' + map_name + '.txt')
+                    analysis_dir,
+                    roi[0] + roi[1] + '_mean' + map_name + '.txt')
 
                 with open(mean_out_file, 'w') as f:
                     f.write("%.3f" % mean_result)
@@ -2014,8 +2016,8 @@ class Mean_stdDev_calc(ProcessMIA):
                 # Writing the value in the corresponding file:
                 # analysis_dir'/'roi[0]roi[1]'_std'map_name'.txt')
                 std_out_file = os.path.join(
-                                   analysis_dir,
-                                   roi[0] + roi[1] + '_std' + map_name + '.txt')
+                    analysis_dir,
+                    roi[0] + roi[1] + '_std' + map_name + '.txt')
 
                 with open(std_out_file, 'w') as f:
                     f.write("%.3f" % std_result)
@@ -2047,7 +2049,7 @@ class OutlierCount(ProcessMIA):
         in_file_desc = ('Input image (a pathlike object or string '
                         'representing a file).')
         mask_file_desc = ('Mask image (a pathlike object or string '
-                        'representing a file).')
+                          'representing a file).')
         fraction_desc = 'Combine the final measurements along each axis (a bool).'
         out_prefix_desc = ('Specify the string to be prepended to the '
                            'filenames of the output image file '
@@ -2315,7 +2317,7 @@ class Result_collector(ProcessMIA):
         parametric_maps_desc = "A list of files (existing, uncompressed file)"
         data_desc = "Defines the data type (a string, e.g. BOLD)"
         calculs_desc = ('Defines the type of calculation (a list of strings, '
-                       'e.g. ["mean", "std", "IL_mean", "IL_std"]')
+                        'e.g. ["mean", "std", "IL_mean", "IL_std"]')
         mean_in_files_desc = ("A list of .txt files containing the average "
                               "value of a parameter for a given territory or "
                               "region of interest (a list of files)")
@@ -2326,7 +2328,7 @@ class Result_collector(ProcessMIA):
                              '(e.g. [["ROI_OCC", "_L"], ["ROI_OCC", "_R"], '
                              '["ROI_PAR", "_l"], ...]')
         patient_info_desc = ("A dictionary whose keys/values correspond to "
-                            "information about the patient "
+                             "information about the patient "
                              "(e.g. {"
                              "'name': 'ablair','patho': 'ACMD', "
                              "'age': 64, 'sex': 'M', 'mr': '3T', "
@@ -2348,11 +2350,11 @@ class Result_collector(ProcessMIA):
                                      desc=data_desc))
 
         self.add_trait("calculs",
-                        traits.List(traits.String(),
-                                    value=["mean", "std", "IL_mean", "IL_std"],
-                                    output=False,
-                                    optional=True,
-                                    desc=calculs_desc))
+                       traits.List(traits.String(),
+                                   value=["mean", "std", "IL_mean", "IL_std"],
+                                   output=False,
+                                   optional=True,
+                                   desc=calculs_desc))
 
         self.add_trait("mean_in_files",
                        traits.List(traits.File(),
@@ -2421,7 +2423,8 @@ class Result_collector(ProcessMIA):
                 return self.make_initResult()
 
             self.dict4runtime['patient_name'] = patient_name
-            roi_dir = os.path.join(self.output_directory, 'roi_' + patient_name)
+            roi_dir = os.path.join(self.output_directory,
+                                   'roi_' + patient_name)
 
             if not os.path.isdir(roi_dir):
                 print("\nResult_collector brick:\nNo {} folder detected ..."
@@ -2441,11 +2444,13 @@ class Result_collector(ProcessMIA):
             for parametric_map in self.parametric_maps:
 
                 for calcul in self.calculs:
-                    out_files.append(os.path.join(analysis_dir,
-                                                  "{0}_{1}_{2}.xls".format(
-                                        self.data,
-                                        calcul,
-                                        os.path.basename(parametric_map)[0:9])))
+                    out_files.append(
+                        os.path.join(analysis_dir,
+                                     "{0}_{1}_{2}.xls".format(
+                                         self.data,
+                                         calcul,
+                                         os.path.basename(
+                                             parametric_map)[0:9])))
 
             self.outputs['out_files'] = out_files
 
@@ -2562,7 +2567,6 @@ class Result_collector(ProcessMIA):
                                       'found ...\n'.format(roi_file))
                                 f.write("Undefined\t")
 
-
                     elif calcul == 'IL_mean':
                         roi_checked = []
 
@@ -2571,7 +2575,8 @@ class Result_collector(ProcessMIA):
                             if roi[0] in roi_checked:
                                 continue
 
-                            roi_file = os.path.join(analysis_dir,
+                            roi_file = os.path.join(
+                                analysis_dir,
                                 "{0}_mean{1}_{2}.txt".format(roi[0] + roi[1],
                                                              map_name,
                                                              self.data))
@@ -2587,15 +2592,15 @@ class Result_collector(ProcessMIA):
 
                             # Searching the ROI that has the same first element
                             roi_2 = [s for s in self.doublet_list
-                                                if roi[0] in s[0] and
-                                                        roi[1] != s[1]][0]
+                                     if roi[0] in s[0] and
+                                     roi[1] != s[1]][0]
                             roi_file_2 = os.path.join(
-                                                analysis_dir,
-                                                "{0}_mean{1}_{2}."
-                                                "txt".format(
-                                                            roi_2[0] + roi_2[1],
-                                                            map_name,
-                                                            self.data))
+                                analysis_dir,
+                                "{0}_mean{1}_{2}."
+                                "txt".format(
+                                    roi_2[0] + roi_2[1],
+                                    map_name,
+                                    self.data))
                             try:
                                 with open(roi_file_2, 'r') as f_read:
                                     roi_value_2 = float(f_read.read())
@@ -2627,10 +2632,10 @@ class Result_collector(ProcessMIA):
 
                         for roi in self.doublet_list:
                             roi_file = os.path.join(
-                                    analysis_dir,
-                                    "{0}_std{1}_{2}.txt".format(roi[0] + roi[1],
-                                                                map_name,
-                                                                self.data))
+                                analysis_dir,
+                                "{0}_std{1}_{2}.txt".format(roi[0] + roi[1],
+                                                            map_name,
+                                                            self.data))
 
                             try:
 
@@ -2653,10 +2658,10 @@ class Result_collector(ProcessMIA):
                                 continue
 
                             roi_file = os.path.join(
-                                    analysis_dir,
-                                    "{0}_std{1}_{2}.txt".format(roi[0] + roi[1],
-                                                                map_name,
-                                                                self.data))
+                                analysis_dir,
+                                "{0}_std{1}_{2}.txt".format(roi[0] + roi[1],
+                                                            map_name,
+                                                            self.data))
 
                             try:
 
@@ -2670,14 +2675,15 @@ class Result_collector(ProcessMIA):
 
                             # Searching the roi that has the same first element
                             roi_2 = [s for s in self.doublet_list if
-                                             roi[0] in s[0] and
-                                                 roi[1] != s[1]][0]
+                                     roi[0] in s[0] and
+                                     roi[1] != s[1]][0]
 
                             roi_file_2 = os.path.join(
                                 analysis_dir,
-                                "{0}_std{1}_{2}.txt".format(roi_2[0] + roi_2[1],
-                                                            map_name,
-                                                            self.data))
+                                "{0}_std{1}_{2}.txt".format(
+                                    roi_2[0] + roi_2[1],
+                                    map_name,
+                                    self.data))
 
                             try:
                                 with open(roi_file_2, 'r') as f_read:
@@ -2907,15 +2913,19 @@ class Spikes(ProcessMIA):
 
 def art_qi1(airmask, artmask):
     r"""
-    Detect artifacts in the image using the method described in [Mortamet2009]_.
+    Detect artifacts in the image using the method described in [Mortamet2009].
     Caculates :math:`\text{QI}_1`, as the proportion of voxels with intensity
-    corrupted by artifacts normalized by the number of voxels in the background:
+    corrupted by artifacts normalized by the number of voxels in the
+    background:
     .. math ::
         \text{QI}_1 = \frac{1}{N} \sum\limits_{x\in X_\text{art}} 1
     Lower values are better.
     :param numpy.ndarray airmask: input air mask, without artifacts
     :param numpy.ndarray artmask: input artifacts mask
     """
+
+    if airmask.sum() < 1:
+        return -1.0
 
     # Count the number of voxels that remain after the opening operation.
     # These are artifacts.
@@ -2966,7 +2976,8 @@ def art_qi2(img, airmask, min_voxels=int(1e3), max_voxels=int(3e5)):
     # Compute goodness-of-fit (gof)
     gof = float(np.abs(kde[-kdethi:] - chi_pdf[-kdethi:]).mean())
 
-    hist_dict = {'x_grid': x_grid.tolist(), 'ref_pdf': kde.tolist(), 'fit_pdf': chi_pdf.tolist(),
+    hist_dict = {'x_grid': x_grid.tolist(), 'ref_pdf': kde.tolist(),
+                 'fit_pdf': chi_pdf.tolist(),
                  'ref_data': modelx.tolist(), 'cutoff_idx': float(kdethi)}
     return gof, hist_dict
 
@@ -3127,7 +3138,8 @@ def gsr(epi_data, mask, direction="y", ref_file=None, out_file=None):
     direction = direction.lower()
     if direction[-1] not in ["x", "y", "all"]:
         raise Exception(
-            "Unknown direction {}, should be one of x, -x, y, -y, all".format(direction)
+            "Unknown direction {}, should be one of x, -x, y, -y, all".format(
+                direction)
         )
 
     if direction == "all":
@@ -3140,7 +3152,8 @@ def gsr(epi_data, mask, direction="y", ref_file=None, out_file=None):
                     fname, ext2 = os.path.splitext(fname)
                     ext = ext2 + ext
                 ofile = "{0}_{1}{2}".format(fname, newdir, ext)
-            result += [gsr(epi_data, mask, newdir, ref_file=ref_file, out_file=ofile)]
+            result += [gsr(epi_data, mask, newdir, ref_file=ref_file,
+                           out_file=ofile)]
         return result
 
     # Roll data of mask through the appropriate axis
@@ -3260,8 +3273,8 @@ def rpve(pvms, seg):
         pvmap[pvmap < loth] = 0
         pvmap[pvmap > upth] = 0
         pvfs[k] = (
-                          pvmap[pvmap > 0.5].sum() + (1.0 - pvmap[pvmap <= 0.5]).sum()
-                  ) / totalvol
+            pvmap[pvmap > 0.5].sum() + (1.0 - pvmap[pvmap <= 0.5]).sum()
+        ) / totalvol
     return {k: float(v) for k, v in list(pvfs.items())}
 
 
@@ -3282,23 +3295,30 @@ def snr(mu_fg, sigma_fg, n):
     return float(mu_fg / (sigma_fg * sqrt(n / (n - 1))))
 
 
-def snr_dietrich(mu_fg, sigma_air):
+def snr_dietrich(mu_fg, mad_air=0.0, sigma_air=1.0):
     r"""
     Calculate the :abbr:`SNR (Signal-to-Noise Ratio)`.
+
     This must be an air mask around the head, and it should not contain artifacts.
     The computation is done following the eq. A.12 of [Dietrich2007]_, which
     includes a correction factor in the estimation of the standard deviation of
     air and its Rayleigh distribution:
+
     .. math::
+
         \text{SNR} = \frac{\mu_F}{\sqrt{\frac{2}{4-\pi}}\,\sigma_\text{air}}.
+
+
     :param float mu_fg: mean of foreground.
     :param float sigma_air: standard deviation of the air surrounding the head ("hat" mask).
-    :return: the computed SNR for the foreground segmentation
-    """
-    if sigma_air < 1.0:
-        sigma_air += 1.0
 
-    return float(DIETRICH_FACTOR * mu_fg / sigma_air)
+    :return: the computed SNR for the foreground segmentation
+
+    """
+    if mad_air > 1.0:
+        return float(DIETRICH_FACTOR * mu_fg / mad_air)
+    
+    return float(DIETRICH_FACTOR * mu_fg / sigma_air) if sigma_air > 1e-3 else -1.0
 
 
 def summary_stats(img, pvms, airmask=None, erode=True):
@@ -3353,8 +3373,18 @@ def summary_stats(img, pvms, airmask=None, erode=True):
                 int(nvox),
             )
             if k == "bg":
+                output["bg"] = {
+                    "mean": 0.0,
+                    "median": 0.0,
+                    "p95": 0.0,
+                    "p05": 0.0,
+                    "k": 0.0,
+                    "stdv": 0.0,
+                    "mad": 0.0,
+                    "n": nvox,
+                }
                 continue
-
+        
         output[k] = {
             "mean": float(img[mask == 1].mean()),
             "stdv": float(img[mask == 1].std()),
@@ -3366,24 +3396,6 @@ def summary_stats(img, pvms, airmask=None, erode=True):
             "n": nvox,
         }
 
-    if "bg" not in output:
-        output["bg"] = {
-            "mean": 0.0,
-            "median": 0.0,
-            "p95": 0.0,
-            "p05": 0.0,
-            "k": 0.0,
-            "stdv": sqrt(sum(val["stdv"] ** 2 for _, val in list(output.items()))),
-            "mad": sqrt(sum(val["mad"] ** 2 for _, val in list(output.items()))),
-            "n": sum(val["n"] for _, val in list(output.items())),
-        }
-
-    if "bg" in output and output["bg"]["mad"] == 0.0 and output["bg"]["stdv"] > 1.0:
-        print(
-            "estimated MAD in the background was too small (MAD=%f)",
-            output["bg"]["mad"],
-        )
-        output["bg"]["mad"] = output["bg"]["stdv"] / DIETRICH_FACTOR
     return output
 
 
