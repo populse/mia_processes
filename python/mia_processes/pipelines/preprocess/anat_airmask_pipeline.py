@@ -14,6 +14,7 @@ class Anat_airmask_pipeline(Pipeline):
         self.nodes["template"].process.resolution = 1
         self.nodes["template"].process.suffix = 'mask'
         self.nodes["template"].process.desc = 'head'
+        self.nodes["applytransforms"].process.interpolation = 'MultiLabel'
 
         # links
         self.export_parameter("artifactmask", "in_file", is_optional=False)
