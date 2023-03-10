@@ -311,16 +311,16 @@ class Binarize(ProcessMIA):
         # Outputs definition and tags inheritance (optional)
         if (self.min != Undefined or
                 self.max != Undefined) and self.match != Undefined:
-            print('\nInitialisation failed. 'match' parameter can not be used '
-                  'with 'min' and/or 'max' parameters'
-                  ' Please, define only 'min'/'max' paremeters or 'match''
+            print('\nInitialisation failed. "match" parameter can not be used '
+                  'with "min" and/or "max" parameters'
+                  ' Please, define only "min"/"max" paremeters or "match"'
                   'parameters (set the other as Undefined) ...!')
             return
         if (self.min != Undefined or
                 self.max != Undefined) and self.wm_ven_csf:
-            print('\nInitialisation failed. 'wm_ven_csf' parameter can not'
-                  'be used  with 'min' and/or 'max' parameters'
-                  ' Please, define only 'min'/'max' paremeters or 'wm_ven_csf''
+            print('\nInitialisation failed. "wm_ven_csf" parameter can not'
+                  'be used  with "min" and/or "max" parameters'
+                  ' Please, define only "min"/"max" paremeters or "wm_ven_csf"'
                   'parameters (set the other as Undefined) ...!')
             return
         if self.in_file:
