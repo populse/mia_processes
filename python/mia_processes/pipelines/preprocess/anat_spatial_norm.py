@@ -10,19 +10,20 @@ class Anat_spatial_norm(Pipeline):
         self.add_process("mask_fixed_image", "mia_processes.bricks.preprocess.others.processing.Mask")
         self.add_process("affine_initializer", "mia_processes.bricks.preprocess.ants.processes.AffineInitializer")
         self.add_process("registration", "mia_processes.bricks.preprocess.ants.processes.Registration")
-        self.nodes["registration"].process.convergence_threshold = [1e-06, 1e-06, 1e-06]
-        self.nodes["registration"].process.convergence_window_size = [20, 20, 10]
+        self.nodes["registration"].process.convergence_threshold = [1e-07, 1e-08]
+        self.nodes["registration"].process.convergence_window_size = [15, 5, 3]
         self.nodes["registration"].process.interpolation = 'LanczosWindowedSinc'
-        self.nodes["registration"].process.metric = ['Mattes', 'Mattes', 'Mattes']
-        self.nodes["registration"].process.metric_weight = [1, 1, 1]
-        self.nodes["registration"].process.number_of_iterations = [[1000], [500, 250, 100], [50, 20]]
-        self.nodes["registration"].process.radius_or_number_of_bins = [32, 32, 56]
-        self.nodes["registration"].process.sampling_percentage = [0.15, 0.15, 0.25]
-        self.nodes["registration"].process.sampling_strategy = ['Random', 'Regular', 'Regular']
-        self.nodes["registration"].process.shrink_factors = [[4], [4, 2, 1], [2, 1]]
-        self.nodes["registration"].process.smoothing_sigmas = [[4.0], [4.0, 2.0, 0.0], [1.0, 0.0]]
-        self.nodes["registration"].process.transform_parameters = [(0.01,), (0.08,), (0.1, 3.0, 0.0)]
-        self.nodes["registration"].process.transforms = ['Rigid', 'Affine', 'SyN']
+        self.nodes["registration"].process.metric = ['Mattes', 'Mattes']
+        self.nodes["registration"].process.metric_weight = [1, 1]
+        self.nodes["registration"].process.number_of_iterations = [[20], [15]]
+        self.nodes["registration"].process.radius_or_number_of_bins = [56, 56]
+        self.nodes["registration"].process.sampling_percentage = [0.2, 0.1]
+        self.nodes["registration"].process.sampling_strategy = ['Random', 'Random']
+        self.nodes["registration"].process.shrink_factors = [[2], [1]]
+        self.nodes["registration"].process.smoothing_sigmas = [[4.0], [2.0]]
+        self.nodes["registration"].process.transform_parameters = [(1.0,), (1.0,)]
+        self.nodes["registration"].process.transforms = ['Rigid', 'Affine']
+        self.nodes["registration"].process.use_histogram_matching = [False, True]
         self.add_process("template_mask", "mia_processes.bricks.preprocess.others.processing.Template")
         self.nodes["template_mask"].process.suffix = 'mask'
         self.nodes["template_mask"].process.desc = 'brain'
