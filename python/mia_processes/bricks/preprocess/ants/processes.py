@@ -753,8 +753,8 @@ class Registration(ProcessMIA):
                             desc=metric_desc))
 
         self.add_trait("metric_weight",
-                       List(Int(),
-                            default=[1, 1, 1],
+                       List(Float(),
+                            default=[1.0, 1.0, 1.0],
                             output=False,
                             optional=True,
                             desc=metric_weight_desc))
