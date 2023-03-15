@@ -2323,12 +2323,6 @@ class Result_collector(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(Result_collector, self).__init__()
 
-        # FIXME: We need to use the database to retrieve information such as
-        #        name, pathology, etc.
-        #        This cannot be hard-coded into the script.
-        patient_info_dict = {"name": "alej170316_testMIA24052018", "patho": "ACMD", "age": 64, "sex": "M",
-                             "mr": "3T", "gas": "BACTAL", "admin": "MASK"}
-
         # Inputs description
         parametric_maps_desc = "A list of files (existing, uncompressed file)"
         data_desc = "Defines the data type (a string, e.g. BOLD)"
@@ -2346,14 +2340,15 @@ class Result_collector(ProcessMIA):
         patient_info_desc = ("A dictionary whose keys/values correspond to "
                              "information about the patient "
                              "(e.g. {"
-                             "'name': 'ablair','patho': 'ACMD', "
-                             "'age': 64, 'sex': 'M', 'mr': '3T', "
-                             "'gas': 'BACTAL', 'admin': 'MASK'}")
+                             "'PatientName': 'ablair','Pathology': 'ACMD', "
+                             "'Age': 64, 'Sex': 'M', 'MR': '3T', "
+                             "'Gas': 'BACTAL', 'GasAdmin': 'MASK'}")
 
         # Outputs description
-        out_files_desc = ""
+        out_files_desc = ("A list of .xml files containing a summary of the "
+                         "requested results")
 
-        # Inputs description
+        # Inputs traits
         self.add_trait("parametric_maps",
                        traits.List(traits.File(exists=True),
                                    output=False,
@@ -2387,12 +2382,20 @@ class Result_collector(ProcessMIA):
                                    desc=doublet_list_desc))
 
         self.add_trait("patient_info",
-                       traits.Dict(patient_info_dict,
+                       #traits.Dict(patient_info_dict,
+                       traits.Dict(
                                    output=False,
                                    optional=True,
                                    desc=patient_info_desc))
+        self.patient_info = dict(PatientName=Undefined,
+                                 Pathology=Undefined,
+                                 Age=Undefined,
+                                 Sex=Undefined,
+                                 MR=Undefined,
+                                 Gas=Undefined,
+                                 GasAdmin=Undefined)
 
-        # Inputs description
+        # Outputs traits
         self.add_trait("out_files",
                        traits.List(traits.File(),
                                    output=True,
@@ -2424,9 +2427,12 @@ class Result_collector(ProcessMIA):
 
         # Outputs definition and tags inheritance (optional)
         if self.calculs != Undefined and self.parametric_maps != Undefined:
-            # FIXME: We retrieve the name of the patient from the first element
-            #        of parametric_maps. This is only fine if all the elements
-            #        of parametric_maps correspond to the same patient.
+            # FIXME 1: We retrieve the name of the patient from the first
+            #          element of parametric_maps. This is only fine if all the
+            #          elements of parametric_maps correspond to the same
+            #          patient.
+            # FIXME 2: The data should be anonymised and we should use
+            #          PatientRef instead of PatientName !
             patient_name = get_dbFieldValue(self.project,
                                             self.parametric_maps[0],
                                             'PatientName')
@@ -2436,6 +2442,7 @@ class Result_collector(ProcessMIA):
                       'filled in the database for the {} file ...\n The '
                       'initialization is '
                       'aborted...'.format(self.parametric_maps[0]))
+
                 return self.make_initResult()
 
             self.dict4runtime['patient_name'] = patient_name
@@ -2470,6 +2477,92 @@ class Result_collector(ProcessMIA):
 
             self.outputs['out_files'] = out_files
 
+            # FIXME: the data should be anonymised and we should use PatientRef
+            #        instead of PatientName !
+            if (self.patient_info.get('PatientName') is None or
+                                 self.patient_info['PatientName'] == Undefined):
+                patient_ref = get_dbFieldValue(self.project,
+                                               self.parametric_maps[0],
+                                               'PatientRef')
+
+                if patient_ref is None:
+                    self.patient_info['PatientName'] = patient_name
+
+                else:
+                    self.patient_info['PatientName'] = patient_ref
+
+            if (self.patient_info.get('Pathology') is None or
+                                   self.patient_info['Pathology'] == Undefined):
+                pathology = get_dbFieldValue(self.project,
+                                             self.parametric_maps[0],
+                                             'Pathology')
+
+                if pathology is None:
+                    self.patient_info['Pathology'] = 'Undefined'
+
+                else:
+                    self.patient_info['Pathology'] = pathology
+
+            if (self.patient_info.get('Age') is None or
+                                         self.patient_info['Age'] == Undefined):
+                age = get_dbFieldValue(self.project,
+                                       self.parametric_maps[0],
+                                       'Age')
+
+                if age is None:
+                    self.patient_info['Age'] = 'Undefined'
+
+                else:
+                    self.patient_info['Age'] = age
+
+            if (self.patient_info.get('Sex') is None or
+                                         self.patient_info['Sex'] == Undefined):
+                sex = get_dbFieldValue(self.project,
+                                       self.parametric_maps[0],
+                                       'Sex')
+
+                if sex is None:
+                    self.patient_info['Sex'] = 'Undefined'
+
+                else:
+                    self.patient_info['Sex'] = sex
+
+            if (self.patient_info.get('MR') is None or
+                                          self.patient_info['MR'] == Undefined):
+                mr = get_dbFieldValue(self.project,
+                                      self.parametric_maps[0],
+                                      'MR')
+
+                if mr is None:
+                    self.patient_info['MR'] = 'Undefined'
+
+                else:
+                    self.patient_info['MR'] = mr
+
+            if (self.patient_info.get('Gas') is None or
+                                         self.patient_info['Gas'] == Undefined):
+                gas = get_dbFieldValue(self.project,
+                                       self.parametric_maps[0],
+                                       'Gas')
+
+                if gas is None:
+                    self.patient_info['Gas'] = 'Undefined'
+
+                else:
+                    self.patient_info['Gas'] = gas
+
+            if (self.patient_info.get('GasAdmin') is None or
+                                    self.patient_info['GasAdmin'] == Undefined):
+                gas_admin = get_dbFieldValue(self.project,
+                                             self.parametric_maps[0],
+                                             'GasAdmin')
+
+                if gas_admin is None:
+                    self.patient_info['GasAdmin'] = 'Undefined'
+
+                else:
+                    self.patient_info['GasAdmin'] = gas_admin
+
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
 
@@ -2478,7 +2571,7 @@ class Result_collector(ProcessMIA):
         # No need the next line (we don't use self.process and SPM)
         #super(Mean_stdDev_calc, self).run_process_mia()
 
-        # Getting the C (doublet_list without hemisphere)
+        # Getting the list of all positions (doublet_list without hemisphere)
         roi_list = []  # list of all ROIs
 
         for roi in self.doublet_list:
@@ -2525,43 +2618,14 @@ class Result_collector(ProcessMIA):
                             f.write("{0}_{1}\t".format(map_name, pos))
 
                     # FIXME: We should iterate on each patient here ?
-                    f.write("\n{0}\t".format(self.patient_info["name"]))
-
-                    if "patho" in self.patient_info.keys():
-                        f.write("{0}\t".format(self.patient_info["patho"]))
-
-                    else:
-                        f.write("Undefined\t")
-
-                    if "age" in self.patient_info.keys():
-                        f.write("%3.1f\t" % self.patient_info["age"])
-
-                    else:
-                        f.write("Undefined\t")
-
-                    if "sex" in self.patient_info.keys():
-                        f.write("{0}\t".format(self.patient_info["sex"]))
-
-                    else:
-                        f.write("Undefined\t")
-
-                    if "mr" in self.patient_info.keys():
-                        f.write("{0}\t".format(self.patient_info["mr"]))
-
-                    else:
-                        f.write("Undefined\t")
-
-                    if "gas" in self.patient_info.keys():
-                        f.write("{0}\t".format(self.patient_info["gas"]))
-
-                    else:
-                        f.write("Undefined\t")
-
-                    if "admin" in self.patient_info.keys():
-                        f.write("{0}\t".format(self.patient_info["admin"]))
-
-                    else:
-                        f.write("Undefined\t")
+                    f.write("\n{0}\t".format(self.patient_info["PatientName"]))
+                    f.write("{0}\t".format(self.patient_info["Pathology"]))
+                    #f.write("%3.1f\t" % self.patient_info["Age"])
+                    f.write("{0}\t".format(self.patient_info["Age"]))
+                    f.write("{0}\t".format(self.patient_info["Sex"]))
+                    f.write("{0}\t".format(self.patient_info["MR"]))
+                    f.write("{0}\t".format(self.patient_info["Gas"]))
+                    f.write("{0}\t".format(self.patient_info["GasAdmin"]))
 
                     if calcul == 'mean':
 
