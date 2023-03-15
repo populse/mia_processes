@@ -79,7 +79,7 @@ from scipy.stats import kurtosis  # pylint: disable=E0611
 import shutil
 from skimage.transform import resize
 
-DIETRICH_FACTOR = 0.6551364 #1.0 / sqrt(2 / (4 - pi))
+DIETRICH_FACTOR = 0.6551364  # 1.0 / sqrt(2 / (4 - pi))
 FSL_FAST_LABELS = {"csf": 1, "gm": 2, "wm": 3, "bg": 0}
 RAS_AXIS_ORDER = {"x": 0, "y": 1, "z": 2}
 
@@ -378,7 +378,8 @@ class AnatIQMs(ProcessMIA):
 
         has_stats = False
         if has_in_noinu and has_pvms and has_airmask:
-            erode = np.all(np.array(imnii.header.get_zooms()[:3], dtype=np.float32) < 1.9)
+            erode = np.all(np.array(imnii.header.get_zooms()[:3],
+                                    dtype=np.float32) < 1.9)
 
             # Summary stats
             stats = summary_stats(inudata, pvmdata, airdata, erode=erode)
@@ -486,7 +487,8 @@ class AnatIQMs(ProcessMIA):
                 "z": int(inudata.shape[2]),
             }
             results_dict["spacing"] = {
-                i: float(v) for i, v in zip(["x", "y", "z"], imnii.header.get_zooms()[:3])
+                i: float(v) for i, v in zip(["x", "y", "z"],
+                                            imnii.header.get_zooms()[:3])
             }
 
             try:
@@ -567,8 +569,8 @@ class BoldIQMs(ProcessMIA):
         # Inputs description
         in_epi_desc = ('EPI input image (a pathlike object or string '
                        'representing a file).')
-        in_hmc_desc = ('Motion corrected input image (a pathlike object or string '
-                       'representing a file).')
+        in_hmc_desc = ('Motion corrected input image (a pathlike object or'
+                       'string representing a file).')
         in_tsnr_desc = ('tSNR input volume (a pathlike object or string '
                         'representing a file).')
         in_mask_desc = ('Input mask image (a pathlike object or string '
@@ -583,9 +585,9 @@ class BoldIQMs(ProcessMIA):
         in_dvars_file_desc = ('DVARS file (a pathlike object or string '
                               'representing a file).')
         in_fd_file_desc = ('FD file (a pathlike object or string '
-                              'representing a file).')
+                           'representing a file).')
         in_spikes_file_desc = ('Spikes file (a pathlike object or string '
-                              'representing a file).')
+                               'representing a file).')
         in_gcor_desc = 'Global correlation value (a float)'
         in_dummy_TRs_desc = 'Number of dummy scans (an int)'
 
@@ -779,7 +781,8 @@ class BoldIQMs(ProcessMIA):
             results_dict["gsr"] = {}
             epidir = ["x", "y"]
             for axis in epidir:
-                results_dict["gsr"][axis] = gsr(epidata, mskdata, direction=axis)
+                results_dict["gsr"][axis] = gsr(epidata, mskdata,
+                                                direction=axis)
 
         # aor
         if self.in_outliers_file:
@@ -915,7 +918,7 @@ class BoldIQMs(ProcessMIA):
                 print("\nError with fd file: ", e)
                 pass
             else:
-                for i in range(0,len(spikes_data[:, 0])):
+                for i in range(0, len(spikes_data[:, 0])):
                     spike_name = "vec_spikes_" + str(i)
                     results_dict[spike_name] = list(spikes_data[i, :])
 
@@ -971,7 +974,7 @@ class CarpetParcellation(ProcessMIA):
         segmentation_desc = ('EPI segmentation (a pathlike object or string '
                              'representing a file).')
         brainmask_desc = ('Brain mask (a pathlike object or string '
-                        'representing a file).')
+                          'representing a file).')
 
         out_prefix_desc = ('Specify the string to be prepended to the '
                            'segmentation filename of the output file (a string).')
@@ -1130,16 +1133,22 @@ class ComputeDVARS(ProcessMIA):
                         'representing a file).')
         in_mask_desc = ('Brain mask (a pathlike object or string '
                         'representing a file).')
-        remove_zero_variance_desc = 'Remove voxels with zero variance (a bool).'
-        intensity_normalization_desc = 'Divide value in each voxel at each timepoint ' \
-                                  'by the median calculated across all voxels' \
-                                  'and timepoints within the mask (if specified)' \
-                                  'and then multiply by the value specified by' \
-                                  'this parameter. By using the default (1000)' \
-                                  'output DVARS will be expressed in ' \
-                                  'x10 % BOLD units compatible with Power et al.' \
-                                  '2012. Set this to 0 to disable intensity' \
-                                  'normalization altogether. (a float)'
+        remove_zero_variance_desc = ('Remove voxels with zero variance'
+                                     '(a bool).')
+        intensity_normalization_desc = ('Divide value in each voxel at each'
+                                        'timepoint by the median calculated'
+                                        'across all voxels and timepoints'
+                                        'within the mask (if specified) and'
+                                        'then multiply by the value specified'
+                                        'by this parameter.'
+                                        'By using the default (1000)'
+                                        'output DVARS will be expressed in '
+                                        'x10 % BOLD units compatible'
+                                        'with Power et al.2012.'
+                                        'Set this to 0 to disable intensity'
+                                        'normalization altogether. (a float)')
+        variance_tol_desc = ('Maximum variance to consider "close to" zero'
+                             'for the purposes of removal')
         out_prefix_desc = ('Specify the string to be prepended to the '
                            'filename of the output file (a string).')
 
@@ -1169,6 +1178,12 @@ class ComputeDVARS(ProcessMIA):
                                     optional=True,
                                     output=False,
                                     desc=intensity_normalization_desc))
+
+        self.add_trait("variance_tol",
+                       traits.Float(0.0000001000,
+                                    optional=True,
+                                    output=False,
+                                    desc=variance_tol_desc))
 
         self.add_trait("out_prefix",
                        traits.String('dvars_',
@@ -1256,14 +1271,13 @@ class ComputeDVARS(ProcessMIA):
                                  '.out'))
 
         # Load data
-        func = nb.load(self.in_file).get_fdata(dtype=np.float32)
-        mask = np.asanyarray(nb.load(self.in_mask).dataobj).astype(np.uint8)
+        func = np.float32(nb.load(self.in_file).dataobj)
+        mask = np.bool_(nb.load(self.in_mask).dataobj)
 
         if len(func.shape) != 4:
             raise RuntimeError("Input fMRI dataset should be 4-dimensional")
 
-        idx = np.where(mask > 0)
-        mfunc = func[idx[0], idx[1], idx[2], :]
+        mfunc = func[mask]
 
         if self.intensity_normalization != 0:
             mfunc = (mfunc / np.median(mfunc)) * self.intensity_normalization
@@ -1271,17 +1285,19 @@ class ComputeDVARS(ProcessMIA):
         # Robust standard deviation (we are using "lower" interpolation
         # because this is what FSL is doing
         func_sd = (
-                          np.percentile(mfunc, 75, axis=1, interpolation="lower")
-                          - np.percentile(mfunc, 25, axis=1, interpolation="lower")
-                  ) / 1.349
+            np.percentile(mfunc, 75, axis=1, interpolation="lower")
+            - np.percentile(mfunc, 25, axis=1, interpolation="lower")
+        ) / 1.349
 
         if self.remove_zero_variance:
-            mfunc = mfunc[func_sd != 0, :]
-            func_sd = func_sd[func_sd != 0]
+            zero_variance_voxels = func_sd > self.variance_tol
+            mfunc = mfunc[zero_variance_voxels, :]
+            func_sd = func_sd[zero_variance_voxels]
 
         # Compute (non-robust) estimate of lag-1 autocorrelation
         ar1 = np.apply_along_axis(
-            AR_est_YW, 1, regress_poly(0, mfunc, remove_mean=True)[0].astype(np.float32), 1
+            _AR_est_YW, 1,
+            regress_poly(0, mfunc, remove_mean=True)[0].astype(np.float32), 1
         )[:, 0]
 
         # Compute (predicted) standard deviation of temporal difference time series
@@ -3317,7 +3333,7 @@ def snr_dietrich(mu_fg, mad_air=0.0, sigma_air=1.0):
     """
     if mad_air > 1.0:
         return float(DIETRICH_FACTOR * mu_fg / mad_air)
-    
+
     return float(DIETRICH_FACTOR * mu_fg / sigma_air) if sigma_air > 1e-3 else -1.0
 
 
@@ -3384,7 +3400,7 @@ def summary_stats(img, pvms, airmask=None, erode=True):
                     "n": nvox,
                 }
                 continue
-        
+    
         output[k] = {
             "mean": float(img[mask == 1].mean()),
             "stdv": float(img[mask == 1].std()),
@@ -3473,3 +3489,10 @@ def _robust_zscore(data):
     return (data - np.atleast_2d(np.median(data, axis=1)).T) / np.atleast_2d(
         data.std(axis=1)
     ).T
+
+
+def _AR_est_YW(x, order, rxx=None):
+    """Retrieve AR coefficients while dropping the sig_sq return value"""
+    from nitime.algorithms import AR_est_YW
+
+    return AR_est_YW(x, order, rxx=rxx)[0]
