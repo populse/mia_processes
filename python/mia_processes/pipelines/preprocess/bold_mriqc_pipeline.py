@@ -37,7 +37,8 @@ class Bold_mriqc_pipeline(Pipeline):
                          "mia_processes.bricks.preprocess.afni.processes."
                          "Automask")
         self.add_process("volreg",
-                         "mia_processes.bricks.preprocess.afni.processes.Volreg")
+                         "mia_processes.bricks.preprocess.afni.processes."
+                         "Volreg")
         self.nodes["volreg"].process.twopass = True
         self.add_process("bold_mni_align",
                          "mia_processes.pipelines.preprocess.bold_mni_align."

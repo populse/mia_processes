@@ -6,11 +6,20 @@ class Anat_spatial_norm(Pipeline):
 
     def pipeline_definition(self):
         # nodes
-        self.add_process("mask_moving_image", "mia_processes.bricks.preprocess.others.processing.Mask")
-        self.add_process("mask_fixed_image", "mia_processes.bricks.preprocess.others.processing.Mask")
-        self.add_process("affine_initializer", "mia_processes.bricks.preprocess.ants.processes.AffineInitializer")
-        self.add_process("registration", "mia_processes.bricks.preprocess.ants.processes.Registration")
-        self.nodes["registration"].process.convergence_threshold = [1e-07, 1e-08]
+        self.add_process("mask_moving_image",
+                         "mia_processes.bricks.preprocess."
+                         "others.processing.Mask")
+        self.add_process("mask_fixed_image",
+                         "mia_processes.bricks.preprocess."
+                         "others.processing.Mask")
+        self.add_process("affine_initializer",
+                         "mia_processes.bricks.preprocess."
+                         "ants.processes.AffineInitializer")
+        self.add_process("registration",
+                         "mia_processes.bricks.preprocess."
+                         "ants.processes.Registration")
+        self.nodes["registration"].process.convergence_threshold = [1e-07,
+                                                                    1e-08]
         self.nodes["registration"].process.convergence_window_size = [15, 5, 3]
         self.nodes["registration"].process.interpolation = 'LanczosWindowedSinc'
         self.nodes["registration"].process.metric = ['Mattes', 'Mattes']
@@ -18,39 +27,56 @@ class Anat_spatial_norm(Pipeline):
         self.nodes["registration"].process.number_of_iterations = [[20], [15]]
         self.nodes["registration"].process.radius_or_number_of_bins = [56, 56]
         self.nodes["registration"].process.sampling_percentage = [0.2, 0.1]
-        self.nodes["registration"].process.sampling_strategy = ['Random', 'Random']
+        self.nodes["registration"].process.sampling_strategy = ['Random',
+                                                                'Random']
         self.nodes["registration"].process.shrink_factors = [[2], [1]]
         self.nodes["registration"].process.smoothing_sigmas = [[4.0], [2.0]]
-        self.nodes["registration"].process.transform_parameters = [(1.0,), (1.0,)]
+        self.nodes["registration"].process.transform_parameters = [(1.0,),
+                                                                   (1.0,)]
         self.nodes["registration"].process.transforms = ['Rigid', 'Affine']
-        self.nodes["registration"].process.use_histogram_matching = [False, True]
-        self.add_process("template_mask", "mia_processes.bricks.preprocess.others.processing.Template")
+        self.nodes["registration"].process.use_histogram_matching = [False,
+                                                                     True]
+        self.add_process("template_mask",
+                         "mia_processes.bricks.preprocess."
+                         "others.processing.Template")
         self.nodes["template_mask"].process.suffix = 'mask'
         self.nodes["template_mask"].process.desc = 'brain'
         self.nodes["template_mask"].process.in_template = 'MNI152NLin2009cAsym'
         self.nodes["template_mask"].process.resolution = 2
-        self.add_process("template", "mia_processes.bricks.preprocess.others.processing.Template")
+        self.add_process("template",
+                         "mia_processes.bricks.preprocess."
+                         "others.processing.Template")
         self.nodes["template"].process.suffix = 'T1w'
         self.nodes["template"].process.in_template = 'MNI152NLin2009cAsym'
         self.nodes["template"].process.resolution = 2
 
         # links
-        self.export_parameter("mask_moving_image", "in_file", "moving_image", is_optional=False)
-        self.export_parameter("mask_moving_image", "mask_file", "moving_mask", is_optional=False)
-        self.add_link("mask_moving_image.out_file->affine_initializer.moving_image")
+        self.export_parameter("mask_moving_image", "in_file",
+                              "moving_image", is_optional=False)
+        self.export_parameter("mask_moving_image", "mask_file",
+                              "moving_mask", is_optional=False)
+        self.add_link("mask_moving_image.out_file->"
+                      "affine_initializer.moving_image")
         self.add_link("mask_moving_image.out_file->registration.moving_image")
-        self.add_link("mask_fixed_image.out_file->affine_initializer.fixed_image")
+        self.add_link("mask_fixed_image.out_file->"
+                      "affine_initializer.fixed_image")
         self.add_link("mask_fixed_image.out_file->registration.fixed_image")
-        self.add_link("affine_initializer.out_file->registration.initial_moving_transform")
-        self.export_parameter("registration", "composite_transform", is_optional=True)
-        self.export_parameter("registration", "inverse_composite_transform", is_optional=False)
-        self.export_parameter("registration", "warped_image", is_optional=False)
+        self.add_link("affine_initializer.out_file->"
+                      "registration.initial_moving_transform")
+        self.export_parameter("registration", "composite_transform",
+                              is_optional=True)
+        self.export_parameter("registration", "inverse_composite_transform",
+                              is_optional=False)
+        self.export_parameter("registration", "warped_image",
+                              is_optional=False)
         self.add_link("template_mask.template->mask_fixed_image.mask_file")
         self.add_link("template.template->mask_fixed_image.in_file")
 
         # parameters order
-
-        self.reorder_traits(("moving_image", "moving_mask", "composite_transform", "inverse_composite_transform", "warped_image"))
+        self.reorder_traits(("moving_image", "moving_mask",
+                             "composite_transform",
+                             "inverse_composite_transform",
+                             "warped_image"))
 
         # default and initial values
         self.template = 'MNI152NLin2009cAsym'

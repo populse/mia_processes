@@ -6,9 +6,15 @@ class Bold_hmc_pipeline(Pipeline):
 
     def pipeline_definition(self):
         # nodes
-        self.add_process("despike", "mia_processes.bricks.preprocess.afni.processes.Despike")
-        self.add_process("deoblique", "mia_processes.bricks.preprocess.afni.processes.Deoblique")
-        self.add_process("volreg", "mia_processes.bricks.preprocess.afni.processes.Volreg")
+        self.add_process("despike",
+                         "mia_processes.bricks.preprocess."
+                         "afni.processes.Despike")
+        self.add_process("deoblique",
+                         "mia_processes.bricks.preprocess."
+                         "afni.processes.Deoblique")
+        self.add_process("volreg",
+                         "mia_processes.bricks.preprocess."
+                         "afni.processes.Volreg")
         self.nodes["volreg"].process.twopass = True
         self.nodes["despike"].process.despike = False
         self.nodes["deoblique"].process.deoblique = False

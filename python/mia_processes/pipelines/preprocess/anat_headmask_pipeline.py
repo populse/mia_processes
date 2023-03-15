@@ -6,18 +6,27 @@ class Anat_headmask_pipeline(Pipeline):
 
     def pipeline_definition(self):
         # nodes
-        self.add_process("denoise", "mia_processes.bricks.preprocess.dipy.processes.Denoise")
-        self.add_process("enhance", "mia_processes.bricks.preprocess.others.processing.Enhance")
-        self.add_process("gradient_threshold", "mia_processes.bricks.preprocess.others.processing.GradientThreshold")
+        self.add_process("denoise",
+                         "mia_processes.bricks.preprocess."
+                         "dipy.processes.Denoise")
+        self.add_process("enhance",
+                         "mia_processes.bricks.preprocess."
+                         "others.processing.Enhance")
+        self.add_process("gradient_threshold",
+                         "mia_processes.bricks.preprocess."
+                         "others.processing.GradientThreshold")
 
         # links
-        self.export_parameter("denoise", "in_file_snr", "in_file", is_optional=False)
+        self.export_parameter("denoise", "in_file_snr", "in_file",
+                              is_optional=False)
         self.add_link("in_file->enhance.in_files")
-        self.export_parameter("gradient_threshold", "seg_file", is_optional=False)
+        self.export_parameter("gradient_threshold", "seg_file",
+                              is_optional=False)
         self.add_link("seg_file->denoise.seg_file")
         self.add_link("denoise.out_file->gradient_threshold.in_file")
         self.add_link("enhance.out_files->denoise.in_file")
-        self.export_parameter("gradient_threshold", "out_file", is_optional=False)
+        self.export_parameter("gradient_threshold", "out_file",
+                              is_optional=False)
 
         # parameters order
 
