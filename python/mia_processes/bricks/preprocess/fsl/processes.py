@@ -8,8 +8,9 @@ populse_mia.
 
 :Contains:
     :Class:
-        - Smooth
         - Segment
+        - Smooth
+        - SurfacesExtraction
 
 """
 
@@ -258,7 +259,7 @@ class Smooth(ProcessMIA):
 
         # To suppress the "FSLOUTPUTTYPE environment
         # variable is not set" nipype warning:
-        if not 'FSLOUTPUTTYPE' in os.environ:
+        if 'FSLOUTPUTTYPE' not in os.environ:
             os.environ['FSLOUTPUTTYPE'] = self.output_type
 
         self.init_process('nipype.interfaces.fsl.Smooth')
@@ -360,4 +361,185 @@ class Smooth(ProcessMIA):
 
         self.process.output_type = self.output_type
         self.process.smoothed_file = self.outf
+        return self.process.run(configuration_dict={})
+
+
+class SurfacesExtraction(ProcessMIA):
+    """
+    * Surfaces (inskull, outskull, outskin) extraction using
+    fsl.BET with option -A (bet2 and betsurf) and -n
+    (no default brain image output)*
+
+    Runs both bet2 and betsurf programs in order to get skull and scalp
+    surfaces created by betsurf.
+    This involves registering to standard space in order to allow betsurf
+    to find the standard space masks it needs.
+
+    Please, see the complete documention for the `SurfacesExtraction' brick in the populse.mia_processes web site
+    <https://populse.github.io/mia_processes/documentation/bricks/preprocess/fsl/SurfacesExtraction.html>`_
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instantiation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(SurfacesExtraction, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = ['fsl', 'nipype']
+
+        # Inputs description
+        in_file_desc = ('File to delete non-brain tissue (a pathlike object'
+                        'string representing a file)')
+
+        output_type_desc = ('Typecodes of the output NIfTI image formats (one '
+                            'of NIFTI, NIFTI_PAIR, NIFTI_GZ, NIFTI_PAIR_GZ).')
+
+        # Outputs description
+        outskin_mask_file_desc = 'outskin mask file'
+        outskin_mesh_file_desc = 'outskin mesh file'
+        outskull_mask_file_desc = 'outskull mask file'
+        outskull_mesh_file_desc = 'outskull mesh file'
+        inskull_mask_file_desc = 'inskull mask file'
+        inskull_mesh_file_desc = 'inskull mesh file'
+        skull_mask_file_desc = 'skull mask file'
+
+        # Inputs traits
+        self.add_trait("in_file",
+                       File(output=False,
+                            optional=False,
+                            desc=in_file_desc))
+
+        self.add_trait("output_type",
+                       Enum('NIFTI',
+                            'NIFTI_PAIR',
+                            'NIFTI_GZ',
+                            'NIFTI_PAIR_GZ',
+                            output=False,
+                            optional=True,
+                            desc=output_type_desc))
+
+        # Outputs traits
+        self.add_trait("outskin_mask_file",
+                       File(output=True,
+                            optional=True,
+                            desc=outskin_mask_file_desc))
+
+        self.add_trait("outskin_mesh_file",
+                       File(output=True,
+                            optional=True,
+                            desc=outskin_mesh_file_desc))
+
+        self.add_trait("outskull_mask_file",
+                       File(output=True,
+                            optional=True,
+                            desc=outskull_mask_file_desc))
+
+        self.add_trait("outskull_mesh_file",
+                       File(output=True,
+                            optional=True,
+                            desc=outskull_mesh_file_desc))
+
+        self.add_trait("inskull_mask_file",
+                       File(output=True,
+                            optional=True,
+                            desc=inskull_mask_file_desc))
+
+        self.add_trait("inskull_mesh_file",
+                       File(output=True,
+                            optional=True,
+                            desc=inskull_mesh_file_desc))
+
+        self.add_trait("skull_mask_file",
+                       File(output=True,
+                            optional=True,
+                            desc=skull_mask_file_desc))
+
+        self.init_default_traits()
+
+        # To suppress the "FSLOUTPUTTYPE environment
+        # variable is not set" nipype warning:
+        if 'FSLOUTPUTTYPE' not in os.environ:
+            os.environ['FSLOUTPUTTYPE'] = self.output_type
+
+        self.init_process('nipype.interfaces.fsl.BET')
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(SurfacesExtraction, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.in_file:
+            self.process.output_type = self.output_type
+            self.process.in_file = self.in_file
+            self.process.surfaces = True
+
+            if self.output_directory:
+                self.outputs['outskin_mask_file'] = os.path.join(
+                    self.output_directory, os.path.split(
+                        self.process._outskin_mask_file)[1])
+                self.outputs['outskin_mesh_file'] = os.path.join(
+                    self.output_directory, os.path.split(
+                        self.process._outskin_mesh_file)[1])
+                self.outputs['outskull_mask_file'] = os.path.join(
+                    self.output_directory, os.path.split(
+                        self.process._outskull_mask_file)[1])
+                self.outputs['outskull_mesh_file'] = os.path.join(
+                    self.output_directory, os.path.split(
+                        self.process._outskull_mesh_file)[1])
+                self.outputs['inskull_mask_file'] = os.path.join(
+                    self.output_directory, os.path.split(
+                        self.process._inskull_mask_file)[1])
+                self.outputs['inskull_mesh_file'] = os.path.join(
+                    self.output_directory, os.path.split(
+                        self.process._inskull_mesh_file)[1])
+                self.outputs['skull_mask_file'] = os.path.join(
+                    self.output_directory, os.path.split(
+                        self.process._skull_mask_file)[1])
+        if self.outputs:
+            self.inheritance_dict[self.outputs[
+                'outskin_mask_file']] = self.in_file
+            self.inheritance_dict[self.outputs[
+                'outskin_mesh_file']] = self.in_file
+            self.inheritance_dict[self.outputs[
+                'outskull_mask_file']] = self.in_file
+            self.inheritance_dict[self.outputs[
+                'outskull_mesh_file']] = self.in_file
+            self.inheritance_dict[self.outputs[
+                'inskull_mask_file']] = self.in_file
+            self.inheritance_dict[self.outputs[
+                'inskull_mesh_file']] = self.in_file
+            self.inheritance_dict[self.outputs[
+                'skull_mask_file']] = self.in_file
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(SurfacesExtraction, self).run_process_mia()
+        self.process.output_type = self.output_type
+        self.process.in_file = self.in_file
+
+        # default inputs
+        self.process.surfaces = True
+        self.process.no_output = True
+
         return self.process.run(configuration_dict={})

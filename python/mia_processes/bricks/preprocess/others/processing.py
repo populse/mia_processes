@@ -5,6 +5,7 @@ pre-processing steps, which are not found in nipype.
 
 :Contains:
     :Class:
+        - ApplyBiasCorrection
         - ArtifactMask
         - Binarize
         - ConformImage
@@ -12,6 +13,7 @@ pre-processing steps, which are not found in nipype.
         - Enhance
         - GradientThreshold
         - Harmonize
+        - IntensityClip
         - Mask
         - NonSteadyStateDetector
         - Resample_1
@@ -60,6 +62,7 @@ from soma.qt_gui.qt_backend.Qt import QMessageBox
 from distutils.dir_util import copy_tree
 from scipy import ndimage as sim
 from skimage.transform import resize
+from skimage.morphology import ball
 import numpy as np
 import os
 import shutil
@@ -68,6 +71,111 @@ import tempfile
 # import templateflow to get anatomical templates
 from templateflow.api import get as get_template
 from statsmodels.robust.scale import mad
+
+
+class ApplyBiasCorrection(ProcessMIA):
+    """
+    *Mask the input given a mask*
+
+    Please, see the complete documentation for the `Threshold brick in the populse.mia_processes website
+    https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/ApplyMask.html
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation / instantiation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(ApplyBiasCorrection, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = []
+
+        # Inputs description
+        in_file_desc = 'A file'
+        bias_image_desc = 'A mask'
+
+        # Outputs description
+        out_file_desc = 'Out file'
+
+        # Inputs traits
+        self.add_trait("in_file",
+                       File(output=False,
+                            optional=False,
+                            desc=in_file_desc))
+
+        self.add_trait("bias_image",
+                       File(output=False,
+                            optional=False,
+                            desc=bias_image_desc))
+
+        # Outputs traits
+        self.add_trait("out_file",
+                       File(output=True,
+                            desc=out_file_desc))
+
+        self.init_default_traits()
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(ApplyBiasCorrection, self).list_outputs()
+
+        if self.in_file:
+            if self.output_directory:
+                fname, ext = os.path.splitext(os.path.basename(self.in_file))
+                if ext == ".gz":
+                    fname, ext2 = os.path.splitext(fname)
+                    ext = ext2 + ext
+                self.outputs['out_file'] = os.path.join(
+                    self.output_directory, os.path.split(
+                        self.in_file)[1].replace(ext, '_inu' + ext))
+            else:
+                print('No output_directory was found...!\n')
+                return
+
+        if self.outputs:
+            self.inheritance_dict[self.outputs[
+                'out_file']] = self.in_file
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+
+        super(ApplyBiasCorrection, self).run_process_mia()
+
+        in_file = self.in_file
+        out_file = self.out_file
+        bias_image = self.bias_image
+
+        img = nib.load(in_file)
+        data = np.clip(
+            img.get_fdata() * nib.load(bias_image).get_fdata(),
+            a_min=0,
+            a_max=None,
+        )
+        out_img = img.__class__(
+            data.astype(img.get_data_dtype()),
+            img.affine,
+            img.header,
+        )
+
+        out_img.to_filename(out_file)
 
 
 class ArtifactMask(ProcessMIA):
@@ -450,7 +558,8 @@ class Binarize(ProcessMIA):
                          file_extension) = os.path.splitext(file_name)
                         if file_extension == '.gz':
                             (file_name_no_ext_2,
-                             file_extension_2) = os.path.splitext(file_name_no_ext)
+                             file_extension_2) = os.path.splitext(
+                                file_name_no_ext)
                             if file_extension_2 == '.nii':
                                 file_name_no_ext = file_name_no_ext_2
                                 file_extension = '.nii.gz'
@@ -463,7 +572,8 @@ class Binarize(ProcessMIA):
                         print('\nBinarize brick warning: the out_files output '
                               'parameter is the same as the in_files input '
                               'parameter (suffix and prefix are not defined):'
-                              '\n{0} will be overwrited ...'.format(file_name1))
+                              '\n{0} will be overwrited ...'.format(
+                                  file_name1))
 
                         if retval == QMessageBox.YesToAll:
                             flag = False
@@ -506,20 +616,24 @@ class Binarize(ProcessMIA):
 
                     for in_val, out_val in zip(files_name, val):
                         _, fileOval = os.path.split(out_val)
-                        fileOval_no_ext, file_extension = os.path.splitext(fileOval)
+                        fileOval_no_ext, file_extension = os.path.splitext(
+                            fileOval)
 
                         if file_extension == '.gz':
                             (fileOval_no_ext_2,
-                             file_extension_2) = os.path.splitext(fileOval_no_ext)
+                             file_extension_2) = os.path.splitext(
+                                fileOval_no_ext)
                             if file_extension_2 == '.nii':
                                 fileOval_no_ext = fileOval_no_ext_2
 
                         _, fileIval = os.path.split(in_val)
-                        fileIval_no_ext, file_extension = os.path.splitext(fileIval)
+                        fileIval_no_ext, file_extension = os.path.splitext(
+                            fileIval)
 
                         if file_extension == '.gz':
                             (fileIval_no_ext_2,
-                             file_extension_2) = os.path.splitext(fileIval_no_ext)
+                             file_extension_2) = os.path.splitext(
+                                fileIval_no_ext)
                             if file_extension_2 == '.nii':
                                 fileIval_no_ext = fileIval_no_ext_2
 
@@ -560,7 +674,9 @@ class Binarize(ProcessMIA):
                 mask = data > self.thresh_low
                 data[~mask] = 0.0
                 img.header.set_data_dtype("uint8")
-                maskimg = img.__class__(mask.astype("uint8"), img.affine, img.header)
+                maskimg = img.__class__(mask.astype("uint8"),
+                                        img.affine,
+                                        img.header)
 
                 # Image save
                 _, file_name = os.path.split(file_name)
@@ -573,10 +689,10 @@ class Binarize(ProcessMIA):
                         file_extension = '.nii.gz'
 
                 file_out = os.path.join(self.output_directory,
-                                         (self.prefix.strip() +
-                                          file_name_no_ext +
-                                          self.suffix.strip() +
-                                          file_extension))
+                                        (self.prefix.strip() +
+                                         file_name_no_ext +
+                                         self.suffix.strip() +
+                                         file_extension))
                 nib.save(maskimg, file_out)
 
 
@@ -612,13 +728,13 @@ class ConformImage(ProcessMIA):
 
         # Outputs description
         out_file_desc = ('Path of the conformed scan '
-                          '(a pathlike object or string representing a file).')
+                         '(a pathlike object or string representing a file).')
 
         # Inputs traits
         self.add_trait("in_file",
                        File(output=False,
-                                    optional=False,
-                                    desc=in_file_desc))
+                            optional=False,
+                            desc=in_file_desc))
 
         self.add_trait("suffix",
                        traits.String("",
@@ -865,7 +981,8 @@ class Conv_ROI(ProcessMIA):
                 return self.make_initResult()
 
             self.dict4runtime['patient_name'] = patient_name
-            roi_dir = os.path.join(self.output_directory, 'roi_' + patient_name)
+            roi_dir = os.path.join(self.output_directory,
+                                   'roi_' + patient_name)
 
             # if not existing, creates self.output_directory'/roi_'patient_name
             # folder. If already existing, remove old reference ROIs in roi_dir
@@ -874,10 +991,10 @@ class Conv_ROI(ProcessMIA):
                 elts = os.listdir(roi_dir)
                 # filtering only the files
                 files = [f for f in elts
-                             if os.path.isfile(os.path.join(roi_dir, f))]
+                         if os.path.isfile(os.path.join(roi_dir, f))]
                 # filtering only the directories
                 dirs = [d for d in elts
-                             if os.path.isdir(os.path.join(roi_dir, d))]
+                        if os.path.isdir(os.path.join(roi_dir, d))]
                 tmp = False
 
                 if 'convROI_BOLD' in dirs:
@@ -887,10 +1004,10 @@ class Conv_ROI(ProcessMIA):
                                 os.path.join(tmp, 'convROI_BOLD'))
                     print('\nConv_ROI brick:\nA "{}" folder already exists, '
                           'it will be overwritten by this new '
-                          'calculation...'.format(os.path.join(roi_dir,
-                                                               'convROI_BOLD')))
+                          'calculation...'.format(
+                              os.path.join(roi_dir, 'convROI_BOLD')))
 
-                for start_fil in [i[0]+i[1] for i in self.doublet_list]:
+                for start_fil in [i[0] + i[1] for i in self.doublet_list]:
 
                     for fil in files:
 
@@ -898,7 +1015,7 @@ class Conv_ROI(ProcessMIA):
 
                             if not os.path.isdir(tmp):
                                 tmp = tempfile.mktemp(dir=os.path.dirname(
-                                                                       roi_dir))
+                                    roi_dir))
                                 os.mkdir(tmp)
 
                             shutil.move(os.path.join(roi_dir, fil), tmp)
@@ -926,8 +1043,9 @@ class Conv_ROI(ProcessMIA):
             list_out = []
 
             for roi in self.doublet_list:
-                list_out.append(os.path.join(conv_dir,
-                                             'conv' + roi[0] + roi[1] + '.nii'))
+                list_out.append(os.path.join(
+                    conv_dir,
+                    'conv' + roi[0] + roi[1] + '.nii'))
 
             self.outputs['out_images'] = list_out
 
@@ -938,7 +1056,7 @@ class Conv_ROI(ProcessMIA):
         """Dedicated to the process launch step of the brick."""
 
         # No need the next line (we don't use self.process et SPM)
-        #super(Conv_ROI, self).run_process_mia()
+        # super(Conv_ROI, self).run_process_mia()
 
         roi_dir = os.path.join(self.output_directory,
                                'roi_' + self.dict4runtime['patient_name'])
@@ -1090,7 +1208,8 @@ class Enhance(ProcessMIA):
                          file_extension) = os.path.splitext(file_name)
                         if file_extension == '.gz':
                             (file_name_no_ext_2,
-                             file_extension_2) = os.path.splitext(file_name_no_ext)
+                             file_extension_2) = os.path.splitext(
+                                file_name_no_ext)
                             if file_extension_2 == '.nii':
                                 file_name_no_ext = file_name_no_ext_2
                                 file_extension = '.nii.gz'
@@ -1103,7 +1222,8 @@ class Enhance(ProcessMIA):
                         print('\nEnhance brick warning: the out_files output '
                               'parameter is the same as the in_files input '
                               'parameter (suffix and prefix are not defined):'
-                              '\n{0} will be overwrited ...'.format(file_name1))
+                              '\n{0} will be overwrited ...'.format(
+                                  file_name1))
 
                         if retval == QMessageBox.YesToAll:
                             flag = False
@@ -1146,18 +1266,22 @@ class Enhance(ProcessMIA):
 
                     for in_val, out_val in zip(files_name, val):
                         _, fileOval = os.path.split(out_val)
-                        fileOval_no_ext, file_extension = os.path.splitext(fileOval)
+                        fileOval_no_ext, file_extension = os.path.splitext(
+                            fileOval)
                         if file_extension == '.gz':
                             (fileOval_no_ext_2,
-                             file_extension_2) = os.path.splitext(fileOval_no_ext)
+                             file_extension_2) = os.path.splitext(
+                                fileOval_no_ext)
                             if file_extension_2 == '.nii':
                                 fileOval_no_ext = fileOval_no_ext_2
 
                         _, fileIval = os.path.split(in_val)
-                        fileIval_no_ext, file_extension = os.path.splitext(fileIval)
+                        fileIval_no_ext, file_extension = os.path.splitext(
+                            fileIval)
                         if file_extension == '.gz':
                             (fileIval_no_ext_2,
-                             file_extension_2) = os.path.splitext(fileIval_no_ext)
+                             file_extension_2) = os.path.splitext(
+                                fileIval_no_ext)
                             if file_extension_2 == '.nii':
                                 fileIval_no_ext = fileIval_no_ext_2
 
@@ -1261,13 +1385,13 @@ class GradientThreshold(ProcessMIA):
         # Inputs traits
         self.add_trait("in_file",
                        File(output=False,
-                                    optional=False,
-                                    desc=in_file_desc))
+                            optional=False,
+                            desc=in_file_desc))
 
         self.add_trait("seg_file",
                        File(output=False,
-                                    optional=False,
-                                    desc=seg_file_desc))
+                            optional=False,
+                            desc=seg_file_desc))
 
         self.add_trait("suffix",
                        traits.String("_grad",
@@ -1349,8 +1473,8 @@ class GradientThreshold(ProcessMIA):
                                          file_name_no_ext +
                                          self.suffix.strip() +
                                          file_extension))
-                    print('\nGradientThreshold brick warning: the out_file output '
-                          'parameter is the same as the in_file input '
+                    print('\nGradientThreshold brick warning: the out_file'
+                          'output parameter is the same as the in_file input '
                           'parameter (suffix and prefix are not defined):'
                           '\n{0} will be overwrited ...'.format(filename))
 
@@ -1677,6 +1801,168 @@ class Harmonize(ProcessMIA):
                                       self.suffix.strip() +
                                       file_extension))
             nib.save(out_img, file_out)
+
+class IntensityClip(ProcessMIA):
+    """
+    *Clip the intensity range as prescribed by the percentiles
+
+    Remove outliers at both ends of the intensity distribution and fit into a given dtype.
+
+    This interface tries to emulate ANTs workflows' massaging that truncate images into
+    the 0-255 range, and applies percentiles for clipping images.
+    For image registration, normalizing the intensity into a compact range (e.g., uint8)
+    is generally advised.
+
+    To more robustly determine the clipping thresholds, data are removed of spikes
+    with a median filter.
+    Once the thresholds are calculated, the denoised data are thrown away and the thresholds
+    are applied on the original image. (see niworkflow.interface.nibabel.IntensityClip)
+
+    Please, see the complete documentation for the `Threshold brick in the populse.mia_processes website
+    https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/IntensityClip.html
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation / instantiation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(IntensityClip, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = []
+
+        # Inputs description
+        in_file_desc = '3D file which intensity will be clipped'
+        p_min_desc = 'Percentile for the lower bound'
+        p_max_desc = 'Percentile for the upper bound'
+        dtype_desc = 'Output datatype'
+        invert_desc = 'Finalize by inverting contrast'
+
+        # Outputs description
+        out_file_desc = ('File after clipping')
+
+        # Inputs traits
+        self.add_trait("in_file",
+                       File(output=False,
+                            optional=False,
+                            desc=in_file_desc))
+
+        self.add_trait("p_min",
+                        traits.Float(default_value=10.0,
+                                   output=False,
+                                   optional=True,
+                                   desc=p_min_desc))
+        self.add_trait("p_max",
+                        traits.Float(default_value=99.9,
+                                   output=False,
+                                   optional=True,
+                                   desc=p_max_desc))
+        self.add_trait("nonnegative",
+                       traits.Bool(default_value=True,
+                                     output=False,
+                                     optional=True,
+                                     desc=invert_desc))
+        self.add_trait("dtype",
+                       traits.Enum("int16",
+                                   "float32",
+                                   "uint8",
+                                     output=False,
+                                     optional=True,
+                                     desc=dtype_desc))
+
+        self.add_trait("invert",
+                       traits.Bool(default_value=False,
+                                     output=False,
+                                     optional=True,
+                                     desc=invert_desc))
+
+        # Outputs traits
+        self.add_trait("out_file",
+                       File(output=True,
+                            desc=out_file_desc))
+
+        self.init_default_traits()
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(IntensityClip, self).list_outputs()
+
+        if self.in_file:
+            if self.output_directory:
+                self.outputs['out_file'] = os.path.join(
+                    self.output_directory, os.path.split(
+                        self.in_file)[1].replace('.nii', '_clippep.nii'))
+            else:
+                print('No output_directory was found...!\n')
+                return
+
+        if self.outputs:
+            self.inheritance_dict[self.outputs[
+                'out_file']] = self.in_file
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+
+        super(IntensityClip, self).run_process_mia()
+
+        in_file = self.in_file
+        out_file = self.out_file
+        nonnegative = self.nonnegative
+        p_min = self.p_min
+        p_max = self.p_max
+        invert = self.invert
+        dtype = self.dtype
+
+        # Load data
+        img = nib.squeeze_image(nib.load(in_file))
+        if len(img.shape) != 3:
+            raise RuntimeError(f"<{in_file}> is not a 3D file.")
+        data = img.get_fdata(dtype="float32")
+
+        # Calculate stats on denoised version, to preempt outliers from biasing
+        denoised = sim.median_filter(data, footprint=ball(3))
+
+        a_min = np.percentile(
+            denoised[denoised > 0] if nonnegative else denoised,
+            p_min
+        )
+        a_max = np.percentile(
+            denoised[denoised > 0] if nonnegative else denoised,
+            p_max
+        )
+
+        # Clip and cast
+        data = np.clip(data, a_min=a_min, a_max=a_max)
+        data -= data.min()
+        data /= data.max()
+
+        if invert:
+            data = 1.0 - data
+
+        if dtype in ("uint8", "int16"):
+            data = np.round(255 * data).astype(dtype)
+
+        hdr = img.header.copy()
+        hdr.set_data_dtype(dtype)
+        img.__class__(data, img.affine, hdr).to_filename(out_file)
 
 
 class Mask(ProcessMIA):
@@ -3045,7 +3331,7 @@ class Sanitize(ProcessMIA):
 
             # Both match, qform valid (implicit with match), codes okay -> do nothing, empty report
             if matching_affines and qform_code > 0 and sform_code > 0:
-                self.out_file = self.in_file
+                save_file = True
 
             # Row 2:
             elif valid_qform and qform_code > 0:

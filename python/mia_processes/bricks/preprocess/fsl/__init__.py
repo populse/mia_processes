@@ -8,4 +8,4 @@
 # for details.
 ##########################################################################
 
-from .processes import (Segment, Smooth)
+from .processes import (Segment, Smooth, SurfacesExtraction)

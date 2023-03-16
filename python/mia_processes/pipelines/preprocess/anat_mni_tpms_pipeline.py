@@ -6,47 +6,65 @@ class Anat_mni_tpms_pipeline(Pipeline):
 
     def pipeline_definition(self):
         # nodes
-        self.add_process("template_CSF", "mia_processes.bricks.preprocess.others.processing.Template")
+        self.add_process("template_CSF",
+                         "mia_processes.bricks.preprocess."
+                         "others.processing.Template")
         self.nodes["template_CSF"].process.in_template = 'MNI152NLin2009cAsym'
         self.nodes["template_CSF"].process.resolution = 1
         self.nodes["template_CSF"].process.suffix = 'probseg'
         self.nodes["template_CSF"].process.label = 'CSF'
-        self.add_process("applytransforms_CSF", "mia_processes.bricks.preprocess.ants.processes.ApplyTransforms")
+        self.add_process("applytransforms_CSF",
+                         "mia_processes.bricks.preprocess."
+                         "ants.processes.ApplyTransforms")
         self.nodes["applytransforms_CSF"].process.out_prefix = 'csf_'
-        self.add_process("template_GM", "mia_processes.bricks.preprocess.others.processing.Template")
+        self.add_process("template_GM",
+                         "mia_processes.bricks.preprocess"
+                         ".others.processing.Template")
         self.nodes["template_GM"].process.in_template = 'MNI152NLin2009cAsym'
         self.nodes["template_GM"].process.resolution = 1
         self.nodes["template_GM"].process.suffix = 'probseg'
         self.nodes["template_GM"].process.label = 'GM'
-        self.add_process("template_WM", "mia_processes.bricks.preprocess.others.processing.Template")
+        self.add_process("template_WM",
+                         "mia_processes.bricks.preprocess."
+                         "others.processing.Template")
         self.nodes["template_WM"].process.in_template = 'MNI152NLin2009cAsym'
         self.nodes["template_WM"].process.resolution = 1
         self.nodes["template_WM"].process.suffix = 'probseg'
         self.nodes["template_WM"].process.label = 'WM'
-        self.add_process("applytransforms_WM", "mia_processes.bricks.preprocess.ants.processes.ApplyTransforms")
+        self.add_process("applytransforms_WM",
+                         "mia_processes.bricks.preprocess."
+                         "ants.processes.ApplyTransforms")
         self.nodes["applytransforms_WM"].process.out_prefix = 'wm_'
-        self.add_process("applytransforms_GM", "mia_processes.bricks.preprocess.ants.processes.ApplyTransforms")
+        self.add_process("applytransforms_GM",
+                         "mia_processes.bricks.preprocess."
+                         "ants.processes.ApplyTransforms")
         self.nodes["applytransforms_GM"].process.out_prefix = 'gm_'
-        self.add_process("files_to_list", "mia_processes.bricks.tools.tools.Files_To_List")
+        self.add_process("files_to_list",
+                         "mia_processes.bricks.tools.tools.Files_To_List")
 
         # links
-        self.export_parameter("applytransforms_CSF", "reference_image", "in_ras", is_optional=False)
+        self.export_parameter("applytransforms_CSF", "reference_image",
+                              "in_ras", is_optional=False)
         self.add_link("in_ras->applytransforms_GM.reference_image")
         self.add_link("in_ras->applytransforms_WM.reference_image")
-        self.export_parameter("applytransforms_WM", "transforms", "inverse_composite_transform", is_optional=False)
-        self.add_link("inverse_composite_transform->applytransforms_CSF.transforms")
-        self.add_link("inverse_composite_transform->applytransforms_GM.transforms")
+        self.export_parameter("applytransforms_WM", "transforms",
+                              "inverse_composite_transform", is_optional=False)
+        self.add_link("inverse_composite_transform->"
+                      "applytransforms_CSF.transforms")
+        self.add_link("inverse_composite_transform->"
+                      "applytransforms_GM.transforms")
         self.add_link("template_CSF.template->applytransforms_CSF.input_image")
         self.add_link("applytransforms_CSF.output_image->files_to_list.file1")
         self.add_link("template_GM.template->applytransforms_GM.input_image")
         self.add_link("template_WM.template->applytransforms_WM.input_image")
         self.add_link("applytransforms_WM.output_image->files_to_list.file3")
         self.add_link("applytransforms_GM.output_image->files_to_list.file2")
-        self.export_parameter("files_to_list", "file_list", "mni_tpms", is_optional=False)
+        self.export_parameter("files_to_list", "file_list",
+                              "mni_tpms", is_optional=False)
 
         # parameters order
-
-        self.reorder_traits(("in_ras", "inverse_composite_transform", "mni_tpms"))
+        self.reorder_traits(("in_ras", "inverse_composite_transform",
+                             "mni_tpms"))
 
         # default and initial values
         self.template = 'MNI152NLin2009cAsym'

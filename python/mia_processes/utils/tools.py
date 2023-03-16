@@ -106,6 +106,9 @@ def dict4runtime_update(dict4runtime, database, db_filename, *args):
         if isinstance(dict4runtime[tag], datetime.date):
             dict4runtime[tag] = str(dict4runtime[tag])
 
+        if dict4runtime[tag] is None:
+            dict4runtime[tag] = "Undefined"
+
 def get_dbFieldValue(project, document, field):
     """blabla"""
 

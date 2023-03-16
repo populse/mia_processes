@@ -888,11 +888,11 @@ class MRIQC_func_report(ProcessMIA):
         #        should be found to retrieve them automatically or to put them
         #        in the input parameters of the brick:
         # Site
-        if self.dict4runtime['Site'] in ("", "Undefined"):
+        if self.dict4runtime['Site'] in ("", "Undefined", None):
             self.dict4runtime['Site'] = 'Grenoble University Hospital - CLUNI'
 
         # MriScanner
-        if self.dict4runtime['Spectro'] in ("", "Undefined"):
+        if self.dict4runtime['Spectro'] in ("", "Undefined", None):
             self.dict4runtime['Spectro'] = 'Philips Achieva 3.0T TX'
 
         # Generate an output name
@@ -1181,6 +1181,14 @@ class MRIQC_func_report(ProcessMIA):
                      "Saad et al., <i>Correcting Brain-Wide Correlation "
                      "Differences in Resting-State FMRI</i>, Brain Conn "
                      "3(4):339-352, 2013."
+                     ],
+            "aor": ["AFNI's outlier ratio",
+                     "{:.2e}",
+                     None
+                     ],
+            "aqi": ["AFNI's quality index",
+                     "{:.2e}",
+                     None
                      ]
         }
 

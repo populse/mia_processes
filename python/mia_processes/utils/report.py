@@ -167,7 +167,7 @@ class Report():
                   "MRIQC CALCULATION DATE", "NAME OF THE INPUT DATA",
                   "PATIENT REFERENCE", "PATIENT SEX", "PATIENT AGE",
                   "SOFTWARES", ]
-        headers.extend([" "] *  5)
+        headers.extend([" "] * 5)
 
         cover_data = [[0, 0]]
 
@@ -205,10 +205,10 @@ class Report():
                                         "&nbsp&nbsp&nbsp :</b></para>",
                                       self.styles["BodyText"]),
                             Paragraph("<para align=justify><font size = 7>" +
-                                      info +
-                                      "</font></para>" if
-                                      header == "NAME OF THE INPUT DATA" else
-                                      "<para align=justify>" + info + "</para>",
+                                        info + "</font></para>" if
+                                        header == "NAME OF THE INPUT DATA" else
+                                        "<para align=justify>" + str(info) +
+                                        "</para>",
                                       self.styles["Normal"])]
 
                 cover_data.append(temp)
@@ -346,6 +346,12 @@ class Report():
                                          "ARTIFACTS AND OTHER</b> </font>",
                                      self.styles['Bullet1']))
         self.report.append(Spacer(0 * mm, 10 * mm))
+        # aor
+        self.report.append(self.get_iqms_data('aor'))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # aqi
+        self.report.append(self.get_iqms_data('aqi'))
+        self.report.append(Spacer(0 * mm, 2.5 * mm))
         # gsr_x
         self.report.append(self.get_iqms_data('gsr_x'))
         self.report.append(Spacer(0 * mm, 1 * mm))
@@ -363,7 +369,7 @@ class Report():
         self.report.append(Spacer(0 * mm, 2.5 * mm))
         # dummyTRs
         self.report.append(self.get_iqms_data('dummyTRs'))
-        self.report.append(Spacer(0 * mm, 90 * mm))
+        self.report.append(Spacer(0 * mm, 82 * mm))
         # Footnote
         line = ReportLine(500)
         line.hAlign = 'CENTER'
@@ -1070,9 +1076,9 @@ class Report():
         self.report.append(slices_image)
 
 
-        # Currently, we make and save (in derived_data) the qi2 graph, but we
-        # don't include it in the report because the result with the test data
-        # looks strange.
+        # FIXME: Currently, we make and save (in derived_data) the
+        # qi2 graph, but we don't include it in the report because
+        # the result with the test data looks strange.
         _ = plot_qi2(np.asarray(self.iqms_data['histogram_qi2_x_grid']),
                      np.asarray(self.iqms_data['histogram_qi2_ref_pdf']),
                      np.asarray(self.iqms_data['histogram_qi2_fit_pdf']),
