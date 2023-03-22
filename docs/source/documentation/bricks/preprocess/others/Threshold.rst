@@ -51,11 +51,11 @@ Makes a binary mask image at a given threshold
 
     ::
 
-      ex. ['/home/ArthurBlair/data/raw_data/c1Anat.nii',
-           '/home/ArthurBlair/data/raw_data/c2Anat.nii',
-           '/home/ArthurBlair/data/raw_data/c3Anat.nii',
-           '/home/ArthurBlair/data/raw_data/c4Anat.nii',
-           '/home/ArthurBlair/data/raw_data/c5Anat.nii']
+      ex. ['/home/username/data/raw_data/c1Anat.nii',
+           '/home/username/data/raw_data/c2Anat.nii',
+           '/home/username/data/raw_data/c3Anat.nii',
+           '/home/username/data/raw_data/c4Anat.nii',
+           '/home/username/data/raw_data/c5Anat.nii']
 
 - *threshold*
     Value of the rate (a float between 0 and 1) defining the applied threshold (everything above becomes 1 and everything below becomes
@@ -93,4 +93,4 @@ Makes a binary mask image at a given threshold
 
     ::
 
-      ex. /home/ArthurBlair/data/derived_data/c1Anat_002.nii
+      ex. /home/username/data/derived_data/c1Anat_002.nii

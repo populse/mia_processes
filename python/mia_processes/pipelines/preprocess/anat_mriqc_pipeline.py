@@ -15,7 +15,7 @@ class Anat_mriqc_pipeline(Pipeline):
                          "Anat_skullstrip_synthstrip_pipeline")
         self.add_process("segment",
                          "mia_processes.bricks.preprocess."
-                         "fsl.processes.Segment")
+                         "fsl.processes.FastSegment")
         self.add_process("anat_spatial_norm",
                          "mia_processes.pipelines.preprocess."
                          "anat_spatial_norm.Anat_spatial_norm")

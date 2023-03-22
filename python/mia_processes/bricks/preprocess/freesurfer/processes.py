@@ -35,12 +35,11 @@ EXT = {'NIFTI_GZ': 'nii.gz',
 
 class Binarize(ProcessMIA):
     """
-    * Use FreeSurfer mri_binarize to binarize a volume
-    (or volume-encoded surface file).
-    Can also be used to merge with other binarizations.
+    * Binarize a volume (or volume-encoded surface file) using FreeSurfer mri_binarize
     Binarization can be done based on threshold or on matched values. *
 
-    Please, see the complete documentation for the `Binarize' brick in the populse.mia_processes website
+    Please, see the complete documentation for the `Binarize' brick in
+    the populse.mia_processes website
     <https://populse.github.io/mia_processes/documentation/bricks/preprocess/freesurfer/Binarize.html>`
 
     """
@@ -66,20 +65,12 @@ class Binarize(ProcessMIA):
         rmin_desc = 'Compute min based on rmin*globalmean.'
         rmax_desc = 'Compute max based on rmax*globalmean.'
         match_desc = 'Match instead of threshold'
-        wm_desc = 'set match vals to 2 and 41 (aseg for cerebral WM)'
-        ventricles_desc = ('set match vals those for aseg '
-                           'ventricles+choroid (not 4th)')
-        wm_ven_csf_desc = ('WM and ventricular CSF,'
-                           'including choroid (not 4th)')
-        count_file_desc = ('save number of hits in ascii file'
-                           '(hits, ntotvox, pct)')
+        get_count_file_desc = ('save number of hits in ascii file'
+                               '(hits, ntotvox, pct)')
         bin_val_desc = 'set vox outside range to val (default is 0)'
         bin_val_not_desc = 'set vox outside range to val (default is 0)'
         invert_desc = 'set binval=0, binvalnot=1'
         frame_no_desc = 'use 0-based frame of input (default is 0)'
-        merge_file_desc = 'merge with mergevol'
-        mask_file_desc = 'must be within mask'
-        mask_thresh_desc = 'set thresh for mask'
         abs_desc = 'take abs of invol first (ie, make unsigned)'
         bin_col_num_desc = 'set binarized voxel value to its column number'
         zero_edges_desc = 'zero the edge voxels'
@@ -97,6 +88,8 @@ class Binarize(ProcessMIA):
         # Outputs description
         out_file_desc = ('The binanized file (a pathlike object or a '
                          'string representing a file).')
+        count_file_desc = ('File that contains number of hits'
+                           '(hits, ntotvox, pct)')
 
         # Inputs traits
         self.add_trait('in_file',
@@ -143,31 +136,12 @@ class Binarize(ProcessMIA):
                               optional=True,
                               desc=match_desc))
 
-        self.add_trait('wm',
-                       Bool(default=False,
+        self.add_trait('get_count_file',
+                       Bool(False,
+                            default=False,
                             output=False,
                             optional=True,
-                            desc=wm_desc))
-
-        self.add_trait('ventricles',
-                       Bool(default=False,
-                            output=False,
-                            optional=True,
-                            desc=ventricles_desc))
-
-        self.add_trait('wm_ven_csf',
-                       Bool(default=False,
-                            output=False,
-                            optional=True,
-                            desc=wm_ven_csf_desc))
-
-        self.add_trait('count_file',
-                       Either(Undefined,
-                              File(),
-                              default=Undefined,
-                              output=False,
-                              optional=True,
-                              desc=count_file_desc))
+                            desc=get_count_file_desc))
 
         self.add_trait('output_type',
                        Enum('NIFTI',
@@ -212,30 +186,6 @@ class Binarize(ProcessMIA):
                               output=False,
                               optional=True,
                               desc=frame_no_desc))
-
-        self.add_trait('merge_file',
-                       Either(Undefined,
-                              File(),
-                              default=Undefined,
-                              output=False,
-                              optional=True,
-                              desc=merge_file_desc))
-
-        self.add_trait('mask_file',
-                       Either(Undefined,
-                              File(),
-                              default=Undefined,
-                              output=False,
-                              optional=True,
-                              desc=mask_file_desc))
-
-        self.add_trait('mask_thresh',
-                       Either(Undefined,
-                              Float(),
-                              default=Undefined,
-                              output=False,
-                              optional=True,
-                              desc=mask_thresh_desc))
 
         self.add_trait('abs',
                        Bool(default=False,
@@ -289,6 +239,11 @@ class Binarize(ProcessMIA):
                        File(output=True,
                             desc=out_file_desc))
 
+        self.add_trait('count_file',
+                       File(output=True,
+                            optional=True,
+                            desc=count_file_desc))
+
         self.init_default_traits()
         self.init_process('nipype.interfaces.freesurfer.Binarize')
 
@@ -309,20 +264,16 @@ class Binarize(ProcessMIA):
         super(Binarize, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
-        if (self.min != Undefined or
-                self.max != Undefined) and self.match != Undefined:
+        if (self.min != Undefined or 
+                self.max != Undefined or
+                self.rmin != Undefined or
+                self.rmax != Undefined) and self.match != Undefined:
             print('\nInitialisation failed. "match" parameter can not be used '
                   'with "min" and/or "max" parameters'
                   ' Please, define only "min"/"max" paremeters or "match"'
                   'parameters (set the other as Undefined) ...!')
             return
-        if (self.min != Undefined or
-                self.max != Undefined) and self.wm_ven_csf:
-            print('\nInitialisation failed. "wm_ven_csf" parameter can not'
-                  'be used  with "min" and/or "max" parameters'
-                  ' Please, define only "min"/"max" paremeters or "wm_ven_csf"'
-                  'parameters (set the other as Undefined) ...!')
-            return
+
         if self.in_file:
             if self.output_directory:
                 output_type = self.output_type
@@ -343,6 +294,12 @@ class Binarize(ProcessMIA):
                     os.path.split(self.in_file)[1].replace(
                         '.' + in_ext,
                         self.out_suffix + '.' + EXT[output_type]))
+
+                self.outputs['count_file'] = os.path.join(
+                    self.output_directory,
+                    os.path.split(self.in_file)[1].replace(
+                        '.' + in_ext,
+                        self.out_suffix + '_count.txt'))
 
                 self.inheritance_dict[self.outputs[
                     'out_file']] = self.in_file
@@ -368,22 +325,14 @@ class Binarize(ProcessMIA):
         self.process.rmin = self.rmin
         self.process.rmax = self.rmax
         self.process.match = self.match
-        self.process.count_file = self.count_file
+        if self.get_count_file:
+            self.process.count_file = self.count_file
         self.process.bin_val = self.bin_val
         self.process.bin_val_not = self.bin_val_not
         self.process.frame_no = self.frame_no
-        self.process.merge_file = self.merge_file
-        self.process.mask_file = self.mask_file
-        self.process.mask_thresh = self.mask_thresh
         self.process.dilate = self.dilate
         self.process.erode = self.erode
         self.process.erode2d = self.erode2d
-        self.process.wm = self.wm
-        self.process.ventricles = self.ventricles
-        if self.wm_ven_csf:
-            # only add wm_ven_csf when True because Mutually
-            # exclusive with min/max
-            self.process.wm_ven_csf = self.wm_ven_csf
         self.process.invert = self.invert
         self.process.abs = self.abs
         self.process.bin_col_num = self.bin_col_num
@@ -397,21 +346,9 @@ class SynthStrip(ProcessMIA):
     """
     * Skul stripping using SynthStrip *
 
-    SynthStrip is a skull-stripping tool that extracts brain signal
-    from a landscape of image types, ranging across imaging modality,
-    contrast, resolution, and subject population. It leverages a deep
-    learning strategy  that synthesizes arbitrary training images
-    from segmentation maps to optimize a robust model agnostic
-    to acquisition specifics.
-
-    SynthStrip: Skull-Stripping for Any Brain Image
-    Andrew Hoopes, Jocelyn S. Mora, Adrian V. Dalca, Bruce Fischl*,
-    Malte Hoffmann* (*equal contribution)
-    NeuroImage 260, 2022, 119474
-    https://doi.org/10.1016/j.neuroimage.2022.119474
-
-    Please, see the complete documention for the `Segment' brick in the populse.mia_processes web site
-    <https://populse.github.io/mia_processes/documentation/bricks/preprocess/freesurfer/SynthStrip.html>`_
+    Please, see the complete documention for the 'SynthStrip' brick
+    in the populse.mia_processes web site
+    <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/freesurfer/SynthStrip.html>`_
 
     """
 

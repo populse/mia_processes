@@ -75,10 +75,11 @@ from statsmodels.robust.scale import mad
 
 class ApplyBiasCorrection(ProcessMIA):
     """
-    *Mask the input given a mask*
+    *Apply bias field correction to an input file using the bias image*
 
-    Please, see the complete documentation for the `Threshold brick in the populse.mia_processes website
-    https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/ApplyMask.html
+    Please, see the complete documentation for the 'ApplyBiasCorrection' brick
+    in the populse.mia_processes website
+    https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/ApplyMask.html
 
     """
 
@@ -97,7 +98,7 @@ class ApplyBiasCorrection(ProcessMIA):
 
         # Inputs description
         in_file_desc = 'A file'
-        bias_image_desc = 'A mask'
+        bias_image_desc = 'Bias image'
 
         # Outputs description
         out_file_desc = 'Out file'
@@ -182,8 +183,9 @@ class ArtifactMask(ProcessMIA):
     """
     * Computes the artifact mask using the method described in [Mortamet2009] *
 
-    Please, see the complete documentation for the `ArtifactMask' brick in the populse.mia_processes website
-    https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/ArtifactMask.html
+    Please, see the complete documentation for the `ArtifactMask' brick
+    in the populse.mia_processes website
+    https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/ArtifactMask.html
 
     adapted from
     https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/interfaces/anatomical.py#L301
@@ -211,11 +213,14 @@ class ArtifactMask(ProcessMIA):
 
         # Outputs description
         out_hat_mask_desc = ('Path of the outputted air mask '
-                             '(a pathlike object or string representing a file).')
+                             '(a pathlike object or string'
+                             'representing a file).')
         out_art_mask_desc = ('Path of the outputted artifact mask '
-                             '(a pathlike object or string representing a file).')
+                             '(a pathlike object or string'
+                             'representing a file).')
         out_air_mask_desc = ('Path of the outputted air mask '
-                             '(a pathlike object or string representing a file).')
+                             '(a pathlike object or string'
+                             'representing a file).')
 
         # Inputs traits
         self.add_trait("in_file",
@@ -437,8 +442,9 @@ class Binarize(ProcessMIA):
     """
     *Image binarization*
 
-    Please, see the complete documentation for the `Binarize' brick in the populse.mia_processes website
-    https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/Binarize.html
+    Please, see the complete documentation for the `Binarize' brick
+    in the populse.mia_processes website
+    https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/Binarize.html
 
     adapted from:
     https://github.com/nipreps/niworkflows/blob/45ab13e1bf6fdbf5e29c90cef44055b0b9cf391b/niworkflows/interfaces/nibabel.py#L92
@@ -462,14 +468,14 @@ class Binarize(ProcessMIA):
         in_files_desc = ('A list of items with string elements corresponding '
                          'to existing path files.')
         thresh_low_desc = 'Lower threshold for binarization (float).'
-        prefix_desc = 'Prefix of the output image (a string).'
-        suffix_desc = 'Suffix of the output image (a string).'
+        prefix_desc = 'Prefix of the output images (a string).'
+        suffix_desc = 'Suffix of the output images (a string).'
 
         # Outputs description
-        out_files_desc = ('Path of the scan after application of the binarization '
-                          '(a pathlike object or string representing a file, or '
-                          'a list of pathlike objects or strings representing a '
-                          'file).')
+        out_files_desc = ('Path of the scan after application of the'
+                          'binarization (a pathlike object or string'
+                          'representing a file, or a list of pathlike'
+                          'objects or strings representing a file).')
 
         # Inputs traits
         self.add_trait("in_files",
@@ -549,7 +555,8 @@ class Binarize(ProcessMIA):
                                 "spaces.\nThe {0} input parameter will be "
                                 "overwritten ...\n Yes or "
                                 "Abort?".format(file_name1))
-                    msg.setStandardButtons(QMessageBox.Yes | QMessageBox.YesToAll |
+                    msg.setStandardButtons(QMessageBox.Yes |
+                                           QMessageBox.YesToAll |
                                            QMessageBox.Abort)
                     retval = msg.exec_()
 
@@ -581,7 +588,8 @@ class Binarize(ProcessMIA):
                                   'checks on input images ...')
                     else:
                         files_name = []
-                        print('\nAborted. Please check your input parameters ...')
+                        print('\nAborted.'
+                              'Please check your input parameters ...')
                         break
 
                 else:
@@ -700,8 +708,9 @@ class ConformImage(ProcessMIA):
     """
     * Conform T1w image to standard *
 
-    Please, see the complete documentation for the `ConformImage' brick in the populse.mia_processes website
-    https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/ConformImage.html
+    Please, see the complete documentation for the `ConformImage' brick
+    in the populse.mia_processes website
+    https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/ConformImage.html
 
     adapted from:
     https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/interfaces/common/conform_image.py#L75
@@ -886,10 +895,10 @@ class ConformImage(ProcessMIA):
                     file_extension = '.nii.gz'
 
             file_out = os.path.join(self.output_directory,
-                                     (self.prefix.strip() +
-                                      file_name_no_ext +
-                                      self.suffix.strip() +
-                                      file_extension))
+                                    (self.prefix.strip() +
+                                     file_name_no_ext +
+                                     self.suffix.strip() +
+                                     file_extension))
             nib.save(out_img, file_out)
 
 
@@ -1095,7 +1104,7 @@ class Enhance(ProcessMIA):
     *Image enhancing*
 
     Please, see the complete documentation for the `Enhance' brick in the populse.mia_processes website
-    https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/Enhance.html
+    https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/Enhance.html
 
     adapted from:
     https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/anatomical.py#L974
@@ -1352,7 +1361,7 @@ class GradientThreshold(ProcessMIA):
     * Computes a threshold from the histogram of the magnitude gradient image *
 
     Please, see the complete documentation for the `Gradient' brick in the populse.mia_processes website
-    https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/Gradient.html
+    https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/Gradient.html
 
     adapted from:
     https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/anatomical.py#L1039
@@ -1589,7 +1598,7 @@ class Harmonize(ProcessMIA):
     * Harmonize *
 
     Please, see the complete documentation for the `Harmonize' brick in the populse.mia_processes website
-    https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/Harmonize.html
+    https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/Harmonize.html
 
     adapted from:
     https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/interfaces/anatomical.py#L405
@@ -1819,7 +1828,7 @@ class IntensityClip(ProcessMIA):
     are applied on the original image. (see niworkflow.interface.nibabel.IntensityClip)
 
     Please, see the complete documentation for the `Threshold brick in the populse.mia_processes website
-    https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/IntensityClip.html
+    https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/IntensityClip.html
 
     """
 
@@ -1970,7 +1979,7 @@ class Mask(ProcessMIA):
     * Mask image *
 
     Please, see the complete documentation for the `Mask' brick in the populse.mia_processes website
-    https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/Mask.html
+    https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/Mask.html
 
     adapted from:
     https://github.com/nipreps/niworkflows/blob/45ab13e1bf6fdbf5e29c90cef44055b0b9cf391b/niworkflows/interfaces/norm.py#L474
@@ -2177,7 +2186,7 @@ class NonSteadyStateDetector(ProcessMIA):
     * Detect non-steady-state at the beginning of a bold 4D image*
 
     Please, see the complete documentation for the `NonSteadyStateDetector' brick in the populse.mia_processes website
-    https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/NonSteadyStateDetector.html
+    https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/NonSteadyStateDetector.html
 
     adapted from:
     https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5de5913b31/nipype/algorithms/confounds.py#L974
@@ -2265,7 +2274,7 @@ class Resample_1(ProcessMIA):
     *Resamples an image to the resolution of a reference image*
 
     Please, see the complete documentation for the `Resample_1 brick in the populse.mia_processes website
-    https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/Resample_1.html
+    https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/Resample_1.html
 
    """
 
@@ -2904,7 +2913,7 @@ class RotationMask(ProcessMIA):
     * Compute the rotation mask image *
 
     Please, see the complete documentation for the `RotationMask' brick in the populse.mia_processes website
-    https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/RotationMask.html
+    https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/RotationMask.html
 
     adapted from:
     https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/interfaces/anatomical.py#L448
@@ -3126,7 +3135,7 @@ class Sanitize(ProcessMIA):
     * Sanitize input bold image *
 
     Please, see the complete documentation for the `Sanitize' brick in the populse.mia_processes website
-    https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/Sanitize.html
+    https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/Sanitize.html
 
     adapted from:
     https://github.com/nipreps/niworkflows/blob/45ab13e1bf6fdbf5e29c90cef44055b0b9cf391b/niworkflows/interfaces/header.py#L394
@@ -3412,7 +3421,7 @@ class Template(ProcessMIA):
     * Get template image from templateflow *
 
     Please, see the complete documentation for the `Template' brick in the populse.mia_processes website
-    https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/Template.html
+    https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/Template.html
 
     """
 
@@ -3548,7 +3557,7 @@ class Threshold(ProcessMIA):
     *Image thresholding*
 
     Please, see the complete documentation for the `Threshold brick in the populse.mia_processes website
-    https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/Threshold.html
+    https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/Threshold.html
 
     """
 
@@ -3825,7 +3834,7 @@ class TSNR(ProcessMIA):
     * Computes the time-course SNR for a time series *
 
     Please, see the complete documentation for the `TSNR' brick in the populse.mia_processes website
-    https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/TSNR.html
+    https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/TSNR.html
 
     adapted from:
     https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5de5913b31/nipype/algorithms/confounds.py#L899

@@ -1,13 +1,20 @@
 mia\_processes package
 ======================
 
+.. automodule:: mia_processes
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Subpackages
 -----------
 
 .. toctree::
+   :maxdepth: 8
 
    mia_processes.bricks
    mia_processes.pipelines
+   mia_processes.utils
 
 Submodules
 ----------
@@ -24,15 +31,6 @@ mia\_processes.process\_matlab module
 -------------------------------------
 
 .. automodule:: mia_processes.process_matlab
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: mia_processes
    :members:
    :undoc-members:
    :show-inheritance:

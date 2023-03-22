@@ -23,7 +23,7 @@ Smooth brick
 
     ::
 
-      ex. ['/home/ArthurBlair/data/raw_data/Func.nii']
+      ex. ['/home/username/data/raw_data/Func.nii']
 
 - *fwhm*
     Specify the full-width at half maximum of the Gaussian smoothing kernel (a float) in mm (not voxels).
@@ -41,11 +41,9 @@ Smooth brick
       ex. 2.55
 
 - *output_type*
-    | Format of the output image (one of NIFTI, NIFTI_PAIR, NIFTI_GZ, NIFTI_PAIR_GZ).
+    | Format of the output image (one of NIFTI, NIFTI_GZ).
     |   NIFTI: \*.nii
     |   NIFTI_GZ: \*.nii.gz
-    |   NIFTI_PAIR: \*.img / \*.hdr
-    |   NIFTI_PAIR_GZ: \*.img.gz / \*.hdr.gz
 
     ::
 
@@ -65,7 +63,7 @@ Smooth brick
 
     ::
 
-      ex. /home/ArthurBlair/data/derived_data/sFunc.nii
+      ex. /home/username/data/derived_data/sFunc.nii
 
 -------------
 
