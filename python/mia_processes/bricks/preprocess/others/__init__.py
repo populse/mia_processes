@@ -9,7 +9,7 @@
 ##########################################################################
 
 from .processing import (ApplyBiasCorrection, ArtifactMask, Binarize,
-                         ConformImage, Conv_ROI, Enhance, GradientThreshold,
+                         ConformImage, ConvROI, Enhance, GradientThreshold,
                          Harmonize, IntensityClip,
                          Mask, NonSteadyStateDetector, Resample_1, Resample_2,
                          RotationMask, Sanitize, Template, Threshold, TSNR)

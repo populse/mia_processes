@@ -1782,7 +1782,7 @@ class Mean_stdDev_calc(ProcessMIA):
       have the "PatientName" tag filled in
     - To work correctly, the output_directory "/roi_"PatientName"/convROI_BOLD"
       must exist and contain a previous convolution results (normally using
-      the Conv_ROI brick)
+      the ConvROI brick)
     """
 
     def __init__(self):

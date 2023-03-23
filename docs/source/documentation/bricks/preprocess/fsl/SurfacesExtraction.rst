@@ -7,7 +7,7 @@
 +--------------------------------+----------------------------------------------+----------------------------------------------------+
 
 ============
-SurfacesExtraction brick
+BetSurfacesExtraction brick
 ============
 
  Surfaces (skull, inskull, outskull, outskin) extraction using BET (FSL). 
@@ -19,8 +19,8 @@ SurfacesExtraction brick
 
  The mask and mesh files (.vtk) are generated. 
 
->>> from mia_processes.bricks.preprocess.fsl import SurfacesExtraction
->>> SurfacesExtraction.help()
+>>> from mia_processes.bricks.preprocess.fsl import BetSurfacesExtraction
+>>> BetSurfacesExtraction.help()
 
 **Inputs parameters:**
 

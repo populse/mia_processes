@@ -10,7 +10,7 @@ populse_mia.
     :Class:
         - FastSegment
         - Smooth
-        - SurfacesExtraction
+        - BetSurfacesExtraction
 
 """
 
@@ -404,7 +404,7 @@ class Smooth(ProcessMIA):
         return self.process.run(configuration_dict={})
 
 
-class SurfacesExtraction(ProcessMIA):
+class BetSurfacesExtraction(ProcessMIA):
     """
     * Surfaces (skull, inskull, outskull, outskin) extraction and skull
     stripping using BET (FSL) with option -A (bet2 and betsurf)*
@@ -421,7 +421,7 @@ class SurfacesExtraction(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(SurfacesExtraction, self).__init__()
+        super(BetSurfacesExtraction, self).__init__()
 
         # Third party softwares required for the execution of the brick
         self.requirement = ['fsl', 'nipype']
@@ -526,7 +526,7 @@ class SurfacesExtraction(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(SurfacesExtraction, self).list_outputs()
+        super(BetSurfacesExtraction, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
@@ -582,7 +582,7 @@ class SurfacesExtraction(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(SurfacesExtraction, self).run_process_mia()
+        super(BetSurfacesExtraction, self).run_process_mia()
         self.process.output_type = self.output_type
         self.process.in_file = self.in_file
 

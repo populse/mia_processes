@@ -21,7 +21,7 @@ class Anat_mriqc_pipeline(Pipeline):
                          "anat_spatial_norm.Anat_spatial_norm")
         self.add_process("anat_headmask",
                          "mia_processes.bricks.preprocess"
-                         ".fsl.SurfacesExtraction")
+                         ".fsl.BetSurfacesExtraction")
         self.add_process("anat_airmask_pipeline",
                          "mia_processes.pipelines.preprocess."
                          "anat_airmask_pipeline.Anat_airmask_pipeline")

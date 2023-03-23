@@ -28,7 +28,7 @@ Adapted from https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf9321
 
     ::
 
-      ex. ['/home/username/data/raw_data/T1w.nii']
+      ex. '/home/username/data/raw_data/T1w.nii'
 
 
 - *prefix* (a string)
@@ -49,12 +49,12 @@ Adapted from https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf9321
 
 **Outputs parameters:**
 
-- *out_file* (a list of pathlike objects or strings representing a file)
+- *out_file* (a strings representing a file)
     Conforme Image (extensions: [.nii, .nii.gz])
     
     ::
 
-      ex. ['/home/username/data/raw_data/T1w_bin.nii']
+      ex. '/home/username/data/raw_data/T1w_bin.nii'
 
 -------------
 

@@ -9,7 +9,7 @@ pre-processing steps, which are not found in nipype.
         - ArtifactMask
         - Binarize
         - ConformImage
-        - Conv_ROI
+        - ConvROI
         - Enhance
         - GradientThreshold
         - Harmonize
@@ -902,7 +902,7 @@ class ConformImage(ProcessMIA):
             nib.save(out_img, file_out)
 
 
-class Conv_ROI(ProcessMIA):
+class ConvROI(ProcessMIA):
     """Convolve regions of interest with a mask.
 
     - Resampling the mask to the size of the ROIs, using the first ROI.
@@ -927,7 +927,7 @@ class Conv_ROI(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(Conv_ROI, self).__init__()
+        super(ConvROI, self).__init__()
 
         # Inputs description
         doublet_list_desc = ('A list of lists containing doublets of strings '
@@ -975,7 +975,7 @@ class Conv_ROI(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Conv_ROI, self).list_outputs()
+        super(ConvROI, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.doublet_list != [] and self.in_image:
@@ -984,7 +984,7 @@ class Conv_ROI(ProcessMIA):
                                             'PatientName')
 
             if patient_name is None:
-                print('\nConv_ROI:\n The "PatientName" tag is not filled '
+                print('\nConvROI:\n The "PatientName" tag is not filled '
                       'in the database for the {} file ...\n The calculation'
                       'is aborted...'.format(self.in_image))
                 return self.make_initResult()
@@ -1011,7 +1011,7 @@ class Conv_ROI(ProcessMIA):
                     os.mkdir(tmp)
                     shutil.move(os.path.join(roi_dir, 'convROI_BOLD'),
                                 os.path.join(tmp, 'convROI_BOLD'))
-                    print('\nConv_ROI brick:\nA "{}" folder already exists, '
+                    print('\nConvROI brick:\nA "{}" folder already exists, '
                           'it will be overwritten by this new '
                           'calculation...'.format(
                               os.path.join(roi_dir, 'convROI_BOLD')))
@@ -1028,7 +1028,7 @@ class Conv_ROI(ProcessMIA):
                                 os.mkdir(tmp)
 
                             shutil.move(os.path.join(roi_dir, fil), tmp)
-                            print('\nConv_ROI brick:\nA "{}" file already '
+                            print('\nConvROI brick:\nA "{}" file already '
                                   'exists, it will be overwritten by this new '
                                   'calculation...'.format(os.path.join(roi_dir,
                                                                        fil)))
@@ -1065,7 +1065,7 @@ class Conv_ROI(ProcessMIA):
         """Dedicated to the process launch step of the brick."""
 
         # No need the next line (we don't use self.process et SPM)
-        # super(Conv_ROI, self).run_process_mia()
+        # super(ConvROI, self).run_process_mia()
 
         roi_dir = os.path.join(self.output_directory,
                                'roi_' + self.dict4runtime['patient_name'])
@@ -1360,8 +1360,8 @@ class GradientThreshold(ProcessMIA):
     """
     * Computes a threshold from the histogram of the magnitude gradient image *
 
-    Please, see the complete documentation for the `Gradient' brick in the populse.mia_processes website
-    https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/Gradient.html
+    Please, see the complete documentation for the `GradientThreshold' brick in the populse.mia_processes website
+    https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/GradientThreshold.html
 
     adapted from:
     https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/anatomical.py#L1039
@@ -1597,7 +1597,8 @@ class Harmonize(ProcessMIA):
     """
     * Harmonize *
 
-    Please, see the complete documentation for the `Harmonize' brick in the populse.mia_processes website
+    Please, see the complete documentation for the `Harmonize' brick
+    in the populse.mia_processes website
     https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/Harmonize.html
 
     adapted from:
@@ -1784,10 +1785,12 @@ class Harmonize(ProcessMIA):
             wm_mask = wm_img.astype(np.uint8)
 
             if self.erodemask:
-                # Create a structural element to be used in an opening operation.
+                # Create a structural element to be used
+                # in an opening operation.
                 struc = sim.generate_binary_structure(3, 2)
                 # Perform an opening operation on the background data.
-                wm_mask = sim.binary_erosion(wm_mask, structure=struc).astype(np.uint8)
+                wm_mask = sim.binary_erosion(
+                    wm_mask, structure=struc).astype(np.uint8)
 
             data = img.get_fdata()
             data = data * (1000.0 / np.median(data[wm_mask > 0]))
@@ -1805,29 +1808,19 @@ class Harmonize(ProcessMIA):
                     file_extension = '.nii.gz'
 
             file_out = os.path.join(self.output_directory,
-                                     (self.prefix.strip() +
-                                      file_name_no_ext +
-                                      self.suffix.strip() +
-                                      file_extension))
+                                    (self.prefix.strip() +
+                                     file_name_no_ext +
+                                     self.suffix.strip() +
+                                     file_extension))
             nib.save(out_img, file_out)
+
 
 class IntensityClip(ProcessMIA):
     """
     *Clip the intensity range as prescribed by the percentiles
 
-    Remove outliers at both ends of the intensity distribution and fit into a given dtype.
-
-    This interface tries to emulate ANTs workflows' massaging that truncate images into
-    the 0-255 range, and applies percentiles for clipping images.
-    For image registration, normalizing the intensity into a compact range (e.g., uint8)
-    is generally advised.
-
-    To more robustly determine the clipping thresholds, data are removed of spikes
-    with a median filter.
-    Once the thresholds are calculated, the denoised data are thrown away and the thresholds
-    are applied on the original image. (see niworkflow.interface.nibabel.IntensityClip)
-
-    Please, see the complete documentation for the `Threshold brick in the populse.mia_processes website
+    Please, see the complete documentation for the `Threshold brick in
+    the populse.mia_processes website
     https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/IntensityClip.html
 
     """
@@ -1850,6 +1843,7 @@ class IntensityClip(ProcessMIA):
         p_min_desc = 'Percentile for the lower bound'
         p_max_desc = 'Percentile for the upper bound'
         dtype_desc = 'Output datatype'
+        nonnegative_desc = 'Whether input intensities must be positive'
         invert_desc = 'Finalize by inverting contrast'
 
         # Outputs description
@@ -1862,33 +1856,33 @@ class IntensityClip(ProcessMIA):
                             desc=in_file_desc))
 
         self.add_trait("p_min",
-                        traits.Float(default_value=10.0,
-                                   output=False,
-                                   optional=True,
-                                   desc=p_min_desc))
+                       traits.Float(default_value=10.0,
+                                    output=False,
+                                    optional=True,
+                                    desc=p_min_desc))
         self.add_trait("p_max",
-                        traits.Float(default_value=99.9,
-                                   output=False,
-                                   optional=True,
-                                   desc=p_max_desc))
+                       traits.Float(default_value=99.9,
+                                    output=False,
+                                    optional=True,
+                                    desc=p_max_desc))
         self.add_trait("nonnegative",
                        traits.Bool(default_value=True,
-                                     output=False,
-                                     optional=True,
-                                     desc=invert_desc))
+                                   output=False,
+                                   optional=True,
+                                   desc=nonnegative_desc))
         self.add_trait("dtype",
                        traits.Enum("int16",
                                    "float32",
                                    "uint8",
-                                     output=False,
-                                     optional=True,
-                                     desc=dtype_desc))
+                                   output=False,
+                                   optional=True,
+                                   desc=dtype_desc))
 
         self.add_trait("invert",
                        traits.Bool(default_value=False,
-                                     output=False,
-                                     optional=True,
-                                     desc=invert_desc))
+                                   output=False,
+                                   optional=True,
+                                   desc=invert_desc))
 
         # Outputs traits
         self.add_trait("out_file",
@@ -1978,7 +1972,8 @@ class Mask(ProcessMIA):
     """
     * Mask image *
 
-    Please, see the complete documentation for the `Mask' brick in the populse.mia_processes website
+    Please, see the complete documentation for the `Mask' brick
+    in the populse.mia_processes website
     https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/Mask.html
 
     adapted from:
@@ -2119,11 +2114,11 @@ class Mask(ProcessMIA):
                         file_name_no_ext = file_name_no_ext_2
                         file_extension = '.nii.gz'
 
-                file =os.path.join(self.output_directory,
-                                   (self.prefix.strip() +
-                                    file_name_no_ext +
-                                    self.suffix.strip() +
-                                    file_extension))
+                file = os.path.join(self.output_directory,
+                                    (self.prefix.strip() +
+                                     file_name_no_ext +
+                                     self.suffix.strip() +
+                                     file_extension))
 
             if filename:
                 self.outputs['out_file'] = file
@@ -2174,10 +2169,10 @@ class Mask(ProcessMIA):
                     file_extension = '.nii.gz'
 
             file_out = os.path.join(self.output_directory,
-                                     (self.prefix.strip() +
-                                      file_name_no_ext +
-                                      self.suffix.strip() +
-                                      file_extension))
+                                    (self.prefix.strip() +
+                                     file_name_no_ext +
+                                     self.suffix.strip() +
+                                     file_extension))
             nib.save(maskimg, file_out)
 
 
@@ -3163,7 +3158,7 @@ class Sanitize(ProcessMIA):
         max_32bit_desc = "cast data to float32 if higher precision is " \
                         "encountered"
         # Outputs description
-        out_file_desc = ('Path of the scan after masking '
+        out_file_desc = ('Path of the snaitized scan'
                          '(a pathlike object or string representing a file).')
 
         # Inputs traits
@@ -3192,9 +3187,9 @@ class Sanitize(ProcessMIA):
 
         self.add_trait("max_32bit",
                        traits.Bool(False,
-                                  output=False,
-                                  optional=True,
-                                  desc=max_32bit_desc))
+                                   output=False,
+                                   optional=True,
+                                   desc=max_32bit_desc))
 
         # Outputs traits
         self.add_trait("out_file",
