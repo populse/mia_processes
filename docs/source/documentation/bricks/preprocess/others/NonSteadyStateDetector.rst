@@ -23,7 +23,7 @@ Adapted from https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5
 **Inputs parameters:**
 
 - *in_file* (a string representing an existing file)
-    Input image (valid extensions: [.nii, .nii.gz])
+    Input image (valid extensions: [.nii, .nii.gz]).
 
     ::
 
@@ -33,7 +33,7 @@ Adapted from https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5
 **Outputs parameters:**
 
 - *n_volumes_to_discard* (int)
-     Number of volumes to discard 
+     Number of volumes to discard. 
     
     ::
 

@@ -14,6 +14,8 @@ Conform T1w image:
 - remove axes length 1 at end of image shapes if needed (nibabel.squeeze_image)
 - reordered to be closest to canonical if needed (nibabel.as_closest_canonical)
 
+Be carrefull, if the suffix and prefix input parameters are not defined or consist only of one or more white spaces, the input parameter will be overwritten.
+
 Adapted from https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/interfaces/common/conform_image.py#L75
 
 --------------------------------------
@@ -24,14 +26,14 @@ Adapted from https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf9321
 **Inputs parameters:**
 
 - *in_file* (a string representing an existing file)
-    Input image (valid extensions: [.nii, .nii.gz])
+    Input image (valid extensions: [.nii, .nii.gz]).
 
     ::
 
       ex. '/home/username/data/raw_data/T1w.nii'
 
 
-- *prefix* (a string)
+- *prefix* (a string, optional)
     Prefix of the output image. Default is ''.
     
     ::
@@ -39,7 +41,7 @@ Adapted from https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf9321
       ex. ''
 
 
-- *suffix* (a string)
+- *suffix* (a string, optional)
    Suffix of output image. Default is ''.
     
     ::
@@ -50,11 +52,11 @@ Adapted from https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf9321
 **Outputs parameters:**
 
 - *out_file* (a strings representing a file)
-    Conforme Image (extensions: [.nii, .nii.gz])
+    Conforme Image (extensions: [.nii, .nii.gz]).
     
     ::
 
-      ex. '/home/username/data/raw_data/T1w_bin.nii'
+      ex. '/home/username/data/derived_data/T1w.nii'
 
 -------------
 

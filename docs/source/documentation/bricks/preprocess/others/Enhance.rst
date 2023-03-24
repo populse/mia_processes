@@ -24,14 +24,14 @@ Adapted from https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf9321
 
 **Inputs parameters:**
 
-- *in_files* ((a list of pathlike objects or strings representing an existing file)
-    Input images (valid extensions: [.nii, .nii.gz])
+- *in_files* (a list of pathlike objects or strings representing an existing file)
+    Input images (valid extensions: [.nii, .nii.gz]).
     
     ::
 
       ex. ['/home/username/data/raw_data/T1w.nii']
 
-- *prefix* (a string)
+- *prefix* (a string, optional)
     Prefix of the output image. Default is ''.
     
     ::
@@ -39,7 +39,7 @@ Adapted from https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf9321
       ex. ''
 
 
-- *suffix* (a string)
+- *suffix* (a string, optional)
    Suffix of output image. Default is '_enh'.
     
     ::
@@ -50,11 +50,11 @@ Adapted from https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf9321
 **Outputs parameters:**
 
 - *out_files* (a list of pathlike objects or strings representing a file)
-    Output Images (extensions: [.nii, .nii.gz])
+    Output Images (extensions: [.nii, .nii.gz]).
     
     ::
 
-      ex. ['/home/username/data/raw_data/T1w_enh.nii']
+      ex. ['/home/username/data/derived_data/T1w_enh.nii']
 
 -------------
 

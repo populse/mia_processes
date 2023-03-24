@@ -11,7 +11,7 @@ class Bold_hmc_pipeline(Pipeline):
                          "afni.processes.Despike")
         self.add_process("deoblique",
                          "mia_processes.bricks.preprocess."
-                         "afni.processes.Deoblique")
+                         "afni.processes.RefitDeoblique")
         self.add_process("volreg",
                          "mia_processes.bricks.preprocess."
                          "afni.processes.Volreg")

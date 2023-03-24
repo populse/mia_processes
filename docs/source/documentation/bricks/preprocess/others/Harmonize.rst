@@ -23,7 +23,7 @@ Adapted from https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf9321
 **Inputs parameters:**
 
 - *in_file* (a string representing an existing file)
-    Input image (valid extensions: [.nii, .nii.gz])
+    Input image (valid extensions: [.nii, .nii.gz]).
 
     ::
 
@@ -36,14 +36,14 @@ Adapted from https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf9321
 
       ex. 'home/username/data/derived_data/T1w_seg.nii'
 
-- *erodemask* (a boolean)
-    Erode mask. Default is True
+- *erodemask* (a boolean, optional)
+    Erode mask. Default is True.
 
     ::
 
       ex. True
 
-- *prefix* (a string, optional=True)
+- *prefix* (a string, optional)
     Prefix of the output image. Default is ''.
     
     ::
@@ -51,7 +51,7 @@ Adapted from https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf9321
       ex. ''
 
 
-- *suffix* (a string, optional=True)
+- *suffix* (a string, optional)
    Suffix of output image. Default is '_harmonized'.
     
     ::
@@ -62,11 +62,11 @@ Adapted from https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf9321
 **Outputs parameters:**
 
 - *out_file* (a strings representing a file)
-    Path of the harmonized image 
+    Path of the harmonized image (extensions: [.nii, .nii.gz]).
     
     ::
 
-      ex. '/home/username/data/raw_data/T1w_harmonized.nii'
+      ex. '/home/username/data/derived_data/T1w_harmonized.nii'
 
 -------------
 

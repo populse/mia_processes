@@ -24,20 +24,20 @@ Adapted from https://github.com/nipreps/niworkflows/blob/45ab13e1bf6fdbf5e29c90c
 **Inputs parameters:**
 
 - *in_file* (a string representing an existing file)
-    Input image (valid extensions: [.nii, .nii.gz])
+    Input image (valid extensions: [.nii, .nii.gz]).
 
     ::
 
       ex. '/home/username/data/raw_data/T1w.nii'
 
 - *mask_file* (a string representing an existing file)
-    Mask image (valid extensions: [.nii, .nii.gz])
+    Mask image (valid extensions: [.nii, .nii.gz]).
 
     ::
 
       ex. '/home/username/data/raw_data/mask.nii'
 
-- *prefix* (a string, optional=True)
+- *prefix* (a string, optional)
     Prefix of the output image. Default is ''.
     
     ::
@@ -45,7 +45,7 @@ Adapted from https://github.com/nipreps/niworkflows/blob/45ab13e1bf6fdbf5e29c90c
       ex. ''
 
 
-- *suffix* (a string, optional=True)
+- *suffix* (a string, optional)
    Suffix of output image. Default is '_masked'.
     
     ::
@@ -57,11 +57,11 @@ Adapted from https://github.com/nipreps/niworkflows/blob/45ab13e1bf6fdbf5e29c90c
 **Outputs parameters:**
 
 - *out_file* (a strings representing a file)
-    Path of the masked image 
+    Path of the masked image (extensions: [.nii, .nii.gz]).
     
     ::
 
-      ex. '/home/username/data/raw_data/T1w_masked.nii'
+      ex. '/home/username/data/derived_data/T1w_masked.nii'
 
 -------------
 

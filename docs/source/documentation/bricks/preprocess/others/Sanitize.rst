@@ -23,35 +23,35 @@ Adapted from  https://github.com/nipreps/niworkflows/blob/45ab13e1bf6fdbf5e29c90
 **Inputs parameters:**
 
 - *in_file* (a string representing an existing file)
-    Input image which intensity will be clipped (valid extensions: [.nii, .nii.gz])
+    Input image which intensity will be clipped (valid extensions: [.nii, .nii.gz]).
 
     ::
 
       ex. '/home/username/data/raw_data/func.nii'
 
-- *prefix* (a string, optional=True)
+- *prefix* (a string, optional)
     Prefix of the output image. Default is ''.
     
     ::
 
       ex. ''
 
-- *suffix* (a string, optional=True)
+- *suffix* (a string, optional)
    Suffix of output image. Default is '_valid'.
     
     ::
 
       ex. '_valid'
 
-- *n_volumes_to_discard* (an int, optional=True)
-    Number of non steady-state volumes. Default is 0
+- *n_volumes_to_discard* (an int, optional)
+    Number of non steady-state volumes. Default is 0.
     
     ::
 
       ex. 0
 
-- *max_32bits* (a boolean, optional=True)
-    Cast data to float32 if higher precision is encountered. Default is False
+- *max_32bits* (a boolean, optional)
+    Cast data to float32 if higher precision is encountered. Default is False.
 
     ::
 
@@ -62,11 +62,11 @@ Adapted from  https://github.com/nipreps/niworkflows/blob/45ab13e1bf6fdbf5e29c90
 **Outputs parameters:**
 
 - *out_file* (a strings representing a file)
-    Path of the sanitize image 
+    Path of the sanitize image (extensions: [.nii, .nii.gz]).
     
     ::
 
-      ex. '/home/username/data/raw_data/func_valid.nii'
+      ex. '/home/username/data/derived_data/func_valid.nii'
 
 -------------
 

@@ -37,11 +37,6 @@ from reportlab.pdfgen import canvas
 from reportlab.platypus import Flowable, Paragraph
 from traits.api import Undefined
 
-#from sys import exit
-#from shutil import copyfile
-# import readline as readlineComp
-# import rlcompleter, getpass
-# import logging # autocomp debug logfile
 
 class PageNumCanvas(canvas.Canvas):
     """For add \"page number of total\" in each footer."""
@@ -71,7 +66,7 @@ class PageNumCanvas(canvas.Canvas):
         """Add the page number."""
         page = "Page %s of %s" % (self._pageNumber, page_count)
         self.setFont("Helvetica", 7)
-        self.drawRightString(195*mm, 10*mm, page)
+        self.drawRightString(195 * mm, 10 * mm, page)
 
 
 class ReportLine(Flowable):
@@ -88,6 +83,29 @@ class ReportLine(Flowable):
     def draw(self):
         "draw the line"
         self.canv.line(0, self.height, self.width, self.height)
+
+
+def checkFileExt(in_file, ext_dic):
+    """ Check file extension and return
+    in_file (str): file name
+    ext_dic (dic): dictionnary of the valid extensions for the file
+                   ex : EXT = {'NIFTI_GZ': 'nii.gz', 'NIFTI': 'nii'}
+    """
+
+    # Get file extension
+    ifile = os.path.split(in_file)[-1]
+    file_name, in_ext = ifile.rsplit('.', 1)
+    if in_ext == 'gz':
+        (file_name_2, in_ext_2) = file_name.rsplit('.', 1)
+        in_ext = in_ext_2 + in_ext
+        file_name = file_name_2
+
+    valid_ext = list(ext_dic.values())
+
+    if in_ext in valid_ext:
+        return True, in_ext, file_name
+    else:
+        return False, in_ext, file_name
 
 
 def dict4runtime_update(dict4runtime, database, db_filename, *args):
@@ -109,6 +127,7 @@ def dict4runtime_update(dict4runtime, database, db_filename, *args):
         if dict4runtime[tag] is None:
             dict4runtime[tag] = "Undefined"
 
+
 def get_dbFieldValue(project, document, field):
     """blabla"""
 
@@ -126,6 +145,7 @@ def get_dbFieldValue(project, document, field):
     return project.session.get_value(COLLECTION_CURRENT,
                                      database_filename,
                                      field)
+
 
 def plot_qi2(x_grid, ref_pdf, fit_pdf, ref_data, cutoff_idx, out_file=None):
     """bla bla"""
@@ -178,6 +198,7 @@ def plot_qi2(x_grid, ref_pdf, fit_pdf, ref_data, cutoff_idx, out_file=None):
     fig.savefig(out_file, bbox_inches="tight", pad_inches=0, dpi=300)
     return out_file
 
+
 def set_dbFieldValue(project, document, tag_to_add):
     """blabla
     """
@@ -219,6 +240,7 @@ def set_dbFieldValue(project, document, tag_to_add):
                                {tag_to_add["name"]: tag_to_add['value']})
     project.session.set_values(COLLECTION_INITIAL, database_filename,
                                {tag_to_add["name"]: tag_to_add['value']})
+
 
 def slice_planes_plot(data, fig_rows, fig_cols, inf_slice_start=None,
                       slices_gap=None, dyn=1, cmap="Greys_r", out_dir=None):
@@ -379,4 +401,3 @@ def slice_planes_plot(data, fig_rows, fig_cols, inf_slice_start=None,
     fig.savefig(out_file, format="png", dpi=300, bbox_inches="tight")
 
     return out_file
-

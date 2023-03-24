@@ -29,7 +29,7 @@ Adapted from https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5
 
       ex. '/home/username/data/raw_data/func.nii'
 
-- *prefix_tsnr* (a string, optional=True)
+- *prefix_tsnr* (a string, optional)
     Prefix of the TSNR output image. Default is ''.
     
     ::
@@ -37,14 +37,14 @@ Adapted from https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5
       ex. ''
 
 
-- *suffix_tnsr* (a string, optional=True)
+- *suffix_tnsr* (a string, optional)
    Suffix of the TSNR output image. Default is '_tsnr'.
     
     ::
 
       ex. '_tsnr'
 
-- *prefix_stddev* (a string, optional=True)
+- *prefix_stddev* (a string, optional)
     Prefix of the stddev output. Default is ''.
     
     ::
@@ -52,8 +52,8 @@ Adapted from https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5
       ex. ''
 
 
-- *suffix_stddev* (a string, optional=True)
-   Suffix of the stddev output. Default is '_stddev'.
+- *suffix_stddev* (a string, optional)
+   Suffix of the STD dev output. Default is '_stddev'.
     
     ::
 
@@ -64,18 +64,18 @@ Adapted from https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5
 **Outputs parameters:**
 
 - *out_tsnr_file* (a strings representing a file)
-    Path of the tsnr image 
+    Path of the tsnr image (extensions: [.nii, .nii.gz]).
     
     ::
 
-      ex. '/home/username/data/raw_data/func_tsnr.nii'
+      ex. '/home/username/data/derived_data/func_tsnr.nii'
 
 - *out_tsnr_file* (a strings representing a file)
-    Path of the stddev image 
+    Path of the  STD dev image (extensions: [.nii, .nii.gz]).
     
     ::
 
-      ex. '/home/username/data/raw_data/func_stddev.nii'
+      ex. '/home/username/data/derived_data/func_stddev.nii'
 
 -------------
 

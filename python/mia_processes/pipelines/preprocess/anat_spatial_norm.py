@@ -38,14 +38,14 @@ class Anat_spatial_norm(Pipeline):
                                                                      True]
         self.add_process("template_mask",
                          "mia_processes.bricks.preprocess."
-                         "others.processing.Template")
+                         "others.processing.TemplateFromTemplateFlow")
         self.nodes["template_mask"].process.suffix = 'mask'
         self.nodes["template_mask"].process.desc = 'brain'
         self.nodes["template_mask"].process.in_template = 'MNI152NLin2009cAsym'
         self.nodes["template_mask"].process.resolution = 2
         self.add_process("template",
                          "mia_processes.bricks.preprocess."
-                         "others.processing.Template")
+                         "others.processing.TemplateFromTemplateFlow")
         self.nodes["template"].process.suffix = 'T1w'
         self.nodes["template"].process.in_template = 'MNI152NLin2009cAsym'
         self.nodes["template"].process.resolution = 2

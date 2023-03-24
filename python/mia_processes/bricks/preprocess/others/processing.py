@@ -20,7 +20,7 @@ pre-processing steps, which are not found in nipype.
         - Resample_2
         - RotationMask
         - Sanitize
-        - Template
+        - TemplateFromTemplateFlow
         - Threshold
         - TSNR
 
@@ -1103,7 +1103,8 @@ class Enhance(ProcessMIA):
     """
     *Image enhancing*
 
-    Please, see the complete documentation for the `Enhance' brick in the populse.mia_processes website
+    Please, see the complete documentation for the `Enhance' brick
+    in the populse.mia_processes website
     https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/Enhance.html
 
     adapted from:
@@ -1360,7 +1361,8 @@ class GradientThreshold(ProcessMIA):
     """
     * Computes a threshold from the histogram of the magnitude gradient image *
 
-    Please, see the complete documentation for the `GradientThreshold' brick in the populse.mia_processes website
+    Please, see the complete documentation for the `GradientThreshold' brick
+    in the populse.mia_processes website
     https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/GradientThreshold.html
 
     adapted from:
@@ -3411,12 +3413,13 @@ class Sanitize(ProcessMIA):
                 nib.save(img, file_out)
 
 
-class Template(ProcessMIA):
+class TemplateFromTemplateFlow(ProcessMIA):
     """
     * Get template image from templateflow *
 
-    Please, see the complete documentation for the `Template' brick in the populse.mia_processes website
-    https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/Template.html
+    Please, see the complete documentation for the `TemplateFromTemplateFlow' brick
+    in the populse.mia_processes website
+    https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/TemplateFromTemplateFlow.html
 
     """
 
@@ -3428,7 +3431,7 @@ class Template(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(Template, self).__init__()
+        super(TemplateFromTemplateFlow, self).__init__()
 
         # Third party softwares required for the execution of the brick
         self.requirement = []
@@ -3501,7 +3504,7 @@ class Template(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Template, self).list_outputs()
+        super(TemplateFromTemplateFlow, self).list_outputs()
 
         if not self.suffix:
             suffix = None
@@ -3544,14 +3547,14 @@ class Template(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(Template, self).run_process_mia()
+        super(TemplateFromTemplateFlow, self).run_process_mia()
 
 
 class Threshold(ProcessMIA):
     """
     *Image thresholding*
 
-    Please, see the complete documentation for the `Threshold brick in the populse.mia_processes website
+    Please, see the complete documentation for the `Threshold` brick in the populse.mia_processes website
     https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/Threshold.html
 
     """

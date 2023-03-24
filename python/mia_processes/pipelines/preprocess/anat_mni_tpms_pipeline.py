@@ -8,7 +8,7 @@ class Anat_mni_tpms_pipeline(Pipeline):
         # nodes
         self.add_process("template_CSF",
                          "mia_processes.bricks.preprocess."
-                         "others.processing.Template")
+                         "others.processing.TemplateFromTemplateFlow")
         self.nodes["template_CSF"].process.in_template = 'MNI152NLin2009cAsym'
         self.nodes["template_CSF"].process.resolution = 1
         self.nodes["template_CSF"].process.suffix = 'probseg'
@@ -19,14 +19,14 @@ class Anat_mni_tpms_pipeline(Pipeline):
         self.nodes["applytransforms_CSF"].process.out_prefix = 'csf_'
         self.add_process("template_GM",
                          "mia_processes.bricks.preprocess"
-                         ".others.processing.Template")
+                         ".others.processing.TemplateFromTemplateFlow")
         self.nodes["template_GM"].process.in_template = 'MNI152NLin2009cAsym'
         self.nodes["template_GM"].process.resolution = 1
         self.nodes["template_GM"].process.suffix = 'probseg'
         self.nodes["template_GM"].process.label = 'GM'
         self.add_process("template_WM",
                          "mia_processes.bricks.preprocess."
-                         "others.processing.Template")
+                         "others.processing.TemplateFromTemplateFlow")
         self.nodes["template_WM"].process.in_template = 'MNI152NLin2009cAsym'
         self.nodes["template_WM"].process.resolution = 1
         self.nodes["template_WM"].process.suffix = 'probseg'

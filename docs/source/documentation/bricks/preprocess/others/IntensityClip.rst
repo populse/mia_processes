@@ -26,21 +26,21 @@ Adapted from https://github.com/nipreps/niworkflows/blob/c2b8e0f7396c626df296a48
 **Inputs parameters:**
 
 - *in_file* (a string representing an existing file)
-    Input image which intensity will be clipped (valid extensions: [.nii, .nii.gz])
+    Input image which intensity will be clipped (valid extensions: [.nii, .nii.gz]).
 
     ::
 
       ex. '/home/username/data/raw_data/T1w.nii'
 
-- *p_min* (a float, optional=True)
+- *p_min* (a float, optional)
     Percentile for the lower bound. Default is 10.0. 
 
     ::
 
       ex. 10.0
 
-- *p_max* (a float,  optional=True)
-    Percentile for the upper bound. Default is 99.9
+- *p_max* (a float,  optional)
+    Percentile for the upper bound. Default is 99.9.
 
     ::
 
@@ -53,14 +53,14 @@ Adapted from https://github.com/nipreps/niworkflows/blob/c2b8e0f7396c626df296a48
 
       ex. True
 
-- *dtype* (one of 'int16', 'float32', 'uint8', optional=True)
+- *dtype* (one of 'int16', 'float32', 'uint8', optional)
     Output datatype. Default is 'int16'.
     
     ::
 
       ex. 'int16'
 
-- *invert* (a boolean, optional=True)
+- *invert* (a boolean, optional)
    Finalize by inverting contrast. Default is False.
     
     ::
@@ -72,11 +72,11 @@ Adapted from https://github.com/nipreps/niworkflows/blob/c2b8e0f7396c626df296a48
 **Outputs parameters:**
 
 - *out_file* (a strings representing a file)
-    Path of the clipped image 
+    Path of the clipped image (xtensions: [.nii, .nii.gz]).
     
     ::
 
-      ex. '/home/username/data/raw_data/T1w_clipped.nii'
+      ex. '/home/username/data/derived_data/T1w_clipped.nii'
 
 -------------
 

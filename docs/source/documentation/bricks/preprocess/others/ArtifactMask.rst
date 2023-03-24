@@ -25,7 +25,7 @@ Adapted from https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf9321
 **Inputs parameters:**
 
 - *in_file* (a string representing an existing file)
-    Input image (valid extensions: [.nii, .nii.gz])
+    Input image (valid extensions: [.nii, .nii.gz]).
 
     ::
 
@@ -38,8 +38,8 @@ Adapted from https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf9321
 
       ex. '/home/username/data/raw_data/T1w_outskin_mask.nii'
 
-- *rot_mask* (a string representing an existing file)
-    Rotation mask image (valid extensions: [.nii, .nii.gz])
+- *rot_mask* (a string representing an existing file, optional)
+    Rotation mask image (valid extensions: [.nii, .nii.gz]).
     
     ::
 
@@ -53,7 +53,7 @@ Adapted from https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf9321
 
       ex. '/home/username/data/raw_data/t_tpl-MNI152NLin2009cAsym_res-01_desc-head_mask.nii'
 
-- *suffix* (a string)
+- *suffix* (a string, optional)
    Suffix of output images. 
     
     ::
@@ -64,25 +64,25 @@ Adapted from https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf9321
 **Outputs parameters:**
 
 - *out_art_mask* (a pathlike object or string representing a file)
-    Out artifact mask image (valid extensions: [.nii, .nii.gz])
+    Out artifact mask image (extensions: [.nii, .nii.gz]).
     
     ::
 
-      ex. '/home/username/data/raw_data/art_T1w_mask.nii'
+      ex. '/home/username/data/derived_data/art_T1w_mask.nii'
 
 - *out_hat_mask* (a pathlike object or string representing a file)
-    Out hat mask image (valid extensions: [.nii, .nii.gz])
+    Out hat mask image (extensions: [.nii, .nii.gz]).
     
     ::
 
-      ex. '/home/username/data/raw_data/hat_T1w_mask.nii'
+      ex. '/home/username/data/derived_data/hat_T1w_mask.nii'
 
 - *out_air_mask* (a pathlike object or string representing a file)
-    Out air mask ("hat" mask without artifacts) image (valid extensions: [.nii, .nii.gz])
+    Out air mask ("hat" mask without artifacts) image (extensions: [.nii, .nii.gz]).
     
     ::
 
-      ex. '/home/username/data/raw_data/air_T1w_mask.nii'
+      ex. '/home/username/data/derived_data/air_T1w_mask.nii'
 
 
 -------------

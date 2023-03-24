@@ -13,6 +13,7 @@ Binarize brick
 Binarizes the input image applying the given lower threshold. 
 All voxels lower than the threshold are set to 0 and all the others voxels are set to 1.
 
+Be carrefull, if the suffix and prefix input parameters are not defined or consist only of one or more white spaces, the input parameter will be overwritten.
 
 Adapted from https://github.com/nipreps/niworkflows/blob/45ab13e1bf6fdbf5e29c90cef44055b0b9cf391b/niworkflows/interfaces/nibabel.py#L92
 --------------------------------------
@@ -23,20 +24,20 @@ Adapted from https://github.com/nipreps/niworkflows/blob/45ab13e1bf6fdbf5e29c90c
 **Inputs parameters:**
 
 - *in_files* (A list of items with string elements corresponding to existing path files.)
-    Input images (valid extensions: [.nii, .nii.gz])
+    Input images (valid extensions: [.nii, .nii.gz]).
 
     ::
 
       ex. ['/home/username/data/raw_data/T1w.nii']
 
 - *thresh_low* (a float)
-    Lower threshold for binarization 
+    Lower threshold for binarization. Default is 0.0. 
     
     ::
 
       ex. 0.5
 
-- *prefix* (a string)
+- *prefix* (a string, optional)
     Prefix of the output images. Default is ''.
     
     ::
@@ -44,7 +45,7 @@ Adapted from https://github.com/nipreps/niworkflows/blob/45ab13e1bf6fdbf5e29c90c
       ex. ''
 
 
-- *suffix* (a string)
+- *suffix* (a string, optional)
    Suffix of output images. Default is '_bin'.
     
     ::
@@ -55,11 +56,11 @@ Adapted from https://github.com/nipreps/niworkflows/blob/45ab13e1bf6fdbf5e29c90c
 **Outputs parameters:**
 
 - *out_files* (a list of pathlike objects or strings representing a file)
-    Images after application of the binarization (extensions: [.nii, .nii.gz])
+    Images after application of the binarization (extensions: [.nii, .nii.gz]).
     
     ::
 
-      ex. ['/home/username/data/raw_data/T1w_bin.nii']
+      ex. ['/home/username/data/derived_data/T1w_bin.nii']
 
 -------------
 

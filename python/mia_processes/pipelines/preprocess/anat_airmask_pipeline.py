@@ -13,7 +13,7 @@ class Anat_airmask_pipeline(Pipeline):
         self.add_process("artifactmask", "mia_processes.bricks.preprocess."
                          "others.processing.ArtifactMask")
         self.add_process("template", "mia_processes.bricks.preprocess."
-                         "others.processing.Template")
+                         "others.processing.TemplateFromTemplateFlow")
         self.nodes["template"].process.in_template = 'MNI152NLin2009cAsym'
         self.nodes["template"].process.resolution = 1
         self.nodes["template"].process.suffix = 'mask'
