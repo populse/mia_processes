@@ -7,35 +7,42 @@
 +--------------------------------+----------------------------------------------+----------------------------------------------------+
 
 ============
-Despike brick
+Denoise brick
 ============
 
-Removes spikes from the 3D+time input dataset using AFNI 3dDespike command. 
-The spike values replaced by something more pleasing to the eye.
-The output dataset will always be stored in floats.
+Denoise image using non-local means
 
 --------------------------------------
 
->>> from mia_processes.bricks.preprocess.others import Despike
+>>> from mia_processes.bricks.preprocess.others import Denoise
 
->>> Despike.help()
+>>> Denoise.help()
 
 **Inputs parameters:**
 
 - *in_file* (a string representing an existing file)
-    Input file (valid extensions: [.nii, .nii.gz]).
+    Input 3D file (valid extensions: [.nii, .nii.gz]).
 
     ::
 
       ex. '/home/username/data/raw_data/func.nii'
 
-- *despike* (a boolean, optional)
-    Despike dataset. 
-    Default is True. 
+- *start_idx* (an integer, optional)
+    Start index for in_file_a.
+    Default is 0.
+    ::
+
+      ex. '3'
+
+- *stop_idx* (an integer, optional)
+    Stop index for in_file_a.
+    Default is -1.
+    If "stop_idx" parameter is set to None or set to default, "stop_idx" will be automatically set to the length of input file. 
+    Cannot be lower than or equal to "start_idx" parameters. 
 
     ::
 
-      ex. True
+      ex. '240'
 
 - *output_type* (NIFTI or NIFTI_GZ, optional)
     | Format of the output image (one of NIFTI, NIFTI_GZ).
@@ -47,25 +54,23 @@ The output dataset will always be stored in floats.
       ex. NIFTI
 
 - *out_prefix* (a string, optional)
-    Prefix of the output image. Default is 'd_'.
+    Prefix of the output image. Default is 'cropped_'.
     
     ::
 
-      ex. 'd_'
-
+        ex. 'cropped_'
 
 **Outputs parameters:**
 
 - *out_file* (a strings representing a file)
-    Despike file (extensions: [.nii, .nii.gz]).
+    Out image (extensions: [.nii, .nii.gz]).
     
     ::
 
-      ex. '/home/username/data/derived_data/d_func.nii'
+      ex. '/home/username/data/derived_data/cropped_func.nii'
 
 -------------
 
 Usefull links:
 
-`AFNI 3dDespike <https://afni.nimh.nih.gov/pub/dist/doc/program_help/3dDespike.html>`_
-`AFNI Despike - nipype <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.afni.preprocess.html#despike>`_
+`Dipy Denoise - nipype <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.dipy.preprocess.html#denoise>`_

@@ -50,35 +50,37 @@ This bricks assumes that the voxel-by-voxel computations are being performed on 
     It is also possible to use built in functions such as sin, cos, sqrt, mean, stdev...
     Some functions are also designed to help implement logical functions such as step(x)  = { 1 if x > 0; 0 if x <= 0 }. 
 
-    For more example, refers to the afni documentation
+    For more example, refers to the AFNI documentation
 
     ::
 
       ex. 'a*step(b)'
 
 - *single_idx* (an integer)
-    Volume index for in_file_a 
-    Default is Undefined (ie paremeter not used)
+    Volume index for in_file_a. The computation will be performed only on this volume.
+    Default is Undefined (ie parameter not used)
     ::
 
       ex. '5'
 
 - *start_idx* (an integer)
     Start index for in_file_a. Requires stop_idx parameter.
-    Default is Undefined (ie paremeter not used).
+    The computation will be performed only only on the volumes between start_idx and stop_idx.
+    Default is Undefined (ie parameter not used).
     ::
 
       ex. '5'
 
 - *stop_idx* (an integer)
     Stop index for in_file_a. Requires start_idx parameter.
+    The computation will be performed only only on the volumes between start_idx and stop_idx.
     Default is Undefined (ie parameter not used).
     ::
 
       ex. '35'
 
 - *output_type* (NIFTI or NIFTI_GZ, optional)
-    | Format of the output image (one of NIFTI, NIFTI_GZ, AFNI).
+    | Format of the output image (one of NIFTI, NIFTI_GZ).
     |   NIFTI: \*.nii
     |   NIFTI_GZ: \*.nii.gz
 

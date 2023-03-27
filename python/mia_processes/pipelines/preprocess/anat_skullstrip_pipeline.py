@@ -12,7 +12,7 @@ class Anat_skullstrip_pipeline(Pipeline):
         self.nodes["n4_bias_field_correction"].process.dimension = 3
         self.add_process("skull_stripping",
                          "mia_processes.bricks.preprocess."
-                         "afni.processes.SkullStripping")
+                         "afni.processes.SkullStrip")
         self.add_process("calc", "mia_processes.bricks.preprocess"
                          ".afni.processes.Calc")
         self.add_process("binarize", "mia_processes.bricks.preprocess."

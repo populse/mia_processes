@@ -7,35 +7,26 @@
 +--------------------------------+----------------------------------------------+----------------------------------------------------+
 
 ============
-Despike brick
+SkullStrip brick
 ============
 
-Removes spikes from the 3D+time input dataset using AFNI 3dDespike command. 
-The spike values replaced by something more pleasing to the eye.
-The output dataset will always be stored in floats.
+Extract the brain from surrounding tissue from MRI T1-weighted images (using AFNI 3dSkullStrip command).
 
 --------------------------------------
 
->>> from mia_processes.bricks.preprocess.others import Despike
+>>> from mia_processes.bricks.preprocess.others import SkullStrip
 
->>> Despike.help()
+>>> SkullStrip.help()
 
 **Inputs parameters:**
 
 - *in_file* (a string representing an existing file)
-    Input file (valid extensions: [.nii, .nii.gz]).
+    'A 3D-T1 file to skull-strip (valid extensions: [.nii, .nii.gz]).
 
     ::
 
-      ex. '/home/username/data/raw_data/func.nii'
+      ex. '/home/username/data/raw_data/T1w.nii'
 
-- *despike* (a boolean, optional)
-    Despike dataset. 
-    Default is True. 
-
-    ::
-
-      ex. True
 
 - *output_type* (NIFTI or NIFTI_GZ, optional)
     | Format of the output image (one of NIFTI, NIFTI_GZ).
@@ -47,25 +38,24 @@ The output dataset will always be stored in floats.
       ex. NIFTI
 
 - *out_prefix* (a string, optional)
-    Prefix of the output image. Default is 'd_'.
+    Prefix of the output image. Default is 'ss_'.
     
     ::
 
-      ex. 'd_'
-
+        ex. 'ss_'
 
 **Outputs parameters:**
 
 - *out_file* (a strings representing a file)
-    Despike file (extensions: [.nii, .nii.gz]).
+    Out image (extensions: [.nii, .nii.gz]).
     
     ::
 
-      ex. '/home/username/data/derived_data/d_func.nii'
+      ex. '/home/username/data/derived_data/ss_T1w.nii'
 
 -------------
 
 Usefull links:
 
-`AFNI 3dDespike <https://afni.nimh.nih.gov/pub/dist/doc/program_help/3dDespike.html>`_
-`AFNI Despike - nipype <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.afni.preprocess.html#despike>`_
+`AFNI 3dSkullStrip <https://afni.nimh.nih.gov/pub/dist/doc/program_help/3dSkullStrip.html>`_
+`AFNI SkullStrip - nipype <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.afni.preprocess.html#skullstrip>`_

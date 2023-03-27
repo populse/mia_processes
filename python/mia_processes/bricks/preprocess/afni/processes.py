@@ -10,12 +10,12 @@ populse_mia.
     :Class:
         - Automask
         - Calc
+        - CalcDropTRs
         - Despike
-        - DropTRs
-        - Mean
         - RefitDeoblique
-        - SkullStripping
+        - SkullStrip
         - TShift
+        - TStatMean
         - Volreg
 
 """
@@ -37,7 +37,7 @@ from mia_processes.utils import checkFileExt
 
 # Other import
 import os
-from traits.api import Bool, Either, Enum, Float, Int, List, String, Undefined
+from traits.api import Bool, Either, Enum, Float, Int, List, String, Tuple, Undefined
 import nibabel as nib
 
 EXT = {'NIFTI_GZ': 'nii.gz',
@@ -98,7 +98,6 @@ class Automask(ProcessMIA):
 
         self.add_trait("output_type",
                        Enum('NIFTI',
-                            'AFNI',
                             'NIFTI_GZ',
                             output=False,
                             optional=True,
@@ -417,6 +416,175 @@ class Calc(ProcessMIA):
         return self.process.run(configuration_dict={})
 
 
+class CalcDropTRs(ProcessMIA):
+    """
+    * DropTRs of bold datasets (using AFNI 3dCalc command)*
+
+    Please, see the complete documentation for the `CalcDropTRs' brick in
+    the populse.mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/afni/CalcDropTRs.html>`_
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instantiation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(CalcDropTRs, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = ['afni', 'nipype']
+
+        # Inputs description
+        in_file_desc = ('Input 3D file (a pathlike object or string '
+                        'representing a file).')
+        start_idx_desc = 'start index (inclusive) for in_file (an Int).'
+        stop_idx_desc = 'stop index (exclusive) for in_file (an Int).'
+        output_type_desc = ('Typecodes of the output image formats (one '
+                            'of NIFTI, NIFTI_GZ).')
+        out_prefix_desc = ('Specify the string to be prepended to the '
+                           'filenames of the output image file '
+                           '(a string).')
+
+        # Outputs description
+        out_file_desc = ('The TR cropped file (a pathlike object or a '
+                         'string representing a file).')
+
+        # Inputs traits
+        self.add_trait("in_file",
+                       File(output=False,
+                            optional=False,
+                            desc=in_file_desc))
+
+        self.add_trait("start_idx",
+                       Int(0,
+                           output=False,
+                           optional=True,
+                           desc=start_idx_desc))
+
+        self.add_trait("stop_idx",
+                       Int(-1,
+                           output=False,
+                           optional=True,
+                           desc=stop_idx_desc))
+
+        self.add_trait("output_type",
+                       Enum('NIFTI',
+                            'NIFTI_GZ',
+                            output=False,
+                            optional=True,
+                            desc=output_type_desc))
+
+        self.add_trait("out_prefix",
+                       String('cropped_',
+                              output=False,
+                              optional=True,
+                              desc=out_prefix_desc))
+
+        # Outputs traits
+        self.add_trait("out_file",
+                       File(output=True,
+                            desc=out_file_desc))
+
+        self.init_default_traits()
+
+        self.init_process('nipype.interfaces.afni.Calc')
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(CalcDropTRs, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.in_file:
+
+            if not self.stop_idx or self.stop_idx == -1:
+                print("\nWarning: stop_idx will be automatically set to"
+                      "the length of input file")
+            elif self.stop_idx <= self.start_idx:
+                print("\nError: stop_idx cannot be lower than or equal to"
+                      "start_idx")
+                return
+
+            if self.start_idx == 0 and self.stop_idx == -1:
+                self.outputs['out_file'] = self.in_file
+            else:
+                if self.out_prefix == Undefined:
+                    self.out_prefix = 'cropped_'
+                    print('The out_prefix parameter is undefined.'
+                          'Automatically set to "cropped" ...')
+
+                if self.output_directory:
+                    valid_ext, in_ext, fileName = checkFileExt(self.in_file,
+                                                               EXT)
+
+                    if not valid_ext:
+                        print('\nThe input image format is'
+                              ' not recognized...!')
+                        return
+                    else:
+                        self.outputs['out_file'] = os.path.join(
+                            self.output_directory,
+                            self.out_prefix + fileName + '.' + EXT[
+                                self.output_type])
+                else:
+                    print('No output_directory was found...!\n')
+                    return
+
+            self.inheritance_dict[self.outputs[
+                'out_file']] = self.in_file
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(CalcDropTRs, self).run_process_mia()
+
+        if self.in_file == self.out_file:
+            return
+
+        try:
+            imnii = nib.load(self.in_file)
+            nb_volumes = imnii.dataobj.shape[3]
+
+        except (nib.filebasedimages.ImageFileError,
+                FileNotFoundError, TypeError) as e:
+            print("\nError while opening input file"
+                  ": ", e)
+            return
+
+        self.process.in_file_a = self.in_file
+        self.process.expr = "a"
+        self.process.outputtype = self.output_type
+        self.process.start_idx = self.start_idx
+        if self.stop_idx == -1:
+            self.process.stop_idx = nb_volumes - 1
+        else:
+            self.process.stop_idx = self.stop_idx
+        self.process.out_file = self.out_file
+
+        if self.out_prefix:
+            self.process.out_prefix = self.out_prefix
+
+        return self.process.run(configuration_dict={})
+
+
 class Despike(ProcessMIA):
     """
     * Removes ‘spikes’ from the 3D+time input dataset *
@@ -551,334 +719,13 @@ class Despike(ProcessMIA):
         return self.process.run(configuration_dict={})
 
 
-class DropTRs(ProcessMIA):
-    """
-    * DropTRs of bold datasets *
-
-    Please, see the complete documentation for the `DropTRs' brick in
-    the populse.mia_processes website
-    <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/afni/DropTRs.html>`_
-
-    """
-
-    def __init__(self):
-        """Dedicated to the attributes initialisation/instantiation.
-
-        The input and output plugs are defined here. The special
-        'self.requirement' attribute (optional) is used to define the
-        third-party products necessary for the running of the brick.
-        """
-        # Initialisation of the objects needed for the launch of the brick
-        super(DropTRs, self).__init__()
-
-        # Third party softwares required for the execution of the brick
-        self.requirement = ['afni', 'nipype']
-
-        # Inputs description
-        in_file_desc = ('First input 3D file (a pathlike object or string '
-                        'representing a file).')
-        start_idx_desc = 'start index (inclusive) for in_file (an Int).'
-        stop_idx_desc = 'stop index (exclusive) for in_file (an Int).'
-        output_type_desc = ('Typecodes of the output image formats (one '
-                            'of NIFTI, AFNI, NIFTI_GZ).')
-        out_prefix_desc = ('Specify the string to be prepended to the '
-                           'filenames of the output image file '
-                           '(a string).')
-
-        # Outputs description
-        out_file_desc = ('The TR cropped file (a pathlike object or a '
-                         'string representing a file).')
-
-        # Inputs traits
-        self.add_trait("in_file",
-                       File(output=False,
-                            optional=False,
-                            desc=in_file_desc))
-
-        self.add_trait("start_idx",
-                       Int(0,
-                           output=False,
-                           optional=True,
-                           desc=start_idx_desc))
-
-        self.add_trait("stop_idx",
-                       Int(-1,
-                           output=False,
-                           optional=True,
-                           desc=stop_idx_desc))
-
-        self.add_trait("output_type",
-                       Enum('NIFTI',
-                            'AFNI',
-                            'NIFTI_GZ',
-                            output=False,
-                            optional=True,
-                            desc=output_type_desc))
-
-        self.add_trait("out_prefix",
-                       String('cropped_',
-                              output=False,
-                              optional=True,
-                              desc=out_prefix_desc))
-
-        # Outputs traits
-        self.add_trait("out_file",
-                       File(output=True,
-                            desc=out_file_desc))
-
-        self.init_default_traits()
-
-        self.init_process('nipype.interfaces.afni.Calc')
-
-    def list_outputs(self, is_plugged=None):
-        """Dedicated to the initialisation step of the brick.
-
-        The main objective of this method is to produce the outputs of the
-        bricks (self.outputs) and the associated tags (self.inheritance_dic),
-        if defined here. In order not to include an output in the database,
-        this output must be a value of the optional key 'notInDb' of the
-        self.outputs dictionary. To work properly this method must return
-        self.make_initResult() object.
-
-        :param is_plugged: the state, linked or not, of the plugs.
-        :returns: a dictionary with requirement, outputs and inheritance_dict.
-        """
-        # Using the inheritance to ProcessMIA class, list_outputs method
-        super(DropTRs, self).list_outputs()
-
-        # Outputs definition and tags inheritance (optional)
-        if self.in_file:
-
-            if not self.stop_idx or self.stop_idx == -1:
-                print("\nWarning: stop_idx will be automatically set to"
-                      "the length of input file")
-            elif self.stop_idx <= self.start_idx:
-                print("\nError: stop_idx cannot be lower than or equal to"
-                      "start_idx")
-                return
-
-            if self.start_idx == 0 and self.stop_idx == -1:
-                self.outputs['out_file'] = self.in_file
-            else:
-                if self.out_prefix == Undefined:
-                    self.out_prefix = 'cropped_'
-                    print('The out_prefix parameter is undefined.'
-                          'Automatically set to "cropped" ...')
-
-                if self.output_directory:
-                    valid_ext, in_ext, fileName = checkFileExt(self.in_file,
-                                                               EXT)
-
-                    if not valid_ext:
-                        print('\nThe input image format is'
-                              ' not recognized...!')
-                        return
-                    else:
-                        self.outputs['out_file'] = os.path.join(
-                            self.output_directory,
-                            self.out_prefix + fileName + '.' + EXT[
-                                self.output_type])
-                else:
-                    print('No output_directory was found...!\n')
-                    return
-
-            self.inheritance_dict[self.outputs[
-                'out_file']] = self.in_file
-
-        # Return the requirement, outputs and inheritance_dict
-        return self.make_initResult()
-
-    def run_process_mia(self):
-        """Dedicated to the process launch step of the brick."""
-        super(DropTRs, self).run_process_mia()
-
-        if self.in_file == self.out_file:
-            return
-
-        try:
-            imnii = nib.load(self.in_file)
-            nb_volumes = imnii.dataobj.shape[3]
-
-        except (nib.filebasedimages.ImageFileError,
-                FileNotFoundError, TypeError) as e:
-            print("\nError while opening input file"
-                  ": ", e)
-            return
-
-        self.process.in_file_a = self.in_file
-        self.process.expr = "a"
-        self.process.outputtype = self.output_type
-        self.process.start_idx = self.start_idx
-        if self.stop_idx == -1:
-            self.process.stop_idx = nb_volumes - 1
-        else:
-            self.process.stop_idx = self.stop_idx
-        self.process.out_file = self.out_file
-
-        if self.out_prefix:
-            self.process.out_prefix = self.out_prefix
-
-        return self.process.run(configuration_dict={})
-
-
-class Mean(ProcessMIA):
-    """
-    * Mean of bold images *
-
-    Please, see the complete documentation for the `Mean' brick in the populse.mia_processes website
-    <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/afni/Mean.html>`_
-
-    """
-
-    def __init__(self):
-        """Dedicated to the attributes initialisation/instantiation.
-
-        The input and output plugs are defined here. The special
-        'self.requirement' attribute (optional) is used to define the
-        third-party products necessary for the running of the brick.
-        """
-        # Initialisation of the objects needed for the launch of the brick
-        super(Mean, self).__init__()
-
-        # Third party softwares required for the execution of the brick
-        self.requirement = ['afni', 'nipype']
-
-        # Inputs description
-        in_file_desc = ('A bold file to be averaged (a pathlike object or string '
-                        'representing a file).')
-        output_type_desc = ('Typecodes of the output image formats (one '
-                            'of NIFTI, AFNI, NIFTI_GZ).')
-        out_prefix_desc = ('Specify the string to be prepended to the '
-                           'filenames of the skull-stripped image file(s) '
-                           '(a string).')
-
-        # Outputs description
-        out_file_desc = ('The time shifted file (a pathlike object or a '
-                         'string representing a file).')
-
-        # Inputs traits
-        self.add_trait("in_file",
-                       File(output=False,
-                            optional=False,
-                            desc=in_file_desc))
-
-        self.add_trait("output_type",
-                       Enum('NIFTI',
-                            'AFNI',
-                            'NIFTI_GZ',
-                            output=False,
-                            optional=True,
-                            desc=output_type_desc))
-
-        self.add_trait("out_prefix",
-                       String('mean_',
-                              output=False,
-                              optional=True,
-                              desc=out_prefix_desc))
-
-        # Outputs traits
-        self.add_trait("out_file",
-                       File(output=True,
-                            desc=out_file_desc))
-
-        self.init_default_traits()
-
-        self.init_process('nipype.interfaces.afni.TStat')
-
-    def list_outputs(self, is_plugged=None):
-        """Dedicated to the initialisation step of the brick.
-
-        The main objective of this method is to produce the outputs of the
-        bricks (self.outputs) and the associated tags (self.inheritance_dic),
-        if defined here. In order not to include an output in the database,
-        this output must be a value of the optional key 'notInDb' of the
-        self.outputs dictionary. To work properly this method must return
-        self.make_initResult() object.
-
-        :param is_plugged: the state, linked or not, of the plugs.
-        :returns: a dictionary with requirement, outputs and inheritance_dict.
-        """
-        # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Mean, self).list_outputs()
-
-        # Outputs definition and tags inheritance (optional)
-        if self.in_file:
-
-            if self.out_prefix == Undefined:
-                self.out_prefix = 'mean_'
-                print('The out_prefix parameter is undefined. Automatically '
-                      'set to "mean" ...')
-
-            if self.output_directory:
-                ifile = os.path.split(self.in_file)[-1]
-
-                try:
-                    fileName, trail = ifile.rsplit('.', 1)
-                    if trail == 'gz':
-                        (fileName_2,
-                         trail_2) = os.path.splitext(fileName)
-                        if trail_2 == 'nii':
-                            trail = 'nii.gz'
-
-                except ValueError:
-                    print('\nThe input image format is not recognized ...!')
-                    return
-
-                else:
-
-                    if trail in ['nii', '3D', 'nii.gz']:
-
-                        if self.output_type == 'NIFTI':
-                            trail = 'nii'
-                        elif self.output_type == 'AFNI':
-                            trail = '3D'
-                        elif self.output_type == 'NIFTI_GZ':
-                            trail = 'nii.gz'
-
-                        self.outputs['out_file'] = os.path.join(
-                            self.output_directory,
-                            self.out_prefix + fileName + '.' + trail)
-
-                    else:
-                        self.outputs['out_file'] = os.path.join(
-                            self.output_directory,
-                            self.out_prefix + ifile)
-                        print('\nThe input image format does not seem to be '
-                              'nii or 3D. This can prevent the process '
-                              'launch ...!')
-
-                    self.inheritance_dict[self.outputs[
-                        'out_file']] = self.in_file
-
-            else:
-                print('No output_directory was found...!\n')
-                return
-
-        # Return the requirement, outputs and inheritance_dict
-        return self.make_initResult()
-
-    def run_process_mia(self):
-        """Dedicated to the process launch step of the brick."""
-        super(Mean, self).run_process_mia()
-
-        self.process.in_file = self.in_file
-        self.process.args = '-mean'
-        self.process.outputtype = self.output_type
-        self.process.out_file = self.out_file
-
-        if self.out_prefix:
-            self.process.out_prefix = self.out_prefix
-
-        return self.process.run(configuration_dict={})
-
-
 class RefitDeoblique(ProcessMIA):
     """
     * Deoblique dataset *
 
-    Please, see the complete documentation for the `Deoblique' brick in
+    Please, see the complete documentation for the `RefitDeoblique' brick in
     the populse.mia_processes website
-    <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/afni/Deoblique.html>`_
+    <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/afni/RefitDeoblique.html>`_
 
     """
 
@@ -896,7 +743,7 @@ class RefitDeoblique(ProcessMIA):
         self.requirement = ['afni', 'nipype']
 
         # Inputs description
-        in_file_desc = ('First input 3D file (a pathlike object or string '
+        in_file_desc = ('Input file (a pathlike object or string '
                         'representing a file).')
         deoblique_desc = 'Deoblique dataset only if true (boolean).'
 
@@ -962,12 +809,13 @@ class RefitDeoblique(ProcessMIA):
         return self.process.run(configuration_dict={})
 
 
-class SkullStripping(ProcessMIA):
+class SkullStrip(ProcessMIA):
     """
     * Extract the brain from surrounding tissue from MRI T1-weighted images *
 
-    Please, see the complete documentation for the `SkullStripping' brick in the populse.mia_processes website
-    <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/afni/SkullStripping.html>`_
+    Please, see the complete documentation for the `SkullStrip' brick
+    in the populse.mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/afni/SkullStrip.html>`_
 
     """
 
@@ -979,16 +827,16 @@ class SkullStripping(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(SkullStripping, self).__init__()
+        super(SkullStrip, self).__init__()
 
         # Third party softwares required for the execution of the brick
         self.requirement = ['afni', 'nipype']
 
         # Inputs description
-        in_file_desc = ('A 3D-T1 file to skull-strip (a pathlike object or string '
-                        'representing a file).')
+        in_file_desc = ('A 3D-T1 file to skull-strip (a pathlike object'
+                        'or string representing a file).')
         output_type_desc = ('Typecodes of the output image formats (one '
-                            'of NIFTI, AFNI, NIFTI_GZ).')
+                            'of NIFTI, NIFTI_GZ).')
         out_prefix_desc = ('Specify the string to be prepended to the '
                            'filenames of the skull-stripped image file(s) '
                            '(a string).')
@@ -1005,7 +853,6 @@ class SkullStripping(ProcessMIA):
 
         self.add_trait("output_type",
                        Enum('NIFTI',
-                            'AFNI',
                             'NIFTI_GZ',
                             output=False,
                             optional=True,
@@ -1040,7 +887,7 @@ class SkullStripping(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(SkullStripping, self).list_outputs()
+        super(SkullStrip, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
@@ -1051,42 +898,19 @@ class SkullStripping(ProcessMIA):
                       'set to "ss" ...')
 
             if self.output_directory:
-                ifile = os.path.split(self.in_file)[-1]
+                valid_ext, in_ext, fileName = checkFileExt(self.in_file,
+                                                           EXT)
 
-                try:
-                    fileName, trail = ifile.rsplit('.', 1)
-                    if trail == 'gz':
-                        (fileName_2,
-                         trail_2) = os.path.splitext(fileName)
-                        if trail_2 == 'nii':
-                            trail = 'nii.gz'
-
-                except ValueError:
-                    print('\nThe input image format is not recognized ...!')
+                if not valid_ext:
+                    print('\nThe input image format is'
+                          ' not recognized...!')
                     return
-
                 else:
 
-                    if trail in ['nii', '3D', 'nii.gz']:
-
-                        if self.output_type == 'NIFTI':
-                            trail = 'nii'
-                        elif self.output_type == 'AFNI':
-                            trail = '3D'
-                        elif self.output_type == 'NIFTI_GZ':
-                            trail = 'nii.gz'
-
-                        self.outputs['out_file'] = os.path.join(
-                            self.output_directory,
-                            self.out_prefix + fileName + '.' + trail)
-
-                    else:
-                        self.outputs['out_file'] = os.path.join(
-                            self.output_directory,
-                            self.out_prefix + ifile)
-                        print('\nThe input image format does not seem to be '
-                              'nii or 3D. This can prevent the process '
-                              'launch ...!')
+                    self.outputs['out_file'] = os.path.join(
+                        self.output_directory,
+                        self.out_prefix + fileName + '.' + EXT[
+                            self.output_type])
 
                     self.inheritance_dict[self.outputs[
                         'out_file']] = self.in_file
@@ -1100,7 +924,7 @@ class SkullStripping(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(SkullStripping, self).run_process_mia()
+        super(SkullStrip, self).run_process_mia()
         self.process.in_file = self.in_file
         self.process.outputtype = self.output_type
         self.process.out_file = self.out_file
@@ -1115,7 +939,8 @@ class TShift(ProcessMIA):
     """
     * Slice-time correction of bold images *
 
-    Please, see the complete documentation for the `TShift' brick in the populse.mia_processes website
+    Please, see the complete documentation for the `TShift' brick
+    in the populse.mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/afni/TShift.html>`_
 
     """
@@ -1134,20 +959,42 @@ class TShift(ProcessMIA):
         self.requirement = ['afni', 'nipype']
 
         # Inputs description
-        in_file_desc = ('A bold file to be time-shifted (a pathlike object or string '
-                        'representing a file).')
-        slice_encoding_dir_desc = ('Direction in which slice_timing is specified '
-                                   '(default: k). If negative,slice_timing is defined '
-                                   'in reverse order, that is, the first entry '
-                                   'corresponds to the slice with the largest index, '
-                                   'and the final entry corresponds to slice index zero.')
-        slice_timing_desc = ('Time offsets from the volume acquisition onset for each '
-                             'slice. (a list of floats).')
+        in_file_desc = ('A bold file to be time-shifted (a pathlike object'
+                        'or string representing a file).')
+        slice_encoding_dir_desc = ('Direction in which slice_timing is'
+                                   'specified (default: k).'
+                                   'If negative,slice_timing is defined'
+                                   'in reverse order, that is, the first'
+                                   'entry corresponds to the slice with '
+                                   'the largest index, and the final entry'
+                                   'corresponds to slice index zero.')
+        slice_timing_desc = ('Time offsets from the volume acquisition onset'
+                             'for each slice. (a string representing an'
+                             'existing file or a list of floats).'
+                             'Mutually exclusive with "tpattern" parameters')
+        ignore_desc = ('Ignore the first set of points specified.'
+                       '(an integer)')
+        interpolation_desc = ('Interpolation methods (one of ‘Fourier’ or'
+                              '‘linear’ or ‘cubic’ or ‘quintic’ or ‘heptic’)')
+        rlt_desc = ('Before shifting, remove the mean and linear trend'
+                    '(a boolean)')
+        rltplus_desc = ('Before shifting, remove the mean and linear trend '
+                        'and later put back the mean. (a boolean)')
+        tpattern_desc = ('Use specified slice time pattern rather than one in'
+                         'header . One of (‘alt+z’ or ‘altplus’ or ‘alt+z2’'
+                         'or ‘alt-z’ or ‘altminus’ or ‘alt-z2’ or ‘seq+z’'
+                         'or ‘seqplus’ or‘seq-z’ or ‘seqminus’'
+                         'Mutually exclusive with "slice_timming" parameters')
+        tr_desc = ('Manually set the TR. You can add suffix “s” for seconds or'
+                   '“ms” for milliseconds (a string)')
+        tslice_desc = ('Align each slice to time offset of given slice.'
+                       '(an integer). Mutually exclusive with tzero parameter.')
+        tzero_desc = (' Align each slice to given time offset'
+                      '(a float). Mutually exclusive with tslice parameter.')
         output_type_desc = ('Typecodes of the output image formats (one '
-                            'of NIFTI, AFNI, NIFTI_GZ).')
+                            'of NIFTI, NIFTI_GZ).')
         out_prefix_desc = ('Specify the string to be prepended to the '
-                           'filenames of the skull-stripped image file(s) '
-                           '(a string).')
+                           'output filename (a string).')
 
         # Outputs description
         out_file_desc = ('The time shifted file (a pathlike object or a '
@@ -1168,14 +1015,86 @@ class TShift(ProcessMIA):
                             desc=slice_encoding_dir_desc))
 
         self.add_trait("slice_timing",
-                       List(Float(),
+                       Either(List(Float()),
+                              File(),
+                              output=False,
+                              optional=True,
+                              desc=slice_timing_desc))
+
+        self.add_trait("tpattern",
+                       Either(Undefined,
+                              Enum('alt+z',
+                                   'altplus',
+                                   'alt+z2',
+                                   'alt-z',
+                                   'altminus',
+                                   'alt-z2',
+                                   'seq+z',
+                                   'seqplus',
+                                   'seq-z',
+                                   'seqminus'
+                                   ),
+                              default=Undefined,
+                              output=False,
+                              optional=True,
+                              desc=tpattern_desc))
+
+        self.add_trait("ignore",
+                       Either(Undefined,
+                              Int(),
+                              default=Undefined,
+                              output=False,
+                              optional=True,
+                              desc=ignore_desc))
+
+        self.add_trait("interpolation",
+                       Enum('Fourier',
+                            'linear',
+                            'cubic',
+                            'quintic',
+                            'heptic',
                             output=False,
                             optional=True,
-                            desc=slice_timing_desc))
+                            desc=interpolation_desc))
+
+        self.add_trait("rlt",
+                       Bool(False,
+                            output=False,
+                            optional=True,
+                            desc=rlt_desc))
+
+        self.add_trait("rltplus",
+                       Bool(False,
+                            output=False,
+                            optional=True,
+                            desc=rltplus_desc))
+
+        self.add_trait("tr",
+                       Either(Undefined,
+                              String(),
+                              default=Undefined,
+                              output=False,
+                              optional=True,
+                              desc=tr_desc))
+
+        self.add_trait("tslice",
+                       Either(Undefined,
+                              Int(),
+                              default=Undefined,
+                              output=False,
+                              optional=True,
+                              desc=tslice_desc))
+
+        self.add_trait("tzero",
+                       Either(Undefined,
+                              Float(),
+                              default=Undefined,
+                              output=False,
+                              optional=True,
+                              desc=tzero_desc))
 
         self.add_trait("output_type",
                        Enum('NIFTI',
-                            'AFNI',
                             'NIFTI_GZ',
                             output=False,
                             optional=True,
@@ -1212,51 +1131,39 @@ class TShift(ProcessMIA):
         # Using the inheritance to ProcessMIA class, list_outputs method
         super(TShift, self).list_outputs()
 
+        if (self.slice_timing and self.tpattern != Undefined):
+            print('\nInitialisation failed. '
+                  'Please, define only "slice_timing" paremeters or '
+                  '"tpattern" parameters (set the other as Undefined) ...!')
+            return
+
+        if self.tslice != Undefined and self.tzero != Undefined:
+            print('\nInitialisation failed. '
+                  'Please, define only "tslice" paremeters or '
+                  '"tzero" parameters (set the other as Undefined) ...!')
+            return
+
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
-            if self.slice_timing:
+            if self.slice_timing or self.tpattern != Undefined:
                 if self.out_prefix == Undefined:
                     self.out_prefix = 'st_corr_'
-                    print('The out_prefix parameter is undefined. Automatically '
-                          'set to "st_corr" ...')
+                    print('The out_prefix parameter is undefined. '
+                          'Automatically set to "st_corr" ...')
 
                 if self.output_directory:
-                    ifile = os.path.split(self.in_file)[-1]
+                    valid_ext, in_ext, fileName = checkFileExt(self.in_file,
+                                                               EXT)
 
-                    try:
-                        fileName, trail = ifile.rsplit('.', 1)
-                        if trail == 'gz':
-                            (fileName_2,
-                             trail_2) = os.path.splitext(fileName)
-                            if trail_2 == 'nii':
-                                trail = 'nii.gz'
-
-                    except ValueError:
-                        print('\nThe input image format is not recognized ...!')
+                    if not valid_ext:
+                        print('\nThe input image format is'
+                              ' not recognized...!')
                         return
-
                     else:
-
-                        if trail in ['nii', '3D', 'nii.gz']:
-
-                            if self.output_type == 'NIFTI':
-                                trail = 'nii'
-                            elif self.output_type == 'AFNI':
-                                trail = '3D'
-                            elif self.output_type == 'NIFTI_GZ':
-                                trail = 'nii.gz'
-
-                            self.outputs['out_file'] = os.path.join(
-                                self.output_directory,
-                                self.out_prefix + fileName + '.' + trail)
-
-                        else:
-                            self.outputs['out_file'] = os.path.join(
-                                self.output_directory,
-                                self.out_prefix + ifile)
-                            print('\nThe input image format does not seem to be '
-                                  'nii or 3D. This can prevent the process '
-                                  'launch ...!')
+                        self.outputs['out_file'] = os.path.join(
+                            self.output_directory,
+                            self.out_prefix + fileName + '.' + EXT[
+                                self.output_type])
 
                 else:
                     print('No output_directory was found...!\n')
@@ -1273,13 +1180,153 @@ class TShift(ProcessMIA):
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
         super(TShift, self).run_process_mia()
-        if not self.slice_timing:
+        if not self.slice_timing and self.tpattern == Undefined:
             return
 
         self.process.in_file = self.in_file
         self.process.outputtype = self.output_type
-        self.process.slice_encoding_direction = self.slice_encoding_direction
-        self.process.slice_timing = self.slice_timing
+        self.process.out_file = self.out_file
+        if self.tpattern:
+            self.process.tpattern = self.tpattern
+        if self.slice_timing:
+            self.process.slice_timing = self.slice_timing
+        self.process.slice_encoding_direction = self.slice_encoding_dir
+        self.process.rlt = self.rlt
+        self.process.rltplus = self.rltplus
+        self.process.interp = self.interpolation
+        if self.out_prefix:
+            self.process.out_prefix = self.out_prefix
+        if self.tslice:
+            self.process.tslice = self.tslice
+        if self.tzero:
+            self.process.tzero = self.tzero
+        if self.ignore:
+            self.process.ignore = self.ignore
+        if self.tr:
+            self.process.tr = self.tr
+
+        return self.process.run(configuration_dict={})
+
+
+class TStatMean(ProcessMIA):
+    """
+    * Mean of bold images (using AFNI 3dTstat command)*
+
+    Please, see the complete documentation for the `TStatMean' brick
+    in the populse.mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/afni/TStatMean.html>`_
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instantiation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(TStatMean, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = ['afni', 'nipype']
+
+        # Inputs description
+        in_file_desc = ('A bold file to be averaged (a pathlike object'
+                        'or string  representing a file).')
+        output_type_desc = ('Typecodes of the output image formats (one '
+                            'of NIFTI, NIFTI_GZ).')
+        out_prefix_desc = ('Specify the string to be prepended to the '
+                           'filenames of the skull-stripped image file(s) '
+                           '(a string).')
+
+        # Outputs description
+        out_file_desc = ('The time shifted file (a pathlike object or a '
+                         'string representing a file).')
+
+        # Inputs traits
+        self.add_trait("in_file",
+                       File(output=False,
+                            optional=False,
+                            desc=in_file_desc))
+
+        self.add_trait("output_type",
+                       Enum('NIFTI',
+                            'NIFTI_GZ',
+                            output=False,
+                            optional=True,
+                            desc=output_type_desc))
+
+        self.add_trait("out_prefix",
+                       String('mean_',
+                              output=False,
+                              optional=True,
+                              desc=out_prefix_desc))
+
+        # Outputs traits
+        self.add_trait("out_file",
+                       File(output=True,
+                            desc=out_file_desc))
+
+        self.init_default_traits()
+
+        self.init_process('nipype.interfaces.afni.TStat')
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(TStatMean, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.in_file:
+
+            if self.out_prefix == Undefined:
+                self.out_prefix = 'mean_'
+                print('The out_prefix parameter is undefined. Automatically '
+                      'set to "mean" ...')
+
+            if self.output_directory:
+                valid_ext, in_ext, fileName = checkFileExt(self.in_file,
+                                                           EXT)
+
+                if not valid_ext:
+                    print('\nThe input image format is'
+                          ' not recognized...!')
+                    return
+                else:
+                    self.outputs['out_file'] = os.path.join(
+                        self.output_directory,
+                        self.out_prefix + fileName + '.' + EXT[
+                            self.output_type])
+
+                    self.inheritance_dict[self.outputs[
+                        'out_file']] = self.in_file
+
+            else:
+                print('No output_directory was found...!\n')
+                return
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(TStatMean, self).run_process_mia()
+
+        self.process.in_file = self.in_file
+        self.process.args = '-mean'
+        self.process.outputtype = self.output_type
         self.process.out_file = self.out_file
 
         if self.out_prefix:
@@ -1290,9 +1337,10 @@ class TShift(ProcessMIA):
 
 class Volreg(ProcessMIA):
     """
-    * Register input volumes to a base volume using AFNI 3dvolreg command *
+    * Register an input volume to a base volume using AFNI 3dvolreg command *
 
-    Please, see the complete documentation for the `Volreg' brick in the populse.mia_processes website
+    Please, see the complete documentation for the `Volreg' brick in
+    the populse.mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/afni/Volreg.html>`_
 
     """
@@ -1311,31 +1359,46 @@ class Volreg(ProcessMIA):
         self.requirement = ['afni', 'nipype']
 
         # Inputs description
-        in_file_desc = ('A bold file to be time-shifted (a pathlike object or string '
-                        'representing a file).')
-        interp_desc = (' Spatial interpolation methods (Either ‘Fourier’ or ‘cubic’ '
-                       'or ‘heptic’ or ‘quintic’ or ‘linear’ - default = heptic)')
+        in_file_desc = ('Input (a pathlike object or '
+                        'string representing a file).')
+        interpolation_desc = ('Spatial interpolation methods (Either '
+                              '‘Fourier’ or ‘cubic’ or ‘heptic’ '
+                              'or ‘quintic’ or ‘linear’. Default is heptic)')
         two_pass_desc = ('Do two passes of the registration algorithm:'
                          '(1) with smoothed base and data bricks, with linear'
                          ' interpolation, to get a crude alignment, then'
-                         '(2) with the input base and data bricks, to get a fine '
-                         'alignment.'
-                         'This method is useful when aligning high-resolution datasets '
-                         'that may need to be moved more than a few voxels to be aligned.'
-                         '(a boolean).')
+                         '(2) with the input base and data bricks, to get a '
+                         'fine alignment.'
+                         'This method is useful when aligning high-resolution'
+                         'datasets that may need to be moved more than'
+                         ' a few voxels to be aligned. (a boolean).')
         zpad_desc = ('Zeropad around the edges by ‘n’ voxels during rotations '
                      '(an integer).')
+        copyorigin_desc = ('Copy base file origin coords to output'
+                           '(a boolean)')
+        timeshift_desc = ('Time shift to mean slice time offset.')
+        in_weight_volume_desc = ('Weights for each voxel specified by a file'
+                                 'with an optional volume number '
+                                 '(defaults to 0). A a tuple of the form:'
+                                 '(a pathlike object or string representing'
+                                 ' an existing file, an integer)')
+        save_oned_matrix_desc = ('Save oned matrix (a boolean)')
+        save_md1d_file_desc = ('Save md1d file (a boolean)')
         output_type_desc = ('Typecodes of the output image formats (one '
-                            'of NIFTI, AFNI, NIFTI_GZ).')
+                            'of NIFTI, NIFTI_GZ).')
         out_prefix_desc = ('Specify the string to be prepended to the '
-                           'filenames of the skull-stripped image file(s) '
+                           'filenames of the registered image file(s) '
                            '(a string).')
 
         # Outputs description
         out_file_desc = ('The registered file (a pathlike object or a '
                          'string representing a file).')
-        oned_file_desc = ('The movement parameters file (a pathlike object or a '
-                         'string representing a file).')
+        oned_file_desc = ('The movement parameters file (a pathlike object'
+                          'or a  string representing a file).')
+        oned_matrix_desc = ('The transformation matrix (a pathlike object'
+                            'or a  string representing a file).')
+        md1d_file_desc = ('Max displacement outputfile (a pathlike object'
+                          'or a  string representing a file).')
 
         # Inputs traits
         self.add_trait("in_file",
@@ -1343,16 +1406,16 @@ class Volreg(ProcessMIA):
                             optional=False,
                             desc=in_file_desc))
 
-        self.add_trait("interp",
-                       Enum('Fourier',
+        self.add_trait("interpolation",
+                       Enum('heptic',
+                            'Fourier',
                             'cubic',
-                            'heptic',
                             'quintic',
                             'linear',
                             default='heptic',
                             output=False,
                             optional=True,
-                            desc=interp_desc))
+                            desc=interpolation_desc))
 
         self.add_trait("twopass",
                        Bool(False,
@@ -1366,9 +1429,40 @@ class Volreg(ProcessMIA):
                            optional=True,
                            desc=zpad_desc))
 
+        self.add_trait("copyorigin",
+                       Bool(False,
+                            output=False,
+                            optional=True,
+                            desc=copyorigin_desc))
+
+        self.add_trait("timeshift",
+                       Bool(False,
+                            output=False,
+                            optional=True,
+                            desc=timeshift_desc))
+
+        self.add_trait("in_weight_volume",
+                       Either(Undefined,
+                              Tuple(String, Int(0)),
+                              default=Undefined,
+                              output=False,
+                              optional=True,
+                              desc=in_weight_volume_desc))
+
+        self.add_trait("save_oned_matrix",
+                       Bool(False,
+                            output=False,
+                            optional=True,
+                            desc=save_oned_matrix_desc))
+
+        self.add_trait("save_md1d_file",
+                       Bool(False,
+                            output=False,
+                            optional=True,
+                            desc=save_md1d_file_desc))
+
         self.add_trait("output_type",
                        Enum('NIFTI',
-                            'AFNI',
                             'NIFTI_GZ',
                             output=False,
                             optional=True,
@@ -1388,6 +1482,16 @@ class Volreg(ProcessMIA):
         self.add_trait("oned_file",
                        File(output=True,
                             desc=oned_file_desc))
+
+        self.add_trait("oned_matrix",
+                       File(output=True,
+                            optional=True,
+                            desc=oned_matrix_desc))
+
+        self.add_trait("md1d_file",
+                       File(output=True,
+                            optional=True,
+                            desc=md1d_file_desc))
 
         self.init_default_traits()
 
@@ -1418,56 +1522,44 @@ class Volreg(ProcessMIA):
                       'set to "reg" ...')
 
             if self.output_directory:
-                ifile = os.path.split(self.in_file)[-1]
+                valid_ext, in_ext, fileName = checkFileExt(self.in_file,
+                                                           EXT)
 
-                try:
-                    fileName, trail = ifile.rsplit('.', 1)
-                    if trail == 'gz':
-                        (fileName_2,
-                         trail_2) = os.path.splitext(fileName)
-                        if trail_2 == 'nii':
-                            trail = 'nii.gz'
-
-                except ValueError:
-                    print('\nThe input image format is not recognized ...!')
+                if not valid_ext:
+                    print('\nThe input image format is'
+                          ' not recognized...!')
                     return
-
                 else:
+                    self.outputs['out_file'] = os.path.join(
+                        self.output_directory,
+                        self.out_prefix + fileName + '.' + EXT[
+                            self.output_type])
 
-                    if trail in ['nii', '3D', 'nii.gz']:
-
-                        if self.output_type == 'NIFTI':
-                            trail = 'nii'
-                        elif self.output_type == 'AFNI':
-                            trail = '3D'
-                        elif self.output_type == 'NIFTI_GZ':
-                            trail = 'nii.gz'
-
-                        self.outputs['out_file'] = os.path.join(
-                            self.output_directory,
-                            self.out_prefix + fileName + '.' + trail)
-
-                        self.outputs['oned_file'] = os.path.join(
-                            self.output_directory,
-                            self.out_prefix + fileName + '_oned.txt')
-
-                    else:
-                        self.outputs['out_file'] = os.path.join(
-                            self.output_directory,
-                            self.out_prefix + ifile)
-
-                        self.outputs['oned_file'] = os.path.join(
-                            self.output_directory,
-                            self.out_prefix + fileName + '_oned.txt')
-                        print('\nThe input image format does not seem to be '
-                              'nii or 3D. This can prevent the process '
-                              'launch ...!')
+                    self.outputs['oned_file'] = os.path.join(
+                        self.output_directory,
+                        self.out_prefix + fileName + '_oned.txt')
 
                     self.inheritance_dict[self.outputs[
                         'out_file']] = self.in_file
 
                     self.inheritance_dict[self.outputs[
                         'oned_file']] = self.in_file
+
+                    if self.save_oned_matrix:
+                        self.outputs['oned_matrix'] = os.path.join(
+                            self.output_directory,
+                            self.out_prefix + fileName + '_oned_matrix.aff12.1D')
+
+                        self.inheritance_dict[self.outputs[
+                            'oned_matrix']] = self.in_file
+
+                    if self.save_md1d_file:
+                        self.outputs['md1d_file'] = os.path.join(
+                            self.output_directory,
+                            self.out_prefix + fileName + '_md.1D')
+
+                        self.inheritance_dict[self.outputs[
+                            'md1d_file']] = self.in_file
 
             else:
                 print('No output_directory was found...!\n')
@@ -1481,14 +1573,21 @@ class Volreg(ProcessMIA):
         super(Volreg, self).run_process_mia()
         self.process.in_file = self.in_file
         self.process.outputtype = self.output_type
-        self.process.interp = self.interp
+        self.process.interp = self.interpolation
         if self.twopass:
             self.process.args = '-twopass'
         if self.zpad:
             self.process.zpad = self.zpad
+        if self.copyorigin:
+            self.process.copyorigin = self.copyorigin
+        if self.in_weight_volume:
+            self.process.in_weight_volume = self.in_weight_volume
         self.process.out_file = self.out_file
         self.process.oned_file = self.oned_file
-
+        if self.save_oned_matrix:
+            self.process.oned_matrix_save = self.oned_matrix
+        if self.save_md1d_file:
+            self.process.md1d_file = self.md1d_file
         if self.out_prefix:
             self.process.out_prefix = self.out_prefix
 

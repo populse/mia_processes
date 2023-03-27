@@ -32,7 +32,7 @@ class Bold_mriqc_pipeline(Pipeline):
                          "TSNR")
         self.add_process("mean",
                          "mia_processes.bricks.preprocess.afni.processes."
-                         "Mean")
+                         "TStatMean")
         self.add_process("automask",
                          "mia_processes.bricks.preprocess.afni.processes."
                          "Automask")

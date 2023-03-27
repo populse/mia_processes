@@ -8,7 +8,7 @@ class Anat_headmask_pipeline(Pipeline):
         # nodes
         self.add_process("denoise",
                          "mia_processes.bricks.preprocess."
-                         "dipy.processes.Denoise")
+                         "dipy.processes.DenoiseOld")
         self.add_process("enhance",
                          "mia_processes.bricks.preprocess."
                          "others.processing.Enhance")

@@ -11,6 +11,7 @@ pre-processing steps, which are not found in nipype.
         - ConformImage
         - ConvROI
         - Enhance
+        - EstimateSNR
         - GradientThreshold
         - Harmonize
         - IntensityClip
@@ -53,7 +54,8 @@ from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 from populse_mia.software_properties import Config
 
 # mia_processes import
-from mia_processes.utils import get_dbFieldValue, set_dbFieldValue
+from mia_processes.utils import (checkFileExt, get_dbFieldValue,
+                                 set_dbFieldValue)
 
 # soma-base imports
 from soma.qt_gui.qt_backend.Qt import QMessageBox
@@ -71,6 +73,10 @@ import tempfile
 # import templateflow to get anatomical templates
 from templateflow.api import get as get_template
 from statsmodels.robust.scale import mad
+
+EXT = {'NIFTI_GZ': 'nii.gz',
+       'NIFTI': 'nii'
+       }
 
 
 class ApplyBiasCorrection(ProcessMIA):
@@ -1355,6 +1361,126 @@ class Enhance(ProcessMIA):
                                          self.suffix.strip() +
                                          file_extension))
                 nib.save(out_image, file_out)
+
+
+class EstimateSNR(ProcessMIA):
+    """
+    *Estimate SNR using a segmentation file*
+
+    Please, see the complete documentation for the `EstimateSNR' brick
+    in the populse.mia_processes website
+    https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/EstimateSNR.html
+
+    adapted from:
+    https://github.com/nipreps/mriqc/blob/master/mriqc/workflows/anatomical.py#L981
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation / instantiation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(EstimateSNR, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = []
+
+        # Inputs description
+        in_file_desc = ('Input file (a pathlike object or string '
+                        'representing a file).')
+        seg_file_desc = ('A segmentation file to calculate SNR (a pathlike '
+                         'object or string representing a file). Mutually '
+                         'exclusive with snr')
+
+        # Outputs description
+        out_snr_desc = ('Estimated SNR'
+                        '(a pathlike object or string representing a file')
+
+        # Inputs traits
+        self.add_trait("in_file",
+                       File(output=False,
+                            optional=False,
+                            desc=in_file_desc))
+
+        self.add_trait("seg_file",
+                       File(output=False,
+                            optional=False,
+                            desc=seg_file_desc))
+
+        # Outputs traits
+        self.add_trait("out_snr",
+                       OutputMultiPath(File(),
+                                       output=True,
+                                       desc=out_snr_desc))
+
+        self.init_default_traits()
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(EstimateSNR, self).list_outputs()
+
+        # Outputs definition
+        if self.in_file:
+            if self.output_directory:
+                valid_ext, in_ext, fileName = checkFileExt(self.in_file,
+                                                           EXT)
+
+                if not valid_ext:
+                    print('\nThe input image format is'
+                          ' not recognized...!')
+                    return
+                else:
+                    self.outputs['out_snr'] = os.path.join(
+                        self.output_directory,
+                        self.out_prefix + fileName + '_estimated_snr.txt')
+
+                    self.inheritance_dict[self.outputs[
+                        'out_snr']] = self.in_file
+
+            else:
+                print('No output_directory was found...!\n')
+                return
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(EstimateSNR, self).run_process_mia()
+
+        file_name = self.in_file
+        seg_file_name = self.seg_file
+
+        try:
+            img = nib.load(file_name)
+            seg_img = nib.load(seg_file_name)
+        except (nib.filebasedimages.ImageFileError,
+                FileNotFoundError, TypeError) as e:
+            print("\nError with files, during "
+                  "initialisation: ", e)
+            return
+
+        data = img.get_fdata()
+        mask = seg_img.get_fdata() == 2  # WM label
+        snr = float(np.mean(data[mask]) /
+                    (data[mask].std() * np.sqrt(mask.sum() /
+                                                (mask.sum() - 1))))
+        with open(self.out_snr, 'w') as f:
+            f.write(str(snr))
 
 
 class GradientThreshold(ProcessMIA):
