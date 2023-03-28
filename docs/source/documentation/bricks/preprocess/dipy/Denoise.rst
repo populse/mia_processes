@@ -10,7 +10,9 @@
 Denoise brick
 ============
 
-Denoise image using non-local means
+Denoise image using Non-Local Means algorithm (NLMEANS).
+The value of a pixel is replaced by an average of a set of other pixel values: the specific patches centered on the other pixels are contrasted to the patch centered on the pixel of interest, a
+nd the average only applies to pixels with patches close to the current patch. 
 
 --------------------------------------
 
@@ -21,44 +23,70 @@ Denoise image using non-local means
 **Inputs parameters:**
 
 - *in_file* (a string representing an existing file)
-    Input 3D file (valid extensions: [.nii, .nii.gz]).
+    Input file to denoise (valid extensions: [.nii, .nii.gz]).
 
     ::
 
       ex. '/home/username/data/raw_data/func.nii'
 
-- *start_idx* (an integer, optional)
-    Start index for in_file_a.
-    Default is 0.
+- *noise_model* (rician or gaussian, optional)
+    Noise distribution model.
+    Default is rician.
     ::
 
-      ex. '3'
+      ex. 'rician'
 
-- *stop_idx* (an integer, optional)
-    Stop index for in_file_a.
-    Default is -1.
-    If "stop_idx" parameter is set to None or set to default, "stop_idx" will be automatically set to the length of input file. 
-    Cannot be lower than or equal to "start_idx" parameters. 
+- *in_mask* (a string representing an existing file, optional)
+    Brain mask.
 
     ::
 
-      ex. '240'
+      ex. '/home/username/data/derived_data/func_brain_mask.nii'
 
-- *output_type* (NIFTI or NIFTI_GZ, optional)
-    | Format of the output image (one of NIFTI, NIFTI_GZ).
-    |   NIFTI: \*.nii
-    |   NIFTI_GZ: \*.nii.gz
+- *noise_mask* (a string representing an existing file, optional)
+    Mask in which the mean signal will be computed.
 
     ::
 
-      ex. NIFTI
+      ex. '/home/username/data/derived_data/func_brain_mask.nii'
+
+- *signal_mask* (a string representing an existing file, optional)
+    Mask in which the standard deviation of noise will be computed
+
+    ::
+
+      ex. '/home/username/data/derived_data/func_brain_mask.nii'
+
+- *snr* (a float, optional)
+    Set manually Signal to Noise Ratio. 
+    Default is Undefined (ie parameter not used).
+
+    ::
+
+      ex. 260.0
+  
+  - *block_radius* (an integer, optional)
+    The block size will be 2 x block_radius + 1.
+    Default is 5.
+
+    ::
+
+      ex. 5
+
+  - *patch_radius* (an integer, optional)
+    The patch size will be 2 x patch_radius + 1.
+    Default is 1.
+
+    ::
+
+      ex. 1
 
 - *out_prefix* (a string, optional)
-    Prefix of the output image. Default is 'cropped_'.
+    Prefix of the output image. Default is 'denoise_'.
     
     ::
 
-        ex. 'cropped_'
+        ex. 'denoise_'
 
 **Outputs parameters:**
 
@@ -67,10 +95,14 @@ Denoise image using non-local means
     
     ::
 
-      ex. '/home/username/data/derived_data/cropped_func.nii'
+      ex. '/home/username/data/derived_data/denoise_func.nii'
 
 -------------
 
 Usefull links:
 
 `Dipy Denoise - nipype <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.dipy.preprocess.html#denoise>`_
+`Dipy Denoise <https://dipy.org/documentation/1.6.0./examples_built/denoise_nlmeans/#example-denoise-nlmeans>`_
+`NLMEANS articles <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2881565/>`_
+`NLMEANS articles <https://hal.science/hal-00645538/document>`_
+

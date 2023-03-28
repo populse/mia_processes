@@ -38,7 +38,7 @@ class Rois_1(Pipeline):
         self.add_process("roi_list_generator1",
                          "mia_processes.bricks.tools.Concat_to_list_of_list")
         self.add_process("conv_roi1",
-                         "mia_processes.bricks.preprocess.others.Conv_ROI")
+                         "mia_processes.bricks.preprocess.others.ConvROI")
         self.nodes["conv_roi1"].process.in_image = traits.Undefined
         self.add_process("resample2",
                          "mia_processes.bricks.preprocess.others.Resample_2")
