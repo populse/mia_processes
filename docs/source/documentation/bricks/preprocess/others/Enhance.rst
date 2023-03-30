@@ -16,7 +16,8 @@ For each images, voxels with signal excess (superior to 99.8%) are set to a rand
 
 Be carrefull, if the suffix and prefix input parameters are not defined or consist only of one or more white spaces, the input parameter will be overwritten.
 
-Adapted from https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/anatomical.py#L974
+Adapted from `mriqc <https://mriqc.readthedocs.io/en/latest/>`_ anatomical workflow.
+
 --------------------------------------
 
 >>> from mia_processes.bricks.preprocess.others import Enhance

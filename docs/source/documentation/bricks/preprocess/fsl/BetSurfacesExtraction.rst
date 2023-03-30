@@ -29,7 +29,7 @@ BetSurfacesExtraction brick
 
     ::
 
-      ex. /home/username/data/raw_data/T1w.nii
+      ex. '/home/username/data/raw_data/T1w.nii'
 
 **Optional inputs with default value parameters:**
 
@@ -46,60 +46,60 @@ BetSurfacesExtraction brick
 **Outputs parameters:**
 
 - *inskull_mask_file* (a pathlike object or string representing a file)
-    Inskull mask 
+    Inskull mask (extensions: [.nii, .nii.gz])
 
     ::
 
-      ex. /home/username/data/raw_data/T1w_brain_inskull_mask.nii
+      ex. '/home/username/data/raw_data/T1w_brain_inskull_mask.nii'
 
 - *inskull_mesh_file* (a pathlike object or string representing a file)
-    Inskull mesh (.vtk format)
+    Inskull mesh  (extensions [.vtk])
 
     ::
 
-      ex. /home/username/data/raw_data/T1w_brain_inskull_mesh.vtk
+      ex. '/home/username/data/raw_data/T1w_brain_inskull_mesh.vtk'
 
 - *out_file* (a pathlike object or string representing a file)
-    Skullstripped file
+    Skullstripped file (extensions: [.nii, .nii.gz])
 
     ::
 
       ex. /home/username/data/raw_data/T1w_brain.nii
 
 - *outskin_mask_file* (a pathlike object or string representing a file)
-    Outskin mask 
+    Outskin mask (extensions: [.nii, .nii.gz])
 
     ::
 
-      ex. /home/username/data/raw_data/T1w_brain_outskin_mask.nii
+      ex. '/home/username/data/raw_data/T1w_brain_outskin_mask.nii'
 
 - *outskin_mesh_file* (a pathlike object or string representing a file)
-    Outskin mesh (.vtk format)
+    Outskin mesh  (extensions [.vtk])
 
     ::
 
-      ex. /home/username/data/raw_data/T1w_brain_outskin_mesh.vtk
+      ex. '/home/username/data/raw_data/T1w_brain_outskin_mesh.vtk'
 
 - *outskull_mask_file* (a pathlike object or string representing a file)
-    Outskull mask 
+    Outskull mask (extensions: [.nii, .nii.gz])
 
     ::
 
-      ex. /home/username/data/raw_data/T1w_brain_outskull_mask.nii
+      ex. '/home/username/data/raw_data/T1w_brain_outskull_mask.nii'
 
 - *outskull_mesh_file* (a pathlike object or string representing a file)
-    Outskull mesh (.vtk format)
+    Outskull mesh (extensions [.vtk])
 
     ::
 
       ex. /home/username/data/raw_data/T1w_brain_outskull_mesh.vtk
 
 - *skull_mask_file* (a pathlike object or string representing a file)
-    Skull mask 
+    Skull mask (extensions: [.nii, .nii.gz])
 
     ::
 
-      ex. /home/username/data/raw_data/T1w_brain_skull_mask.nii
+      ex. '/home/username/data/raw_data/T1w_brain_skull_mask.nii'
       
 
 -------------

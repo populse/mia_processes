@@ -105,6 +105,6 @@ Usefull links:
 
 `Dipy Denoise - nipype <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.dipy.preprocess.html#denoise>`_
 `Dipy Denoise <https://dipy.org/documentation/1.6.0./examples_built/denoise_nlmeans/#example-denoise-nlmeans>`_
-`NLMEANS articles <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2881565/>`_
-`NLMEANS articles <https://hal.science/hal-00645538/document>`_
+`NLMEANS article 1 <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2881565/>`_
+`NLMEANS article 2 <https://hal.science/hal-00645538/document>`_
 

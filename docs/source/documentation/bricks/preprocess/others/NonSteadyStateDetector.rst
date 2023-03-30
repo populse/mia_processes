@@ -12,7 +12,7 @@ NonSteadyStateDetector brick
 
 Detect non-steady-state at the beginning of a bold 4D image
 
-Adapted from https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5de5913b31/nipype/algorithms/confounds.py#L974
+Adapted from  `Nipype Cofounds <https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5de5913b31/nipype/algorithms/confounds.py#L974>`_.
 
 --------------------------------------
 

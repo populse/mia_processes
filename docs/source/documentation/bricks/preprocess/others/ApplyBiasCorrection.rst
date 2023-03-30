@@ -12,8 +12,6 @@ ApplyBiasCorrection brick
 
 Apply bias field correction to an input file using the bias image
 
---------------------------------------
-
 >>> from mia_processes.bricks.preprocess.others import ApplyBiasCorrection
 >>> ApplyBiasCorrection.help()
 
@@ -41,6 +39,6 @@ Apply bias field correction to an input file using the bias image
 
     ::
 
-      ex. /home/username/data/derived_data/T1w_inu.nii
+      ex. '/home/username/data/derived_data/T1w_inu.nii'
 
 -------------

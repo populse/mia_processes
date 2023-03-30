@@ -42,7 +42,7 @@ Be carreful this program by itself does NOT do 'skull-stripping'.
       default value. '0.5'
 
 - *out_brain_suffix* (a string, optional)
-   Suffix of the brain masked image.
+    Suffix of the brain masked image.
     
     ::
 
@@ -67,16 +67,14 @@ Be carreful this program by itself does NOT do 'skull-stripping'.
 **Optional inputs parameters:**
 
 - *dilate* (an integer, optional)
-    Dilate the mask outwards.
-    Default is Undefined (ie parameter not used).
+    Dilate the mask outwards. Default is Undefined (ie parameter not used).
     
     ::
 
       ex. '1'  
 
 - *erode* (an integer, optional)
-    Erode the mask inwards.
-    Default is Undefined (ie parameter not used).
+    Erode the mask inwards. Default is Undefined (ie parameter not used).
     
     ::
 

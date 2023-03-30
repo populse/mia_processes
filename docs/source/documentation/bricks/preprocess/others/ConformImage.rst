@@ -16,7 +16,7 @@ Conform T1w image:
 
 Be carrefull, if the suffix and prefix input parameters are not defined or consist only of one or more white spaces, the input parameter will be overwritten.
 
-Adapted from https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/interfaces/common/conform_image.py#L75
+Adapted from `mriqc <https://mriqc.readthedocs.io/en/latest/>` anatomical workflow.
 
 --------------------------------------
 
@@ -53,7 +53,7 @@ Adapted from https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf9321
 **Outputs parameters:**
 
 - *out_file* (a strings representing a file)
-    Conforme Image (extensions: [.nii, .nii.gz]).
+  Conforme Image (extensions: [.nii, .nii.gz]).
     
     ::
 

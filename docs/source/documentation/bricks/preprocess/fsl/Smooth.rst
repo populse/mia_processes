@@ -67,7 +67,7 @@ Smooth brick
 
     ::
 
-      ex. /home/username/data/derived_data/s_Func.nii
+      ex. '/home/username/data/derived_data/s_Func.nii'
 
 -------------
 

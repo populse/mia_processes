@@ -85,4 +85,4 @@ This bricks allows to get template image from TemplateFlow.
 -------------
 
 Usefull links:
-`SanitizeImage niworflow <https://github.com/nipreps/niworkflows/blob/45ab13e1bf6fdbf5e29c90cef44055b0b9cf391b/niworkflows/interfaces/header.py#L394>`_
+`TemplateFlow <https://www.templateflow.org/>`_

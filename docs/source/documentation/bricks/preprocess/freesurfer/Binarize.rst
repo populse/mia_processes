@@ -27,7 +27,7 @@ Binarize brick
 
     ::
 
-      ex. /home/username/data/raw_data/T1w.nii
+      ex. '/home/username/data/raw_data/T1w.nii'
 
 **Optional inputs with default value  parameters:**
 
@@ -109,6 +109,7 @@ Binarize brick
       default value. False
 
 **Optional inputs parameters:**
+
 - *binval* (an integer, optional)
     Value to use for all voxels that are in the threshold/match. 
     By default this value is 1.
@@ -184,14 +185,14 @@ Binarize brick
 
     ::
 
-      ex. /home/username/data/raw_data/T1w_binarize_count_file.txt
+      ex. '/home/username/data/raw_data/T1w_binarize_count_file.txt'
 
 - *out_file* (a pathlike object or string representing a file)
     Brain-extracted image
 
     ::
 
-      ex. /home/username/data/raw_data/T1w_desc-brain.nii
+      ex. '/home/username/data/raw_data/T1w_desc-brain.nii'
 
 -------------
 

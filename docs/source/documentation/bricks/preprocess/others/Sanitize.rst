@@ -12,7 +12,7 @@ Sanitize brick
 
 Sanitize input bold image. 
 
-Adapted from  https://github.com/nipreps/niworkflows/blob/45ab13e1bf6fdbf5e29c90cef44055b0b9cf391b/niworkflows/interfaces/header.py#L394
+Adapted from `niworkflows <https://github.com/nipreps/niworkflows>`_.
 
 --------------------------------------
 
@@ -53,7 +53,7 @@ Adapted from  https://github.com/nipreps/niworkflows/blob/45ab13e1bf6fdbf5e29c90
       default_value. ''
 
 - *suffix* (a string, optional)
-   Suffix of output image.
+    Suffix of output image.
    
     ::
 

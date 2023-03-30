@@ -116,7 +116,7 @@ Here can be found some of classical registration parameters(used in fMRIPrep and
         default value. False
 
 - *out_prefix* (a string, optional)
-    Prefix of the warped output image. Default is 'w_'.
+    Prefix of the warped output image.
     
     ::
 

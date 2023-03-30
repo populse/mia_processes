@@ -41,7 +41,7 @@ If "stop_idx" parameter is set to None or set to default (-1), "stop_idx" will b
       default value. NIFTI
 
 - *out_prefix* (a string, optional)
-    Prefix of the output image. Default is 'cropped_'.
+    Prefix of the output image.
     
     ::
 

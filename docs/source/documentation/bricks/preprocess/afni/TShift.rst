@@ -35,12 +35,12 @@ If neither of this two parameters are defined, the process return the input file
 **Optional inputs with default value parameters:**
 
 - *interpolation* (Fourier or linear or cubic or quintic or heptic, optional)
-    Different interpolation methods:
-      -Fourier = Use a Fourier method (the default: most accurate; slowest).
-      -linear  = Use linear (1st order polynomial) interpolation (least accurate).
-      -cubic   = Use the cubic (3rd order) Lagrange polynomial interpolation.
-      -quintic = Use the quintic (5th order) Lagrange polynomial interpolation.
-      -heptic  = Use the heptic (7th order) Lagrange polynomial interpolation.
+    |Different interpolation methods:
+    | - Fourier = Use a Fourier method (the default: most accurate; slowest).
+    | - linear  = Use linear (1st order polynomial) interpolation (least accurate).
+    | - cubic   = Use the cubic (3rd order) Lagrange polynomial interpolation.
+    | - quintic = Use the quintic (5th order) Lagrange polynomial interpolation.
+    | - heptic  = Use the heptic (7th order) Lagrange polynomial interpolation.
 
     ::
 
@@ -104,7 +104,7 @@ If neither of this two parameters are defined, the process return the input file
 
     ::
 
-      ex. slice_timing.1D
+      ex. 'slice_timing.1D'
 
 - *tpattern* (alt+z or altplus or alt+z2 or alt-z or altminus or alt-z2 or seq+z or seqplus or seq-z or seqminus, optional)
     Use specified slice time pattern rather than one in header. 

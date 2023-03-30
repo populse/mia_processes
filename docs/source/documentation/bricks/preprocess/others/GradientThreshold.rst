@@ -12,7 +12,7 @@ GradientThreshold brick
 
 Computes a threshold from the histogram of the magnitude gradient image using a segmentation of the input image.
 
-Adapted from https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/anatomical.py#L1039
+Adapted from `mriqc <https://mriqc.readthedocs.io/en/latest/>`_ anatomical workflow.
 
 --------------------------------------
 

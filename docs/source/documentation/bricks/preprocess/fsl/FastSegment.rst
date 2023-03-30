@@ -57,34 +57,34 @@ By default the image type is set to T1 but it is also possible to segment T2 and
 **Outputs parameters:**
 
 - *mixeltype* (a pathlike object or string representing a file)
-     The mixeltype file represents the classification of each voxel's tissue mixture.  That is, voxels containing only one tissue type have a different mixeltype from that containing mixtures of two tissues, which is different again from those containing mixtures of all three tissues. 
+    The mixeltype file represents the classification of each voxel's tissue mixture.  That is, voxels containing only one tissue type have a different mixeltype from that containing mixtures of two tissues, which is different again from those containing mixtures of all three tissues. 
    
     ::
 
-      ex. /home/username/data/derived_data/T1w_mixeltype.nii
+      ex. '/home/username/data/derived_data/T1w_mixeltype.nii'
 
 - *partial_volume_files* (a list of items which are file names.)
     A (non-binary) partial volume image for each class, where each voxel contains a value in the range 0-1 that represents the proportion of that class's tissue present in that voxel.
 
     ::
 
-      ex.[/home/username/data/derived_data/T1w_pve_0.nii, /home/username/data/derived_data/T1w_pve_1.nii, /home/username/data/derived_data/T1w_pve_2.nii]
+      ex.['/home/username/data/derived_data/T1w_pve_0.nii', '/home/username/data/derived_data/T1w_pve_1.nii', '/home/username/data/derived_data/T1w_pve_2.nii']
 
 - *partial_volume_map* (a pathlike object or string representing a file)
-      The pveseg map  contains the best hard segmentation that follows from the partial volume segmentation results. 
-      That is, each voxel contains one number, representing the tissue type with the largest partial volume fraction.
-      It can be useful for a quick visual assessment of the segmentation.
+    The pveseg map  contains the best hard segmentation that follows from the partial volume segmentation results. 
+    That is, each voxel contains one number, representing the tissue type with the largest partial volume fraction.
+    It can be useful for a quick visual assessment of the segmentation.
    
     ::
 
-      ex. /home/username/data/derived_data/T1w_pveseg.nii
+      ex. '/home/username/data/derived_data/T1w_pveseg.nii'
 
 - *tissue_class_files* (a list of items which are file names.)
     Binary segmented volume files, one image per class. Values are only either 0 or 1.
 
     ::
 
-      ex. [/home/username/data/derived_data/T1w_seg_0.nii, /home/username/data/derived_data/T1w_seg_1.nii, /home/username/data/derived_data/T1w_seg_2.nii]
+      ex. ['/home/username/data/derived_data/T1w_seg_0.nii', '/home/username/data/derived_data/T1w_seg_1.nii', '/home/username/data/derived_data/T1w_seg_2.nii']
 
 - *tissue_class_map* (a pathlike object or string representing a file)
     A binary segmented volume file where each voxel is classified into only one class.
@@ -92,7 +92,7 @@ By default the image type is set to T1 but it is also possible to segment T2 and
 
     ::
 
-      ex. /home/username/data/derived_data/T1w_seg.nii
+      ex. '/home/username/data/derived_data/T1w_seg.nii'
 
 -------------
 

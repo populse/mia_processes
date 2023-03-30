@@ -15,7 +15,8 @@ All voxels lower than the threshold are set to 0 and all the others voxels are s
 
 Be carrefull, if the suffix and prefix input parameters are not defined or consist only of one or more white spaces, the input parameter will be overwritten.
 
-Adapted from https://github.com/nipreps/niworkflows/blob/45ab13e1bf6fdbf5e29c90cef44055b0b9cf391b/niworkflows/interfaces/nibabel.py#L92
+Adapted from `niworkflows <https://github.com/nipreps/niworkflows>`_.
+
 --------------------------------------
 
 >>> from mia_processes.bricks.preprocess.others import Binarize

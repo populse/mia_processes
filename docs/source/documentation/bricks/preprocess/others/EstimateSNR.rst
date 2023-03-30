@@ -12,7 +12,8 @@ EstimateSNR brick
 
 Estimate SNR using a segmentation file 
 
-Adapted from https://github.com/nipreps/mriqc/blob/22.0.6/mriqc/workflows/anatomical.py#L970
+Adapted from `mriqc <https://mriqc.readthedocs.io/en/latest/>`_ anatomical workflow.
+
 --------------------------------------
 
 >>> from mia_processes.bricks.preprocess.others import EstimateSNR

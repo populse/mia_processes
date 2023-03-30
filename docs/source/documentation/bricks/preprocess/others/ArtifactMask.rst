@@ -15,7 +15,7 @@ Mortamet B et al.
 Automatic quality assessment in structural brain magnetic resonance imaging,
 Mag Res Med 62(2):365-372, 2009. doi:10.1002/mrm.21992.
 
-Adapted from https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/interfaces/anatomical.py#L301
+Adapted from `mriqc <https://mriqc.readthedocs.io/en/latest/>`_ anatomical workflow.
 
 --------------------------------------
 

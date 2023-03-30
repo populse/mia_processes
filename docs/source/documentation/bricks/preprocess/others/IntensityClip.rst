@@ -15,7 +15,7 @@ Remove outliers at both ends of the intensity distribution and fit into a given 
 To more robustly determine the clipping thresholds, data are removed of spikes with a median filter.
 Once the thresholds are calculated, the denoised data are thrown away and the thresholds are applied on the original image.
 
-Adapted from https://github.com/nipreps/niworkflows/blob/c2b8e0f7396c626df296a48217655298a82f3069/niworkflows/interfaces/nibabel.py#L460 
+Adapted from `niworkflows <https://github.com/nipreps/niworkflows>`_.
 
 --------------------------------------
 
@@ -42,7 +42,7 @@ Adapted from https://github.com/nipreps/niworkflows/blob/c2b8e0f7396c626df296a48
       default value. 'int16'
 
 - *invert* (a boolean, optional)
-   Finalize by inverting contrast.
+    Finalize by inverting contrast.
     
     ::
 

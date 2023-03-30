@@ -39,7 +39,6 @@ Threshold brick
 ===============
 
 Makes a binary mask image at a given threshold
-----------------------------------------------
 
 >>> from mia_processes.bricks.preprocess.other import Threshold
 >>> Threshold.help()
@@ -72,14 +71,14 @@ Makes a binary mask image at a given threshold
 
     ::
 
-      ex. ""
+      ex. ''
 
 - *suffix* (a string, optional)
     Suffix of the output image.
 
     ::
 
-       ex. _002
+       ex. '_002'
 
 - *threshold* (a float between 0 and 1, optional)
     Value of the rate  defining the applied threshold (everything above becomes 1 and everything below becomes
@@ -95,4 +94,4 @@ Makes a binary mask image at a given threshold
 
     ::
 
-      ex. /home/username/data/derived_data/c1Anat_002.nii
+      ex. '/home/username/data/derived_data/c1Anat_002.nii'

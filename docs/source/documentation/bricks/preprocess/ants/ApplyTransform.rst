@@ -79,7 +79,7 @@ using ANTs ApplyTransforms command.
       default value. 'Linear'
   
 - *out_prefix* (a string, optional)
-    Prefix of the output image. Default is 't_'.
+    Prefix of the output image.
     
     ::
 

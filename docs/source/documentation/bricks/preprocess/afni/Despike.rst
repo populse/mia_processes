@@ -32,8 +32,7 @@ The output dataset will always be stored in floats.
 **Optional inputs with default value parameters:**
 
 - *despike* (a boolean, optional)
-    Despike dataset. 
-    Default is True. 
+    Despike dataset.
 
     ::
 
@@ -49,7 +48,7 @@ The output dataset will always be stored in floats.
       default value. NIFTI
 
 - *out_prefix* (a string, optional)
-    Prefix of the output image. Default is 'd_'.
+    Prefix of the output image.
     
     ::
 

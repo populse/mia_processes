@@ -21,7 +21,7 @@ Initialize an affine transform using ANTs AffineInitizer command.
 **Mandatory inputs parameters:**
 
 - *moving_image* (a string representing an existing file)
-    The moving image to be mapped to the fixed space(valid extensions: [.nii, .nii.gz]).
+    The moving image to be mapped to the fixed space (valid extensions: [.nii, .nii.gz]).
 
     ::
 
@@ -51,9 +51,10 @@ Initialize an affine transform using ANTs AffineInitizer command.
         default value. 10
 
 - *out_prefix* (a string, optional)
-    Prefix of the out transform file. Default is 'AffineTransform_'.
+    Prefix of the out transform file.
     
     ::
+        
         default value. 'AffineTransform_'
 
 - *principal_axes* (a boolean, optional)

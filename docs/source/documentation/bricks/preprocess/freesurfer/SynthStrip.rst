@@ -25,7 +25,7 @@ SynthStrip brick
 
     ::
 
-      ex. /home/username/data/raw_data/T1w.nii
+      ex. '/home/username/data/raw_data/T1w.nii'
 
 **Optional inputs with default value parameters:**
 
@@ -61,14 +61,14 @@ SynthStrip brick
 
     ::
 
-      ex. /home/username/data/raw_data/T1w_desc-brain.nii
+      ex. '/home/username/data/raw_data/T1w_desc-brain.nii'
 
 - *out_mask* (a pathlike object or string representing a file)
     Binary brain mask 
 
     ::
 
-      ex. /home/username/data/raw_data/T1w_desc-brain_mask.nii
+      ex. '/home/username/data/raw_data/T1w_desc-brain_mask.nii'
 
 -------------
 

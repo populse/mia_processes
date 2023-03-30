@@ -37,7 +37,7 @@ This bricks assumes that the voxel-by-voxel computations are being performed on 
     It is also possible to use built in functions such as sin, cos, sqrt, mean, stdev...
     Some functions are also designed to help implement logical functions such as step(x)  = { 1 if x > 0; 0 if x <= 0 }. 
 
-    For more example, refers to the AFNI documentation
+    For more example, refers to the AFNI documentation.
 
     ::
 

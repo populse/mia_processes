@@ -12,7 +12,7 @@ TSNR brick
 
 Computes the time-course SNR for a time series
 
-Adapted from https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5de5913b31/nipype/algorithms/confounds.py#L899
+Adapted from  `Nipype Cofounds <https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5de5913b31/nipype/algorithms/confounds.py#L974>`_
 
 --------------------------------------
 
@@ -47,14 +47,14 @@ Adapted from https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5
 
 
 - *suffix_stddev* (a string, optional)
-   Suffix of the STD dev output. Default is '_stddev'.
+  Suffix of the STD dev output. Default is '_stddev'.
     
     ::
 
       ex. '_stddev'
       
 - *suffix_tnsr* (a string, optional)
-   Suffix of the TSNR output image. Default is '_tsnr'.
+  Suffix of the TSNR output image. Default is '_tsnr'.
     
     ::
 
