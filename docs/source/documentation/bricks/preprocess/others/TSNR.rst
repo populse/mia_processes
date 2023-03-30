@@ -20,7 +20,7 @@ Adapted from https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5
 
 >>> TSNR.help()
 
-**Inputs parameters:**
+**Mandatory inputs parameters:**
 
 - *in_file* (a string representing an existing file)
     Input image (valid extensions: [.nii, .nii.gz])
@@ -29,23 +29,17 @@ Adapted from https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5
 
       ex. '/home/username/data/raw_data/func.nii'
 
-- *prefix_tsnr* (a string, optional)
-    Prefix of the TSNR output image. Default is ''.
+**Optional inputs with default value parameters:**
+
+- *prefix_stddev* (a string, optional)
+    Prefix of the stddev output. Default is ''.
     
     ::
 
       ex. ''
 
-
-- *suffix_tnsr* (a string, optional)
-   Suffix of the TSNR output image. Default is '_tsnr'.
-    
-    ::
-
-      ex. '_tsnr'
-
-- *prefix_stddev* (a string, optional)
-    Prefix of the stddev output. Default is ''.
+- *prefix_tsnr* (a string, optional)
+    Prefix of the TSNR output image. Default is ''.
     
     ::
 
@@ -58,7 +52,13 @@ Adapted from https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5
     ::
 
       ex. '_stddev'
+      
+- *suffix_tnsr* (a string, optional)
+   Suffix of the TSNR output image. Default is '_tsnr'.
+    
+    ::
 
+      ex. '_tsnr'
 
 
 **Outputs parameters:**

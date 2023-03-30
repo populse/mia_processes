@@ -68,18 +68,20 @@ class Automask(ProcessMIA):
         # Third party softwares required for the execution of the brick
         self.requirement = ['afni', 'nipype']
 
-        # Inputs description
+        # Mandatory inputs description
         in_file_desc = ('Input file (a pathlike object or string '
                         'representing a file).')
+        # Optional inputs with default value description
+        clfrac_desc = ('Sets the clip level fraction (must be 0.1-0.9).'
+                       'A small value will tend to make the mask larger '
+                       '(a float)')
+        out_brain_suffix_desc = ('Suffix of the brain masked image (a string)')
         output_type_desc = ('Typecodes of the output image formats (one '
                             'of NIFTI, NIFTI_GZ).')
         out_prefix_desc = ('Specify the string to be prepended to the '
                            'filenames of the output image file '
                            '(a string).')
-        out_brain_suffix_desc = ('Suffix of the brain masked image (a string)')
-        clfrac_desc = ('Sets the clip level fraction (must be 0.1-0.9).'
-                       'A small value will tend to make the mask larger '
-                       '(a float)')
+        # Optional inputs description
         dilate_desc = ('Dilate the mask outwards (an integer)')
         erode_desc = ('Erode the mask inwards (an integer)')
 
@@ -90,11 +92,24 @@ class Automask(ProcessMIA):
         brain_file_desc = ('The masked brain file (a pathlike object or a '
                            'string representing a file).')
 
-        # Inputs traits
+        # Mandatory inputs traits
         self.add_trait("in_file",
                        File(output=False,
                             optional=False,
                             desc=in_file_desc))
+
+        # Optional inputs with default value traits
+        self.add_trait("clfrac",
+                       Float(0.5,
+                             output=False,
+                             optional=True,
+                             desc=clfrac_desc))
+
+        self.add_trait("out_brain_suffix",
+                       String('_masked',
+                              output=False,
+                              optional=True,
+                              desc=out_brain_suffix_desc))
 
         self.add_trait("output_type",
                        Enum('NIFTI',
@@ -109,18 +124,7 @@ class Automask(ProcessMIA):
                               optional=True,
                               desc=out_prefix_desc))
 
-        self.add_trait("out_brain_suffix",
-                       String('_masked',
-                              output=False,
-                              optional=True,
-                              desc=out_brain_suffix_desc))
-
-        self.add_trait("clfrac",
-                       Float(0.5,
-                             output=False,
-                             optional=True,
-                             desc=clfrac_desc))
-
+        # Optional inputs traits
         self.add_trait("erode",
                        Either(Undefined,
                               Int(),
@@ -260,15 +264,15 @@ class Calc(ProcessMIA):
                      '(a string).')
         output_type_desc = ('Typecodes of the output image formats (one '
                             'of NIFTI, NIFTI_GZ).')
+        out_prefix_desc = ('Specify the string to be prepended to the '
+                           'filenames of the output image file '
+                           '(a string).')
         single_idx_desc = ('Volume index for in_file_a.'
                            '(an integer or Undefined)')
         start_idx_desc = ('Start index for in_file_a (an integer'
                           'or Undefined). Requires inputs: stop_idx')
         stop_idx_desc = ('Stop index for in_file_a (an integer or Undefined).'
                          'Requires inputs: start_idx.')
-        out_prefix_desc = ('Specify the string to be prepended to the '
-                           'filenames of the output image file '
-                           '(a string).')
 
         # Outputs description
         out_file_desc = ('The calculated files (a pathlike object or a '
@@ -292,6 +296,7 @@ class Calc(ProcessMIA):
                             optional=True,
                             desc=in_file_c_desc))
 
+        # Optional inputs with default value traits
         self.add_trait("expr",
                        String(Undefined,
                               output=False,
@@ -306,6 +311,13 @@ class Calc(ProcessMIA):
                             optional=True,
                             desc=output_type_desc))
 
+        self.add_trait("out_prefix",
+                       String('c_',
+                              output=False,
+                              optional=True,
+                              desc=out_prefix_desc))
+
+        # Optional inputs traits
         self.add_trait("single_idx",
                        Either(Undefined,
                               Int(),
@@ -328,13 +340,6 @@ class Calc(ProcessMIA):
                               output=False,
                               optional=True,
                               desc=stop_idx_desc))
-
-        self.add_trait("out_prefix",
-                       String('c_',
-                              output=False,
-                              optional=True,
-                              desc=out_prefix_desc))
-
         # Outputs traits
         self.add_trait("out_file",
                        File(output=True,
@@ -442,36 +447,24 @@ class CalcDropTRs(ProcessMIA):
         # Inputs description
         in_file_desc = ('Input 3D file (a pathlike object or string '
                         'representing a file).')
-        start_idx_desc = 'start index (inclusive) for in_file (an Int).'
-        stop_idx_desc = 'stop index (exclusive) for in_file (an Int).'
         output_type_desc = ('Typecodes of the output image formats (one '
                             'of NIFTI, NIFTI_GZ).')
         out_prefix_desc = ('Specify the string to be prepended to the '
                            'filenames of the output image file '
                            '(a string).')
-
+        start_idx_desc = 'start index (inclusive) for in_file (an Int).'
+        stop_idx_desc = 'stop index (exclusive) for in_file (an Int).'
         # Outputs description
         out_file_desc = ('The TR cropped file (a pathlike object or a '
                          'string representing a file).')
 
-        # Inputs traits
+        # Mandatory inputs traits
         self.add_trait("in_file",
                        File(output=False,
                             optional=False,
                             desc=in_file_desc))
 
-        self.add_trait("start_idx",
-                       Int(0,
-                           output=False,
-                           optional=True,
-                           desc=start_idx_desc))
-
-        self.add_trait("stop_idx",
-                       Int(-1,
-                           output=False,
-                           optional=True,
-                           desc=stop_idx_desc))
-
+        # Optional inputs with default value traits
         self.add_trait("output_type",
                        Enum('NIFTI',
                             'NIFTI_GZ',
@@ -484,6 +477,18 @@ class CalcDropTRs(ProcessMIA):
                               output=False,
                               optional=True,
                               desc=out_prefix_desc))
+
+        self.add_trait("start_idx",
+                       Int(0,
+                           output=False,
+                           optional=True,
+                           desc=start_idx_desc))
+
+        self.add_trait("stop_idx",
+                       Int(-1,
+                           output=False,
+                           optional=True,
+                           desc=stop_idx_desc))
 
         # Outputs traits
         self.add_trait("out_file",
@@ -958,9 +963,20 @@ class TShift(ProcessMIA):
         # Third party softwares required for the execution of the brick
         self.requirement = ['afni', 'nipype']
 
-        # Inputs description
+        # Mandatory inputs description
         in_file_desc = ('A bold file to be time-shifted (a pathlike object'
                         'or string representing a file).')
+        # Optional inputs with default value description
+        interpolation_desc = ('Interpolation methods (one of ‘Fourier’ or'
+                              '‘linear’ or ‘cubic’ or ‘quintic’ or ‘heptic’)')
+        output_type_desc = ('Typecodes of the output image formats (one '
+                            'of NIFTI, NIFTI_GZ).')
+        out_prefix_desc = ('Specify the string to be prepended to the '
+                           'output filename (a string).')
+        rlt_desc = ('Before shifting, remove the mean and linear trend'
+                    '(a boolean)')
+        rltplus_desc = ('Before shifting, remove the mean and linear trend '
+                        'and later put back the mean. (a boolean)')
         slice_encoding_dir_desc = ('Direction in which slice_timing is'
                                    'specified (default: k).'
                                    'If negative,slice_timing is defined'
@@ -968,18 +984,13 @@ class TShift(ProcessMIA):
                                    'entry corresponds to the slice with '
                                    'the largest index, and the final entry'
                                    'corresponds to slice index zero.')
+        # Optional inputs description
+        ignore_desc = ('Ignore the first set of points specified.'
+                       '(an integer)')
         slice_timing_desc = ('Time offsets from the volume acquisition onset'
                              'for each slice. (a string representing an'
                              'existing file or a list of floats).'
                              'Mutually exclusive with "tpattern" parameters')
-        ignore_desc = ('Ignore the first set of points specified.'
-                       '(an integer)')
-        interpolation_desc = ('Interpolation methods (one of ‘Fourier’ or'
-                              '‘linear’ or ‘cubic’ or ‘quintic’ or ‘heptic’)')
-        rlt_desc = ('Before shifting, remove the mean and linear trend'
-                    '(a boolean)')
-        rltplus_desc = ('Before shifting, remove the mean and linear trend '
-                        'and later put back the mean. (a boolean)')
         tpattern_desc = ('Use specified slice time pattern rather than one in'
                          'header . One of (‘alt+z’ or ‘altplus’ or ‘alt+z2’'
                          'or ‘alt-z’ or ‘altminus’ or ‘alt-z2’ or ‘seq+z’'
@@ -991,20 +1002,51 @@ class TShift(ProcessMIA):
                        '(an integer). Mutually exclusive with tzero parameter.')
         tzero_desc = (' Align each slice to given time offset'
                       '(a float). Mutually exclusive with tslice parameter.')
-        output_type_desc = ('Typecodes of the output image formats (one '
-                            'of NIFTI, NIFTI_GZ).')
-        out_prefix_desc = ('Specify the string to be prepended to the '
-                           'output filename (a string).')
-
         # Outputs description
         out_file_desc = ('The time shifted file (a pathlike object or a '
                          'string representing a file).')
 
-        # Inputs traits
+        # Mandatory inputs traits
         self.add_trait("in_file",
                        File(output=False,
                             optional=False,
                             desc=in_file_desc))
+
+        # Optional inputs with default value traits
+        self.add_trait("interpolation",
+                       Enum('Fourier',
+                            'linear',
+                            'cubic',
+                            'quintic',
+                            'heptic',
+                            output=False,
+                            optional=True,
+                            desc=interpolation_desc))
+
+        self.add_trait("output_type",
+                       Enum('NIFTI',
+                            'NIFTI_GZ',
+                            output=False,
+                            optional=True,
+                            desc=output_type_desc))
+
+        self.add_trait("out_prefix",
+                       String('st_corr_',
+                              output=False,
+                              optional=True,
+                              desc=out_prefix_desc))
+
+        self.add_trait("rlt",
+                       Bool(False,
+                            output=False,
+                            optional=True,
+                            desc=rlt_desc))
+
+        self.add_trait("rltplus",
+                       Bool(False,
+                            output=False,
+                            optional=True,
+                            desc=rltplus_desc))
 
         self.add_trait("slice_encoding_dir",
                        Enum('k',
@@ -1013,6 +1055,14 @@ class TShift(ProcessMIA):
                             output=False,
                             optional=True,
                             desc=slice_encoding_dir_desc))
+        # Optional inputs traits
+        self.add_trait("ignore",
+                       Either(Undefined,
+                              Int(),
+                              default=Undefined,
+                              output=False,
+                              optional=True,
+                              desc=ignore_desc))
 
         self.add_trait("slice_timing",
                        Either(List(Float()),
@@ -1039,36 +1089,6 @@ class TShift(ProcessMIA):
                               optional=True,
                               desc=tpattern_desc))
 
-        self.add_trait("ignore",
-                       Either(Undefined,
-                              Int(),
-                              default=Undefined,
-                              output=False,
-                              optional=True,
-                              desc=ignore_desc))
-
-        self.add_trait("interpolation",
-                       Enum('Fourier',
-                            'linear',
-                            'cubic',
-                            'quintic',
-                            'heptic',
-                            output=False,
-                            optional=True,
-                            desc=interpolation_desc))
-
-        self.add_trait("rlt",
-                       Bool(False,
-                            output=False,
-                            optional=True,
-                            desc=rlt_desc))
-
-        self.add_trait("rltplus",
-                       Bool(False,
-                            output=False,
-                            optional=True,
-                            desc=rltplus_desc))
-
         self.add_trait("tr",
                        Either(Undefined,
                               String(),
@@ -1092,19 +1112,6 @@ class TShift(ProcessMIA):
                               output=False,
                               optional=True,
                               desc=tzero_desc))
-
-        self.add_trait("output_type",
-                       Enum('NIFTI',
-                            'NIFTI_GZ',
-                            output=False,
-                            optional=True,
-                            desc=output_type_desc))
-
-        self.add_trait("out_prefix",
-                       String('st_corr_',
-                              output=False,
-                              optional=True,
-                              desc=out_prefix_desc))
 
         # Outputs traits
         self.add_trait("out_file",
@@ -1358,12 +1365,23 @@ class Volreg(ProcessMIA):
         # Third party softwares required for the execution of the brick
         self.requirement = ['afni', 'nipype']
 
-        # Inputs description
+        # Mandatory inputs description
         in_file_desc = ('Input (a pathlike object or '
                         'string representing a file).')
+        # Optional inputs with default value description
+        copyorigin_desc = ('Copy base file origin coords to output'
+                           '(a boolean)')
         interpolation_desc = ('Spatial interpolation methods (Either '
                               '‘Fourier’ or ‘cubic’ or ‘heptic’ '
                               'or ‘quintic’ or ‘linear’. Default is heptic)')
+        output_type_desc = ('Typecodes of the output image formats (one '
+                            'of NIFTI, NIFTI_GZ).')
+        out_prefix_desc = ('Specify the string to be prepended to the '
+                           'filenames of the registered image file(s) '
+                           '(a string).')
+        save_md1d_file_desc = ('Save md1d file (a boolean)')
+        save_oned_matrix_desc = ('Save oned matrix (a boolean)')
+        timeshift_desc = ('Time shift to mean slice time offset.')
         two_pass_desc = ('Do two passes of the registration algorithm:'
                          '(1) with smoothed base and data bricks, with linear'
                          ' interpolation, to get a crude alignment, then'
@@ -1374,37 +1392,34 @@ class Volreg(ProcessMIA):
                          ' a few voxels to be aligned. (a boolean).')
         zpad_desc = ('Zeropad around the edges by ‘n’ voxels during rotations '
                      '(an integer).')
-        copyorigin_desc = ('Copy base file origin coords to output'
-                           '(a boolean)')
-        timeshift_desc = ('Time shift to mean slice time offset.')
+        # Optional inputs description
         in_weight_volume_desc = ('Weights for each voxel specified by a file'
                                  'with an optional volume number '
                                  '(defaults to 0). A a tuple of the form:'
                                  '(a pathlike object or string representing'
                                  ' an existing file, an integer)')
-        save_oned_matrix_desc = ('Save oned matrix (a boolean)')
-        save_md1d_file_desc = ('Save md1d file (a boolean)')
-        output_type_desc = ('Typecodes of the output image formats (one '
-                            'of NIFTI, NIFTI_GZ).')
-        out_prefix_desc = ('Specify the string to be prepended to the '
-                           'filenames of the registered image file(s) '
-                           '(a string).')
-
         # Outputs description
-        out_file_desc = ('The registered file (a pathlike object or a '
-                         'string representing a file).')
+        md1d_file_desc = ('Max displacement outputfile (a pathlike object'
+                          'or a  string representing a file).')
         oned_file_desc = ('The movement parameters file (a pathlike object'
                           'or a  string representing a file).')
         oned_matrix_desc = ('The transformation matrix (a pathlike object'
                             'or a  string representing a file).')
-        md1d_file_desc = ('Max displacement outputfile (a pathlike object'
-                          'or a  string representing a file).')
+        out_file_desc = ('The registered file (a pathlike object or a '
+                         'string representing a file).')
 
-        # Inputs traits
+        # Mandatory inputs traits
         self.add_trait("in_file",
                        File(output=False,
                             optional=False,
                             desc=in_file_desc))
+
+        # Optional inputs with default value traits
+        self.add_trait("copyorigin",
+                       Bool(False,
+                            output=False,
+                            optional=True,
+                            desc=copyorigin_desc))
 
         self.add_trait("interpolation",
                        Enum('heptic',
@@ -1416,50 +1431,6 @@ class Volreg(ProcessMIA):
                             output=False,
                             optional=True,
                             desc=interpolation_desc))
-
-        self.add_trait("twopass",
-                       Bool(False,
-                            output=False,
-                            optional=True,
-                            desc=two_pass_desc))
-
-        self.add_trait("zpad",
-                       Int(4,
-                           output=False,
-                           optional=True,
-                           desc=zpad_desc))
-
-        self.add_trait("copyorigin",
-                       Bool(False,
-                            output=False,
-                            optional=True,
-                            desc=copyorigin_desc))
-
-        self.add_trait("timeshift",
-                       Bool(False,
-                            output=False,
-                            optional=True,
-                            desc=timeshift_desc))
-
-        self.add_trait("in_weight_volume",
-                       Either(Undefined,
-                              Tuple(String, Int(0)),
-                              default=Undefined,
-                              output=False,
-                              optional=True,
-                              desc=in_weight_volume_desc))
-
-        self.add_trait("save_oned_matrix",
-                       Bool(False,
-                            output=False,
-                            optional=True,
-                            desc=save_oned_matrix_desc))
-
-        self.add_trait("save_md1d_file",
-                       Bool(False,
-                            output=False,
-                            optional=True,
-                            desc=save_md1d_file_desc))
 
         self.add_trait("output_type",
                        Enum('NIFTI',
@@ -1474,10 +1445,50 @@ class Volreg(ProcessMIA):
                               optional=True,
                               desc=out_prefix_desc))
 
+        self.add_trait("save_oned_matrix",
+                       Bool(False,
+                            output=False,
+                            optional=True,
+                            desc=save_oned_matrix_desc))
+
+        self.add_trait("save_md1d_file",
+                       Bool(False,
+                            output=False,
+                            optional=True,
+                            desc=save_md1d_file_desc))
+
+        self.add_trait("timeshift",
+                       Bool(False,
+                            output=False,
+                            optional=True,
+                            desc=timeshift_desc))
+
+        self.add_trait("twopass",
+                       Bool(False,
+                            output=False,
+                            optional=True,
+                            desc=two_pass_desc))
+
+        self.add_trait("zpad",
+                       Int(4,
+                           output=False,
+                           optional=True,
+                           desc=zpad_desc))
+
+        # Optional inputs traits
+        self.add_trait("in_weight_volume",
+                       Either(Undefined,
+                              Tuple(String, Int(0)),
+                              default=Undefined,
+                              output=False,
+                              optional=True,
+                              desc=in_weight_volume_desc))
+
         # Outputs traits
-        self.add_trait("out_file",
+        self.add_trait("md1d_file",
                        File(output=True,
-                            desc=out_file_desc))
+                            optional=True,
+                            desc=md1d_file_desc))
 
         self.add_trait("oned_file",
                        File(output=True,
@@ -1488,10 +1499,9 @@ class Volreg(ProcessMIA):
                             optional=True,
                             desc=oned_matrix_desc))
 
-        self.add_trait("md1d_file",
+        self.add_trait("out_file",
                        File(output=True,
-                            optional=True,
-                            desc=md1d_file_desc))
+                            desc=out_file_desc))
 
         self.init_default_traits()
 

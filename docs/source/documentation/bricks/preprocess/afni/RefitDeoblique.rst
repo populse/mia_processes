@@ -20,7 +20,7 @@ Output file name is the same as input file name.
 
 >>> RefitDeoblique.help()
 
-**Inputs parameters:**
+**Mandatory inputs parameters:**
 
 - *in_file* (a string representing an existing file)
     Input file (valid extensions: [.nii, .nii.gz]).
@@ -29,13 +29,14 @@ Output file name is the same as input file name.
 
       ex. '/home/username/data/raw_data/func.nii'
 
+**Optional inputs with default value parameters:**
+
 - *deoblique* (a boolean, optional)
     Deoblique dataset. 
-    Default is True. 
 
     ::
 
-      ex. True
+      default value. True
 
 
 **Outputs parameters:**

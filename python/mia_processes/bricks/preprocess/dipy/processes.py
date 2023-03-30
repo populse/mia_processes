@@ -140,7 +140,6 @@ class DenoiseOld(ProcessMIA):
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
-
             if self.output_directory:
                 ifile = os.path.split(self.in_file)[-1]
 
@@ -150,14 +149,7 @@ class DenoiseOld(ProcessMIA):
                 except ValueError:
                     print('\nThe input image format is not recognised ...!')
                     return
-
                 else:
-
-                    if trail not in ['nii', 'img']:
-                        print('\nThe input image format does not seem to be '
-                              'nii or img. This can prevent the process '
-                              'launch ...!')
-
                     self.outputs['out_file'] = os.path.join(
                         self.output_directory,
                         fileName + '_denoise.' + trail)
@@ -235,11 +227,18 @@ class Denoise(ProcessMIA):
         # Third party softwares required for the execution of the brick
         self.requirement = ['nipype']
 
-        # Inputs description
+        # Mandatory inputs description
         in_file_desc = ('A file to denoise (a pathlike object or string '
                         'representing a file).')
+        # Optional inputs with default value description
+        block_radius_desc = ('Block_radius (an integer). Default is 5.')
         noise_model_desc = ('Noise distribution model (‘rician’ or'
                             ' ‘gaussian’). Default is rician')
+        out_prefix_desc = ('Specify the string to be prepended to the '
+                           'filenames of the smoothed image file(s) '
+                           '(a string).')
+        patch_radius_desc = ('Patch radius (an integer). Default is 1.')
+        # Optional inputs description
         in_mask_desc = ('Brain mask (a pathlike '
                         'object or string representing a file).')
         noise_mask_desc = ('Mask in which the mean signal will'
@@ -249,21 +248,22 @@ class Denoise(ProcessMIA):
                             'will be computed. (a pathlike object or'
                             'string representing a file).')
         snr_desc = ('Set manually Signal to noise ratio (a float)')
-        block_radius_desc = ('Block_radius (an integer). Default is 5.')
-        patch_radius_desc = ('Patch radius (an integer). Default is 1.')
-        out_prefix_desc = ('Specify the string to be prepended to the '
-                           'filenames of the smoothed image file(s) '
-                           '(a string).')
-
         # Outputs description
         out_file_desc = ('The denoised file (a pathlike object or a '
                          'string representing a file).')
 
-        # Inputs traits
+        # Mandatory inputs traits
         self.add_trait("in_file",
                        File(output=False,
                             optional=False,
                             desc=in_file_desc))
+
+        # Optional inputs with default value traits
+        self.add_trait("block_radius",
+                       Int(5,
+                           output=False,
+                           optional=True,
+                           desc=block_radius_desc))
 
         self.add_trait("noise_model",
                        Enum('rician',
@@ -272,32 +272,33 @@ class Denoise(ProcessMIA):
                             optional=False,
                             desc=noise_model_desc))
 
-        self.add_trait("in_mask",
-                       File(output=False,
-                            optional=True,
-                            desc=in_mask_desc))
-
-        self.add_trait("signal_mask",
-                       File(output=False,
-                            optional=True,
-                            desc=signal_mask_desc))
-
-        self.add_trait("noise_mask",
-                       File(output=False,
-                            optional=True,
-                            desc=noise_mask_desc))
-
-        self.add_trait("block_radius",
-                       Int(5,
-                           output=False,
-                           optional=True,
-                           desc=block_radius_desc))
+        self.add_trait("out_prefix",
+                       String('denoise_',
+                              output=False,
+                              optional=True,
+                              desc=out_prefix_desc))
 
         self.add_trait("patch_radius",
                        Int(1,
                            output=False,
                            optional=True,
                            desc=patch_radius_desc))
+
+        # Optional inputs value traits
+        self.add_trait("in_mask",
+                       File(output=False,
+                            optional=True,
+                            desc=in_mask_desc))
+
+        self.add_trait("noise_mask",
+                       File(output=False,
+                            optional=True,
+                            desc=noise_mask_desc))
+
+        self.add_trait("signal_mask",
+                       File(output=False,
+                            optional=True,
+                            desc=signal_mask_desc))
 
         self.add_trait("snr",
                        Either(Undefined,
@@ -306,12 +307,6 @@ class Denoise(ProcessMIA):
                               output=False,
                               optional=True,
                               desc=snr_desc))
-
-        self.add_trait("out_prefix",
-                       String('denoise_',
-                              output=False,
-                              optional=True,
-                              desc=out_prefix_desc))
 
         # Outputs traits
         self.add_trait("out_file",
@@ -373,17 +368,17 @@ class Denoise(ProcessMIA):
         """Dedicated to the process launch step of the brick."""
         super(Denoise, self).run_process_mia()
         self.process.in_file = self.in_file
-        self.process.noise_model = self.noise_model
-        self.process.patch_radius = self.patch_radius
         self.process.block_radius = self.block_radius
+        self.process.noise_model = self.noise_model
         self.process._out_file = self.out_file
-        if self.snr:
-            self.process.snr = self.snr
-        if self.signal_mask:
-            self.process.signal_mask = self.signal_mask
-        if self.noise_mask:
-            self.process.noise_mask = self.noise_mask
+        self.process.patch_radius = self.patch_radius
         if self.in_mask:
             self.process.in_mask = self.in_mask
+        if self.noise_mask:
+            self.process.noise_mask = self.noise_mask
+        if self.signal_mask:
+            self.process.signal_mask = self.signal_mask
+        if self.snr:
+            self.process.snr = self.snr
 
         return self.process.run(configuration_dict={})

@@ -22,7 +22,7 @@ Be carreful this program by itself does NOT do 'skull-stripping'.
 
 >>> Automask.help()
 
-**Inputs parameters:**
+**Mandatory inputs parameters:**
 
 - *in_file* (a string representing an existing file)
     Input image (valid extensions: [.nii, .nii.gz]).
@@ -32,6 +32,22 @@ Be carreful this program by itself does NOT do 'skull-stripping'.
 
       ex. '/home/username/data/raw_data/func.nii'
 
+**Optional inputs with default value parameters:**
+
+- *clfrac* (a float, optional)
+    Sets the clip level fraction (must be 0.1-0.9). A small value will tend to make the mask larger. 
+    
+    ::
+
+      default value. '0.5'
+
+- *out_brain_suffix* (a string, optional)
+   Suffix of the brain masked image.
+    
+    ::
+
+      default value. '_masked'
+
 - *output_type* (NIFTI or NIFTI_GZ, optional)
     | Format of the output image (one of NIFTI, NIFTI_GZ).
     |   NIFTI: \*.nii
@@ -39,29 +55,16 @@ Be carreful this program by itself does NOT do 'skull-stripping'.
 
     ::
 
-      ex. NIFTI
+      default value. NIFTI
 
 - *out_prefix* (a string, optional)
-    Prefix of the output image. Default is 'automask_'.
-    
+    Prefix of the output image.
+
     ::
 
-      ex. 'autpmask_'
+      default value. 'autpmask_'
 
-- *out_brain_suffix* (a string, optional)
-   Suffix of the brain masked image. Default is '_masked'.
-    
-    ::
-
-      ex. '_masked'
-
-- *clfrac* (a float, optional)
-    Sets the clip level fraction (must be 0.1-0.9). A small value will tend to make the mask larger. 
-    Default is 0.5.
-    
-    ::
-
-      ex. '0.5'
+**Optional inputs parameters:**
 
 - *dilate* (an integer, optional)
     Dilate the mask outwards.
@@ -82,19 +85,19 @@ Be carreful this program by itself does NOT do 'skull-stripping'.
 
 **Outputs parameters:**
 
-- *out_file* (a strings representing a file)
-    Brain mask image (extensions: [.nii, .nii.gz]).
-    
-    ::
-
-      ex. '/home/username/data/derived_data/automask_func.nii'
-
 - *out_brain* (a strings representing a file)
     Masked image (extensions: [.nii, .nii.gz]).
     
     ::
 
       ex. '/home/username/data/derived_data/func_masked.nii'
+
+- *out_file* (a strings representing a file)
+    Brain mask image (extensions: [.nii, .nii.gz]).
+    
+    ::
+
+      ex. '/home/username/data/derived_data/automask_func.nii'
 
 -------------
 

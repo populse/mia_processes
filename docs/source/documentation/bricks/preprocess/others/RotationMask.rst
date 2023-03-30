@@ -21,7 +21,7 @@ Adapted from https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf9321
 >>> from mia_processes.bricks.preprocess.others import RotationMask
 >>> RotationMask.help()
 
-**Inputs parameters:**
+**Mandatory inputs parameters:**
 
 - *in_file* (a string representing an existing file)
     Input image (valid extensions: [.nii, .nii.gz]).
@@ -30,20 +30,22 @@ Adapted from https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf9321
 
       ex. '/home/username/data/raw_data/T1w.nii'
 
+**Optional inputs with default value parameters:**
+
 - *prefix* (a string, optional)
-    Prefix of the output image. Default is ''.
+    Prefix of the output image.
     
     ::
 
-      ex. ''
+      default value. ''
 
 
 - *suffix* (a string, optional)
-   Suffix of output image. Default is '_rotmasked'.
+   Suffix of output image.
     
     ::
 
-      ex. '_rotmasked'
+      default value. '_rotmasked'
 
 
 **Outputs parameters:**

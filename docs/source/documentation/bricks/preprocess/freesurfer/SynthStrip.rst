@@ -18,7 +18,7 @@ SynthStrip brick
 >>> from mia_processes.bricks.preprocess.freesurfer import SynthStrip
 >>> SynthStrip.help()
 
-**Inputs parameters:**
+**Mandatory inputs parameters:**
 
 - *in_file* (a string representing an existing file)
     Input file to skull strip. An existing file (valid extensions: [.nii, .nii.gz]).
@@ -27,23 +27,23 @@ SynthStrip brick
 
       ex. /home/username/data/raw_data/T1w.nii
 
+**Optional inputs with default value parameters:**
 
-- *border_mm* (integer)
+- *border_mm* (an integer, optional)
     Mask border threshold in mm. Controls the boundary distance from the brain.
-    Default is 1
 
     ::
 
-      ex. 1
+      default value. 1
 
-- *no_csf* (boolean)
-    Exclude CSF from brain border. Default is Fasle
+- *no_csf* (a boolean, optional)
+    Exclude CSF from brain border.
 
     ::
 
-      ex. False
+      default value. False
 
-- *output_type* ('NIFTI' or 'NIFTI_GZ' or 'MGZ')
+- *output_type* ('NIFTI' or 'NIFTI_GZ' or 'MGZ', optional)
     | Format of the output image (one of NIFTI, NIFTI_GZ, MGZ).
     |   NIFTI: \*.nii
     |   NIFTI_GZ: \*.nii.gz
@@ -51,7 +51,7 @@ SynthStrip brick
 
     ::
 
-      ex. NIFTI
+      default value. NIFTI
 
 
 **Outputs parameters:**

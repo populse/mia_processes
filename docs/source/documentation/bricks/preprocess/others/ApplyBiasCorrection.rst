@@ -17,7 +17,7 @@ Apply bias field correction to an input file using the bias image
 >>> from mia_processes.bricks.preprocess.others import ApplyBiasCorrection
 >>> ApplyBiasCorrection.help()
 
-**Inputs parameters:**
+**Mandatory inputs parameters:**
 
 - *in_file* (a string representing an existing file)
     Input image (valid extensions: [.nii, .nii.gz])
@@ -32,7 +32,6 @@ Apply bias field correction to an input file using the bias image
     ::
 
       ex. '/home/username/data/raw_data/T1w_bias.nii'
-
 
 
 **Outputs parameters:**

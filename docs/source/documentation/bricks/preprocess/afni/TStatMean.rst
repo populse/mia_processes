@@ -20,7 +20,7 @@ Compute mean of input voxels for a 3D+time dataset image.
 
 >>> TStatMean.help()
 
-**Inputs parameters:**
+**Mandatory inputs parameters:**
 
 - *in_file* (a string representing an existing file)
     Input bold file to be averaged (valid extensions: [.nii, .nii.gz]).
@@ -29,6 +29,7 @@ Compute mean of input voxels for a 3D+time dataset image.
 
       ex. '/home/username/data/raw_data/func.nii'
 
+**Optional inputs with default value parameters:**
 
 - *output_type* (NIFTI or NIFTI_GZ, optional)
     | Format of the output image (one of NIFTI, NIFTI_GZ).
@@ -37,14 +38,14 @@ Compute mean of input voxels for a 3D+time dataset image.
 
     ::
 
-      ex. NIFTI
+      default value. NIFTI
 
 - *out_prefix* (a string, optional)
-    Prefix of the output image. Default is 'mean_'.
+    Prefix of the output image.
     
     ::
 
-        ex. 'mean_'
+        default value. 'mean_'
 
 **Outputs parameters:**
 

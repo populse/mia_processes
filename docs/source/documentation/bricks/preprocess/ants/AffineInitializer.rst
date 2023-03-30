@@ -10,7 +10,7 @@
 AffineInitializer brick
 ============
 
-A multi-start optimizer for affine registration.
+Initialize an affine transform using ANTs AffineInitizer command.
 
 --------------------------------------
 
@@ -18,7 +18,7 @@ A multi-start optimizer for affine registration.
 
 >>> AffineInitializer.help()
 
-**Inputs parameters:**
+**Mandatory inputs parameters:**
 
 - *moving_image* (a string representing an existing file)
     The moving image to be mapped to the fixed space(valid extensions: [.nii, .nii.gz]).
@@ -27,55 +27,55 @@ A multi-start optimizer for affine registration.
 
       ex. '/home/username/data/raw_data/T1w.nii'
 
-- *reference_image* (a string representing an existing file)
+- *fixed_image* (a string representing an existing file)
     The fixed reference image (valid extensions: [.nii, .nii.gz]).
 
     ::
 
       ex. '/home/username/data/raw_data/T1w_template.nii'
 
+**Optional inputs parameters with a default value:**
+
 - *dimension* (3 or 2, optional)
-    Image dimension. Default is 3.
+    Image dimension.
     
     ::
 
-        ex. 3
+        default value. 3
 
 - *local_search* (an integer, optional)
-    Determines if a local optimization is run at each search point for the set number of iterations. Default is 10.
+    Determines if a local optimization is run at each search point for the set number of iterations.
     
     ::
 
-        ex. 10
-
-- *search_factor* (a float, optional)
-    Increments (degrees) for affine search. Default is 15.0.
-    
-    ::
-
-        ex. 15.0
-
-
-- *search_factor* (a float between 0.0 and 1.0, optional)
-    Search this arc +/- principal axes. Default is 0.1.
-    
-    ::
-
-        ex. 0.1
-
-- *principal_axes* (a boolean, optional)
-    Whether the rotation is searched around an initial principal axis alignment. Default is False.
-    
-    ::
-
-        ex. False
+        default value. 10
 
 - *out_prefix* (a string, optional)
     Prefix of the out transform file. Default is 'AffineTransform_'.
     
     ::
+        default value. 'AffineTransform_'
 
-        ex. 'AffineTransform_'
+- *principal_axes* (a boolean, optional)
+    Whether the rotation is searched around an initial principal axis alignment.
+    
+    ::
+
+        default value. False
+
+- *radian_fraction* (a float between 0.0 and 1.0, optional)
+    Search this arc +/- principal axes. 
+    
+    ::
+
+        default value. 0.1
+
+- *search_factor* (a float, optional)
+    Increments (degrees) for affine search.
+    
+    ::
+
+        default value. 15.0
 
 **Outputs parameters:**
 

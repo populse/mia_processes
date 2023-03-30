@@ -20,7 +20,7 @@ Adapted from https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5
 
 >>> NonSteadyStateDetector.help()
 
-**Inputs parameters:**
+**Mandatory inputs parameters:**
 
 - *in_file* (a string representing an existing file)
     Input image (valid extensions: [.nii, .nii.gz]).

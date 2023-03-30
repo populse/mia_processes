@@ -21,7 +21,7 @@ Adapted from https://github.com/nipreps/niworkflows/blob/45ab13e1bf6fdbf5e29c90c
 >>> from mia_processes.bricks.preprocess.others import Binarize
 >>> Binarize.help()
 
-**Inputs parameters:**
+**Mandatory inputs parameters:**
 
 - *in_files* (A list of items with string elements corresponding to existing path files.)
     Input images (valid extensions: [.nii, .nii.gz]).
@@ -30,27 +30,29 @@ Adapted from https://github.com/nipreps/niworkflows/blob/45ab13e1bf6fdbf5e29c90c
 
       ex. ['/home/username/data/raw_data/T1w.nii']
 
-- *thresh_low* (a float)
-    Lower threshold for binarization. Default is 0.0. 
-    
-    ::
-
-      ex. 0.5
+**Optional inputs with default value parameters:**
 
 - *prefix* (a string, optional)
-    Prefix of the output images. Default is ''.
+    Prefix of the output images. 
     
     ::
 
-      ex. ''
+      default value. ''
 
 
 - *suffix* (a string, optional)
-   Suffix of output images. Default is '_bin'.
+   Suffix of output images.
     
     ::
 
-      ex. '_bin'
+      default value. '_bin'
+  
+- *thresh_low* (a float)
+    Lower threshold for binarization. 
+    
+    ::
+
+      default value. 0.0
 
 
 **Outputs parameters:**

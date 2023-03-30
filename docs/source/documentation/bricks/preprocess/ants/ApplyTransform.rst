@@ -7,10 +7,11 @@
 +--------------------------------+----------------------------------------------+----------------------------------------------------+
 
 ============
-AffineInitializer brick
+ApplyTransforms brick
 ============
 
-A multi-start optimizer for affine registration.
+ApplyTransforms, applied to an input image, transforms it according to a reference image and a transform (or a set of transforms)
+using ANTs ApplyTransforms command.
 
 --------------------------------------
 
@@ -18,7 +19,7 @@ A multi-start optimizer for affine registration.
 
 >>> ApplyTransforms.help()
 
-**Inputs parameters:**
+**Mandatory inputs parameters:**
 
 - *input_image* (a string representing an existing file)
     Input file to apply transformation to (valid extensions: [.nii, .nii.gz]).
@@ -41,43 +42,62 @@ A multi-start optimizer for affine registration.
 
       ex. ['identity', 'ants_Warp.nii.gz', 'trans.mat']
 
-- *interpolation*(Linear or NearestNeighbor or CosineWindowedSinc or WelchWindowedSinc or HammingWindowedSinc or LanczosWindowedSinc or MultiLabel or Gaussian or BSpline, optional)
-    Interpolation model.
-    Default is Linear.
-    ::
-
-      ex. 'Linear'
+**Optional inputs parameters with a default value:**
 
 - *default_value* (a float, optional)
-    Default value. Default is 0.0.
+    Default value.
     ::
 
-      ex. 0.0
+      default value. 0.0
 
 - *dimension* (2 or 3 or 4, optional)
     This option forces the image to be treated as a specified-dimensional image (2 or 3 or 4).
-    Default is 3.
+
     ::
 
-      ex. 3
+      default value. 3
 
 - *float* (a boolean, optional)
     Use float instead of double for computations.
-    Default is False.
+
     ::
 
-      ex. False
+      default value. False
 
 - *input_image_type* (0 or 1 or 2 or 3, optional)
     Option specifying the input image type of scalar (0), vector (1), tensor(2), or time series(3). 
-    Default is 0 (scalar).
+
     ::
 
-      ex. 0
+      default value. 0
+
+- *interpolation*(Linear or NearestNeighbor or CosineWindowedSinc or WelchWindowedSinc or HammingWindowedSinc or LanczosWindowedSinc or MultiLabel or Gaussian or BSpline, optional)
+    Interpolation model.
+
+    ::
+
+      default value. 'Linear'
+  
+- *out_prefix* (a string, optional)
+    Prefix of the output image. Default is 't_'.
+    
+    ::
+
+        default value. 't_'
+
+- *print_out_composite_warp_file* (a boolean, optional)
+    Output a composite warp file instead of a transformed image.
+    Default is False.
+    ::
+
+      default value. False
+
+**Optional inputs parameters:**
 
 - *interpolation_parameters* (a tuple of the form: (an integer) or a tuple of the form: (a float, a float), optional)
     Interpolation parameters. For example for BSpline order or for sigma/alphaparameters for Gaussian/Multilabel  
     Default is Undefined (ie parameter not used).
+
     ::
 
       ex. (5,) (if interpolation = 'BSpline')
@@ -87,23 +107,10 @@ A multi-start optimizer for affine registration.
     For example if transforms parameter is equal to ['ants_Warp.nii.gz', 'trans.mat'] and invert_transform_flags is [False, True], the follinw trnasform will be applied: 
     `--transform ants_Warp.nii.gz --transform [ trans.mat, 1 ]`
     Default is Undefined (ie parameter not used).
+
     ::
 
       ex. [False, True]
-
-- *print_out_composite_warp_file* (a boolean, optional)
-    Output a composite warp file instead of a transformed image.
-    Default is False.
-    ::
-
-      ex. False
-
-- *out_prefix* (a string, optional)
-    Prefix of the output image. Default is 't_'.
-    
-    ::
-
-        ex. 't_'
 
 **Outputs parameters:**
 

@@ -20,7 +20,7 @@ nd the average only applies to pixels with patches close to the current patch.
 
 >>> Denoise.help()
 
-**Inputs parameters:**
+**Mandatory inputs parameters:**
 
 - *in_file* (a string representing an existing file)
     Input file to denoise (valid extensions: [.nii, .nii.gz]).
@@ -29,12 +29,37 @@ nd the average only applies to pixels with patches close to the current patch.
 
       ex. '/home/username/data/raw_data/func.nii'
 
-- *noise_model* (rician or gaussian, optional)
-    Noise distribution model.
-    Default is rician.
+**Optional inputs with default value parameters:**
+
+- *block_radius* (an integer, optional)
+    The block size will be 2 x block_radius + 1.
+
     ::
 
-      ex. 'rician'
+      default value. 5
+  
+- *noise_model* (rician or gaussian, optional)
+    Noise distribution model.
+
+    ::
+
+      default value. 'rician'
+
+- *out_prefix* (a string, optional)
+    Prefix of the output image. 
+    
+    ::
+
+      default value. 'denoise_'
+
+- *patch_radius* (an integer, optional)
+    The patch size will be 2 x patch_radius + 1.
+
+    ::
+
+      default value. 1
+  
+  **Optional inputs parameters:**
 
 - *in_mask* (a string representing an existing file, optional)
     Brain mask.
@@ -64,29 +89,6 @@ nd the average only applies to pixels with patches close to the current patch.
     ::
 
       ex. 260.0
-  
-  - *block_radius* (an integer, optional)
-    The block size will be 2 x block_radius + 1.
-    Default is 5.
-
-    ::
-
-      ex. 5
-
-  - *patch_radius* (an integer, optional)
-    The patch size will be 2 x patch_radius + 1.
-    Default is 1.
-
-    ::
-
-      ex. 1
-
-- *out_prefix* (a string, optional)
-    Prefix of the output image. Default is 'denoise_'.
-    
-    ::
-
-        ex. 'denoise_'
 
 **Outputs parameters:**
 

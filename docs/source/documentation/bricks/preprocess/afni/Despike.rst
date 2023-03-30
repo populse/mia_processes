@@ -20,7 +20,7 @@ The output dataset will always be stored in floats.
 
 >>> Despike.help()
 
-**Inputs parameters:**
+**Mandatory inputs parameters:**
 
 - *in_file* (a string representing an existing file)
     Input file (valid extensions: [.nii, .nii.gz]).
@@ -29,13 +29,15 @@ The output dataset will always be stored in floats.
 
       ex. '/home/username/data/raw_data/func.nii'
 
+**Optional inputs with default value parameters:**
+
 - *despike* (a boolean, optional)
     Despike dataset. 
     Default is True. 
 
     ::
 
-      ex. True
+      default value. True
 
 - *output_type* (NIFTI or NIFTI_GZ, optional)
     | Format of the output image (one of NIFTI, NIFTI_GZ).
@@ -44,14 +46,14 @@ The output dataset will always be stored in floats.
 
     ::
 
-      ex. NIFTI
+      default value. NIFTI
 
 - *out_prefix* (a string, optional)
     Prefix of the output image. Default is 'd_'.
     
     ::
 
-      ex. 'd_'
+      default value. 'd_'
 
 
 **Outputs parameters:**

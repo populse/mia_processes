@@ -23,7 +23,7 @@ Adapted from https://github.com/nipreps/niworkflows/blob/c2b8e0f7396c626df296a48
 
 >>> IntensityClip.help()
 
-**Inputs parameters:**
+**Mandatory inputs parameters:**
 
 - *in_file* (a string representing an existing file)
     Input image which intensity will be clipped (valid extensions: [.nii, .nii.gz]).
@@ -32,42 +32,42 @@ Adapted from https://github.com/nipreps/niworkflows/blob/c2b8e0f7396c626df296a48
 
       ex. '/home/username/data/raw_data/T1w.nii'
 
-- *p_min* (a float, optional)
-    Percentile for the lower bound. Default is 10.0. 
-
-    ::
-
-      ex. 10.0
-
-- *p_max* (a float,  optional)
-    Percentile for the upper bound. Default is 99.9.
-
-    ::
-
-      ex. 99.9
-
-- *nonnegative* (a boolean, optional=True)
-    Whether input intensities must be positive. Default is True.
-    
-    ::
-
-      ex. True
+**Optional inputs with default value parameters:**
 
 - *dtype* (one of 'int16', 'float32', 'uint8', optional)
-    Output datatype. Default is 'int16'.
+    Output datatype.
     
     ::
 
-      ex. 'int16'
+      default value. 'int16'
 
 - *invert* (a boolean, optional)
-   Finalize by inverting contrast. Default is False.
+   Finalize by inverting contrast.
     
     ::
 
-      ex. False
+      default value. False
+      
+- *nonnegative* (a boolean, optional=True)
+    Whether input intensities must be positive. 
+    
+    ::
 
+      default value. True
 
+- *p_max* (a float,  optional)
+    Percentile for the upper bound.
+
+    ::
+
+      default value. 99.9
+
+- *p_min* (a float, optional)
+    Percentile for the lower bound.
+
+    ::
+
+      default value. 10.0
 
 **Outputs parameters:**
 

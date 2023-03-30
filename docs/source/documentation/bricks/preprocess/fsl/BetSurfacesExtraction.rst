@@ -22,7 +22,7 @@ BetSurfacesExtraction brick
 >>> from mia_processes.bricks.preprocess.fsl import BetSurfacesExtraction
 >>> BetSurfacesExtraction.help()
 
-**Inputs parameters:**
+**Mandatory inputs parameters:**
 
 - *in_file* (a string representing an existing file)
     Input file to skull strip. An existing file (valid extensions: [.nii, .nii.gz]).
@@ -31,18 +31,33 @@ BetSurfacesExtraction brick
 
       ex. /home/username/data/raw_data/T1w.nii
 
+**Optional inputs with default value parameters:**
 
-- *output_type* ('NIFTI' or 'NIFTI_GZ')
+- *output_type* ('NIFTI' or 'NIFTI_GZ', optional)
     | Format of the output image (one of NIFTI, NIFTI_GZ).
     |   NIFTI: \*.nii
     |   NIFTI_GZ: \*.nii.gz
 
     ::
 
-      ex. NIFTI
+      default value. NIFTI
 
 
 **Outputs parameters:**
+
+- *inskull_mask_file* (a pathlike object or string representing a file)
+    Inskull mask 
+
+    ::
+
+      ex. /home/username/data/raw_data/T1w_brain_inskull_mask.nii
+
+- *inskull_mesh_file* (a pathlike object or string representing a file)
+    Inskull mesh (.vtk format)
+
+    ::
+
+      ex. /home/username/data/raw_data/T1w_brain_inskull_mesh.vtk
 
 - *out_file* (a pathlike object or string representing a file)
     Skullstripped file
@@ -78,20 +93,6 @@ BetSurfacesExtraction brick
     ::
 
       ex. /home/username/data/raw_data/T1w_brain_outskull_mesh.vtk
-
-- *inskull_mask_file* (a pathlike object or string representing a file)
-    Inskull mask 
-
-    ::
-
-      ex. /home/username/data/raw_data/T1w_brain_inskull_mask.nii
-
-- *inskull_mesh_file* (a pathlike object or string representing a file)
-    Inskull mesh (.vtk format)
-
-    ::
-
-      ex. /home/username/data/raw_data/T1w_brain_inskull_mesh.vtk
 
 - *skull_mask_file* (a pathlike object or string representing a file)
     Skull mask 

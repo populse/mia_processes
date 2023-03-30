@@ -19,7 +19,7 @@ This bricks assumes that the voxel-by-voxel computations are being performed on 
 
 >>> Calc.help()
 
-**Inputs parameters:**
+**Mandatory inputs parameters:**
 
 - *in_file_a* (a string representing an existing file)
     First input 3D file (valid extensions: [.nii, .nii.gz]).
@@ -27,6 +27,39 @@ This bricks assumes that the voxel-by-voxel computations are being performed on 
     ::
 
       ex. '/home/username/data/raw_data/img_1.nii'
+
+**Optional inputs with default value parameters:**
+
+- *expr* (a string, optional)
+    Arithmetic expression to apply between a, b and c. 
+
+    Arithmetic expressions are allowed, using + - * / ** ^ and parentheses.
+    It is also possible to use built in functions such as sin, cos, sqrt, mean, stdev...
+    Some functions are also designed to help implement logical functions such as step(x)  = { 1 if x > 0; 0 if x <= 0 }. 
+
+    For more example, refers to the AFNI documentation
+
+    ::
+
+      default value. 'a*step(b)'
+
+- *output_type* (NIFTI or NIFTI_GZ, optional)
+    | Format of the output image (one of NIFTI, NIFTI_GZ).
+    |   NIFTI: \*.nii
+    |   NIFTI_GZ: \*.nii.gz
+
+    ::
+
+      default value. NIFTI
+
+- *out_prefix* (a string, optional)
+    Prefix of the output image. Default is 'c_'.
+    
+    ::
+
+        default value. 'c_'
+
+**Optional inputs parameters:** 
 
 - *in_file_b* (a string representing an existing file, optional)
     Second input 3D file (valid extensions: [.nii, .nii.gz]).
@@ -42,28 +75,14 @@ This bricks assumes that the voxel-by-voxel computations are being performed on 
 
       ex. '/home/username/data/raw_data/img_3.nii'
 
-- *expr* (a string)
-    Arithmetic expression to apply between a, b and c. 
-    Default is 'a*step(b)'
-
-    Arithmetic expressions are allowed, using + - * / ** ^ and parentheses.
-    It is also possible to use built in functions such as sin, cos, sqrt, mean, stdev...
-    Some functions are also designed to help implement logical functions such as step(x)  = { 1 if x > 0; 0 if x <= 0 }. 
-
-    For more example, refers to the AFNI documentation
-
-    ::
-
-      ex. 'a*step(b)'
-
-- *single_idx* (an integer)
+- *single_idx* (an integer, optional)
     Volume index for in_file_a. The computation will be performed only on this volume.
     Default is Undefined (ie parameter not used)
     ::
 
       ex. '5'
 
-- *start_idx* (an integer)
+- *start_idx* (an integer, optional)
     Start index for in_file_a. Requires stop_idx parameter.
     The computation will be performed only only on the volumes between start_idx and stop_idx.
     Default is Undefined (ie parameter not used).
@@ -71,29 +90,13 @@ This bricks assumes that the voxel-by-voxel computations are being performed on 
 
       ex. '5'
 
-- *stop_idx* (an integer)
+- *stop_idx* (an integer, optional)
     Stop index for in_file_a. Requires start_idx parameter.
     The computation will be performed only only on the volumes between start_idx and stop_idx.
     Default is Undefined (ie parameter not used).
     ::
 
       ex. '35'
-
-- *output_type* (NIFTI or NIFTI_GZ, optional)
-    | Format of the output image (one of NIFTI, NIFTI_GZ).
-    |   NIFTI: \*.nii
-    |   NIFTI_GZ: \*.nii.gz
-
-    ::
-
-      ex. NIFTI
-
-- *out_prefix* (a string, optional)
-    Prefix of the output image. Default is 'c_'.
-    
-    ::
-
-        ex. 'c_'
 
 **Outputs parameters:**
 

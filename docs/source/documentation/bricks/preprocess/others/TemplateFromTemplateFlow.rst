@@ -22,30 +22,7 @@ This bricks allows to get template image from TemplateFlow.
 
 >>> TemplateFromTemplateFlow.help()
 
-**Inputs parameters:**
-
-- *in_template* (a string)
-    Template name. Default is 'MNI152NLin2009cAsym'.
-
-    ::
-
-      ex. 'MNI152NLin2009cAsym'
-
-- *resolution* (an int)
-    Resolution of the template (entity 'res' in template path name). Default is 2.
-    
-    ::
-
-      ex. 2
-
-- *suffix* (a string, optional)
-    Suffix of the template image. Default is ''.
-    Example: 'T1w', 'T2w', 'probseg', 'T2map', 'mask'...
-
-    
-    ::
-
-      ex. 'T1w'
+**Optional inputs with default value parameters:**
 
 - *atlas* (a string, optional)
     Name of a particular atlas (entity 'atlas' in template path name). Default is ''.
@@ -53,24 +30,47 @@ This bricks allows to get template image from TemplateFlow.
 
     ::
 
-      ex. ''
-
-- *desc* (a string, optional)
-    Description field (entity 'desc' in template path name). Default is ''.
+      default value. ''
+  
+  - *desc* (a string, optional)
+    Description field (entity 'desc' in template path name). 
     Example: 'brain', 'eye', '256dimensions' ...
 
     ::
 
-      ex. ''
+      default value. ''
+
+  - *in_template* (a string)
+    Template name. 
+
+    ::
+
+      default value. 'MNI152NLin2009cAsym'
 
 - *label* (a string, optional)
-    Label fields. Default is ''.
+    Label fields.
     Example: 'CSF', 'GM'...
 
     ::
 
-      ex. ''
+      default value. ''
 
+
+- *resolution* (an int)
+    Resolution of the template (entity 'res' in template path name). 
+    
+    ::
+
+      default value. 2
+
+- *suffix* (a string, optional)
+    Suffix of the template image. 
+    Example: 'T1w', 'T2w', 'probseg', 'T2map', 'mask'...
+
+    
+    ::
+
+      default value. ''
 
 
 **Outputs parameters:**

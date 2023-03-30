@@ -21,10 +21,12 @@ populse_mia.
 
 # populse_mia import
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
+from mia_processes.utils import checkFileExt
 
 # Other import
 import os
-from traits.api import Bool, Either, Enum, File, Float, Int, List, Undefined, String 
+from traits.api import (Bool, Either, Enum, File, Float, Int, List, 
+                        Undefined, String)
 import capsul
 from capsul.in_context import freesurfer
 
@@ -35,7 +37,8 @@ EXT = {'NIFTI_GZ': 'nii.gz',
 
 class Binarize(ProcessMIA):
     """
-    * Binarize a volume (or volume-encoded surface file) using FreeSurfer mri_binarize
+    * Binarize a volume (or volume-encoded surface file) using 
+    FreeSurfer mri_binarize.
     Binarization can be done based on threshold or on matched values. *
 
     Please, see the complete documentation for the `Binarize' brick in
@@ -57,84 +60,59 @@ class Binarize(ProcessMIA):
         # Third party softwares required for the execution of the brick
         self.requirement = ['freesurfer', 'nipype']
 
-        # Inputs description
+        # Mandatory inputs description
         in_file_desc = ('Input file (a pathlike object or string '
                         'representing a file).')
-        min_desc = 'Minimum voxel threshold(float).'
-        max_desc = 'Maximum voxel threshold(float).'
-        rmin_desc = 'Compute min based on rmin*globalmean.'
-        rmax_desc = 'Compute max based on rmax*globalmean.'
-        match_desc = 'Match instead of threshold'
-        get_count_file_desc = ('save number of hits in ascii file'
-                               '(hits, ntotvox, pct)')
-        bin_val_desc = 'set vox outside range to val (default is 0)'
-        bin_val_not_desc = 'set vox outside range to val (default is 0)'
-        invert_desc = 'set binval=0, binvalnot=1'
-        frame_no_desc = 'use 0-based frame of input (default is 0)'
+        # Optional inputs with default value description
         abs_desc = 'take abs of invol first (ie, make unsigned)'
         bin_col_num_desc = 'set binarized voxel value to its column number'
+        get_count_file_desc = ('save number of hits in ascii file'
+                               '(hits, ntotvox, pct)')
+        invert_desc = 'set binval=0, binvalnot=1'
+        max_desc = 'Maximum voxel threshold(float).'
+        min_desc = 'Minimum voxel threshold(float).'
+        output_type_desc = ('Typecodes of the output image formats (one '
+                            'of NIFTI, MGZ, NIFTI_GZ).')
+        out_suffix_desc = 'Suffix of the output image (a string).'
         zero_edges_desc = 'zero the edge voxels'
         zero_slice_edge_desc = 'zero the edge slice voxels'
+        # Optional inputs description
+        bin_val_desc = 'set vox outside range to val (default is 0)'
+        bin_val_not_desc = 'set vox outside range to val (default is 0)'
         dilate_desc = 'niters: dilate binarization in 3D'
         erode_desc = ('nerode: erode binarization in 3D '
                       '(after any dilation)')
         erode2d_desc = ('nerode2d: erode binarization in 2D '
                         '(after any 3D erosion)')
+        frame_no_desc = 'use 0-based frame of input (default is 0)'
+        match_desc = 'Match instead of threshold'
 
-        output_type_desc = ('Typecodes of the output image formats (one '
-                            'of NIFTI, MGZ, NIFTI_GZ).')
-        out_suffix_desc = 'Suffix of the output image (a string).'
-
+        rmax_desc = 'Compute max based on rmax*globalmean.'
+        rmin_desc = 'Compute min based on rmin*globalmean.'
         # Outputs description
-        out_file_desc = ('The binanized file (a pathlike object or a '
-                         'string representing a file).')
         count_file_desc = ('File that contains number of hits'
                            '(hits, ntotvox, pct)')
+        out_file_desc = ('The binanized file (a pathlike object or a '
+                         'string representing a file).')
 
-        # Inputs traits
+        # Mandatory inputs traits
         self.add_trait('in_file',
                        File(output=False,
                             optional=False,
                             desc=in_file_desc))
 
-        self.add_trait('min',
-                       Either(Undefined,
-                              Float(),
-                              default=Undefined,
-                              output=False,
-                              optional=True,
-                              desc=min_desc))
+        # Optional inputs with default value traits
+        self.add_trait('abs',
+                       Bool(default=False,
+                            output=False,
+                            optional=True,
+                            desc=abs_desc))
 
-        self.add_trait('max',
-                       Either(Undefined,
-                              Float(),
-                              default=Undefined,
-                              output=False,
-                              optional=True,
-                              desc=max_desc))
-        self.add_trait('rmin',
-                       Either(Undefined,
-                              Float(),
-                              default=Undefined,
-                              output=False,
-                              optional=True,
-                              desc=rmin_desc))
-
-        self.add_trait('rmax',
-                       Either(Undefined,
-                              Float(),
-                              default=Undefined,
-                              output=False,
-                              optional=True,
-                              desc=rmax_desc))
-
-        self.add_trait('match',
-                       Either(Undefined,
-                              List(Int()),
-                              default=Undefined,
-                              output=False,
-                              optional=True,
-                              desc=match_desc))
+        self.add_trait('bin_col_num',
+                       Bool(default=False,
+                            output=False,
+                            optional=True,
+                            desc=bin_col_num_desc))
 
         self.add_trait('get_count_file',
                        Bool(False,
@@ -143,6 +121,26 @@ class Binarize(ProcessMIA):
                             optional=True,
                             desc=get_count_file_desc))
 
+        self.add_trait('invert',
+                       Bool(default=False,
+                            output=False,
+                            optional=True,
+                            desc=invert_desc))
+        self.add_trait('max',
+                       Either(Float(),
+                              Undefined,
+                              default=100.0,
+                              output=False,
+                              optional=True,
+                              desc=max_desc))
+        self.add_trait('min',
+                       Either(Float(),
+                              Undefined,
+                              default=0.0,
+                              output=False,
+                              optional=True,
+                              desc=min_desc))
+        
         self.add_trait('output_type',
                        Enum('NIFTI',
                             'NIFTI_GZ',
@@ -157,6 +155,19 @@ class Binarize(ProcessMIA):
                               optional=True,
                               desc=out_suffix_desc))
 
+        self.add_trait('zero_edges',
+                       Bool(default=False,
+                            output=False,
+                            optional=True,
+                            desc=zero_edges_desc))
+
+        self.add_trait('zero_slice_edge',
+                       Bool(default=False,
+                            output=False,
+                            optional=True,
+                            desc=zero_slice_edge_desc))
+
+        # Optional inputs traits
         self.add_trait('bin_val',
                        Either(Undefined,
                               Int(),
@@ -172,44 +183,6 @@ class Binarize(ProcessMIA):
                               output=False,
                               optional=True,
                               desc=bin_val_not_desc))
-
-        self.add_trait('invert',
-                       Bool(default=False,
-                            output=False,
-                            optional=True,
-                            desc=invert_desc))
-
-        self.add_trait('frame_no',
-                       Either(Undefined,
-                              Int(),
-                              default=Undefined,
-                              output=False,
-                              optional=True,
-                              desc=frame_no_desc))
-
-        self.add_trait('abs',
-                       Bool(default=False,
-                            output=False,
-                            optional=True,
-                            desc=abs_desc))
-
-        self.add_trait('bin_col_num',
-                       Bool(default=False,
-                            output=False,
-                            optional=True,
-                            desc=bin_col_num_desc))
-
-        self.add_trait('zero_edges',
-                       Bool(default=False,
-                            output=False,
-                            optional=True,
-                            desc=zero_edges_desc))
-
-        self.add_trait('zero_slice_edge',
-                       Bool(default=False,
-                            output=False,
-                            optional=True,
-                            desc=zero_slice_edge_desc))
 
         self.add_trait('dilate',
                        Either(Undefined,
@@ -234,15 +207,46 @@ class Binarize(ProcessMIA):
                               output=False,
                               optional=True,
                               desc=erode2d_desc))
-        # Outputs traits
-        self.add_trait('out_file',
-                       File(output=True,
-                            desc=out_file_desc))
+        self.add_trait('frame_no',
+                       Either(Undefined,
+                              Int(),
+                              default=Undefined,
+                              output=False,
+                              optional=True,
+                              desc=frame_no_desc))
 
+        self.add_trait('match',
+                       Either(Undefined,
+                              List(Int()),
+                              default=Undefined,
+                              output=False,
+                              optional=True,
+                              desc=match_desc))
+
+        self.add_trait('rmax',
+                       Either(Undefined,
+                              Float(),
+                              default=Undefined,
+                              output=False,
+                              optional=True,
+                              desc=rmax_desc))
+
+        self.add_trait('rmin',
+                       Either(Undefined,
+                              Float(),
+                              default=Undefined,
+                              output=False,
+                              optional=True,
+                              desc=rmin_desc))
+        # Outputs traits
         self.add_trait('count_file',
                        File(output=True,
                             optional=True,
                             desc=count_file_desc))
+
+        self.add_trait('out_file',
+                       File(output=True,
+                            desc=out_file_desc))
 
         self.init_default_traits()
         self.init_process('nipype.interfaces.freesurfer.Binarize')
@@ -264,7 +268,7 @@ class Binarize(ProcessMIA):
         super(Binarize, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
-        if (self.min != Undefined or 
+        if (self.min != Undefined or
                 self.max != Undefined or
                 self.rmin != Undefined or
                 self.rmax != Undefined) and self.match != Undefined:
@@ -276,33 +280,29 @@ class Binarize(ProcessMIA):
 
         if self.in_file:
             if self.output_directory:
-                output_type = self.output_type
+                valid_ext, in_ext, fileName = checkFileExt(self.in_file,
+                                                           EXT)
 
-                try:
-                    ifile = os.path.split(self.in_file)[-1]
-                    file_name, in_ext = ifile.rsplit('.', 1)
-                    if in_ext == 'gz':
-                        (file_name_2, in_ext_2) = file_name.rsplit('.', 1)
-                        if in_ext_2 == 'nii':
-                            in_ext = 'nii.gz'
-                except ValueError:
-                    print('\nThe input image format is not recognized ...!')
+                if not valid_ext:
+                    print('\nThe input image format is'
+                          ' not recognized...!')
                     return
+                else:
+                    output_type = self.output_type
+                    self.outputs['out_file'] = os.path.join(
+                        self.output_directory,
+                        os.path.split(self.in_file)[1].replace(
+                            '.' + in_ext,
+                            self.out_suffix + '.' + EXT[output_type]))
 
-                self.outputs['out_file'] = os.path.join(
-                    self.output_directory,
-                    os.path.split(self.in_file)[1].replace(
-                        '.' + in_ext,
-                        self.out_suffix + '.' + EXT[output_type]))
+                    self.outputs['count_file'] = os.path.join(
+                        self.output_directory,
+                        os.path.split(self.in_file)[1].replace(
+                            '.' + in_ext,
+                            self.out_suffix + '_count.txt'))
 
-                self.outputs['count_file'] = os.path.join(
-                    self.output_directory,
-                    os.path.split(self.in_file)[1].replace(
-                        '.' + in_ext,
-                        self.out_suffix + '_count.txt'))
-
-                self.inheritance_dict[self.outputs[
-                    'out_file']] = self.in_file
+                    self.inheritance_dict[self.outputs[
+                        'out_file']] = self.in_file
             else:
                 print('No output_directory was found...!\n')
                 return
@@ -365,28 +365,35 @@ class SynthStrip(ProcessMIA):
         # Third party softwares required for the execution of the brick
         self.requirement = ['freesurfer', 'nipype']
 
-        # Inputs description
+        # Mandatory inputs description
         in_file_desc = 'Input image to be brain extracted'
+        # Optional inputs with default value description
         border_mm_desc = ('Mask border threshold in mm')
+        no_csf_desc = 'Exclude CSF from brain border'
         output_type_desc = ('Typecodes of the output image formats (one '
                             'of NIFTI, MGZ, NIFTI_GZ).')
-        no_csf_desc = 'Exclude CSF from brain border'
-
         # Outputs description
         out_file_desc = 'Brain-extracted path'
         out_mask_desc = 'Brainmask path'
 
-        # Inputs traits
+        # Mandatory inputs traits
         self.add_trait('in_file',
                        File(output=False,
                             optional=False,
                             desc=in_file_desc))
 
+        # Optional inputs with default value traits
         self.add_trait('border_mm',
                        Int(1,
                            output=False,
                            optional=True,
                            desc=border_mm_desc))
+
+        self.add_trait('no_csf',
+                       Bool(False,
+                            output=False,
+                            optional=True,
+                            desc=no_csf_desc))
 
         self.add_trait('output_type',
                        Enum('NIFTI',
@@ -395,12 +402,6 @@ class SynthStrip(ProcessMIA):
                             output=False,
                             optional=True,
                             desc=output_type_desc))
-
-        self.add_trait('no_csf',
-                       Bool(False,
-                            output=False,
-                            optional=True,
-                            desc=no_csf_desc))
 
         # Outputs traits
         self.add_trait('out_file',
@@ -433,30 +434,26 @@ class SynthStrip(ProcessMIA):
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
             if self.output_directory:
-                output_type = self.output_type
+                valid_ext, in_ext, fileName = checkFileExt(self.in_file,
+                                                           EXT)
 
-                try:
-                    ifile = os.path.split(self.in_file)[-1]
-                    file_name, in_ext = ifile.rsplit('.', 1)
-                    if in_ext == 'gz':
-                        (file_name_2, in_ext_2) = file_name.rsplit('.', 1)
-                        if in_ext_2 == 'nii':
-                            in_ext = 'nii.gz'
-                except ValueError:
-                    print('\nThe input image format is not recognized ...!')
+                if not valid_ext:
+                    print('\nThe input image format is'
+                          ' not recognized...!')
                     return
+                else:
+                    output_type = self.output_type
+                    self.outputs['out_file'] = os.path.join(
+                        self.output_directory,
+                        os.path.split(self.in_file)[1].replace(
+                            '.' + in_ext,
+                            '_desc-brain.' + EXT[output_type]))
 
-                self.outputs['out_file'] = os.path.join(
-                    self.output_directory,
-                    os.path.split(self.in_file)[1].replace(
-                        '.' + in_ext,
-                        '_desc-brain.' + EXT[output_type]))
-
-                self.outputs['out_mask'] = os.path.join(
-                    self.output_directory,
-                    os.path.split(self.in_file)[1].replace(
-                        '.' + in_ext,
-                        '_desc-brain_mask.' + EXT[output_type]))
+                    self.outputs['out_mask'] = os.path.join(
+                        self.output_directory,
+                        os.path.split(self.in_file)[1].replace(
+                            '.' + in_ext,
+                            '_desc-brain_mask.' + EXT[output_type]))
 
             else:
                 print('No output_directory was found...!\n')

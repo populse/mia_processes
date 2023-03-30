@@ -21,7 +21,7 @@ Adapted from https://github.com/nipreps/niworkflows/blob/45ab13e1bf6fdbf5e29c90c
 
 >>> Mask.help()
 
-**Inputs parameters:**
+**Mandatory inputs parameters:**
 
 - *in_file* (a string representing an existing file)
     Input image (valid extensions: [.nii, .nii.gz]).
@@ -37,12 +37,14 @@ Adapted from https://github.com/nipreps/niworkflows/blob/45ab13e1bf6fdbf5e29c90c
 
       ex. '/home/username/data/raw_data/mask.nii'
 
+**Optional inputs with default value parameters:**
+
 - *prefix* (a string, optional)
     Prefix of the output image. Default is ''.
     
     ::
 
-      ex. ''
+      default value. ''
 
 
 - *suffix* (a string, optional)
@@ -50,7 +52,7 @@ Adapted from https://github.com/nipreps/niworkflows/blob/45ab13e1bf6fdbf5e29c90c
     
     ::
 
-      ex. '_masked'
+      default value. '_masked'
 
 
 

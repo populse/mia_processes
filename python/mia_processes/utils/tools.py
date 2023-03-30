@@ -97,7 +97,7 @@ def checkFileExt(in_file, ext_dic):
     file_name, in_ext = ifile.rsplit('.', 1)
     if in_ext == 'gz':
         (file_name_2, in_ext_2) = file_name.rsplit('.', 1)
-        in_ext = in_ext_2 + in_ext
+        in_ext = in_ext_2 + '.' + in_ext
         file_name = file_name_2
 
     valid_ext = list(ext_dic.values())

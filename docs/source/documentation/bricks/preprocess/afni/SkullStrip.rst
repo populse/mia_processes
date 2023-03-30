@@ -18,7 +18,7 @@ Extract the brain from surrounding tissue from MRI T1-weighted images (using AFN
 
 >>> SkullStrip.help()
 
-**Inputs parameters:**
+**Mandatory inputs parameters:**
 
 - *in_file* (a string representing an existing file)
     'A 3D-T1 file to skull-strip (valid extensions: [.nii, .nii.gz]).
@@ -28,6 +28,8 @@ Extract the brain from surrounding tissue from MRI T1-weighted images (using AFN
       ex. '/home/username/data/raw_data/T1w.nii'
 
 
+**Optional inputs with default value parameters:**
+
 - *output_type* (NIFTI or NIFTI_GZ, optional)
     | Format of the output image (one of NIFTI, NIFTI_GZ).
     |   NIFTI: \*.nii
@@ -35,14 +37,14 @@ Extract the brain from surrounding tissue from MRI T1-weighted images (using AFN
 
     ::
 
-      ex. NIFTI
+      default value. NIFTI
 
 - *out_prefix* (a string, optional)
-    Prefix of the output image. Default is 'ss_'.
+    Prefix of the output image.
     
     ::
 
-        ex. 'ss_'
+        default value. 'ss_'
 
 **Outputs parameters:**
 

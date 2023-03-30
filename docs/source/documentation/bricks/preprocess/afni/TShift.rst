@@ -23,7 +23,7 @@ If neither of this two parameters are defined, the process return the input file
 
 >>> TShift.help()
 
-**Inputs parameters:**
+**Mandatory inputs parameters:**
 
 - *in_file* (a string representing an existing file)
     Input bold file to be time-shifted (valid extensions: [.nii, .nii.gz]).
@@ -32,15 +32,71 @@ If neither of this two parameters are defined, the process return the input file
 
       ex. '/home/username/data/raw_data/func.nii'
 
-- *slice_encoding_dir* (k or k-, optional)
-    Direction in which slice_timing is specified. 
-    If negative, slice_timing is defined in reverse order, that is, the first entry corresponds to the slice with the largest index and the final entry corresponds to slice index zero.
-    Default is K. 
+**Optional inputs with default value parameters:**
+
+- *interpolation* (Fourier or linear or cubic or quintic or heptic, optional)
+    Different interpolation methods:
+      -Fourier = Use a Fourier method (the default: most accurate; slowest).
+      -linear  = Use linear (1st order polynomial) interpolation (least accurate).
+      -cubic   = Use the cubic (3rd order) Lagrange polynomial interpolation.
+      -quintic = Use the quintic (5th order) Lagrange polynomial interpolation.
+      -heptic  = Use the heptic (7th order) Lagrange polynomial interpolation.
 
     ::
 
-      ex. k
+      default value. Fourier
 
+- *output_type* (NIFTI or NIFTI_GZ, optional)
+    | Format of the output image (one of NIFTI, NIFTI_GZ).
+    |   NIFTI: \*.nii
+    |   NIFTI_GZ: \*.nii.gz
+
+    ::
+
+      default value. NIFTI
+
+- *out_prefix* (a string, optional)
+    Prefix of the output image.
+    
+    ::
+
+        default value. 'st_corr_'
+
+
+- *rlt* (a boolean, optional)
+    Before shifting, remove the mean and linear trend.
+
+    ::
+
+      default value. False
+
+- *rltplus* (a boolean, optional)
+    Before shifting, remove the mean and linear trend and later put back the mean.
+
+    ::
+
+      default value. False
+
+- *slice_encoding_dir* (k or k-, optional)
+    Direction in which slice_timing is specified. 
+    If negative, slice_timing is defined in reverse order, that is, the first entry corresponds to the slice 
+    with the largest index and the final entry corresponds to slice index zero.
+
+    ::
+
+      default value. k
+  
+
+**Optional inputs parameters:**
+
+- *ignore* (an integer, optional)
+    Ignore the first set of points specified.
+    The first ii values will be unchanged in the output.They also will not be used in the detrending or time shifting.
+    Default is Undefined (ie parameter not used).
+
+    ::
+
+      ex. 2
 
 - *slice_timing* (a string representing an existing file or a list of floats, optional)
     Time offsets from the volume acquisition onset for each slice. 
@@ -55,44 +111,6 @@ If neither of this two parameters are defined, the process return the input file
     One of ‘alt+z’ or ‘altplus’ or ‘alt+z2’ or ‘alt-z’ or ‘altminus’ or ‘alt-z2’ or ‘seq+z’ or ‘seqplus’ or‘seq-z’ or ‘seqminus’.
     Mutually exclusive with "slice_timming" parameter.
     Default is Undefined (ie parameter not used).
-
-    ::
-
-      ex. False
-
-- *ignore* (an integer, optional)
-    Ignore the first set of points specified.
-    The first ii values will be unchanged in the output.They also will not be used in the detrending or time shifting.
-    Default is Undefined (ie parameter not used).
-
-    ::
-
-      ex. 2
-
-- *interpolation* (‘Fourier’ or ‘linear’ or ‘cubic’ or ‘quintic’ or ‘heptic’, optional)
-    Different interpolation methods:
-      -Fourier = Use a Fourier method (the default: most accurate; slowest).
-      -linear  = Use linear (1st order polynomial) interpolation (least accurate).
-      -cubic   = Use the cubic (3rd order) Lagrange polynomial interpolation.
-      -quintic = Use the quintic (5th order) Lagrange polynomial interpolation.
-      -heptic  = Use the heptic (7th order) Lagrange polynomial interpolation.
-    Default is 'Fourier'.
-
-    ::
-
-      ex. Fourier
-
-- *rlt* (a boolean, optional)
-    Before shifting, remove the mean and linear trend.
-    Default is False.
-
-    ::
-
-      ex. False
-
-- *rlt* (a boolean, optional)
-    Before shifting, remove the mean and linear trend and later put back the mean.
-    Default is False.
 
     ::
 
@@ -131,22 +149,6 @@ If neither of this two parameters are defined, the process return the input file
     ::
 
       ex. 0.0
-
-- *output_type* (NIFTI or NIFTI_GZ, optional)
-    | Format of the output image (one of NIFTI, NIFTI_GZ).
-    |   NIFTI: \*.nii
-    |   NIFTI_GZ: \*.nii.gz
-
-    ::
-
-      ex. NIFTI
-
-- *out_prefix* (a string, optional)
-    Prefix of the output image. Default is 'st_corr_'.
-    
-    ::
-
-        ex. 'st_corr_'
 
 **Outputs parameters:**
 

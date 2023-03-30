@@ -20,7 +20,7 @@ If "stop_idx" parameter is set to None or set to default (-1), "stop_idx" will b
 
 >>> CalcDropTRs.help()
 
-**Inputs parameters:**
+**Mandatory inputs parameters:**
 
 - *in_file* (a string representing an existing file)
     Input 3D file (valid extensions: [.nii, .nii.gz]).
@@ -29,22 +29,7 @@ If "stop_idx" parameter is set to None or set to default (-1), "stop_idx" will b
 
       ex. '/home/username/data/raw_data/func.nii'
 
-- *start_idx* (an integer, optional)
-    Start index for in_file_a.
-    Default is 0.
-    ::
-
-      ex. '3'
-
-- *stop_idx* (an integer, optional)
-    Stop index for in_file_a.
-    Default is -1.
-    If "stop_idx" parameter is set to None or set to default, "stop_idx" will be automatically set to the length of input file. 
-    Cannot be lower than or equal to "start_idx" parameters. 
-
-    ::
-
-      ex. '240'
+**Optional inputs with default value parameters:**
 
 - *output_type* (NIFTI or NIFTI_GZ, optional)
     | Format of the output image (one of NIFTI, NIFTI_GZ).
@@ -53,14 +38,30 @@ If "stop_idx" parameter is set to None or set to default (-1), "stop_idx" will b
 
     ::
 
-      ex. NIFTI
+      default value. NIFTI
 
 - *out_prefix* (a string, optional)
     Prefix of the output image. Default is 'cropped_'.
     
     ::
 
-        ex. 'cropped_'
+      default value. 'cropped_'
+
+- *start_idx* (an integer, optional)
+    Start index for in_file_a.
+
+    ::
+
+      default value. 0
+
+- *stop_idx* (an integer, optional)
+    Stop index for in_file_a.
+    If "stop_idx" parameter is set to None or set to default (-1), "stop_idx" will be automatically set to the length of input file. 
+    Cannot be lower than or equal to "start_idx" parameters. 
+
+    ::
+
+      default value. -1
 
 **Outputs parameters:**
 

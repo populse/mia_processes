@@ -143,13 +143,16 @@ class ApplyBiasCorrection(ProcessMIA):
 
         if self.in_file:
             if self.output_directory:
-                fname, ext = os.path.splitext(os.path.basename(self.in_file))
-                if ext == ".gz":
-                    fname, ext2 = os.path.splitext(fname)
-                    ext = ext2 + ext
+                valid_ext, in_ext, fileName = checkFileExt(self.in_file,
+                                                           EXT)
+
+                if not valid_ext:
+                    print('\nThe input image format is'
+                          ' not recognized...!')
+                    return
+
                 self.outputs['out_file'] = os.path.join(
-                    self.output_directory, os.path.split(
-                        self.in_file)[1].replace(ext, '_inu' + ext))
+                    self.output_directory, fileName + '_inu.' + in_ext)
             else:
                 print('No output_directory was found...!\n')
                 return
@@ -239,16 +242,16 @@ class ArtifactMask(ProcessMIA):
                             optional=False,
                             desc=head_mask_desc))
 
+        self.add_trait("nasion_post_mask",
+                       File(output=False,
+                            optional=False,
+                            desc=nasion_post_mask_desc))
+
         self.add_trait("rot_mask",
                        File(default=None,
                             output=False,
                             optional=True,
                             desc=rot_mask_desc))
-
-        self.add_trait("nasion_post_mask",
-                       File(output=False,
-                            optional=False,
-                            desc=nasion_post_mask_desc))
 
         self.add_trait("suffix",
                        traits.String("_mask",
@@ -287,9 +290,6 @@ class ArtifactMask(ProcessMIA):
 
         # Outputs definition
         if self.in_file:
-
-            file_name = self.in_file
-
             if ((not self.suffix) or (self.suffix.isspace()) or
                     self.suffix in [Undefined, "<undefined>"]):
                 self.suffix = " "
@@ -298,43 +298,35 @@ class ArtifactMask(ProcessMIA):
             file_art = ''
             file_air = ''
 
-            path, file_name = os.path.split(file_name)
+            valid_ext, in_ext, fileName = checkFileExt(self.in_file,
+                                                       EXT)
 
-            (file_name_no_ext,
-             file_extension) = os.path.splitext(file_name)
-            if file_extension == '.gz':
-                (file_name_no_ext_2,
-                 file_extension_2) = os.path.splitext(file_name_no_ext)
-                if file_extension_2 == '.nii':
-                    file_name_no_ext = file_name_no_ext_2
-                    file_extension = '.nii.gz'
+            if not valid_ext:
+                print('\nThe input image format is'
+                      ' not recognized...!')
+                return
 
             file_hat = os.path.join(self.output_directory,
                                     ('hat_' +
-                                     file_name_no_ext +
+                                     fileName +
                                      self.suffix.strip() +
-                                     file_extension))
+                                     '.' + in_ext))
 
             file_art = os.path.join(self.output_directory,
                                     ('art_' +
-                                     file_name_no_ext +
+                                     fileName +
                                      self.suffix.strip() +
-                                     file_extension))
+                                     '.' + in_ext))
 
             file_air = os.path.join(self.output_directory,
                                     ('air_' +
-                                     file_name_no_ext +
+                                     fileName +
                                      self.suffix.strip() +
-                                     file_extension))
+                                     '.' + in_ext))
 
-            if file_name:
-                self.outputs['out_hat_mask'] = file_hat
-                self.outputs['out_art_mask'] = file_art
-                self.outputs['out_air_mask'] = file_air
-
-            else:
-                print('- There was no output file deducted during '
-                      'initialisation. Please check the input parameters...!')
+            self.outputs['out_hat_mask'] = file_hat
+            self.outputs['out_art_mask'] = file_art
+            self.outputs['out_air_mask'] = file_air
 
             # tags inheritance (optional)
             if self.outputs:
@@ -374,7 +366,7 @@ class ArtifactMask(ProcessMIA):
             npmnii = None
 
         if (imnii is not None) and (hmnii is not None) and \
-                (rmnii is not None) and (npmnii is not None) :
+                (rmnii is not None) and (npmnii is not None):
 
             imdata = np.nan_to_num(imnii.get_fdata().astype(np.float32))
 
@@ -490,23 +482,22 @@ class Binarize(ProcessMIA):
                                       output=False,
                                       desc=in_files_desc))
 
-        self.add_trait("thresh_low",
-                       traits.Float(default=0.0,
-                                    output=False,
-                                    optional=True,
-                                    desc=thresh_low_desc))
-
+        self.add_trait("prefix",
+                       traits.String("",
+                                     output=False,
+                                     optional=True,
+                                     desc=prefix_desc))
         self.add_trait("suffix",
                        traits.String("_bin",
                                      output=False,
                                      optional=True,
                                      desc=suffix_desc))
 
-        self.add_trait("prefix",
-                       traits.String("",
-                                     output=False,
-                                     optional=True,
-                                     desc=prefix_desc))
+        self.add_trait("thresh_low",
+                       traits.Float(default=0.0,
+                                    output=False,
+                                    optional=True,
+                                    desc=thresh_low_desc))
 
         # Outputs traits
         self.add_trait("out_files",
@@ -532,7 +523,6 @@ class Binarize(ProcessMIA):
 
         # Outputs definition
         if self.in_files:
-
             files_name = self.in_files
 
             if ((not self.suffix) or (self.suffix.isspace()) or
@@ -547,11 +537,16 @@ class Binarize(ProcessMIA):
             flag = True  # If False, suf/pref check will not be performed later
 
             for file_name1 in files_name:
-                path, file_name = os.path.split(file_name1)
+                valid_ext, in_ext, fileName = checkFileExt(
+                    file_name1,
+                    EXT)
+                if not valid_ext:
+                    print('\nThe input image format is'
+                          ' not recognized...!')
+                    return
 
                 if (self.suffix == " " and
-                        self.prefix == " " and
-                        path == self.output_directory and flag is True):
+                        self.prefix == " " and flag is True):
                     msg = QMessageBox()
                     msg.setIcon(QMessageBox.Warning)
                     msg.setWindowTitle("mia_processes - "
@@ -567,21 +562,6 @@ class Binarize(ProcessMIA):
                     retval = msg.exec_()
 
                     if retval != QMessageBox.Abort:
-                        (file_name_no_ext,
-                         file_extension) = os.path.splitext(file_name)
-                        if file_extension == '.gz':
-                            (file_name_no_ext_2,
-                             file_extension_2) = os.path.splitext(
-                                file_name_no_ext)
-                            if file_extension_2 == '.nii':
-                                file_name_no_ext = file_name_no_ext_2
-                                file_extension = '.nii.gz'
-
-                        files.append(os.path.join(self.output_directory,
-                                                  (self.prefix.strip() +
-                                                   file_name_no_ext +
-                                                   self.suffix.strip() +
-                                                   file_extension)))
                         print('\nBinarize brick warning: the out_files output '
                               'parameter is the same as the in_files input '
                               'parameter (suffix and prefix are not defined):'
@@ -596,25 +576,15 @@ class Binarize(ProcessMIA):
                         files_name = []
                         print('\nAborted.'
                               'Please check your input parameters ...')
-                        break
+                        return
 
-                else:
-                    (file_name_no_ext,
-                     file_extension) = os.path.splitext(file_name)
-                    if file_extension == '.gz':
-                        (file_name_no_ext_2,
-                         file_extension_2) = os.path.splitext(file_name_no_ext)
-                        if file_extension_2 == '.nii':
-                            file_name_no_ext = file_name_no_ext_2
-                            file_extension = '.nii.gz'
+                files.append(os.path.join(self.output_directory,
+                                          (self.prefix.strip() +
+                                           fileName +
+                                           self.suffix.strip() +
+                                           '.' + in_ext)))
 
-                    files.append(os.path.join(self.output_directory,
-                                              (self.prefix.strip() +
-                                               file_name_no_ext +
-                                               self.suffix.strip() +
-                                               file_extension)))
-
-            if files_name:
+            if files:
                 self.outputs['out_files'] = files
 
             else:
@@ -751,17 +721,17 @@ class ConformImage(ProcessMIA):
                             optional=False,
                             desc=in_file_desc))
 
-        self.add_trait("suffix",
-                       traits.String("",
-                                     output=False,
-                                     optional=True,
-                                     desc=suffix_desc))
-
         self.add_trait("prefix",
                        traits.String("",
                                      output=False,
                                      optional=True,
                                      desc=prefix_desc))
+
+        self.add_trait("suffix",
+                       traits.String("",
+                                     output=False,
+                                     optional=True,
+                                     desc=suffix_desc))
 
         # Outputs traits
         self.add_trait("out_file",
@@ -786,9 +756,6 @@ class ConformImage(ProcessMIA):
 
         # Outputs definition
         if self.in_file:
-
-            file_name = self.in_file
-
             if ((not self.suffix) or (self.suffix.isspace()) or
                     self.suffix in [Undefined, "<undefined>"]):
                 self.suffix = " "
@@ -797,12 +764,18 @@ class ConformImage(ProcessMIA):
                     (self.prefix in [Undefined, "<undefined>"])):
                 self.prefix = " "
 
+            valid_ext, in_ext, fileName = checkFileExt(
+                self.in_file,
+                EXT)
+
+            if not valid_ext:
+                print('\nThe input image format is'
+                      ' not recognized...!')
+                return
+
             file = ''
-
-            path, filename = os.path.split(file_name)
-
-            if (self.suffix == " " and
-                    self.prefix == " " and
+            path, _ = os.path.split(self.in_file)
+            if (self.suffix == " " and self.prefix == " " and
                     path == self.output_directory):
                 msg = QMessageBox()
                 msg.setIcon(QMessageBox.Warning)
@@ -812,51 +785,26 @@ class ConformImage(ProcessMIA):
                             "defined or consist only of one or more white "
                             "spaces.\nThe {0} input parameter will be "
                             "overwritten ...\n Yes or "
-                            "Abort?".format(filename))
+                            "Abort?".format(fileName))
                 msg.setStandardButtons(QMessageBox.Yes | QMessageBox.Abort)
                 retval = msg.exec_()
 
                 if retval != QMessageBox.Abort:
-                    (file_name_no_ext,
-                     file_extension) = os.path.splitext(filename)
-                    if file_extension == '.gz':
-                        (file_name_no_ext_2,
-                         file_extension_2) = os.path.splitext(file_name_no_ext)
-                        if file_extension_2 == '.nii':
-                            file_name_no_ext = file_name_no_ext_2
-                            file_extension = '.nii.gz'
-
-                    file = os.path.join(self.output_directory,
-                                        (self.prefix.strip() +
-                                         file_name_no_ext +
-                                         self.suffix.strip() +
-                                         file_extension))
                     print('\nConformImage brick warning: the out_file output '
                           'parameter is the same as the in_files input '
                           'parameter (suffix and prefix are not defined):'
-                          '\n{0} will be overwrited ...'.format(filename))
-
+                          '\n{0} will be overwrited ...'.format(fileName))
                 else:
                     filename = ''
                     print('\nAborted. Please check your input parameters ...')
+                    return
 
-            else:
-                (file_name_no_ext,
-                 file_extension) = os.path.splitext(filename)
-                if file_extension == '.gz':
-                    (file_name_no_ext_2,
-                     file_extension_2) = os.path.splitext(file_name_no_ext)
-                    if file_extension_2 == '.nii':
-                        file_name_no_ext = file_name_no_ext_2
-                        file_extension = '.nii.gz'
-
-                file = os.path.join(self.output_directory,
-                                    (self.prefix.strip() +
-                                     file_name_no_ext +
-                                     self.suffix.strip() +
-                                     file_extension))
-
-            if filename:
+            file = os.path.join(self.output_directory,
+                                (self.prefix.strip() +
+                                    fileName +
+                                    self.suffix.strip() +
+                                    '.' + in_ext))
+            if file:
                 self.outputs['out_file'] = file
 
             else:
@@ -1114,7 +1062,7 @@ class Enhance(ProcessMIA):
     https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/Enhance.html
 
     adapted from:
-    https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/anatomical.py#L974
+    https://github.com/nipreps/mriqc/blob/22.0.6/mriqc/workflows/anatomical.py#L974
 
     """
 
@@ -1150,17 +1098,17 @@ class Enhance(ProcessMIA):
                                       output=False,
                                       desc=in_files_desc))
 
-        self.add_trait("suffix",
-                       traits.String("_enh",
-                                     output=False,
-                                     optional=True,
-                                     desc=suffix_desc))
-
         self.add_trait("prefix",
                        traits.String("",
                                      output=False,
                                      optional=True,
                                      desc=prefix_desc))
+
+        self.add_trait("suffix",
+                       traits.String("_enh",
+                                     output=False,
+                                     optional=True,
+                                     desc=suffix_desc))
 
         # Outputs traits
         self.add_trait("out_files",
@@ -1201,7 +1149,15 @@ class Enhance(ProcessMIA):
             flag = True  # If False, suf/pref check will not be performed later
 
             for file_name1 in files_name:
-                path, file_name = os.path.split(file_name1)
+                valid_ext, in_ext, fileName = checkFileExt(
+                    file_name1,
+                    EXT)
+
+                if not valid_ext:
+                    print('\nThe input image format is'
+                          ' not recognized...!')
+                    return
+                path, _ = os.path.split(file_name1)
 
                 if (self.suffix == " " and
                         self.prefix == " " and
@@ -1220,21 +1176,6 @@ class Enhance(ProcessMIA):
                     retval = msg.exec_()
 
                     if retval != QMessageBox.Abort:
-                        (file_name_no_ext,
-                         file_extension) = os.path.splitext(file_name)
-                        if file_extension == '.gz':
-                            (file_name_no_ext_2,
-                             file_extension_2) = os.path.splitext(
-                                file_name_no_ext)
-                            if file_extension_2 == '.nii':
-                                file_name_no_ext = file_name_no_ext_2
-                                file_extension = '.nii.gz'
-
-                        files.append(os.path.join(self.output_directory,
-                                                  (self.prefix.strip() +
-                                                   file_name_no_ext +
-                                                   self.suffix.strip() +
-                                                   file_extension)))
                         print('\nEnhance brick warning: the out_files output '
                               'parameter is the same as the in_files input '
                               'parameter (suffix and prefix are not defined):'
@@ -1248,23 +1189,13 @@ class Enhance(ProcessMIA):
                     else:
                         files_name = []
                         print('\nAborted. Please check your input parameters ...')
-                        break
+                        return
 
-                else:
-                    (file_name_no_ext,
-                     file_extension) = os.path.splitext(file_name)
-                    if file_extension == '.gz':
-                        (file_name_no_ext_2,
-                         file_extension_2) = os.path.splitext(file_name_no_ext)
-                        if file_extension_2 == '.nii':
-                            file_name_no_ext = file_name_no_ext_2
-                            file_extension = '.nii.gz'
-
-                    files.append(os.path.join(self.output_directory,
-                                              (self.prefix.strip() +
-                                               file_name_no_ext +
-                                               self.suffix.strip() +
-                                               file_extension)))
+                files.append(os.path.join(self.output_directory,
+                                          (self.prefix.strip() +
+                                           fileName +
+                                           self.suffix.strip() +
+                                           '.' + in_ext)))
 
             if files_name:
                 self.outputs['out_files'] = files
@@ -1341,7 +1272,8 @@ class Enhance(ProcessMIA):
                 # Resample signal excess pixels
                 excess = np.where(data > range_max)
                 data[excess] = 0
-                data[excess] = np.random.choice(data[data > range_min], size=len(excess[0]))
+                data[excess] = np.random.choice(
+                    data[data > range_min], size=len(excess[0]))
 
                 out_image = img.__class__(data, img.affine, img.header)
 
@@ -1372,7 +1304,7 @@ class EstimateSNR(ProcessMIA):
     https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/EstimateSNR.html
 
     adapted from:
-    https://github.com/nipreps/mriqc/blob/master/mriqc/workflows/anatomical.py#L981
+    https://github.com/nipreps/mriqc/blob/22.0.6/mriqc/workflows/anatomical.py#L970
 
     """
 
@@ -1393,9 +1325,7 @@ class EstimateSNR(ProcessMIA):
         in_file_desc = ('Input file (a pathlike object or string '
                         'representing a file).')
         seg_file_desc = ('A segmentation file to calculate SNR (a pathlike '
-                         'object or string representing a file). Mutually '
-                         'exclusive with snr')
-
+                         'object or string representing a file).')
         # Outputs description
         out_snr_desc = ('Estimated SNR'
                         '(a pathlike object or string representing a file')
@@ -1443,13 +1373,13 @@ class EstimateSNR(ProcessMIA):
                     print('\nThe input image format is'
                           ' not recognized...!')
                     return
-                else:
-                    self.outputs['out_snr'] = os.path.join(
-                        self.output_directory,
-                        self.out_prefix + fileName + '_estimated_snr.txt')
 
-                    self.inheritance_dict[self.outputs[
-                        'out_snr']] = self.in_file
+                self.outputs['out_snr'] = os.path.join(
+                    self.output_directory,
+                    fileName + '_estimated_snr.txt')
+
+                self.inheritance_dict[self.outputs[
+                    'out_snr']] = self.in_file
 
             else:
                 print('No output_directory was found...!\n')
@@ -1517,7 +1447,7 @@ class GradientThreshold(ProcessMIA):
 
         # Outputs description
         out_file_desc = ('Path of the thresholded scan '
-                          '(a pathlike object or string representing a file).')
+                         '(a pathlike object or string representing a file).')
 
         # Inputs traits
         self.add_trait("in_file",
@@ -1530,17 +1460,16 @@ class GradientThreshold(ProcessMIA):
                             optional=False,
                             desc=seg_file_desc))
 
-        self.add_trait("suffix",
-                       traits.String("_grad",
-                                     output=False,
-                                     optional=True,
-                                     desc=suffix_desc))
-
         self.add_trait("prefix",
                        traits.String("",
                                      output=False,
                                      optional=True,
                                      desc=prefix_desc))
+        self.add_trait("suffix",
+                       traits.String("_grad",
+                                     output=False,
+                                     optional=True,
+                                     desc=suffix_desc))
 
         # Outputs traits
         self.add_trait("out_file",
@@ -1565,9 +1494,6 @@ class GradientThreshold(ProcessMIA):
 
         # Outputs definition
         if self.in_file:
-
-            file_name = self.in_file
-
             if ((not self.suffix) or (self.suffix.isspace()) or
                     self.suffix in [Undefined, "<undefined>"]):
                 self.suffix = " "
@@ -1578,7 +1504,15 @@ class GradientThreshold(ProcessMIA):
 
             file = ''
 
-            path, filename = os.path.split(file_name)
+            valid_ext, in_ext, fileName = checkFileExt(self.in_file,
+                                                       EXT)
+
+            if not valid_ext:
+                print('\nThe input image format is'
+                      ' not recognized...!')
+                return
+
+            path, _ = os.path.split(self.in_file)
 
             if (self.suffix == " " and
                     self.prefix == " " and
@@ -1591,51 +1525,28 @@ class GradientThreshold(ProcessMIA):
                             "defined or consist only of one or more white "
                             "spaces.\nThe {0} input parameter will be "
                             "overwritten ...\n Yes or "
-                            "Abort?".format(filename))
+                            "Abort?".format(fileName))
                 msg.setStandardButtons(QMessageBox.Yes | QMessageBox.Abort)
                 retval = msg.exec_()
 
                 if retval != QMessageBox.Abort:
-                    (file_name_no_ext,
-                     file_extension) = os.path.splitext(filename)
-                    if file_extension == '.gz':
-                        (file_name_no_ext_2,
-                         file_extension_2) = os.path.splitext(file_name_no_ext)
-                        if file_extension_2 == '.nii':
-                            file_name_no_ext = file_name_no_ext_2
-                            file_extension = '.nii.gz'
-
-                    file = os.path.join(self.output_directory,
-                                        (self.prefix.strip() +
-                                         file_name_no_ext +
-                                         self.suffix.strip() +
-                                         file_extension))
                     print('\nGradientThreshold brick warning: the out_file'
                           'output parameter is the same as the in_file input '
                           'parameter (suffix and prefix are not defined):'
-                          '\n{0} will be overwrited ...'.format(filename))
+                          '\n{0} will be overwrited ...'.format(fileName))
 
                 else:
                     filename = ''
                     print('\nAborted. Please check your input parameters ...')
+                    return
 
-            else:
-                (file_name_no_ext,
-                 file_extension) = os.path.splitext(filename)
-                if file_extension == '.gz':
-                    (file_name_no_ext_2,
-                     file_extension_2) = os.path.splitext(file_name_no_ext)
-                    if file_extension_2 == '.nii':
-                        file_name_no_ext = file_name_no_ext_2
-                        file_extension = '.nii.gz'
+            file = os.path.join(self.output_directory,
+                                (self.prefix.strip() +
+                                 fileName +
+                                 self.suffix.strip() +
+                                 '.' + in_ext))
 
-                file = os.path.join(self.output_directory,
-                                    (self.prefix.strip() +
-                                     file_name_no_ext +
-                                     self.suffix.strip() +
-                                     file_extension))
-
-            if filename:
+            if file:
                 self.outputs['out_file'] = file
 
             else:
@@ -1714,10 +1625,10 @@ class GradientThreshold(ProcessMIA):
                     file_extension = '.nii.gz'
 
             file_out = os.path.join(self.output_directory,
-                                     (self.prefix.strip() +
-                                      file_name_no_ext +
-                                      self.suffix.strip() +
-                                      file_extension))
+                                    (self.prefix.strip() +
+                                     file_name_no_ext +
+                                     self.suffix.strip() +
+                                     file_extension))
             nib.save(out_image, file_out)
 
 
@@ -1774,17 +1685,16 @@ class Harmonize(ProcessMIA):
                                    output=False,
                                    optional=True,
                                    desc=erodemask_desc))
-        self.add_trait("suffix",
-                       traits.String("_harmonized",
-                                     output=False,
-                                     optional=True,
-                                     desc=suffix_desc))
-
         self.add_trait("prefix",
                        traits.String("",
                                      output=False,
                                      optional=True,
                                      desc=prefix_desc))
+        self.add_trait("suffix",
+                       traits.String("_harmonized",
+                                     output=False,
+                                     optional=True,
+                                     desc=suffix_desc))
 
         # Outputs traits
         self.add_trait("out_file",
@@ -1810,7 +1720,13 @@ class Harmonize(ProcessMIA):
         # Outputs definition
         if self.in_file:
 
-            file_name = self.in_file
+            valid_ext, in_ext, fileName = checkFileExt(self.in_file,
+                                                       EXT)
+
+            if not valid_ext:
+                print('\nThe input image format is'
+                      ' not recognized...!')
+                return
 
             if ((not self.suffix) or (self.suffix.isspace()) or
                     self.suffix in [Undefined, "<undefined>"]):
@@ -1822,7 +1738,7 @@ class Harmonize(ProcessMIA):
 
             file = ''
 
-            path, filename = os.path.split(file_name)
+            path, _ = os.path.split(self.in_file)
 
             if (self.suffix == " " and
                     self.prefix == " " and
@@ -1835,51 +1751,28 @@ class Harmonize(ProcessMIA):
                             "defined or consist only of one or more white "
                             "spaces.\nThe {0} input parameter will be "
                             "overwritten ...\n Yes or "
-                            "Abort?".format(filename))
+                            "Abort?".format(fileName))
                 msg.setStandardButtons(QMessageBox.Yes | QMessageBox.Abort)
                 retval = msg.exec_()
 
                 if retval != QMessageBox.Abort:
-                    (file_name_no_ext,
-                     file_extension) = os.path.splitext(filename)
-                    if file_extension == '.gz':
-                        (file_name_no_ext_2,
-                         file_extension_2) = os.path.splitext(file_name_no_ext)
-                        if file_extension_2 == '.nii':
-                            file_name_no_ext = file_name_no_ext_2
-                            file_extension = '.nii.gz'
-
-                    file = os.path.join(self.output_directory,
-                                        (self.prefix.strip() +
-                                         file_name_no_ext +
-                                         self.suffix.strip() +
-                                         file_extension))
                     print('\nHarmonize brick warning: the out_file output '
                           'parameter is the same as the in_file input '
                           'parameter (suffix and prefix are not defined):'
-                          '\n{0} will be overwrited ...'.format(filename))
+                          '\n{0} will be overwrited ...'.format(fileName))
 
                 else:
                     filename = ''
                     print('\nAborted. Please check your input parameters ...')
+                    return
 
-            else:
-                (file_name_no_ext,
-                 file_extension) = os.path.splitext(filename)
-                if file_extension == '.gz':
-                    (file_name_no_ext_2,
-                     file_extension_2) = os.path.splitext(file_name_no_ext)
-                    if file_extension_2 == '.nii':
-                        file_name_no_ext = file_name_no_ext_2
-                        file_extension = '.nii.gz'
+            file = os.path.join(self.output_directory,
+                                (self.prefix.strip() +
+                                    fileName +
+                                    self.suffix.strip() +
+                                    '.' + in_ext))
 
-                file = os.path.join(self.output_directory,
-                                    (self.prefix.strip() +
-                                     file_name_no_ext +
-                                     self.suffix.strip() +
-                                     file_extension))
-
-            if filename:
+            if file:
                 self.outputs['out_file'] = file
 
             else:
@@ -1977,27 +1870,13 @@ class IntensityClip(ProcessMIA):
         # Outputs description
         out_file_desc = ('File after clipping')
 
-        # Inputs traits
+        # Mandatory inputs traits
         self.add_trait("in_file",
                        File(output=False,
                             optional=False,
                             desc=in_file_desc))
 
-        self.add_trait("p_min",
-                       traits.Float(default_value=10.0,
-                                    output=False,
-                                    optional=True,
-                                    desc=p_min_desc))
-        self.add_trait("p_max",
-                       traits.Float(default_value=99.9,
-                                    output=False,
-                                    optional=True,
-                                    desc=p_max_desc))
-        self.add_trait("nonnegative",
-                       traits.Bool(default_value=True,
-                                   output=False,
-                                   optional=True,
-                                   desc=nonnegative_desc))
+        # Optional inputs with default value traits
         self.add_trait("dtype",
                        traits.Enum("int16",
                                    "float32",
@@ -2011,6 +1890,24 @@ class IntensityClip(ProcessMIA):
                                    output=False,
                                    optional=True,
                                    desc=invert_desc))
+
+        self.add_trait("nonnegative",
+                       traits.Bool(default_value=True,
+                                   output=False,
+                                   optional=True,
+                                   desc=nonnegative_desc))
+
+        self.add_trait("p_max",
+                       traits.Float(default_value=99.9,
+                                    output=False,
+                                    optional=True,
+                                    desc=p_max_desc))
+
+        self.add_trait("p_min",
+                       traits.Float(default_value=10.0,
+                                    output=False,
+                                    optional=True,
+                                    desc=p_min_desc))
 
         # Outputs traits
         self.add_trait("out_file",
@@ -2130,7 +2027,7 @@ class Mask(ProcessMIA):
 
         # Outputs description
         out_file_desc = ('Path of the scan after masking '
-                          '(a pathlike object or string representing a file).')
+                         '(a pathlike object or string representing a file).')
 
         # Inputs traits
         self.add_trait("in_file",
@@ -2143,17 +2040,17 @@ class Mask(ProcessMIA):
                             optional=False,
                             desc=mask_file_desc))
 
-        self.add_trait("suffix",
-                       traits.String("_masked",
-                                     output=False,
-                                     optional=True,
-                                     desc=suffix_desc))
-
         self.add_trait("prefix",
                        traits.String("",
                                      output=False,
                                      optional=True,
                                      desc=prefix_desc))
+
+        self.add_trait("suffix",
+                       traits.String("_masked",
+                                     output=False,
+                                     optional=True,
+                                     desc=suffix_desc))
 
         # Outputs traits
         self.add_trait("out_file",
@@ -2179,7 +2076,13 @@ class Mask(ProcessMIA):
         # Outputs definition
         if self.in_file:
 
-            file_name = self.in_file
+            valid_ext, in_ext, fileName = checkFileExt(self.in_file,
+                                                       EXT)
+
+            if not valid_ext:
+                print('\nThe input image format is'
+                      ' not recognized...!')
+                return
 
             if ((not self.suffix) or (self.suffix.isspace()) or
                     self.suffix in [Undefined, "<undefined>"]):
@@ -2191,7 +2094,7 @@ class Mask(ProcessMIA):
 
             file = ''
 
-            path, filename = os.path.split(file_name)
+            path, _ = os.path.split(self.in_file)
 
             if (self.suffix == " " and
                     self.prefix == " " and
@@ -2204,51 +2107,28 @@ class Mask(ProcessMIA):
                             "defined or consist only of one or more white "
                             "spaces.\nThe {0} input parameter will be "
                             "overwritten ...\n Yes or "
-                            "Abort?".format(filename))
+                            "Abort?".format(fileName))
                 msg.setStandardButtons(QMessageBox.Yes | QMessageBox.Abort)
                 retval = msg.exec_()
 
                 if retval != QMessageBox.Abort:
-                    (file_name_no_ext,
-                     file_extension) = os.path.splitext(filename)
-                    if file_extension == '.gz':
-                        (file_name_no_ext_2,
-                         file_extension_2) = os.path.splitext(file_name_no_ext)
-                        if file_extension_2 == '.nii':
-                            file_name_no_ext = file_name_no_ext_2
-                            file_extension = '.nii.gz'
-
-                    file = os.path.join(self.output_directory,
-                                        (self.prefix.strip() +
-                                         file_name_no_ext +
-                                         self.suffix.strip() +
-                                         file_extension))
                     print('\nMask brick warning: the out_file output '
                           'parameter is the same as the in_files input '
                           'parameter (suffix and prefix are not defined):'
-                          '\n{0} will be overwrited ...'.format(filename))
+                          '\n{0} will be overwrited ...'.format(fileName))
 
                 else:
                     filename = ''
                     print('\nAborted. Please check your input parameters ...')
+                    return
 
-            else:
-                (file_name_no_ext,
-                 file_extension) = os.path.splitext(filename)
-                if file_extension == '.gz':
-                    (file_name_no_ext_2,
-                     file_extension_2) = os.path.splitext(file_name_no_ext)
-                    if file_extension_2 == '.nii':
-                        file_name_no_ext = file_name_no_ext_2
-                        file_extension = '.nii.gz'
+            file = os.path.join(self.output_directory,
+                                (self.prefix.strip() +
+                                 fileName +
+                                 self.suffix.strip() +
+                                 '.' + in_ext))
 
-                file = os.path.join(self.output_directory,
-                                    (self.prefix.strip() +
-                                     file_name_no_ext +
-                                     self.suffix.strip() +
-                                     file_extension))
-
-            if filename:
+            if file:
                 self.outputs['out_file'] = file
 
             else:
@@ -2440,15 +2320,28 @@ class Resample_1(ProcessMIA):
                           'pathlike objects or strings representing a file).')
 
         # Inputs traits
+        self.add_trait("files_to_resample",
+                       InputMultiPath(ImageFileSPM(),
+                                      output=False,
+                                      desc=files_to_resample_desc))
 
         self.add_trait("reference_image",
                        ImageFileSPM(output=False,
                                     desc=reference_image_desc))
 
-        self.add_trait("files_to_resample",
-                       InputMultiPath(ImageFileSPM(),
-                                      output=False,
-                                      desc=files_to_resample_desc))
+        self.add_trait("interp",
+                       traits.Range(value=3,
+                                    low=0,
+                                    high=5,
+                                    output=False,
+                                    optional=True,
+                                    desc=interp_desc))
+
+        self.add_trait("prefix",
+                       traits.String(" ",
+                                     output=False,
+                                     optional=True,
+                                     desc=prefix_desc))
 
         self.add_trait("suffix_to_delete",
                        traits.String("_002",
@@ -2461,20 +2354,6 @@ class Resample_1(ProcessMIA):
                                      output=False,
                                      optional=True,
                                      desc=suffix_desc))
-
-        self.add_trait("prefix",
-                       traits.String(" ",
-                                     output=False,
-                                     optional=True,
-                                     desc=prefix_desc))
-
-        self.add_trait("interp",
-                       traits.Range(value=3,
-                                    low=0,
-                                    high=5,
-                                    output=False,
-                                    optional=True,
-                                    desc=interp_desc))
 
         # Outputs traits
         self.add_trait("out_files",
@@ -2723,9 +2602,9 @@ class Resample_1(ProcessMIA):
                             tag_to_add['unit'] = None
                             tag_to_add['default_value'] = None
                             tag_to_add['value'] = get_dbFieldValue(
-                                                                  self.project,
-                                                                  in_val,
-                                                                  "PatientName")
+                                self.project,
+                                in_val,
+                                "PatientName")
 
                             if tag_to_add['value'] is not None:
                                 set_dbFieldValue(self.project,
@@ -2882,6 +2761,7 @@ class Resample_2(ProcessMIA):
     - To work correctly, the database entry for the reference_image parameter
       must have the "PatientName" tag filled in.
     """
+
     def __init__(self):
         """Dedicated to the attributes initialisation/instantiation.
 
@@ -2961,7 +2841,7 @@ class Resample_2(ProcessMIA):
                 elts = os.listdir(roi_dir)
                 # filtering only the directories
                 dirs = [d for d in elts
-                             if os.path.isdir(os.path.join(roi_dir, d))]
+                        if os.path.isdir(os.path.join(roi_dir, d))]
                 tmp = False
 
                 if 'convROI_BOLD2' in dirs:
@@ -2972,8 +2852,8 @@ class Resample_2(ProcessMIA):
                     print('\nResample_2 brick:\nA "{}" folder already exists, '
                           'it will be overwritten by this new '
                           'calculation...'.format(os.path.join(
-                                                              roi_dir,
-                                                              'convROI_BOLD2')))
+                              roi_dir,
+                              'convROI_BOLD2')))
 
                 if os.path.isdir(tmp):
                     shutil.rmtree(tmp)
@@ -2989,8 +2869,8 @@ class Resample_2(ProcessMIA):
 
             for roi in self.doublet_list:
                 list_out.append(os.path.join(
-                                            conv_dir,
-                                            'conv' + roi[0] + roi[1] + '2.nii'))
+                    conv_dir,
+                    'conv' + roi[0] + roi[1] + '2.nii'))
 
             self.outputs['out_images'] = list_out
 
@@ -3001,7 +2881,7 @@ class Resample_2(ProcessMIA):
         """Dedicated to the process launch step of the brick."""
 
         # No need the next line (we don't use self.process et SPM)
-        #super(Resample_2, self).run_process_mia()
+        # super(Resample_2, self).run_process_mia()
 
         roi_dir = os.path.join(self.output_directory,
                                'roi_' + self.dict4runtime['patient_name'])
@@ -3028,7 +2908,7 @@ class Resample_2(ProcessMIA):
             nib.save(resized_img, out_file)
 
             print('\nResample_2 brick:{0} saved'.format(os.path.basename(
-                                                                     out_file)))
+                out_file)))
 
 
 class RotationMask(ProcessMIA):
@@ -3068,8 +2948,8 @@ class RotationMask(ProcessMIA):
         # Inputs traits
         self.add_trait("in_file",
                        File(output=False,
-                                    optional=False,
-                                    desc=in_file_desc))
+                            optional=False,
+                            desc=in_file_desc))
 
         self.add_trait("suffix",
                        traits.String("_rotmasked",
@@ -3106,8 +2986,13 @@ class RotationMask(ProcessMIA):
 
         # Outputs definition
         if self.in_file:
+            valid_ext, in_ext, fileName = checkFileExt(self.in_file,
+                                                       EXT)
 
-            file_name = self.in_file
+            if not valid_ext:
+                print('\nThe input image format is'
+                      ' not recognized...!')
+                return
 
             if ((not self.suffix) or (self.suffix.isspace()) or
                     self.suffix in [Undefined, "<undefined>"]):
@@ -3119,7 +3004,7 @@ class RotationMask(ProcessMIA):
 
             file = ''
 
-            path, filename = os.path.split(file_name)
+            path, _ = os.path.split(self.in_file)
 
             if (self.suffix == " " and
                     self.prefix == " " and
@@ -3132,51 +3017,28 @@ class RotationMask(ProcessMIA):
                             "defined or consist only of one or more white "
                             "spaces.\nThe {0} input parameter will be "
                             "overwritten ...\n Yes or "
-                            "Abort?".format(filename))
+                            "Abort?".format(fileName))
                 msg.setStandardButtons(QMessageBox.Yes | QMessageBox.Abort)
                 retval = msg.exec_()
 
                 if retval != QMessageBox.Abort:
-                    (file_name_no_ext,
-                     file_extension) = os.path.splitext(filename)
-                    if file_extension == '.gz':
-                        (file_name_no_ext_2,
-                         file_extension_2) = os.path.splitext(file_name_no_ext)
-                        if file_extension_2 == '.nii':
-                            file_name_no_ext = file_name_no_ext_2
-                            file_extension = '.nii.gz'
-
-                    file = os.path.join(self.output_directory,
-                                        (self.prefix.strip() +
-                                         file_name_no_ext +
-                                         self.suffix.strip() +
-                                         file_extension))
                     print('\nRotationMask brick warning: the out_file output '
                           'parameter is the same as the in_files input '
                           'parameter (suffix and prefix are not defined):'
-                          '\n{0} will be overwrited ...'.format(filename))
+                          '\n{0} will be overwrited ...'.format(fileName))
 
                 else:
                     filename = ''
                     print('\nAborted. Please check your input parameters ...')
+                    return
 
-            else:
-                (file_name_no_ext,
-                 file_extension) = os.path.splitext(filename)
-                if file_extension == '.gz':
-                    (file_name_no_ext_2,
-                     file_extension_2) = os.path.splitext(file_name_no_ext)
-                    if file_extension_2 == '.nii':
-                        file_name_no_ext = file_name_no_ext_2
-                        file_extension = '.nii.gz'
+            file = os.path.join(self.output_directory,
+                                (self.prefix.strip() +
+                                 fileName +
+                                 self.suffix.strip() +
+                                 '.' + in_ext))
 
-                file = os.path.join(self.output_directory,
-                                    (self.prefix.strip() +
-                                     file_name_no_ext +
-                                     self.suffix.strip() +
-                                     file_extension))
-
-            if filename:
+            if file:
                 self.outputs['out_file'] = file
 
             else:
@@ -3284,7 +3146,7 @@ class Sanitize(ProcessMIA):
         suffix_desc = 'Suffix of the output image (a string).'
         n_volumes_to_discard_desc = 'number of non steady-state volumes'
         max_32bit_desc = "cast data to float32 if higher precision is " \
-                        "encountered"
+            "encountered"
         # Outputs description
         out_file_desc = ('Path of the snaitized scan'
                          '(a pathlike object or string representing a file).')
@@ -3294,6 +3156,18 @@ class Sanitize(ProcessMIA):
                        File(output=False,
                             optional=False,
                             desc=in_file_desc))
+
+        self.add_trait("max_32bit",
+                       traits.Bool(False,
+                                   output=False,
+                                   optional=True,
+                                   desc=max_32bit_desc))
+
+        self.add_trait("n_volumes_to_discard",
+                       traits.Int(0,
+                                  output=False,
+                                  optional=True,
+                                  desc=n_volumes_to_discard_desc))
 
         self.add_trait("prefix",
                        traits.String("",
@@ -3306,18 +3180,6 @@ class Sanitize(ProcessMIA):
                                      output=False,
                                      optional=True,
                                      desc=suffix_desc))
-
-        self.add_trait("n_volumes_to_discard",
-                       traits.Int(0,
-                                  output=False,
-                                  optional=True,
-                                  desc=n_volumes_to_discard_desc))
-
-        self.add_trait("max_32bit",
-                       traits.Bool(False,
-                                   output=False,
-                                   optional=True,
-                                   desc=max_32bit_desc))
 
         # Outputs traits
         self.add_trait("out_file",
@@ -3342,8 +3204,13 @@ class Sanitize(ProcessMIA):
 
         # Outputs definition
         if self.in_file:
+            valid_ext, in_ext, fileName = checkFileExt(self.in_file,
+                                                       EXT)
 
-            file_name = self.in_file
+            if not valid_ext:
+                print('\nThe input image format is'
+                      ' not recognized...!')
+                return
 
             if ((not self.suffix) or (self.suffix.isspace()) or
                     self.suffix in [Undefined, "<undefined>"]):
@@ -3355,7 +3222,7 @@ class Sanitize(ProcessMIA):
 
             file = ''
 
-            path, filename = os.path.split(file_name)
+            path, _ = os.path.split(self.in_file)
 
             if (self.suffix == " " and
                     self.prefix == " " and
@@ -3368,51 +3235,28 @@ class Sanitize(ProcessMIA):
                             "defined or consist only of one or more white "
                             "spaces.\nThe {0} input parameter will be "
                             "overwritten ...\n Yes or "
-                            "Abort?".format(filename))
+                            "Abort?".format(fileName))
                 msg.setStandardButtons(QMessageBox.Yes | QMessageBox.Abort)
                 retval = msg.exec_()
 
                 if retval != QMessageBox.Abort:
-                    (file_name_no_ext,
-                     file_extension) = os.path.splitext(filename)
-                    if file_extension == '.gz':
-                        (file_name_no_ext_2,
-                         file_extension_2) = os.path.splitext(file_name_no_ext)
-                        if file_extension_2 == '.nii':
-                            file_name_no_ext = file_name_no_ext_2
-                            file_extension = '.nii.gz'
-
-                    file = os.path.join(self.output_directory,
-                                        (self.prefix.strip() +
-                                         file_name_no_ext +
-                                         self.suffix.strip() +
-                                         file_extension))
                     print('\nSanitize brick warning: the out_file output '
                           'parameter is the same as the in_files input '
                           'parameter (suffix and prefix are not defined):'
-                          '\n{0} will be overwrited ...'.format(filename))
+                          '\n{0} will be overwrited ...'.format(fileName))
 
                 else:
                     filename = ''
                     print('\nAborted. Please check your input parameters ...')
+                    return
 
-            else:
-                (file_name_no_ext,
-                 file_extension) = os.path.splitext(filename)
-                if file_extension == '.gz':
-                    (file_name_no_ext_2,
-                     file_extension_2) = os.path.splitext(file_name_no_ext)
-                    if file_extension_2 == '.nii':
-                        file_name_no_ext = file_name_no_ext_2
-                        file_extension = '.nii.gz'
+            file = os.path.join(self.output_directory,
+                                (self.prefix.strip() +
+                                 fileName +
+                                 self.suffix.strip() +
+                                 '.' + in_ext))
 
-                file = os.path.join(self.output_directory,
-                                    (self.prefix.strip() +
-                                     file_name_no_ext +
-                                     self.suffix.strip() +
-                                     file_extension))
-
-            if filename:
+            if file:
                 self.outputs['out_file'] = file
 
             else:
@@ -3456,7 +3300,8 @@ class Sanitize(ProcessMIA):
                 pass
 
             # Matching affines
-            matching_affines = valid_qform and np.allclose(img.get_qform(), img.get_sform())
+            matching_affines = valid_qform and np.allclose(
+                img.get_qform(), img.get_sform())
 
             save_file = False
             warning_txt = ""
@@ -3575,24 +3420,6 @@ class TemplateFromTemplateFlow(ProcessMIA):
                          'or string representing a file).')
 
         # Inputs traits
-        self.add_trait("in_template",
-                       traits.String(default='MNI152NLin2009cAsym',
-                                     output=False,
-                                     optional=True,
-                                     desc=in_template_desc))
-
-        self.add_trait("resolution",
-                       traits.Int(2,
-                                  output=False,
-                                  optional=True,
-                                  desc=resolution_desc))
-
-        self.add_trait("suffix",
-                       traits.String('',
-                                     output=False,
-                                     optional=True,
-                                     desc=suffix_desc))
-
         self.add_trait("atlas",
                        traits.String('',
                                      output=False,
@@ -3605,11 +3432,29 @@ class TemplateFromTemplateFlow(ProcessMIA):
                                      optional=True,
                                      desc=desc_desc))
 
+        self.add_trait("in_template",
+                       traits.String(default='MNI152NLin2009cAsym',
+                                     output=False,
+                                     optional=True,
+                                     desc=in_template_desc))
+
         self.add_trait("label",
                        traits.String('',
                                      output=False,
                                      optional=True,
                                      desc=label_desc))
+
+        self.add_trait("resolution",
+                       traits.Int(2,
+                                  output=False,
+                                  optional=True,
+                                  desc=resolution_desc))
+
+        self.add_trait("suffix",
+                       traits.String('',
+                                     output=False,
+                                     optional=True,
+                                     desc=suffix_desc))
 
         # Outputs traits
         self.add_trait("template",
@@ -3652,7 +3497,8 @@ class TemplateFromTemplateFlow(ProcessMIA):
         else:
             label = self.label
 
-        template_spec = {"resolution": self.resolution, "suffix": suffix, "atlas": atlas, "desc": desc, "label": label}
+        template_spec = {"resolution": self.resolution, "suffix": suffix,
+                         "atlas": atlas, "desc": desc, "label": label}
 
         tpl_target_path = get_template(self.in_template, **template_spec)
         if not tpl_target_path:
@@ -3721,19 +3567,17 @@ class Threshold(ProcessMIA):
                                       output=False,
                                       desc=in_files_desc))
 
-        self.add_trait("threshold",
-                       traits.Range(value=0.3,
-                                    low=0.0,
-                                    high=1.0,
-                                    output=False,
-                                    optional=True,
-                                    desc=threshold_desc))
-
         self.add_trait("GM_filtering",
                        traits.Bool(default_value=True,
                                    output=False,
                                    optional=True,
                                    desc=GM_filtering_desc))
+
+        self.add_trait("prefix",
+                       traits.String("",
+                                     output=False,
+                                     optional=True,
+                                     desc=prefix_desc))
 
         self.add_trait("suffix",
                        traits.String("_002",
@@ -3741,11 +3585,13 @@ class Threshold(ProcessMIA):
                                      optional=True,
                                      desc=suffix_desc))
 
-        self.add_trait("prefix",
-                       traits.String("",
-                                     output=False,
-                                     optional=True,
-                                     desc=prefix_desc))
+        self.add_trait("threshold",
+                       traits.Range(value=0.3,
+                                    low=0.0,
+                                    high=1.0,
+                                    output=False,
+                                    optional=True,
+                                    desc=threshold_desc))
 
         # Outputs traits
         self.add_trait("out_files",
@@ -3812,7 +3658,14 @@ class Threshold(ProcessMIA):
             retval = None
 
             for file_name1 in files_name:
-                path, file_name = os.path.split(file_name1)
+                valid_ext, in_ext, fileName = checkFileExt(file_name1,
+                                                           EXT)
+
+                if not valid_ext:
+                    print('\nThe input image format is'
+                          ' not recognized...!')
+                    return
+                path, _ = os.path.split(file_name1)
 
                 if (self.suffix == " " and
                         self.prefix == " " and
@@ -3831,13 +3684,6 @@ class Threshold(ProcessMIA):
                     retval = msg.exec_()
 
                     if retval != QMessageBox.Abort:
-                        (file_name_no_ext,
-                         file_extension) = os.path.splitext(file_name)
-                        files.append(os.path.join(self.output_directory,
-                                                  (self.prefix.strip() +
-                                                   file_name_no_ext +
-                                                   self.suffix.strip() +
-                                                   file_extension)))
                         print('\nThreshold brick warning: the out_files output '
                               'parameter is the same as the in_files input '
                               'parameter (suffix and prefix are not defined):'
@@ -3850,20 +3696,16 @@ class Threshold(ProcessMIA):
                     else:
                         files_name = []
                         print('\nAborted. Please check your input parameters ...')
-                        break
+                        return
 
-                else:
-                    (file_name_no_ext,
-                     file_extension) = os.path.splitext(file_name)
-                    files.append(os.path.join(self.output_directory,
-                                              (self.prefix.strip() +
-                                               file_name_no_ext +
-                                               self.suffix.strip() +
-                                               file_extension)))
+                files.append(os.path.join(self.output_directory,
+                                          (self.prefix.strip() +
+                                           fileName +
+                                           self.suffix.strip() +
+                                           '.' + in_ext)))
 
-            if files_name:
+            if files:
                 self.outputs['out_files'] = files
-
             else:
                 print('- There was no output file deducted during '
                       'initialisation. Please check the input parameters...!')
@@ -3908,9 +3750,9 @@ class Threshold(ProcessMIA):
                             tag_to_add['unit'] = None
                             tag_to_add['default_value'] = None
                             tag_to_add['value'] = get_dbFieldValue(
-                                                                  self.project,
-                                                                  in_val,
-                                                                  "PatientName")
+                                self.project,
+                                in_val,
+                                "PatientName")
 
                             if tag_to_add['value'] is not None:
                                 set_dbFieldValue(self.project,
@@ -3984,13 +3826,13 @@ class TSNR(ProcessMIA):
         suffix_tsnr_desc = 'Suffix of the tsnr image (a string).'
         prefix_stddev_desc = 'Prefix of the tsnr image (a string).'
         suffix_stddev_desc = 'Suffix of the tsnr image (a string).'
-        
+
         # Outputs description
         out_tsnr_file_desc = ('Path of the scan after masking '
                               '(a pathlike object or string representing a file).')
 
         out_stddev_file_desc = ('Path of the scan after masking '
-                              '(a pathlike object or string representing a file).')
+                                '(a pathlike object or string representing a file).')
 
         # Inputs traits
         self.add_trait("in_file",
@@ -4050,8 +3892,13 @@ class TSNR(ProcessMIA):
 
         # Outputs definition
         if self.in_file:
+            valid_ext, in_ext, fileName = checkFileExt(self.in_file,
+                                                       EXT)
 
-            file_name = self.in_file
+            if not valid_ext:
+                print('\nThe input image format is'
+                      ' not recognized...!')
+                return
 
             if ((not self.suffix_tsnr) or (self.suffix_tsnr.isspace()) or
                     self.suffix_tsnr in [Undefined, "<undefined>"]):
@@ -4063,7 +3910,7 @@ class TSNR(ProcessMIA):
 
             file_tsnr = ''
 
-            path, filename = os.path.split(file_name)
+            path, _ = os.path.split(self.in_file)
 
             if (self.suffix_tsnr == " " and
                     self.prefix_tsnr == " " and
@@ -4076,50 +3923,27 @@ class TSNR(ProcessMIA):
                             "defined or consist only of one or more white "
                             "spaces.\nThe {0} input parameter will be "
                             "overwritten ...\n Yes or "
-                            "Abort?".format(filename))
+                            "Abort?".format(fileName))
                 msg.setStandardButtons(QMessageBox.Yes | QMessageBox.Abort)
                 retval = msg.exec_()
 
                 if retval != QMessageBox.Abort:
-                    (file_name_no_ext,
-                     file_extension) = os.path.splitext(filename)
-                    if file_extension == '.gz':
-                        (file_name_no_ext_2,
-                         file_extension_2) = os.path.splitext(file_name_no_ext)
-                        if file_extension_2 == '.nii':
-                            file_name_no_ext = file_name_no_ext_2
-                            file_extension = '.nii.gz'
-
-                    file_tsnr = os.path.join(self.output_directory,
-                                        (self.prefix_tsnr.strip() +
-                                         file_name_no_ext +
-                                         self.suffix_tsnr.strip() +
-                                         file_extension))
                     print('\nTSNR brick warning: the out_tsnr_file output '
                           'parameter is the same as the in_file input '
                           'parameter (suffix and prefix are not defined):'
-                          '\n{0} will be overwrited ...'.format(filename))
+                          '\n{0} will be overwrited ...'.format(fileName))
 
                 else:
-                    filename = ''
                     print('\nAborted. Please check your input parameters ...')
+                    return
 
             else:
-                (file_name_no_ext,
-                 file_extension) = os.path.splitext(filename)
-                if file_extension == '.gz':
-                    (file_name_no_ext_2,
-                     file_extension_2) = os.path.splitext(file_name_no_ext)
-                    if file_extension_2 == '.nii':
-                        file_name_no_ext = file_name_no_ext_2
-                        file_extension = '.nii.gz'
-
                 file_tsnr = os.path.join(self.output_directory,
-                                    (self.prefix_tsnr.strip() +
-                                     file_name_no_ext +
-                                     self.suffix_tsnr.strip() +
-                                     file_extension))
-                
+                                         (self.prefix_tsnr.strip() +
+                                          fileName +
+                                          self.suffix_tsnr.strip() +
+                                          '.' + in_ext))
+
             if ((not self.suffix_stddev) or (self.suffix_stddev.isspace()) or
                     self.suffix_stddev in [Undefined, "<undefined>"]):
                 self.suffix_stddev = " "
@@ -4129,8 +3953,6 @@ class TSNR(ProcessMIA):
                 self.prefix_stddev = " "
 
             file_stddev = ''
-
-            path, filename = os.path.split(file_name)
 
             if (self.suffix_stddev == " " and
                     self.prefix_stddev == " " and
@@ -4143,57 +3965,28 @@ class TSNR(ProcessMIA):
                             "defined or consist only of one or more white "
                             "spaces.\nThe {0} input parameter will be "
                             "overwritten ...\n Yes or "
-                            "Abort?".format(filename))
+                            "Abort?".format(fileName))
                 msg.setStandardButtons(QMessageBox.Yes | QMessageBox.Abort)
                 retval = msg.exec_()
 
                 if retval != QMessageBox.Abort:
-                    (file_name_no_ext,
-                     file_extension) = os.path.splitext(filename)
-                    if file_extension == '.gz':
-                        (file_name_no_ext_2,
-                         file_extension_2) = os.path.splitext(file_name_no_ext)
-                        if file_extension_2 == '.nii':
-                            file_name_no_ext = file_name_no_ext_2
-                            file_extension = '.nii.gz'
-
-                    file_stddev = os.path.join(self.output_directory,
-                                        (self.prefix_stddev.strip() +
-                                         file_name_no_ext +
-                                         self.suffix_stddev.strip() +
-                                         file_extension))
                     print('\nTSNR brick warning: the out_stddev_file output '
                           'parameter is the same as the in_files input '
                           'parameter (suffix and prefix are not defined):'
-                          '\n{0} will be overwrited ...'.format(filename))
-
+                          '\n{0} will be overwrited ...'.format(fileName))
                 else:
-                    filename = ''
                     print('\nAborted. Please check your input parameters ...')
+                    return
 
             else:
-                (file_name_no_ext,
-                 file_extension) = os.path.splitext(filename)
-                if file_extension == '.gz':
-                    (file_name_no_ext_2,
-                     file_extension_2) = os.path.splitext(file_name_no_ext)
-                    if file_extension_2 == '.nii':
-                        file_name_no_ext = file_name_no_ext_2
-                        file_extension = '.nii.gz'
-
                 file_stddev = os.path.join(self.output_directory,
-                                    (self.prefix_stddev.strip() +
-                                     file_name_no_ext +
-                                     self.suffix_stddev.strip() +
-                                     file_extension))
+                                           (self.prefix_stddev.strip() +
+                                            fileName +
+                                            self.suffix_stddev.strip() +
+                                            '.' + in_ext))
 
-            if filename:
-                self.outputs['out_tsnr_file'] = file_tsnr
-                self.outputs['out_stddev_file'] = file_stddev
-
-            else:
-                print('- There was no output file deducted during '
-                      'initialisation. Please check the input parameters...!')
+            self.outputs['out_tsnr_file'] = file_tsnr
+            self.outputs['out_stddev_file'] = file_stddev
 
             # tags inheritance (optional)
             if self.outputs['out_tsnr_file']:
@@ -4222,7 +4015,7 @@ class TSNR(ProcessMIA):
             header = img.header.copy()
             data = img.get_fdata(dtype=np.float32).reshape(img.shape[:3] + (-1,))
             data = np.nan_to_num(data)
-    
+
             if data.dtype.kind == "i":
                 header.set_data_dtype(np.float32)
                 data = data.astype(np.float32)
@@ -4232,7 +4025,7 @@ class TSNR(ProcessMIA):
             tsnr = np.zeros_like(meanimg)
             stddevimg_nonzero = stddevimg > 1.0e-3
             tsnr[stddevimg_nonzero] = (
-                    meanimg[stddevimg_nonzero] / stddevimg[stddevimg_nonzero]
+                meanimg[stddevimg_nonzero] / stddevimg[stddevimg_nonzero]
             )
 
             # Image save
@@ -4260,7 +4053,7 @@ class TSNR(ProcessMIA):
                                             file_extension))
             stddev_img = nib.Nifti1Image(stddevimg, img.affine, header)
             nib.save(stddev_img, stddev_file_out)
-        
+
 
 def artifact_mask(imdata, airdata, distance, zscore=10.0):
     """Computes a mask of artifacts found in the air region"""
@@ -4337,7 +4130,7 @@ def threshold(file_name, thresh):
     """
     img = nib.load(file_name)
     img_data = img.get_fdata()
-    _max =  img_data.max()
+    _max = img_data.max()
     img_thresh = (img_data > (_max*thresh)).astype(float)
     img_final = nib.Nifti1Image(img_thresh, img.affine, img.header)
     return img_final

@@ -28,7 +28,7 @@ This tag is used to create the folder `output_directory/roi_PatientName` (that w
 >>> from mia_processes.bricks.preprocess.others import ConvROI
 >>> ConvROI.help()
 
-**Inputs parameters:**
+**Mandatory inputs parameters:**
 
 - *doublet_list* (a list of lists)
     A list of lists containing doublets of strings. 

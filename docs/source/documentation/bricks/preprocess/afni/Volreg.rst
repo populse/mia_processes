@@ -18,7 +18,7 @@ Register an input volume to a base volume using AFNI 3dvolreg command
 
 >>> Volreg.help()
 
-**Inputs parameters:**
+**Mandatory inputs parameters:**
 
 - *in_file* (a string representing an existing file)
     Input file (valid extensions: [.nii, .nii.gz]).
@@ -27,6 +27,15 @@ Register an input volume to a base volume using AFNI 3dvolreg command
 
       ex. '/home/username/data/raw_data/func.nii'
 
+**Optional inputs with default value parameters:**
+
+- *copyorigin* (a boolean, optional)
+    Copy base file origin coords to output.
+
+    ::
+
+      default value. False
+
 - *interpolation* (‘Fourier’ or ‘linear’ or ‘cubic’ or ‘quintic’ or ‘heptic’, optional)
     Different interpolation methods:
       -Fourier = Use a Fourier method (the default: most accurate; slowest).
@@ -34,67 +43,10 @@ Register an input volume to a base volume using AFNI 3dvolreg command
       -cubic   = Use the cubic (3rd order) Lagrange polynomial interpolation.
       -quintic = Use the quintic (5th order) Lagrange polynomial interpolation.
       -heptic  = Use the heptic (7th order) Lagrange polynomial interpolation.
-    Default is 'heptic'.
 
     ::
 
-      ex. heptic
-
-- *twopass* (a boolean, optional)
-    Do two passes of the registration algorithm:
-    (1) with smoothed base and data bricks, with linear interpolation, to get a crude alignment, then'
-    (2) with the input base and data bricks, to get a fine alignment. 
-    This method is useful when aligning high-resolution datasets that may need to be moved more than a few voxels to be aligned.
-    Default is False. 
-
-    ::
-
-      ex. False
-
-- *zpad* (a integer, optional)
-    Zeropad around the edges by ‘n’ voxels during rotations. 
-    Default is n = 4.
-    ::
-
-      ex. 4
-
-- *copyorigin* (a boolean, optional)
-    Copy base file origin coords to output.
-    Default is False. 
-
-    ::
-
-      ex. False
-
-- *timeshift* (a boolean, optional)
-    Time shift to mean slice time offset.
-    Default is False. 
-
-    ::
-
-      ex. False
-
-- *in_weight_volume* (a tuple (a string representing an existing file, Integer), optional)
-    Weights for each voxel specified by a file with an optional volume number (defaults to 0).
-    Default is Undefined (ie parameter not used).
-
-    ::
-
-      ex. False
-
-- *save_oned_matrix* (a boolean, optional)
-    Save the transformation matrix  oned matrix. 
-
-    ::
-
-      ex. False
-
-- *save_md1d_file* (a boolean, optional)
-    Save max displacement outputfile (md1d) file. 
-
-    ::
-
-      ex. False
+      default value. heptic
 
 - *output_type* (NIFTI or NIFTI_GZ, optional)
     | Format of the output image (one of NIFTI, NIFTI_GZ).
@@ -103,24 +55,72 @@ Register an input volume to a base volume using AFNI 3dvolreg command
 
     ::
 
-      ex. NIFTI
+      default value. NIFTI
 
 - *out_prefix* (a string, optional)
-    Prefix of the output image. Default is 'reg_'.
+    Prefix of the output image.
     
     ::
 
-      ex. 'reg_'
+      default value. 'reg_'
+
+- *save_oned_matrix* (a boolean, optional)
+    Save the transformation matrix  oned matrix. 
+
+    ::
+
+      default value. False
+
+- *save_md1d_file* (a boolean, optional)
+    Save max displacement outputfile (md1d) file. 
+
+    ::
+
+      default value. False
+
+- *timeshift* (a boolean, optional)
+    Time shift to mean slice time offset.
+
+    ::
+
+      default value. False
+
+- *twopass* (a boolean, optional)
+    Do two passes of the registration algorithm:
+    (1) with smoothed base and data bricks, with linear interpolation, to get a crude alignment, then'
+    (2) with the input base and data bricks, to get a fine alignment. 
+    This method is useful when aligning high-resolution datasets that may need to be moved more than a few voxels to be aligned.
+
+    ::
+
+      default value. False
+
+- *zpad* (a integer, optional)
+    Zeropad around the edges by ‘n’ voxels during rotations. 
+
+    ::
+
+      default value. 4
+
+**Optional inputs with default value parameters:**
+
+- *in_weight_volume* (a tuple (a string representing an existing file, Integer), optional)
+    Weights for each voxel specified by a file with an optional volume number (defaults to 0).
+    Default is Undefined (ie parameter not used).
+
+    ::
+
+      ex. ('/home/username/data/raw_data/mask.nii', 0)
 
 
 **Outputs parameters:**
 
-- *out_file* (a strings representing a file)
-    Register file (extensions: [.nii, .nii.gz]).
+- *md1d_file* (a strings representing a file, optional)
+   The transformation matrix (extensions: [.aff12.1D]).
     
     ::
 
-      ex. '/home/username/data/derived_data/reg_func.nii'
+      ex. '/home/username/data/derived_data/reg_func_md.1D'
 
 - *oned_file* (a strings representing a file)
    The movement parameters file (extensions: [.txt]).
@@ -136,12 +136,12 @@ Register an input volume to a base volume using AFNI 3dvolreg command
 
       ex. '/home/username/data/derived_data/reg_func_oned_matrix.aff12.1D'
 
-- *md1d_file* (a strings representing a file, optional)
-   The transformation matrix (extensions: [.aff12.1D]).
+- *out_file* (a strings representing a file)
+    Register file (extensions: [.nii, .nii.gz]).
     
     ::
 
-      ex. '/home/username/data/derived_data/reg_func_md.1D'
+      ex. '/home/username/data/derived_data/reg_func.nii'
 
 -------------
 

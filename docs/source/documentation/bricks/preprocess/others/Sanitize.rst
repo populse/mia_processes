@@ -20,7 +20,7 @@ Adapted from  https://github.com/nipreps/niworkflows/blob/45ab13e1bf6fdbf5e29c90
 
 >>> Sanitize.help()
 
-**Inputs parameters:**
+**Mandatory inputs parameters:**
 
 - *in_file* (a string representing an existing file)
     Input image which intensity will be clipped (valid extensions: [.nii, .nii.gz]).
@@ -29,35 +29,35 @@ Adapted from  https://github.com/nipreps/niworkflows/blob/45ab13e1bf6fdbf5e29c90
 
       ex. '/home/username/data/raw_data/func.nii'
 
-- *prefix* (a string, optional)
-    Prefix of the output image. Default is ''.
-    
-    ::
-
-      ex. ''
-
-- *suffix* (a string, optional)
-   Suffix of output image. Default is '_valid'.
-    
-    ::
-
-      ex. '_valid'
-
-- *n_volumes_to_discard* (an int, optional)
-    Number of non steady-state volumes. Default is 0.
-    
-    ::
-
-      ex. 0
+**Optional inputs with default value parameters:**
 
 - *max_32bits* (a boolean, optional)
-    Cast data to float32 if higher precision is encountered. Default is False.
+    Cast data to float32 if higher precision is encountered.
 
     ::
 
-      ex. False
+      default_value. False
 
+- *n_volumes_to_discard* (an int, optional)
+    Number of non steady-state volumes.
+    
+    ::
 
+      default_value. 0
+
+- *prefix* (a string, optional)
+    Prefix of the output image.
+    
+    ::
+
+      default_value. ''
+
+- *suffix* (a string, optional)
+   Suffix of output image.
+   
+    ::
+
+      default_value. '_valid'
 
 **Outputs parameters:**
 
