@@ -16,7 +16,7 @@ Conform T1w image:
 
 Be carrefull, if the suffix and prefix input parameters are not defined or consist only of one or more white spaces, the input parameter will be overwritten.
 
-Adapted from `mriqc <https://mriqc.readthedocs.io/en/latest/>` anatomical workflow.
+Adapted from `mriqc <https://mriqc.readthedocs.io/en/latest/>`_ anatomical workflow.
 
 --------------------------------------
 

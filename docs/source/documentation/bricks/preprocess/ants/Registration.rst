@@ -6,9 +6,9 @@
 |`Home <../../../../index.html>`_|`Documentation <../../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +--------------------------------+----------------------------------------------+----------------------------------------------------+
 
-============
+==================
 Registration brick
-============
+==================
 
 Image registration using ANTs Registration command. 
 
@@ -24,7 +24,7 @@ For example, when you already have a warpfield that corrects for geometrical dis
 You could put this transform into 'intial_moving_transform'.
 
 Here can be found some of classical registration parameters(used in fMRIPrep and MRIQC):
-<https://github.com/nipreps/niworkflows/tree/master/niworkflows/data>. 
+`niworkflows parameters examples <https://github.com/nipreps/niworkflows/tree/master/niworkflows/data>`_ 
 
 --------------------------------------
 
@@ -35,7 +35,7 @@ Here can be found some of classical registration parameters(used in fMRIPrep and
 **Mandatory inputs parameters:**
 
 - *fixed_image* (a string representing an existing file)
-   Image to which the moving image should be transformed (valid extensions: [.nii, .nii.gz]).
+    Image to which the moving image should be transformed (valid extensions: [.nii, .nii.gz]).
 
     ::
 
@@ -72,7 +72,7 @@ Here can be found some of classical registration parameters(used in fMRIPrep and
 
         default value. False
 
-- *initialize_transforms_per_stage*(a boolean, optional)
+- *initialize_transforms_per_stage* (a boolean, optional)
     Initialize linear transforms from the previous stage.
 
     ::
@@ -88,8 +88,8 @@ Here can be found some of classical registration parameters(used in fMRIPrep and
 
 
 - *metrics* (a list of items which are CC or MeanSquares or Demon or GC or MI or mattes, optional)
-    |The metric to use for each stage.
-    |Metrics available:
+    | The metric to use for each stage.
+    | Metrics available:
     |   cross-correlation (CC)
     |   Mean Squares (MeanSquares)
     |   Demons (Demons)
@@ -151,22 +151,22 @@ Here can be found some of classical registration parameters(used in fMRIPrep and
         default value. [[4], [4, 2, 1], [2, 1]]
 
 - *transforms* (a list of items which are Rigid or Affine or CompositeAffine or Similarity or Translation or BSpline or GaussianDisplacementField or TimeVaryingVelocityField or TimeVaryingBSplineVelocityField or SyN or BSplineSyN or Exponential or BSplineExponential, optional)
-    |List of the transformations.
-    |Linear transformations:
-    |   Translation
-    |   Rigid
-    |   Affine
-    |   CompositeAffine
-    |   Translation
-    |Non-linear transformations:
-    |   BSpline
-    |   GaussianDisplacementField
-    |   TimeVaryingVelocityField
-    |   TimeVaryingBSplineVelocityField
-    |   SyN
-    |   BSplineSyN
-    |   Exponential
-    |   BSplineExponential
+    | List of the transformations.
+    |   Linear transformations:
+    |     Translation
+    |     Rigid
+    |     Affine
+    |     CompositeAffine
+    |     Translation
+    |   Non-linear transformations:
+    |     BSpline
+    |     GaussianDisplacementField
+    |     TimeVaryingVelocityField
+    |     TimeVaryingBSplineVelocityField
+    |     SyN
+    |     BSplineSyN
+    |     Exponential
+    |     BSplineExponential
     
     ::
 
@@ -250,8 +250,8 @@ Here can be found some of classical registration parameters(used in fMRIPrep and
       ex. ['trans.mat']
 
 - *initial_moving_transform_com* (0 or 1 or 2, optional)
-   Align the moving_image and fixed_image before registration using the geometric center of the images (=0), 
-   the image intensities (=1), or the origin of the images (=2). Mutually exclusive with initial_moving_transform.
+    Align the moving_image and fixed_image before registration using the geometric center of the images (=0), 
+    the image intensities (=1), or the origin of the images (=2). Mutually exclusive with initial_moving_transform.
     
     ::
 

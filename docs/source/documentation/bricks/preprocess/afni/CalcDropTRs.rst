@@ -6,9 +6,9 @@
 |`Home <../../../../index.html>`_|`Documentation <../../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +--------------------------------+----------------------------------------------+----------------------------------------------------+
 
-============
+==================
 CalcDropTRs brick
-============
+==================
 
 Drop volumes of bold datasets (using AFNI 3dcalc command). 
 
