@@ -40,6 +40,7 @@ class Bold_mriqc_pipeline(Pipeline):
                          "mia_processes.bricks.preprocess.afni.processes."
                          "Volreg")
         self.nodes["volreg"].process.twopass = True
+        self.nodes["volreg"].process.interpolation = 'Fourier'
         self.add_process("bold_mni_align",
                          "mia_processes.pipelines.preprocess.bold_mni_align."
                          "Bold_mni_align")

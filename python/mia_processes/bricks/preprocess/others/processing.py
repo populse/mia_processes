@@ -1343,9 +1343,8 @@ class EstimateSNR(ProcessMIA):
 
         # Outputs traits
         self.add_trait("out_snr",
-                       OutputMultiPath(File(),
-                                       output=True,
-                                       desc=out_snr_desc))
+                       traits.Float(output=True,
+                                    desc=out_snr_desc))
 
         self.init_default_traits()
 
@@ -1374,13 +1373,6 @@ class EstimateSNR(ProcessMIA):
                           ' not recognized...!')
                     return
 
-                self.outputs['out_snr'] = os.path.join(
-                    self.output_directory,
-                    fileName + '_estimated_snr.txt')
-
-                self.inheritance_dict[self.outputs[
-                    'out_snr']] = self.in_file
-
             else:
                 print('No output_directory was found...!\n')
                 return
@@ -1406,11 +1398,9 @@ class EstimateSNR(ProcessMIA):
 
         data = img.get_fdata()
         mask = seg_img.get_fdata() == 2  # WM label
-        snr = float(np.mean(data[mask]) /
-                    (data[mask].std() * np.sqrt(mask.sum() /
-                                                (mask.sum() - 1))))
-        with open(self.out_snr, 'w') as f:
-            f.write(str(snr))
+        self.out_snr = float(np.mean(data[mask]) /
+                             (data[mask].std() * np.sqrt(mask.sum() /
+                                                         (mask.sum() - 1))))
 
 
 class GradientThreshold(ProcessMIA):

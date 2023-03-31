@@ -309,10 +309,12 @@ class FastSegment(ProcessMIA):
         # Outputs traits
         self.add_trait("mixeltype",
                        File(output=True,
+                            optional=True,
                             desc=mixeltype_desc))
 
         self.add_trait("partial_volume_map",
                        File(output=True,
+                            optional=True,
                             desc=partial_volume_map_desc))
 
         self.add_trait("partial_volume_files",

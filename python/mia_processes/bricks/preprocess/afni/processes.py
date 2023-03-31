@@ -1382,7 +1382,7 @@ class Volreg(ProcessMIA):
         save_md1d_file_desc = ('Save md1d file (a boolean)')
         save_oned_matrix_desc = ('Save oned matrix (a boolean)')
         timeshift_desc = ('Time shift to mean slice time offset.')
-        two_pass_desc = ('Do two passes of the registration algorithm:'
+        twopass_desc = ('Do two passes of the registration algorithm:'
                          '(1) with smoothed base and data bricks, with linear'
                          ' interpolation, to get a crude alignment, then'
                          '(2) with the input base and data bricks, to get a '
@@ -1467,7 +1467,7 @@ class Volreg(ProcessMIA):
                        Bool(False,
                             output=False,
                             optional=True,
-                            desc=two_pass_desc))
+                            desc=twopass_desc))
 
         self.add_trait("zpad",
                        Int(4,

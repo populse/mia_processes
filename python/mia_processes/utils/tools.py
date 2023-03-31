@@ -6,6 +6,7 @@ Module that contains multiple functions used across mia_processes
         - PageNumCanvas
         - ReportLine
     :Functions:
+        - checkFileExt
         - dict4runtime_update
         - get_dbFieldValue
         - plot_qi2
@@ -86,13 +87,18 @@ class ReportLine(Flowable):
 
 
 def checkFileExt(in_file, ext_dic):
-    """ Check file extension and return
-    in_file (str): file name
-    ext_dic (dic): dictionnary of the valid extensions for the file
-                   ex : EXT = {'NIFTI_GZ': 'nii.gz', 'NIFTI': 'nii'}
+    """ Check file extension
+
+    :param in_file: file name (a string)
+    :param ext_dic: dictionnary of the valid extensions for the file (dictionnary, ex: EXT = {'NIFTI_GZ': 'nii.gz', 'NIFTI': 'nii'})
+    :returns:
+        - valid_bool: True if extension is valid (a boolean)
+        - in_ext: file extension (a string)
+        - file_name: file name without extension (a string)
     """
 
     # Get file extension
+    valid_bool = False
     ifile = os.path.split(in_file)[-1]
     file_name, in_ext = ifile.rsplit('.', 1)
     if in_ext == 'gz':
@@ -103,9 +109,9 @@ def checkFileExt(in_file, ext_dic):
     valid_ext = list(ext_dic.values())
 
     if in_ext in valid_ext:
-        return True, in_ext, file_name
-    else:
-        return False, in_ext, file_name
+        valid_bool = True
+
+    return valid_bool, in_ext, file_name
 
 
 def dict4runtime_update(dict4runtime, database, db_filename, *args):
