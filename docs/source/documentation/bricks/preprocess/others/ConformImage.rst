@@ -16,12 +16,9 @@ Conform T1w image:
 
 Be carrefull, if the suffix and prefix input parameters are not defined or consist only of one or more white spaces, the input parameter will be overwritten.
 
-Adapted from `mriqc <https://mriqc.readthedocs.io/en/latest/>`_ anatomical workflow.
+Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical workflow.
 
 --------------------------------------
-
->>> from mia_processes.bricks.preprocess.others import ConformImage
->>> ConformImage.help()
 
 **Mandatory inputs parameters:**
 
@@ -34,20 +31,20 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/latest/>`_ anatomical workf
 
 **Optional inputs with default value parameters:**
 
-- *prefix* (a string, optional)
+- *prefix* (a string, optional, default value is '')
     Prefix of the output image. Default is ''.
     
     ::
 
-      default value. ''
+      ex. ''
 
 
-- *suffix* (a string, optional)
-   Suffix of output image. Default is ''.
+- *suffix* (a string, optional, default value is '')
+    Suffix of output image. Default is ''.
     
     ::
 
-      default value. ''
+      ex. ''
 
 
 **Outputs parameters:**

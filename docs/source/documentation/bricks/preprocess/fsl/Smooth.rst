@@ -11,10 +11,8 @@ Smooth brick
 ============
 
 3D Gaussian smoothing of image volumes
---------------------------------------
 
->>> from mia_processes.bricks.preprocess.fsl import Smooth
->>> Smooth.help()
+--------------------------------------
 
 **Mandatory nputs parameters:**
 
@@ -27,34 +25,34 @@ Smooth brick
 
 **Optional inputs with default value parameters:**
 
-- *fwhm*
-    Specify the full-width at half maximum of the Gaussian smoothing kernel (a float) in mm (not voxels).
+- *fwhm* (a float, optional, default value is 6.0)
+    Specify the full-width at half maximum of the Gaussian smoothing kernel in mm (not voxels).
     Will be converted internally to sigma in mm (not voxels), using approximately `2.355 * sigma = fwhm <https://brainder.org/2011/08/20/gaussian-kernels-convert-fwhm-to-sigma/>`_. Mutually exclusive with sigma.
 
     ::
 
-      default value. 6.0
+      ex. 6.0
 
-- *out_prefix*
-    Specify the string to be prepended to the filename of the smoothed image file (a string).
+- *out_prefix* (a string, optional, default value is 's')
+    Specify the string to be prepended to the filename of the smoothed image file.
 
     ::
 
-      default value. s_
+      ex. 's_'
 
-- *output_type*
+- *output_type* ('NIFTI' or 'NIFTI_GZ', optional, default value is NIFTI)
     | Format of the output image (one of NIFTI, NIFTI_GZ).
     |   NIFTI: \*.nii
     |   NIFTI_GZ: \*.nii.gz
 
     ::
 
-      default value. NIFTI
+      ex. NIFTI
 
 **Optional inputs parameters:**
 
-- *sigma*
-    Specify the standard deviation of the filter (a float) in mm (not voxels). Mutually exclusive with fwhm.
+- *sigma* (a float, optionnal)
+    Specify the standard deviation of the filter in mm (not voxels). Mutually exclusive with fwhm.
 
     ::
 
@@ -62,8 +60,8 @@ Smooth brick
 
 **Outputs parameters:**
 
-- *out_file*
-    Smoothed file (an item which are a file name).
+- *out_file* (a pathlike object or string representing a file)
+    Smoothed file.
 
     ::
 

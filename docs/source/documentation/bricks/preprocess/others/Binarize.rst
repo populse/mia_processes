@@ -19,8 +19,6 @@ Adapted from `niworkflows <https://github.com/nipreps/niworkflows>`_.
 
 --------------------------------------
 
->>> from mia_processes.bricks.preprocess.others import Binarize
->>> Binarize.help()
 
 **Mandatory inputs parameters:**
 
@@ -33,27 +31,27 @@ Adapted from `niworkflows <https://github.com/nipreps/niworkflows>`_.
 
 **Optional inputs with default value parameters:**
 
-- *prefix* (a string, optional)
+- *prefix* (a string, optional, default value is '')
     Prefix of the output images. 
     
     ::
 
-      default value. ''
+      ex. ''
 
 
-- *suffix* (a string, optional)
-   Suffix of output images.
+- *suffix* (a string, optional, default value is '_bin')
+    Suffix of output images.
     
     ::
 
-      default value. '_bin'
+      ex. '_bin'
   
-- *thresh_low* (a float)
+- *thresh_low* (a float, default value is 0.0)
     Lower threshold for binarization. 
     
     ::
 
-      default value. 0.0
+      ex. 0.0
 
 
 **Outputs parameters:**

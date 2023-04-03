@@ -14,10 +14,6 @@ Initialize an affine transform using ANTs AffineInitizer command.
 
 --------------------------------------
 
->>> from mia_processes.bricks.preprocess.others import AffineInitializer
-
->>> AffineInitializer.help()
-
 **Mandatory inputs parameters:**
 
 - *moving_image* (a string representing an existing file)
@@ -36,47 +32,47 @@ Initialize an affine transform using ANTs AffineInitizer command.
 
 **Optional inputs parameters with a default value:**
 
-- *dimension* (3 or 2, optional)
+- *dimension* (3 or 2, optional, default value is 3)
     Image dimension.
     
     ::
 
-        default value. 3
+        ex. 3
 
-- *local_search* (an integer, optional)
+- *local_search* (an integer, optional, default value is 10)
     Determines if a local optimization is run at each search point for the set number of iterations.
     
     ::
 
-        default value. 10
+        ex. 10
 
-- *out_prefix* (a string, optional)
+- *out_prefix* (a string, optional, default value is 'AffineTransform')
     Prefix of the out transform file.
     
     ::
         
-        default value. 'AffineTransform_'
+        ex. 'AffineTransform_'
 
-- *principal_axes* (a boolean, optional)
+- *principal_axes* (a boolean, optional, default value is False)
     Whether the rotation is searched around an initial principal axis alignment.
     
     ::
 
-        default value. False
+        ex. False
 
-- *radian_fraction* (a float between 0.0 and 1.0, optional)
+- *radian_fraction* (a float between 0.0 and 1.0, optional, default value is 0.1)
     Search this arc +/- principal axes. 
     
     ::
 
-        default value. 0.1
+        ex. 0.1
 
-- *search_factor* (a float, optional)
+- *search_factor* (a float, optional, default value is 15.0)
     Increments (degrees) for affine search.
     
     ::
 
-        default value. 15.0
+        ex. 15.0
 
 **Outputs parameters:**
 

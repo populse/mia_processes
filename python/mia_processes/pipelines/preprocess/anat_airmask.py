@@ -2,7 +2,14 @@ from capsul.api import Pipeline
 import traits.api as traits
 
 
-class Anat_airmask_pipeline(Pipeline):
+class Anat_airmask(Pipeline):
+
+    """
+    Compute rotation mask, air mask, artifact mask and hat mask for structural
+    data following step 1 from
+    (`[Mortamet2009] <https://onlinelibrary.wiley.com/doi/10.1002/mrm.21992>`_).
+
+    """
 
     def pipeline_definition(self):
         # nodes

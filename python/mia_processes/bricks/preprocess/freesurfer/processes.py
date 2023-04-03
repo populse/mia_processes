@@ -43,7 +43,7 @@ class Binarize(ProcessMIA):
 
     Please, see the complete documentation for the `Binarize' brick in
     the populse.mia_processes website
-    <https://populse.github.io/mia_processes/documentation/bricks/preprocess/freesurfer/Binarize.html>`
+    <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/freesurfer/Binarize.html>`
 
     """
 

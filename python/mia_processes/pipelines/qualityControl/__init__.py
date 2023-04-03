@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*- #
-
 ##########################################################################
 # mia_processes - Copyright (C) IRMaGe/CEA, 2018
 # Distributed under the terms of the CeCILL license, as published by
@@ -8,5 +6,5 @@
 # for details.
 ##########################################################################
 
-from .bold_iqms import Bold_iqms
-from .rois_1 import Rois_1
+from .bold_mriqc import Bold_mriqc
+from .anat_mriqc import Anat_mriqc

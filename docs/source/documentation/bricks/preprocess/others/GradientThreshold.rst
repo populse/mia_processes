@@ -12,12 +12,9 @@ GradientThreshold brick
 
 Computes a threshold from the histogram of the magnitude gradient image using a segmentation of the input image.
 
-Adapted from `mriqc <https://mriqc.readthedocs.io/en/latest/>`_ anatomical workflow.
+Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical workflow.
 
 --------------------------------------
-
->>> from mia_processes.bricks.preprocess.others import GradientThreshold
->>> GradientThreshold.help()
 
 **Mandatory inputs parameters:**
 
@@ -38,20 +35,20 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/latest/>`_ anatomical workf
 
 **Optional inputs with default value parameters:**
 
-- *prefix* (a string, optional)
+- *prefix* (a string, optional, default value is '')
     Prefix of the output image.
     
     ::
 
-      default value. ''
+      ex. ''
 
 
-- *suffix* (a string, optional)
-   Suffix of output image.
+- *suffix* (a string, optional, default value is '_grad')
+    Suffix of output image.
     
     ::
 
-      default value. '_grad'
+      ex. '_grad'
 
 
 **Outputs parameters:**

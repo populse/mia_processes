@@ -27,7 +27,7 @@ Mia_processes's documentation
     
     - **ants**
 
-      - `AffineInitilizer <bricks/preprocess/ants/AffineInitilizer.html>`_
+      - `AffineInitializer <bricks/preprocess/ants/AffineInitializer.html>`_
       - `ApplyTransform <bricks/preprocess/ants/ApplyTransform.html>`_
       - `N4BiasFieldCorrection <bricks/preprocess/ants/N4BiasFieldCorrection.html>`_
       - `Registration <bricks/preprocess/ants/Registration.html>`_
@@ -78,6 +78,10 @@ Mia_processes's documentation
       - `Realign <bricks/preprocess/spm/Realign.html>`_
       - `SliceTiming <bricks/preprocess/spm/SliceTiming.html>`_
       - `Smooth <bricks/preprocess/spm/Smooth.html>`_
+ 
+  - **reports**
+
+    - `Spikes <bricks/reports/Spkikes.html>`_
 
   - **tools**
 
@@ -91,6 +95,23 @@ Mia_processes's documentation
 
   - **preprocess**
 
+    - `Anat_airmask <pipelines/preprocess/Anat_airmask.html>`_
+    - `Anat_headmask <pipelines/preprocess/Anat_headmask.html>`_
+    - `Anat_mni_tpms <pipelines/preprocess/Anat_mni_tpms.html>`_
+    - `Anat_skullstrip_synthstrip <pipelines/preprocess/Anat_skullstrip_synthstrip.html>`_
+    - `Anat_skullstrip <pipelines/preprocess/Anat_skullstrip.html>`_
+    - `Anat_spatial_norm <pipelines/preprocess/Anat_spatial_norm.html>`_
+    - `Bold_hmc <pipelines/preprocess/Bold_hmc.html>`_
+    - `Bold_mni_align <pipelines/preprocess/Bold_mni_align.html>`_
     - `Spatial_preprocessing_1 <pipelines/preprocess/Spatial_preprocessing_1.html>`_
+
+  - **qualityControl**
+
+    - `Anat_mriqc <pipelines/qualityControl/Anat_mriqc.html>`_
+    - `Bold_mri_qc <pipelines/qualityControl/Bold_mriqc.html>`_
+  
+  - **reports**
+
+    - `Bold_iqms <pipelines/reports/Bold_iqms.html>`_
 
 

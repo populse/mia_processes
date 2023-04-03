@@ -70,7 +70,7 @@ class MRIQC_anat_report(ProcessMIA):
         * Generates the report for anatomical data in MRIQC pipeline *
 
         Please, see the complete documentation for the `MRIQC_report brick in the populse.mia_processes website
-        https://populse.github.io/mia_processes/documentation/bricks/reports/MRIQC_report.html
+        https://populse.github.io/mia_processes/html/documentation/bricks/reports/MRIQC_report.html
 
         """
 
@@ -713,7 +713,7 @@ class MRIQC_func_report(ProcessMIA):
         * Generates the report for functional data in MRIQC pipeline *
 
         Please, see the complete documentation for the `MRIQC_report brick in the populse.mia_processes website
-        https://populse.github.io/mia_processes/documentation/bricks/reports/MRIQC_report.html
+        https://populse.github.io/mia_processes/html/documentation/bricks/reports/MRIQC_report.html
 
         """
 

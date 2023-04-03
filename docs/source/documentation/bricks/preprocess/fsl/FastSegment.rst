@@ -14,10 +14,8 @@ Brain tissue segmentation using FAST (FSL).
 This brick can be used to segment one input image. 
 The tissue class segmented are Grey Matter, White Matter and CSF.
 By default the image type is set to T1 but it is also possible to segment T2 and PD images by changing the img_type parameter. 
---------------------------------------
 
->>> from mia_processes.bricks.preprocess.fsl import FastSegment
->>> FastSegment.help()
+--------------------------------------
 
 **Mandatory inputs parameters:**
 
@@ -30,29 +28,29 @@ By default the image type is set to T1 but it is also possible to segment T2 and
 
 **Optional inputs with default value parameters:**
 
-- *img_type*(an int, 1, 2 or 3, optional)
+- *img_type* (an int, 1, 2 or 3, optional, default value is 1)
     Int specifying type of image: (1 = T1, 2 = T2, 3 = PD). Default image type is T1. 
     This option aids the segmentation in identifying which classes are which tissue type.
 
     ::
 
-      default value. 1
+      ex. 1
 
-- *output_type* ('NIFTI' or 'NIFTI_GZ', optional)
+- *output_type* ('NIFTI' or 'NIFTI_GZ', optional, default value is NIFTI)
     | Format of the output image (one of NIFTI, NIFTI_GZ).
     |   NIFTI: \*.nii
     |   NIFTI_GZ: \*.nii.gz
 
     ::
 
-      default value. NIFTI
+      ex. NIFTI
 
-- *segments* (a boolean, optional)
+- *segments* (a boolean, optional, default value is True)
     Outputs a separate binary image for each tissue type.
 
     ::
 
-      default value. True
+      ex. True
 
 **Outputs parameters:**
 

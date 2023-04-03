@@ -4,7 +4,7 @@ from capsul.api import Pipeline
 import traits.api as traits
 
 
-class Bold_iqms_pipeline(Pipeline):
+class Bold_iqms(Pipeline):
 
     def pipeline_definition(self):
         # nodes

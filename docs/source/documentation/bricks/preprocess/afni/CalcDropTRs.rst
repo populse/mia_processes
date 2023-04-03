@@ -16,10 +16,6 @@ If "stop_idx" parameter is set to None or set to default (-1), "stop_idx" will b
 
 --------------------------------------
 
->>> from mia_processes.bricks.preprocess.others import CalcDropTRs
-
->>> CalcDropTRs.help()
-
 **Mandatory inputs parameters:**
 
 - *in_file* (a string representing an existing file)
@@ -31,37 +27,37 @@ If "stop_idx" parameter is set to None or set to default (-1), "stop_idx" will b
 
 **Optional inputs with default value parameters:**
 
-- *output_type* (NIFTI or NIFTI_GZ, optional)
+- *output_type* (NIFTI or NIFTI_GZ, optional, , default value is NIFTI)
     | Format of the output image (one of NIFTI, NIFTI_GZ).
     |   NIFTI: \*.nii
     |   NIFTI_GZ: \*.nii.gz
 
     ::
 
-      default value. NIFTI
+      ex. NIFTI
 
-- *out_prefix* (a string, optional)
+- *out_prefix* (a string, optional, default value is 'cropped')
     Prefix of the output image.
     
     ::
 
-      default value. 'cropped_'
+      ex. 'cropped_'
 
-- *start_idx* (an integer, optional)
+- *start_idx* (an integer, optional, default value is 0)
     Start index for in_file_a.
 
     ::
 
-      default value. 0
+      ex. 0
 
-- *stop_idx* (an integer, optional)
+- *stop_idx* (an integer, optional, default value is -1)
     Stop index for in_file_a.
     If "stop_idx" parameter is set to None or set to default (-1), "stop_idx" will be automatically set to the length of input file. 
     Cannot be lower than or equal to "start_idx" parameters. 
 
     ::
 
-      default value. -1
+      ex. 10
 
 **Outputs parameters:**
 

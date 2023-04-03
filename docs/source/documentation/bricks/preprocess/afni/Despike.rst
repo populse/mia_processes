@@ -16,10 +16,6 @@ The output dataset will always be stored in floats.
 
 --------------------------------------
 
->>> from mia_processes.bricks.preprocess.others import Despike
-
->>> Despike.help()
-
 **Mandatory inputs parameters:**
 
 - *in_file* (a string representing an existing file)
@@ -31,28 +27,28 @@ The output dataset will always be stored in floats.
 
 **Optional inputs with default value parameters:**
 
-- *despike* (a boolean, optional)
+- *despike* (a boolean, optional, default value is True)
     Despike dataset.
 
     ::
 
-      default value. True
+      ex. True
 
-- *output_type* (NIFTI or NIFTI_GZ, optional)
+- *output_type* (NIFTI or NIFTI_GZ, optional, default value is NIFTI)
     | Format of the output image (one of NIFTI, NIFTI_GZ).
     |   NIFTI: \*.nii
     |   NIFTI_GZ: \*.nii.gz
 
     ::
 
-      default value. NIFTI
+      ex. NIFTI
 
-- *out_prefix* (a string, optional)
+- *out_prefix* (a string, optional, default value is 'd')
     Prefix of the output image.
     
     ::
 
-      default value. 'd_'
+      ex. 'd_'
 
 
 **Outputs parameters:**

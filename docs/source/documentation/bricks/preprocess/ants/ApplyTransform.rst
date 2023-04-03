@@ -15,10 +15,6 @@ using ANTs ApplyTransforms command.
 
 --------------------------------------
 
->>> from mia_processes.bricks.preprocess.others import ApplyTransforms
-
->>> ApplyTransforms.help()
-
 **Mandatory inputs parameters:**
 
 - *input_image* (a string representing an existing file)
@@ -44,53 +40,53 @@ using ANTs ApplyTransforms command.
 
 **Optional inputs parameters with a default value:**
 
-- *default_value* (a float, optional)
-    Default value.
+- *default_value* (a float, optional, default value is 0.0)
+    ex.
     ::
 
-      default value. 0.0
+      ex. 0.0
 
-- *dimension* (2 or 3 or 4, optional)
+- *dimension* (2 or 3 or 4, optional, default value is 3)
     This option forces the image to be treated as a specified-dimensional image (2 or 3 or 4).
 
     ::
 
-      default value. 3
+      ex. 3
 
-- *float* (a boolean, optional)
+- *float* (a boolean, optional, default value is False)
     Use float instead of double for computations.
 
     ::
 
-      default value. False
+      ex. False
 
-- *input_image_type* (0 or 1 or 2 or 3, optional)
+- *input_image_type* (0 or 1 or 2 or 3, optional, default value is 0)
     Option specifying the input image type of scalar (0), vector (1), tensor(2), or time series(3). 
 
     ::
 
-      default value. 0
+      ex. 0
 
-- *interpolation*(Linear or NearestNeighbor or CosineWindowedSinc or WelchWindowedSinc or HammingWindowedSinc or LanczosWindowedSinc or MultiLabel or Gaussian or BSpline, optional)
+- *interpolation*(Linear or NearestNeighbor or CosineWindowedSinc or WelchWindowedSinc or HammingWindowedSinc or LanczosWindowedSinc or MultiLabel or Gaussian or BSpline, optional, default value is Linear)
     Interpolation model.
 
     ::
 
-      default value. 'Linear'
+      ex. 'Linear'
   
-- *out_prefix* (a string, optional)
+- *out_prefix* (a string, optional, default value is 't')
     Prefix of the output image.
     
     ::
 
-        default value. 't_'
+        ex. 't_'
 
-- *print_out_composite_warp_file* (a boolean, optional)
+- *print_out_composite_warp_file* (a boolean, optional, default value is False)
     Output a composite warp file instead of a transformed image.
     Default is False.
     ::
 
-      default value. False
+      ex. False
 
 **Optional inputs parameters:**
 

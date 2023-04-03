@@ -10,17 +10,16 @@
 BetSurfacesExtraction brick
 ============
 
- Surfaces (skull, inskull, outskull, outskin) extraction using BET (FSL). 
+Surfaces (skull, inskull, outskull, outskin) extraction using BET (FSL). 
 
- Both bet2 and betsurf programs are used in order to get skull and scalp
- surfaces created by betsurf (fsl BET -A option)
- This involves registering to standard space in order to allow betsurf
- to find the standard space masks it needs.
+Both bet2 and betsurf programs are used in order to get skull and scalp
+surfaces created by betsurf (fsl BET -A option)
+This involves registering to standard space in order to allow betsurf
+to find the standard space masks it needs.
 
- The mask and mesh files (.vtk) are generated. 
+The mask and mesh files (.vtk) are generated. 
 
->>> from mia_processes.bricks.preprocess.fsl import BetSurfacesExtraction
->>> BetSurfacesExtraction.help()
+--------------------------------------
 
 **Mandatory inputs parameters:**
 
@@ -33,14 +32,14 @@ BetSurfacesExtraction brick
 
 **Optional inputs with default value parameters:**
 
-- *output_type* ('NIFTI' or 'NIFTI_GZ', optional)
+- *output_type* ('NIFTI' or 'NIFTI_GZ', optional, default value is NIFTI)
     | Format of the output image (one of NIFTI, NIFTI_GZ).
     |   NIFTI: \*.nii
     |   NIFTI_GZ: \*.nii.gz
 
     ::
 
-      default value. NIFTI
+      ex. NIFTI
 
 
 **Outputs parameters:**
@@ -64,7 +63,7 @@ BetSurfacesExtraction brick
 
     ::
 
-      ex. /home/username/data/raw_data/T1w_brain.nii
+      ex. '/home/username/data/raw_data/T1w_brain.nii'
 
 - *outskin_mask_file* (a pathlike object or string representing a file)
     Outskin mask (extensions: [.nii, .nii.gz])

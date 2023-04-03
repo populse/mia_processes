@@ -10,17 +10,11 @@
 ArtifactMask brick
 ============
 
-Computes the artifact mask using the method described in the step 1 (Background Region Segmentation) of:
-Mortamet B et al.
-Automatic quality assessment in structural brain magnetic resonance imaging,
-Mag Res Med 62(2):365-372, 2009. doi:10.1002/mrm.21992.
+Computes the artifact mask using the method described in the step 1 (Background Region Segmentation) of (`[Mortamet2009] <https://onlinelibrary.wiley.com/doi/10.1002/mrm.21992>`_)
 
-Adapted from `mriqc <https://mriqc.readthedocs.io/en/latest/>`_ anatomical workflow.
+Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical workflow.
 
 --------------------------------------
-
->>> from mia_processes.bricks.preprocess.others import ArtifactMask
->>> ArtifactMask.help()
 
 **Mandatory inputs parameters:**
 
@@ -48,8 +42,8 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/latest/>`_ anatomical workf
 
 **Optional inputs with default value parameters:**
 
-- *suffix* (a string, optional)
-   Suffix of output images. 
+- *suffix* (a string, optional, default value is '_mask')
+    Suffix of output images. 
     
     ::
 

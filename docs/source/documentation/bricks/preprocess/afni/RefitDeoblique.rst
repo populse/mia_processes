@@ -14,12 +14,6 @@ Deoblique dataset (ie transform dataset from oblique to cardinal) using AFNI 3dr
 
 Output file name is the same as input file name. 
 
---------------------------------------
-
->>> from mia_processes.bricks.preprocess.others import RefitDeoblique
-
->>> RefitDeoblique.help()
-
 **Mandatory inputs parameters:**
 
 - *in_file* (a string representing an existing file)
@@ -31,12 +25,12 @@ Output file name is the same as input file name.
 
 **Optional inputs with default value parameters:**
 
-- *deoblique* (a boolean, optional)
+- *deoblique* (a boolean, optional, default value is True)
     Deoblique dataset. 
 
     ::
 
-      default value. True
+      ex. True
 
 
 **Outputs parameters:**

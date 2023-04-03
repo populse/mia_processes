@@ -12,12 +12,9 @@ EstimateSNR brick
 
 Estimate SNR using a segmentation file 
 
-Adapted from `mriqc <https://mriqc.readthedocs.io/en/latest/>`_ anatomical workflow.
+Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical workflow.
 
 --------------------------------------
-
->>> from mia_processes.bricks.preprocess.others import EstimateSNR
->>> EstimateSNR.help()
 
 **Mandatory inputs parameters:**
 
@@ -29,7 +26,7 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/latest/>`_ anatomical workf
       ex. '/home/username/data/raw_data/T1w.nii'
 
 - *seg_file* (a string representing an existing file)
-    Segmentation file used ti calculate SNR (valid extensions: [.nii, .nii.gz]).
+    Segmentation file used to compute SNR (valid extensions: [.nii, .nii.gz]).
 
     ::
 
@@ -37,12 +34,12 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/latest/>`_ anatomical workf
 
 **Outputs parameters:**
 
-- *out_snr* (a string representing a file)
-    Output Images (extensions: [.nii, .nii.gz]).
+- *out_snr* (a float)
+    Computed SNR 
     
     ::
 
-      ex. '/home/username/data/derived_data/T1w_estimated_snr.txt
+      ex. 10.96
 
 -------------
 

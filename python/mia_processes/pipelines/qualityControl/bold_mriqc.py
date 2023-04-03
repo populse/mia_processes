@@ -4,13 +4,23 @@ from capsul.api import Pipeline
 import traits.api as traits
 
 
-class Bold_mriqc_pipeline(Pipeline):
+class Bold_mriqc(Pipeline):
+
+    """
+    Get no-reference IQMs (image quality metrics) from functional MRI data
+    using mriqc functional workflow (mriqc v22.06).
+
+    Please, see the complete documention for Anat_mriqc_pipeline 
+    in the populse.mia_processes web site:
+    <https://populse.github.io/mia_processes/html/documentation/pipelines/qualiTyControl/Anat_mriqc_pipeline.html>`_
+
+    """
 
     def pipeline_definition(self):
         # nodes
         self.add_process("bold_iqms_pipeline",
-                         "mia_processes.pipelines.reports.bold_iqms_pipeline."
-                         "Bold_iqms_pipeline")
+                         "mia_processes.pipelines.reports.bold_iqms."
+                         "Bold_iqms")
         self.nodes["bold_iqms_pipeline"].process.nodes_activation = {
             'outliercount': True,
             'boldiqms': True,

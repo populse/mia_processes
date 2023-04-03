@@ -16,10 +16,6 @@ nd the average only applies to pixels with patches close to the current patch.
 
 --------------------------------------
 
->>> from mia_processes.bricks.preprocess.others import Denoise
-
->>> Denoise.help()
-
 **Mandatory inputs parameters:**
 
 - *in_file* (a string representing an existing file)
@@ -31,33 +27,33 @@ nd the average only applies to pixels with patches close to the current patch.
 
 **Optional inputs with default value parameters:**
 
-- *block_radius* (an integer, optional)
+- *block_radius* (an integer, optional, default value is 5)
     The block size will be 2 x block_radius + 1.
 
     ::
 
-      default value. 5
+      ex. 5
   
-- *noise_model* (rician or gaussian, optional)
+- *noise_model* (rician or gaussian, optional, default value is rician)
     Noise distribution model.
 
     ::
 
-      default value. 'rician'
+      ex. rician
 
-- *out_prefix* (a string, optional)
+- *out_prefix* (a string, optional, default value is 'denoise')
     Prefix of the output image. 
     
     ::
 
-      default value. 'denoise_'
+      ex. 'denoise_'
 
-- *patch_radius* (an integer, optional)
+- *patch_radius* (an integer, optional, default value is 1)
     The patch size will be 2 x patch_radius + 1.
 
     ::
 
-      default value. 1
+      ex. 1
   
   **Optional inputs parameters:**
 

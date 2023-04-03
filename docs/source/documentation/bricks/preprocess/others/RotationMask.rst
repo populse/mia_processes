@@ -14,12 +14,9 @@ Compute the rotation mask image as decribed in the method to compute the arfifac
 
 Be carrefull, if the suffix and prefix input parameters are not defined or consist only of one or more white spaces, the input parameter will be overwritten.
 
-Adapted from `mriqc <https://mriqc.readthedocs.io/en/latest/>`_ anatomical workflow.
+Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical workflow.
 
 --------------------------------------
-
->>> from mia_processes.bricks.preprocess.others import RotationMask
->>> RotationMask.help()
 
 **Mandatory inputs parameters:**
 
@@ -32,20 +29,20 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/latest/>`_ anatomical workf
 
 **Optional inputs with default value parameters:**
 
-- *prefix* (a string, optional)
+- *prefix* (a string, optional, default value is '')
     Prefix of the output image.
     
     ::
 
-      default value. ''
+      ex. ''
 
 
-- *suffix* (a string, optional)
+- *suffix* (a string, optional, default value is '_rotmasked')
     Suffix of output image.
     
     ::
 
-      default value. '_rotmasked'
+      ex. '_rotmasked'
 
 
 **Outputs parameters:**

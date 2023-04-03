@@ -10,13 +10,9 @@
 Volreg brick
 ============
 
-Register an input volume to a base volume using AFNI 3dvolreg command
+Registers each 3D volume from the input dataset to the base volume using AFNI 3dvolreg command
 
 --------------------------------------
-
->>> from mia_processes.bricks.preprocess.others import Volreg
-
->>> Volreg.help()
 
 **Mandatory inputs parameters:**
 
@@ -29,14 +25,14 @@ Register an input volume to a base volume using AFNI 3dvolreg command
 
 **Optional inputs with default value parameters:**
 
-- *copyorigin* (a boolean, optional)
+- *copyorigin* (a boolean, optional, default value is False)
     Copy base file origin coords to output.
 
     ::
 
-      default value. False
+      ex. False
 
-- *interpolation* (‘Fourier’ or ‘linear’ or ‘cubic’ or ‘quintic’ or ‘heptic’, optional)
+- *interpolation* (Fourier or linear or cubic or quintic or heptic, optional, default value is heptic)
     Different interpolation methods:
       -Fourier = Use a Fourier method (the default: most accurate; slowest).
       -linear  = Use linear (1st order polynomial) interpolation (least accurate).
@@ -46,46 +42,46 @@ Register an input volume to a base volume using AFNI 3dvolreg command
 
     ::
 
-      default value. heptic
+      ex. heptic
 
-- *output_type* (NIFTI or NIFTI_GZ, optional)
+- *output_type* (NIFTI or NIFTI_GZ, optional, default value is NIFTI)
     | Format of the output image (one of NIFTI, NIFTI_GZ).
     |   NIFTI: \*.nii
     |   NIFTI_GZ: \*.nii.gz
 
     ::
 
-      default value. NIFTI
+      ex. NIFTI
 
-- *out_prefix* (a string, optional)
+- *out_prefix* (a string, optional, default value is 'reg')
     Prefix of the output image.
     
     ::
 
-      default value. 'reg_'
+      ex. 'reg_'
 
-- *save_oned_matrix* (a boolean, optional)
+- *save_oned_matrix* (a boolean, optional, default value is False)
     Save the transformation matrix  oned matrix. 
 
     ::
 
-      default value. False
+      ex. False
 
-- *save_md1d_file* (a boolean, optional)
+- *save_md1d_file* (a boolean, optional, default value is False)
     Save max displacement outputfile (md1d) file. 
 
     ::
 
-      default value. False
+      ex. False
 
-- *timeshift* (a boolean, optional)
+- *timeshift* (a boolean, optional, default value is False)
     Time shift to mean slice time offset.
 
     ::
 
-      default value. False
+      ex. False
 
-- *twopass* (a boolean, optional)
+- *twopass* (a boolean, optional, default value is False)
     Do two passes of the registration algorithm:
     (1) with smoothed base and data bricks, with linear interpolation, to get a crude alignment, then'
     (2) with the input base and data bricks, to get a fine alignment. 
@@ -93,14 +89,14 @@ Register an input volume to a base volume using AFNI 3dvolreg command
 
     ::
 
-      default value. False
+      ex. False
 
-- *zpad* (a integer, optional)
+- *zpad* (a integer, optional, default value is 4)
     Zeropad around the edges by ‘n’ voxels during rotations. 
 
     ::
 
-      default value. 4
+      ex. 4
 
 **Optional inputs with default value parameters:**
 
@@ -116,21 +112,21 @@ Register an input volume to a base volume using AFNI 3dvolreg command
 **Outputs parameters:**
 
 - *md1d_file* (a strings representing a file, optional)
-   The transformation matrix (extensions: [.aff12.1D]).
+    The transformation matrix (extensions: [.aff12.1D]).
     
     ::
 
       ex. '/home/username/data/derived_data/reg_func_md.1D'
 
 - *oned_file* (a strings representing a file)
-   The movement parameters file (extensions: [.txt]).
+    Movement parameters file (extensions: [.txt]).
     
     ::
 
       ex. '/home/username/data/derived_data/reg_func_oned.txt'
 
 - *oned_matrix* (a strings representing a file, optional)
-   The transformation matrix (extensions: [.aff12.1D]).
+    Transformation matrix (extensions: [.aff12.1D]).
     
     ::
 

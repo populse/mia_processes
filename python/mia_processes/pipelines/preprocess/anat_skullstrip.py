@@ -2,7 +2,13 @@ from capsul.api import Pipeline
 import traits.api as traits
 
 
-class Anat_skullstrip_pipeline(Pipeline):
+class Anat_skullstrip(Pipeline):
+
+    """
+
+    Bias correction and skull stripping of a structural image.
+
+    """
 
     def pipeline_definition(self):
         # nodes

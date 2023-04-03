@@ -17,10 +17,6 @@ Adapted from `niworkflows <https://github.com/nipreps/niworkflows>`_.
 
 --------------------------------------
 
->>> from mia_processes.bricks.preprocess.others import Mask
-
->>> Mask.help()
-
 **Mandatory inputs parameters:**
 
 - *in_file* (a string representing an existing file)
@@ -39,20 +35,20 @@ Adapted from `niworkflows <https://github.com/nipreps/niworkflows>`_.
 
 **Optional inputs with default value parameters:**
 
-- *prefix* (a string, optional)
+- *prefix* (a string, optional, default value is '')
     Prefix of the output image. Default is ''.
     
     ::
 
-      default value. ''
+      ex. ''
 
 
-- *suffix* (a string, optional)
+- *suffix* (a string, optional, default value is '_masked')
     Suffix of output image. Default is '_masked'.
     
     ::
 
-      default value. '_masked'
+      ex. '_masked'
 
 
 

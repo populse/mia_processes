@@ -15,10 +15,6 @@ This bricks assumes that the voxel-by-voxel computations are being performed on 
 
 --------------------------------------
 
->>> from mia_processes.bricks.preprocess.others import Calc
-
->>> Calc.help()
-
 **Mandatory inputs parameters:**
 
 - *in_file_a* (a string representing an existing file)
@@ -30,7 +26,7 @@ This bricks assumes that the voxel-by-voxel computations are being performed on 
 
 **Optional inputs with default value parameters:**
 
-- *expr* (a string, optional)
+- *expr* (a string, optional, default value is 'a*step(b)')
     Arithmetic expression to apply between a, b and c. 
 
     Arithmetic expressions are allowed, using + - * / ** ^ and parentheses.
@@ -41,23 +37,23 @@ This bricks assumes that the voxel-by-voxel computations are being performed on 
 
     ::
 
-      default value. 'a*step(b)'
+      ex. 'a-b'
 
-- *output_type* (NIFTI or NIFTI_GZ, optional)
+- *output_type* (NIFTI or NIFTI_GZ, optional, default value is NIFTI)
     | Format of the output image (one of NIFTI, NIFTI_GZ).
     |   NIFTI: \*.nii
     |   NIFTI_GZ: \*.nii.gz
 
     ::
 
-      default value. NIFTI
+      ex. NIFTI
 
-- *out_prefix* (a string, optional)
-    Prefix of the output image. Default is 'c_'.
+- *out_prefix* (a string, optional, default value is 'c')
+    Prefix of the output image.
     
     ::
 
-        default value. 'c_'
+        ex. 'c_'
 
 **Optional inputs parameters:** 
 

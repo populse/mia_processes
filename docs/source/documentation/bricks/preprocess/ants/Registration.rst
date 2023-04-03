@@ -28,10 +28,6 @@ Here can be found some of classical registration parameters(used in fMRIPrep and
 
 --------------------------------------
 
->>> from mia_processes.bricks.preprocess.others import Registration
-
->>> Registration.help()
-
 **Mandatory inputs parameters:**
 
 - *fixed_image* (a string representing an existing file)
@@ -51,43 +47,43 @@ Here can be found some of classical registration parameters(used in fMRIPrep and
 
 **Optional inputs parameters with a default value:**
 
-- *collapse_output_transforms* (a boolean, optional)
+- *collapse_output_transforms* (a boolean, optional, default value is True)
     Collapse output transforms.
     
     ::
 
-        default value. True
+        ex. True
 
-- *dimension* (2 or 3 or 4, optional)
+- *dimension* (2 or 3 or 4, optional, default value is 3)
     Image dimension (2 or 3).
 
     ::
 
-        default value. 3
+        ex. 3
 
-- *float* (a boolean, optional)
+- *float* (a boolean, optional, default value is False)
     Use float instead of double for computations.
     
     ::
 
-        default value. False
+        ex. False
 
-- *initialize_transforms_per_stage* (a boolean, optional)
+- *initialize_transforms_per_stage* (a boolean, optional, default value is False)
     Initialize linear transforms from the previous stage.
 
     ::
 
-        default value. False
+        ex. False
 
-- *interpolation* (Linear or NearestNeighbor or CosineWindowedSinc or WelchWindowedSinc or HammingWindowedSinc or LanczosWindowedSinc or BSpline or MultiLabel or Gaussian or GenericLabel, optional)
+- *interpolation* (Linear or NearestNeighbor or CosineWindowedSinc or WelchWindowedSinc or HammingWindowedSinc or LanczosWindowedSinc or BSpline or MultiLabel or Gaussian or GenericLabel, optional, default value is Linear)
     Interpolation model.
     
     ::
 
-        default value. 'Linear'
+        ex. 'Linear'
 
 
-- *metrics* (a list of items which are CC or MeanSquares or Demon or GC or MI or mattes, optional)
+- *metrics* (a list of items which are CC or MeanSquares or Demon or GC or MI or mattes, optional, default value is ['Mattes', 'Mattes', 'Mattes'])
     | The metric to use for each stage.
     | Metrics available:
     |   cross-correlation (CC)
@@ -98,59 +94,59 @@ Here can be found some of classical registration parameters(used in fMRIPrep and
    
     ::
 
-        default value. ['Mattes', 'Mattes', 'Mattes']
+        ex. ['Mattes', 'Mattes', 'Mattes']
 
-- *metric_weight* (a list of items which are a float, optional)
+- *metric_weight* (a list of items which are a float, optional, default value is [1.0, 1.0, 1.0])
     The metric weight(s) for each stage. The weights must sum to 1 per stage. 
     
     ::
 
-        default value. [1.0, 1.0, 1.0]
+        ex. [1.0, 1.0, 1.0]
 
-- *output_inverse_warped_image* (a boolean, optional)
+- *output_inverse_warped_image* (a boolean, optional, default value is False)
     Get output inverse_warped_image.
     Default is False.
     
     ::
 
-        default value. False
+        ex. False
 
-- *out_prefix* (a string, optional)
+- *out_prefix* (a string, optional, default value is 'w')
     Prefix of the warped output image.
     
     ::
 
-        default value. 'w_'
+        ex. 'w_'
 
-- *radius_bins_item_trait* (an integer, optional)
+- *radius_bins_item_trait* (an integer, optional, default value is 5)
     Radius bins item.
     
     ::
 
-        default value. 5
+        ex. 5
 
-- *signa_units* (a list of items which are vox or mm, optional)
+- *signa_units* (a list of items which are vox or mm, optional, default value is ['vox'] * len(metric))
     Units for smoothing sigmas (mm or vox).
     
     ::
 
-        default value. ['vox'] * len(metric)
+        ex. ['vox'] * len(metric)
 
-- *smoothing_sigmas* (a list of items which are a list of items which are a float, optional)
+- *smoothing_sigmas* (a list of items which are a list of items which are a float, optional, default value is [[4.0], [4.0, 2.0, 0.0], [1.0, 0.0]])
     Smoothing sigmas.
     
     ::
 
-        default value. [[4.0], [4.0, 2.0, 0.0], [1.0, 0.0]]
+        ex. [[4.0], [4.0, 2.0, 0.0], [1.0, 0.0]]
 
-- *shrink_factors* (a list of items which are a list of items which are an integer, optional)
+- *shrink_factors* (a list of items which are a list of items which are an integer, optional, default value is [[4], [4, 2, 1], [2, 1]])
     Shrink factor.
     
     ::
 
-        default value. [[4], [4, 2, 1], [2, 1]]
+        ex. [[4], [4, 2, 1], [2, 1]]
 
-- *transforms* (a list of items which are Rigid or Affine or CompositeAffine or Similarity or Translation or BSpline or GaussianDisplacementField or TimeVaryingVelocityField or TimeVaryingBSplineVelocityField or SyN or BSplineSyN or Exponential or BSplineExponential, optional)
+- *transforms* (a list of items which are Rigid or Affine or CompositeAffine or Similarity or Translation or BSpline or GaussianDisplacementField or TimeVaryingVelocityField or TimeVaryingBSplineVelocityField or SyN or BSplineSyN or Exponential or BSplineExponential, optional, default value is ['Rigid', 'Affine', 'SyN'])
     | List of the transformations.
     |   Linear transformations:
     |     Translation
@@ -170,49 +166,49 @@ Here can be found some of classical registration parameters(used in fMRIPrep and
     
     ::
 
-        default value. ['Rigid', 'Affine', 'SyN']
+        ex. ['Rigid', 'Affine', 'SyN']
 
-- *transform_parameters* (a list of items which are a tuple of the form: (a float) or a tuple of the form: (a float, a float, a float) or a tuple of the form: (a float, an integer, an integer, an integer) or a tuple of the form: (a float, an integer, a float, a float, a float, a float) or a tuple of the form: (a float, a float, a float, an integer) or a tuple of the form: (a float, an integer, an integer, an integer, an integer), optional)
+- *transform_parameters* (a list of items which are a tuple of the form: (a float) or a tuple of the form: (a float, a float, a float) or a tuple of the form: (a float, an integer, an integer, an integer) or a tuple of the form: (a float, an integer, a float, a float, a float, a float) or a tuple of the form: (a float, a float, a float, an integer) or a tuple of the form: (a float, an integer, an integer, an integer, an integer), optional, default value is [(0.01,), (0.08,), (0.1, 3.0, 0.0)])
     Transforms parameters.
     
     ::
 
-        default value. [(0.01,), (0.08,), (0.1, 3.0, 0.0)]
+        ex. [(0.01,), (0.08,), (0.1, 3.0, 0.0)]
 
-- *use_estimate_learning_rate_once* (a list of boolean, optional)
+- *use_estimate_learning_rate_once* (a list of boolean, optional, default value is [True] * len(metric))
     Use estimate learning rate.
     
     ::
 
-        default value. [True] * len(metric)
+        ex. [True] * len(metric)
 
-- *use_histogram_matching* (a list of boolean, optional)
+- *use_histogram_matching* (a list of boolean, optional, default value is [True] * len(metric))
     Use histogram matching.
     
     ::
 
-        default value. [True] * len(metric)
+        ex. [True] * len(metric)
 
-- *winsorize_lower_quantile* (a float between 0.0 and 1.0, optional)
+- *winsorize_lower_quantile* (a float between 0.0 and 1.0, optional, default value is 0.005)
     The lower quantile to clip image ranges.
     
     ::
 
-        default value. 0.005
+        ex. 0.005
 
-- *winsorize_upper_quantile* (a float between 0.0 and 1.0, optional)
+- *winsorize_upper_quantile* (a float between 0.0 and 1.0, optional, default value is 0.995)
     The upper quantile to clip image ranges.
     
     ::
 
-        default value. 0.995
+        ex. 0.995
 
-- *write_composite_transform* (a boolean, optional)
+- *write_composite_transform* (a boolean, optional, default value is True)
     Write composite transform.
     
     ::
 
-        default value. True
+        ex. True
 
 **Optional inputs parameters:**
 

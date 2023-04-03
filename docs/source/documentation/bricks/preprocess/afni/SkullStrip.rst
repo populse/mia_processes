@@ -14,10 +14,6 @@ Extract the brain from surrounding tissue from MRI T1-weighted images (using AFN
 
 --------------------------------------
 
->>> from mia_processes.bricks.preprocess.others import SkullStrip
-
->>> SkullStrip.help()
-
 **Mandatory inputs parameters:**
 
 - *in_file* (a string representing an existing file)
@@ -30,21 +26,21 @@ Extract the brain from surrounding tissue from MRI T1-weighted images (using AFN
 
 **Optional inputs with default value parameters:**
 
-- *output_type* (NIFTI or NIFTI_GZ, optional)
+- *output_type* (NIFTI or NIFTI_GZ, optional, default value is NIFTI)
     | Format of the output image (one of NIFTI, NIFTI_GZ).
     |   NIFTI: \*.nii
     |   NIFTI_GZ: \*.nii.gz
 
     ::
 
-      default value. NIFTI
+      ex. NIFTI
 
-- *out_prefix* (a string, optional)
+- *out_prefix* (a string, optional, default value is 'ss')
     Prefix of the output image.
     
     ::
 
-        default value. 'ss_'
+        ex. 'ss_'
 
 **Outputs parameters:**
 

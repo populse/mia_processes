@@ -57,6 +57,7 @@ from nipype.interfaces.base import (OutputMultiPath, InputMultiPath, File,
 
 # populse_mia import
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
+from mia_processes.utils import checkFileExt
 
 # mia_processes import
 from mia_processes.utils import get_dbFieldValue
@@ -82,6 +83,9 @@ from skimage.transform import resize
 DIETRICH_FACTOR = 0.6551364  # 1.0 / sqrt(2 / (4 - pi))
 FSL_FAST_LABELS = {"csf": 1, "gm": 2, "wm": 3, "bg": 0}
 RAS_AXIS_ORDER = {"x": 0, "y": 1, "z": 2}
+EXT = {'NIFTI_GZ': 'nii.gz',
+       'NIFTI': 'nii'
+       }
 
 
 class AnatIQMs(ProcessMIA):
@@ -89,7 +93,7 @@ class AnatIQMs(ProcessMIA):
         * Computes the anatomical IQMs *
 
         Please, see the complete documentation for the `AnatIQMs' brick in the populse.mia_processes website
-        https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/AnatIQMs.html
+        https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/AnatIQMs.html
 
         adapted from:
         https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/anatomical.py#L332
@@ -546,7 +550,7 @@ class BoldIQMs(ProcessMIA):
         * Computes the anatomical IQMs *
 
         Please, see the complete documentation for the `AnatIQMs' brick in the populse.mia_processes website
-        https://populse.github.io/mia_processes/documentation/bricks/preprocess/other/AnatIQMs.html
+        https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/AnatIQMs.html
 
         adapted from:
         https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/functional.py#L243
@@ -948,7 +952,7 @@ class CarpetParcellation(ProcessMIA):
     the union of obtained crown mask and epi parcellation *
 
     Please, see the complete documentation for the `CarpetParcellation' brick in the populse.mia_processes website
-    <https://populse.github.io/mia_processes/documentation/bricks/reports/CarpetParcellation.html>`_
+    <https://populse.github.io/mia_processes/html/documentation/bricks/reports/CarpetParcellation.html>`_
 
     adapted from:
     https://github.com/nipreps/niworkflows/blob/45ab13e1bf6fdbf5e29c90cef44055b0b9cf391b/niworkflows/interfaces/morphology.py#L46
@@ -1108,7 +1112,7 @@ class ComputeDVARS(ProcessMIA):
     * Computes the DVARS *
 
     Please, see the complete documentation for the `ComputeDVARS' brick in the populse.mia_processes website
-    <https://populse.github.io/mia_processes/documentation/bricks/reports/ComputeDVARS.html>`_
+    <https://populse.github.io/mia_processes/html/documentation/bricks/reports/ComputeDVARS.html>`_
 
     adapted from:
     https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5de5913b31/nipype/algorithms/confounds.py#L100
@@ -1351,7 +1355,7 @@ class FramewiseDisplacement(ProcessMIA):
          <https://doi.org/10.1016/j.neuroimage.2011.10.018>`.
 
     Please, see the complete documentation for the `FramewiseDisplacement' brick in the populse.mia_processes website
-    <https://populse.github.io/mia_processes/documentation/bricks/reports/FramewiseDisplacement.html>`_
+    <https://populse.github.io/mia_processes/html/documentation/bricks/reports/FramewiseDisplacement.html>`_
 
     adapted from:
     https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5de5913b31/nipype/algorithms/confounds.py#L298
@@ -1519,7 +1523,7 @@ class FWHMx(ProcessMIA):
     * Computes FWHMs for all sub-bricks in the input dataset, each one separately *
 
     Please, see the complete documentation for the `FWHMx' brick in the populse.mia_processes website
-    <https://populse.github.io/mia_processes/documentation/bricks/reports/FWHMx.html>`_
+    <https://populse.github.io/mia_processes/html/documentation/bricks/reports/FWHMx.html>`_
 
     """
 
@@ -1670,7 +1674,7 @@ class GCOR(ProcessMIA):
     * Computes the average correlation between every voxel and ever other voxel, over any give mask *
 
     Please, see the complete documentation for the `GCOR' brick in the populse.mia_processes website
-    <https://populse.github.io/mia_processes/documentation/bricks/reports/GCOR.html>`_
+    <https://populse.github.io/mia_processes/html/documentation/bricks/reports/GCOR.html>`_
 
     """
 
@@ -2044,7 +2048,7 @@ class OutlierCount(ProcessMIA):
     * Computes outliers for all sub-bricks in the input dataset, each one separately *
 
     Please, see the complete documentation for the `OutlierCount' brick in the populse.mia_processes website
-    <https://populse.github.io/mia_processes/documentation/bricks/reports/OutlierCount.html>`_
+    <https://populse.github.io/mia_processes/html/documentation/bricks/reports/OutlierCount.html>`_
 
     """
 
@@ -2187,7 +2191,7 @@ class QualityIndex(ProcessMIA):
     series with the index for each sub-brick *
 
     Please, see the complete documentation for the `QualityIndex' brick in the populse.mia_processes website
-    <https://populse.github.io/mia_processes/documentation/bricks/reports/QualityIndex.html>`_
+    <https://populse.github.io/mia_processes/html/documentation/bricks/reports/QualityIndex.html>`_
 
     """
 
@@ -2797,7 +2801,7 @@ class Spikes(ProcessMIA):
     * Computes the number of spikes *
 
     Please, see the complete documentation for the `Spikes' brick in the populse.mia_processes website
-    <https://populse.github.io/mia_processes/documentation/bricks/reports/Spikes.html>`_
+    <https://populse.github.io/mia_processes/html/documentation/bricks/reports/Spikes.html>`_
 
     adapted from:
     https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/functional.py#L939
@@ -2898,24 +2902,15 @@ class Spikes(ProcessMIA):
                       'set to "spikes" ...')
 
             if self.output_directory:
-                ifile = os.path.split(self.in_file)[-1]
+                valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
 
-                try:
-                    fileName, trail = ifile.rsplit('.', 1)
-                    if trail == 'gz':
-                        (fileName_2,
-                         trail_2) = os.path.splitext(fileName)
-                        if trail_2 == 'nii':
-                            trail = 'nii.gz'
-
-                except ValueError:
+                if not valid_ext:
                     print('\nThe input image format is not recognized ...!')
                     return
 
-                else:
-                    self.outputs['out_file'] = os.path.join(
-                        self.output_directory,
-                        self.out_prefix + fileName + '.out')
+                self.outputs['out_file'] = os.path.join(
+                    self.output_directory,
+                    self.out_prefix + fileName + '.out')
 
             else:
                 print('No output_directory was found...!\n')

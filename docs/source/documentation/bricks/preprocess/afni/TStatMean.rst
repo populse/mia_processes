@@ -16,10 +16,6 @@ Compute mean of input voxels for a 3D+time dataset image.
 
 --------------------------------------
 
->>> from mia_processes.bricks.preprocess.others import TStatMean
-
->>> TStatMean.help()
-
 **Mandatory inputs parameters:**
 
 - *in_file* (a string representing an existing file)
@@ -31,21 +27,21 @@ Compute mean of input voxels for a 3D+time dataset image.
 
 **Optional inputs with default value parameters:**
 
-- *output_type* (NIFTI or NIFTI_GZ, optional)
+- *output_type* (NIFTI or NIFTI_GZ, optional, default value is NIFTI)
     | Format of the output image (one of NIFTI, NIFTI_GZ).
     |   NIFTI: \*.nii
     |   NIFTI_GZ: \*.nii.gz
 
     ::
 
-      default value. NIFTI
+      ex. NIFTI
 
-- *out_prefix* (a string, optional)
+- *out_prefix* (a string, optional, default value is 'mean')
     Prefix of the output image.
     
     ::
 
-        default value. 'mean_'
+        ex. 'mean_'
 
 **Outputs parameters:**
 

@@ -19,10 +19,6 @@ and then spatially smoothing this result by a B-spline modeling of the bias fiel
 
 --------------------------------------
 
->>> from mia_processes.bricks.preprocess.others import N4BiasFieldCorrection
-
->>> N4BiasFieldCorrection.help()
-
 **Mandatory inputs parameters:**
 
 - *in_file* (a string representing an existing file)
@@ -35,40 +31,40 @@ and then spatially smoothing this result by a B-spline modeling of the bias fiel
 
 **Optional inputs parameters with a default value:**
 
-- *copy_header* (a boolean, optionnal)
+- *copy_header* (a boolean, optionnal, default value is True)
     Copy headers of the original image into the output (corrected) file.
 
     ::
 
-      default value. True
+      ex. True
 
-- *dimension* (2 or 3 or 4, optional)
+- *dimension* (2 or 3 or 4, optional, default value is 3)
     Image dimension (2 or 3 or 4).
 
     ::
 
-      default value. 3
+      ex. 3
 
-- *out_prefix* (a string, optional)
+- *out_prefix* (a string, optional, default value is ''n4c')
     Prefix of the output image.
     
     ::
 
-        default value. 'n4c_'
+        ex. 'n4c_'
 
-- *rescale_intensities* (a boolean, optionnal)
+- *rescale_intensities* (a boolean, optionnal, default value is True)
     Rescales to the [min,max] range of theoriginal image intensities within the user-specified mask.
 
     ::
 
-      default value. True
+      ex. True
 
-- *save_bias* (a boolean, optionnal)
+- *save_bias* (a boolean, optionnal, default value is True)
     Save the estimated bias in a file .
 
     ::
 
-      default value. True
+      ex. True
 
 **Optional inputs parameters:**
 

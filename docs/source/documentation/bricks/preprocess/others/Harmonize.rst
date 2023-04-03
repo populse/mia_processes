@@ -13,12 +13,9 @@ Harmonize brick
 Harmonize input image using a white matter mask as decribed in the method to compute the arfifact mask described in [Mortamet2009].  
 Be carrefull, if the suffix and prefix input parameters are not defined or consist only of one or more white spaces, the input parameter will be overwritten.
 
-Adapted from `mriqc <https://mriqc.readthedocs.io/en/latest/>`_ anatomical workflow.
+Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical workflow.
 
 --------------------------------------
-
->>> from mia_processes.bricks.preprocess.others import Harmonize
->>> Harmonize.help()
 
 **Mandatory inputs parameters:**
 
@@ -38,27 +35,27 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/latest/>`_ anatomical workf
 
 **Optional inputs with default value parameters:**
 
-- *erodemask* (a boolean, optional)
+- *erodemask* (a boolean, optional, default value is True)
     Erode mask.
 
     ::
 
-      default value. True
+      ex. True
 
-- *prefix* (a string, optional)
+- *prefix* (a string, optional, default value is '')
     Prefix of the output image.
     
     ::
 
-      default value. ''
+      ex. ''
 
 
-- *suffix* (a string, optional)
+- *suffix* (a string, optional, default value is '_harmonized')
     Suffix of output image.
     
     ::
 
-      default value. '_harmonized'
+      ex. '_harmonized'
 
 
 **Outputs parameters:**

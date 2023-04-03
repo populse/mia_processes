@@ -2,7 +2,15 @@ from capsul.api import Pipeline
 import traits.api as traits
 
 
-class Anat_mni_tpms_pipeline(Pipeline):
+class Anat_mni_tpms(Pipeline):
+
+    """
+    Get templates tissues probability map (white matter (WM), grey matter (GM)
+    and cerebrospinal (CSF)) from 'MNI152NLin2009cAsym' template
+    (resolution 1 mm) and register them in subject space.
+
+    Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical workflow.
+    """
 
     def pipeline_definition(self):
         # nodes

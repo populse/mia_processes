@@ -16,10 +16,6 @@ Adapted from  `Nipype Cofounds <https://github.com/nipy/nipype/blob/f662acfce8de
 
 --------------------------------------
 
->>> from mia_processes.bricks.preprocess.others import TSNR
-
->>> TSNR.help()
-
 **Mandatory inputs parameters:**
 
 - *in_file* (a string representing an existing file)
@@ -31,31 +27,31 @@ Adapted from  `Nipype Cofounds <https://github.com/nipy/nipype/blob/f662acfce8de
 
 **Optional inputs with default value parameters:**
 
-- *prefix_stddev* (a string, optional)
-    Prefix of the stddev output. Default is ''.
+- *prefix_stddev* (a string, optional, default value is '')
+    Prefix of the stddev output.
     
     ::
 
       ex. ''
 
-- *prefix_tsnr* (a string, optional)
-    Prefix of the TSNR output image. Default is ''.
-    
+- *prefix_tsnr* (a string, optional, default value is '')
+    Prefix of the TSNR output image.
+
     ::
 
       ex. ''
 
 
-- *suffix_stddev* (a string, optional)
-  Suffix of the STD dev output. Default is '_stddev'.
+- *suffix_stddev* (a string, optional, default value is '_stddev')
+    Suffix of the STD dev output.
     
     ::
 
       ex. '_stddev'
       
-- *suffix_tnsr* (a string, optional)
-  Suffix of the TSNR output image. Default is '_tsnr'.
-    
+- *suffix_tnsr* (a string, optional, default value is '_tsnr')
+    Suffix of the TSNR output image.
+
     ::
 
       ex. '_tsnr'
@@ -70,7 +66,7 @@ Adapted from  `Nipype Cofounds <https://github.com/nipy/nipype/blob/f662acfce8de
 
       ex. '/home/username/data/derived_data/func_tsnr.nii'
 
-- *out_tsnr_file* (a strings representing a file)
+- *out_stddev_file* (a strings representing a file)
     Path of the  STD dev image (extensions: [.nii, .nii.gz]).
     
     ::

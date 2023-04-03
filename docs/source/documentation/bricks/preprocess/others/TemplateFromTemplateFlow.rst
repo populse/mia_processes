@@ -18,59 +18,55 @@ This bricks allows to get template image from TemplateFlow.
 
 --------------------------------------
 
->>> from mia_processes.bricks.preprocess.others import TemplateFromTemplateFlow
-
->>> TemplateFromTemplateFlow.help()
-
 **Optional inputs with default value parameters:**
 
-- *atlas* (a string, optional)
+- *atlas* (a string, optional, default value is '')
     Name of a particular atlas (entity 'atlas' in template path name). Default is ''.
     Example: 'DiFuMo', 'Scahefer2018'...
 
     ::
 
-      default value. ''
+      ex. 'DiFuMo'
   
-  - *desc* (a string, optional)
+- *desc* (a string, optional, default value is '')
     Description field (entity 'desc' in template path name). 
     Example: 'brain', 'eye', '256dimensions' ...
 
     ::
 
-      default value. ''
+      ex. 'brain'
 
-  - *in_template* (a string)
+- *in_template* (a string, default value is 'MNI152NLin2009cAsym')
     Template name. 
 
     ::
 
-      default value. 'MNI152NLin2009cAsym'
+      ex. 'MNI152NLin2009cAsym'
 
-- *label* (a string, optional)
+- *label* (a string, optional, default value is '')
     Label fields.
     Example: 'CSF', 'GM'...
 
     ::
 
-      default value. ''
+      ex. 'WM'
 
 
-- *resolution* (an int)
+- *resolution* (an int, default value is 2)
     Resolution of the template (entity 'res' in template path name). 
     
     ::
 
-      default value. 2
+      ex. 2
 
-- *suffix* (a string, optional)
+- *suffix* (a string, optional, default value is '')
     Suffix of the template image. 
     Example: 'T1w', 'T2w', 'probseg', 'T2map', 'mask'...
 
     
     ::
 
-      default value. ''
+      ex. 'T1W'
 
 
 **Outputs parameters:**

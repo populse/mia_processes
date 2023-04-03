@@ -10,13 +10,11 @@
 SynthStrip brick
 ============
  
- Skull-stripping using SynthStrip tool (mri_synthstrip in Freesurfer). 
- It is a is a skull-stripping tool that extracts brain signal from a landscape of image types, ranging across imaging modality, contrast, resolution, and subject population. 
- It leverages a deep learning strategy  that synthesizes arbitrary training images from segmentation maps to optimize a robust model agnostic to acquisition specifics.
+Skull-stripping using SynthStrip tool (mri_synthstrip in Freesurfer). 
+It is a is a skull-stripping tool that extracts brain signal from a landscape of image types, ranging across imaging modality, contrast, resolution, and subject population. 
+It leverages a deep learning strategy  that synthesizes arbitrary training images from segmentation maps to optimize a robust model agnostic to acquisition specifics.
 
-
->>> from mia_processes.bricks.preprocess.freesurfer import SynthStrip
->>> SynthStrip.help()
+--------------------------------------
 
 **Mandatory inputs parameters:**
 
@@ -29,21 +27,21 @@ SynthStrip brick
 
 **Optional inputs with default value parameters:**
 
-- *border_mm* (an integer, optional)
+- *border_mm* (an integer, optional, default value is 1)
     Mask border threshold in mm. Controls the boundary distance from the brain.
 
     ::
 
-      default value. 1
+      ex. 1
 
-- *no_csf* (a boolean, optional)
+- *no_csf* (a boolean, optional, default value is False)
     Exclude CSF from brain border.
 
     ::
 
-      default value. False
+      ex. False
 
-- *output_type* ('NIFTI' or 'NIFTI_GZ' or 'MGZ', optional)
+- *output_type* ('NIFTI' or 'NIFTI_GZ' or 'MGZ', optional, default value is NIFTI)
     | Format of the output image (one of NIFTI, NIFTI_GZ, MGZ).
     |   NIFTI: \*.nii
     |   NIFTI_GZ: \*.nii.gz
@@ -51,7 +49,7 @@ SynthStrip brick
 
     ::
 
-      default value. NIFTI
+      ex. NIFTI
 
 
 **Outputs parameters:**

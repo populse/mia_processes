@@ -2,7 +2,7 @@ from capsul.api import Pipeline
 import traits.api as traits
 
 
-class Bold_hmc_pipeline(Pipeline):
+class Bold_hmc(Pipeline):
 
     def pipeline_definition(self):
         # nodes

@@ -2,7 +2,14 @@ from capsul.api import Pipeline
 import traits.api as traits
 
 
-class Anat_headmask_pipeline(Pipeline):
+class Anat_headmask(Pipeline):
+
+    """
+
+    Compute head mask from skull stripped structural image using "Denoise"
+    from Dipy.
+
+    """
 
     def pipeline_definition(self):
         # nodes

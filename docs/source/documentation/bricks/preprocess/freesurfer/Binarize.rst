@@ -10,15 +10,14 @@
 Binarize brick
 ============
  
- Binarize an input volume (or volume-encoded surface file). 
+Binarize an input volume (or volume-encoded surface file). 
 
- Binarization can be done based on threshold (using min or rmin and/or max or rmax options) or on matched values (using match option). 
- All voxels in the threshold/match are set to the binval value (1 by default) and all voxels out of range are set to the binvalnot value (0 by default)
+Binarization can be done based on threshold (using min or rmin and/or max or rmax options) or on matched values (using match option). 
+All voxels in the threshold/match are set to the binval value (1 by default) and all voxels out of range are set to the binvalnot value (0 by default)
 
- By default all the option are set to Undefined.
+By default all the option are set to Undefined.
 
->>> from mia_processes.bricks.preprocess.freesurfer import Binarize
->>> Binarize.help()
+--------------------------------------
 
 **Mandatory inputs parameters:**
 
@@ -31,60 +30,60 @@ Binarize brick
 
 **Optional inputs with default value  parameters:**
 
-- *abs* (a boolean, optional)
+- *abs* (a boolean, optional, default value is False)
     Take absolute value of the input volume (ie, make input unsigned). 
 
     ::
 
-      default value. False
+      ex. False
 
-- *bin_col_nul* (a boolean, optional)
+- *bin_col_nul* (a boolean, optional, default value is False)
     Set binarized voxel value to its column number. 
 
     ::
 
-      default value. False
+      ex. False
 
-- *get_count_file* (a boolean, optional)
+- *get_count_file* (a boolean, optional, default value is False)
     Save number of hits in ascii file (hits, ntotvox, pct). 
     Four numbers are saved: the number of voxels that match(nhits), the volume of the voxels that match, the total number of voxels in the volume (nvoxtot), and the percent matching (100*nhits/nvoxtot). 
 
     ::
 
-      default value. False
+      ex. False
 
-- *invert* (a boolean, optional)
+- *invert* (a boolean, optional, default value is False)
     Invert binval and binvalnot (set binval=0 and binvalnot=1). 
 
     ::
 
-      default value. False
+      ex. False
 
-- *max* (a float, optional)
+- *max* (a float, optional, default value is 100.0)
     Maximum voxel threshold
     Cannot be used with match option.
 
     ::
 
-      default value. 100.0
+      ex. 100.0
 
-- *min* (a float, optional)
+- *min* (a float, optional, default value is 0.0)
     Minimum voxel threshold.
     Cannot be used with match option.
 
     ::
 
-      default value. 0.0
+      ex. 0.0
 
-- *out_suffix* (a string, optional)
+- *out_suffix* (a string, optional, default value is '_thresh')
     Output suffix. 
 
     ::
 
-      default value. _thresh
+      ex. _thresh
 
 
-- *output_type* ('NIFTI' or 'NIFTI_GZ' or 'MGZ', optional)
+- *output_type* ('NIFTI' or 'NIFTI_GZ' or 'MGZ', optional, default value is NIFTI)
     | Format of the output image (one of NIFTI, NIFTI_GZ, MGZ).
     |   NIFTI: \*.nii
     |   NIFTI_GZ: \*.nii.gz
@@ -92,21 +91,21 @@ Binarize brick
 
     ::
 
-      default value. NIFTI
+      ex. NIFTI
 
-- *zero_edges* (a boolean, optional)
+- *zero_edges* (a boolean, optional, default value is False)
     Set the first and last planes in all dimensions to binvalnot(0 by default). This makes sure that all the voxels on the edge of the imaging volume are zero. 
 
     ::
 
-      default value. False
+      ex. False
 
-- *zero_slice_edges* (a boolean, optional)
+- *zero_slice_edges* (a boolean, optional, default value is False)
     Same as zero_edges but only for slices
 
     ::
 
-      default value. False
+      ex. False
 
 **Optional inputs parameters:**
 

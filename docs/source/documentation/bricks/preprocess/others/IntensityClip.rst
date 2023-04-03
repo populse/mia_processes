@@ -19,10 +19,6 @@ Adapted from `niworkflows <https://github.com/nipreps/niworkflows>`_.
 
 --------------------------------------
 
->>> from mia_processes.bricks.preprocess.others import IntensityClip
-
->>> IntensityClip.help()
-
 **Mandatory inputs parameters:**
 
 - *in_file* (a string representing an existing file)
@@ -34,40 +30,40 @@ Adapted from `niworkflows <https://github.com/nipreps/niworkflows>`_.
 
 **Optional inputs with default value parameters:**
 
-- *dtype* (one of 'int16', 'float32', 'uint8', optional)
+- *dtype* (one of int16, float32, uint8, optional, default value is int16)
     Output datatype.
     
     ::
 
-      default value. 'int16'
+      ex. int16
 
-- *invert* (a boolean, optional)
+- *invert* (a boolean, optional, default value is False)
     Finalize by inverting contrast.
     
     ::
 
-      default value. False
+      ex. False
       
-- *nonnegative* (a boolean, optional=True)
+- *nonnegative* (a boolean, optional, default value is True)
     Whether input intensities must be positive. 
     
     ::
 
-      default value. True
+      ex. True
 
-- *p_max* (a float,  optional)
+- *p_max* (a float,  optional, default value is 99.9)
     Percentile for the upper bound.
 
     ::
 
-      default value. 99.9
+      ex. 99.9
 
-- *p_min* (a float, optional)
+- *p_min* (a float, optional, default value is 10.0)
     Percentile for the lower bound.
 
     ::
 
-      default value. 10.0
+      ex. 10.0
 
 **Outputs parameters:**
 

@@ -18,10 +18,6 @@ Be carreful this program by itself does NOT do 'skull-stripping'.
 
 --------------------------------------
 
->>> from mia_processes.bricks.preprocess.others import Automask
-
->>> Automask.help()
-
 **Mandatory inputs parameters:**
 
 - *in_file* (a string representing an existing file)
@@ -32,37 +28,37 @@ Be carreful this program by itself does NOT do 'skull-stripping'.
 
       ex. '/home/username/data/raw_data/func.nii'
 
-**Optional inputs with default value parameters:**
+**Optional inputs with default value  is parameters:**
 
-- *clfrac* (a float, optional)
+- *clfrac* (a float, optional, default value is 0.5)
     Sets the clip level fraction (must be 0.1-0.9). A small value will tend to make the mask larger. 
     
     ::
 
-      default value. '0.5'
+      ex. 0.5
 
-- *out_brain_suffix* (a string, optional)
+- *out_brain_suffix* (a string, optional, default value is '_masked')
     Suffix of the brain masked image.
     
     ::
 
-      default value. '_masked'
+      ex. '_masked'
 
-- *output_type* (NIFTI or NIFTI_GZ, optional)
+- *output_type* (NIFTI or NIFTI_GZ, optional, default value is NIFTI)
     | Format of the output image (one of NIFTI, NIFTI_GZ).
     |   NIFTI: \*.nii
     |   NIFTI_GZ: \*.nii.gz
 
     ::
 
-      default value. NIFTI
+      ex. NIFTI
 
-- *out_prefix* (a string, optional)
+- *out_prefix* (a string, optional, default value is 'automask')
     Prefix of the output image.
 
     ::
 
-      default value. 'autpmask_'
+      ex. 'automask_'
 
 **Optional inputs parameters:**
 
@@ -71,14 +67,14 @@ Be carreful this program by itself does NOT do 'skull-stripping'.
     
     ::
 
-      ex. '1'  
+      ex. 1
 
 - *erode* (an integer, optional)
     Erode the mask inwards. Default is Undefined (ie parameter not used).
     
     ::
 
-      ex. '1'    
+      ex. 1
 
 
 **Outputs parameters:**

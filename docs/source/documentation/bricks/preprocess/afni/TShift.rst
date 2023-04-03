@@ -19,10 +19,6 @@ If neither of this two parameters are defined, the process return the input file
 
 --------------------------------------
 
->>> from mia_processes.bricks.preprocess.others import TShift
-
->>> TShift.help()
-
 **Mandatory inputs parameters:**
 
 - *in_file* (a string representing an existing file)
@@ -34,7 +30,7 @@ If neither of this two parameters are defined, the process return the input file
 
 **Optional inputs with default value parameters:**
 
-- *interpolation* (Fourier or linear or cubic or quintic or heptic, optional)
+- *interpolation* (Fourier or linear or cubic or quintic or heptic, optional, , default value is Fourier)
     |Different interpolation methods:
     | - Fourier = Use a Fourier method (the default: most accurate; slowest).
     | - linear  = Use linear (1st order polynomial) interpolation (least accurate).
@@ -44,47 +40,47 @@ If neither of this two parameters are defined, the process return the input file
 
     ::
 
-      default value. Fourier
+      ex. Fourier
 
-- *output_type* (NIFTI or NIFTI_GZ, optional)
+- *output_type* (NIFTI or NIFTI_GZ, optional, default value is NIFTI)
     | Format of the output image (one of NIFTI, NIFTI_GZ).
     |   NIFTI: \*.nii
     |   NIFTI_GZ: \*.nii.gz
 
     ::
 
-      default value. NIFTI
+      ex. NIFTI
 
-- *out_prefix* (a string, optional)
+- *out_prefix* (a string, optional, default value is 'st_corr')
     Prefix of the output image.
     
     ::
 
-        default value. 'st_corr_'
+        ex. 'st_corr_'
 
 
-- *rlt* (a boolean, optional)
+- *rlt* (a boolean, optional, default value is False)
     Before shifting, remove the mean and linear trend.
 
     ::
 
-      default value. False
+      ex. False
 
-- *rltplus* (a boolean, optional)
+- *rltplus* (a boolean, optional, default value is False)
     Before shifting, remove the mean and linear trend and later put back the mean.
 
     ::
 
-      default value. False
+      ex. False
 
-- *slice_encoding_dir* (k or k-, optional)
+- *slice_encoding_dir* (k or k-, optional, default value is k)
     Direction in which slice_timing is specified. 
     If negative, slice_timing is defined in reverse order, that is, the first entry corresponds to the slice 
     with the largest index and the final entry corresponds to slice index zero.
 
     ::
 
-      default value. k
+      ex. k
   
 
 **Optional inputs parameters:**

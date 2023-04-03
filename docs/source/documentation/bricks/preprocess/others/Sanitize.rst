@@ -16,10 +16,6 @@ Adapted from `niworkflows <https://github.com/nipreps/niworkflows>`_.
 
 --------------------------------------
 
->>> from mia_processes.bricks.preprocess.others import Sanitize
-
->>> Sanitize.help()
-
 **Mandatory inputs parameters:**
 
 - *in_file* (a string representing an existing file)
