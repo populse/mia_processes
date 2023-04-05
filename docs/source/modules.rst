@@ -2,6 +2,6 @@ mia_processes
 =============
 
 .. toctree::
-   :maxdepth: 8
+   :maxdepth: 4
 
    mia_processes

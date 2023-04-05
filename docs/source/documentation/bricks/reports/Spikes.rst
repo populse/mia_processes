@@ -18,10 +18,6 @@ and `spikes mask <https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882ba
 
 --------------------------------------
 
->>> from mia_processes.reports.preprocess import Spikes
-
->>> Spikes.help()
-
 **Mandatory inputs parameters:**
 
 - *in_file* (a string representing an existing file)
@@ -33,40 +29,40 @@ and `spikes mask <https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882ba
 
 **Optional inputs with default value parameters:**
 
-- *detrend* (a boolean, optional)
+- *detrend* (a boolean, optional, default value is False)
     Detrend data.  
     
     ::
 
-      default value. False
+      ex. False
 
-- *no_zscore* (a boolean, optional)
+- *no_zscore* (a boolean, optional, default value is True)
     Do not zscore 
     
     ::
 
-      default value. True
+      ex. True
 
-- *out_prefix* (a string, optional)
+- *out_prefix* (a string, optional, default value is 'spikes')
     Prefix of the output image.
 
     ::
 
-      default value. 'spikes_'
+      ex. 'spikes_'
 
-- *skip_frames* (an integer, optional)
+- *skip_frames* (an integer, optional, default value is 0)
     Number of frames to skip in the beginning of the time series.
     
     ::
 
-      default value. 0
+      ex. 0
 
-- *spike_thresh* (a float, optional)
+- *spike_thresh* (a float, optional, default value is 6.0)
     z-score to call one timepoint of one axial slice a spike.
     
     ::
 
-      default value. 6.0
+      ex. 6.0
 
 
 

@@ -60,10 +60,6 @@ from datetime import datetime
 
 from sys import exit, path, version
 
-#import matplotlib.pyplot as plt
-#import scipy.ndimage as ndi
-
-
 
 class MRIQC_anat_report(ProcessMIA):
     """

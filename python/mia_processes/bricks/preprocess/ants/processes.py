@@ -670,7 +670,7 @@ class N4BiasFieldCorrection(ProcessMIA):
                       'set to "n4c" ...')
             if (self.bspline_order and
                     self.bspline_fitting_distance == Undefined):
-                print('Initialization failde.. "bspline_order" parameter '
+                print('Initialization failed.. "bspline_order" parameter '
                       'required "bspline_fitting_distance" parameter')
                 return
 

@@ -44,7 +44,7 @@ class Anat_mriqc(Pipeline):
                          "mia_processes.bricks.preprocess."
                          "others.processing.Harmonize")
         self.add_process("fwhmx",
-                         "mia_processes.bricks.reports.processes.FWHMx")
+                         "mia_processes.bricks.preprocess.afni.FWHMx")
         self.nodes["fwhmx"].plugs["detrend"].optional = True
         self.add_process("list_to_file",
                          "mia_processes.bricks.tools.tools.List_To_File")
@@ -105,6 +105,7 @@ class Anat_mriqc(Pipeline):
         self.reorder_traits(("anat_file", "anat_report"))
 
         # default and initial values
+        self.nodes["fwhmx"].process.args = '-ShowMeClassicFWHM'
         self.nodes["conformimage"].process.suffix = ' '
         self.nodes["conformimage"].process.prefix = ' '
         self.nodes["list_to_file"].process.index_filter = [3]

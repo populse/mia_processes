@@ -9,10 +9,10 @@ mia\_processes.pipelines.reports package
 Submodules
 ----------
 
-mia\_processes.pipelines.reports.bold\_iqms\_pipeline module
-------------------------------------------------------------
+mia\_processes.pipelines.reports.bold\_iqms module
+--------------------------------------------------
 
-.. automodule:: mia_processes.pipelines.reports.bold_iqms_pipeline
+.. automodule:: mia_processes.pipelines.reports.bold_iqms
    :members:
    :undoc-members:
    :show-inheritance:

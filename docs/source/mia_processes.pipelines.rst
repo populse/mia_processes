@@ -10,8 +10,9 @@ Subpackages
 -----------
 
 .. toctree::
-   :maxdepth: 8
+   :maxdepth: 4
 
    mia_processes.pipelines.preprocess
+   mia_processes.pipelines.qualityControl
    mia_processes.pipelines.reports
    mia_processes.pipelines.stat

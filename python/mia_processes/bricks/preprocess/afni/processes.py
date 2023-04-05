@@ -12,6 +12,10 @@ populse_mia.
         - Calc
         - CalcDropTRs
         - Despike
+        - FWHMx
+        - GCOR
+        - OutlierCount
+        - QualityIndex
         - RefitDeoblique
         - SkullStrip
         - TShift
@@ -719,6 +723,648 @@ class Despike(ProcessMIA):
 
         self.process.in_file = self.in_file
         self.process.outputtype = self.output_type
+        self.process.out_file = self.out_file
+
+        return self.process.run(configuration_dict={})
+
+
+class FWHMx(ProcessMIA):
+    """
+    * Computes FWHMs for all sub-bricks in the input dataset,
+    each one separately *
+
+    Please, see the complete documentation for the `FWHMx' brick
+    in the populse.mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/reports/FWHMx.html>`_
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instantiation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(FWHMx, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = ['afni', 'nipype']
+
+        # Inputs description
+        in_file_desc = ('Input image (a pathlike object or string '
+                        'representing a file).')
+        mask_file_desc = ('Mask image (a pathlike object or string '
+                          'representing a file).')
+        combine_desc = 'Combine the final measurements along each axis (a bool).'
+        detrend_desc = 'Detrend to the specified order (a bool or an int).'
+        out_prefix_desc = ('Specify the string to be prepended to the '
+                           'filenames of the output image file '
+                           '(a string).')
+        args_desc = ('')
+
+        # Outputs description
+        out_file_desc = ('The output file (a pathlike object or a '
+                         'string representing a file).')
+
+        # Inputs traits
+        self.add_trait("in_file",
+                       File(output=False,
+                            optional=False,
+                            desc=in_file_desc))
+
+        self.add_trait("mask_file",
+                       File(Undefined,
+                            output=False,
+                            optional=True,
+                            desc=mask_file_desc))
+
+        self.add_trait("combine",
+                       Bool(True,
+                            optional=True,
+                            output=False,
+                            desc=combine_desc))
+
+        self.add_trait("detrend",
+                       Either(Bool(),
+                              Int(),
+                              default=True,
+                              output=False,
+                              optional=True,
+                              desc=detrend_desc))
+
+        self.add_trait("out_prefix",
+                       String('fwhm_',
+                              output=False,
+                              optional=True,
+                              desc=out_prefix_desc))
+
+        self.add_trait("args",
+                       String('',
+                              output=False,
+                              optional=True,
+                              desc=args_desc))
+
+        # Outputs traits
+        self.add_trait("out_file",
+                       File(output=True,
+                            desc=out_file_desc))
+
+        self.init_default_traits()
+
+        self.init_process('nipype.interfaces.afni.FWHMx')
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(FWHMx, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.in_file:
+
+            if self.out_prefix == Undefined:
+                self.out_prefix = 'fwhm_'
+                print('The out_prefix parameter is undefined. Automatically '
+                      'set to "fwhm" ...')
+
+            if self.output_directory:
+                valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
+
+                if not valid_ext:
+                    print('\nThe input image format is not recognized ...!')
+                    return
+
+                self.outputs['out_file'] = os.path.join(
+                    self.output_directory,
+                    self.out_prefix + fileName + '.out')
+
+            else:
+                print('No output_directory was found...!\n')
+                return
+
+            self.inheritance_dict[self.outputs[
+                'out_file']] = self.in_file
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(FWHMx, self).run_process_mia()
+
+        self.process.in_file = self.in_file
+        if self.mask_file:
+            self.process.mask = self.mask_file
+        self.process.combine = self.combine
+        self.process.detrend = self.detrend
+        self.process.out_file = self.out_file
+        if self.args:
+            self.process.args = self.args
+
+        return self.process.run(configuration_dict={})
+
+
+class GCOR(ProcessMIA):
+    """
+    * Computes the average correlation between every voxel and ever other
+    voxel, over any give mask *
+
+    Please, see the complete documentation for the `GCOR' brick
+    in the populse.mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/reports/GCOR.html>`_
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instantiation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(GCOR, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = ['afni', 'nipype']
+
+        # Inputs description
+        in_file_desc = ('Input image (a pathlike object or string '
+                        'representing a file).')
+        mask_file_desc = ('Mask image (a pathlike object or string '
+                          'representing a file).')
+        nfirst_desc = ('Specify number of initial TRs to ignore')
+        no_demean_desc = ('Do not (need to) demean as first step.')
+
+        # Outputs description
+        out_desc = 'Global correlation value (a float).'
+
+        # Inputs traits
+        self.add_trait("in_file",
+                       File(output=False,
+                            optional=False,
+                            desc=in_file_desc))
+
+        self.add_trait("mask_file",
+                       File(Undefined,
+                            output=False,
+                            optional=True,
+                            desc=mask_file_desc))
+
+        self.add_trait("nfirst",
+                       Either(Undefined,
+                              Int(),
+                              default=Undefined,
+                              output=False,
+                              optional=True,
+                              desc=nfirst_desc))
+
+        self.add_trait("no_demean",
+                       Bool(False,
+                            output=False,
+                            optional=True,
+                            desc=no_demean_desc))
+
+        # Outputs traits
+        self.add_trait("out",
+                       Float(output=True,
+                             nipype_process_name="_out",
+                             desc=out_desc))
+
+        self.init_default_traits()
+
+        self.init_process('nipype.interfaces.afni.GCOR')
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(GCOR, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.in_file:
+
+            if self.output_directory:
+                valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
+
+                if not valid_ext:
+                    print('\nThe input image format is not recognized ...!')
+                    return
+
+            else:
+                print('No output_directory was found...!\n')
+                return
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(GCOR, self).run_process_mia()
+
+        self.process.in_file = self.in_file
+        self.process.mask = self.mask_file
+        self.process.nfirst = self.nfirst
+        self.process.no_demean = self.no_demean
+
+        return self.process.run(configuration_dict={})
+
+
+class OutlierCount(ProcessMIA):
+    """
+    * Computes outliers for all sub-bricks in the input dataset, 
+    each one separately *
+
+    Please, see the complete documentation for the `OutlierCount' brick 
+    in the populse.mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/reports/OutlierCount.html>`_
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instantiation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(OutlierCount, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = ['afni', 'nipype']
+
+        # Inputs description
+        in_file_desc = ('Input image (a pathlike object or string '
+                        'representing a file).')
+        automask_desc = ('Clip off small voxels (a boolean). '
+                         'Mutually exclusive with mask')
+        autoclip_desc = ('Clip off small voxels (a boolean). '
+                         'Mutually exclusive with mask')
+        interval_desc = ('Write out the median + 3.5 MAD of outlier '
+                         'count with each timepoint. ')
+        mask_file_desc = ('Mask image. Compute correlation only across '
+                          'masked voxels.(a pathlike object or string '
+                          'representing a file). Mutually exclusive '
+                          'with automask and autoclip')
+        fraction_desc = ('Combine the final measurements '
+                         'along each axis (a bool).')
+        interval_desc = ('Write out the median + 3.5 MAD of outlier '
+                         'count with each timepoint.')
+        legendre_desc = 'Use Legendre polynomials.'
+        polort_desc = 'Detrend each voxel timeseries with polynomials. '
+        qthr_desc = 'Indicate a value for q to compute alpha.'
+        out_prefix_desc = ('Specify the string to be prepended to the '
+                           'filenames of the output image file '
+                           '(a string).')
+
+        # Outputs description
+        out_file_desc = ('The output text file (a pathlike object or a '
+                         'string representing a file).')
+
+        # Inputs traits
+        self.add_trait("in_file",
+                       File(output=False,
+                            optional=False,
+                            desc=in_file_desc))
+
+        self.add_trait("mask_file",
+                       File(Undefined,
+                            output=False,
+                            optional=True,
+                            desc=mask_file_desc))
+
+        self.add_trait("autoclip",
+                       Bool(False,
+                            output=False,
+                            optional=True,
+                            desc=autoclip_desc))
+
+        self.add_trait("automask",
+                       Bool(False,
+                            output=False,
+                            optional=True,
+                            desc=automask_desc))
+
+        self.add_trait("fraction",
+                       Bool(True,
+                            optional=True,
+                            output=False,
+                            desc=fraction_desc))
+
+        self.add_trait("interval",
+                       Bool(False,
+                            optional=True,
+                            output=False,
+                            desc=interval_desc))
+
+        self.add_trait("legendre",
+                       Bool(False,
+                            optional=True,
+                            output=False,
+                            desc=legendre_desc))
+
+        self.add_trait("out_prefix",
+                       String('outliers_',
+                              output=False,
+                              optional=True,
+                              desc=out_prefix_desc))
+
+        self.add_trait("polort",
+                       Either(Int(),
+                              Undefined,
+                              default=Undefined,
+                              optional=True,
+                              output=False,
+                              desc=polort_desc))
+
+        self.add_trait("qthr",
+                       Int(0.001,
+                           min=0.0,
+                           max=1.0,
+                           optional=True,
+                           output=False,
+                           desc=qthr_desc))
+
+        # Outputs traits
+        self.add_trait("out_file",
+                       File(output=True,
+                            desc=out_file_desc))
+
+        self.init_default_traits()
+
+        self.init_process('nipype.interfaces.afni.OutlierCount')
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(OutlierCount, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.in_file:
+            if (self.automask and self.mask_file) or \
+                    (self.autoclip and self.mask_file):
+                print('Initisalisation failed..'
+                      'Automask and mask_file parameters are '
+                      'mutually esclusive')
+                return
+
+            if self.out_prefix == Undefined:
+                self.out_prefix = 'outliers_'
+                print('The out_prefix parameter is undefined. Automatically '
+                      'set to "outliers" ...')
+
+            if self.output_directory:
+                valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
+
+                if not valid_ext:
+                    print('\nThe input image format is not recognized ...!')
+                    return
+
+                self.outputs['out_file'] = os.path.join(
+                    self.output_directory,
+                    self.out_prefix + fileName + '.out')
+
+            else:
+                print('No output_directory was found...!\n')
+                return
+
+            self.inheritance_dict[self.outputs[
+                'out_file']] = self.in_file
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(OutlierCount, self).run_process_mia()
+
+        self.process.in_file = self.in_file
+        if self.automask:
+            self.process.automask = self.automask
+        if self.autoclip:
+            self.process.autoclip = self.autoclip
+        if self.mask_file:
+            self.process.autoclip = Undefined
+            self.process.automask = Undefined
+            self.process.mask = self.mask_file
+        self.process.fraction = self.fraction
+        self.process.interval = self.interval
+        self.process.legendre = self.legendre
+        self.process.polort = self.polort
+        self.process.qthr = self.qthr
+        self.process.out_file = self.out_file
+
+        return self.process.run(configuration_dict={})
+
+
+class QualityIndex(ProcessMIA):
+    """
+    * Computes a quality index for each sub-brick in a 3D+time dataset.
+    The output is a 1D time series with the index for each sub-brick *
+
+    Please, see the complete documentation for the `QualityIndex' brick
+    in the populse.mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/reports/QualityIndex.html>`_
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instantiation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(QualityIndex, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = ['afni', 'nipype']
+
+        # Inputs description
+        in_file_desc = ('A bold file (a pathlike object or string '
+                        'representing a file).')
+        automask_desc = ('Clip off small voxels (a boolean). '
+                         'Mutually exclusive with mask')
+        autoclip_desc = ('Clip off small voxels (a boolean). '
+                         'Mutually exclusive with mask')
+        interval_desc = ('Write out the median + 3.5 MAD of outlier '
+                         'count with each timepoint. ')
+        mask_file_desc = ('Mask image. Compute correlation only across '
+                          'masked voxels.(a pathlike object or string '
+                          'representing a file). Mutually exclusive '
+                          'with automask and autoclip')
+        out_prefix_desc = ('Specify the string to be prepended to the '
+                           'filenames of the output image file '
+                           '(a string).')
+        quadrant_desc = ('Similar to -spearman, but using 1 minus '
+                         'the quadrant correlation coefficient as '
+                         'the quality index')
+        spearman_desc = ('Quality index is 1 minus the Spearman (rank) '
+                         'correlation coefficient of each sub-brick with '
+                         'the median sub-brick. ')
+
+        # Outputs description
+        out_file_desc = ('The output file (a pathlike object or a '
+                         'string representing a file).')
+
+        # Inputs traits
+        self.add_trait("in_file",
+                       File(output=False,
+                            optional=False,
+                            desc=in_file_desc))
+
+        self.add_trait("automask",
+                       Bool(True,
+                            output=False,
+                            optional=True,
+                            desc=automask_desc))
+
+        self.add_trait("autoclip",
+                       Bool(False,
+                            output=False,
+                            optional=True,
+                            desc=autoclip_desc))
+
+        self.add_trait("interval",
+                       Bool(False,
+                            optional=True,
+                            output=False,
+                            desc=interval_desc))
+
+        self.add_trait("mask_file",
+                       File(Undefined,
+                            output=False,
+                            optional=True,
+                            desc=mask_file_desc))
+
+        self.add_trait("out_prefix",
+                       String('QI_',
+                              output=False,
+                              optional=True,
+                              desc=out_prefix_desc))
+
+        self.add_trait("quadrant",
+                       Bool(False,
+                            optional=True,
+                            output=False,
+                            desc=quadrant_desc))
+
+        self.add_trait("spearman",
+                       Bool(False,
+                            optional=True,
+                            output=False,
+                            desc=spearman_desc))
+
+        # Outputs traits
+        self.add_trait("out_file",
+                       File(output=True,
+                            desc=out_file_desc))
+
+        self.init_default_traits()
+
+        self.init_process('nipype.interfaces.afni.QualityIndex')
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(QualityIndex, self).list_outputs()
+
+        if (self.automask and self.mask_file) or \
+                (self.autoclip and self.mask_file):
+            print('Initisalisation failed..'
+                  'Automask and mask_file parameters are mutually esclusive')
+            return
+
+        # Outputs definition and tags inheritance (optional)
+        if self.in_file:
+
+            if self.out_prefix == Undefined:
+                self.out_prefix = 'QI_'
+                print('The out_prefix parameter is undefined. Automatically '
+                      'set to "QI" ...')
+
+            if self.output_directory:
+                valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
+
+                if not valid_ext:
+                    print('\nThe input image format is not recognized ...!')
+                    return
+
+                self.outputs['out_file'] = os.path.join(
+                    self.output_directory,
+                    self.out_prefix + fileName + '.out')
+
+            else:
+                print('No output_directory was found...!\n')
+                return
+
+            self.inheritance_dict[self.outputs[
+                'out_file']] = self.in_file
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(QualityIndex, self).run_process_mia()
+
+        self.process.in_file = self.in_file
+        if self.autoclip:
+            self.process.autoclip = self.autoclip
+        if self.automask:
+            self.process.automask = self.automask
+        if self.mask_file:
+            self.process.autoclip = Undefined
+            self.process.automask = Undefined
+            self.process.mask = self.mask_file
+        self.process.interval = self.interval
+        self.process.quadrant = self.quadrant
+        self.process.spearman = self.spearman
         self.process.out_file = self.out_file
 
         return self.process.run(configuration_dict={})

@@ -8,16 +8,16 @@ class Bold_iqms(Pipeline):
 
     def pipeline_definition(self):
         # nodes
-        self.add_process("outliercount", "mia_processes.bricks.reports.processes.OutlierCount")
+        self.add_process("outliercount", "mia_processes.bricks.preprocess.afni.OutlierCount")
         self.add_process("boldiqms", "mia_processes.bricks.reports.processes.BoldIQMs")
         self.add_process("carpetparcellation", "mia_processes.bricks.reports.processes.CarpetParcellation")
         self.add_process("framewisedisplacement", "mia_processes.bricks.reports.processes.FramewiseDisplacement")
         self.nodes["framewisedisplacement"].process.parameter_source = 'AFNI'
         self.add_process("spikes", "mia_processes.bricks.reports.processes.Spikes")
-        self.add_process("gcor", "mia_processes.bricks.reports.processes.GCOR")
+        self.add_process("gcor", "mia_processes.bricks.preprocess.afni.GCOR")
         self.add_process("computedvars", "mia_processes.bricks.reports.processes.ComputeDVARS")
-        self.add_process("fwhmx", "mia_processes.bricks.reports.processes.FWHMx")
-        self.add_process("qualityindex", "mia_processes.bricks.reports.processes.QualityIndex")
+        self.add_process("fwhmx", "mia_processes.bricks.preprocess.afni.FWHMx")
+        self.add_process("qualityindex", "mia_processes.bricks.preprocess.afni.QualityIndex")
 
         # links
         self.export_parameter("fwhmx", "in_file", "epi_mean", is_optional=False)
@@ -78,6 +78,7 @@ class Bold_iqms(Pipeline):
                              "spikes_spike_thresh", "spikes_skip_frames"))
 
         # default and initial values
+        self.nodes["fwhmx"].process.args = '-ShowMeClassicFWHM'
 
         # nodes positions
         self.node_position = {

@@ -10,7 +10,7 @@ Subpackages
 -----------
 
 .. toctree::
-   :maxdepth: 8
+   :maxdepth: 4
 
    mia_processes.bricks.preprocess.afni
    mia_processes.bricks.preprocess.ants

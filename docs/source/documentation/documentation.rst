@@ -19,6 +19,10 @@ Mia_processes's documentation
       - `Calc <bricks/preprocess/afni/Calc.html>`_
       - `CalcDropTRs <bricks/preprocess/afni/CalcDropTRs.html>`_
       - `Despike <bricks/preprocess/afni/Despike.html>`_
+      - `FWHMx <bricks/reports/FWHMx.html>`_
+      - `GCOR correlation <bricks/reports/GCOR.html>`_
+      - `OutliersCount <bricks/reports/OutlierCount.html>`_
+      - `QualityIndex <bricks/reports/QualityIndex.html>`_
       - `RefitDeoblique <bricks/preprocess/afni/RefitDeoblique.html>`_
       - `SkullStrip <bricks/preprocess/afni/SkullStrip.html>`_
       - `TShift <bricks/preprocess/afni/TShift.html>`_
@@ -81,7 +85,12 @@ Mia_processes's documentation
  
   - **reports**
 
-    - `Spikes <bricks/reports/Spkikes.html>`_
+    - `AnatIQMS <bricks/reports/AnatIQMS.html>`_
+    - `BoldIQMS <bricks/reports/BoldIQMS.html>`_
+    - `CarpetParcellation <bricks/reports/CarpetParcellation.html>`_
+    - `ComputeDVARS <bricks/reports/ComputeDVARS.html>`_
+    - `FramewiseDisplacement <bricks/reports/FramewiseDisplacement.html>`_
+    - `Spikes <bricks/reports/Spikes.html>`_
 
   - **tools**
 

@@ -8,4 +8,4 @@
 # for details.
 ##########################################################################
 
-from .processes import DenoiseOld, Denoise
+from .processes import Denoise
