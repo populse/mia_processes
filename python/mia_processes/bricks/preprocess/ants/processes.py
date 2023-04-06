@@ -737,7 +737,8 @@ class N4BiasFieldCorrection(ProcessMIA):
             self.process.rescale_intensities = self.rescale_intensities
         if self.save_bias:
             self.process.bias_image = self.bias_image
-        self.process.save_bias = self.save_bias
+        else:
+            self.process.save_bias = self.save_bias
         if self.bspline_fitting_distance:
             self.process.bspline_fitting_distance = self.bspline_fitting_distance
         if self.bspline_order:
