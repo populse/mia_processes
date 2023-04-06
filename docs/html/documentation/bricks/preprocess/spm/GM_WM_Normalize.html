@@ -1,32 +1,23 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>GM_WM_Normalize brick &#8212; mia_processes 2.0.1-dev+cf8a047 documentation</title>
-    <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
-    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../../../../',
-        VERSION:     '2.0.1-dev+cf8a047',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
-    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>GM_WM_Normalize brick &#8212; mia_processes 2.2.1-dev+2bc8ce9 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
-  </head>
-  <body>
+  </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.0.1-dev+cf8a047 documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+2bc8ce9 documentation</span></a></h1>
         <h2 class="heading"><span>GM_WM_Normalize brick</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -36,54 +27,52 @@
         </p>
 
       </div>
-      <div class="content">
+      <div class="content" role="main">
         
         
   <div class="toctree-wrapper compound">
 </div>
-<table border="1" class="docutils">
+<table class="docutils align-default">
 <colgroup>
-<col width="25%" />
-<col width="35%" />
-<col width="40%" />
+<col style="width: 25%" />
+<col style="width: 35%" />
+<col style="width: 40%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference external" href="../../../../index.html">Home</a></td>
-<td><a class="reference external" href="../../../documentation.html">Documentation</a></td>
-<td><a class="reference external" href="https://github.com/populse/mia_processes">GitHub</a></td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference external" href="../../../../index.html">Home</a></p></td>
+<td><p><a class="reference external" href="../../../documentation.html">Documentation</a></p></td>
+<td><p><a class="reference external" href="https://github.com/populse/mia_processes">GitHub</a></p></td>
 </tr>
 </tbody>
 </table>
-<div class="section" id="gm-wm-normalize-brick">
+<section id="gm-wm-normalize-brick">
 <h1>GM_WM_Normalize brick<a class="headerlink" href="#gm-wm-normalize-brick" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="normalises-only-the-grey-or-and-white-matter-from-a-set-of-images">
+<section id="normalises-only-the-grey-or-and-white-matter-from-a-set-of-images">
 <h2>Normalises only the grey or/and white matter from a set of images<a class="headerlink" href="#normalises-only-the-grey-or-and-white-matter-from-a-set-of-images" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">mia_processes.bricks.preprocess.spm</span> <span class="kn">import</span> <span class="n">GM_WM_Normalize</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">mia_processes.bricks.preprocess.spm</span> <span class="kn">import</span> <span class="n">GM_WM_Normalize</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">GM_WM_Normalize</span><span class="o">.</span><span class="n">help</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>The GM_WM_Normalize brick is equivalent to the <a class="reference external" href="https://populse.github.io/mia_processes/documentation/preprocess/spm/Normalize12.html">Normalize12</a> brick from the mia_processes library, with an additional filter (<em>in_filter</em>
-parameter) for grey and/or white matter, applied to the <em>apply_to_files</em> input parameter <a class="footnote-reference" href="#label" id="id1">[1]</a>. A list of native space probability maps (<em>apply_to_files</em> parameter) and an inverse deformation field (<em>deformation_file</em> parameter) may have been, for example, obtained after a previous segmentation. The <em>jobtype</em> input parameter is therefore fixed to write.</p>
-<dl class="docutils">
-<dt>The <em>in_filter</em> parameter can take the following values:</dt>
-<dd><ul class="first last simple">
-<li>GM (grey matter images will be selected before to be normalised)</li>
-<li>WM (white matter images will be selected before to be normalised)</li>
-<li>GM &amp; WM (grey and white matter images will be selected before to be normalised)</li>
-<li>GM + WM (grey and white matter images will be selected and then added together before to be normalised)</li>
+<p>The GM_WM_Normalize brick is equivalent to the <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/preprocess/spm/Normalize12.html">Normalize12</a> brick from the mia_processes library, with an additional filter (<em>in_filter</em>
+parameter) for grey and/or white matter, applied to the <em>apply_to_files</em> input parameter <a class="footnote-reference brackets" href="#label" id="id1">1</a>. A list of native space probability maps (<em>apply_to_files</em> parameter) and an inverse deformation field (<em>deformation_file</em> parameter) may have been, for example, obtained after a previous segmentation. The <em>jobtype</em> input parameter is therefore fixed to write.</p>
+<dl class="simple">
+<dt>The <em>in_filter</em> parameter can take the following values:</dt><dd><ul class="simple">
+<li><p>GM (grey matter images will be selected before to be normalised)</p></li>
+<li><p>WM (white matter images will be selected before to be normalised)</p></li>
+<li><p>GM &amp; WM (grey and white matter images will be selected before to be normalised)</p></li>
+<li><p>GM + WM (grey and white matter images will be selected and then added together before to be normalised)</p></li>
 </ul>
 </dd>
 </dl>
-<p>For the <em>deformation_file</em>, <em>apply_to_files</em>, <em>write_bounding_box</em>, <em>write_voxel_sizes</em>, <em>write_interp</em> input parameters and <em>normalized_files</em> output parameter, please see the <a class="reference external" href="https://populse.github.io/mia_processes/documentation/preprocess/spm/Normalize12.html">Normalize12</a> brick of the mia_processes library.</p>
+<p>For the <em>deformation_file</em>, <em>apply_to_files</em>, <em>write_bounding_box</em>, <em>write_voxel_sizes</em>, <em>write_interp</em> input parameters and <em>normalized_files</em> output parameter, please see the <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/preprocess/spm/Normalize12.html">Normalize12</a> brick of the mia_processes library.</p>
 <hr class="docutils" />
-<table class="docutils footnote" frame="void" id="label" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>The selection of the images is made using the syntax of SPM (<em>c1*</em> for grey matter and <em>c2*</em> for white matter).</td></tr>
-</tbody>
-</table>
-</div>
-</div>
+<dl class="footnote brackets">
+<dt class="label" id="label"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>The selection of the images is made using the syntax of SPM (<em>c1*</em> for grey matter and <em>c2*</em> for white matter).</p>
+</dd>
+</dl>
+</section>
+</section>
 
 
       </div>
@@ -97,7 +86,7 @@ parameter) for grey and/or white matter, applied to the <em>apply_to_files</em> 
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, populse.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
     </div>
   </body>
 </html>

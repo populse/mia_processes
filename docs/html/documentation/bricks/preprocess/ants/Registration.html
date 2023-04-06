@@ -1,0 +1,457 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Registration brick &#8212; mia_processes 2.2.1-dev+2bc8ce9 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
+          <span>mia_processes 2.2.1-dev+2bc8ce9 documentation</span></a></h1>
+        <h2 class="heading"><span>Registration brick</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <div class="toctree-wrapper compound">
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 35%" />
+<col style="width: 40%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference external" href="../../../../index.html">Home</a></p></td>
+<td><p><a class="reference external" href="../../../documentation.html">Documentation</a></p></td>
+<td><p><a class="reference external" href="https://github.com/populse/mia_processes">GitHub</a></p></td>
+</tr>
+</tbody>
+</table>
+<section id="registration-brick">
+<h1>Registration brick<a class="headerlink" href="#registration-brick" title="Permalink to this headline">¶</a></h1>
+<p>Image registration using ANTs Registration command.</p>
+<p>This brick registers a moving_image to a fixed_image, using a predefined (or a sequence of) cost function(s)
+and transformation operations. The cost function is defined using one or more ‘metrics’.</p>
+<p>Both linear and non-linear transformations can be used. Usually, registration is done in multiple stages.
+For example first an Affine, then a Rigid, and ultimately a non-linear (Syn)-transformation (see ‘transform’ and ‘transform_parameters’ parameter).</p>
+<p>It is possible to initilize the registration by using one or more transforms from moving_image to fixed_image with the
+‘initial_moving_transform’ parameter.
+For example, when you already have a warpfield that corrects for geometrical distortions in an EPI (functional) image, that you want to apply before an Affine registration to a structural image.
+You could put this transform into ‘intial_moving_transform’.</p>
+<p>Here can be found some of classical registration parameters(used in fMRIPrep and MRIQC):
+<a class="reference external" href="https://github.com/nipreps/niworkflows/tree/master/niworkflows/data">niworkflows parameters examples</a></p>
+<hr class="docutils" />
+<p><strong>Mandatory inputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>fixed_image</em> (a string representing an existing file)</dt><dd><p>Image to which the moving image should be transformed (valid extensions: [.nii, .nii.gz]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/template.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>moving_image</em> (a string representing an existing file)</dt><dd><p>Image that will be registered to the space of the fixed image (valid extensions: [.nii, .nii.gz]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/T1w.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Optional inputs parameters with a default value:</strong></p>
+<ul>
+<li><dl>
+<dt><em>collapse_output_transforms</em> (a boolean, optional, default value is True)</dt><dd><p>Collapse output transforms.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">True</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>dimension</em> (2 or 3 or 4, optional, default value is 3)</dt><dd><p>Image dimension (2 or 3).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">3</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>float</em> (a boolean, optional, default value is False)</dt><dd><p>Use float instead of double for computations.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>initialize_transforms_per_stage</em> (a boolean, optional, default value is False)</dt><dd><p>Initialize linear transforms from the previous stage.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>interpolation</em> (Linear or NearestNeighbor or CosineWindowedSinc or WelchWindowedSinc or HammingWindowedSinc or LanczosWindowedSinc or BSpline or MultiLabel or Gaussian or GenericLabel, optional, default value is Linear)</dt><dd><p>Interpolation model.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;Linear&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>metrics</em> (a list of items which are CC or MeanSquares or Demon or GC or MI or mattes, optional, default value is [‘Mattes’, ‘Mattes’, ‘Mattes’])</dt><dd><div class="line-block">
+<div class="line">The metric to use for each stage.</div>
+<div class="line">Metrics available:</div>
+<div class="line-block">
+<div class="line">cross-correlation (CC)</div>
+<div class="line">Mean Squares (MeanSquares)</div>
+<div class="line">Demons (Demons)</div>
+<div class="line">global correlation (GC)</div>
+<div class="line">Mutual Information (Mattes or MI)</div>
+</div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;Mattes&#39;</span><span class="p">,</span> <span class="s1">&#39;Mattes&#39;</span><span class="p">,</span> <span class="s1">&#39;Mattes&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>metric_weight</em> (a list of items which are a float, optional, default value is [1.0, 1.0, 1.0])</dt><dd><p>The metric weight(s) for each stage. The weights must sum to 1 per stage.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>output_inverse_warped_image</em> (a boolean, optional, default value is False)</dt><dd><p>Get output inverse_warped_image.
+Default is False.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>out_prefix</em> (a string, optional, default value is ‘w’)</dt><dd><p>Prefix of the warped output image.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;w_&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>radius_bins_item_trait</em> (an integer, optional, default value is 5)</dt><dd><p>Radius bins item.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">5</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>signa_units</em> (a list of items which are vox or mm, optional, default value is [‘vox’] * len(metric))</dt><dd><p>Units for smoothing sigmas (mm or vox).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;vox&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">metric</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>smoothing_sigmas</em> (a list of items which are a list of items which are a float, optional, default value is [[4.0], [4.0, 2.0, 0.0], [1.0, 0.0]])</dt><dd><p>Smoothing sigmas.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[[</span><span class="mf">4.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>shrink_factors</em> (a list of items which are a list of items which are an integer, optional, default value is [[4], [4, 2, 1], [2, 1]])</dt><dd><p>Shrink factor.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[[</span><span class="mi">4</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>transforms</em> (a list of items which are Rigid or Affine or CompositeAffine or Similarity or Translation or BSpline or GaussianDisplacementField or TimeVaryingVelocityField or TimeVaryingBSplineVelocityField or SyN or BSplineSyN or Exponential or BSplineExponential, optional, default value is [‘Rigid’, ‘Affine’, ‘SyN’])</dt><dd><div class="line-block">
+<div class="line">List of the transformations.</div>
+<div class="line-block">
+<div class="line">Linear transformations:</div>
+<div class="line-block">
+<div class="line">Translation</div>
+<div class="line">Rigid</div>
+<div class="line">Affine</div>
+<div class="line">CompositeAffine</div>
+<div class="line">Translation</div>
+</div>
+<div class="line">Non-linear transformations:</div>
+<div class="line-block">
+<div class="line">BSpline</div>
+<div class="line">GaussianDisplacementField</div>
+<div class="line">TimeVaryingVelocityField</div>
+<div class="line">TimeVaryingBSplineVelocityField</div>
+<div class="line">SyN</div>
+<div class="line">BSplineSyN</div>
+<div class="line">Exponential</div>
+<div class="line">BSplineExponential</div>
+</div>
+</div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;Rigid&#39;</span><span class="p">,</span> <span class="s1">&#39;Affine&#39;</span><span class="p">,</span> <span class="s1">&#39;SyN&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>transform_parameters</em> (a list of items which are a tuple of the form: (a float) or a tuple of the form: (a float, a float, a float) or a tuple of the form: (a float, an integer, an integer, an integer) or a tuple of the form: (a float, an integer, a float, a float, a float, a float) or a tuple of the form: (a float, a float, a float, an integer) or a tuple of the form: (a float, an integer, an integer, an integer, an integer), optional, default value is [(0.01,), (0.08,), (0.1, 3.0, 0.0)])</dt><dd><p>Transforms parameters.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[(</span><span class="mf">0.01</span><span class="p">,),</span> <span class="p">(</span><span class="mf">0.08</span><span class="p">,),</span> <span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>use_estimate_learning_rate_once</em> (a list of boolean, optional, default value is [True] * len(metric))</dt><dd><p>Use estimate learning rate.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="kc">True</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">metric</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>use_histogram_matching</em> (a list of boolean, optional, default value is [True] * len(metric))</dt><dd><p>Use histogram matching.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="kc">True</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">metric</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>winsorize_lower_quantile</em> (a float between 0.0 and 1.0, optional, default value is 0.005)</dt><dd><p>The lower quantile to clip image ranges.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mf">0.005</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>winsorize_upper_quantile</em> (a float between 0.0 and 1.0, optional, default value is 0.995)</dt><dd><p>The upper quantile to clip image ranges.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mf">0.995</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>write_composite_transform</em> (a boolean, optional, default value is True)</dt><dd><p>Write composite transform.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">True</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Optional inputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>convergence_threshold</em> (a list of items which are a float, optional)</dt><dd><p>Convergence threshold.
+Requires number_of_iterations parameter.
+Default is Undefined (ie parameter not used).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="mf">1e-07</span><span class="p">,</span> <span class="mf">1e-08</span><span class="p">,</span> <span class="mf">1e-8</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>convergence_window_size</em> (a list of items which are an integer, optional)</dt><dd><p>Convergence window size.
+Default is Undefined (ie parameter not used).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="mi">15</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>fixed_image_masks</em> (a string representing an existing file or a list of strings representing existing files or NULL, optional)</dt><dd><p>Mask used to limit metric sampling region of the fixed image defined per registration stage (valid mask extensions: [.nii, .nii.gz]).
+If a list of items is used, use “NULL” to omit a mask at a given stage.
+Default is NULL (ie option not used).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/template_desc-brain_mask.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>initial_moving_transform</em> (multiples string representing existing files, optional)</dt><dd><p>A transform or a list of transform that should be applied before the. Mutually exclusive with initial_moving_transform_com.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;trans.mat&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>initial_moving_transform_com</em> (0 or 1 or 2, optional)</dt><dd><p>Align the moving_image and fixed_image before registration using the geometric center of the images (=0),
+the image intensities (=1), or the origin of the images (=2). Mutually exclusive with initial_moving_transform.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>interpolation_parameters</em> (a tuple of the form: (an integer) or a tuple of the form: (a float, a float) or a tuple of the form: (a string), optional)</dt><dd><p>Interpolation parameters. For example for BSpline order or for sigma/alphaparameters for Gaussian/Multilabel
+Default is Undefined (ie parameter not used).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">(</span><span class="mi">5</span><span class="p">,)</span> <span class="p">(</span><span class="k">if</span> <span class="n">interpolation</span> <span class="o">=</span> <span class="s1">&#39;BSpline&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>invert_initial_moving_transform</em> (a list of boolean)</dt><dd><p>A list of booleans that indicatewhether the inverse(s) of the transform(s) defined in initial_moving_transform should be used.
+Requires initial_moving_transform parameter.
+Default is Undefined (ie parameter not used).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="kc">False</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>moving_image_mask</em> (a string representing an existing file or a list of strings representing existing files or NULL, optional)</dt><dd><p>Masks used to limit metric sampling region of the moving image, defined per registration stage (valid extensions: [.nii, .nii.gz]).
+If a list of items is used, use “NULL” to omit a mask at a given stage.
+Default is NULL (ie option not used)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/T1w_desc-brain_mask.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>number_of_iterations</em> (a list of items which are a list of item which are an integer, optional)</dt><dd><p>Number of iterations.
+Default is Undefined (ie parameter not used).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[[</span><span class="mi">10000</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">100</span><span class="p">],</span> <span class="p">[</span><span class="mi">500</span><span class="p">,</span> <span class="mi">250</span><span class="p">,</span> <span class="mi">100</span><span class="p">],</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">20</span><span class="p">]]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>radius_or_number_of_bins</em> (a list of items which are an integer, optional)</dt><dd><p>The number of bins in each stage for the MI and Mattes metric, the radius for other metrics.
+Default is Undefined (ie parameter not used).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="mi">56</span><span class="p">,</span> <span class="mi">56</span><span class="p">,</span> <span class="mi">56</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>random_seed</em> (an integer, optional)</dt><dd><p>Fixed seed for random number generation.
+Default is Undefined (ie parameter not used).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">5</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>sampling_percentage</em> (a list of items which are a float between 0.0 and 1.0, optional)</dt><dd><p>The metric sampling percentages to use for each stage.
+Requires sampling strategy parameter.
+Default is Undefined (ie parameter not used).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span><span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>sampling_strategy</em> (a list of items which are Random, Regular or None, optional)</dt><dd><p>The metric sampling strategies for each stage.
+Default is Undefined (ie parameter not used).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span><span class="p">[</span><span class="s1">&#39;Random&#39;</span><span class="p">,</span> <span class="s1">&#39;Random&#39;</span><span class="p">,</span> <span class="s1">&#39;Random&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Outputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>composite_transform</em> (a strings representing a file)</dt><dd><p>Composite transform file (extensions: [.h5]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/T1w_Composite.h5&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>inverse_composite_transform</em> (a strings representing a file)</dt><dd><p>Inverse composite transform file (extensions: [.h5]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/T1w_InverseComposite.h5&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>inverse_warped_image</em> (a strings representing a file)</dt><dd><p>Inverse warped image (extensions: [.nii, .nii.gz]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/w_inverse_T1w.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>warped_image</em> (a strings representing a file)</dt><dd><p>Warped image (extensions: [.nii, .nii.gz]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/w_T1w.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<hr class="docutils" />
+<p>Usefull links:</p>
+<p><a class="reference external" href="https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.ants.html#registration">ANTs Registration - nipype</a></p>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </div>
+  </body>
+</html>

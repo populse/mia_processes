@@ -1,0 +1,1240 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>mia_processes.bricks.reports.reporting &#8212; mia_processes 2.2.1-dev+2bc8ce9 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
+          <span>mia_processes 2.2.1-dev+2bc8ce9 documentation</span></a></h1>
+        <h2 class="heading"><span>mia_processes.bricks.reports.reporting</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <h1>Source code for mia_processes.bricks.reports.reporting</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;The reporting library of the mia_processes package.</span>
+
+<span class="sd">The purpose of this module is to provide the reporting bricks necessary to</span>
+<span class="sd">generate automatic report at the end of a pipeline calculation.</span>
+
+<span class="sd">:Contains:</span>
+<span class="sd">    :Class:</span>
+<span class="sd">        - ReportAnatMriqc</span>
+<span class="sd">        - ReportFuncMriqc</span>
+
+<span class="sd">    :Function:</span>
+<span class="sd">        -</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1">##########################################################################</span>
+<span class="c1"># mia_processes - Copyright (C) IRMaGe/CEA, 2018</span>
+<span class="c1"># Distributed under the terms of the CeCILL license, as published by</span>
+<span class="c1"># the CEA-CNRS-INRIA. Refer to the LICENSE file or to</span>
+<span class="c1"># http://www.cecill.info/licences/Licence_CeCILL_V2.1-en.html</span>
+<span class="c1"># for details.</span>
+<span class="c1">##########################################################################</span>
+
+<span class="c1"># nipype import</span>
+<span class="kn">from</span> <span class="nn">nipype.interfaces.base</span> <span class="kn">import</span> <span class="p">(</span><span class="n">File</span><span class="p">,</span> <span class="n">OutputMultiPath</span><span class="p">,</span> <span class="n">Str</span><span class="p">,</span>
+                                    <span class="n">traits</span><span class="p">,</span> <span class="n">Undefined</span><span class="p">,)</span>
+<span class="kn">from</span> <span class="nn">nipype.interfaces.spm.base</span> <span class="kn">import</span> <span class="n">ImageFileSPM</span>
+
+<span class="c1"># mia_processes import:</span>
+
+<span class="kn">from</span> <span class="nn">mia_processes.utils</span> <span class="kn">import</span> <span class="n">dict4runtime_update</span>
+<span class="kn">from</span> <span class="nn">mia_processes.utils</span> <span class="kn">import</span> <span class="n">Report</span>
+
+<span class="c1"># populse_mia import</span>
+<span class="kn">from</span> <span class="nn">populse_mia.data_manager.project</span> <span class="kn">import</span> <span class="n">COLLECTION_CURRENT</span>
+<span class="kn">from</span> <span class="nn">populse_mia.user_interface.pipeline_manager.process_mia</span> <span class="kn">import</span> <span class="n">ProcessMIA</span>
+
+<span class="c1"># Other import</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">sys</span> <span class="kn">import</span> <span class="n">path</span>
+
+
+<div class="viewcode-block" id="ReportAnatMriqc"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportAnatMriqc">[docs]</a><span class="k">class</span> <span class="nc">ReportAnatMriqc</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        * Generates the report for anatomical data in MRIQC pipeline *</span>
+
+<span class="sd">        Please, see the complete documentation for the `MRIQC_report brick </span>
+<span class="sd">        in the populse.mia_processes website</span>
+<span class="sd">        https://populse.github.io/mia_processes/html/documentation/bricks/reports/MRIQC_report.html</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ReportAnatMriqc.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportAnatMriqc.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+
+<span class="sd">        The input and output plugs are defined here. The special</span>
+<span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
+<span class="sd">        third-party products necessary for the running of the brick.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ReportAnatMriqc</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="c1"># Third party software required for the execution of the brick</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Inputs description</span>
+
+        <span class="n">IQMs_file_desc</span> <span class="o">=</span> <span class="s1">&#39;A .JSON file containing the IQMs&#39;</span>
+
+        <span class="n">anat_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;An existing, uncompressed anatomical image file (valid &#39;</span>
+                     <span class="s1">&#39;extensions: .nii, .nii.gz)&#39;</span><span class="p">)</span>
+
+        <span class="n">anat_fig_rows_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;The number of lines for the anatomical slice &#39;</span>
+                              <span class="s1">&#39;planes plot&#39;</span><span class="p">)</span>
+
+        <span class="n">anat_fig_cols_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;The number of columns for the anatomical slice &#39;</span>
+                              <span class="s1">&#39;planes plot&#39;</span><span class="p">)</span>
+
+        <span class="n">anat_inf_slice_start_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;The first index displayed in anatomical &#39;</span>
+                                     <span class="s1">&#39;slice planes plot&#39;</span><span class="p">)</span>
+
+        <span class="n">anat_slices_gap_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Gap between slices in anatomical slice planes &#39;</span>
+                                <span class="s1">&#39;plot&#39;</span><span class="p">)</span>
+
+        <span class="n">norm_anat_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;An existing, uncompressed normalised anatomical &#39;</span>
+                          <span class="s1">&#39;image file (valid extensions: .nii)&#39;</span><span class="p">)</span>
+
+        <span class="n">norm_anat_fig_rows_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;The number of lines for the normalised &#39;</span>
+                                   <span class="s1">&#39;anatomical slice planes plot&#39;</span><span class="p">)</span>
+
+        <span class="n">norm_anat_fig_cols_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;The number of columns for the normalised &#39;</span>
+                                   <span class="s1">&#39;anatomical slice planes plot&#39;</span><span class="p">)</span>
+
+        <span class="n">norm_anat_inf_slice_start_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;The first index displayed in &#39;</span>
+                                          <span class="s1">&#39;normalised anatomical slice planes &#39;</span>
+                                          <span class="s1">&#39;plot&#39;</span><span class="p">)</span>
+
+        <span class="n">norm_anat_slices_gap_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Gap between slices in normalised &#39;</span>
+                                     <span class="s1">&#39;anatomical slice planes plot&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Outputs description</span>
+        <span class="n">report_desc</span> <span class="o">=</span> <span class="s1">&#39;The generated report (pdf)&#39;</span>
+
+        <span class="c1"># Inputs traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;IQMs_file&quot;</span><span class="p">,</span>
+                       <span class="n">File</span><span class="p">(</span><span class="n">copyfile</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">IQMs_file_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;anat&quot;</span><span class="p">,</span>
+                       <span class="n">ImageFileSPM</span><span class="p">(</span><span class="n">copyfile</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                    <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                    <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                    <span class="n">desc</span><span class="o">=</span><span class="n">anat_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;anat_fig_rows&quot;</span><span class="p">,</span>
+                       <span class="n">traits</span><span class="o">.</span><span class="n">Int</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span>
+                                  <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                  <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                  <span class="n">desc</span><span class="o">=</span><span class="n">anat_fig_rows_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;anat_fig_cols&quot;</span><span class="p">,</span>
+                       <span class="n">traits</span><span class="o">.</span><span class="n">Int</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span>
+                                  <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                  <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                  <span class="n">desc</span><span class="o">=</span><span class="n">anat_fig_cols_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;anat_inf_slice_start&quot;</span><span class="p">,</span>
+                       <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span><span class="n">Undefined</span><span class="p">,</span>
+                                     <span class="n">traits</span><span class="o">.</span><span class="n">Int</span><span class="p">,</span>
+                                     <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                                     <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                     <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                     <span class="n">desc</span><span class="o">=</span><span class="n">anat_inf_slice_start_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;anat_slices_gap&quot;</span><span class="p">,</span>
+                       <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span><span class="n">Undefined</span><span class="p">,</span>
+                                     <span class="n">traits</span><span class="o">.</span><span class="n">Int</span><span class="p">,</span>
+                                     <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                                     <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                     <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                     <span class="n">desc</span><span class="o">=</span><span class="n">anat_slices_gap_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">,</span>
+                       <span class="n">ImageFileSPM</span><span class="p">(</span><span class="n">copyfile</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                    <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                    <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                    <span class="n">desc</span><span class="o">=</span><span class="n">norm_anat_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;norm_anat_fig_rows&quot;</span><span class="p">,</span>
+                       <span class="n">traits</span><span class="o">.</span><span class="n">Int</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span>
+                                  <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                  <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                  <span class="n">desc</span><span class="o">=</span><span class="n">norm_anat_fig_rows_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;norm_anat_fig_cols&quot;</span><span class="p">,</span>
+                       <span class="n">traits</span><span class="o">.</span><span class="n">Int</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span>
+                                  <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                  <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                  <span class="n">desc</span><span class="o">=</span><span class="n">norm_anat_fig_cols_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;norm_anat_inf_slice_start&quot;</span><span class="p">,</span>
+                       <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span><span class="n">Undefined</span><span class="p">,</span>
+                                     <span class="n">traits</span><span class="o">.</span><span class="n">Int</span><span class="p">,</span>
+                                     <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                                     <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                     <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                     <span class="n">desc</span><span class="o">=</span><span class="n">norm_anat_inf_slice_start_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;norm_anat_slices_gap&quot;</span><span class="p">,</span>
+                       <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span><span class="n">Undefined</span><span class="p">,</span>
+                                     <span class="n">traits</span><span class="o">.</span><span class="n">Int</span><span class="p">,</span>
+                                     <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                                     <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                     <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                     <span class="n">desc</span><span class="o">=</span><span class="n">norm_anat_slices_gap_desc</span><span class="p">))</span>
+
+        <span class="c1"># Outputs traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;report&quot;</span><span class="p">,</span>
+                       <span class="n">OutputMultiPath</span><span class="p">(</span><span class="n">File</span><span class="p">(),</span>
+                                       <span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                       <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                       <span class="n">desc</span><span class="o">=</span><span class="n">report_desc</span><span class="p">))</span>
+        <span class="c1"># Special parameter used as a messenger for the run_process_mia method</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;dict4runtime&quot;</span><span class="p">,</span>
+                       <span class="n">traits</span><span class="o">.</span><span class="n">Dict</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                   <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                   <span class="n">userlevel</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ReportAnatMriqc.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportAnatMriqc.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+
+<span class="sd">        The main objective of this method is to produce the outputs of the</span>
+<span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
+<span class="sd">        if defined here. To work properly this method must return</span>
+<span class="sd">        self.make_initResult() object.</span>
+
+<span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ReportAnatMriqc</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+
+        <span class="n">file_position</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">anat</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">getName</span><span class="p">())</span>
+                         <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">getName</span><span class="p">())</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">database_filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">anat</span><span class="p">[</span><span class="n">file_position</span><span class="p">:]</span>
+
+        <span class="c1"># As we do not have access to the database at the runtime (see #272),</span>
+        <span class="c1"># we prepare here the data that the run_process_mia method will need</span>
+        <span class="c1"># via dict4runtime parameter:</span>
+        <span class="n">dict4runtime_update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">session</span><span class="p">,</span>
+                            <span class="n">database_filename</span><span class="p">,</span>
+                            <span class="s1">&#39;PatientName&#39;</span><span class="p">,</span> <span class="s1">&#39;StudyName&#39;</span><span class="p">,</span> <span class="s1">&#39;AcquisitionDate&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;Sex&#39;</span><span class="p">,</span> <span class="s1">&#39;Site&#39;</span><span class="p">,</span> <span class="s1">&#39;Spectro&#39;</span><span class="p">,</span> <span class="s1">&#39;Age&#39;</span><span class="p">)</span>
+
+        <span class="c1"># FIXME: Currently, Site and Spectro data is hard-coded. A solution</span>
+        <span class="c1">#        should be found to retrieve them automatically or to put them</span>
+        <span class="c1">#        in the input parameters of the brick:</span>
+        <span class="c1"># Site</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s1">&#39;Site&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s1">&#39;Site&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Grenoble University Hospital - CLUNI&#39;</span>
+
+        <span class="c1"># MriScanner</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s1">&#39;Spectro&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s1">&#39;Spectro&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Philips Achieva 3.0T TX&#39;</span>
+
+        <span class="c1"># Generate an output name</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">anat</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">anat</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;report&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">_anatomical_mriqcReport_</span><span class="si">{1}</span><span class="s2">.pdf&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s1">&#39;PatientName&#39;</span><span class="p">]</span> <span class="k">if</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s1">&#39;PatientName&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;Undefined&quot;</span> <span class="k">else</span>
+                    <span class="s2">&quot;Undefined_name_ref&quot;</span><span class="p">,</span>
+                    <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y_%m_</span><span class="si">%d</span><span class="s1">_&#39;</span>
+                                            <span class="s1">&#39;%H_%M_%S_</span><span class="si">%f</span><span class="s1">&#39;</span><span class="p">)[:</span><span class="mi">22</span><span class="p">]))</span>
+
+        <span class="c1"># Add additional information for report generation</span>
+        <span class="c1"># {iqms parameter: [parameter header, parameter rounding,</span>
+        <span class="c1">#                   wildcard, related publication]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s1">&#39;extra_info&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;size_x&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Voxel size in X&quot;</span><span class="p">,</span>
+                       <span class="mi">2</span><span class="p">,</span>
+                       <span class="kc">None</span>
+                       <span class="p">],</span>
+            <span class="s2">&quot;size_y&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Voxel size in Y&quot;</span><span class="p">,</span>
+                       <span class="mi">2</span><span class="p">,</span>
+                       <span class="kc">None</span>
+                       <span class="p">],</span>
+            <span class="s2">&quot;size_z&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Voxel size in Z&quot;</span><span class="p">,</span>
+                       <span class="mi">2</span><span class="p">,</span>
+                       <span class="kc">None</span>
+                       <span class="p">],</span>
+            <span class="s2">&quot;spacing_x&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Spacing in X (mm)&quot;</span><span class="p">,</span>
+                          <span class="mi">2</span><span class="p">,</span>
+                          <span class="kc">None</span>
+                          <span class="p">],</span>
+            <span class="s2">&quot;spacing_y&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Spacing in Y (mm)&quot;</span><span class="p">,</span>
+                          <span class="mi">2</span><span class="p">,</span>
+                          <span class="kc">None</span>
+                          <span class="p">],</span>
+            <span class="s2">&quot;spacing_z&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Spacing in Z (mm)&quot;</span><span class="p">,</span>
+                          <span class="mi">2</span><span class="p">,</span>
+                          <span class="kc">None</span>
+                          <span class="p">],</span>
+            <span class="s2">&quot;snr_csf&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Signal-to-noise ratio (SNR) for cerebrospinal fluid&quot;</span><span class="p">,</span>
+                        <span class="mi">2</span><span class="p">,</span>
+                        <span class="kc">None</span>
+                        <span class="p">],</span>
+            <span class="s2">&quot;snr_wm&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;SNR for white matter&quot;</span><span class="p">,</span>
+                       <span class="mi">2</span><span class="p">,</span>
+                       <span class="kc">None</span>
+                       <span class="p">],</span>
+            <span class="s2">&quot;snr_gm&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;SNR for gray matter&quot;</span><span class="p">,</span>
+                       <span class="mi">2</span><span class="p">,</span>
+                       <span class="kc">None</span>
+                       <span class="p">],</span>
+            <span class="s2">&quot;snr_total&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;SNR for brain parenchyma&quot;</span><span class="p">,</span>
+                          <span class="mi">2</span><span class="p">,</span>
+                          <span class="kc">None</span>
+                          <span class="p">],</span>
+            <span class="s2">&quot;snrd_csf&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Dietrich’s SNR for cerebrospinal fluid&quot;</span><span class="p">,</span>
+                         <span class="mi">2</span><span class="p">,</span>
+                         <span class="s2">&quot;$&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;Dietrich et al., &lt;i&gt;Measurement of SNRs in MR images:&quot;</span>
+                         <span class="s2">&quot; influence of multichannel coils, parallel &quot;</span>
+                         <span class="s2">&quot;imaging and reconstruction filters&lt;/i&gt;, JMRI &quot;</span>
+                         <span class="s2">&quot;26(2):375–385, 2007. Higher values are better.&quot;</span>
+                         <span class="p">],</span>
+            <span class="s2">&quot;snrd_wm&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Dietrich’s SNR for white matter&quot;</span><span class="p">,</span>
+                        <span class="mi">2</span><span class="p">,</span>
+                        <span class="s2">&quot;$&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;Dietrich et al., &lt;i&gt;Measurement of SNRs in MR images:&quot;</span>
+                        <span class="s2">&quot; influence of multichannel coils, parallel &quot;</span>
+                        <span class="s2">&quot;imaging and reconstruction filters&lt;/i&gt;, JMRI &quot;</span>
+                        <span class="s2">&quot;26(2):375–385, 2007. Higher values are better.&quot;</span>
+                        <span class="p">],</span>
+            <span class="s2">&quot;snrd_gm&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Dietrich’s SNR for gray matter&quot;</span><span class="p">,</span>
+                        <span class="mi">2</span><span class="p">,</span>
+                        <span class="s2">&quot;$&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;Dietrich et al., &lt;i&gt;Measurement of SNRs in MR images:&quot;</span>
+                        <span class="s2">&quot; influence of multichannel coils, parallel &quot;</span>
+                        <span class="s2">&quot;imaging and reconstruction filters&lt;/i&gt;, JMRI &quot;</span>
+                        <span class="s2">&quot;26(2):375–385, 2007. Higher values are better.&quot;</span>
+                        <span class="p">],</span>
+            <span class="s2">&quot;snrd_total&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Dietrich’s SNR for brain parenchyma&quot;</span><span class="p">,</span>
+                           <span class="mi">2</span><span class="p">,</span>
+                           <span class="s2">&quot;$&quot;</span><span class="p">,</span>
+                           <span class="s2">&quot;Dietrich et al., &lt;i&gt;Measurement of SNRs in MR &quot;</span>
+                           <span class="s2">&quot;images: influence of multichannel coils, &quot;</span>
+                           <span class="s2">&quot;parallel imaging and reconstruction filters&lt;/i&gt;,&quot;</span>
+                           <span class="s2">&quot;JMRI 26(2):375–385, 2007. Higher values are &quot;</span>
+                           <span class="s2">&quot;better.&quot;</span>
+                           <span class="p">],</span>
+            <span class="s2">&quot;cnr&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Contrast-to-noise ratio&quot;</span><span class="p">,</span>
+                    <span class="mi">2</span><span class="p">,</span>
+                    <span class="s1">&#39;#&#39;</span><span class="p">,</span>
+                    <span class="s2">&quot;Magnotta, VA., &amp; Friedman, L., &lt;i&gt;Measurement of &quot;</span>
+                    <span class="s2">&quot;signal-to-noise and contrast-to-noise in the fBIRN &quot;</span>
+                    <span class="s2">&quot;multicenter imaging study&lt;/i&gt;, J Dig Imag &quot;</span>
+                    <span class="s2">&quot;19(2):140-147, 2006. Higher values are better.&quot;</span>
+                    <span class="p">],</span>
+            <span class="s2">&quot;qi_2&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Mortamet’s quality index 2&quot;</span><span class="p">,</span>
+                     <span class="s2">&quot;</span><span class="si">{:.2e}</span><span class="s2">&quot;</span><span class="p">,</span>
+                     <span class="s2">&quot;&amp;&quot;</span><span class="p">,</span>
+                     <span class="s2">&quot;Mortamet B et al., &lt;i&gt;Automatic quality assessment in &quot;</span>
+                     <span class="s2">&quot;structural brain magnetic resonance imaging&lt;/i&gt;, Mag &quot;</span>
+                     <span class="s2">&quot;Res Med 62(2):365-372, 2009. Lower values are better.&quot;</span>
+                     <span class="p">],</span>
+            <span class="s2">&quot;cjv&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Coefficient of joint variation&quot;</span><span class="p">,</span>
+                    <span class="mi">2</span><span class="p">,</span>
+                    <span class="s2">&quot;%&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;Ganzetti et al., &lt;i&gt; Intensity inhomogeneity correction &quot;</span>
+                    <span class="s2">&quot;of structural MR images: a data-driven approach to &quot;</span>
+                    <span class="s2">&quot;define input algorithm parameters&lt;/i&gt;, Front &quot;</span>
+                    <span class="s2">&quot;Neuroinform 10:10, 2016. Lower values are better.&quot;</span>
+                    <span class="p">],</span>
+            <span class="s2">&quot;fber&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;FBER&quot;</span><span class="p">,</span>
+                     <span class="s2">&quot;</span><span class="si">{:.2e}</span><span class="s2">&quot;</span><span class="p">,</span>
+                     <span class="s2">&quot;%&quot;</span><span class="p">,</span>
+                     <span class="s2">&quot;Shehzad Z et al., &lt;i&gt;The Preprocessed Connectomes &quot;</span>
+                     <span class="s2">&quot;Project Quality Assessment Protocol - a resource for &quot;</span>
+                     <span class="s2">&quot;measuring the quality of MRI data&lt;/i&gt;, Front. &quot;</span>
+                     <span class="s2">&quot;Neurosci. Conference Abstract: Neuroinformatics 2015. &quot;</span>
+                     <span class="s2">&quot;Higher values are better.&quot;</span>
+                     <span class="p">],</span>
+            <span class="s2">&quot;efc&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;EFC&quot;</span><span class="p">,</span>
+                    <span class="mi">2</span><span class="p">,</span>
+                    <span class="s2">&quot;#&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;Atkinson et al., &lt;i&gt;Automatic correction of motion &quot;</span>
+                    <span class="s2">&quot;artifacts in magnetic resonance images using an &quot;</span>
+                    <span class="s2">&quot;entropy focus criterion&lt;/i&gt;, IEEE Trans Med Imag &quot;</span>
+                    <span class="s2">&quot;16(6):903-910, 1997. Lower values are better.&quot;</span>
+                    <span class="p">],</span>
+            <span class="s2">&quot;wm2max&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;White-matter to maximum intensity ratio&quot;</span><span class="p">,</span>
+                       <span class="mi">2</span><span class="p">,</span>
+                       <span class="s2">&quot;&amp;&quot;</span><span class="p">,</span>
+                       <span class="s2">&quot;The median intensity within the white matter mask over &quot;</span>
+                       <span class="s2">&quot;the 95% percentile of the full intensity &quot;</span>
+                       <span class="s2">&quot;distribution. Values should be around the interval &quot;</span>
+                       <span class="s2">&quot;[0.6, 0.8].&quot;</span>
+                       <span class="p">],</span>
+            <span class="s2">&quot;qi_1&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Mortamet’s quality index 1&quot;</span><span class="p">,</span>
+                     <span class="s2">&quot;</span><span class="si">{:.2e}</span><span class="s2">&quot;</span><span class="p">,</span>
+                     <span class="s2">&quot;$&quot;</span><span class="p">,</span>
+                     <span class="s2">&quot;Mortamet B et al., &lt;i&gt;Automatic quality assessment in &quot;</span>
+                     <span class="s2">&quot;structural brain magnetic resonance imaging&lt;/i&gt;, Mag &quot;</span>
+                     <span class="s2">&quot;Res Med 62(2):365-372, 2009. Lower values are better.&quot;</span>
+                     <span class="p">],</span>
+            <span class="s2">&quot;inu_range&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Bias field range (95th percentile - 5th percentile)&quot;</span><span class="p">,</span>
+                          <span class="mi">2</span><span class="p">,</span>
+                          <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+                          <span class="s2">&quot;Tustison NJ et al., &lt;i&gt;N4ITK: improved N3 bias &quot;</span>
+                          <span class="s2">&quot;correction&lt;/i&gt;, IEEE Trans Med Imag, &quot;</span>
+                          <span class="s2">&quot;29(6):1310-20, 2010. Median closer to 1 and range &quot;</span>
+                          <span class="s2">&quot;closer to 0 are better.&quot;</span>
+                          <span class="p">],</span>
+            <span class="s2">&quot;inu_med&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Bias field median&quot;</span><span class="p">,</span>
+                        <span class="mi">2</span><span class="p">,</span>
+                        <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;Tustison NJ et al., &lt;i&gt;N4ITK: improved N3 bias &quot;</span>
+                        <span class="s2">&quot;correction&lt;/i&gt;, IEEE Trans Med Imag, &quot;</span>
+                        <span class="s2">&quot;29(6):1310-20, 2010. Median closer to 1 and range &quot;</span>
+                        <span class="s2">&quot;closer to 0 are better.&quot;</span>
+                        <span class="p">],</span>
+            <span class="s2">&quot;summary_csf_mean&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Mean of the distribution of cerebrospinal &quot;</span>
+                                 <span class="s2">&quot;fluid&quot;</span><span class="p">,</span>
+                                 <span class="mi">2</span><span class="p">,</span>
+                                 <span class="kc">None</span>
+                                 <span class="p">],</span>
+            <span class="s2">&quot;summary_csf_stdv&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Standard deviation of the distribution of &quot;</span>
+                                 <span class="s2">&quot;cerebrospinal fluid&quot;</span><span class="p">,</span>
+                                 <span class="mi">2</span><span class="p">,</span>
+                                 <span class="kc">None</span>
+                                 <span class="p">],</span>
+            <span class="s2">&quot;summary_csf_median&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Median of the distribution of &quot;</span>
+                                   <span class="s2">&quot;cerebrospinal fluid&quot;</span><span class="p">,</span>
+                                   <span class="mi">2</span><span class="p">,</span>
+                                   <span class="kc">None</span>
+                                   <span class="p">],</span>
+            <span class="s2">&quot;summary_csf_mad&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Median absolute deviation of the distribution&quot;</span>
+                                <span class="s2">&quot; of cerebrospinal fluid&quot;</span><span class="p">,</span>
+                                <span class="mi">2</span><span class="p">,</span>
+                                <span class="kc">None</span>
+                                <span class="p">],</span>
+            <span class="s2">&quot;summary_csf_p95&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;95% percentile of the distribution of &quot;</span>
+                                <span class="s2">&quot;cerebrospinal fluid&quot;</span><span class="p">,</span>
+                                <span class="mi">2</span><span class="p">,</span>
+                                <span class="kc">None</span>
+                                <span class="p">],</span>
+            <span class="s2">&quot;summary_csf_p05&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;5% percentile of the distribution of &quot;</span>
+                                <span class="s2">&quot;cerebrospinal fluid&quot;</span><span class="p">,</span>
+                                <span class="mi">2</span><span class="p">,</span>
+                                <span class="kc">None</span>
+                                <span class="p">],</span>
+            <span class="s2">&quot;summary_csf_k&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Kurtosis of the distribution of &quot;</span>
+                              <span class="s2">&quot;cerebrospinal fluid&quot;</span><span class="p">,</span>
+                              <span class="mi">2</span><span class="p">,</span>
+                              <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+                              <span class="s2">&quot;K is always ≥ -2. If the distribution is &quot;</span>
+                              <span class="s2">&quot;Gaussian, K = 0. If a distribution has less &quot;</span>
+                              <span class="s2">&quot;weight on its center and tails compared to a &quot;</span>
+                              <span class="s2">&quot;Gaussian of the same variance, then K &lt; 0. If &quot;</span>
+                              <span class="s2">&quot;the distribution has more weight on its &quot;</span>
+                              <span class="s2">&quot;center and tails, then K &gt; 0.&quot;</span>
+                              <span class="p">],</span>
+            <span class="s2">&quot;summary_csf_n&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Number of voxels in the distribution &quot;</span>
+                              <span class="s2">&quot;of cerebrospinal fluid&quot;</span><span class="p">,</span>
+                              <span class="s2">&quot;</span><span class="si">{:.2e}</span><span class="s2">&quot;</span><span class="p">,</span>
+                              <span class="kc">None</span>
+                              <span class="p">],</span>
+            <span class="s2">&quot;summary_gm_mean&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Mean of the distribution of gray matter&quot;</span><span class="p">,</span>
+                                <span class="mi">2</span><span class="p">,</span>
+                                <span class="kc">None</span>
+                                <span class="p">],</span>
+            <span class="s2">&quot;summary_gm_stdv&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Standard deviation of the distribution of &quot;</span>
+                                <span class="s2">&quot;gray matter&quot;</span><span class="p">,</span>
+                                <span class="mi">2</span><span class="p">,</span>
+                                <span class="kc">None</span>
+                                <span class="p">],</span>
+            <span class="s2">&quot;summary_gm_median&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Median of the distribution of gray matter&quot;</span><span class="p">,</span>
+                                  <span class="mi">2</span><span class="p">,</span>
+                                  <span class="kc">None</span>
+                                  <span class="p">],</span>
+            <span class="s2">&quot;summary_gm_mad&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Median absolute deviation of the distribution&quot;</span>
+                               <span class="s2">&quot; gray matter&quot;</span><span class="p">,</span>
+                               <span class="mi">2</span><span class="p">,</span>
+                               <span class="kc">None</span>
+                               <span class="p">],</span>
+            <span class="s2">&quot;summary_gm_p95&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;95% percentile of the distribution of &quot;</span>
+                               <span class="s2">&quot;gray matter&quot;</span><span class="p">,</span>
+                               <span class="mi">2</span><span class="p">,</span>
+                               <span class="kc">None</span>
+                               <span class="p">],</span>
+            <span class="s2">&quot;summary_gm_p05&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;5% percentile of the distribution of &quot;</span>
+                               <span class="s2">&quot;gray matter&quot;</span><span class="p">,</span>
+                               <span class="mi">2</span><span class="p">,</span>
+                               <span class="kc">None</span>
+                               <span class="p">],</span>
+            <span class="s2">&quot;summary_gm_k&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Kurtosis of the distribution of &quot;</span>
+                             <span class="s2">&quot;gray matter&quot;</span><span class="p">,</span>
+                             <span class="mi">2</span><span class="p">,</span>
+                             <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+                             <span class="s2">&quot;K is always ≥ -2. If the distribution is &quot;</span>
+                             <span class="s2">&quot;Gaussian, K = 0. If a distribution has less &quot;</span>
+                             <span class="s2">&quot;weight on its center and tails compared to a &quot;</span>
+                             <span class="s2">&quot;Gaussian of the same variance, then K &lt; 0. If &quot;</span>
+                             <span class="s2">&quot;the distribution has more weight on its &quot;</span>
+                             <span class="s2">&quot;center and tails, then K &gt; 0.&quot;</span>
+                             <span class="p">],</span>
+            <span class="s2">&quot;summary_gm_n&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Number of voxels in the distribution of gray &quot;</span>
+                             <span class="s2">&quot;matter&quot;</span><span class="p">,</span>
+                             <span class="s2">&quot;</span><span class="si">{:.2e}</span><span class="s2">&quot;</span><span class="p">,</span>
+                             <span class="kc">None</span>
+                             <span class="p">],</span>
+            <span class="s2">&quot;summary_wm_mean&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Mean of the distribution of white matter&quot;</span><span class="p">,</span>
+                                <span class="mi">2</span><span class="p">,</span>
+                                <span class="kc">None</span>
+                                <span class="p">],</span>
+            <span class="s2">&quot;summary_wm_stdv&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Standard deviation of the distribution of &quot;</span>
+                                <span class="s2">&quot;white matter&quot;</span><span class="p">,</span>
+                                <span class="mi">2</span><span class="p">,</span>
+                                <span class="kc">None</span>
+                                <span class="p">],</span>
+            <span class="s2">&quot;summary_wm_median&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Median of the distribution of white matter&quot;</span><span class="p">,</span>
+                                  <span class="mi">2</span><span class="p">,</span>
+                                  <span class="kc">None</span>
+                                  <span class="p">],</span>
+            <span class="s2">&quot;summary_wm_mad&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Median absolute deviation of the distribution&quot;</span>
+                               <span class="s2">&quot; white matter&quot;</span><span class="p">,</span>
+                               <span class="mi">2</span><span class="p">,</span>
+                               <span class="kc">None</span>
+                               <span class="p">],</span>
+            <span class="s2">&quot;summary_wm_p95&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;95% percentile of the distribution of &quot;</span>
+                               <span class="s2">&quot;white matter&quot;</span><span class="p">,</span>
+                               <span class="mi">2</span><span class="p">,</span>
+                               <span class="kc">None</span>
+                               <span class="p">],</span>
+            <span class="s2">&quot;summary_wm_p05&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;5% percentile of the distribution of white &quot;</span>
+                               <span class="s2">&quot;matter&quot;</span><span class="p">,</span>
+                               <span class="mi">2</span><span class="p">,</span>
+                               <span class="kc">None</span>
+                               <span class="p">],</span>
+            <span class="s2">&quot;summary_wm_k&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Kurtosis of the distribution of white matter&quot;</span><span class="p">,</span>
+                             <span class="mi">2</span><span class="p">,</span>
+                             <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+                             <span class="s2">&quot;K is always ≥ -2. If the distribution is &quot;</span>
+                             <span class="s2">&quot;Gaussian, K = 0. If a distribution has less &quot;</span>
+                             <span class="s2">&quot;weight on its center and tails compared to a &quot;</span>
+                             <span class="s2">&quot;Gaussian of the same variance, then K &lt; 0. If &quot;</span>
+                             <span class="s2">&quot;the distribution has more weight on its &quot;</span>
+                             <span class="s2">&quot;center and tails, then K &gt; 0.&quot;</span>
+                             <span class="p">],</span>
+            <span class="s2">&quot;summary_wm_n&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Number of voxels in the distribution of white &quot;</span>
+                             <span class="s2">&quot;matter&quot;</span><span class="p">,</span>
+                             <span class="s2">&quot;</span><span class="si">{:.2e}</span><span class="s2">&quot;</span><span class="p">,</span>
+                             <span class="kc">None</span>
+                             <span class="p">],</span>
+
+            <span class="s2">&quot;summary_bg_mean&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Mean of the distribution of background&quot;</span><span class="p">,</span>
+                                <span class="mi">2</span><span class="p">,</span>
+                                <span class="kc">None</span>
+                                <span class="p">],</span>
+            <span class="s2">&quot;summary_bg_stdv&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Standard deviation of the distribution of &quot;</span>
+                                <span class="s2">&quot;background&quot;</span><span class="p">,</span>
+                                <span class="mi">2</span><span class="p">,</span>
+                                <span class="kc">None</span>
+                                <span class="p">],</span>
+            <span class="s2">&quot;summary_bg_median&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Median of the distribution of background&quot;</span><span class="p">,</span>
+                                  <span class="mi">2</span><span class="p">,</span>
+                                  <span class="kc">None</span>
+                                  <span class="p">],</span>
+            <span class="s2">&quot;summary_bg_mad&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Median absolute deviation of the distribution&quot;</span>
+                               <span class="s2">&quot; background&quot;</span><span class="p">,</span>
+                               <span class="mi">2</span><span class="p">,</span>
+                               <span class="kc">None</span>
+                               <span class="p">],</span>
+            <span class="s2">&quot;summary_bg_p95&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;95% percentile of the distribution of &quot;</span>
+                               <span class="s2">&quot;background&quot;</span><span class="p">,</span>
+                               <span class="mi">2</span><span class="p">,</span>
+                               <span class="kc">None</span>
+                               <span class="p">],</span>
+            <span class="s2">&quot;summary_bg_p05&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;5% percentile of the distribution of &quot;</span>
+                               <span class="s2">&quot;background&quot;</span><span class="p">,</span>
+                               <span class="mi">2</span><span class="p">,</span>
+                               <span class="kc">None</span>
+                               <span class="p">],</span>
+            <span class="s2">&quot;summary_bg_k&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Kurtosis of the distribution of background&quot;</span><span class="p">,</span>
+                             <span class="mi">2</span><span class="p">,</span>
+                             <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+                             <span class="s2">&quot;K is always ≥ -2. If the distribution is &quot;</span>
+                             <span class="s2">&quot;Gaussian, K = 0. If a distribution has less &quot;</span>
+                             <span class="s2">&quot;weight on its center and tails compared to a &quot;</span>
+                             <span class="s2">&quot;Gaussian of the same variance, then K &lt; 0. If &quot;</span>
+                             <span class="s2">&quot;the distribution has more weight on its &quot;</span>
+                             <span class="s2">&quot;center and tails, then K &gt; 0.&quot;</span>
+                             <span class="p">],</span>
+            <span class="s2">&quot;summary_bg_n&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Number of voxels in the distribution of &quot;</span>
+                             <span class="s2">&quot;background&quot;</span><span class="p">,</span>
+                             <span class="s2">&quot;</span><span class="si">{:.2e}</span><span class="s2">&quot;</span><span class="p">,</span>
+                             <span class="kc">None</span>
+                             <span class="p">],</span>
+            <span class="s2">&quot;fwhm_x&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;FWHM of the distribution in units of voxels, along x &quot;</span>
+                       <span class="s2">&quot;dimension&quot;</span><span class="p">,</span>
+                       <span class="mi">2</span><span class="p">,</span>
+                       <span class="s2">&quot;#&quot;</span><span class="p">,</span>
+                       <span class="s2">&quot;Forman SD et al., &lt;i&gt;Improved assessment of &quot;</span>
+                       <span class="s2">&quot;significant activation in functional magnetic &quot;</span>
+                       <span class="s2">&quot;resonance imaging(fMRI): use of a cluster - size &quot;</span>
+                       <span class="s2">&quot;threshold&lt;/i&gt;, Magn.Reson.Med. 33(5), 636–647, 1995. &quot;</span>
+                       <span class="s2">&quot;Lower values are better, higher values indicate a &quot;</span>
+                       <span class="s2">&quot;blurrier image.&quot;</span>
+                       <span class="p">],</span>
+            <span class="s2">&quot;fwhm_y&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;FWHM of the distribution in units of voxels, along y &quot;</span>
+                       <span class="s2">&quot;dimension&quot;</span><span class="p">,</span>
+                       <span class="mi">2</span><span class="p">,</span>
+                       <span class="s2">&quot;#&quot;</span><span class="p">,</span>
+                       <span class="s2">&quot;Forman SD et al., &lt;i&gt;Improved assessment of &quot;</span>
+                       <span class="s2">&quot;significant activation in functional magnetic &quot;</span>
+                       <span class="s2">&quot;resonance imaging(fMRI): use of a cluster - size &quot;</span>
+                       <span class="s2">&quot;threshold&lt;/i&gt;, Magn.Reson.Med. 33(5), 636–647, 1995. &quot;</span>
+                       <span class="s2">&quot;Lower values are better, higher values indicate a &quot;</span>
+                       <span class="s2">&quot;blurrier image.&quot;</span>
+                       <span class="p">],</span>
+            <span class="s2">&quot;fwhm_z&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;FWHM of the distribution in units of voxels, along z &quot;</span>
+                       <span class="s2">&quot;dimension&quot;</span><span class="p">,</span>
+                       <span class="mi">2</span><span class="p">,</span>
+                       <span class="s2">&quot;#&quot;</span><span class="p">,</span>
+                       <span class="s2">&quot;Forman SD et al., &lt;i&gt;Improved assessment of &quot;</span>
+                       <span class="s2">&quot;significant activation in functional magnetic &quot;</span>
+                       <span class="s2">&quot;resonance imaging(fMRI): use of a cluster - size &quot;</span>
+                       <span class="s2">&quot;threshold&lt;/i&gt;, Magn.Reson.Med. 33(5), 636–647, 1995. &quot;</span>
+                       <span class="s2">&quot;Lower values are better, higher values indicate a &quot;</span>
+                       <span class="s2">&quot;blurrier image.&quot;</span>
+                       <span class="p">],</span>
+            <span class="s2">&quot;fwhm_avg&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;FWHM of the distribution in units of voxels, average&quot;</span><span class="p">,</span>
+                         <span class="mi">2</span><span class="p">,</span>
+                         <span class="s2">&quot;#&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;Forman SD et al., &lt;i&gt;Improved assessment of &quot;</span>
+                         <span class="s2">&quot;significant activation in functional magnetic &quot;</span>
+                         <span class="s2">&quot;resonance imaging(fMRI): use of a cluster - size &quot;</span>
+                         <span class="s2">&quot;threshold&lt;/i&gt;, Magn.Reson.Med. 33(5), 636–647, 1995. &quot;</span>
+                         <span class="s2">&quot;Lower values are better, higher values indicate a &quot;</span>
+                         <span class="s2">&quot;blurrier image.&quot;</span>
+                         <span class="p">],</span>
+            <span class="s2">&quot;icvs_csf&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Intracranial volume fraction for cerebrospinal fluid&quot;</span><span class="p">,</span>
+                         <span class="mi">2</span><span class="p">,</span>
+                         <span class="kc">None</span><span class="p">,</span>
+                         <span class="p">],</span>
+            <span class="s2">&quot;icvs_gm&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Intracranial volume fraction for gray matter&quot;</span><span class="p">,</span>
+                        <span class="mi">2</span><span class="p">,</span>
+                        <span class="kc">None</span><span class="p">,</span>
+                        <span class="p">],</span>
+            <span class="s2">&quot;icvs_wm&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Intracranial volume fraction for white matter&quot;</span><span class="p">,</span>
+                        <span class="mi">2</span><span class="p">,</span>
+                        <span class="kc">None</span><span class="p">,</span>
+                        <span class="p">],</span>
+            <span class="s2">&quot;rpve_csf&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Residual partial voluming error for cerebrospinal &quot;</span>
+                         <span class="s2">&quot;fluid&quot;</span><span class="p">,</span>
+                         <span class="mi">2</span><span class="p">,</span>
+                         <span class="s2">&quot;%&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;Lower values are better.&quot;</span>
+                         <span class="p">],</span>
+            <span class="s2">&quot;rpve_gm&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Residual partial voluming error for gray matter&quot;</span><span class="p">,</span>
+                        <span class="mi">2</span><span class="p">,</span>
+                        <span class="s2">&quot;%&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;Lower values are better.&quot;</span>
+                        <span class="p">],</span>
+            <span class="s2">&quot;rpve_wm&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Residual partial voluming error for white matter&quot;</span><span class="p">,</span>
+                        <span class="mi">2</span><span class="p">,</span>
+                        <span class="s2">&quot;%&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;Lower values are better.&quot;</span>
+                        <span class="p">],</span>
+            <span class="s2">&quot;tpm_overlap_csf&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Overlap of the tissue probability map and the &quot;</span>
+                                <span class="s2">&quot;corresponding ICBM nonlinear-asymmetric &quot;</span>
+                                <span class="s2">&quot;2009c template, for cerebrospinal fluid&quot;</span><span class="p">,</span>
+                                <span class="mi">2</span><span class="p">,</span>
+                                <span class="s2">&quot;&amp;&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;Higher values are better.&quot;</span>
+                                <span class="p">],</span>
+            <span class="s2">&quot;tpm_overlap_gm&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Overlap of the tissue probability map and the &quot;</span>
+                               <span class="s2">&quot;corresponding ICBM nonlinear-asymmetric &quot;</span>
+                               <span class="s2">&quot;2009c template, for gray matter&quot;</span><span class="p">,</span>
+                               <span class="mi">2</span><span class="p">,</span>
+                               <span class="s2">&quot;&amp;&quot;</span><span class="p">,</span>
+                               <span class="s2">&quot;Higher values are better.&quot;</span>
+                               <span class="p">],</span>
+            <span class="s2">&quot;tpm_overlap_wm&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Overlap of the tissue probability map and the &quot;</span>
+                               <span class="s2">&quot;corresponding ICBM nonlinear-asymmetric &quot;</span>
+                               <span class="s2">&quot;2009c template, for white matter&quot;</span><span class="p">,</span>
+                               <span class="mi">2</span><span class="p">,</span>
+                               <span class="s2">&quot;&amp;&quot;</span><span class="p">,</span>
+                               <span class="s2">&quot;Higher values are better.&quot;</span>
+                               <span class="p">],</span>
+
+        <span class="p">}</span>
+
+        <span class="c1"># FIXME: Do we need tags inheritance ?</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ReportAnatMriqc.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportAnatMriqc.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ReportAnatMriqc</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+
+        <span class="n">report</span> <span class="o">=</span> <span class="n">Report</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">,</span>
+            <span class="n">IQMs_file</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">IQMs_file</span><span class="p">,</span>
+            <span class="n">anat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">anat</span><span class="p">,</span> <span class="n">anat_fig_rows</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">anat_fig_rows</span><span class="p">,</span>
+            <span class="n">anat_fig_cols</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">anat_fig_cols</span><span class="p">,</span>
+            <span class="n">anat_inf_slice_start</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">anat_inf_slice_start</span><span class="p">,</span>
+            <span class="n">anat_slices_gap</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">anat_slices_gap</span><span class="p">,</span>
+            <span class="n">norm_anat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_anat</span><span class="p">,</span>
+            <span class="n">norm_anat_fig_rows</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_anat_fig_rows</span><span class="p">,</span>
+            <span class="n">norm_anat_fig_cols</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_anat_fig_cols</span><span class="p">,</span>
+            <span class="n">norm_anat_inf_slice_start</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_anat_inf_slice_start</span><span class="p">,</span>
+            <span class="n">norm_anat_slices_gap</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_anat_slices_gap</span><span class="p">)</span>
+
+        <span class="n">report</span><span class="o">.</span><span class="n">make_report</span><span class="p">()</span></div></div>
+
+
+<div class="viewcode-block" id="ReportFuncMriqc"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportFuncMriqc">[docs]</a><span class="k">class</span> <span class="nc">ReportFuncMriqc</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        * Generates the report for functional data in MRIQC pipeline *</span>
+
+<span class="sd">        Please, see the complete documentation for the `MRIQC_report brick in the populse.mia_processes website</span>
+<span class="sd">        https://populse.github.io/mia_processes/html/documentation/bricks/reports/MRIQC_report.html</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ReportFuncMriqc.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportFuncMriqc.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+
+<span class="sd">        The input and output plugs are defined here. The special</span>
+<span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
+<span class="sd">        third-party products necessary for the running of the brick.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ReportFuncMriqc</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="c1"># Third party software required for the execution of the brick</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Inputs description</span>
+
+        <span class="n">IQMs_file_desc</span> <span class="o">=</span> <span class="s1">&#39;A .JSON file containing the IQMs&#39;</span>
+
+        <span class="n">func_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;An existing, uncompressed functional image file (valid &#39;</span>
+                     <span class="s1">&#39;extensions: .nii)&#39;</span><span class="p">)</span>
+
+        <span class="n">func_fig_rows_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;The number of lines for the functional slice &#39;</span>
+                              <span class="s1">&#39;planes plot&#39;</span><span class="p">)</span>
+
+        <span class="n">func_fig_cols_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;The number of columns for the functional slice &#39;</span>
+                              <span class="s1">&#39;planes plot&#39;</span><span class="p">)</span>
+
+        <span class="n">func_inf_slice_start_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;The first index displayed in functional &#39;</span>
+                                     <span class="s1">&#39;slice planes plot&#39;</span><span class="p">)</span>
+
+        <span class="n">func_slices_gap_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Gap between slices in functional slice planes &#39;</span>
+                                <span class="s1">&#39;plot&#39;</span><span class="p">)</span>
+
+        <span class="n">norm_func_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;An existing, uncompressed normalised functional &#39;</span>
+                          <span class="s1">&#39;image file (valid extensions: .nii)&#39;</span><span class="p">)</span>
+
+        <span class="n">norm_func_fig_rows_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;The number of lines for the normalised &#39;</span>
+                                   <span class="s1">&#39;functional slice planes plot&#39;</span><span class="p">)</span>
+
+        <span class="n">norm_func_fig_cols_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;The number of columns for the normalised &#39;</span>
+                                   <span class="s1">&#39;functional slice planes plot&#39;</span><span class="p">)</span>
+
+        <span class="n">norm_func_inf_slice_start_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;The first index displayed in &#39;</span>
+                                          <span class="s1">&#39;normalised functional slice planes &#39;</span>
+                                          <span class="s1">&#39;plot&#39;</span><span class="p">)</span>
+
+        <span class="n">norm_func_slices_gap_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Gap between slices in normalised &#39;</span>
+                                     <span class="s1">&#39;functional slice planes plot&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Outputs description</span>
+        <span class="n">report_desc</span> <span class="o">=</span> <span class="s1">&#39;The generated report (pdf)&#39;</span>
+
+        <span class="c1"># Inputs traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;IQMs_file&quot;</span><span class="p">,</span>
+                       <span class="n">File</span><span class="p">(</span><span class="n">copyfile</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">IQMs_file_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;func&quot;</span><span class="p">,</span>
+                       <span class="n">ImageFileSPM</span><span class="p">(</span><span class="n">copyfile</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                    <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                    <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                    <span class="n">desc</span><span class="o">=</span><span class="n">func_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;func_fig_rows&quot;</span><span class="p">,</span>
+                       <span class="n">traits</span><span class="o">.</span><span class="n">Int</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span>
+                                  <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                  <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                  <span class="n">desc</span><span class="o">=</span><span class="n">func_fig_rows_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;func_fig_cols&quot;</span><span class="p">,</span>
+                       <span class="n">traits</span><span class="o">.</span><span class="n">Int</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span>
+                                  <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                  <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                  <span class="n">desc</span><span class="o">=</span><span class="n">func_fig_cols_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;func_inf_slice_start&quot;</span><span class="p">,</span>
+                       <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span><span class="n">Undefined</span><span class="p">,</span>
+                                     <span class="n">traits</span><span class="o">.</span><span class="n">Int</span><span class="p">,</span>
+                                     <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                                     <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                     <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                     <span class="n">desc</span><span class="o">=</span><span class="n">func_inf_slice_start_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;func_slices_gap&quot;</span><span class="p">,</span>
+                       <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span><span class="n">Undefined</span><span class="p">,</span>
+                                     <span class="n">traits</span><span class="o">.</span><span class="n">Int</span><span class="p">,</span>
+                                     <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                                     <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                     <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                     <span class="n">desc</span><span class="o">=</span><span class="n">func_slices_gap_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;norm_func&quot;</span><span class="p">,</span>
+                       <span class="n">ImageFileSPM</span><span class="p">(</span><span class="n">copyfile</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                    <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                    <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                    <span class="n">desc</span><span class="o">=</span><span class="n">norm_func_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;norm_func_fig_rows&quot;</span><span class="p">,</span>
+                       <span class="n">traits</span><span class="o">.</span><span class="n">Int</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span>
+                                  <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                  <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                  <span class="n">desc</span><span class="o">=</span><span class="n">norm_func_fig_rows_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;norm_func_fig_cols&quot;</span><span class="p">,</span>
+                       <span class="n">traits</span><span class="o">.</span><span class="n">Int</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span>
+                                  <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                  <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                  <span class="n">desc</span><span class="o">=</span><span class="n">norm_func_fig_cols_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;norm_func_inf_slice_start&quot;</span><span class="p">,</span>
+                       <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span><span class="n">Undefined</span><span class="p">,</span>
+                                     <span class="n">traits</span><span class="o">.</span><span class="n">Int</span><span class="p">,</span>
+                                     <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                                     <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                     <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                     <span class="n">desc</span><span class="o">=</span><span class="n">norm_func_inf_slice_start_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;norm_func_slices_gap&quot;</span><span class="p">,</span>
+                       <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span><span class="n">Undefined</span><span class="p">,</span>
+                                     <span class="n">traits</span><span class="o">.</span><span class="n">Int</span><span class="p">,</span>
+                                     <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                                     <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                     <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                     <span class="n">desc</span><span class="o">=</span><span class="n">norm_func_slices_gap_desc</span><span class="p">))</span>
+
+        <span class="c1"># Outputs traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;report&quot;</span><span class="p">,</span>
+                       <span class="n">OutputMultiPath</span><span class="p">(</span><span class="n">File</span><span class="p">(),</span>
+                                       <span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                       <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                       <span class="n">desc</span><span class="o">=</span><span class="n">report_desc</span><span class="p">))</span>
+        <span class="c1"># Special parameter used as a messenger for the run_process_mia method</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;dict4runtime&quot;</span><span class="p">,</span>
+                       <span class="n">traits</span><span class="o">.</span><span class="n">Dict</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                   <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                   <span class="n">userlevel</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ReportFuncMriqc.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportFuncMriqc.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+
+<span class="sd">        The main objective of this method is to produce the outputs of the</span>
+<span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
+<span class="sd">        if defined here. To work properly this method must return</span>
+<span class="sd">        self.make_initResult() object.</span>
+
+<span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ReportFuncMriqc</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+
+        <span class="n">file_position</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">getName</span><span class="p">())</span>
+                         <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">getName</span><span class="p">())</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">database_filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">[</span><span class="n">file_position</span><span class="p">:]</span>
+
+        <span class="c1"># As we do not have access to the database at the runtime (see #272),</span>
+        <span class="c1"># we prepare here the data that the run_process_mia method will need</span>
+        <span class="c1"># via dict4runtime parameter:</span>
+        <span class="n">dict4runtime_update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">session</span><span class="p">,</span>
+                            <span class="n">database_filename</span><span class="p">,</span>
+                            <span class="s1">&#39;PatientName&#39;</span><span class="p">,</span> <span class="s1">&#39;StudyName&#39;</span><span class="p">,</span> <span class="s1">&#39;AcquisitionDate&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;Sex&#39;</span><span class="p">,</span> <span class="s1">&#39;Site&#39;</span><span class="p">,</span> <span class="s1">&#39;Spectro&#39;</span><span class="p">,</span> <span class="s1">&#39;Age&#39;</span><span class="p">)</span>
+
+        <span class="c1"># FIXME: Currently, Site and Spectro data are hard-coded. A solution</span>
+        <span class="c1">#        should be found to retrieve them automatically or to put them</span>
+        <span class="c1">#        in the input parameters of the brick:</span>
+        <span class="c1"># Site</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s1">&#39;Site&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s1">&#39;Site&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Grenoble University Hospital - CLUNI&#39;</span>
+
+        <span class="c1"># MriScanner</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s1">&#39;Spectro&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s1">&#39;Spectro&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Philips Achieva 3.0T TX&#39;</span>
+
+        <span class="c1"># Generate an output name</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;report&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">_functional_mriqcReport_</span><span class="si">{1}</span><span class="s2">.pdf&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s1">&#39;PatientName&#39;</span><span class="p">]</span> <span class="k">if</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s1">&#39;PatientName&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;Undefined&quot;</span> <span class="k">else</span>
+                    <span class="s2">&quot;Undefined_name_ref&quot;</span><span class="p">,</span>
+                    <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y_%m_</span><span class="si">%d</span><span class="s1">_&#39;</span>
+                                            <span class="s1">&#39;%H_%M_%S_</span><span class="si">%f</span><span class="s1">&#39;</span><span class="p">)[:</span><span class="mi">22</span><span class="p">]))</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
+
+        <span class="c1"># Add additional information for report generation</span>
+        <span class="c1"># {iqms parameter: [parameter header, parameter rounding,</span>
+        <span class="c1">#                   wildcard, related publication]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s1">&#39;extra_info&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;size_x&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Voxel size in X&quot;</span><span class="p">,</span>
+                       <span class="mi">2</span><span class="p">,</span>
+                       <span class="kc">None</span>
+                       <span class="p">],</span>
+            <span class="s2">&quot;size_y&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Voxel size in Y&quot;</span><span class="p">,</span>
+                       <span class="mi">2</span><span class="p">,</span>
+                       <span class="kc">None</span>
+                       <span class="p">],</span>
+            <span class="s2">&quot;size_z&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Voxel size in Z&quot;</span><span class="p">,</span>
+                       <span class="mi">2</span><span class="p">,</span>
+                       <span class="kc">None</span>
+                       <span class="p">],</span>
+            <span class="s2">&quot;size_t&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Number of dynamics&quot;</span><span class="p">,</span>
+                       <span class="mi">0</span><span class="p">,</span>
+                       <span class="kc">None</span>
+                       <span class="p">],</span>
+            <span class="s2">&quot;spacing_x&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Spacing in X (mm)&quot;</span><span class="p">,</span>
+                          <span class="mi">2</span><span class="p">,</span>
+                          <span class="kc">None</span>
+                          <span class="p">],</span>
+            <span class="s2">&quot;spacing_y&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Spacing in Y (mm)&quot;</span><span class="p">,</span>
+                          <span class="mi">2</span><span class="p">,</span>
+                          <span class="kc">None</span>
+                          <span class="p">],</span>
+            <span class="s2">&quot;spacing_z&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Spacing in Z (mm)&quot;</span><span class="p">,</span>
+                          <span class="mi">2</span><span class="p">,</span>
+                          <span class="kc">None</span>
+                          <span class="p">],</span>
+            <span class="s2">&quot;spacing_tr&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Dynamic spacing (s)&quot;</span><span class="p">,</span>
+                           <span class="mi">2</span><span class="p">,</span>
+                           <span class="kc">None</span>
+                           <span class="p">],</span>
+            <span class="s2">&quot;gsr_x&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Ghost to Signal Ratio (GSR), calculated along x&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;</span><span class="si">{:.2e}</span><span class="s2">&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;$&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;Giannelli et al., &lt;i&gt;Characterization of Nyquist ghost &quot;</span>
+                      <span class="s2">&quot;in EPI-fMRI acquisition sequences implemented on two &quot;</span>
+                      <span class="s2">&quot;clinical 1.5 T MR scanner systems: effect of readout &quot;</span>
+                      <span class="s2">&quot;bandwidth and echo spacing&lt;/i&gt;, J App Clin Med Phy, &quot;</span>
+                      <span class="s2">&quot;11(4), 2010.&quot;</span>
+                      <span class="p">],</span>
+            <span class="s2">&quot;gsr_y&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Ghost to Signal Ratio (GSR), calculated along y&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;</span><span class="si">{:.2e}</span><span class="s2">&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;$&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;Giannelli et al., &lt;i&gt;Characterization of Nyquist ghost &quot;</span>
+                      <span class="s2">&quot;in EPI-fMRI acquisition sequences implemented on two &quot;</span>
+                      <span class="s2">&quot;clinical 1.5 T MR scanner systems: effect of readout &quot;</span>
+                      <span class="s2">&quot;bandwidth and echo spacing&lt;/i&gt;, J App Clin Med Phy, &quot;</span>
+                      <span class="s2">&quot;11(4), 2010.&quot;</span>
+                      <span class="p">],</span>
+            <span class="s2">&quot;fd_mean&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Framewise Displacement (FD), average (mm)&quot;</span><span class="p">,</span>
+                        <span class="mi">2</span><span class="p">,</span>
+                        <span class="s2">&quot;#&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;Jenkinson et al., &lt;i&gt;Improved Optimisation for the &quot;</span>
+                        <span class="s2">&quot;Robust and Accurate Linear Registration and Motion &quot;</span>
+                        <span class="s2">&quot;Correction of Brain Images&lt;/i&gt;, NeuroImage, 17(2), &quot;</span>
+                        <span class="s2">&quot;825-841, 2002.&quot;</span>
+                        <span class="p">],</span>
+            <span class="s2">&quot;fd_num&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Number of timepoints above FD threshold (0.2mm)&quot;</span><span class="p">,</span>
+                       <span class="mi">2</span><span class="p">,</span>
+                       <span class="s2">&quot;#&quot;</span><span class="p">,</span>
+                       <span class="s2">&quot;Jenkinson et al., &lt;i&gt;Improved Optimisation for the &quot;</span>
+                       <span class="s2">&quot;Robust and Accurate Linear Registration and Motion &quot;</span>
+                       <span class="s2">&quot;Correction of Brain Images&lt;/i&gt;, NeuroImage, 17(2), &quot;</span>
+                       <span class="s2">&quot;825-841, 2002.&quot;</span>
+                       <span class="p">],</span>
+            <span class="s2">&quot;fd_perc&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Percent of FDs above the FD threshold (0.2mm)&quot;</span><span class="p">,</span>
+                        <span class="mi">2</span><span class="p">,</span>
+                        <span class="s2">&quot;#&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;Jenkinson et al., &lt;i&gt;Improved Optimisation for the &quot;</span>
+                        <span class="s2">&quot;Robust and Accurate Linear Registration and Motion &quot;</span>
+                        <span class="s2">&quot;Correction of Brain Images&lt;/i&gt;, NeuroImage, 17(2), &quot;</span>
+                        <span class="s2">&quot;825-841, 2002.&quot;</span>
+                        <span class="p">],</span>
+            <span class="s2">&quot;dummyTRs&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Number of volumes identified as non-steady state&quot;</span><span class="p">,</span>
+                         <span class="mi">2</span><span class="p">,</span>
+                         <span class="kc">None</span>
+                         <span class="p">],</span>
+            <span class="s2">&quot;summary_bg_mean&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Mean of the distribution of background&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;</span><span class="si">{:.2e}</span><span class="s2">&quot;</span><span class="p">,</span>
+                                <span class="kc">None</span>
+                                <span class="p">],</span>
+            <span class="s2">&quot;summary_bg_stdv&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Standard deviation of the distribution of &quot;</span>
+                                <span class="s2">&quot;background&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;</span><span class="si">{:.2e}</span><span class="s2">&quot;</span><span class="p">,</span>
+                                <span class="kc">None</span>
+                                <span class="p">],</span>
+            <span class="s2">&quot;summary_bg_median&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Median of the distribution of background&quot;</span><span class="p">,</span>
+                                  <span class="mi">2</span><span class="p">,</span>
+                                  <span class="kc">None</span>
+                                  <span class="p">],</span>
+            <span class="s2">&quot;summary_bg_mad&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Median absolute deviation of the distribution&quot;</span>
+                               <span class="s2">&quot; of background&quot;</span><span class="p">,</span>
+                               <span class="mi">2</span><span class="p">,</span>
+                               <span class="kc">None</span>
+                               <span class="p">],</span>
+            <span class="s2">&quot;summary_bg_p95&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;95% percentile of the distribution of &quot;</span>
+                               <span class="s2">&quot;background&quot;</span><span class="p">,</span>
+                               <span class="s2">&quot;</span><span class="si">{:.2e}</span><span class="s2">&quot;</span><span class="p">,</span>
+                               <span class="kc">None</span>
+                               <span class="p">],</span>
+            <span class="s2">&quot;summary_bg_p05&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;5% percentile of the distribution of &quot;</span>
+                               <span class="s2">&quot;background&quot;</span><span class="p">,</span>
+                               <span class="mi">2</span><span class="p">,</span>
+                               <span class="kc">None</span>
+                               <span class="p">],</span>
+            <span class="s2">&quot;summary_bg_k&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Kurtosis of the distribution of background&quot;</span><span class="p">,</span>
+                             <span class="mi">2</span><span class="p">,</span>
+                             <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+                             <span class="s2">&quot;K is always ≥ -2. If the distribution is &quot;</span>
+                             <span class="s2">&quot;Gaussian, K = 0. If a distribution has less &quot;</span>
+                             <span class="s2">&quot;weight on its center and tails compared to a &quot;</span>
+                             <span class="s2">&quot;Gaussian of the same variance, then K &lt; 0. If &quot;</span>
+                             <span class="s2">&quot;the distribution has more weight on its &quot;</span>
+                             <span class="s2">&quot;center and tails, then K &gt; 0.&quot;</span>
+                             <span class="p">],</span>
+            <span class="s2">&quot;summary_bg_n&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Number of voxels in the distribution &quot;</span>
+                             <span class="s2">&quot;of background&quot;</span><span class="p">,</span>
+                             <span class="s2">&quot;</span><span class="si">{:.2e}</span><span class="s2">&quot;</span><span class="p">,</span>
+                             <span class="kc">None</span>
+                             <span class="p">],</span>
+            <span class="s2">&quot;summary_fg_mean&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Mean of the distribution of foreground&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;</span><span class="si">{:.2e}</span><span class="s2">&quot;</span><span class="p">,</span>
+                                <span class="kc">None</span>
+                                <span class="p">],</span>
+            <span class="s2">&quot;summary_fg_stdv&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Standard deviation of the distribution of &quot;</span>
+                                <span class="s2">&quot;foreground&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;</span><span class="si">{:.2e}</span><span class="s2">&quot;</span><span class="p">,</span>
+                                <span class="kc">None</span>
+                                <span class="p">],</span>
+            <span class="s2">&quot;summary_fg_median&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Median of the distribution of foreground&quot;</span><span class="p">,</span>
+                                  <span class="s2">&quot;</span><span class="si">{:.2e}</span><span class="s2">&quot;</span><span class="p">,</span>
+                                  <span class="kc">None</span>
+                                  <span class="p">],</span>
+            <span class="s2">&quot;summary_fg_mad&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Median absolute deviation of the distribution&quot;</span>
+                               <span class="s2">&quot; of foreground&quot;</span><span class="p">,</span>
+                               <span class="s2">&quot;</span><span class="si">{:.2e}</span><span class="s2">&quot;</span><span class="p">,</span>
+                               <span class="kc">None</span>
+                               <span class="p">],</span>
+            <span class="s2">&quot;summary_fg_p95&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;95% percentile of the distribution of &quot;</span>
+                               <span class="s2">&quot;foreground&quot;</span><span class="p">,</span>
+                               <span class="s2">&quot;</span><span class="si">{:.2e}</span><span class="s2">&quot;</span><span class="p">,</span>
+                               <span class="kc">None</span>
+                               <span class="p">],</span>
+            <span class="s2">&quot;summary_fg_p05&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;5% percentile of the distribution of &quot;</span>
+                               <span class="s2">&quot;foreground&quot;</span><span class="p">,</span>
+                               <span class="s2">&quot;</span><span class="si">{:.2e}</span><span class="s2">&quot;</span><span class="p">,</span>
+                               <span class="kc">None</span>
+                               <span class="p">],</span>
+            <span class="s2">&quot;summary_fg_k&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Kurtosis of the distribution of foreground&quot;</span><span class="p">,</span>
+                             <span class="mi">2</span><span class="p">,</span>
+                             <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+                             <span class="s2">&quot;K is always ≥ -2. If the distribution is &quot;</span>
+                             <span class="s2">&quot;Gaussian, K = 0. If a distribution has less &quot;</span>
+                             <span class="s2">&quot;weight on its center and tails compared to a &quot;</span>
+                             <span class="s2">&quot;Gaussian of the same variance, then K &lt; 0. If &quot;</span>
+                             <span class="s2">&quot;the distribution has more weight on its &quot;</span>
+                             <span class="s2">&quot;center and tails, then K &gt; 0.&quot;</span>
+                             <span class="p">],</span>
+            <span class="s2">&quot;summary_fg_n&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Number of voxels in the distribution &quot;</span>
+                             <span class="s2">&quot;of foreground&quot;</span><span class="p">,</span>
+                             <span class="s2">&quot;</span><span class="si">{:.2e}</span><span class="s2">&quot;</span><span class="p">,</span>
+                             <span class="kc">None</span>
+                             <span class="p">],</span>
+            <span class="s2">&quot;snr&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;SNR for brain parenchyma&quot;</span><span class="p">,</span>
+                    <span class="mi">2</span><span class="p">,</span>
+                    <span class="kc">None</span>
+                    <span class="p">],</span>
+            <span class="s2">&quot;fber&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;FBER&quot;</span><span class="p">,</span>
+                     <span class="s2">&quot;</span><span class="si">{:.2e}</span><span class="s2">&quot;</span><span class="p">,</span>
+                     <span class="s2">&quot;%&quot;</span><span class="p">,</span>
+                     <span class="s2">&quot;Shehzad Z et al., &lt;i&gt;The Preprocessed Connectomes &quot;</span>
+                     <span class="s2">&quot;Project Quality Assessment Protocol - a resource for &quot;</span>
+                     <span class="s2">&quot;measuring the quality of MRI data&lt;/i&gt;, Front. &quot;</span>
+                     <span class="s2">&quot;Neurosci. Conference Abstract: Neuroinformatics 2015. &quot;</span>
+                     <span class="s2">&quot;Higher values are better.&quot;</span>
+                     <span class="p">],</span>
+            <span class="s2">&quot;efc&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;EFC&quot;</span><span class="p">,</span>
+                    <span class="mi">2</span><span class="p">,</span>
+                    <span class="s2">&quot;#&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;Atkinson et al., &lt;i&gt;Automatic correction of motion &quot;</span>
+                    <span class="s2">&quot;artifacts in magnetic resonance images using an &quot;</span>
+                    <span class="s2">&quot;entropy focus criterion&lt;/i&gt;, IEEE Trans Med Imag &quot;</span>
+                    <span class="s2">&quot;16(6):903-910, 1997. Lower values are better.&quot;</span>
+                    <span class="p">],</span>
+            <span class="s2">&quot;fwhm_x&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;FWHM of the distribution in units of voxels, along x &quot;</span>
+                       <span class="s2">&quot;dimension&quot;</span><span class="p">,</span>
+                       <span class="mi">2</span><span class="p">,</span>
+                       <span class="s2">&quot;&amp;&quot;</span><span class="p">,</span>
+                       <span class="s2">&quot;Forman SD et al., &lt;i&gt;Improved assessment of &quot;</span>
+                       <span class="s2">&quot;significant activation in functional magnetic &quot;</span>
+                       <span class="s2">&quot;resonance imaging(fMRI): use of a cluster - size &quot;</span>
+                       <span class="s2">&quot;threshold&lt;/i&gt;, Magn.Reson.Med. 33(5), 636–647, 1995. &quot;</span>
+                       <span class="s2">&quot;Lower values are better, higher values indicate a &quot;</span>
+                       <span class="s2">&quot;blurrier image.&quot;</span>
+                       <span class="p">],</span>
+            <span class="s2">&quot;fwhm_y&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;FWHM of the distribution in units of voxels, along y &quot;</span>
+                       <span class="s2">&quot;dimension&quot;</span><span class="p">,</span>
+                       <span class="mi">2</span><span class="p">,</span>
+                       <span class="s2">&quot;&amp;&quot;</span><span class="p">,</span>
+                       <span class="s2">&quot;Forman SD et al., &lt;i&gt;Improved assessment of &quot;</span>
+                       <span class="s2">&quot;significant activation in functional magnetic &quot;</span>
+                       <span class="s2">&quot;resonance imaging(fMRI): use of a cluster - size &quot;</span>
+                       <span class="s2">&quot;threshold&lt;/i&gt;, Magn.Reson.Med. 33(5), 636–647, 1995. &quot;</span>
+                       <span class="s2">&quot;Lower values are better, higher values indicate a &quot;</span>
+                       <span class="s2">&quot;blurrier image.&quot;</span>
+                       <span class="p">],</span>
+            <span class="s2">&quot;fwhm_z&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;FWHM of the distribution in units of voxels, along z &quot;</span>
+                       <span class="s2">&quot;dimension&quot;</span><span class="p">,</span>
+                       <span class="mi">2</span><span class="p">,</span>
+                       <span class="s2">&quot;&amp;&quot;</span><span class="p">,</span>
+                       <span class="s2">&quot;Forman SD et al., &lt;i&gt;Improved assessment of &quot;</span>
+                       <span class="s2">&quot;significant activation in functional magnetic &quot;</span>
+                       <span class="s2">&quot;resonance imaging(fMRI): use of a cluster - size &quot;</span>
+                       <span class="s2">&quot;threshold&lt;/i&gt;, Magn.Reson.Med. 33(5), 636–647, 1995. &quot;</span>
+                       <span class="s2">&quot;Lower values are better, higher values indicate a &quot;</span>
+                       <span class="s2">&quot;blurrier image.&quot;</span>
+                       <span class="p">],</span>
+            <span class="s2">&quot;fwhm_avg&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;FWHM of the distribution in units of voxels, average&quot;</span><span class="p">,</span>
+                         <span class="mi">2</span><span class="p">,</span>
+                         <span class="s2">&quot;&amp;&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;Forman SD et al., &lt;i&gt;Improved assessment of &quot;</span>
+                         <span class="s2">&quot;significant activation in functional magnetic &quot;</span>
+                         <span class="s2">&quot;resonance imaging(fMRI): use of a cluster - size &quot;</span>
+                         <span class="s2">&quot;threshold&lt;/i&gt;, Magn.Reson.Med. 33(5), 636–647, 1995. &quot;</span>
+                         <span class="s2">&quot;Lower values are better, higher values indicate a &quot;</span>
+                         <span class="s2">&quot;blurrier image.&quot;</span>
+                         <span class="p">],</span>
+            <span class="s2">&quot;dvars_nstd&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;DVARS, per-image standard deviation of the temporal &quot;</span>
+                           <span class="s2">&quot;derivative of the BOLD signal, scaled to 1000&quot;</span><span class="p">,</span>
+                           <span class="mi">2</span><span class="p">,</span>
+                           <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+                           <span class="s2">&quot;Power et al., &lt;i&gt;Spurious but systematic &quot;</span>
+                           <span class="s2">&quot;correlations in functional connectivity MRI &quot;</span>
+                           <span class="s2">&quot;networks arise from subject motion&lt;/i&gt;, NeuroImage &quot;</span>
+                           <span class="s2">&quot;59(3):2142-2154, 2012.&quot;</span>
+                           <span class="p">],</span>
+            <span class="s2">&quot;dvars_std&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Normalization of DVARS with the standard deviation &quot;</span>
+                          <span class="s2">&quot;of the temporal difference time series&quot;</span><span class="p">,</span>
+                          <span class="mi">2</span><span class="p">,</span>
+                          <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+                          <span class="s2">&quot;Power et al., &lt;i&gt;Spurious but systematic &quot;</span>
+                          <span class="s2">&quot;correlations in functional connectivity MRI &quot;</span>
+                          <span class="s2">&quot;networks arise from subject motion&lt;/i&gt;, NeuroImage &quot;</span>
+                          <span class="s2">&quot;59(3):2142-2154, 2012.&quot;</span>
+                          <span class="p">],</span>
+            <span class="s2">&quot;dvars_vstd&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Voxel-wise standardization of DVARS&quot;</span><span class="p">,</span>
+                           <span class="mi">2</span><span class="p">,</span>
+                           <span class="s2">&quot;*&quot;</span><span class="p">,</span>
+                           <span class="s2">&quot;Power et al., &lt;i&gt;Spurious but systematic &quot;</span>
+                           <span class="s2">&quot;correlations in functional connectivity MRI &quot;</span>
+                           <span class="s2">&quot;networks arise from subject motion&lt;/i&gt;, NeuroImage &quot;</span>
+                           <span class="s2">&quot;59(3):2142-2154, 2012.&quot;</span>
+                           <span class="p">],</span>
+            <span class="s2">&quot;tsnr&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Temporal SNR&quot;</span><span class="p">,</span>
+                     <span class="mi">2</span><span class="p">,</span>
+                     <span class="s2">&quot;#&quot;</span><span class="p">,</span>
+                     <span class="s2">&quot;Krüger et al., &lt;i&gt;Physiological noise in &quot;</span>
+                     <span class="s2">&quot;oxygenation-sensitive magnetic resonance imaging&lt;/i&gt;, &quot;</span>
+                     <span class="s2">&quot;Magn. Reson. Med. 46(4):631-637, 2001. Higher values are&quot;</span>
+                     <span class="s2">&quot;better.&quot;</span>
+                     <span class="p">],</span>
+            <span class="s2">&quot;gcor&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Global Correlation&quot;</span><span class="p">,</span>
+                     <span class="mi">2</span><span class="p">,</span>
+                     <span class="s2">&quot;&amp;&quot;</span><span class="p">,</span>
+                     <span class="s2">&quot;Saad et al., &lt;i&gt;Correcting Brain-Wide Correlation &quot;</span>
+                     <span class="s2">&quot;Differences in Resting-State FMRI&lt;/i&gt;, Brain Conn &quot;</span>
+                     <span class="s2">&quot;3(4):339-352, 2013.&quot;</span>
+                     <span class="p">],</span>
+            <span class="s2">&quot;aor&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;AFNI&#39;s outlier ratio&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;</span><span class="si">{:.2e}</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="kc">None</span>
+                    <span class="p">],</span>
+            <span class="s2">&quot;aqi&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;AFNI&#39;s quality index&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;</span><span class="si">{:.2e}</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="kc">None</span>
+                    <span class="p">]</span>
+        <span class="p">}</span>
+
+        <span class="c1"># We force tags inheritance (see mia_processes issue #13)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;report&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">func</span>
+
+        <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ReportFuncMriqc.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportFuncMriqc.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ReportFuncMriqc</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+
+        <span class="n">report</span> <span class="o">=</span> <span class="n">Report</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">,</span>
+            <span class="n">IQMs_file</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">IQMs_file</span><span class="p">,</span>
+            <span class="n">func</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">,</span> <span class="n">func_fig_rows</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">func_fig_rows</span><span class="p">,</span>
+            <span class="n">func_fig_cols</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">func_fig_cols</span><span class="p">,</span>
+            <span class="n">func_inf_slice_start</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">func_inf_slice_start</span><span class="p">,</span>
+            <span class="n">func_slices_gap</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">func_slices_gap</span><span class="p">,</span>
+            <span class="n">norm_func</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_func</span><span class="p">,</span>
+            <span class="n">norm_func_fig_rows</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_func_fig_rows</span><span class="p">,</span>
+            <span class="n">norm_func_fig_cols</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_func_fig_cols</span><span class="p">,</span>
+            <span class="n">norm_func_inf_slice_start</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_func_inf_slice_start</span><span class="p">,</span>
+            <span class="n">norm_func_slices_gap</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_func_slices_gap</span><span class="p">)</span>
+
+        <span class="n">report</span><span class="o">.</span><span class="n">make_report</span><span class="p">()</span></div></div>
+</pre></div>
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </div>
+  </body>
+</html>

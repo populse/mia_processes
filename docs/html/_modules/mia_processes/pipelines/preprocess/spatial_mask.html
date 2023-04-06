@@ -1,0 +1,143 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>mia_processes.pipelines.preprocess.spatial_mask &#8212; mia_processes 2.2.1-dev+c0ad978 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
+          <span>mia_processes 2.2.1-dev+c0ad978 documentation</span></a></h1>
+        <h2 class="heading"><span>mia_processes.pipelines.preprocess.spatial_mask</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <h1>Source code for mia_processes.pipelines.preprocess.spatial_mask</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*- #</span>
+
+<span class="sd">&quot;&quot;&quot;The module for the Spatial_mask pipeline.</span>
+
+<span class="sd">:Contains:</span>
+<span class="sd">    :Class:</span>
+<span class="sd">        - Spatial_mask</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1">##########################################################################</span>
+<span class="c1"># mia_processes - Copyright (C) IRMaGe/CEA, 2018</span>
+<span class="c1"># Distributed under the terms of the CeCILL license, as published by</span>
+<span class="c1"># the CEA-CNRS-INRIA. Refer to the LICENSE file or to</span>
+<span class="c1"># http://www.cecill.info/licences/Licence_CeCILL_V2.1-en.html</span>
+<span class="c1"># for details.</span>
+<span class="c1">##########################################################################</span>
+
+<span class="c1"># Capsul import</span>
+<span class="kn">from</span> <span class="nn">capsul.api</span> <span class="kn">import</span> <span class="n">Pipeline</span>
+
+<span class="c1"># other import</span>
+<span class="kn">import</span> <span class="nn">traits.api</span> <span class="k">as</span> <span class="nn">traits</span>
+
+<span class="c1"># populse_mia import</span>
+<span class="c1">#from populse_mia.project.filter import Filter</span>
+
+
+<div class="viewcode-block" id="Spatial_mask"><a class="viewcode-back" href="../../../../mia_processes.pipelines.preprocess.html#mia_processes.pipelines.preprocess.spatial_mask.Spatial_mask">[docs]</a><span class="k">class</span> <span class="nc">Spatial_mask</span><span class="p">(</span><span class="n">Pipeline</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    *Makes the grey matter native mask for cerebrovascular reserve analyse*</span>
+<span class="sd">    User_processes_ECdev.studies.spatial_mask_1.Spatial_mask_1()</span>
+
+<span class="sd">    Please, see the complete documentation for the Spatial_mask_1 pipeline in the</span>
+<span class="sd">    https://gricad-gitlab.univ-grenoble-alpes.fr/condamie/ec_dev web site</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+ 
+<div class="viewcode-block" id="Spatial_mask.pipeline_definition"><a class="viewcode-back" href="../../../../mia_processes.pipelines.preprocess.html#mia_processes.pipelines.preprocess.spatial_mask.Spatial_mask.pipeline_definition">[docs]</a>    <span class="k">def</span> <span class="nf">pipeline_definition</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># nodes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;gm_wm_normalize1&quot;</span><span class="p">,</span> <span class="s2">&quot;mia_processes.bricks.preprocess.spm.GM_WM_Normalize&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;threshold1&quot;</span><span class="p">,</span> <span class="s2">&quot;mia_processes.bricks.preprocess.others.Threshold&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;threshold1&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_files</span> <span class="o">=</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;threshold1&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;smooth1&quot;</span><span class="p">,</span> <span class="s2">&quot;mia_processes.bricks.preprocess.spm.Smooth&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;smooth1&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_files</span> <span class="o">=</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;threshold2&quot;</span><span class="p">,</span> <span class="s2">&quot;mia_processes.bricks.preprocess.others.Threshold&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;threshold2&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_files</span> <span class="o">=</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;threshold2&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">suffix</span> <span class="o">=</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;threshold2&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="s1">&#39;mask_&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;resample1&quot;</span><span class="p">,</span> <span class="s2">&quot;mia_processes.bricks.preprocess.others.Resample_1&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;resample1&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">files_to_resample</span> <span class="o">=</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;resample1&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span>
+
+        <span class="c1"># links</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;gm_wm_normalize1&quot;</span><span class="p">,</span> <span class="s2">&quot;apply_to_files&quot;</span><span class="p">,</span> <span class="s2">&quot;native_class_images&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;gm_wm_normalize1&quot;</span><span class="p">,</span> <span class="s2">&quot;deformation_file&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;gm_wm_normalize1.normalized_files-&gt;threshold1.in_files&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;threshold1.out_files-&gt;smooth1.in_files&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;smooth1.smoothed_files-&gt;threshold2.in_files&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;threshold2.out_files-&gt;resample1.files_to_resample&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;threshold2&quot;</span><span class="p">,</span> <span class="s2">&quot;out_files&quot;</span><span class="p">,</span> <span class="s2">&quot;mask_002&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;resample1&quot;</span><span class="p">,</span> <span class="s2">&quot;out_files&quot;</span><span class="p">,</span> <span class="s2">&quot;mask_003&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;resample1&quot;</span><span class="p">,</span> <span class="s2">&quot;reference_image&quot;</span><span class="p">,</span> <span class="s2">&quot;smoothed_func&quot;</span><span class="p">)</span>
+
+        <span class="c1"># nodes positions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_position</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;resample1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">660.8743625</span><span class="p">,</span> <span class="mf">314.2747999999999</span><span class="p">),</span>
+            <span class="s2">&quot;gm_wm_normalize1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">121.68129999999996</span><span class="p">,</span> <span class="o">-</span><span class="mf">140.0</span><span class="p">),</span>
+            <span class="s2">&quot;threshold2&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">402.93549225419565</span><span class="p">,</span> <span class="mf">203.88756771783517</span><span class="p">),</span>
+            <span class="s2">&quot;smooth1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">742.5339029207395</span><span class="p">,</span> <span class="o">-</span><span class="mf">156.09480055247312</span><span class="p">),</span>
+            <span class="s2">&quot;outputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">827.6561125000001</span><span class="p">,</span> <span class="mf">151.5811</span><span class="p">),</span>
+            <span class="s2">&quot;inputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">40.80193413672403</span><span class="p">,</span> <span class="mf">164.24180575139843</span><span class="p">),</span>
+            <span class="s2">&quot;threshold1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">440.7735314209599</span><span class="p">,</span> <span class="o">-</span><span class="mf">168.49913686833992</span><span class="p">),</span>
+        <span class="p">}</span>
+
+
+        <span class="c1"># nodes dimensions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_dimension</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;inputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">155.453125</span><span class="p">,</span> <span class="mf">145.0</span><span class="p">),</span>
+            <span class="s2">&quot;normalize_spatial_mask1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">244.0625</span><span class="p">,</span> <span class="mf">215.0</span><span class="p">),</span>
+            <span class="s2">&quot;threshold1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">152.609375</span><span class="p">,</span> <span class="mf">215.0</span><span class="p">),</span>
+            <span class="s2">&quot;smooth1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">218.046875</span><span class="p">,</span> <span class="mf">215.0</span><span class="p">),</span>
+            <span class="s2">&quot;threshold2&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">152.609375</span><span class="p">,</span> <span class="mf">215.0</span><span class="p">),</span>
+            <span class="s2">&quot;resample1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">176.84375</span><span class="p">,</span> <span class="mf">250.0</span><span class="p">),</span>
+            <span class="s2">&quot;outputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">81.11804503946317</span><span class="p">,</span> <span class="mf">110.0</span><span class="p">),</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_autoexport_nodes_parameters</span> <span class="o">=</span> <span class="kc">False</span></div></div>
+
+</pre></div>
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </div>
+  </body>
+</html>

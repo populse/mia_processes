@@ -1,21 +1,18 @@
 mia\_processes.bricks.preprocess.others package
 ===============================================
 
-Submodules
-----------
-mia\_processes.bricks.preprocess.others.processing module
----------------------------------------------------------
-
-.. automodule:: mia_processes.bricks.preprocess.others.processing
+.. automodule:: mia_processes.bricks.preprocess.others
    :members:
    :undoc-members:
    :show-inheritance:
 
+Submodules
+----------
 
-Module contents
----------------
+mia\_processes.bricks.preprocess.others.processing module
+---------------------------------------------------------
 
-.. automodule:: mia_processes.bricks.preprocess.others
+.. automodule:: mia_processes.bricks.preprocess.others.processing
    :members:
    :undoc-members:
    :show-inheritance:

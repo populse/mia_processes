@@ -1,0 +1,129 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>mia_processes.pipelines.stat.bold_stat &#8212; mia_processes 2.2.1-dev+c0ad978 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
+          <span>mia_processes 2.2.1-dev+c0ad978 documentation</span></a></h1>
+        <h2 class="heading"><span>mia_processes.pipelines.stat.bold_stat</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <h1>Source code for mia_processes.pipelines.stat.bold_stat</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="sd">&quot;&quot;&quot;The module for the Bold_stat pipeline.</span>
+
+<span class="sd">:Contains:</span>
+<span class="sd">    :Class:</span>
+<span class="sd">        - Bold_stat</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1">##########################################################################</span>
+<span class="c1"># mia_processes - Copyright (C) IRMaGe/CEA, 2018</span>
+<span class="c1"># Distributed under the terms of the CeCILL license, as published by</span>
+<span class="c1"># the CEA-CNRS-INRIA. Refer to the LICENSE file or to</span>
+<span class="c1"># http://www.cecill.info/licences/Licence_CeCILL_V2.1-en.html</span>
+<span class="c1"># for details.</span>
+<span class="c1">##########################################################################</span>
+
+<span class="c1"># Capsul import</span>
+<span class="kn">from</span> <span class="nn">capsul.api</span> <span class="kn">import</span> <span class="n">Pipeline</span>
+
+<span class="c1"># other import</span>
+<span class="kn">import</span> <span class="nn">traits.api</span> <span class="k">as</span> <span class="nn">traits</span>
+
+
+<div class="viewcode-block" id="Bold_stat"><a class="viewcode-back" href="../../../../mia_processes.pipelines.stat.html#mia_processes.pipelines.stat.bold_stat.Bold_stat">[docs]</a><span class="k">class</span> <span class="nc">Bold_stat</span><span class="p">(</span><span class="n">Pipeline</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Blabla&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Bold_stat.pipeline_definition"><a class="viewcode-back" href="../../../../mia_processes.pipelines.stat.html#mia_processes.pipelines.stat.bold_stat.Bold_stat.pipeline_definition">[docs]</a>    <span class="k">def</span> <span class="nf">pipeline_definition</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># nodes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;estimatecontrast&quot;</span><span class="p">,</span> <span class="s2">&quot;mia_processes.bricks.stat.spm.model.EstimateContrast&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;estimatecontrast&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_plug_value</span><span class="p">(</span><span class="s2">&quot;multi_reg&quot;</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;estimatecontrast&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">multi_reg</span> <span class="o">=</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;level1design&quot;</span><span class="p">,</span> <span class="s2">&quot;mia_processes.bricks.stat.spm.model.Level1Design&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;level1design&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_plug_value</span><span class="p">(</span><span class="s2">&quot;sess_multi_reg&quot;</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;level1design&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">sess_multi_reg</span> <span class="o">=</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;estimatemodel&quot;</span><span class="p">,</span> <span class="s2">&quot;mia_processes.bricks.stat.spm.model.EstimateModel&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;make_a_list&quot;</span><span class="p">,</span> <span class="s2">&quot;mia_processes.bricks.tools.Make_A_List&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;make_a_list&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_plug_value</span><span class="p">(</span><span class="s2">&quot;obj1&quot;</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;make_a_list&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">obj1</span> <span class="o">=</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span>
+
+        <span class="c1"># links</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;estimatecontrast&quot;</span><span class="p">,</span> <span class="s2">&quot;multi_reg&quot;</span><span class="p">,</span> <span class="s2">&quot;regressors&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;regressors-&gt;make_a_list.obj1&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;level1design&quot;</span><span class="p">,</span> <span class="s2">&quot;sess_scans&quot;</span><span class="p">,</span> <span class="s2">&quot;smoothed_func&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;level1design&quot;</span><span class="p">,</span> <span class="s2">&quot;mask_image&quot;</span><span class="p">,</span> <span class="s2">&quot;mask_002&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;estimatecontrast&quot;</span><span class="p">,</span> <span class="s2">&quot;spmT_images&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;estimatecontrast&quot;</span><span class="p">,</span> <span class="s2">&quot;out_spm_mat_file&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;level1design.spm_mat_file-&gt;estimatemodel.spm_mat_file&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;estimatemodel.out_spm_mat_file-&gt;estimatecontrast.spm_mat_file&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;estimatemodel&quot;</span><span class="p">,</span> <span class="s2">&quot;beta_images&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;estimatemodel.beta_images-&gt;estimatecontrast.beta_images&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;estimatemodel.residual_image-&gt;estimatecontrast.residual_image&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;make_a_list.obj_list-&gt;level1design.sess_multi_reg&quot;</span><span class="p">)</span>
+
+        <span class="c1"># parameters order</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">reorder_traits</span><span class="p">((</span><span class="s2">&quot;regressors&quot;</span><span class="p">,</span> <span class="s2">&quot;smoothed_func&quot;</span><span class="p">,</span> <span class="s2">&quot;mask_002&quot;</span><span class="p">,</span> <span class="s2">&quot;spmT_images&quot;</span><span class="p">,</span> <span class="s2">&quot;out_spm_mat_file&quot;</span><span class="p">,</span> <span class="s2">&quot;beta_images&quot;</span><span class="p">))</span>
+
+        <span class="c1"># nodes positions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_position</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;estimatecontrast&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">809.5599999999998</span><span class="p">,</span> <span class="mf">60.0</span><span class="p">),</span>
+            <span class="s2">&quot;level1design&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">139.24</span><span class="p">,</span> <span class="o">-</span><span class="mf">103.75999999999988</span><span class="p">),</span>
+            <span class="s2">&quot;estimatemodel&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">489.87999999999977</span><span class="p">,</span> <span class="mf">145.7199999999999</span><span class="p">),</span>
+            <span class="s2">&quot;make_a_list&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">8.399999999999991</span><span class="p">,</span> <span class="mf">255.60000000000002</span><span class="p">),</span>
+            <span class="s2">&quot;inputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">158.2314466389599</span><span class="p">,</span> <span class="mf">157.20000000000002</span><span class="p">),</span>
+            <span class="s2">&quot;outputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1133.715545039463</span><span class="p">,</span> <span class="mf">267.3599999999999</span><span class="p">),</span>
+        <span class="p">}</span>
+
+        <span class="c1"># nodes dimensions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_dimension</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;estimatecontrast&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">226.203125</span><span class="p">,</span> <span class="mf">425.0</span><span class="p">),</span>
+            <span class="s2">&quot;level1design&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">290.015625</span><span class="p">,</span> <span class="mf">880.0</span><span class="p">),</span>
+            <span class="s2">&quot;estimatemodel&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">246.296875</span><span class="p">,</span> <span class="mf">425.0</span><span class="p">),</span>
+            <span class="s2">&quot;make_a_list&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">101.984375</span><span class="p">,</span> <span class="mf">110.0</span><span class="p">),</span>
+            <span class="s2">&quot;inputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">109.015625</span><span class="p">,</span> <span class="mf">145.0</span><span class="p">),</span>
+            <span class="s2">&quot;outputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">121.359375</span><span class="p">,</span> <span class="mf">145.0</span><span class="p">),</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_autoexport_nodes_parameters</span> <span class="o">=</span> <span class="kc">False</span></div></div>
+</pre></div>
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </div>
+  </body>
+</html>
