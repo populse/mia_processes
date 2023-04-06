@@ -1,0 +1,63 @@
+:orphan:
+
+.. toctree::
+
++--------------------------------+----------------------------------------------+----------------------------------------------------+
+|`Home <../../../../index.html>`_|`Documentation <../../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
++--------------------------------+----------------------------------------------+----------------------------------------------------+
+
+============
+Enhance brick
+============
+
+Image enhancing. The aims is to resample signal excess voxels. 
+
+For each images, voxels with signal excess (superior to 99.8%) are set to a random value among the voxel's values superior to the median.
+
+Be carrefull, if the suffix and prefix input parameters are not defined or consist only of one or more white spaces, the input parameter will be overwritten.
+
+Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical workflow.
+
+--------------------------------------
+
+**Mandatory inputs parameters:**
+
+- *in_files* (a list of pathlike objects or strings representing an existing file)
+    Input images (valid extensions: [.nii, .nii.gz]).
+    
+    ::
+
+      ex. ['/home/username/data/raw_data/T1w.nii']
+
+**Optional inputs with default value parameters:**
+
+- *prefix* (a string, optional, default value is '')
+    Prefix of the output image.
+    
+    ::
+
+      ex. ''
+
+
+- *suffix* (a string, optional, default value is '_enh')
+    Suffix of output image.
+    
+    ::
+
+      ex. '_enh'
+
+
+**Outputs parameters:**
+
+- *out_files* (a list of pathlike objects or strings representing a file)
+    Output Images (extensions: [.nii, .nii.gz]).
+    
+    ::
+
+      ex. ['/home/username/data/derived_data/T1w_enh.nii']
+
+-------------
+
+
+Usefull links:
+`Enhance image mriqc <https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/anatomical.py#L974>`_

@@ -1,0 +1,199 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>mia_processes.pipelines.qualityControl.anat_mriqc &#8212; mia_processes 2.2.1-dev+2bc8ce9 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
+          <span>mia_processes 2.2.1-dev+2bc8ce9 documentation</span></a></h1>
+        <h2 class="heading"><span>mia_processes.pipelines.qualityControl.anat_mriqc</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <h1>Source code for mia_processes.pipelines.qualityControl.anat_mriqc</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">capsul.api</span> <span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="kn">import</span> <span class="nn">traits.api</span> <span class="k">as</span> <span class="nn">traits</span>
+
+
+<div class="viewcode-block" id="Anat_mriqc"><a class="viewcode-back" href="../../../../mia_processes.pipelines.qualityControl.html#mia_processes.pipelines.qualityControl.anat_mriqc.Anat_mriqc">[docs]</a><span class="k">class</span> <span class="nc">Anat_mriqc</span><span class="p">(</span><span class="n">Pipeline</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get no-reference IQMs (image quality metrics) from structural (T1w and T2w)</span>
+<span class="sd">    data using mriqc anatomical workflow (mriqc v22.06).</span>
+
+<span class="sd">    Please, see the complete documention for Anat_mriqc_pipeline</span>
+<span class="sd">    in the populse.mia_processes web site:</span>
+<span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/pipelines/qualiTyControl/Anat_mriqc_pipeline.html&gt;`_</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Anat_mriqc.pipeline_definition"><a class="viewcode-back" href="../../../../mia_processes.pipelines.qualityControl.html#mia_processes.pipelines.qualityControl.anat_mriqc.Anat_mriqc.pipeline_definition">[docs]</a>    <span class="k">def</span> <span class="nf">pipeline_definition</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># nodes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;conformimage&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;mia_processes.bricks.preprocess.&quot;</span>
+                         <span class="s2">&quot;others.processing.ConformImage&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;anat_skullstrip_pipeline&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;mia_processes.pipelines.preprocess.&quot;</span>
+                         <span class="s2">&quot;anat_skullstrip_synthstrip.&quot;</span>
+                         <span class="s2">&quot;Anat_skullstrip_synthstrip&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;segment&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;mia_processes.bricks.preprocess.&quot;</span>
+                         <span class="s2">&quot;fsl.processes.FastSegment&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;anat_spatial_norm&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;mia_processes.pipelines.preprocess.&quot;</span>
+                         <span class="s2">&quot;anat_spatial_norm.Anat_spatial_norm&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;anat_headmask&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;mia_processes.bricks.preprocess&quot;</span>
+                         <span class="s2">&quot;.fsl.BetSurfacesExtraction&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;anat_airmask&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;mia_processes.pipelines.preprocess.&quot;</span>
+                         <span class="s2">&quot;anat_airmask.Anat_airmask&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;anat_mni_tpms_pipeline&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;mia_processes.pipelines.preprocess.&quot;</span>
+                         <span class="s2">&quot;anat_mni_tpms.Anat_mni_tpms&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;anatiqms&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;mia_processes.bricks.reports.processes.AnatIQMs&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;harmonize&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;mia_processes.bricks.preprocess.&quot;</span>
+                         <span class="s2">&quot;others.processing.Harmonize&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;fwhmx&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;mia_processes.bricks.preprocess.afni.FWHMx&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;fwhmx&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">plugs</span><span class="p">[</span><span class="s2">&quot;detrend&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">optional</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;list_to_file&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;mia_processes.bricks.tools.tools.List_To_File&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;mriqc_anat_report&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;mia_processes.bricks.reports.&quot;</span>
+                         <span class="s2">&quot;reporting.ReportAnatMriqc&quot;</span><span class="p">)</span>
+
+        <span class="c1"># links</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;conformimage&quot;</span><span class="p">,</span> <span class="s2">&quot;in_file&quot;</span><span class="p">,</span> <span class="s2">&quot;anat_file&quot;</span><span class="p">,</span>
+                              <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;anat_file-&gt;mriqc_anat_report.anat&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;conformimage.out_file-&gt;&quot;</span>
+                      <span class="s2">&quot;anat_skullstrip_pipeline.in_file&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;conformimage.out_file-&gt;anatiqms.in_ras&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;conformimage.out_file-&gt;fwhmx.in_file&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;conformimage.out_file-&gt;anat_mni_tpms_pipeline.in_ras&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;conformimage.out_file-&gt;anat_airmask.in_file&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;anat_skullstrip_pipeline.out_brain-&gt;segment.in_file&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;anat_skullstrip_pipeline.out_mask_synthstrip-&gt;&quot;</span>
+                      <span class="s2">&quot;fwhmx.mask_file&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;anat_skullstrip_pipeline.out_mask_synthstrip-&gt;&quot;</span>
+                      <span class="s2">&quot;anat_spatial_norm.moving_mask&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;anat_skullstrip_pipeline.out_mask_synthstrip-&gt;&quot;</span>
+                      <span class="s2">&quot;anat_airmask.in_mask&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;anat_skullstrip_pipeline.out_corrected&quot;</span>
+                      <span class="s2">&quot;-&gt;harmonize.in_file&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;anat_skullstrip_pipeline.out_corrected-&gt;&quot;</span>
+                      <span class="s2">&quot;anat_headmask.in_file&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;anat_skullstrip_pipeline.out_corrected-&gt;&quot;</span>
+                      <span class="s2">&quot;anat_spatial_norm.moving_image&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;anat_skullstrip_pipeline.bias_image-&gt;anatiqms.in_inu&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;segment.tissue_class_map-&gt;anatiqms.segmentation&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;segment.partial_volume_files-&gt;list_to_file.file_list&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;segment.partial_volume_files-&gt;anatiqms.pvms&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;anat_spatial_norm.inverse_composite_transform&quot;</span>
+                      <span class="s2">&quot;-&gt;anat_mni_tpms_pipeline.inverse_composite_transform&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;anat_spatial_norm.inverse_composite_transform-&gt;&quot;</span>
+                      <span class="s2">&quot;anat_airmask.inverse_composite_transform&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;anat_spatial_norm.warped_image-&gt;&quot;</span>
+                      <span class="s2">&quot;mriqc_anat_report.norm_anat&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;anat_headmask.outskin_mask_file-&gt;&quot;</span>
+                      <span class="s2">&quot;anat_airmask.head_mask&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;anat_headmask.outskin_mask_file-&gt;anatiqms.headmask&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;anat_airmask.out_hat_mask-&gt;anatiqms.hatmask&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;anat_airmask.out_art_mask-&gt;anatiqms.artmask&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;anat_airmask.out_air_mask-&gt;anatiqms.airmask&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;anat_airmask.out_rot_mask-&gt;anatiqms.rotmask&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;anat_mni_tpms_pipeline.mni_tpms-&gt;anatiqms.mni_tpms&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;anatiqms.out_file-&gt;mriqc_anat_report.IQMs_file&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;harmonize.out_file-&gt;anatiqms.in_noinu&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;fwhmx.out_file-&gt;anatiqms.in_fwhm&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;list_to_file.file-&gt;harmonize.wm_mask&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;mriqc_anat_report&quot;</span><span class="p">,</span> <span class="s2">&quot;report&quot;</span><span class="p">,</span>
+                              <span class="n">pipeline_parameter</span><span class="o">=</span><span class="s2">&quot;anat_report&quot;</span><span class="p">,</span>
+                              <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># parameters order</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reorder_traits</span><span class="p">((</span><span class="s2">&quot;anat_file&quot;</span><span class="p">,</span> <span class="s2">&quot;anat_report&quot;</span><span class="p">))</span>
+
+        <span class="c1"># default and initial values</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;fwhmx&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="s1">&#39;-ShowMeClassicFWHM&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;conformimage&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">suffix</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;conformimage&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;list_to_file&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">index_filter</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;harmonize&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span>
+
+        <span class="c1"># nodes positions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_position</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;conformimage&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">266.294964300051</span><span class="p">,</span> <span class="mf">665.2984755165728</span><span class="p">),</span>
+            <span class="s2">&quot;inputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">760.1707537491396</span><span class="p">,</span> <span class="mf">306.60591462332025</span><span class="p">),</span>
+            <span class="s2">&quot;anat_skullstrip_pipeline&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">318.30359196600546</span><span class="p">,</span> <span class="mf">123.0195907</span><span class="p">),</span>
+            <span class="s2">&quot;segment&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">82.8528</span><span class="p">,</span> <span class="o">-</span><span class="mf">26.389119999999984</span><span class="p">),</span>
+            <span class="s2">&quot;anat_spatial_norm&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">122.1775299994049</span><span class="p">,</span> <span class="mf">474.3922141023147</span><span class="p">),</span>
+            <span class="s2">&quot;anat_headmask&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">239.62046769206347</span><span class="p">,</span> <span class="mf">245.85271538452383</span><span class="p">),</span>
+            <span class="s2">&quot;anat_airmask&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">512.8535576922617</span><span class="p">,</span> <span class="o">-</span><span class="mf">39.083212461309614</span><span class="p">),</span>
+            <span class="s2">&quot;anat_mni_tpms_pipeline&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">23.313110769047682</span><span class="p">,</span> <span class="mf">1180.4801720512571</span><span class="p">),</span>
+            <span class="s2">&quot;anatiqms&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">878.0130611266952</span><span class="p">,</span> <span class="mf">880.9613282881348</span><span class="p">),</span>
+            <span class="s2">&quot;harmonize&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">274.74608025667965</span><span class="p">,</span> <span class="mf">1129.801461025529</span><span class="p">),</span>
+            <span class="s2">&quot;fwhmx&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">565.5987063585978</span><span class="p">,</span> <span class="mf">1172.0964170767852</span><span class="p">),</span>
+            <span class="s2">&quot;list_to_file&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">520.7743035899467</span><span class="p">,</span> <span class="mf">1036.3461573847217</span><span class="p">),</span>
+            <span class="s2">&quot;outputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1266.8414282725082</span><span class="p">,</span> <span class="mf">887.7104479139109</span><span class="p">),</span>
+            <span class="s2">&quot;mriqc_anat_report&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1081.212516565563</span><span class="p">,</span> <span class="mf">151.23336869359628</span><span class="p">),</span>
+        <span class="p">}</span>
+
+        <span class="c1"># nodes dimensions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_dimension</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;conformimage&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">108.3125</span><span class="p">,</span> <span class="mf">145.0</span><span class="p">),</span>
+            <span class="s2">&quot;inputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">221.953125</span><span class="p">,</span> <span class="mf">600.0</span><span class="p">),</span>
+            <span class="s2">&quot;anat_skullstrip_pipeline&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">179.21875</span><span class="p">,</span> <span class="mf">180.0</span><span class="p">),</span>
+            <span class="s2">&quot;segment&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">223.25</span><span class="p">,</span> <span class="mf">145.0</span><span class="p">),</span>
+            <span class="s2">&quot;anat_spatial_norm&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">377.796875</span><span class="p">,</span> <span class="mf">635.0</span><span class="p">),</span>
+            <span class="s2">&quot;anat_headmask&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">176.640625</span><span class="p">,</span> <span class="mf">110.0</span><span class="p">),</span>
+            <span class="s2">&quot;anat_airmask&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">276.828125</span><span class="p">,</span> <span class="mf">250.0</span><span class="p">),</span>
+            <span class="s2">&quot;anat_mni_tpms_pipeline&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">256.109375</span><span class="p">,</span> <span class="mf">215.0</span><span class="p">),</span>
+            <span class="s2">&quot;anatiqms&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">152.203125</span><span class="p">,</span> <span class="mf">460.0</span><span class="p">),</span>
+            <span class="s2">&quot;harmonize&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">141.0</span><span class="p">,</span> <span class="mf">215.0</span><span class="p">),</span>
+            <span class="s2">&quot;fwhmx&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">133.734375</span><span class="p">,</span> <span class="mf">215.0</span><span class="p">),</span>
+            <span class="s2">&quot;list_to_file&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">117.75</span><span class="p">,</span> <span class="mf">110.0</span><span class="p">),</span>
+            <span class="s2">&quot;outputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">184.18054503946317</span><span class="p">,</span> <span class="mf">250.0</span><span class="p">),</span>
+            <span class="s2">&quot;mriqc_anat_report&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">218.484375</span><span class="p">,</span> <span class="mf">425.0</span><span class="p">),</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_autoexport_nodes_parameters</span> <span class="o">=</span> <span class="kc">False</span></div></div>
+</pre></div>
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </div>
+  </body>
+</html>

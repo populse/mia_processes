@@ -1,0 +1,1455 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>mia_processes.bricks.preprocess.ants.processes &#8212; mia_processes 2.2.1-dev+0715924 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/haiku.css" />
+    <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+    <script src="../../../../../_static/jquery.js"></script>
+    <script src="../../../../../_static/underscore.js"></script>
+    <script src="../../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../../../index.html">
+          <span>mia_processes 2.2.1-dev+0715924 documentation</span></a></h1>
+        <h2 class="heading"><span>mia_processes.bricks.preprocess.ants.processes</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <h1>Source code for mia_processes.bricks.preprocess.ants.processes</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*- #</span>
+
+<span class="sd">&quot;&quot;&quot;The ants preprocess library of the mia_processes package.</span>
+
+<span class="sd">The purpose of this module is to customise the main ants preprocessing bricks</span>
+<span class="sd">provided by nipype and to correct some things that do not work directly in</span>
+<span class="sd">populse_mia.</span>
+
+<span class="sd">:Contains:</span>
+<span class="sd">    :Class:</span>
+<span class="sd">        - AffineInitializer</span>
+<span class="sd">        - ApplyTransforms</span>
+<span class="sd">        - N4BiasFieldCorrection</span>
+<span class="sd">        - Registration</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1">##########################################################################</span>
+<span class="c1"># mia_processes - Copyright (C) IRMaGe/CEA, 2018</span>
+<span class="c1"># Distributed under the terms of the CeCILL license, as published by</span>
+<span class="c1"># the CEA-CNRS-INRIA. Refer to the LICENSE file or to</span>
+<span class="c1"># http://www.cecill.info/licences/Licence_CeCILL_V2.1-en.html</span>
+<span class="c1"># for details.</span>
+<span class="c1">##########################################################################</span>
+
+<span class="c1"># nipype imports</span>
+<span class="kn">from</span> <span class="nn">nipype.interfaces.base</span> <span class="kn">import</span> <span class="p">(</span><span class="n">File</span><span class="p">,</span> <span class="n">InputMultiPath</span><span class="p">)</span>
+
+<span class="c1"># populse_mia import</span>
+<span class="kn">from</span> <span class="nn">populse_mia.user_interface.pipeline_manager.process_mia</span> <span class="kn">import</span> <span class="n">ProcessMIA</span>
+<span class="kn">from</span> <span class="nn">mia_processes.utils</span> <span class="kn">import</span> <span class="n">checkFileExt</span>
+
+<span class="c1"># Other import</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="p">(</span><span class="n">Bool</span><span class="p">,</span> <span class="n">Either</span><span class="p">,</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">Float</span><span class="p">,</span> <span class="n">Int</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span>
+                        <span class="n">Range</span><span class="p">,</span> <span class="n">String</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Undefined</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">nibabel</span> <span class="k">as</span> <span class="nn">nib</span>
+
+<span class="n">EXT</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;NIFTI_GZ&#39;</span><span class="p">:</span> <span class="s1">&#39;nii.gz&#39;</span><span class="p">,</span>
+       <span class="s1">&#39;NIFTI&#39;</span><span class="p">:</span> <span class="s1">&#39;nii&#39;</span>
+       <span class="p">}</span>
+
+
+<div class="viewcode-block" id="AffineInitializer"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.ants.html#mia_processes.bricks.preprocess.ants.processes.AffineInitializer">[docs]</a><span class="k">class</span> <span class="nc">AffineInitializer</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    * A multi-start optimizer for affine registration *</span>
+
+<span class="sd">    Please, see the complete documentation for the `AffineInitializer&#39; brick</span>
+<span class="sd">    in the populse.mia_processes website</span>
+<span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/afni/AffineInitializer.html&gt;`_</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="AffineInitializer.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.ants.html#mia_processes.bricks.preprocess.ants.processes.AffineInitializer.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
+
+<span class="sd">        The input and output plugs are defined here. The special</span>
+<span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
+<span class="sd">        third-party products necessary for the running of the brick.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">AffineInitializer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ants&#39;</span><span class="p">,</span> <span class="s1">&#39;nipype&#39;</span><span class="p">]</span>
+
+        <span class="c1"># Mandatory inputs description</span>
+        <span class="n">moving_image_desc</span> <span class="o">=</span> <span class="s1">&#39;The moving image to be mapped to the fixed space.&#39;</span>
+        <span class="n">fixed_image_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;The fixed reference image (a pathlike object or &#39;</span>
+                            <span class="s1">&#39;string representing a file).&#39;</span><span class="p">)</span>
+        <span class="c1"># Optional inputs with default value description</span>
+        <span class="n">dimension_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Image dimension (3 or 2). Default is 3.&#39;</span><span class="p">)</span>
+        <span class="n">local_search_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Determines if a local optimization is run at&#39;</span>
+                             <span class="s1">&#39;each search point for the set number of &#39;</span>
+                             <span class="s1">&#39;iterations (an integer). Default is 10.&#39;</span><span class="p">)</span>
+        <span class="n">out_prefix_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Specify the string to be prepended to the &#39;</span>
+                           <span class="s1">&#39;filenames of the corrected image file &#39;</span>
+                           <span class="s1">&#39;(a string).&#39;</span><span class="p">)</span>
+        <span class="n">principal_axes_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Whether the rotation is searched around&#39;</span>
+                               <span class="s1">&#39;an initial principal axis alignment. &#39;</span>
+                               <span class="s1">&#39;Default is False.&#39;</span><span class="p">)</span>
+        <span class="n">radian_fraction_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Search this arc +/- principal axes &#39;</span>
+                                <span class="s1">&#39;(a float between 0.0 and 1.0).&#39;</span>
+                                <span class="s1">&#39;Default is 0.1&#39;</span><span class="p">)</span>
+        <span class="n">search_factor_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Increments (degrees) for affine search&#39;</span>
+                              <span class="s1">&#39;(a float). Default is 15.0&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Outputs description</span>
+        <span class="n">out_file_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Output transform file (a pathlike object or a &#39;</span>
+                         <span class="s1">&#39;string representing a file).&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Mandatory inputs traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;moving_image&quot;</span><span class="p">,</span>
+                       <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">moving_image_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;fixed_image&quot;</span><span class="p">,</span>
+                       <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">fixed_image_desc</span><span class="p">))</span>
+
+        <span class="c1"># Optional inputs with default value traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;dimension&quot;</span><span class="p">,</span>
+                       <span class="n">Enum</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span>
+                            <span class="mi">2</span><span class="p">,</span>
+                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">dimension_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;local_search&quot;</span><span class="p">,</span>
+                       <span class="n">Int</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span>
+                           <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                           <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                           <span class="n">desc</span><span class="o">=</span><span class="n">local_search_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;out_prefix&quot;</span><span class="p">,</span>
+                       <span class="n">String</span><span class="p">(</span><span class="s1">&#39;AffineTransform_&#39;</span><span class="p">,</span>
+                              <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                              <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                              <span class="n">desc</span><span class="o">=</span><span class="n">out_prefix_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;principal_axes&quot;</span><span class="p">,</span>
+                       <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">principal_axes_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;radian_fraction&quot;</span><span class="p">,</span>
+                       <span class="n">Range</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+                             <span class="n">low</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+                             <span class="n">high</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+                             <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                             <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                             <span class="n">desc</span><span class="o">=</span><span class="n">radian_fraction_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;search_factor&quot;</span><span class="p">,</span>
+                       <span class="n">Float</span><span class="p">(</span><span class="mf">15.0</span><span class="p">,</span>
+                             <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                             <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                             <span class="n">desc</span><span class="o">=</span><span class="n">search_factor_desc</span><span class="p">))</span>
+
+        <span class="c1"># Outputs traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;out_file&quot;</span><span class="p">,</span>
+                       <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">out_file_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s1">&#39;nipype.interfaces.ants.AffineInitializer&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AffineInitializer.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.ants.html#mia_processes.bricks.preprocess.ants.processes.AffineInitializer.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+
+<span class="sd">        The main objective of this method is to produce the outputs of the</span>
+<span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
+<span class="sd">        if defined here. In order not to include an output in the database,</span>
+<span class="sd">        this output must be a value of the optional key &#39;notInDb&#39; of the</span>
+<span class="sd">        self.outputs dictionary. To work properly this method must return</span>
+<span class="sd">        self.make_initResult() object.</span>
+
+<span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">AffineInitializer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+
+        <span class="c1"># Outputs definition and tags inheritance (optional)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">moving_image</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span> <span class="o">==</span> <span class="n">Undefined</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span> <span class="o">=</span> <span class="s1">&#39;AffineTransform_&#39;</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The out_prefix parameter is undefined. Automatically &#39;</span>
+                      <span class="s1">&#39;set to &quot;AffineTransform_&quot; ...&#39;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">:</span>
+                <span class="n">valid_ext</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">fileName</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">moving_image</span><span class="p">,</span>
+                                                           <span class="n">EXT</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_ext</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">The input image format is not recognized ...!&#39;</span><span class="p">)</span>
+                    <span class="k">return</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;out_file&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span> <span class="o">+</span> <span class="n">fileName</span> <span class="o">+</span> <span class="s1">&#39;.mat&#39;</span><span class="p">)</span>
+
+                    <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span>
+                        <span class="s1">&#39;out_file&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">moving_image</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;No output_directory was found...!</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="k">return</span>
+
+        <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="AffineInitializer.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.ants.html#mia_processes.bricks.preprocess.ants.processes.AffineInitializer.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">AffineInitializer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+        <span class="c1"># Mandatory inputs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">fixed_image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fixed_image</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">moving_image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">moving_image</span>
+        <span class="c1"># Others inputs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">dimension</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dimension</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">local_search</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">local_search</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">out_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">principal_axes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">principal_axes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">radian_fraction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">radian_fraction</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">search_factor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">search_factor</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
+
+
+<div class="viewcode-block" id="ApplyTransforms"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.ants.html#mia_processes.bricks.preprocess.ants.processes.ApplyTransforms">[docs]</a><span class="k">class</span> <span class="nc">ApplyTransforms</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    * Transforms an image according to  a reference image and a</span>
+<span class="sd">      transformation (or set of transformation) *</span>
+
+<span class="sd">    Please, see the complete documentation for the `ApplyTransforms&#39; brick</span>
+<span class="sd">     in the populse.mia_processes website</span>
+<span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/afni/ApplyTransforms.html&gt;`_</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ApplyTransforms.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.ants.html#mia_processes.bricks.preprocess.ants.processes.ApplyTransforms.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
+
+<span class="sd">        The input and output plugs are defined here. The special</span>
+<span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
+<span class="sd">        third-party products necessary for the running of the brick.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ApplyTransforms</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ants&#39;</span><span class="p">,</span> <span class="s1">&#39;nipype&#39;</span><span class="p">]</span>
+
+        <span class="c1"># Mandatory inputs description</span>
+        <span class="n">input_image_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Image to apply transformation to. (a pathlike &#39;</span>
+                            <span class="s1">&#39;object or string representing an existing file) &#39;</span><span class="p">)</span>
+        <span class="n">reference_image_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Reference image space that you wish to warp &#39;</span>
+                                <span class="s1">&#39;into (a pathlike object or string &#39;</span>
+                                <span class="s1">&#39; representing an existing file)&#39;</span><span class="p">)</span>
+        <span class="n">transforms_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Transform files that will be applied in &#39;</span>
+                           <span class="s1">&#39;reverse order. (ie the last specified &#39;</span>
+                           <span class="s1">&#39;transform will be applied first)&#39;</span><span class="p">)</span>
+        <span class="c1"># Optional inputs with default value description</span>
+        <span class="n">default_value_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Default value. Default is 0.0.&#39;</span><span class="p">)</span>
+        <span class="n">dimension_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;This option forces the image to be treated as a &#39;</span>
+                          <span class="s1">&#39;specified-dimensional image (2 or 3 or 4). &#39;</span>
+                          <span class="s1">&#39;Default is 3&#39;</span><span class="p">)</span>
+        <span class="n">float_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Use float instead of double for computations. &#39;</span>
+                      <span class="s1">&#39;Default is False.&#39;</span><span class="p">)</span>
+        <span class="n">input_image_type_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Option specifying the input image type of &#39;</span>
+                                 <span class="s1">&#39;scalar (0), vector (1), tensor(2), or &#39;</span>
+                                 <span class="s1">&#39;time series(3). Default is 0 (scalar).&#39;</span><span class="p">)</span>
+        <span class="n">interpolation_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Choice of interpolator. &#39;</span>
+                              <span class="s1">&#39;(‘Linear’ or ‘NearestNeighbor’ &#39;</span>
+                              <span class="s1">&#39;or ‘CosineWindowedSinc’ or ‘WelchWindowedSinc’ &#39;</span>
+                              <span class="s1">&#39;or ‘HammingWindowedSinc’ or &#39;</span>
+                              <span class="s1">&#39;‘LanczosWindowedSinc’ or ‘MultiLabel’ or &#39;</span>
+                              <span class="s1">&#39;‘Gaussian’ or ‘BSpline’)&#39;</span><span class="p">)</span>
+        <span class="n">print_out_composite_warp_file_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Output a composite warp file &#39;</span>
+                                              <span class="s1">&#39;instead of a transformed &#39;</span>
+                                              <span class="s1">&#39;image. (a boolean)&#39;</span><span class="p">)</span>
+        <span class="n">out_prefix_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Specify the string to be prepended to the &#39;</span>
+                           <span class="s1">&#39;filenames of the corrected image file &#39;</span>
+                           <span class="s1">&#39;(a string).&#39;</span><span class="p">)</span>
+        <span class="c1"># Optional inputs description</span>
+        <span class="n">interpolation_parameters_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Interpolation parameters for &#39;</span>
+                                         <span class="s1">&#39;example for BSpline order or for &#39;</span>
+                                         <span class="s1">&#39;sigma/alphaparameters for &#39;</span>
+                                         <span class="s1">&#39;Gaussian/Multilabel (a tuple &#39;</span>
+                                         <span class="s1">&#39;of the form: (an integer) &#39;</span>
+                                         <span class="s1">&#39;or a tuple of the form: &#39;</span>
+                                         <span class="s1">&#39;(a float, a float))&#39;</span><span class="p">)</span>
+        <span class="n">invert_transform_flags_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Invert transform flags &#39;</span>
+                                       <span class="s1">&#39;(a list of boolean)&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Outputs description</span>
+        <span class="n">output_image_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Warped image (a pathlike object or string&#39;</span>
+                             <span class="s1">&#39;representing an existing file).&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Mandatory inputs traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;input_image&quot;</span><span class="p">,</span>
+                       <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">input_image_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;reference_image&quot;</span><span class="p">,</span>
+                       <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">reference_image_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;transforms&quot;</span><span class="p">,</span>
+                       <span class="n">InputMultiPath</span><span class="p">(</span><span class="n">File</span><span class="p">(),</span>
+                                      <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                      <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                      <span class="n">desc</span><span class="o">=</span><span class="n">transforms_desc</span><span class="p">))</span>
+        <span class="c1"># Optional inputs with default value traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;default_value&quot;</span><span class="p">,</span>
+                       <span class="n">Float</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span>
+                             <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                             <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                             <span class="n">desc</span><span class="o">=</span><span class="n">default_value_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;dimension&quot;</span><span class="p">,</span>
+                       <span class="n">Enum</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span>
+                            <span class="mi">2</span><span class="p">,</span>
+                            <span class="mi">4</span><span class="p">,</span>
+                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">dimension_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;float&quot;</span><span class="p">,</span>
+                       <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">float_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;input_image_type&quot;</span><span class="p">,</span>
+                       <span class="n">Enum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span>
+                            <span class="mi">1</span><span class="p">,</span>
+                            <span class="mi">2</span><span class="p">,</span>
+                            <span class="mi">3</span><span class="p">,</span>
+                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">input_image_type_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;interpolation&quot;</span><span class="p">,</span>
+                       <span class="n">Enum</span><span class="p">(</span><span class="s1">&#39;Linear&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;NearestNeighbor&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;CosineWindowedSinc&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;WelchWindowedSinc&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;HammingWindowedSinc&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;LanczosWindowedSinc&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;MultiLabel&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;Gaussian&#39;</span>
+                            <span class="s1">&#39;BSpline&#39;</span><span class="p">,</span>
+                            <span class="n">default</span><span class="o">=</span><span class="s1">&#39;Linear&#39;</span><span class="p">,</span>
+                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">interpolation_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;out_prefix&quot;</span><span class="p">,</span>
+                       <span class="n">String</span><span class="p">(</span><span class="s1">&#39;t_&#39;</span><span class="p">,</span>
+                              <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                              <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                              <span class="n">desc</span><span class="o">=</span><span class="n">out_prefix_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;print_out_composite_warp_file&quot;</span><span class="p">,</span>
+                       <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">print_out_composite_warp_file_desc</span><span class="p">))</span>
+
+        <span class="c1"># Optional inputs with default value traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;interpolation_parameters&quot;</span><span class="p">,</span>
+                       <span class="n">Either</span><span class="p">(</span><span class="n">Undefined</span><span class="p">,</span>
+                              <span class="n">Tuple</span><span class="p">(</span><span class="n">Int</span><span class="p">()),</span>
+                              <span class="n">Tuple</span><span class="p">(</span><span class="n">Float</span><span class="p">(),</span> <span class="n">Float</span><span class="p">()),</span>
+                              <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                              <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                              <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                              <span class="n">desc</span><span class="o">=</span><span class="n">interpolation_parameters_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;invert_transform_flags&quot;</span><span class="p">,</span>
+                       <span class="n">Either</span><span class="p">(</span><span class="n">Undefined</span><span class="p">,</span>
+                              <span class="n">List</span><span class="p">(</span><span class="n">Bool</span><span class="p">()),</span>
+                              <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                              <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                              <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                              <span class="n">desc</span><span class="o">=</span><span class="n">invert_transform_flags_desc</span><span class="p">))</span>
+
+        <span class="c1"># Outputs traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;output_image&quot;</span><span class="p">,</span>
+                       <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">output_image_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s1">&#39;nipype.interfaces.ants.ApplyTransforms&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ApplyTransforms.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.ants.html#mia_processes.bricks.preprocess.ants.processes.ApplyTransforms.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+
+<span class="sd">        The main objective of this method is to produce the outputs of the</span>
+<span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
+<span class="sd">        if defined here. In order not to include an output in the database,</span>
+<span class="sd">        this output must be a value of the optional key &#39;notInDb&#39; of the</span>
+<span class="sd">        self.outputs dictionary. To work properly this method must return</span>
+<span class="sd">        self.make_initResult() object.</span>
+
+<span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ApplyTransforms</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+
+        <span class="c1"># Outputs definition and tags inheritance (optional)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_image</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span> <span class="o">==</span> <span class="n">Undefined</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span> <span class="o">=</span> <span class="s1">&#39;t_&#39;</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The out_prefix parameter is undefined. Automatically &#39;</span>
+                      <span class="s1">&#39;set to &quot;AffineTransform_&quot; ...&#39;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">:</span>
+                <span class="n">valid_ext</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">fileName</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input_image</span><span class="p">,</span>
+                                                           <span class="n">EXT</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_ext</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">The input image format is not recognized ...!&#39;</span><span class="p">)</span>
+                    <span class="k">return</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;output_image&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span> <span class="o">+</span> <span class="n">fileName</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="n">in_ext</span><span class="p">)</span>
+
+                    <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span>
+                        <span class="s1">&#39;output_image&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_image</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;No output_directory was found...!</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="k">return</span>
+
+        <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ApplyTransforms.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.ants.html#mia_processes.bricks.preprocess.ants.processes.ApplyTransforms.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ApplyTransforms</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">input_image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_image</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">reference_image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference_image</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">transforms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transforms</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">dimension</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dimension</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">float</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">input_image_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_image_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">interpolation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">interpolation</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">interpolation_parameters</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">interpolation_parameters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">interpolation_parameters</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">invert_transform_flags</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">invert_transform_flags</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">invert_transform_flags</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">print_out_composite_warp_file</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">print_out_composite_warp_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">print_out_composite_warp_file</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">output_image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_image</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
+
+
+<div class="viewcode-block" id="N4BiasFieldCorrection"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.ants.html#mia_processes.bricks.preprocess.ants.processes.N4BiasFieldCorrection">[docs]</a><span class="k">class</span> <span class="nc">N4BiasFieldCorrection</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    * N4 retrospective bias correction algorithm *</span>
+
+<span class="sd">    Please, see the complete documentation for the `N4BiasFieldCorrection&#39;</span>
+<span class="sd">    brick in the populse.mia_processes website</span>
+<span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/afni/N4BiasFieldCorrection.html&gt;`_</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="N4BiasFieldCorrection.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.ants.html#mia_processes.bricks.preprocess.ants.processes.N4BiasFieldCorrection.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
+
+<span class="sd">        The input and output plugs are defined here. The special</span>
+<span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
+<span class="sd">        third-party products necessary for the running of the brick.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">N4BiasFieldCorrection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ants&#39;</span><span class="p">,</span> <span class="s1">&#39;nipype&#39;</span><span class="p">]</span>
+
+        <span class="c1"># Mandatory inputs description</span>
+        <span class="n">in_file_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;A image file (2D, 3D or 4D) to correct (a pathlike&#39;</span>
+                        <span class="s1">&#39;object or string representing a file).&#39;</span><span class="p">)</span>
+        <span class="c1"># Optional inputs with default value description</span>
+        <span class="n">copy_header_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39; Copy headers of the original image into the &#39;</span>
+                            <span class="s1">&#39;output (corrected) file (a boolean). &#39;</span>
+                            <span class="s1">&#39;Default is True&#39;</span><span class="p">)</span>
+        <span class="n">dimension_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Image dimension (2, 3 or 4). Default is 3&#39;</span><span class="p">)</span>
+        <span class="n">out_prefix_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Specify the string to be prepended to the &#39;</span>
+                           <span class="s1">&#39;filenames of the corrected image file &#39;</span>
+                           <span class="s1">&#39;(a string).&#39;</span><span class="p">)</span>
+        <span class="n">rescale_intensities_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Rescales to the [min,max] range of the&#39;</span>
+                                    <span class="s1">&#39;original image intensities within the &#39;</span>
+                                    <span class="s1">&#39;user-specified mask (a boolean).&#39;</span><span class="p">)</span>
+        <span class="n">save_bias_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Save the estimated bias in a file (a boolean). &#39;</span>
+                          <span class="s1">&#39;Default is True&#39;</span><span class="p">)</span>
+        <span class="c1"># Optional inputs description</span>
+        <span class="n">bspline_fitting_distance_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Set bspline fitting distance &#39;</span>
+                                         <span class="s1">&#39;(a float)&#39;</span><span class="p">)</span>
+        <span class="n">bspline_order_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;bspline order (an integer). &#39;</span>
+                              <span class="s1">&#39;Requires bspline_fitting_distance parameter&#39;</span><span class="p">)</span>
+        <span class="n">convergence_threshold_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Convergence threshodl (a float). &#39;</span>
+                                      <span class="s1">&#39;Require n_iterations parameter&#39;</span><span class="p">)</span>
+        <span class="n">histogram_sharpening_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Three-values tuple of histogram &#39;</span>
+                                     <span class="s1">&#39;sharpening parameters (FWHM, &#39;</span>
+                                     <span class="s1">&#39;wienerNose, numberOfHistogramBins). &#39;</span>
+                                     <span class="s1">&#39;(a tuple of the form: &#39;</span>
+                                     <span class="s1">&#39;(a float, a float, an integer))&#39;</span><span class="p">)</span>
+        <span class="n">mask_image_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Image to specify region to perform final &#39;</span>
+                           <span class="s1">&#39;bias correction in. (a pathlike&#39;</span>
+                           <span class="s1">&#39;object or string representing a file)&#39;</span><span class="p">)</span>
+        <span class="n">n_iterations_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Number of iterations (convergence option) &#39;</span>
+                             <span class="s1">&#39;(a list of integer)&#39;</span><span class="p">)</span>
+        <span class="n">shrink_factor_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Shrink factor (an integer).&#39;</span><span class="p">)</span>
+        <span class="n">weight_image_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Image for relative weighting (e.g. &#39;</span>
+                             <span class="s1">&#39;probability map of the white matter) of voxels &#39;</span>
+                             <span class="s1">&#39;during the B-spline fitting (a pathlike&#39;</span>
+                             <span class="s1">&#39;object or string representing a file)&#39;</span><span class="p">)</span>
+        <span class="c1"># Outputs description</span>
+        <span class="n">bias_image_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Estimated bias (a pathlike object or a &#39;</span>
+                           <span class="s1">&#39;string representing a file).&#39;</span><span class="p">)</span>
+        <span class="n">negative_values_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;True if negative values are present in&#39;</span>
+                                <span class="s1">&#39;False otherwise.&#39;</span><span class="p">)</span>
+        <span class="n">out_file_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;The corrected file (a pathlike object or a &#39;</span>
+                         <span class="s1">&#39;string representing a file).&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Mandatory inputs traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;in_file&quot;</span><span class="p">,</span>
+                       <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">in_file_desc</span><span class="p">))</span>
+
+        <span class="c1"># Optional inputs whith default value traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;copy_header&quot;</span><span class="p">,</span>
+                       <span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">copy_header_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;dimension&quot;</span><span class="p">,</span>
+                       <span class="n">Enum</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span>
+                            <span class="mi">2</span><span class="p">,</span>
+                            <span class="mi">4</span><span class="p">,</span>
+                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">dimension_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;out_prefix&quot;</span><span class="p">,</span>
+                       <span class="n">String</span><span class="p">(</span><span class="s1">&#39;n4c_&#39;</span><span class="p">,</span>
+                              <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                              <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                              <span class="n">desc</span><span class="o">=</span><span class="n">out_prefix_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;rescale_intensities&quot;</span><span class="p">,</span>
+                       <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">rescale_intensities_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;save_bias&quot;</span><span class="p">,</span>
+                       <span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">save_bias_desc</span><span class="p">))</span>
+
+        <span class="c1"># Optional inputs traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;bspline_fitting_distance&quot;</span><span class="p">,</span>
+                       <span class="n">Either</span><span class="p">(</span><span class="n">Undefined</span><span class="p">,</span>
+                              <span class="n">Float</span><span class="p">(),</span>
+                              <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                              <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                              <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                              <span class="n">desc</span><span class="o">=</span><span class="n">bspline_fitting_distance_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;bspline_order&quot;</span><span class="p">,</span>
+                       <span class="n">Either</span><span class="p">(</span><span class="n">Undefined</span><span class="p">,</span>
+                              <span class="n">Int</span><span class="p">(),</span>
+                              <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                              <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                              <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                              <span class="n">desc</span><span class="o">=</span><span class="n">bspline_order_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;convergence_threshold&quot;</span><span class="p">,</span>
+                       <span class="n">Either</span><span class="p">(</span><span class="n">Undefined</span><span class="p">,</span>
+                              <span class="n">Float</span><span class="p">(),</span>
+                              <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                              <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                              <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                              <span class="n">desc</span><span class="o">=</span><span class="n">convergence_threshold_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;histogram_sharpening&quot;</span><span class="p">,</span>
+                       <span class="n">Either</span><span class="p">(</span><span class="n">Undefined</span><span class="p">,</span>
+                              <span class="n">Tuple</span><span class="p">(</span><span class="n">Float</span><span class="p">(),</span> <span class="n">Float</span><span class="p">(),</span> <span class="n">Int</span><span class="p">()),</span>
+                              <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                              <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                              <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                              <span class="n">desc</span><span class="o">=</span><span class="n">histogram_sharpening_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;mask_image&quot;</span><span class="p">,</span>
+                       <span class="n">Either</span><span class="p">(</span><span class="n">Undefined</span><span class="p">,</span>
+                              <span class="n">String</span><span class="p">(),</span>
+                              <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                              <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                              <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                              <span class="n">desc</span><span class="o">=</span><span class="n">mask_image_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;n_iterations&quot;</span><span class="p">,</span>
+                       <span class="n">Either</span><span class="p">(</span><span class="n">Undefined</span><span class="p">,</span>
+                              <span class="n">List</span><span class="p">(</span><span class="n">Int</span><span class="p">()),</span>
+                              <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                              <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                              <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                              <span class="n">desc</span><span class="o">=</span><span class="n">n_iterations_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;shrink_factor&quot;</span><span class="p">,</span>
+                       <span class="n">Either</span><span class="p">(</span><span class="n">Undefined</span><span class="p">,</span>
+                              <span class="n">Int</span><span class="p">(),</span>
+                              <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                              <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                              <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                              <span class="n">desc</span><span class="o">=</span><span class="n">shrink_factor_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;weight_image&quot;</span><span class="p">,</span>
+                       <span class="n">Either</span><span class="p">(</span><span class="n">Undefined</span><span class="p">,</span>
+                              <span class="n">String</span><span class="p">(),</span>
+                              <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                              <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                              <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                              <span class="n">desc</span><span class="o">=</span><span class="n">weight_image_desc</span><span class="p">))</span>
+
+        <span class="c1"># Outputs traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;bias_image&quot;</span><span class="p">,</span>
+                       <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">bias_image_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;negative_values&quot;</span><span class="p">,</span>
+                       <span class="n">Bool</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">negative_values_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;out_file&quot;</span><span class="p">,</span>
+                       <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">out_file_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s1">&#39;nipype.interfaces.ants.N4BiasFieldCorrection&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="N4BiasFieldCorrection.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.ants.html#mia_processes.bricks.preprocess.ants.processes.N4BiasFieldCorrection.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+
+<span class="sd">        The main objective of this method is to produce the outputs of the</span>
+<span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
+<span class="sd">        if defined here. In order not to include an output in the database,</span>
+<span class="sd">        this output must be a value of the optional key &#39;notInDb&#39; of the</span>
+<span class="sd">        self.outputs dictionary. To work properly this method must return</span>
+<span class="sd">        self.make_initResult() object.</span>
+
+<span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">N4BiasFieldCorrection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+
+        <span class="c1"># Outputs definition and tags inheritance (optional)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span> <span class="o">==</span> <span class="n">Undefined</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span> <span class="o">=</span> <span class="s1">&#39;n4c_&#39;</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The out_prefix parameter is undefined. Automatically &#39;</span>
+                      <span class="s1">&#39;set to &quot;n4c&quot; ...&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bspline_order</span> <span class="ow">and</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">bspline_fitting_distance</span> <span class="o">==</span> <span class="n">Undefined</span><span class="p">):</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Initialization failed.. &quot;bspline_order&quot; parameter &#39;</span>
+                      <span class="s1">&#39;required &quot;bspline_fitting_distance&quot; parameter&#39;</span><span class="p">)</span>
+                <span class="k">return</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">:</span>
+                <span class="n">valid_ext</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">fileName</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">,</span>
+                                                           <span class="n">EXT</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_ext</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">The input image format is not recognized ...!&#39;</span><span class="p">)</span>
+                    <span class="k">return</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;out_file&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span> <span class="o">+</span> <span class="n">fileName</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="n">in_ext</span><span class="p">)</span>
+
+                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;bias_image&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span> <span class="o">+</span> <span class="n">fileName</span> <span class="o">+</span>
+                        <span class="s1">&#39;_bias.&#39;</span> <span class="o">+</span> <span class="n">in_ext</span><span class="p">)</span>
+
+                    <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span>
+                        <span class="s1">&#39;out_file&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
+
+                    <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span>
+                        <span class="s1">&#39;bias_image&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;No output_directory was found...!</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="k">return</span>
+
+        <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="N4BiasFieldCorrection.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.ants.html#mia_processes.bricks.preprocess.ants.processes.N4BiasFieldCorrection.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">N4BiasFieldCorrection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+
+        <span class="c1"># If negative values, scale image</span>
+        <span class="n">input_nii</span> <span class="o">=</span> <span class="n">nib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">)</span>
+        <span class="n">datamin</span> <span class="o">=</span> <span class="n">input_nii</span><span class="o">.</span><span class="n">get_fdata</span><span class="p">()</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">datamin</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">input_nii</span><span class="o">.</span><span class="n">get_fdata</span><span class="p">()</span> <span class="o">-</span> <span class="n">datamin</span>
+            <span class="n">newnii</span> <span class="o">=</span> <span class="n">input_nii</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">input_nii</span><span class="o">.</span><span class="n">affine</span><span class="p">,</span>
+                                         <span class="n">input_nii</span><span class="o">.</span><span class="n">header</span><span class="p">)</span>
+
+            <span class="n">fileName</span><span class="p">,</span> <span class="n">trail</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+            <span class="n">nib</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">newnii</span><span class="p">,</span> <span class="n">fileName</span> <span class="o">+</span> <span class="s1">&#39;_scaled.&#39;</span> <span class="o">+</span> <span class="n">trail</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span> <span class="o">=</span> <span class="n">fileName</span> <span class="o">+</span> <span class="s1">&#39;_scaled.&#39;</span> <span class="o">+</span> <span class="n">trail</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">negative_values</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">The input image contains negative values &#39;</span>
+                  <span class="s1">&#39;A scaled copy was created and set as input&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">input_image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">copy_header</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy_header</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">dimension</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dimension</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">rescale_intensities</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rescale_intensities</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_bias</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">bias_image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias_image</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">save_bias</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_bias</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bspline_fitting_distance</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">bspline_fitting_distance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bspline_fitting_distance</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bspline_order</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">bspline_order</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bspline_order</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">convergence_threshold</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">convergence_threshold</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">convergence_threshold</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">histogram_sharpening</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">histogram_sharpening</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">histogram_sharpening</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask_image</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">mask_image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask_image</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_iterations</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">n_iterations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_iterations</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shrink_factor</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">shrink_factor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shrink_factor</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight_image</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">weight_image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight_image</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">output_image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_file</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
+
+
+<div class="viewcode-block" id="Registration"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.ants.html#mia_processes.bricks.preprocess.ants.processes.Registration">[docs]</a><span class="k">class</span> <span class="nc">Registration</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    * Registers a moving image to a fixed image *</span>
+
+<span class="sd">    Please, see the complete documentation for the `Registration&#39; brick in</span>
+<span class="sd">    the populse.mia_processes website</span>
+<span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/afni/Registration.html&gt;`</span>
+
+<span class="sd">    Here can be found some of classical registration parameters </span>
+<span class="sd">    (used in fMRIPrep and MRIQC)</span>
+<span class="sd">    https://github.com/nipreps/niworkflows/tree/master/niworkflows/data</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Registration.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.ants.html#mia_processes.bricks.preprocess.ants.processes.Registration.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
+
+<span class="sd">        The input and output plugs are defined here. The special</span>
+<span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
+<span class="sd">        third-party products necessary for the running of the brick.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Registration</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ants&#39;</span><span class="p">,</span> <span class="s1">&#39;nipype&#39;</span><span class="p">]</span>
+
+        <span class="c1"># Mandatory inputs description</span>
+        <span class="n">fixed_image_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Image to which the moving image should be &#39;</span>
+                            <span class="s1">&#39;transformed (a pathlike object or string &#39;</span>
+                            <span class="s1">&#39;representing an existing file).&#39;</span><span class="p">)</span>
+        <span class="n">moving_image_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Image that will be registered to the space &#39;</span>
+                             <span class="s1">&#39;of the fixed image (a pathlike object&#39;</span>
+                             <span class="s1">&#39;or string representing an existing file).&#39;</span><span class="p">)</span>
+        <span class="c1"># Optional inputs  whith default value description</span>
+        <span class="n">collapse_output_transforms_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Collapse output transforms &#39;</span>
+                                           <span class="s1">&#39;(a boolean). Default is True&#39;</span><span class="p">)</span>
+        <span class="n">dimension_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Image dimension (3 or 2). Default is 3.&#39;</span><span class="p">)</span>
+        <span class="n">float_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Use float instead of double for computations &#39;</span>
+                      <span class="s1">&#39;(a boolean). Default is False&#39;</span><span class="p">)</span>
+        <span class="n">initialize_transforms_per_stage_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Initialize linear transforms &#39;</span>
+                                                <span class="s1">&#39;from the previous stag &#39;</span>
+                                                <span class="s1">&#39;(a boolean). &#39;</span>
+                                                <span class="s1">&#39;Default is False&#39;</span><span class="p">)</span>
+        <span class="n">interpolation_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;(‘Linear’ or ‘NearestNeighbor’ or&#39;</span>
+                              <span class="s1">&#39;‘CosineWindowedSinc’ or ‘WelchWindowedSinc’ &#39;</span>
+                              <span class="s1">&#39;or ‘HammingWindowedSinc’ or&#39;</span>
+                              <span class="s1">&#39;‘LanczosWindowedSinc’ or ‘BSpline’ or&#39;</span>
+                              <span class="s1">&#39;‘MultiLabel’ or ‘Gaussian’ or ‘GenericLabel’).&#39;</span>
+                              <span class="s1">&#39;Default is Linear&#39;</span><span class="p">)</span>
+        <span class="n">metric_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;The metric to use for each stage (a list of strings&#39;</span>
+                       <span class="s1">&#39;which are &#39;&#39;CC&#39;&#39; or &#39;&#39;MeanSquares&#39;&#39; or &#39;&#39;Demons&#39;&#39;&#39;</span>
+                       <span class="s1">&#39;or &#39;&#39;GC&#39;&#39; or &#39;&#39;MI&#39;&#39; or Mattes)&#39;</span><span class="p">)</span>
+        <span class="n">metric_weight_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;The metric weight(s) for each stage.&#39;</span>
+                              <span class="s1">&#39;The weights must sum to 1 per stage&#39;</span>
+                              <span class="s1">&#39;(A list of floats).&#39;</span><span class="p">)</span>
+        <span class="n">output_inverse_warped_image_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Get inverse_warped image &#39;</span>
+                                            <span class="s1">&#39;(a boolean). Default is False&#39;</span><span class="p">)</span>
+        <span class="n">out_prefix_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Specify the string to be prepended to the &#39;</span>
+                           <span class="s1">&#39;filename of the warped image file &#39;</span>
+                           <span class="s1">&#39;(a string).&#39;</span><span class="p">)</span>
+        <span class="n">radius_bins_item_trait_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Radius bins item (an interger). &#39;</span>
+                                       <span class="s1">&#39;Default is 5&#39;</span><span class="p">)</span>
+        <span class="n">sigma_units_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Units for smoothing sigmas (mm or vox). &#39;</span>
+                            <span class="s1">&#39;Default is [&quot;vox&quot;] * len(metric)&#39;</span><span class="p">)</span>
+        <span class="n">smoothing_sigmas_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Smoothing sigmas (A list of items which &#39;</span>
+                                 <span class="s1">&#39;are a list of items (which are a float,)&#39;</span><span class="p">)</span>
+        <span class="n">shrink_factors_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;(Shrink factor (A list of items which are &#39;</span>
+                               <span class="s1">&#39;a list of items which are an integer)&#39;</span><span class="p">)</span>
+        <span class="n">transforms_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;(A list of items which are Rigid or Affine or &#39;</span>
+                           <span class="s1">&#39;CompositeAffine or Similarity or Translation or &#39;</span>
+                           <span class="s1">&#39;BSpline or GaussianDisplacementField or &#39;</span>
+                           <span class="s1">&#39;TimeVaryingVelocityField or &#39;</span>
+                           <span class="s1">&#39;TimeVaryingBSplineVelocityField or SyN or &#39;</span>
+                           <span class="s1">&#39;BSplineSyN or Exponential or BSplineExponential&#39;</span><span class="p">)</span>
+        <span class="n">transform_parameters_desc</span> <span class="o">=</span> <span class="s1">&#39;(A list of tuples)&#39;</span>
+        <span class="n">use_estimate_learning_rate_once_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Use estimate learning rate &#39;</span>
+                                                <span class="s1">&#39;(a list of boolean). Default &#39;</span>
+                                                <span class="s1">&#39;is [True] * len(metric)&#39;</span><span class="p">)</span>
+        <span class="n">use_histogram_matching_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Use histogram matching &#39;</span>
+                                       <span class="s1">&#39;(a list of boolean). Default &#39;</span>
+                                       <span class="s1">&#39;is [True] * len(metric)&#39;</span><span class="p">)</span>
+        <span class="n">winsorize_lower_quantile_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;The Lower quantile to clip image &#39;</span>
+                                         <span class="s1">&#39;ranges (a float between 0.0 and &#39;</span>
+                                         <span class="s1">&#39;1.0). Default is 0.005.&#39;</span><span class="p">)</span>
+        <span class="n">winsorize_upper_quantile_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;The upper quantile to clip image &#39;</span>
+                                         <span class="s1">&#39;ranges (a float between 0.0 and &#39;</span>
+                                         <span class="s1">&#39;1.0). Default is 0.995.&#39;</span><span class="p">)</span>
+        <span class="n">write_composite_transform_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Write composite transform (a &#39;</span>
+                                          <span class="s1">&#39;boolean). Default is True&#39;</span><span class="p">)</span>
+        <span class="c1"># Optional inputs description</span>
+        <span class="n">convergence_threshold_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Convergence threshold (a list of &#39;</span>
+                                      <span class="s1">&#39;at least 1 float).&#39;</span>
+                                      <span class="s1">&#39;Requires inputs: number_of_iterations&#39;</span><span class="p">)</span>
+        <span class="n">convergence_window_size_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Convergence window size &#39;</span>
+                                        <span class="s1">&#39;(a list of integer)&#39;</span><span class="p">)</span>
+        <span class="n">fixed_image_masks_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Mask used to limit metric sampling region &#39;</span>
+                                  <span class="s1">&#39;of the fixed image in all stages (a list&#39;</span>
+                                  <span class="s1">&#39;of items which are a pathlike object or&#39;</span>
+                                  <span class="s1">&#39;string representing an existing file&#39;</span>
+                                  <span class="s1">&#39;or ‘NULL’).&#39;</span><span class="p">)</span>
+        <span class="n">initial_moving_transform_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;A transform or a list of transform &#39;</span>
+                                         <span class="s1">&#39;that should be applied before the &#39;</span>
+                                         <span class="s1">&#39;registration begin. (a list of items&#39;</span>
+                                         <span class="s1">&#39;which are a pathlike object or&#39;</span>
+                                         <span class="s1">&#39;string representing an existing&#39;</span>
+                                         <span class="s1">&#39;file). Mutually exclusive with &#39;</span>
+                                         <span class="s1">&#39;initial_moving_transform_com&#39;</span><span class="p">)</span>
+        <span class="n">initial_moving_transform_com_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Align the moving_image and &#39;</span>
+                                             <span class="s1">&#39;fixed_image before registration &#39;</span>
+                                             <span class="s1">&#39;using the geometric center of &#39;</span>
+                                             <span class="s1">&#39;the images (=0), the image &#39;</span>
+                                             <span class="s1">&#39;intensities (=1), or the &#39;</span>
+                                             <span class="s1">&#39;origin of the images (=2) &#39;</span>
+                                             <span class="s1">&#39;(0 or 1 or 2). &#39;</span>
+                                             <span class="s1">&#39;Mutually exclusive with &#39;</span>
+                                             <span class="s1">&#39;initial_moving_transform&#39;</span><span class="p">)</span>
+        <span class="n">interpolation_parameters_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Interpolation parameters for &#39;</span>
+                                         <span class="s1">&#39;example for BSpline order or for &#39;</span>
+                                         <span class="s1">&#39;sigma/alphaparameters for &#39;</span>
+                                         <span class="s1">&#39;Gaussian/Multilabel (a tuple &#39;</span>
+                                         <span class="s1">&#39;of the form: (an integer) &#39;</span>
+                                         <span class="s1">&#39;or a tuple of the form: &#39;</span>
+                                         <span class="s1">&#39;(a float, a float) or &#39;</span>
+                                         <span class="s1">&#39;a tuple of the form: (a string))&#39;</span><span class="p">)</span>
+        <span class="n">invert_initial_moving_transform_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;A list of booleans that &#39;</span>
+                                                <span class="s1">&#39;indicatewhether the &#39;</span>
+                                                <span class="s1">&#39;inverse(s) of the &#39;</span>
+                                                <span class="s1">&#39;transform(s) defined in &#39;</span>
+                                                <span class="s1">&#39;initial_moving_transform &#39;</span>
+                                                <span class="s1">&#39;should be used. &#39;</span>
+                                                <span class="s1">&#39;Mutually exclusive with &#39;</span>
+                                                <span class="s1">&#39;initial_moving_transform_com.&#39;</span>
+                                                <span class="s1">&#39;Required &#39;</span>
+                                                <span class="s1">&#39;initial_moving_transform.&#39;</span><span class="p">)</span>
+        <span class="n">moving_image_masks_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Masks used to limit metric sampling&#39;</span>
+                                   <span class="s1">&#39;region of the moving image, defined&#39;</span>
+                                   <span class="s1">&#39;per registration stage (Use “NULL” to omit&#39;</span>
+                                   <span class="s1">&#39;a mask at a given stage - a list of items&#39;</span>
+                                   <span class="s1">&#39;which are a pathlike object or string &#39;</span>
+                                   <span class="s1">&#39;representing an existing file or ‘NULL’).&#39;</span><span class="p">)</span>
+        <span class="n">number_of_iterations_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Number of iterations. (A list of items &#39;</span>
+                                     <span class="s1">&#39;which are a list of items which are an &#39;</span>
+                                     <span class="s1">&#39;integer)&#39;</span><span class="p">)</span>
+        <span class="n">sampling_percentage_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;The metric sampling percentages to use&#39;</span>
+                                    <span class="s1">&#39;for each stage (a list of&#39;</span>
+                                    <span class="s1">&#39; 0.0 &lt;= floats &lt;=1; requires sampling&#39;</span>
+                                    <span class="s1">&#39;strategy)&#39;</span><span class="p">)</span>
+        <span class="n">sampling_strategy_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;The metric sampling strategies for each&#39;</span>
+                                  <span class="s1">&#39;stage (A list of strings which are &#39;&#39;None&#39;&#39;&#39;</span>
+                                  <span class="s1">&#39;or &#39;&#39;Regular&#39;&#39; or &#39;&#39;Random&#39;&#39;).&#39;</span><span class="p">)</span>
+        <span class="n">radius_or_number_of_bins_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;The number of bins in each stage for&#39;</span>
+                                         <span class="s1">&#39; the MI  and Mattes metric,&#39;</span>
+                                         <span class="s1">&#39;the radius for other metrics&#39;</span>
+                                         <span class="s1">&#39;(a list of integers)&#39;</span><span class="p">)</span>
+        <span class="n">random_seed_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Fixed seed for random number generation. &#39;</span>
+                            <span class="s1">&#39;(an integer)&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Outputs description</span>
+        <span class="n">composite_transform_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Composite transform file&#39;</span>
+                                    <span class="s1">&#39;(a pathlike object or a string&#39;</span>
+                                    <span class="s1">&#39;representing a file).&#39;</span><span class="p">)</span>
+        <span class="n">inverse_composite_transform_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Inverse composite&#39;</span>
+                                            <span class="s1">&#39;transform file (a pathlike object&#39;</span>
+                                            <span class="s1">&#39;or a string representing&#39;</span>
+                                            <span class="s1">&#39;a file).&#39;</span><span class="p">)</span>
+        <span class="n">inverse_warped_image_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Inverse warped image. (a pathlike object &#39;</span>
+                                     <span class="s1">&#39;or string representing an existing file).&#39;</span><span class="p">)</span>
+        <span class="n">warped_image_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Warped image. (a pathlike object &#39;</span>
+                             <span class="s1">&#39;or string representing an existing file).&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Mandatory inputs traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;fixed_image&quot;</span><span class="p">,</span>
+                       <span class="n">File</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">fixed_image_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;moving_image&quot;</span><span class="p">,</span>
+                       <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">moving_image_desc</span><span class="p">))</span>
+
+        <span class="c1"># Optional inputs with default value traits</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;collapse_output_transforms&quot;</span><span class="p">,</span>
+                       <span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">collapse_output_transforms_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;dimension&quot;</span><span class="p">,</span>
+                       <span class="n">Enum</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span>
+                            <span class="mi">2</span><span class="p">,</span>
+                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">dimension_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;float&quot;</span><span class="p">,</span>
+                       <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">float_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;initialize_transforms_per_stage&quot;</span><span class="p">,</span>
+                       <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">initialize_transforms_per_stage_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;interpolation&quot;</span><span class="p">,</span>
+                       <span class="n">Enum</span><span class="p">(</span><span class="s1">&#39;Linear&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;NearestNeighbor&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;CosineWindowedSinc&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;WelchWindowedSinc&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;HammingWindowedSinc&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;LanczosWindowedSinc&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;BSpline&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;MultiLabel&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;Gaussian&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;GenericLabel&#39;</span><span class="p">,</span>
+                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">interpolation_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;metric&quot;</span><span class="p">,</span>
+                       <span class="n">List</span><span class="p">(</span><span class="n">Enum</span><span class="p">(</span><span class="s1">&#39;CC&#39;</span><span class="p">,</span>
+                                 <span class="s1">&#39;MeanSquares&#39;</span><span class="p">,</span>
+                                 <span class="s1">&#39;Demon&#39;</span><span class="p">,</span>
+                                 <span class="s1">&#39;GC&#39;</span><span class="p">,</span>
+                                 <span class="s1">&#39;MI&#39;</span><span class="p">,</span>
+                                 <span class="s1">&#39;Mattes&#39;</span><span class="p">),</span>
+                            <span class="n">default</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Mattes&#39;</span><span class="p">,</span> <span class="s1">&#39;Mattes&#39;</span><span class="p">,</span> <span class="s1">&#39;Mattes&#39;</span><span class="p">],</span>
+                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">metric_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;metric_weight&quot;</span><span class="p">,</span>
+                       <span class="n">List</span><span class="p">(</span><span class="n">Float</span><span class="p">(),</span>
+                            <span class="n">default</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span>
+                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">metric_weight_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;output_inverse_warped_image&quot;</span><span class="p">,</span>
+                       <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">output_inverse_warped_image_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;out_prefix&quot;</span><span class="p">,</span>
+                       <span class="n">String</span><span class="p">(</span><span class="s1">&#39;w_&#39;</span><span class="p">,</span>
+                              <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                              <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                              <span class="n">desc</span><span class="o">=</span><span class="n">out_prefix_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;radius_bins_item_trait&quot;</span><span class="p">,</span>
+                       <span class="n">Int</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span>
+                           <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                           <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                           <span class="n">desc</span><span class="o">=</span><span class="n">radius_bins_item_trait_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;sigma_units&quot;</span><span class="p">,</span>
+                       <span class="n">List</span><span class="p">(</span><span class="n">Enum</span><span class="p">(</span><span class="s1">&#39;vox&#39;</span><span class="p">,</span>
+                                 <span class="s1">&#39;mm&#39;</span><span class="p">),</span>
+                            <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">sigma_units_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;smoothing_sigmas&quot;</span><span class="p">,</span>
+                       <span class="n">List</span><span class="p">(</span><span class="n">List</span><span class="p">(</span><span class="n">Float</span><span class="p">()),</span>
+                            <span class="n">default</span><span class="o">=</span><span class="p">[[</span><span class="mf">4.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]],</span>
+                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">smoothing_sigmas_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;shrink_factors&quot;</span><span class="p">,</span>
+                       <span class="n">List</span><span class="p">(</span><span class="n">List</span><span class="p">(</span><span class="n">Int</span><span class="p">()),</span>
+                            <span class="n">default</span><span class="o">=</span><span class="p">[[</span><span class="mi">4</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]],</span>
+                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">shrink_factors_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;transforms&quot;</span><span class="p">,</span>
+                       <span class="n">List</span><span class="p">(</span><span class="n">Enum</span><span class="p">(</span><span class="s1">&#39;Rigid&#39;</span><span class="p">,</span>
+                                 <span class="s1">&#39;Affine&#39;</span><span class="p">,</span>
+                                 <span class="s1">&#39;CompositeAffine&#39;</span><span class="p">,</span>
+                                 <span class="s1">&#39;Similarity&#39;</span><span class="p">,</span>
+                                 <span class="s1">&#39;Translation&#39;</span><span class="p">,</span>
+                                 <span class="s1">&#39;BSpline&#39;</span><span class="p">,</span>
+                                 <span class="s1">&#39;GaussianDisplacementField&#39;</span><span class="p">,</span>
+                                 <span class="s1">&#39;TimeVaryingVelocityField&#39;</span><span class="p">,</span>
+                                 <span class="s1">&#39;TimeVaryingBSplineVelocityField&#39;</span><span class="p">,</span>
+                                 <span class="s1">&#39;SyN&#39;</span><span class="p">,</span>
+                                 <span class="s1">&#39;BSplineSyN&#39;</span><span class="p">,</span>
+                                 <span class="s1">&#39;Exponential&#39;</span><span class="p">,</span>
+                                 <span class="s1">&#39;BSplineExponential&#39;</span><span class="p">),</span>
+                            <span class="n">default</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Rigid&#39;</span><span class="p">,</span> <span class="s1">&#39;Affine&#39;</span><span class="p">,</span> <span class="s1">&#39;SyN&#39;</span><span class="p">],</span>
+                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">transforms_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;transform_parameters&quot;</span><span class="p">,</span>
+                       <span class="n">List</span><span class="p">(</span><span class="n">Either</span><span class="p">(</span>
+                           <span class="n">Tuple</span><span class="p">(</span><span class="n">Float</span><span class="p">),</span>
+                           <span class="n">Tuple</span><span class="p">(</span><span class="n">Float</span><span class="p">,</span> <span class="n">Float</span><span class="p">,</span> <span class="n">Float</span><span class="p">),</span>
+                           <span class="n">Tuple</span><span class="p">(</span><span class="n">Float</span><span class="p">,</span> <span class="n">Int</span><span class="p">,</span> <span class="n">Int</span><span class="p">,</span> <span class="n">Int</span><span class="p">),</span>
+                           <span class="n">Tuple</span><span class="p">(</span><span class="n">Float</span><span class="p">,</span> <span class="n">Int</span><span class="p">,</span> <span class="n">Float</span><span class="p">,</span> <span class="n">Float</span><span class="p">,</span> <span class="n">Float</span><span class="p">,</span> <span class="n">Float</span><span class="p">),</span>
+                           <span class="n">Tuple</span><span class="p">(</span><span class="n">Float</span><span class="p">,</span> <span class="n">Float</span><span class="p">,</span> <span class="n">Float</span><span class="p">,</span> <span class="n">Int</span><span class="p">),</span>
+                           <span class="n">Tuple</span><span class="p">(</span><span class="n">Float</span><span class="p">,</span> <span class="n">Int</span><span class="p">,</span> <span class="n">Int</span><span class="p">,</span> <span class="n">Int</span><span class="p">,</span> <span class="n">Int</span><span class="p">)),</span>
+                           <span class="n">default</span><span class="o">=</span><span class="p">[(</span><span class="mf">0.01</span><span class="p">,),</span> <span class="p">(</span><span class="mf">0.08</span><span class="p">,),</span> <span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)],</span>
+                           <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                           <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                           <span class="n">desc</span><span class="o">=</span><span class="n">transform_parameters_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;use_estimate_learning_rate_once&quot;</span><span class="p">,</span>
+                       <span class="n">List</span><span class="p">(</span><span class="n">Bool</span><span class="p">(),</span>
+                            <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">use_estimate_learning_rate_once_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;use_histogram_matching&quot;</span><span class="p">,</span>
+                       <span class="n">List</span><span class="p">(</span><span class="n">Bool</span><span class="p">(),</span>
+                            <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">use_histogram_matching_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;winsorize_lower_quantile&quot;</span><span class="p">,</span>
+                       <span class="n">Float</span><span class="p">(</span><span class="mf">0.005</span><span class="p">,</span>
+                             <span class="nb">min</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+                             <span class="nb">max</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+                             <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                             <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                             <span class="n">desc</span><span class="o">=</span><span class="n">winsorize_lower_quantile_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;winsorize_upper_quantile&quot;</span><span class="p">,</span>
+                       <span class="n">Float</span><span class="p">(</span><span class="mf">0.995</span><span class="p">,</span>
+                             <span class="nb">min</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+                             <span class="nb">max</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+                             <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                             <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                             <span class="n">desc</span><span class="o">=</span><span class="n">winsorize_upper_quantile_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;write_composite_transform&quot;</span><span class="p">,</span>
+                       <span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">write_composite_transform_desc</span><span class="p">))</span>
+
+        <span class="c1"># Optional input traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;convergence_threshold&quot;</span><span class="p">,</span>
+                       <span class="n">List</span><span class="p">(</span><span class="n">Float</span><span class="p">(),</span>
+                            <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">convergence_threshold_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;convergence_window_size&quot;</span><span class="p">,</span>
+                       <span class="n">List</span><span class="p">(</span><span class="n">Int</span><span class="p">(),</span>
+                            <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">convergence_window_size_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;fixed_image_masks&quot;</span><span class="p">,</span>
+                       <span class="n">Either</span><span class="p">(</span><span class="n">File</span><span class="p">(),</span>
+                              <span class="n">List</span><span class="p">(</span><span class="n">File</span><span class="p">()),</span>
+                              <span class="s1">&#39;NULL&#39;</span><span class="p">,</span>
+                              <span class="n">default</span><span class="o">=</span><span class="s1">&#39;NULL&#39;</span><span class="p">,</span>
+                              <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                              <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                              <span class="n">desc</span><span class="o">=</span><span class="n">fixed_image_masks_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;initial_moving_transform&quot;</span><span class="p">,</span>
+                       <span class="n">InputMultiPath</span><span class="p">(</span><span class="n">File</span><span class="p">(),</span>
+                                      <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                                      <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                      <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                      <span class="n">desc</span><span class="o">=</span><span class="n">initial_moving_transform_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;initial_moving_transform_com&quot;</span><span class="p">,</span>
+                       <span class="n">Either</span><span class="p">(</span><span class="n">Undefined</span><span class="p">,</span>
+                              <span class="n">Enum</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span>
+                                   <span class="mi">1</span><span class="p">,</span>
+                                   <span class="mi">2</span><span class="p">),</span>
+                              <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                              <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                              <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                              <span class="n">desc</span><span class="o">=</span><span class="n">initial_moving_transform_com_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;interpolation_parameters&quot;</span><span class="p">,</span>
+                       <span class="n">Either</span><span class="p">(</span><span class="n">Undefined</span><span class="p">,</span>
+                              <span class="n">Tuple</span><span class="p">(</span><span class="n">Int</span><span class="p">()),</span>
+                              <span class="n">Tuple</span><span class="p">(</span><span class="n">Float</span><span class="p">(),</span> <span class="n">Float</span><span class="p">()),</span>
+                              <span class="n">Tuple</span><span class="p">(</span><span class="n">String</span><span class="p">()),</span>
+                              <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                              <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                              <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                              <span class="n">desc</span><span class="o">=</span><span class="n">interpolation_parameters_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;invert_initial_moving_transform&quot;</span><span class="p">,</span>
+                       <span class="n">Either</span><span class="p">(</span><span class="n">Undefined</span><span class="p">,</span>
+                              <span class="n">List</span><span class="p">(</span><span class="n">Bool</span><span class="p">()),</span>
+                              <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                              <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                              <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                              <span class="n">desc</span><span class="o">=</span><span class="n">invert_initial_moving_transform_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;moving_image_masks&quot;</span><span class="p">,</span>
+                       <span class="n">Either</span><span class="p">(</span><span class="n">File</span><span class="p">(),</span>
+                              <span class="n">List</span><span class="p">(</span><span class="n">File</span><span class="p">()),</span>
+                              <span class="s1">&#39;NULL&#39;</span><span class="p">,</span>
+                              <span class="n">default</span><span class="o">=</span><span class="s1">&#39;NULL&#39;</span><span class="p">,</span>
+                              <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                              <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                              <span class="n">desc</span><span class="o">=</span><span class="n">moving_image_masks_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;number_of_iterations&quot;</span><span class="p">,</span>
+                       <span class="n">List</span><span class="p">(</span><span class="n">List</span><span class="p">(</span><span class="n">Int</span><span class="p">()),</span>
+                            <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">number_of_iterations_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;radius_or_number_of_bins&quot;</span><span class="p">,</span>
+                       <span class="n">List</span><span class="p">(</span><span class="n">Int</span><span class="p">(),</span>
+                            <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">radius_or_number_of_bins_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;random_seed&quot;</span><span class="p">,</span>
+                       <span class="n">Either</span><span class="p">(</span><span class="n">Undefined</span><span class="p">,</span>
+                              <span class="n">Int</span><span class="p">(),</span>
+                              <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                              <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                              <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                              <span class="n">desc</span><span class="o">=</span><span class="n">random_seed_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;sampling_percentage&quot;</span><span class="p">,</span>
+                       <span class="n">List</span><span class="p">(</span><span class="n">Float</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
+                            <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">sampling_percentage_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;sampling_strategy&quot;</span><span class="p">,</span>
+                       <span class="n">List</span><span class="p">(</span><span class="n">Enum</span><span class="p">(</span><span class="s1">&#39;None&#39;</span><span class="p">,</span>
+                                 <span class="s1">&#39;Regular&#39;</span><span class="p">,</span>
+                                 <span class="s1">&#39;Random&#39;</span><span class="p">),</span>
+                            <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">sampling_strategy_desc</span><span class="p">))</span>
+
+        <span class="c1"># Outputs traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;composite_transform&quot;</span><span class="p">,</span>
+                       <span class="n">File</span><span class="p">(</span><span class="n">Undefined</span><span class="p">,</span>
+                            <span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">composite_transform_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;inverse_composite_transform&quot;</span><span class="p">,</span>
+                       <span class="n">File</span><span class="p">(</span><span class="n">Undefined</span><span class="p">,</span>
+                            <span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">inverse_composite_transform_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;inverse_warped_image&quot;</span><span class="p">,</span>
+                       <span class="n">File</span><span class="p">(</span><span class="n">Undefined</span><span class="p">,</span>
+                            <span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">inverse_warped_image_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;warped_image&quot;</span><span class="p">,</span>
+                       <span class="n">File</span><span class="p">(</span><span class="n">Undefined</span><span class="p">,</span>
+                            <span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">warped_image_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s1">&#39;nipype.interfaces.ants.Registration&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Registration.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.ants.html#mia_processes.bricks.preprocess.ants.processes.Registration.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+
+<span class="sd">        The main objective of this method is to produce the outputs of the</span>
+<span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
+<span class="sd">        if defined here. In order not to include an output in the database,</span>
+<span class="sd">        this output must be a value of the optional key &#39;notInDb&#39; of the</span>
+<span class="sd">        self.outputs dictionary. To work properly this method must return</span>
+<span class="sd">        self.make_initResult() object.</span>
+
+<span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Registration</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sampling_percentage</span> <span class="o">==</span> <span class="n">Undefined</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">sampling_strategy</span> <span class="o">!=</span> <span class="n">Undefined</span><span class="p">)</span> <span class="ow">or</span> \
+           <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sampling_percentage</span> <span class="o">!=</span> <span class="n">Undefined</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">sampling_strategy</span> <span class="o">==</span> <span class="n">Undefined</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Initialisation failed. Please, set both (or none) of the &#39;</span>
+                  <span class="s1">&#39;two inputparameters sampling_percentage &#39;</span>
+                  <span class="s1">&#39;and sampling_strategy ...!&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">convergence_threshold</span> <span class="o">!=</span> <span class="n">Undefined</span>
+                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_iterations</span> <span class="o">==</span> <span class="n">Undefined</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Initialisation failed. Please, set number_of_iterations &#39;</span>
+                  <span class="s1">&#39;input if convergence_threshold input is set...!&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">convergence_window_size</span> <span class="o">!=</span> <span class="n">Undefined</span>
+                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">convergence_threshold</span> <span class="o">==</span> <span class="n">Undefined</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Initialisation failed. Please, set convergence_threshold &#39;</span>
+                  <span class="s1">&#39;input if convergence_window_size input is set...!&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">initial_moving_transform_com</span> <span class="o">!=</span> <span class="n">Undefined</span>
+                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_moving_transform</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Initialisation failed. initial_moving_transform_com and &#39;</span>
+                  <span class="s1">&#39;initial_moving_transform are mutually exclusif...!&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">invert_initial_moving_transform</span> <span class="o">!=</span> <span class="n">Undefined</span>
+                <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_moving_transform</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Initialisation failed. invert_initial_moving_transform &#39;</span>
+                  <span class="s1">&#39;require initial_moving_transform...!&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># Outputs definition and tags inheritance (optional)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">moving_image</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span> <span class="o">==</span> <span class="n">Undefined</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span> <span class="o">=</span> <span class="s1">&#39;w_&#39;</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The out_prefix parameter is undefined. Automatically &#39;</span>
+                      <span class="s1">&#39;set to &quot;w&quot; ...&#39;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">:</span>
+                <span class="n">valid_ext</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">fileName</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">moving_image</span><span class="p">,</span>
+                                                           <span class="n">EXT</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_ext</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">The input image format is not recognized ...!&#39;</span><span class="p">)</span>
+                    <span class="k">return</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;warped_image&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span> <span class="o">+</span> <span class="n">fileName</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="n">in_ext</span><span class="p">)</span>
+
+                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;composite_transform&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                        <span class="n">fileName</span> <span class="o">+</span> <span class="s1">&#39;_Composite.h5&#39;</span><span class="p">)</span>
+
+                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;inverse_composite_transform&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                        <span class="n">fileName</span> <span class="o">+</span> <span class="s1">&#39;_InverseComposite.h5&#39;</span><span class="p">)</span>
+
+                    <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span>
+                        <span class="s1">&#39;warped_image&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">moving_image</span>
+
+                    <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span>
+                        <span class="s1">&#39;composite_transform&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">moving_image</span>
+
+                    <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span>
+                        <span class="s1">&#39;inverse_composite_transform&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">moving_image</span>
+
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_inverse_warped_image</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;inverse_warped_image&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span> <span class="o">+</span> <span class="s1">&#39;_inverse_&#39;</span> <span class="o">+</span> <span class="n">fileName</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="n">in_ext</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span>
+                            <span class="s1">&#39;inverse_warped_image&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">moving_image</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;No output_directory was found...!</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="k">return</span>
+
+        <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Registration.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.ants.html#mia_processes.bricks.preprocess.ants.processes.Registration.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Registration</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+
+        <span class="c1"># Mandatory inputs (in Nipype)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">fixed_image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fixed_image</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">metric</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metric</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">metric_weight</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metric_weight</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">moving_image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">moving_image</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">transforms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transforms</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">shrink_factors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shrink_factors</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">smoothing_sigmas</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">smoothing_sigmas</span>
+
+        <span class="c1"># Optional inputs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">collapse_output_transforms</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collapse_output_transforms</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">convergence_threshold</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">convergence_threshold</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">convergence_window_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">convergence_window_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">dimension</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dimension</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">fixed_image_masks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fixed_image_masks</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">float</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">float</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_moving_transform</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">initial_moving_transform</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_moving_transform</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_moving_transform_com</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">initial_moving_transform_com</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initial_moving_transform_com</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">initialize_transforms_per_stage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">initialize_transforms_per_stage</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">interpolation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">interpolation</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">interpolation_parameters</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">interpolation_parameters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">interpolation_parameters</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">invert_initial_moving_transform</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">invert_initial_moving_transform</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">invert_initial_moving_transform</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">moving_image_masks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">moving_image_masks</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">number_of_iterations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">number_of_iterations</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">radius_bins_item_trait</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius_bins_item_trait</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">radius_or_number_of_bins</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius_or_number_of_bins</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">random_seed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_seed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">sampling_percentage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sampling_percentage</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">sampling_strategy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sampling_strategy</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigma_units</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">sigma_units</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigma_units</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">sigma_units</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;vox&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metric</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_estimate_learning_rate_once</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">use_estimate_learning_rate_once</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_estimate_learning_rate_once</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">use_estimate_learning_rate_once</span> <span class="o">=</span> <span class="p">[</span><span class="kc">True</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metric</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">transform_parameters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform_parameters</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_histogram_matching</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">use_histogram_matching</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_histogram_matching</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">use_histogram_matching</span> <span class="o">=</span> <span class="p">[</span><span class="kc">True</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metric</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">winsorize_lower_quantile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">winsorize_lower_quantile</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">winsorize_upper_quantile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">winsorize_upper_quantile</span>
+
+        <span class="c1"># Ouput flags</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_inverse_warped_image</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">output_inverse_warped_image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inverse_warped_image</span>
+        <span class="n">ifile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">moving_image</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">fileName</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">ifile</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">output_transform_prefix</span> <span class="o">=</span> <span class="n">fileName</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">output_warped_image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">warped_image</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">write_composite_transform</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_composite_transform</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
+</pre></div>
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,121 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Bold_mriqc pipeline &#8212; mia_processes 2.2.1-dev+2bc8ce9 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/haiku.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
+          <span>mia_processes 2.2.1-dev+2bc8ce9 documentation</span></a></h1>
+        <h2 class="heading"><span>Bold_mriqc pipeline</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <div class="toctree-wrapper compound">
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 35%" />
+<col style="width: 42%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference external" href="../../../index.html">Home</a></p></td>
+<td><p><a class="reference external" href="../../documentation.html">Documentation</a></p></td>
+<td><p><a class="reference external" href="https://github.com/populse/mia_processes">GitHub</a></p></td>
+</tr>
+</tbody>
+</table>
+<section id="bold-mriqc-pipeline">
+<h1>Bold_mriqc pipeline<a class="headerlink" href="#bold-mriqc-pipeline" title="Permalink to this headline">¶</a></h1>
+<p>Get no-reference IQMs (image quality metrics) from functional (BOLD)
+data using mriqc functional workflow (<a class="reference external" href="https://mriqc.readthedocs.io/en/22.0.6/">mriqc v22.06</a>).</p>
+<hr class="docutils" />
+<p><strong>Pipeline insight</strong></p>
+<div class="line-block">
+<div class="line">Bold_mriqc pipeline combines the following pipelines and processes:</div>
+<div class="line-block">
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/others/NonSteadyDetector.html">Non steady state detection</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/others/Sanitize.html">Sanitize</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/others/TSNR.html">TSNR</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/afni/TStatMean.html">Mean</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/afni/Automask.html">Mask</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/afni/Volreg.html">Volume registration</a></div>
+<div class="line-block">
+<div class="line">(default values : twopass = True, nterpolation = ‘Fourier’)</div>
+</div>
+<div class="line">- <a class="reference external" href="../../pipelines/preprocess/Bold_mni_align.html">MIN align</a></div>
+<div class="line">- <a class="reference external" href="../../pipelines/reports/Bold_iqms.html">IQMS computation</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/reports/ReportFuncMriqc.html">Func report</a></div>
+</div>
+</div>
+<p><strong>Mandatory inputs parameters</strong></p>
+<ul>
+<li><dl>
+<dt><em>func_file</em> (a string representing an existing file)</dt><dd><p>A functional image (BOLD). An existing file (valid extensions: [.nii, .nii.gz]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/func.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Outputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>func_report</em></dt><dd><p>Functional Image-Quality Metrics summary report.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/func_ref_functional_mriqcReport_2023_03_31_11_42_10_75.pdf&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>carpet_seg</em></dt><dd><p>Carpet segmentation.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/cseg_t_tpl-MNI152NLin2009cAsym_res-01_desc-carpet_dseg.nii.gz&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<hr class="docutils" />
+<p>Usefull links:</p>
+<p><a class="reference external" href="https://mriqc.readthedocs.io/en/22.0.6/">mriqc 22.06</a></p>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </div>
+  </body>
+</html>

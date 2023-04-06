@@ -1,0 +1,181 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Calc brick &#8212; mia_processes 2.2.1-dev+2bc8ce9 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
+          <span>mia_processes 2.2.1-dev+2bc8ce9 documentation</span></a></h1>
+        <h2 class="heading"><span>Calc brick</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <div class="toctree-wrapper compound">
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 35%" />
+<col style="width: 40%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference external" href="../../../../index.html">Home</a></p></td>
+<td><p><a class="reference external" href="../../../documentation.html">Documentation</a></p></td>
+<td><p><a class="reference external" href="https://github.com/populse/mia_processes">GitHub</a></p></td>
+</tr>
+</tbody>
+</table>
+<section id="calc-brick">
+<h1>Calc brick<a class="headerlink" href="#calc-brick" title="Permalink to this headline">¶</a></h1>
+<p>Voxel-by-voxel arithmetic on 3D datasets (using AFNI 3dcalc command).
+This bricks assumes that the voxel-by-voxel computations are being performed on datasets that occupy the same space and have the same orientations.</p>
+<hr class="docutils" />
+<p><strong>Mandatory inputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>in_file_a</em> (a string representing an existing file)</dt><dd><p>First input 3D file (valid extensions: [.nii, .nii.gz]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/img_1.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Optional inputs with default value parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>expr</em> (a string, optional, default value is ‘a*step(b)’)</dt><dd><p>Arithmetic expression to apply between a, b and c.</p>
+<p>Arithmetic expressions are allowed, using + - * / ** ^ and parentheses.
+It is also possible to use built in functions such as sin, cos, sqrt, mean, stdev…
+Some functions are also designed to help implement logical functions such as step(x)  = { 1 if x &gt; 0; 0 if x &lt;= 0 }.</p>
+<p>For more example, refers to the AFNI documentation.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;a-b&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>output_type</em> (NIFTI or NIFTI_GZ, optional, default value is NIFTI)</dt><dd><div class="line-block">
+<div class="line">Format of the output image (one of NIFTI, NIFTI_GZ).</div>
+<div class="line-block">
+<div class="line">NIFTI: *.nii</div>
+<div class="line">NIFTI_GZ: *.nii.gz</div>
+</div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="n">NIFTI</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>out_prefix</em> (a string, optional, default value is ‘c’)</dt><dd><p>Prefix of the output image.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;c_&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Optional inputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>in_file_b</em> (a string representing an existing file, optional)</dt><dd><p>Second input 3D file (valid extensions: [.nii, .nii.gz]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/img_2.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>in_file_c</em> (a string representing an existing file, optional)</dt><dd><p>Third input 3D file (valid extensions: [.nii, .nii.gz]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/img_3.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>single_idx</em> (an integer, optional)</dt><dd><p>Volume index for in_file_a. The computation will be performed only on this volume.
+Default is Undefined (ie parameter not used)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;5&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>start_idx</em> (an integer, optional)</dt><dd><p>Start index for in_file_a. Requires stop_idx parameter.
+The computation will be performed only only on the volumes between start_idx and stop_idx.
+Default is Undefined (ie parameter not used).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;5&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>stop_idx</em> (an integer, optional)</dt><dd><p>Stop index for in_file_a. Requires start_idx parameter.
+The computation will be performed only only on the volumes between start_idx and stop_idx.
+Default is Undefined (ie parameter not used).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;35&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Outputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>out_file</em> (a strings representing a file)</dt><dd><p>Out image (extensions: [.nii, .nii.gz]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/c_img_1.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<hr class="docutils" />
+<p>Usefull links:</p>
+<p><a class="reference external" href="https://afni.nimh.nih.gov/pub/dist/doc/program_help/3dcalc.html">AFNI 3dcalc</a>
+<a class="reference external" href="https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.afni.utils.html#calc">AFNI Calc - nipype</a></p>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </div>
+  </body>
+</html>

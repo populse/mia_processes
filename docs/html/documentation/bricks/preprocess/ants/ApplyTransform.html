@@ -1,0 +1,194 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>ApplyTransforms brick &#8212; mia_processes 2.2.1-dev+2bc8ce9 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
+          <span>mia_processes 2.2.1-dev+2bc8ce9 documentation</span></a></h1>
+        <h2 class="heading"><span>ApplyTransforms brick</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <div class="toctree-wrapper compound">
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 35%" />
+<col style="width: 40%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference external" href="../../../../index.html">Home</a></p></td>
+<td><p><a class="reference external" href="../../../documentation.html">Documentation</a></p></td>
+<td><p><a class="reference external" href="https://github.com/populse/mia_processes">GitHub</a></p></td>
+</tr>
+</tbody>
+</table>
+<section id="applytransforms-brick">
+<h1>ApplyTransforms brick<a class="headerlink" href="#applytransforms-brick" title="Permalink to this headline">¶</a></h1>
+<p>ApplyTransforms, applied to an input image, transforms it according to a reference image and a transform (or a set of transforms)
+using ANTs ApplyTransforms command.</p>
+<hr class="docutils" />
+<p><strong>Mandatory inputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>input_image</em> (a string representing an existing file)</dt><dd><p>Input file to apply transformation to (valid extensions: [.nii, .nii.gz]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/T1w.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>reference_image</em> (a string representing an existing file)</dt><dd><p>Input file to apply transformation to (valid extensions: [.nii, .nii.gz]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/T1w.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>transforms</em> (multiples string representing existing files)</dt><dd><p>Transform files that will be applied in reverse order.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;identity&#39;</span><span class="p">,</span> <span class="s1">&#39;ants_Warp.nii.gz&#39;</span><span class="p">,</span> <span class="s1">&#39;trans.mat&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Optional inputs parameters with a default value:</strong></p>
+<ul>
+<li><dl>
+<dt><em>default_value</em> (a float, optional, default value is 0.0)</dt><dd><p>ex.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mf">0.0</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>dimension</em> (2 or 3 or 4, optional, default value is 3)</dt><dd><p>This option forces the image to be treated as a specified-dimensional image (2 or 3 or 4).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">3</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>float</em> (a boolean, optional, default value is False)</dt><dd><p>Use float instead of double for computations.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>input_image_type</em> (0 or 1 or 2 or 3, optional, default value is 0)</dt><dd><p>Option specifying the input image type of scalar (0), vector (1), tensor(2), or time series(3).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><a href="#id1"><span class="problematic" id="id2">*</span></a>interpolation*(Linear or NearestNeighbor or CosineWindowedSinc or WelchWindowedSinc or HammingWindowedSinc or LanczosWindowedSinc or MultiLabel or Gaussian or BSpline, optional, default value is Linear)</dt><dd><p>Interpolation model.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;Linear&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>out_prefix</em> (a string, optional, default value is ‘t’)</dt><dd><p>Prefix of the output image.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;t_&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>print_out_composite_warp_file</em> (a boolean, optional, default value is False)</dt><dd><p>Output a composite warp file instead of a transformed image.
+Default is False.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Optional inputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>interpolation_parameters</em> (a tuple of the form: (an integer) or a tuple of the form: (a float, a float), optional)</dt><dd><p>Interpolation parameters. For example for BSpline order or for sigma/alphaparameters for Gaussian/Multilabel
+Default is Undefined (ie parameter not used).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">(</span><span class="mi">5</span><span class="p">,)</span> <span class="p">(</span><span class="k">if</span> <span class="n">interpolation</span> <span class="o">=</span> <span class="s1">&#39;BSpline&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>invert_transform_flags</em> (a list of boolean, optional)</dt><dd><p>Invert transform flags.
+For example if transforms parameter is equal to [‘ants_Warp.nii.gz’, ‘trans.mat’] and invert_transform_flags is [False, True], the follinw trnasform will be applied:
+<cite>–transform ants_Warp.nii.gz –transform [ trans.mat, 1 ]</cite>
+Default is Undefined (ie parameter not used).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Outputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>out_file</em> (a strings representing a file)</dt><dd><p>Out image (extensions: [.nii, .nii.gz]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/denoise_func.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<hr class="docutils" />
+<p>Usefull links:</p>
+<p><a class="reference external" href="https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.ants.html#applytransforms">ANTS ApplyTransforms - nipype</a></p>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </div>
+  </body>
+</html>

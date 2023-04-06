@@ -1,0 +1,167 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>FastSegment brick &#8212; mia_processes 2.2.1-dev+2bc8ce9 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
+          <span>mia_processes 2.2.1-dev+2bc8ce9 documentation</span></a></h1>
+        <h2 class="heading"><span>FastSegment brick</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <div class="toctree-wrapper compound">
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 35%" />
+<col style="width: 40%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference external" href="../../../../index.html">Home</a></p></td>
+<td><p><a class="reference external" href="../../../documentation.html">Documentation</a></p></td>
+<td><p><a class="reference external" href="https://github.com/populse/mia_processes">GitHub</a></p></td>
+</tr>
+</tbody>
+</table>
+<section id="fastsegment-brick">
+<h1>FastSegment brick<a class="headerlink" href="#fastsegment-brick" title="Permalink to this headline">¶</a></h1>
+<p>Brain tissue segmentation using FAST (FSL).
+This brick can be used to segment one input image.
+The tissue class segmented are Grey Matter, White Matter and CSF.
+By default the image type is set to T1 but it is also possible to segment T2 and PD images by changing the img_type parameter.</p>
+<hr class="docutils" />
+<p><strong>Mandatory inputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>in_file</em> (a string representing an existing file)</dt><dd><p>An image to be segmented. An existing file (valid extensions: [.nii, .nii.gz]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/raw_data/T1w.nii&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Optional inputs with default value parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>img_type</em> (an int, 1, 2 or 3, optional, default value is 1)</dt><dd><p>Int specifying type of image: (1 = T1, 2 = T2, 3 = PD). Default image type is T1.
+This option aids the segmentation in identifying which classes are which tissue type.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>output_type</em> (‘NIFTI’ or ‘NIFTI_GZ’, optional, default value is NIFTI)</dt><dd><div class="line-block">
+<div class="line">Format of the output image (one of NIFTI, NIFTI_GZ).</div>
+<div class="line-block">
+<div class="line">NIFTI: *.nii</div>
+<div class="line">NIFTI_GZ: *.nii.gz</div>
+</div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="n">NIFTI</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>segments</em> (a boolean, optional, default value is True)</dt><dd><p>Outputs a separate binary image for each tissue type.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">True</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Outputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>mixeltype</em> (a pathlike object or string representing a file)</dt><dd><p>The mixeltype file represents the classification of each voxel’s tissue mixture.  That is, voxels containing only one tissue type have a different mixeltype from that containing mixtures of two tissues, which is different again from those containing mixtures of all three tissues.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/T1w_mixeltype.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>partial_volume_files</em> (a list of items which are file names.)</dt><dd><p>A (non-binary) partial volume image for each class, where each voxel contains a value in the range 0-1 that represents the proportion of that class’s tissue present in that voxel.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span><span class="p">[</span><span class="s1">&#39;/home/username/data/derived_data/T1w_pve_0.nii&#39;</span><span class="p">,</span> <span class="s1">&#39;/home/username/data/derived_data/T1w_pve_1.nii&#39;</span><span class="p">,</span> <span class="s1">&#39;/home/username/data/derived_data/T1w_pve_2.nii&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>partial_volume_map</em> (a pathlike object or string representing a file)</dt><dd><p>The pveseg map  contains the best hard segmentation that follows from the partial volume segmentation results.
+That is, each voxel contains one number, representing the tissue type with the largest partial volume fraction.
+It can be useful for a quick visual assessment of the segmentation.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/T1w_pveseg.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>tissue_class_files</em> (a list of items which are file names.)</dt><dd><p>Binary segmented volume files, one image per class. Values are only either 0 or 1.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/derived_data/T1w_seg_0.nii&#39;</span><span class="p">,</span> <span class="s1">&#39;/home/username/data/derived_data/T1w_seg_1.nii&#39;</span><span class="p">,</span> <span class="s1">&#39;/home/username/data/derived_data/T1w_seg_2.nii&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>tissue_class_map</em> (a pathlike object or string representing a file)</dt><dd><p>A binary segmented volume file where each voxel is classified into only one class.
+It is a single image that contains all the necessary information, with the first class taking intensity value 1 in the image, etc.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/T1w_seg.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<hr class="docutils" />
+<p>Usefull links:
+<a class="reference external" href="https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FAST">FSL FAST</a>
+<a class="reference external" href="https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.fsl.preprocess.html#fast">FSL FAST - nipype</a></p>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </div>
+  </body>
+</html>

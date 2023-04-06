@@ -1,0 +1,307 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Bold_mni_align pipeline &#8212; mia_processes 2.2.1-dev+2bc8ce9 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/haiku.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
+          <span>mia_processes 2.2.1-dev+2bc8ce9 documentation</span></a></h1>
+        <h2 class="heading"><span>Bold_mni_align pipeline</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <div class="toctree-wrapper compound">
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 35%" />
+<col style="width: 42%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference external" href="../../../index.html">Home</a></p></td>
+<td><p><a class="reference external" href="../../documentation.html">Documentation</a></p></td>
+<td><p><a class="reference external" href="https://github.com/populse/mia_processes">GitHub</a></p></td>
+</tr>
+</tbody>
+</table>
+<section id="bold-mni-align-pipeline">
+<h1>Bold_mni_align pipeline<a class="headerlink" href="#bold-mni-align-pipeline" title="Permalink to this headline">¶</a></h1>
+<p>Registered a mean functional image EPI in MNI space (for checking out registration).</p>
+<p>Adapted from <a class="reference external" href="https://github.com/nipreps/mriqc/blob/22.0.6/mriqc/workflows/functional.py#L753">mriqc 22.06</a></p>
+<hr class="docutils" />
+<p><strong>Pipeline insight</strong></p>
+<div class="line-block">
+<div class="line">Bold_mni_align combines the following pipelines and processes:</div>
+<div class="line-block">
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/ants/N4BiasFieldCorrection.html">Bias field correction</a> (using ANTs N4BiasFieldCorrection)</div>
+<div class="line-block">
+<div class="line">(default: dimension = 3)</div>
+</div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/ants/AffineInitializer.html">Affine Initilizer</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/others/TemplateFromTemplateFlow.html">Get template from templateFlow</a></div>
+<div class="line-block">
+<div class="line">(default values for template : in_template = ‘MNI152NLin2009cAsym’, resolution = 2, suffix = ‘boldref’,  desc =’fMRIPrep’</div>
+<div class="line-block">
+<div class="line">default values for template mask : in_template = ‘MNI152NLin2009cAsym’, resolution = 2, suffix = ‘mask’, desc =’brain’</div>
+<div class="line">default values for template seg : in_template = ‘MNI152NLin2009cAsym’, resolution = 1, suffix = ‘dseg’, desc =’carpet’)</div>
+</div>
+</div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/ants/Registration.html">Registration</a></div>
+<div class="line-block">
+<div class="line">(default values:</div>
+<div class="line">convergence_threshold = [1e-06, 1e-06, 1e-06],</div>
+<div class="line">convergence_window_size = [20, 20, 10],</div>
+<div class="line">interpolation = ‘LanczosWindowedSinc’,</div>
+<div class="line">metric = [‘Mattes’, ‘Mattes’, ‘CC’],</div>
+<div class="line">metric_weight = [1, 1, 1],</div>
+<div class="line">number_of_iterations = [[10000, 1000, 100], [500, 250, 100], [100, 30, 20]],</div>
+<div class="line">radius_or_number_of_bins = [56, 56, 4],</div>
+<div class="line">sampling_percentage = [0.25, 0.25, 1.0],</div>
+<div class="line">sampling_strategy = [‘Regular’, ‘Regular’, ‘None’],</div>
+<div class="line">shrink_factors = [[4, 2, 1], [8, 4, 2], [8, 4, 2]],</div>
+<div class="line">smoothing_sigmas = [[4.0, 2.0, 1.0], [4.0, 2.0, 0.0], [3.0, 2.0, 1.0]],</div>
+<div class="line">transform_parameters = [(0.05,), (0.08,), (0.1, 3.0, 0.0)],</div>
+<div class="line">transforms = [‘Rigid’, ‘Affine’, ‘SyN’])</div>
+</div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/ants/ApplyTransform.html">Apply Transform</a></div>
+<div class="line-block">
+<div class="line">(default values: interpolation = ‘MultiLabel’)</div>
+</div>
+</div>
+</div>
+<a class="reference internal image-reference" href="../../../_images/Bold_mni_align_pipeline.png"><img alt="Bold mni align pipeline" src="../../../_images/Bold_mni_align_pipeline.png" style="width: 800px;" /></a>
+<p><strong>Mandatory inputs parameters</strong></p>
+<ul>
+<li><dl>
+<dt><em>epi_mask</em> (a string representing an existing file)</dt><dd><p>Functional image brain mask (valid extensions: [.nii, .nii.gz]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/automask_mean_reg_func_valid.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>epi_mean</em> (a string representing an existing file)</dt><dd><p>Mean functional image (valid extensions: [.nii, .nii.gz]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/mean_reg_func_valid.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Optional inputs parameters with a default value</strong></p>
+<ul>
+<li><dl>
+<dt><em>reg_convergence_threshold</em> (a list of items which are a float, optional)</dt><dd><p>See <a class="reference external" href="../../bricks/preprocess/ants/Registration.html">Registration brick</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">default</span> <span class="n">value</span><span class="o">.</span> <span class="p">[</span><span class="mf">1e-06</span><span class="p">,</span> <span class="mf">1e-06</span><span class="p">,</span> <span class="mf">1e-06</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>reg_convergence_window_size</em> (a list of items which are an integer, optional)</dt><dd><p>See <a class="reference external" href="../../bricks/preprocess/ants/Registration.html">Registration brick</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">default</span> <span class="n">value</span><span class="o">.</span> <span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>reg_interpolation</em> (Linear or NearestNeighbor or CosineWindowedSinc or WelchWindowedSinc or HammingWindowedSinc or LanczosWindowedSinc or BSpline or MultiLabel or Gaussian or GenericLabel, optional)</dt><dd><p>See <a class="reference external" href="../../bricks/preprocess/ants/Registration.html">Registration brick</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">default</span> <span class="n">value</span><span class="o">.</span>  <span class="s1">&#39;LanczosWindowedSinc&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>reg_metric</em> (a list of items which are CC or MeanSquares or Demon or GC or MI or mattes, optional)</dt><dd><p>See <a class="reference external" href="../../bricks/preprocess/ants/Registration.html">Registration brick</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">default</span> <span class="n">value</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;Mattes&#39;</span><span class="p">,</span> <span class="s1">&#39;Mattes&#39;</span><span class="p">,</span> <span class="s1">&#39;CC&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>reg_metric_weight</em> (a list of items which are a float, optional)</dt><dd><p>See <a class="reference external" href="../../bricks/preprocess/ants/Registration.html">Registration brick</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">default</span> <span class="n">value</span><span class="o">.</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>reg_number_of_iteration</em> (a list of items which are a list of item which are an integer, optional)</dt><dd><p>See <a class="reference external" href="../../bricks/preprocess/ants/Registration.html">Registration brick</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">default</span> <span class="n">value</span><span class="o">.</span> <span class="p">[[</span><span class="mi">10000</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">100</span><span class="p">],</span> <span class="p">[</span><span class="mi">500</span><span class="p">,</span> <span class="mi">250</span><span class="p">,</span> <span class="mi">100</span><span class="p">],</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">20</span><span class="p">]]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>reg_radius_or_number_of_bins</em> (a list of items which are an integer, optional)</dt><dd><p>See <a class="reference external" href="../../bricks/preprocess/ants/Registration.html">Registration brick</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">default</span> <span class="n">value</span><span class="o">.</span> <span class="p">[</span><span class="mi">56</span><span class="p">,</span> <span class="mi">56</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>reg_sampling_percentage</em> (a list of items which are a float, optional)</dt><dd><p>See <a class="reference external" href="../../bricks/preprocess/ants/Registration.html">Registration brick</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">default</span> <span class="n">value</span><span class="o">.</span> <span class="p">[</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>reg_sampling_strategy</em> (a list of items which are Random, Regular or None, optional)</dt><dd><p>See <a class="reference external" href="../../bricks/preprocess/ants/Registration.html">Registration brick</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">default</span> <span class="n">value</span><span class="o">.</span>  <span class="p">[</span><span class="s1">&#39;Regular&#39;</span><span class="p">,</span> <span class="s1">&#39;Regular&#39;</span><span class="p">,</span> <span class="s1">&#39;None&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>reg_shrink_factors</em> (a list of items which are a list of items which are an integer, optional)</dt><dd><p>See <a class="reference external" href="../../bricks/preprocess/ants/Registration.html">Registration brick</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">default</span> <span class="n">value</span><span class="o">.</span>  <span class="p">[[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">]]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>reg_smoothing_sigmas</em> (a list of items which are a list of items which are a float, optional)</dt><dd><p>See <a class="reference external" href="../../bricks/preprocess/ants/Registration.html">Registration brick</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">default</span> <span class="n">value</span><span class="o">.</span> <span class="p">[[</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>reg_transform_parameters</em> (a list of items which are a tuple of the form: (a float) or a tuple of the form: (a float, a float, a float) or a tuple of the form: (a float, an integer, an integer, an integer) or a tuple of the form: (a float, an integer, a float, a float, a float, a float) or a tuple of the form: (a float, a float, a float, an integer) or a tuple of the form: (a float, an integer, an integer, an integer, an integer), optional)</dt><dd><p>See <a class="reference external" href="../../bricks/preprocess/ants/Registration.html">Registration brick</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">default</span> <span class="n">value</span><span class="o">.</span> <span class="p">[(</span><span class="mf">0.05</span><span class="p">,),</span> <span class="p">(</span><span class="mf">0.08</span><span class="p">,),</span> <span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>reg_transforms</em> (a list of items which are Rigid or Affine or CompositeAffine or Similarity or Translation or BSpline or GaussianDisplacementField or TimeVaryingVelocityField or TimeVaryingBSplineVelocityField or SyN or BSplineSyN or Exponential or BSplineExponential, optional)</dt><dd><p>See <a class="reference external" href="../../bricks/preprocess/ants/Registration.html">Registration brick</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">default</span> <span class="n">value</span> <span class="p">[</span><span class="s1">&#39;Rigid&#39;</span><span class="p">,</span> <span class="s1">&#39;Affine&#39;</span><span class="p">,</span> <span class="s1">&#39;SyN&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>seg_template_res</em> (an integer, optional)</dt><dd><p>Seg template resolution</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">default</span> <span class="n">value</span><span class="o">.</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>template</em> (a string, optional)</dt><dd><p>Template name in TemplateFlow</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">default</span> <span class="n">value</span><span class="o">.</span> <span class="s1">&#39;MNI152NLin2009cAsym&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>template_res</em> (an integer, optional)</dt><dd><p>Template resolution</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">default</span> <span class="n">value</span><span class="o">.</span> <span class="mi">2</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Outputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>composite_transform</em></dt><dd><p>Composite transform (bold space –&gt; MNI)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/n4c_mean_reg_func_valid_Composite.h5&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>bias_image</em></dt><dd><p>Register file (extensions: [.nii, .nii.gz]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/n4c_mean_reg_func_valid_bias.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>epi_mni</em></dt><dd><p>Bold data in template space (extensions: [.nii, .nii.gz]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/w_n4c_mean_reg_func_valid.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>epi_parc</em></dt><dd><p>Template data in bold space (extensions: [.nii, .nii.gz]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/t_tpl-MNI152NLin2009cAsym_res-01_desc-carpet_dseg.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>inverse_composite_transform</em></dt><dd><p>Inverse composite transform (MNI –&gt; bold space)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/n4c_mean_reg_func_valid_InverseComposite.h5&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<hr class="docutils" />
+<p>Usefull links:</p>
+<p><a class="reference external" href="https://mriqc.readthedocs.io/en/22.0.6/workflows.html#mriqc.workflows.functional.epi_mni_align">mriq EPI mni align pipeline</a></p>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </div>
+  </body>
+</html>
