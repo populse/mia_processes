@@ -90,7 +90,9 @@ def checkFileExt(in_file, ext_dic):
     """ Check file extension
 
     :param in_file: file name (a string)
-    :param ext_dic: dictionnary of the valid extensions for the file (dictionnary, ex: EXT = {'NIFTI_GZ': 'nii.gz', 'NIFTI': 'nii'})
+    :param ext_dic: dictionary of the valid extensions for the file
+                    (dictionary, ex:
+                    EXT = {'NIFTI_GZ': 'nii.gz', 'NIFTI': 'nii'})
     :returns:
         - valid_bool: True if extension is valid (a boolean)
         - in_ext: file extension (a string)

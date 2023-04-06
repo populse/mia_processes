@@ -1,5 +1,5 @@
 from capsul.api import Pipeline
-
+import os
 
 class Anat_skullstrip_synthstrip(Pipeline):
 
@@ -31,8 +31,13 @@ class Anat_skullstrip_synthstrip(Pipeline):
         self.nodes["pre_n4biasfieldcor"].process.dimension = 3
         self.nodes["pre_n4biasfieldcor"].process.out_prefix = 'pre_n4c_'
         self.nodes["pre_n4biasfieldcor"].process.rescale_intensities = True
+        self.nodes["pre_n4biasfieldcor"].process.num_threads = int(
+            os.getenv("OMP_NUM_THREADS", os.cpu_count()))
         self.nodes["post_n4biasfieldcor"].process.n_iterations = [50] * 4
+        self.nodes["post_n4biasfieldcor"].process.out_prefix = 'post_n4c_'
         self.nodes["post_n4biasfieldcor"].process.dimension = 3
+        self.nodes["post_n4biasfieldcor"].process.num_threads = int(
+            os.getenv("OMP_NUM_THREADS", os.cpu_count()))
         self.nodes["mask"].process.suffix = ''
         self.nodes["mask"].process.prefix = 'ss_'
 

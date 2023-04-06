@@ -344,7 +344,7 @@ class Binarize(ProcessMIA):
 
 class SynthStrip(ProcessMIA):
     """
-    * Skul stripping using SynthStrip *
+    * Skull stripping using SynthStrip *
 
     Please, see the complete documention for the 'SynthStrip' brick
     in the populse.mia_processes web site
@@ -368,13 +368,13 @@ class SynthStrip(ProcessMIA):
         # Mandatory inputs description
         in_file_desc = 'Input image to be brain extracted'
         # Optional inputs with default value description
-        border_mm_desc = ('Mask border threshold in mm')
+        border_mm_desc = 'Mask border threshold in mm'
         no_csf_desc = 'Exclude CSF from brain border'
         output_type_desc = ('Typecodes of the output image formats (one '
                             'of NIFTI, MGZ, NIFTI_GZ).')
         # Outputs description
         out_file_desc = 'Brain-extracted path'
-        out_mask_desc = 'Brainmask path'
+        out_mask_desc = 'Brain mask path'
 
         # Mandatory inputs traits
         self.add_trait('in_file',

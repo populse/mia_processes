@@ -198,6 +198,10 @@ class AffineInitializer(ProcessMIA):
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
         super(AffineInitializer, self).run_process_mia()
+
+        # TODO: We see in soma_workflow: nipype.interface INFO:
+        #       bad det -1 v 1 u -1
+
         # Mandatory inputs
         self.process.fixed_image = self.fixed_image
         self.process.moving_image = self.moving_image
@@ -686,13 +690,14 @@ class N4BiasFieldCorrection(ProcessMIA):
                         self.output_directory,
                         self.out_prefix + fileName + '.' + in_ext)
 
-                    self.outputs['bias_image'] = os.path.join(
-                        self.output_directory,
-                        self.out_prefix + fileName +
-                        '_bias.' + in_ext)
+                    if self.save_bias:
+                        self.outputs['bias_image'] = os.path.join(
+                                                self.output_directory,
+                                                self.out_prefix + fileName +
+                                                '_bias.' + in_ext)
 
-                    self.inheritance_dict[self.outputs[
-                        'out_file']] = self.in_file
+                        self.inheritance_dict[self.outputs[
+                            'out_file']] = self.in_file
 
                     self.inheritance_dict[self.outputs[
                         'bias_image']] = self.in_file
@@ -710,31 +715,29 @@ class N4BiasFieldCorrection(ProcessMIA):
 
         # If negative values, scale image
         input_nii = nib.load(self.in_file)
-        datamin = input_nii.get_fdata().min()
-        if datamin < 0:
-            data = input_nii.get_fdata() - datamin
-            newnii = input_nii.__class__(data, input_nii.affine,
-                                         input_nii.header)
+        data = input_nii.get_fdata()
+        data_min = data.min()
 
-            fileName, trail = self.in_file.rsplit('.', 1)
-
-            nib.save(newnii, fileName + '_scaled.' + trail)
-            self.in_file = fileName + '_scaled.' + trail
+        if data_min < 0:
+            data_new = data - data_min
+            new_nii = input_nii.__class__(data_new, input_nii.affine,
+                                          input_nii.header)
+            file_name, trail = self.in_file.rsplit('.', 1)
+            nib.save(new_nii, file_name + '_scaled.' + trail)
+            self.in_file = file_name + '_scaled.' + trail
             self.negative_values = True
 
             print('\nThe input image contains negative values '
                   'A scaled copy was created and set as input')
 
         self.process.input_image = self.in_file
-
         self.process.copy_header = self.copy_header
         self.process.dimension = self.dimension
-        self.process.rescale_intensities = self.rescale_intensities
+        if self.rescale_intensities:
+            self.process.rescale_intensities = self.rescale_intensities
         if self.save_bias:
             self.process.bias_image = self.bias_image
-        else:
-            self.process.save_bias = self.save_bias
-
+        self.process.save_bias = self.save_bias
         if self.bspline_fitting_distance:
             self.process.bspline_fitting_distance = self.bspline_fitting_distance
         if self.bspline_order:
@@ -749,9 +752,8 @@ class N4BiasFieldCorrection(ProcessMIA):
             self.process.n_iterations = self.n_iterations
         if self.shrink_factor:
             self.process.shrink_factor = self.shrink_factor
-        if self.weight_image:
+        if self.weight_image not in [Undefined, '<undefined>']:
             self.process.weight_image = self.weight_image
-
         self.process.output_image = self.out_file
 
         return self.process.run(configuration_dict={})
@@ -1344,6 +1346,9 @@ class Registration(ProcessMIA):
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
         super(Registration, self).run_process_mia()
+
+        # TODO: We see in soma_workflow: nipype.interface INFO: file NULL does
+        #       not exist, with MRIQC anat
 
         # Mandatory inputs (in Nipype)
         self.process.fixed_image = self.fixed_image

@@ -4061,6 +4061,7 @@ def artifact_mask(imdata, airdata, distance, zscore=10.0):
     bg_location = np.median(bg_img[bg_img > 0])
     bg_spread = mad(bg_img[bg_img > 0])
     bg_img[bg_img > 0] -= bg_location
+    #TODO: This is generating a RuntimeWarning: divide by zero with MRIQC anat
     bg_img[bg_img > 0] /= bg_spread
 
     # Apply this threshold to the background voxels to identify voxels
