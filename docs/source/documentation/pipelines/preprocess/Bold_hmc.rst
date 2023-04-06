@@ -23,6 +23,9 @@ Adapted from `bold HCM pipeline in mriqc 22.06 <https://github.com/nipreps/mriqc
 |   - `Deoblique <../../bricks/preprocess/ants/RefitDeoblique.html>`_ 
 |   - `Volume Registration <../../bricks/preprocess/afni/VolReg.html>`_ 
 
+.. image:: ../../images/Bold_hmc_pipeline.png
+  :width: 800
+  :alt: Bold hmc pipeline
 
 **Mandatory inputs parameters**
 

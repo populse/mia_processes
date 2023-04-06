@@ -11,7 +11,7 @@ FramewiseDisplacement brick
 ============================
 
 Calculate the FD (framewise displacement) as in `[Power2012] <https://doi.org/10.1016/j.neuroimage.2011.10.018>`_.
-This implementation reproduces the calculation in fsl_motion_outliers
+This implementation reproduces the calculation in fsl_motion_outliers.
 
 
 Adapted from `nipype Cofunds <https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5de5913b31/nipype/algorithms/confounds.py#L298>`_ 

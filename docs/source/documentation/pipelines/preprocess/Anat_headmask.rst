@@ -24,6 +24,10 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
 |   - `Denoise <../../bricks/preprocess/dipy/Denoise.html>`_ 
 |   - `Gradient Threshold <../../bricks/preprocess/others/GradientThreshold.html>`_ 
 
+.. image:: ../../images/Anat_headmask_pipeline.png
+  :width: 800
+  :alt: Anat headmask pipeline
+
 **Mandatory inputs parameters**
 
 - *in_file* (a string representing an existing file)

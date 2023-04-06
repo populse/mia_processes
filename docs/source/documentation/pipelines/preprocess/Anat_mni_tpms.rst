@@ -25,6 +25,11 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
 |   - `Apply Transform <../../bricks/preprocess/ants/ApplyTransform.html>`_ 
 |       (default values: interpolation = 'Linear')
 
+.. image:: ../../images/Anat_mni_tpms_pipeline.png
+  :width: 800
+  :alt: Anat MNI templates pipeline
+
+
 **Mandatory inputs parameters**
 
 - *inverse_composite_transform* (a string representing an existing file)

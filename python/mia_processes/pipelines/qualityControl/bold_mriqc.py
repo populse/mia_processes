@@ -70,7 +70,7 @@ class Bold_mriqc(Pipeline):
         self.nodes["bold_mni_align"].process.epi_mask = traits.Undefined
         self.add_process("mriqc_func_report",
                          "mia_processes.bricks.reports.reporting."
-                         "MRIQC_func_report")
+                         "ReportFuncMriqc")
 
         # links
         self.export_parameter("sanitize", "in_file",

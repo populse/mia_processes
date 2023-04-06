@@ -6,9 +6,9 @@
 |`Home <../../../index.html>`_|`Documentation <../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +-----------------------------+-------------------------------------------+----------------------------------------------------+
 
-================================
+======================================
 Anat_skullstrip_synthstrip pipeline
-================================
+======================================
 
 Create a brain-extraction workflow using SynthStrip (Freesurfer).
 
@@ -26,6 +26,10 @@ Adapted from `mriqc v22.06 synthstrip workflow <https://github.com/nipreps/mriqc
 |   - `Skull Stripping <../../bricks/preprocess/afni/SkullStrip.html>`_  (using Freesurfer Synthstrip)
 |   - `Intesity Clip <../../bricks/preprocess/others/IntensityClip.html>`_
 |   - `Mask <../../bricks/preprocess/others/Mask.html>`_ 
+
+.. image:: ../../images/Anat_skullstrip_synthstrip_pipeline.png
+  :width: 800
+  :alt: Anat SkullStrip synthstrip pipeline
 
 **Mandatory inputs parameters**
 

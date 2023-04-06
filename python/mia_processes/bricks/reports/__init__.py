@@ -12,4 +12,4 @@ from .processes import (AnatIQMs, BoldIQMs, CarpetParcellation,
                         ComputeDVARS, FramewiseDisplacement,
                         Mean_stdDev_calc,
                         Result_collector, Spikes)
-from .reporting import MRIQC_anat_report, MRIQC_func_report
+from .reporting import ReportAnatMriqc, ReportFuncMriqc

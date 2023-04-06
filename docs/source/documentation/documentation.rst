@@ -90,6 +90,8 @@ Mia_processes's documentation
     - `CarpetParcellation <bricks/reports/CarpetParcellation.html>`_
     - `ComputeDVARS <bricks/reports/ComputeDVARS.html>`_
     - `FramewiseDisplacement <bricks/reports/FramewiseDisplacement.html>`_
+    - `ReportAnatMriqc <bricks/reports/ReportAnatMriqc.html>`_
+    - `ReportFuncMriqc <bricks/reports/ReportFuncMriqc.html>`_
     - `Spikes <bricks/reports/Spikes.html>`_
 
   - **tools**

@@ -24,6 +24,10 @@ Bias correction and skull stripping of a structural image.
 |       (default expr = 'a*step(b)')
 |   - `Binarize <../../bricks/preprocess/others/Binarize.html>`_ 
 
+.. image:: ../../images/Anat_skullstrip_pipeline.png
+  :width: 800
+  :alt: Anat SkullStrip pipeline
+
 **Mandatory inputs parameters**
 
 - *in_file* (a string representing an existing file)

@@ -50,7 +50,7 @@ class Anat_mriqc(Pipeline):
                          "mia_processes.bricks.tools.tools.List_To_File")
         self.add_process("mriqc_anat_report",
                          "mia_processes.bricks.reports."
-                         "reporting.MRIQC_anat_report")
+                         "reporting.ReportAnatMriqc")
 
         # links
         self.export_parameter("conformimage", "in_file", "anat_file",

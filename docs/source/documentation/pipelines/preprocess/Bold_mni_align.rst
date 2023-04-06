@@ -45,6 +45,9 @@ Adapted from `mriqc 22.06 <https://github.com/nipreps/mriqc/blob/22.0.6/mriqc/wo
 |   - `Apply Transform <../../bricks/preprocess/ants/ApplyTransform.html>`_ 
 |      (default values: interpolation = 'MultiLabel')
 
+.. image:: ../../images/Bold_mni_align_pipeline.png
+  :width: 800
+  :alt: Bold mni align pipeline
 
 **Mandatory inputs parameters**
 

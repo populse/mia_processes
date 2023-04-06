@@ -11,14 +11,14 @@ Bold_mriqc pipeline
 ================================
 
 Get no-reference IQMs (image quality metrics) from functional (BOLD)
-data using mriqc functional workflow (`mriqc v22.06 <https://mriqc.readthedocs.io/en/22.0.6/>_`).
+data using mriqc functional workflow (`mriqc v22.06 <https://mriqc.readthedocs.io/en/22.0.6/>`_).
 
 --------------------------------------
 
 **Pipeline insight**
 
 | Bold_mriqc pipeline combines the following pipelines and processes:
-|   - `Non steady state detection <../../bricks/preprocess/others/NonSteadyStateDetector.html>`_
+|   - `Non steady state detection <../../bricks/preprocess/others/NonSteadyDetector.html>`_
 |   - `Sanitize <../../bricks/preprocess/others/Sanitize.html>`_
 |   - `TSNR  <../../bricks/preprocess/others/TSNR.html>`_
 |   - `Mean <../../bricks/preprocess/afni/TStatMean.html>`_
@@ -27,7 +27,7 @@ data using mriqc functional workflow (`mriqc v22.06 <https://mriqc.readthedocs.i
 |      (default values : twopass = True, nterpolation = 'Fourier')
 |   - `MIN align <../../pipelines/preprocess/Bold_mni_align.html>`_
 |   - `IQMS computation <../../pipelines/reports/Bold_iqms.html>`_
-|   - `Func report  <../../bricks/reports/reporting/MRIQC_func_report.html>`_
+|   - `Func report  <../../bricks/reports/ReportFuncMriqc.html>`_
 
 **Mandatory inputs parameters**
 

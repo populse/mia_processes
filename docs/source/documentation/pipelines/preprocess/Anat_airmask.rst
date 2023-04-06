@@ -26,6 +26,10 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
 |   - `Get template from templateFlow  <../../bricks/preprocess/others/TemplateFromTemplateFlow.html>`_ 
 |      (default values : in_template = 'MNI152NLin2009cAsym', resolution = 1, suffix = 'mask', desc = 'head')
 
+.. image:: ../../images/Anat_airmask_pipeline.png
+  :width: 800
+  :alt: Anat airmask pipeline
+
 **Mandatory inputs parameters**
 
 - *head_mask* (a string representing an existing file)

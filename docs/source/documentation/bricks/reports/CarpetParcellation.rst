@@ -6,15 +6,15 @@
 |`Home <../../../../index.html>`_|`Documentation <../../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +--------------------------------+----------------------------------------------+----------------------------------------------------+
 
-============
+========================
 CarpetParcellation brick
-============
+========================
 
-Dilate brainmask, substract from itself then generate the union of obtained crown mask and epi parcellation
+Dilate brainmask, substract from itself then generate the union of obtained crown mask and epi parcellation.
 
 Adapted from `mriqc <https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/functional.py#L1022>`_ , 
 `niworkflow Binary dilatation <https://github.com/nipreps/niworkflows/blob/45ab13e1bf6fdbf5e29c90cef44055b0b9cf391b/niworkflows/interfaces/morphology.py#L46>`_,
-`niworkflow Binary Subtraction <ttps://github.com/nipreps/niworkflows/blob/45ab13e1bf6fdbf5e29c90cef44055b0b9cf391b/niworkflows/interfaces/morphology.py#L79>`_
+`niworkflow Binary Subtraction <ttps://github.com/nipreps/niworkflows/blob/45ab13e1bf6fdbf5e29c90cef44055b0b9cf391b/niworkflows/interfaces/morphology.py#L79>`_.
 
 --------------------------------------
 

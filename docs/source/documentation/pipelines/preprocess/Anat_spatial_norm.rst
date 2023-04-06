@@ -41,6 +41,10 @@ Adapted from `mriqc 22.06 anatomical workflow <https://github.com/nipreps/mriqc/
 |       transforms = ['Rigid', 'Affine'],
 |       use_histogram_matching = [False,True])
 
+.. image:: ../../images/Anat_spatial_norm_pipeline.png
+  :width: 800
+  :alt: Anat spatial norm pipeline
+
 **Mandatory inputs parameters**
 
 - *moving_image* (a string representing an existing file)

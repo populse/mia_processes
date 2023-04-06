@@ -11,7 +11,7 @@ Anat_mriqc pipeline
 ================================
 
 Get no-reference IQMs (image quality metrics) from structural (T1w and T2w)
-data using mriqc anatomical workflow (`mriqc v22.06 <https://mriqc.readthedocs.io/en/22.0.6/>_`).
+data using mriqc anatomical workflow (`mriqc v22.06 <https://mriqc.readthedocs.io/en/22.0.6/>`_).
 
 --------------------------------------
 
@@ -21,14 +21,14 @@ data using mriqc anatomical workflow (`mriqc v22.06 <https://mriqc.readthedocs.i
 |   - `ConformImage <../../bricks/preprocess/others/ConformImage.html>`_
 |   - `Harmonize <../../bricks/preprocess/others/Harmonize.html>`_
 |   - `Skull Stripping <../../pipelines/preprocess/Anat_skullstrip_synthstrip.html>`_ (using SynthStrip from Freesurfer)
-|   - `Segmentation <../../bricks/preprocess/fsl/FastSegment.html>`_
+|   - `Segmentation <../../bricks/preprocess/fsl/FastSegment.html>`_ (using Fast from FSL)
 |   - `Spatial Normalisation <../../pipelines/preprocess/Anat_spatial_norm.html>`_
 |   - `Head mask <../../bricks/preprocess/fsl/FastSegment.html>`_ (using Bet from FSL)
 |   - `Air mask  <../../pipelines/preprocess/Anat_airmask.html>`_
 |   - `Anat_mni_tpms <../../pipelines/preprocess/Anat_mni_tpms.html>`_
 |   - `IQMs computation  <../../bricks/reports/AnatIQMs.html>`_
 |   - `FWHMx computation  <../../bricks/reports/FWHMx.html>`_
-|   - `Anat report  <../../bricks/reports/reporting/MRIQC_anat_report.html>`_
+|   - `Anat report  <../../bricks/reports/ReportFuncMriqc.html>`_
 
 **Mandatory inputs parameters**
 
