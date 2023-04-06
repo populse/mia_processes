@@ -23,6 +23,7 @@ On the other hand, the mia_processes library developed by the `populse team <htt
 Indices and tables
 ==================
 
+* `Documentation <./documentation/documentation.html>`_
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`

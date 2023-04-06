@@ -1,0 +1,147 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>mia_processes.pipelines.reports.rois_1 &#8212; mia_processes 2.2.1-dev+c0ad978 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
+          <span>mia_processes 2.2.1-dev+c0ad978 documentation</span></a></h1>
+        <h2 class="heading"><span>mia_processes.pipelines.reports.rois_1</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <h1>Source code for mia_processes.pipelines.reports.rois_1</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*- #</span>
+
+<span class="sd">&quot;&quot;&quot;blabla.</span>
+
+<span class="sd">The purpose of this module is to blabla.</span>
+
+<span class="sd">:Contains:</span>
+<span class="sd">    :Class:</span>
+<span class="sd">        - Rois_1</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1">##########################################################################</span>
+<span class="c1"># mia_processes - Copyright (C) IRMaGe/CEA, 2018</span>
+<span class="c1"># Distributed under the terms of the CeCILL license, as published by</span>
+<span class="c1"># the CEA-CNRS-INRIA. Refer to the LICENSE file or to</span>
+<span class="c1"># http://www.cecill.info/licences/Licence_CeCILL_V2.1-en.html</span>
+<span class="c1"># for details.</span>
+<span class="c1">##########################################################################</span>
+
+<span class="c1"># Capsul import</span>
+<span class="kn">from</span> <span class="nn">capsul.api</span> <span class="kn">import</span> <span class="n">Pipeline</span>
+
+<span class="c1"># Other import</span>
+<span class="kn">import</span> <span class="nn">traits.api</span> <span class="k">as</span> <span class="nn">traits</span>
+
+
+<div class="viewcode-block" id="Rois_1"><a class="viewcode-back" href="../../../../mia_processes.pipelines.reports.html#mia_processes.pipelines.reports.rois_1.Rois_1">[docs]</a><span class="k">class</span> <span class="nc">Rois_1</span><span class="p">(</span><span class="n">Pipeline</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Rois_1.pipeline_definition"><a class="viewcode-back" href="../../../../mia_processes.pipelines.reports.html#mia_processes.pipelines.reports.rois_1.Rois_1.pipeline_definition">[docs]</a>    <span class="k">def</span> <span class="nf">pipeline_definition</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># nodes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;find_in_list1&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;mia_processes.bricks.tools.Find_In_List&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;resample1&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;mia_processes.bricks.preprocess.others.Resample_1&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;resample1&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">reference_image</span> <span class="o">=</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;resample1&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">files_to_resample</span> <span class="o">=</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;roi_list_generator1&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;mia_processes.bricks.tools.Concat_to_list_of_list&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;conv_roi1&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;mia_processes.bricks.preprocess.others.ConvROI&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;conv_roi1&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_image</span> <span class="o">=</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;resample2&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;mia_processes.bricks.preprocess.others.Resample_2&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;files_to_list1&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;mia_processes.bricks.tools.tools.Files_To_List&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;find_in_list2&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;mia_processes.bricks.tools.Find_In_List&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+                        <span class="s2">&quot;result_collector1&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;mia_processes.bricks.reports.Result_collector&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;mean_&amp;_stdDev_calc1&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;mia_processes.bricks.reports.Mean_stdDev_calc&quot;</span><span class="p">)</span>
+
+        <span class="c1"># links</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;find_in_list1&quot;</span><span class="p">,</span> <span class="s2">&quot;in_list&quot;</span><span class="p">,</span> <span class="s2">&quot;spmT_images&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;resample1&quot;</span><span class="p">,</span> <span class="s2">&quot;files_to_resample&quot;</span><span class="p">,</span> <span class="s2">&quot;mask_002&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;mask_002-&gt;conv_roi1.in_image&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;find_in_list2&quot;</span><span class="p">,</span> <span class="s2">&quot;in_list&quot;</span><span class="p">,</span> <span class="s2">&quot;beta_images&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;find_in_list1.out_file-&gt;resample1.reference_image&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;find_in_list1.out_file-&gt;files_to_list1.file1&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;resample1.out_files-&gt;resample2.reference_image&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;roi_list_generator1.listOflist-&gt;resample2.doublet_list&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;roi_list_generator1.listOflist-&gt;conv_roi1.doublet_list&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;roi_list_generator1.listOflist-&gt;&quot;</span>
+                      <span class="s2">&quot;result_collector1.doublet_list&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;roi_list_generator1.listOflist-&gt;&quot;</span>
+                      <span class="s2">&quot;mean_&amp;_stdDev_calc1.doublet_list&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;conv_roi1&quot;</span><span class="p">,</span> <span class="s2">&quot;out_images&quot;</span><span class="p">,</span> <span class="s2">&quot;conv_roi_masks&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;resample2&quot;</span><span class="p">,</span> <span class="s2">&quot;out_images&quot;</span><span class="p">,</span> <span class="s2">&quot;resample2_masks&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;files_to_list1.file_list-&gt;&quot;</span>
+                      <span class="s2">&quot;mean_&amp;_stdDev_calc1.parametric_maps&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;files_to_list1.file_list-&gt;result_collector1.parametric_maps&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;find_in_list2.out_file-&gt;files_to_list1.file2&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;result_collector1&quot;</span><span class="p">,</span> <span class="s2">&quot;out_files&quot;</span><span class="p">,</span> <span class="s2">&quot;xls_files&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;mean_&amp;_stdDev_calc1.mean_out_files-&gt;&quot;</span>
+                      <span class="s2">&quot;result_collector1.mean_in_files&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;mean_&amp;_stdDev_calc1.std_out_files-&gt;&quot;</span>
+                      <span class="s2">&quot;result_collector1.std_in_files&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;result_collector1&quot;</span><span class="p">,</span> <span class="s2">&quot;patient_info&quot;</span><span class="p">,</span>
+                              <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># nodes positions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_position</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;conv_roi1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">352.35910249999995</span><span class="p">,</span> <span class="mf">425.5439</span><span class="p">),</span>
+            <span class="s2">&quot;find_in_list1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">187.4372275</span><span class="p">,</span> <span class="mf">102.63739999999996</span><span class="p">),</span>
+            <span class="s2">&quot;inputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">164.05629999999996</span><span class="p">),</span>
+            <span class="s2">&quot;resample1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">341.58566499999995</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+            <span class="s2">&quot;find_in_list2&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">187.4372275</span><span class="p">,</span> <span class="mf">224.54389999999995</span><span class="p">),</span>
+            <span class="s2">&quot;result_collector1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">681.214865</span><span class="p">,</span> <span class="mf">256.02479999999997</span><span class="p">),</span>
+            <span class="s2">&quot;resample2&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">518.45744</span><span class="p">,</span> <span class="mf">177.0811</span><span class="p">),</span>
+            <span class="s2">&quot;mean_&amp;_stdDev_calc1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">506.1527525</span><span class="p">,</span> <span class="mf">389.375</span><span class="p">),</span>
+            <span class="s2">&quot;outputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">852.45024</span><span class="p">,</span> <span class="mf">318.52479999999997</span><span class="p">),</span>
+            <span class="s2">&quot;roi_list_generator1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">162.710665</span><span class="p">,</span> <span class="mf">346.4437</span><span class="p">),</span>
+            <span class="s2">&quot;files_to_list1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">356.53878999999995</span><span class="p">,</span> <span class="mf">196.625</span><span class="p">),</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_autoexport_nodes_parameters</span> <span class="o">=</span> <span class="kc">False</span></div></div>
+</pre></div>
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </div>
+  </body>
+</html>

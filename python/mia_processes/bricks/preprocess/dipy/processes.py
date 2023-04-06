@@ -22,25 +22,31 @@ populse_mia.
 
 # nibabel import
 import nibabel as nib
-import nibabel.processing as nibp
 
 # nipype imports
 from nipype.interfaces.base import File
 
 # populse_mia import
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
+from mia_processes.utils import checkFileExt
 
 # Other import
 import os
-from traits.api import Either, Enum, Float, String, Undefined
+from traits.api import Either, Enum, Float, Int, String, Undefined
 import numpy as np
+
+EXT = {'NIFTI_GZ': 'nii.gz',
+       'NIFTI': 'nii'
+       }
+
 
 class Denoise(ProcessMIA):
     """
     * Non-local means for denoising 3D images *
 
-    Please, see the complete documentation for the `Denoise' brick in the populse.mia_processes website
-    <https://populse.github.io/mia_processes/documentation/bricks/preprocess/dipy/Denoise.html>`_
+    Please, see the complete documentation for the `Denoise' brick
+    in the populse.mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/dipy/Denoise.html>`_
 
     """
 
@@ -57,42 +63,78 @@ class Denoise(ProcessMIA):
         # Third party softwares required for the execution of the brick
         self.requirement = ['nipype']
 
-        # Inputs description
+        # Mandatory inputs description
         in_file_desc = ('A file to denoise (a pathlike object or string '
                         'representing a file).')
-        seg_file_desc = ('A segmentation file to calculate SNR (a pathlike '
-                         'object or string representing a file). Mutually '
-                         'exclusive with snr')
-        snr_desc = ('Signal to noise ratio (a float). If undefined, SNR is '
-                    'estimated from in_file and seg_file. If seg_file also '
-                    'undefined, SNR is estimated from in_file only. Mutually '
-                    'exclusive with seg_file')
-        in_file_snr_desc = ('A input file to calculate SNR with seg_file. If'
-                            'not specified, equal to in_file (a pathlike object'
-                            ' or string representing a file).')
+        # Optional inputs with default value description
+        block_radius_desc = ('Block_radius (an integer). Default is 5.')
+        noise_model_desc = ('Noise distribution model (‘rician’ or'
+                            ' ‘gaussian’). Default is rician')
         out_prefix_desc = ('Specify the string to be prepended to the '
                            'filenames of the smoothed image file(s) '
                            '(a string).')
-
+        patch_radius_desc = ('Patch radius (an integer). Default is 1.')
+        # Optional inputs description
+        in_mask_desc = ('Brain mask (a pathlike '
+                        'object or string representing a file).')
+        noise_mask_desc = ('Mask in which the mean signal will'
+                           ' be computed. (a pathlike object or'
+                           'string representing a file).')
+        signal_mask_desc = ('Mask in which the standard deviation of noise'
+                            'will be computed. (a pathlike object or'
+                            'string representing a file).')
+        snr_desc = ('Set manually Signal to noise ratio (a float)')
         # Outputs description
         out_file_desc = ('The denoised file (a pathlike object or a '
                          'string representing a file).')
 
-        # Inputs traits
+        # Mandatory inputs traits
         self.add_trait("in_file",
                        File(output=False,
                             optional=False,
                             desc=in_file_desc))
 
-        self.add_trait("in_file_snr",
-                       File(output=False,
-                            optional=True,
-                            desc=in_file_snr_desc))
+        # Optional inputs with default value traits
+        self.add_trait("block_radius",
+                       Int(5,
+                           output=False,
+                           optional=True,
+                           desc=block_radius_desc))
 
-        self.add_trait("seg_file",
+        self.add_trait("noise_model",
+                       Enum('rician',
+                            'gaussian',
+                            output=False,
+                            optional=True,
+                            desc=noise_model_desc))
+
+        self.add_trait("out_prefix",
+                       String('denoise_',
+                              output=False,
+                              optional=True,
+                              desc=out_prefix_desc))
+
+        self.add_trait("patch_radius",
+                       Int(1,
+                           output=False,
+                           optional=True,
+                           desc=patch_radius_desc))
+
+        # Optional inputs value traits
+        self.add_trait("in_mask",
                        File(output=False,
                             optional=True,
-                            desc=seg_file_desc))
+                            desc=in_mask_desc))
+
+        self.add_trait("noise_mask",
+                       File(output=False,
+                            optional=True,
+                            desc=noise_mask_desc))
+
+        self.add_trait("signal_mask",
+                       File(output=False,
+                            optional=True,
+                            desc=signal_mask_desc))
 
         self.add_trait("snr",
                        Either(Undefined,
@@ -127,39 +169,30 @@ class Denoise(ProcessMIA):
         # Using the inheritance to ProcessMIA class, list_outputs method
         super(Denoise, self).list_outputs()
 
-        if self.seg_file and self.snr is not Undefined:
-                print('\nInitialisation failed. Please, do not set both seg_file '
-                      'and snr ...!')
-                return
-
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
 
+            if not self.out_prefix:
+                self.out_prefix = 'denoise_'
+                print('The out_prefix parameter is undefined. Automatically '
+                      'set to "denoise" ...')
+
             if self.output_directory:
-                ifile = os.path.split(self.in_file)[-1]
+                valid_ext, in_ext, fileName = checkFileExt(self.in_file,
+                                                           EXT)
 
-                try:
-                    fileName, trail = ifile.rsplit('.', 1)
-
-                except ValueError:
-                    print('\nThe input image format is not recognised ...!')
+                if not valid_ext:
+                    print('\nThe input image format is'
+                          ' not recognized...!')
                     return
-
                 else:
-
-                    if trail not in ['nii', 'img']:
-                        print('\nThe input image format does not seem to be '
-                              'nii or img. This can prevent the process '
-                              'launch ...!')
-
                     self.outputs['out_file'] = os.path.join(
                         self.output_directory,
-                        fileName + '_denoise.' + trail)
+                        self.out_prefix + fileName + '.' + in_ext)
 
                     self.inheritance_dict[self.outputs[
                         'out_file']] = self.in_file
 
-                # self.outputs['out_file'] = self.process._out_file
             else:
                 print('No output_directory was found...!\n')
                 return
@@ -171,36 +204,17 @@ class Denoise(ProcessMIA):
         """Dedicated to the process launch step of the brick."""
         super(Denoise, self).run_process_mia()
         self.process.in_file = self.in_file
-
-        if self.seg_file:
-            if self.in_file_snr:
-                file_name = self.in_file_snr
-            else:
-                file_name = self.in_file
-
-            seg_file_name = self.seg_file
-
-            try:
-                img = nib.load(file_name)
-                seg_img = nib.load(seg_file_name)
-            except (nib.filebasedimages.ImageFileError,
-                    FileNotFoundError, TypeError) as e:
-                print("\nError with files, during "
-                      "initialisation: ", e)
-                img = None
-                seg_img = None
-
-            if (img is not None) and (seg_img is not None):
-                data = img.get_fdata()
-                mask = seg_img.get_fdata() == 2  # WM label
-                self.process.snr = float(np.mean(data[mask]) /
-                                         (data[mask].std() * np.sqrt(mask.sum() / (mask.sum() - 1))))
-        else:
-            if self.snr is Undefined:
-                self.process.snr = None
-            else:
-                self.process.snr = self.snr
-
+        self.process.block_radius = self.block_radius
+        self.process.noise_model = self.noise_model
         self.process._out_file = self.out_file
+        self.process.patch_radius = self.patch_radius
+        if self.in_mask:
+            self.process.in_mask = self.in_mask
+        if self.noise_mask:
+            self.process.noise_mask = self.noise_mask
+        if self.signal_mask:
+            self.process.signal_mask = self.signal_mask
+        if self.snr:
+            self.process.snr = self.snr
 
         return self.process.run(configuration_dict={})

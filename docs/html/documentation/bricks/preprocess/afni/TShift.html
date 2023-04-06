@@ -1,0 +1,229 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>TShift brick &#8212; mia_processes 2.2.1-dev+2bc8ce9 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
+          <span>mia_processes 2.2.1-dev+2bc8ce9 documentation</span></a></h1>
+        <h2 class="heading"><span>TShift brick</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <div class="toctree-wrapper compound">
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 35%" />
+<col style="width: 40%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference external" href="../../../../index.html">Home</a></p></td>
+<td><p><a class="reference external" href="../../../documentation.html">Documentation</a></p></td>
+<td><p><a class="reference external" href="https://github.com/populse/mia_processes">GitHub</a></p></td>
+</tr>
+</tbody>
+</table>
+<section id="tshift-brick">
+<h1>TShift brick<a class="headerlink" href="#tshift-brick" title="Permalink to this headline">¶</a></h1>
+<p>Slice-time correction of bold images (using mean option of the AFNI 3dTshift command).
+Shifts voxel time series from input so that separate slices are aligned to the same temporal origin.</p>
+<p>You can either used “slice_timing” parameter or “tpattern” parameter to specify slice time.
+If neither of this two parameters are defined, the process return the input file.</p>
+<hr class="docutils" />
+<p><strong>Mandatory inputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>in_file</em> (a string representing an existing file)</dt><dd><p>Input bold file to be time-shifted (valid extensions: [.nii, .nii.gz]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/func.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Optional inputs with default value parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>interpolation</em> (Fourier or linear or cubic or quintic or heptic, optional, , default value is Fourier)</dt><dd><p><a href="#id1"><span class="problematic" id="id2">|</span></a>Different interpolation methods:
+| - Fourier = Use a Fourier method (the default: most accurate; slowest).
+| - linear  = Use linear (1st order polynomial) interpolation (least accurate).
+| - cubic   = Use the cubic (3rd order) Lagrange polynomial interpolation.
+| - quintic = Use the quintic (5th order) Lagrange polynomial interpolation.
+| - heptic  = Use the heptic (7th order) Lagrange polynomial interpolation.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="n">Fourier</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>output_type</em> (NIFTI or NIFTI_GZ, optional, default value is NIFTI)</dt><dd><div class="line-block">
+<div class="line">Format of the output image (one of NIFTI, NIFTI_GZ).</div>
+<div class="line-block">
+<div class="line">NIFTI: *.nii</div>
+<div class="line">NIFTI_GZ: *.nii.gz</div>
+</div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="n">NIFTI</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>out_prefix</em> (a string, optional, default value is ‘st_corr’)</dt><dd><p>Prefix of the output image.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;st_corr_&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>rlt</em> (a boolean, optional, default value is False)</dt><dd><p>Before shifting, remove the mean and linear trend.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>rltplus</em> (a boolean, optional, default value is False)</dt><dd><p>Before shifting, remove the mean and linear trend and later put back the mean.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>slice_encoding_dir</em> (k or k-, optional, default value is k)</dt><dd><p>Direction in which slice_timing is specified.
+If negative, slice_timing is defined in reverse order, that is, the first entry corresponds to the slice
+with the largest index and the final entry corresponds to slice index zero.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="n">k</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Optional inputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>ignore</em> (an integer, optional)</dt><dd><p>Ignore the first set of points specified.
+The first ii values will be unchanged in the output.They also will not be used in the detrending or time shifting.
+Default is Undefined (ie parameter not used).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">2</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>slice_timing</em> (a string representing an existing file or a list of floats, optional)</dt><dd><p>Time offsets from the volume acquisition onset for each slice.
+Mutually exclusive with “tpattern” parameter.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;slice_timing.1D&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>tpattern</em> (alt+z or altplus or alt+z2 or alt-z or altminus or alt-z2 or seq+z or seqplus or seq-z or seqminus, optional)</dt><dd><p>Use specified slice time pattern rather than one in header.
+One of ‘alt+z’ or ‘altplus’ or ‘alt+z2’ or ‘alt-z’ or ‘altminus’ or ‘alt-z2’ or ‘seq+z’ or ‘seqplus’ or‘seq-z’ or ‘seqminus’.
+Mutually exclusive with “slice_timming” parameter.
+Default is Undefined (ie parameter not used).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>tr</em> (a string, optional)</dt><dd><p>Manually set the TR. Add suffix “s” for seconds or “ms” for milliseconds.
+Default is Undefined (ie parameter not used).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mf">2.5</span><span class="n">s</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>tslice</em> (an integer, optional)</dt><dd><p>Align each slice to time offset of given slice.
+Mutually exclusive with tzero parameter.
+Default is Undefined (ie parameter not used).</p>
+<p>For example if tslice = 5, each slice will be align to time offset of slice 5.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">5</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>tzero</em> (an float, optional)</dt><dd><p>Align each slice to the given time offset.
+The value  must be between the minimum and maximum slice temporal offsets.
+Mutually exclusive with tslice parameter.
+Default is Undefined (ie parameter not used).</p>
+<p>Note that the default alignment time (when tzero is not used) is the average of the ‘tpattern’ values
+(either from tpattern option or slice_timing option).</p>
+<p>For example if tzero = 0.0, each slice will be align to time offset 0.0.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mf">0.0</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Outputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>out_file</em> (a strings representing a file)</dt><dd><p>Out image (extensions: [.nii, .nii.gz]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/st_corr_func.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<hr class="docutils" />
+<p>Usefull links:</p>
+<p><a class="reference external" href="https://afni.nimh.nih.gov/pub/dist/doc/program_help/3dTshift.html">AFNI 3dTshift</a>
+<a class="reference external" href="https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.afni.preprocess.html#tshift">AFNI TShift - nipype</a></p>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,1008 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>mia_processes.bricks.reports package &#8212; mia_processes 2.2.1-dev+2bc8ce9 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/haiku.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>mia_processes 2.2.1-dev+2bc8ce9 documentation</span></a></h1>
+        <h2 class="heading"><span>mia_processes.bricks.reports package</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <section id="module-mia_processes.bricks.reports">
+<span id="mia-processes-bricks-reports-package"></span><h1>mia_processes.bricks.reports package<a class="headerlink" href="#module-mia_processes.bricks.reports" title="Permalink to this headline">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="module-mia_processes.bricks.reports.processes">
+<span id="mia-processes-bricks-reports-processes-module"></span><h2>mia_processes.bricks.reports.processes module<a class="headerlink" href="#module-mia_processes.bricks.reports.processes" title="Permalink to this headline">¶</a></h2>
+<p>The report preprocess library of the mia_processes package.</p>
+<p>The purpose of this module is to provide bricks and functions to
+compute necessary values for reporting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Contains</dt>
+<dd class="field-odd"><dl class="field-list simple">
+<dt class="field-odd">Class</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>AnatIQMs</p></li>
+<li><p>BoldIQMs</p></li>
+<li><p>ComputeDVARS</p></li>
+<li><p>CarpetParcellation</p></li>
+<li><p>FramewiseDisplacement</p></li>
+<li><p>FWHMx</p></li>
+<li><p>GCOR</p></li>
+<li><p>Mean_stdDev_calc</p></li>
+<li><p>OutlierCount</p></li>
+<li><p>QualityIndex</p></li>
+<li><p>Result_collector</p></li>
+<li><p>Spikes</p></li>
+</ul>
+</dd>
+<dt class="field-even">Function</dt>
+<dd class="field-even"><ul class="simple">
+<li><p>art_qi1</p></li>
+<li><p>art_qi2</p></li>
+<li><p>cjv</p></li>
+<li><p>cnr</p></li>
+<li><p>efc</p></li>
+<li><p>fber</p></li>
+<li><p>fuzzy_jaccard</p></li>
+<li><p>find_peaks</p></li>
+<li><p>find_spikes</p></li>
+<li><p>gsr</p></li>
+<li><p>image_binary_dilation</p></li>
+<li><p>normalize_mc_params</p></li>
+<li><p>rpve</p></li>
+<li><p>snr</p></li>
+<li><p>snr_dietrich</p></li>
+<li><p>summary_stats</p></li>
+<li><p>volume_fraction</p></li>
+<li><p>wm2max</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.AnatIQMs">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.reports.processes.</span></span><span class="sig-name descname"><span class="pre">AnatIQMs</span></span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#AnatIQMs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.AnatIQMs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
+<ul class="simple">
+<li><p>Computes the anatomical IQMs *</p></li>
+</ul>
+<p>Please, see the complete documentation for the <a href="#id1"><span class="problematic" id="id2">`</span></a>AnatIQMs’ brick
+in the populse.mia_processes website
+<a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/AnatIQMs.html">https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/AnatIQMs.html</a></p>
+<p>adapted from:
+<a class="reference external" href="https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/anatomical.py#L332">https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/anatomical.py#L332</a></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Type ‘AnatIQMs.help()’ for a full description of this process parameters.</p></li>
+<li><p>Type ‘&lt;AnatIQMs&gt;.get_input_spec()’ for a full description of this process input trait types.</p></li>
+<li><p>Type ‘&lt;AnatIQMs&gt;.get_output_spec()’ for a full description of this process output trait types.</p></li>
+</ul>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.AnatIQMs.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#AnatIQMs.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.AnatIQMs.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the attributes initialisation / instantiation.</p>
+<p>The input and output plugs are defined here. The special
+‘self.requirement’ attribute (optional) is used to define the
+third-party products necessary for the running of the brick.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.AnatIQMs.list_outputs">
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#AnatIQMs.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.AnatIQMs.list_outputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the initialisation step of the brick.</p>
+<p>The main objective of this method is to produce the outputs of the
+bricks (self.outputs) and the associated tags (self.inheritance_dic),
+if defined here. To work properly this method must return
+self.make_initResult() object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.AnatIQMs.run_process_mia">
+<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#AnatIQMs.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.AnatIQMs.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the process launch step of the brick.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.BoldIQMs">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.reports.processes.</span></span><span class="sig-name descname"><span class="pre">BoldIQMs</span></span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#BoldIQMs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.BoldIQMs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
+<ul class="simple">
+<li><p>Computes the functional IQMs *</p></li>
+</ul>
+<p>Please, see the complete documentation for the <a href="#id3"><span class="problematic" id="id4">`</span></a>BoldIQMs’ brick 
+in the populse.mia_processes website
+<a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/BoldIQMs.html">https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/BoldIQMs.html</a></p>
+<p>adapted from:
+<a class="reference external" href="https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/functional.py#L243">https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/functional.py#L243</a></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Type ‘BoldIQMs.help()’ for a full description of this process parameters.</p></li>
+<li><p>Type ‘&lt;BoldIQMs&gt;.get_input_spec()’ for a full description of this process input trait types.</p></li>
+<li><p>Type ‘&lt;BoldIQMs&gt;.get_output_spec()’ for a full description of this process output trait types.</p></li>
+</ul>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.BoldIQMs.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#BoldIQMs.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.BoldIQMs.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the attributes initialisation / instantiation.</p>
+<p>The input and output plugs are defined here. The special
+‘self.requirement’ attribute (optional) is used to define the
+third-party products necessary for the running of the brick.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.BoldIQMs.list_outputs">
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#BoldIQMs.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.BoldIQMs.list_outputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the initialisation step of the brick.</p>
+<p>The main objective of this method is to produce the outputs of the
+bricks (self.outputs) and the associated tags (self.inheritance_dic),
+if defined here. To work properly this method must return
+self.make_initResult() object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.BoldIQMs.run_process_mia">
+<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#BoldIQMs.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.BoldIQMs.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the process launch step of the brick.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.CarpetParcellation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.reports.processes.</span></span><span class="sig-name descname"><span class="pre">CarpetParcellation</span></span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#CarpetParcellation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.CarpetParcellation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
+<ul class="simple">
+<li><p>Dilate brainmask, substract from itself then generate</p></li>
+</ul>
+<p>the union of obtained crown mask and epi parcellation *</p>
+<p>Please, see the complete documentation for the <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/bricks/reports/CarpetParcellation.html">CarpetParcellation’ brick 
+in the populse.mia_processes website</a></p>
+<p>adapted from:
+<a class="reference external" href="https://github.com/nipreps/niworkflows/blob/45ab13e1bf6fdbf5e29c90cef44055b0b9cf391b/niworkflows/interfaces/morphology.py#L46">https://github.com/nipreps/niworkflows/blob/45ab13e1bf6fdbf5e29c90cef44055b0b9cf391b/niworkflows/interfaces/morphology.py#L46</a>
+<a class="reference external" href="https://github.com/nipreps/niworkflows/blob/45ab13e1bf6fdbf5e29c90cef44055b0b9cf391b/niworkflows/interfaces/morphology.py#L79">https://github.com/nipreps/niworkflows/blob/45ab13e1bf6fdbf5e29c90cef44055b0b9cf391b/niworkflows/interfaces/morphology.py#L79</a>
+<a class="reference external" href="https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/functional.py#L1022">https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/functional.py#L1022</a></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Type ‘CarpetParcellation.help()’ for a full description of this process parameters.</p></li>
+<li><p>Type ‘&lt;CarpetParcellation&gt;.get_input_spec()’ for a full description of this process input trait types.</p></li>
+<li><p>Type ‘&lt;CarpetParcellation&gt;.get_output_spec()’ for a full description of this process output trait types.</p></li>
+</ul>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.CarpetParcellation.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#CarpetParcellation.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.CarpetParcellation.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the attributes initialisation/instantiation.</p>
+<p>The input and output plugs are defined here. The special
+‘self.requirement’ attribute (optional) is used to define the
+third-party products necessary for the running of the brick.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.CarpetParcellation.list_outputs">
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#CarpetParcellation.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.CarpetParcellation.list_outputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the initialisation step of the brick.</p>
+<p>The main objective of this method is to produce the outputs of the
+bricks (self.outputs) and the associated tags (self.inheritance_dic),
+if defined here. In order not to include an output in the database,
+this output must be a value of the optional key ‘notInDb’ of the
+self.outputs dictionary. To work properly this method must return
+self.make_initResult() object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.CarpetParcellation.run_process_mia">
+<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#CarpetParcellation.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.CarpetParcellation.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the process launch step of the brick.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.ComputeDVARS">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.reports.processes.</span></span><span class="sig-name descname"><span class="pre">ComputeDVARS</span></span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#ComputeDVARS"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.ComputeDVARS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
+<ul class="simple">
+<li><p>Computes the DVARS *</p></li>
+</ul>
+<p>Please, see the complete documentation for the <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/bricks/reports/ComputeDVARS.html">ComputeDVARS’ brick 
+in the populse.mia_processes website</a></p>
+<p>adapted from:
+<a class="reference external" href="https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5de5913b31/nipype/algorithms/confounds.py#L100">https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5de5913b31/nipype/algorithms/confounds.py#L100</a></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Type ‘ComputeDVARS.help()’ for a full description of this process parameters.</p></li>
+<li><p>Type ‘&lt;ComputeDVARS&gt;.get_input_spec()’ for a full description of this process input trait types.</p></li>
+<li><p>Type ‘&lt;ComputeDVARS&gt;.get_output_spec()’ for a full description of this process output trait types.</p></li>
+</ul>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.ComputeDVARS.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#ComputeDVARS.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.ComputeDVARS.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the attributes initialisation/instantiation.</p>
+<p>The input and output plugs are defined here. The special
+‘self.requirement’ attribute (optional) is used to define the
+third-party products necessary for the running of the brick.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.ComputeDVARS.list_outputs">
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#ComputeDVARS.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.ComputeDVARS.list_outputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the initialisation step of the brick.</p>
+<p>The main objective of this method is to produce the outputs of the
+bricks (self.outputs) and the associated tags (self.inheritance_dic),
+if defined here. In order not to include an output in the database,
+this output must be a value of the optional key ‘notInDb’ of the
+self.outputs dictionary. To work properly this method must return
+self.make_initResult() object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.ComputeDVARS.run_process_mia">
+<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#ComputeDVARS.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.ComputeDVARS.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the process launch step of the brick.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.FramewiseDisplacement">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.reports.processes.</span></span><span class="sig-name descname"><span class="pre">FramewiseDisplacement</span></span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#FramewiseDisplacement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.FramewiseDisplacement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
+<ul class="simple">
+<li><p>Calculate the FD (framewise displacement)` as in [Power2012].</p></li>
+</ul>
+<p>This implementation reproduces the calculation in fsl_motion_outliers</p>
+<blockquote>
+<div><dl class="simple">
+<dt>[Power2012] Power et al., Spurious but systematic correlations</dt><dd><p>in functional connectivity MRI networks arise from subject
+motion, NeuroImage 59(3),
+2012. doi:<cite>10.1016/j.neuroimage.2011.10.018
+&lt;https://doi.org/10.1016/j.neuroimage.2011.10.018&gt;</cite>.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>Please, see the complete documentation for the <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/bricks/reports/FramewiseDisplacement.html">FramewiseDisplacement’
+brick in the populse.mia_processes website</a></p>
+<p>adapted from:
+<a class="reference external" href="https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5de5913b31/nipype/algorithms/confounds.py#L298">https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5de5913b31/nipype/algorithms/confounds.py#L298</a></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Type ‘FramewiseDisplacement.help()’ for a full description of this process parameters.</p></li>
+<li><p>Type ‘&lt;FramewiseDisplacement&gt;.get_input_spec()’ for a full description of this process input trait types.</p></li>
+<li><p>Type ‘&lt;FramewiseDisplacement&gt;.get_output_spec()’ for a full description of this process output trait types.</p></li>
+</ul>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.FramewiseDisplacement.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#FramewiseDisplacement.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.FramewiseDisplacement.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the attributes initialisation/instantiation.</p>
+<p>The input and output plugs are defined here. The special
+‘self.requirement’ attribute (optional) is used to define the
+third-party products necessary for the running of the brick.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.FramewiseDisplacement.list_outputs">
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#FramewiseDisplacement.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.FramewiseDisplacement.list_outputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the initialisation step of the brick.</p>
+<p>The main objective of this method is to produce the outputs of the
+bricks (self.outputs) and the associated tags (self.inheritance_dic),
+if defined here. In order not to include an output in the database,
+this output must be a value of the optional key ‘notInDb’ of the
+self.outputs dictionary. To work properly this method must return
+self.make_initResult() object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.FramewiseDisplacement.run_process_mia">
+<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#FramewiseDisplacement.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.FramewiseDisplacement.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the process launch step of the brick.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.Mean_stdDev_calc">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.reports.processes.</span></span><span class="sig-name descname"><span class="pre">Mean_stdDev_calc</span></span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#Mean_stdDev_calc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.Mean_stdDev_calc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
+<p>Makes the mean and standard deviation of the parametric_maps</p>
+<ul class="simple">
+<li><p>The parametric_maps are first convolved with the ROIs corresponding
+to doublet_list.</p></li>
+<li><p>ROIs are defined from doublet_list parameter as
+doublet_list[0][0] + doublet_list[0][1] + ‘.nii’,
+doublet_list[1][0] + doublet_list[1][1] + ‘.nii’,
+etc.</p></li>
+<li><p>To work correctly, the database entry for the parametric_maps items must
+have the “PatientName” tag filled in</p></li>
+<li><p>To work correctly, the output_directory “/<a href="#id15"><span class="problematic" id="id16">roi_</span></a>”PatientName”/convROI_BOLD”
+must exist and contain a previous convolution results (normally using
+the ConvROI brick)</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Type ‘Mean_stdDev_calc.help()’ for a full description of this process parameters.</p></li>
+<li><p>Type ‘&lt;Mean_stdDev_calc&gt;.get_input_spec()’ for a full description of this process input trait types.</p></li>
+<li><p>Type ‘&lt;Mean_stdDev_calc&gt;.get_output_spec()’ for a full description of this process output trait types.</p></li>
+</ul>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.Mean_stdDev_calc.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#Mean_stdDev_calc.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.Mean_stdDev_calc.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the attributes initialisation/instantiation.</p>
+<p>The input and output plugs are defined here. The special
+‘self.requirement’ attribute (optional) is used to define the
+third-party products necessary for the running of the brick.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.Mean_stdDev_calc.list_outputs">
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#Mean_stdDev_calc.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.Mean_stdDev_calc.list_outputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the initialisation step of the brick.</p>
+<p>The main objective of this method is to produce the outputs of the
+bricks (self.outputs) and the associated tags (self.inheritance_dic),
+if defined here. In order not to include an output in the database,
+this output must be a value of the optional key ‘notInDb’ of the
+self.outputs dictionary. To work properly this method must return
+self.make_initResult() object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.Mean_stdDev_calc.run_process_mia">
+<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#Mean_stdDev_calc.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.Mean_stdDev_calc.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the process launch step of the brick.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.Result_collector">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.reports.processes.</span></span><span class="sig-name descname"><span class="pre">Result_collector</span></span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#Result_collector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.Result_collector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
+<p>Blabla</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Type ‘Result_collector.help()’ for a full description of this process parameters.</p></li>
+<li><p>Type ‘&lt;Result_collector&gt;.get_input_spec()’ for a full description of this process input trait types.</p></li>
+<li><p>Type ‘&lt;Result_collector&gt;.get_output_spec()’ for a full description of this process output trait types.</p></li>
+</ul>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.Result_collector.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#Result_collector.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.Result_collector.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the attributes initialisation/instantiation.</p>
+<p>The input and output plugs are defined here. The special
+‘self.requirement’ attribute (optional) is used to define the
+third-party products necessary for the running of the brick.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.Result_collector.list_outputs">
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#Result_collector.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.Result_collector.list_outputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the initialisation step of the brick.</p>
+<p>The main objective of this method is to produce the outputs of the
+bricks (self.outputs) and the associated tags (self.inheritance_dic),
+if defined here. In order not to include an output in the database,
+this output must be a value of the optional key ‘notInDb’ of the
+self.outputs dictionary. To work properly this method must return
+self.make_initResult() object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.Result_collector.run_process_mia">
+<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#Result_collector.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.Result_collector.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the process launch step of the brick.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.Spikes">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.reports.processes.</span></span><span class="sig-name descname"><span class="pre">Spikes</span></span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#Spikes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.Spikes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
+<ul class="simple">
+<li><p>Computes the number of spikes *</p></li>
+</ul>
+<p>Please, see the complete documentation for the <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/bricks/reports/Spikes.html">Spikes’ brick in the populse.mia_processes website</a></p>
+<p>adapted from:
+<a class="reference external" href="https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/functional.py#L939">https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/functional.py#L939</a>
+<a class="reference external" href="https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/interfaces/functional.py#L223">https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/interfaces/functional.py#L223</a></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Type ‘Spikes.help()’ for a full description of this process parameters.</p></li>
+<li><p>Type ‘&lt;Spikes&gt;.get_input_spec()’ for a full description of this process input trait types.</p></li>
+<li><p>Type ‘&lt;Spikes&gt;.get_output_spec()’ for a full description of this process output trait types.</p></li>
+</ul>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.Spikes.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#Spikes.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.Spikes.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the attributes initialisation/instantiation.</p>
+<p>The input and output plugs are defined here. The special
+‘self.requirement’ attribute (optional) is used to define the
+third-party products necessary for the running of the brick.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.Spikes.list_outputs">
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#Spikes.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.Spikes.list_outputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the initialisation step of the brick.</p>
+<p>The main objective of this method is to produce the outputs of the
+bricks (self.outputs) and the associated tags (self.inheritance_dic),
+if defined here. In order not to include an output in the database,
+this output must be a value of the optional key ‘notInDb’ of the
+self.outputs dictionary. To work properly this method must return
+self.make_initResult() object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.Spikes.run_process_mia">
+<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#Spikes.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.Spikes.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the process launch step of the brick.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.art_qi1">
+<span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.reports.processes.</span></span><span class="sig-name descname"><span class="pre">art_qi1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">airmask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">artmask</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#art_qi1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.art_qi1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Detect artifacts in the image using the method described in [Mortamet2009].
+Caculates <span class="math notranslate nohighlight">\(\text{QI}_1\)</span>, as the proportion of voxels with intensity
+corrupted by artifacts normalized by the number of voxels in the
+background:
+.. math</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>\<span class="n">text</span><span class="p">{</span><span class="n">QI</span><span class="p">}</span><span class="n">_1</span> <span class="o">=</span> \<span class="n">frac</span><span class="p">{</span><span class="mi">1</span><span class="p">}{</span><span class="n">N</span><span class="p">}</span> \<span class="nb">sum</span>\<span class="n">limits_</span><span class="p">{</span><span class="n">x</span>\<span class="ow">in</span> <span class="n">X_</span>\<span class="n">text</span><span class="p">{</span><span class="n">art</span><span class="p">}}</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p>Lower values are better.
+:param numpy.ndarray airmask: input air mask, without artifacts
+:param numpy.ndarray artmask: input artifacts mask</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.art_qi2">
+<span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.reports.processes.</span></span><span class="sig-name descname"><span class="pre">art_qi2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">airmask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_voxels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_voxels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#art_qi2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.art_qi2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates <span class="math notranslate nohighlight">\(\text{QI}_2\)</span>, based on the goodness-of-fit of a centered
+<span class="math notranslate nohighlight">\(\chi^2\)</span> distribution onto the intensity distribution of
+non-artifactual background (within the “hat” mask):
+.. math</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>\chi^2_n = \frac{2}{(\sigma \sqrt{2})^{2n} \, (n - 1)!}x^{2n - 1}\, e^{-\frac{x}{2}}
+</pre></div>
+</div>
+<p>where <span class="math notranslate nohighlight">\(n\)</span> is the number of coil elements.
+:param numpy.ndarray img: input data
+:param numpy.ndarray airmask: input air mask without artifacts</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.cjv">
+<span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.reports.processes.</span></span><span class="sig-name descname"><span class="pre">cjv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mu_wm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu_gm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma_wm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma_gm</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#cjv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.cjv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the <abbr title="coefficient of joint variation">CJV</abbr>, a measure
+related to <abbr title="Signal-to-Noise Ratio">SNR</abbr> and
+<abbr title="Contrast-to-Noise Ratio">CNR</abbr> that is presented as a proxy for
+the <abbr title="intensity non-uniformity">INU</abbr> artifact <span id="id5">[Ganzetti2016]</span>.
+Lower is better.
+.. math:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>\<span class="n">text</span><span class="p">{</span><span class="n">CJV</span><span class="p">}</span> <span class="o">=</span> \<span class="n">frac</span><span class="p">{</span>\<span class="n">sigma_</span>\<span class="n">text</span><span class="p">{</span><span class="n">WM</span><span class="p">}</span> <span class="o">+</span> \<span class="n">sigma_</span>\<span class="n">text</span><span class="p">{</span><span class="n">GM</span><span class="p">}}{</span><span class="o">|</span>\<span class="n">mu_</span>\<span class="n">text</span><span class="p">{</span><span class="n">WM</span><span class="p">}</span> <span class="o">-</span> \<span class="n">mu_</span>\<span class="n">text</span><span class="p">{</span><span class="n">GM</span><span class="p">}</span><span class="o">|</span><span class="p">}</span><span class="o">.</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mu_wm</strong> (<em>float</em>) – mean of signal within white-matter mask.</p></li>
+<li><p><strong>mu_gm</strong> (<em>float</em>) – mean of signal within gray-matter mask.</p></li>
+<li><p><strong>sigma_wm</strong> (<em>float</em>) – standard deviation of signal within white-matter mask.</p></li>
+<li><p><strong>sigma_gm</strong> (<em>float</em>) – standard deviation of signal within gray-matter mask.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the computed CJV</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.cnr">
+<span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.reports.processes.</span></span><span class="sig-name descname"><span class="pre">cnr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mu_wm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu_gm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma_air</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#cnr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.cnr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the <abbr title="Contrast-to-Noise Ratio">CNR</abbr> <span id="id6">[Magnota2006]</span>.
+Higher values are better.
+.. math:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>\<span class="n">text</span><span class="p">{</span><span class="n">CNR</span><span class="p">}</span> <span class="o">=</span> \<span class="n">frac</span><span class="p">{</span><span class="o">|</span>\<span class="n">mu_</span>\<span class="n">text</span><span class="p">{</span><span class="n">GM</span><span class="p">}</span> <span class="o">-</span> \<span class="n">mu_</span>\<span class="n">text</span><span class="p">{</span><span class="n">WM</span><span class="p">}</span> <span class="o">|</span><span class="p">}{</span>\<span class="n">sqrt</span><span class="p">{</span>\<span class="n">sigma_B</span><span class="o">^</span><span class="mi">2</span> <span class="o">+</span>
+\<span class="n">sigma_</span>\<span class="n">text</span><span class="p">{</span><span class="n">WM</span><span class="p">}</span><span class="o">^</span><span class="mi">2</span> <span class="o">+</span> \<span class="n">sigma_</span>\<span class="n">text</span><span class="p">{</span><span class="n">GM</span><span class="p">}</span><span class="o">^</span><span class="mi">2</span><span class="p">}},</span>
+</pre></div>
+</div>
+<p>where <span class="math notranslate nohighlight">\(\sigma_B\)</span> is the standard deviation of the noise distribution within
+the air (background) mask.
+:param float mu_wm: mean of signal within white-matter mask.
+:param float mu_gm: mean of signal within gray-matter mask.
+:param float sigma_air: standard deviation of the air surrounding the head (“hat” mask).
+:return: the computed CNR</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.efc">
+<span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.reports.processes.</span></span><span class="sig-name descname"><span class="pre">efc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">framemask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#efc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.efc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the <abbr title="Entropy Focus Criterion">EFC</abbr> <span id="id7">[Atkinson1997]</span>.
+Uses the Shannon entropy of voxel intensities as an indication of ghosting
+and blurring induced by head motion. A range of low values is better,
+with EFC = 0 for all the energy concentrated in one pixel.
+.. math:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>\<span class="n">text</span><span class="p">{</span><span class="n">E</span><span class="p">}</span> <span class="o">=</span> <span class="o">-</span> \<span class="n">sum_</span><span class="p">{</span><span class="n">j</span><span class="o">=</span><span class="mi">1</span><span class="p">}</span><span class="o">^</span><span class="n">N</span> \<span class="n">frac</span><span class="p">{</span><span class="n">x_j</span><span class="p">}{</span><span class="n">x_</span>\<span class="n">text</span><span class="p">{</span><span class="nb">max</span><span class="p">}}</span>
+\<span class="n">ln</span> \<span class="n">left</span><span class="p">[</span>\<span class="n">frac</span><span class="p">{</span><span class="n">x_j</span><span class="p">}{</span><span class="n">x_</span>\<span class="n">text</span><span class="p">{</span><span class="nb">max</span><span class="p">}}</span>\<span class="n">right</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>with <span class="math notranslate nohighlight">\(x_\text{max} = \sqrt{\sum_{j=1}^N x^2_j}\)</span>.
+The original equation is normalized by the maximum entropy, so that the
+<abbr title="Entropy Focus Criterion">EFC</abbr> can be compared across images with
+different dimensions:
+.. math:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>\<span class="n">text</span><span class="p">{</span><span class="n">EFC</span><span class="p">}</span> <span class="o">=</span> \<span class="n">left</span><span class="p">(</span> \<span class="n">frac</span><span class="p">{</span><span class="n">N</span><span class="p">}{</span>\<span class="n">sqrt</span><span class="p">{</span><span class="n">N</span><span class="p">}}</span> \<span class="p">,</span> \<span class="n">log</span><span class="p">{</span>\<span class="n">sqrt</span><span class="p">{</span><span class="n">N</span><span class="p">}</span><span class="o">^</span><span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">}}</span> \<span class="n">right</span><span class="p">)</span> \<span class="n">text</span><span class="p">{</span><span class="n">E</span><span class="p">}</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>img</strong> (<em>numpy.ndarray</em>) – input data</p></li>
+<li><p><strong>framemask</strong> (<em>numpy.ndarray</em>) – a mask of empty voxels inserted after a rotation of
+data</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.fber">
+<span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.reports.processes.</span></span><span class="sig-name descname"><span class="pre">fber</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headmask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotmask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#fber"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.fber" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the <abbr title="Foreground-Background Energy Ratio">FBER</abbr> <span id="id8">[Shehzad2015]</span>,
+defined as the mean energy of image values within the head relative
+to outside the head. Higher values are better.
+.. math:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>\<span class="n">text</span><span class="p">{</span><span class="n">FBER</span><span class="p">}</span> <span class="o">=</span> \<span class="n">frac</span><span class="p">{</span><span class="n">E</span><span class="p">[</span><span class="o">|</span><span class="n">F</span><span class="o">|^</span><span class="mi">2</span><span class="p">]}{</span><span class="n">E</span><span class="p">[</span><span class="o">|</span><span class="n">B</span><span class="o">|^</span><span class="mi">2</span><span class="p">]}</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>img</strong> (<em>numpy.ndarray</em>) – input data</p></li>
+<li><p><strong>headmask</strong> (<em>numpy.ndarray</em>) – a mask of the head (including skull, skin, etc.)</p></li>
+<li><p><strong>rotmask</strong> (<em>numpy.ndarray</em>) – a mask of empty voxels inserted after a rotation of
+data</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.find_peaks">
+<span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.reports.processes.</span></span><span class="sig-name descname"><span class="pre">find_peaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#find_peaks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.find_peaks" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.find_spikes">
+<span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.reports.processes.</span></span><span class="sig-name descname"><span class="pre">find_spikes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spike_thresh</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#find_spikes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.find_spikes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.fuzzy_jaccard">
+<span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.reports.processes.</span></span><span class="sig-name descname"><span class="pre">fuzzy_jaccard</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_tpms</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">in_mni_tpms</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#fuzzy_jaccard"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.fuzzy_jaccard" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.gsr">
+<span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.reports.processes.</span></span><span class="sig-name descname"><span class="pre">gsr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epi_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'y'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#gsr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.gsr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the <abbr title="ghost to signal ratio">GSR</abbr> <span id="id9">[Giannelli2010]</span>.
+The procedure is as follows:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Create a Nyquist ghost mask by circle-shifting the original mask by <span class="math notranslate nohighlight">\(N/2\)</span>.</p></li>
+<li><p>Rotate by <span class="math notranslate nohighlight">\(N/2\)</span></p></li>
+<li><p>Remove the intersection with the original mask</p></li>
+<li><p>Generate a non-ghost background</p></li>
+<li><p>Calculate the <abbr title="ghost to signal ratio">GSR</abbr></p></li>
+</ol>
+</div></blockquote>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This should be used with EPI images for which the phase
+encoding direction is known.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>epi_file</strong> (<em>str</em>) – path to epi file</p></li>
+<li><p><strong>mask_file</strong> (<em>str</em>) – path to brain mask</p></li>
+<li><p><strong>direction</strong> (<em>str</em>) – the direction of phase encoding (x, y, all)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the computed gsr</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.image_binary_dilation">
+<span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.reports.processes.</span></span><span class="sig-name descname"><span class="pre">image_binary_dilation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_mask</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#image_binary_dilation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.image_binary_dilation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dilate the input binary mask.
+Parameters
+———-
+in_mask: <code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></p>
+<blockquote>
+<div><p>A 3D binary array.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>radius: <code class="xref py py-obj docutils literal notranslate"><span class="pre">int</span></code>, optional</dt><dd><p>The radius of the ball-shaped footprint for dilation of the mask.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.normalize_mc_params">
+<span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.reports.processes.</span></span><span class="sig-name descname"><span class="pre">normalize_mc_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#normalize_mc_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.normalize_mc_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normalize a single row of motion parameters to the SPM format.
+SPM saves motion parameters as:</p>
+<blockquote>
+<div><p>x   Right-Left          (mm)
+y   Anterior-Posterior  (mm)
+z   Superior-Inferior   (mm)
+rx  Pitch               (rad)
+ry  Roll                (rad)
+rz  Yaw                 (rad)</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.regress_poly">
+<span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.reports.processes.</span></span><span class="sig-name descname"><span class="pre">regress_poly</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">degree</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove_mean</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">failure_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'error'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#regress_poly"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.regress_poly" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns data with degree polynomial regressed out.
+:param bool remove_mean: whether or not demean data (i.e. degree 0),
+:param int axis: numpy array axes along which regression is performed</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.rpve">
+<span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.reports.processes.</span></span><span class="sig-name descname"><span class="pre">rpve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pvms</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#rpve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.rpve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the <abbr title="residual partial voluming error">rPVe</abbr>
+of each tissue class.
+.. math</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>\<span class="n">text</span><span class="p">{</span><span class="n">rPVE</span><span class="p">}</span><span class="o">^</span><span class="n">k</span> <span class="o">=</span> \<span class="n">frac</span><span class="p">{</span><span class="mi">1</span><span class="p">}{</span><span class="n">N</span><span class="p">}</span> \<span class="n">left</span><span class="p">[</span> \<span class="nb">sum</span>\<span class="n">limits_</span><span class="p">{</span><span class="n">p</span><span class="o">^</span><span class="n">k_i</span> \<span class="ow">in</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">P_</span><span class="p">{</span><span class="mi">98</span><span class="p">}]}</span> <span class="n">p</span><span class="o">^</span><span class="n">k_i</span> <span class="o">+</span> \<span class="nb">sum</span>\<span class="n">limits_</span><span class="p">{</span><span class="n">p</span><span class="o">^</span><span class="n">k_i</span> \<span class="ow">in</span> <span class="p">[</span><span class="n">P_</span><span class="p">{</span><span class="mi">2</span><span class="p">},</span> <span class="mf">0.5</span><span class="p">)}</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">p</span><span class="o">^</span><span class="n">k_i</span> \<span class="n">right</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.snr">
+<span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.reports.processes.</span></span><span class="sig-name descname"><span class="pre">snr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mu_fg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma_fg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#snr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.snr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the <abbr title="Signal-to-Noise Ratio">SNR</abbr>.
+The estimation may be provided with only one foreground region in
+which the noise is computed as follows:
+.. math:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>\<span class="n">text</span><span class="p">{</span><span class="n">SNR</span><span class="p">}</span> <span class="o">=</span> \<span class="n">frac</span><span class="p">{</span>\<span class="n">mu_F</span><span class="p">}{</span>\<span class="n">sigma_F</span>\<span class="n">sqrt</span><span class="p">{</span><span class="n">n</span><span class="o">/</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)}},</span>
+</pre></div>
+</div>
+<p>where <span class="math notranslate nohighlight">\(\mu_F\)</span> is the mean intensity of the foreground and
+<span class="math notranslate nohighlight">\(\sigma_F\)</span> is the standard deviation of the same region.
+:param float mu_fg: mean of foreground.
+:param float sigma_fg: standard deviation of foreground.
+:param int n: number of voxels in foreground mask.
+:return: the computed SNR</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.snr_dietrich">
+<span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.reports.processes.</span></span><span class="sig-name descname"><span class="pre">snr_dietrich</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mu_fg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mad_air</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma_air</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#snr_dietrich"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.snr_dietrich" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the <abbr title="Signal-to-Noise Ratio">SNR</abbr>.</p>
+<p>This must be an air mask around the head, and it should not contain artifacts.
+The computation is done following the eq. A.12 of <span id="id10">[Dietrich2007]</span>, which
+includes a correction factor in the estimation of the standard deviation of
+air and its Rayleigh distribution:</p>
+<div class="math notranslate nohighlight">
+\[\text{SNR} = \frac{\mu_F}{\sqrt{\frac{2}{4-\pi}}\,\sigma_\text{air}}.\]</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mu_fg</strong> (<em>float</em>) – mean of foreground.</p></li>
+<li><p><strong>sigma_air</strong> (<em>float</em>) – standard deviation of the air surrounding the head (“hat” mask).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the computed SNR for the foreground segmentation</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.summary_stats">
+<span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.reports.processes.</span></span><span class="sig-name descname"><span class="pre">summary_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pvms</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">airmask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">erode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#summary_stats"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.summary_stats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimates the mean, the standard deviation, the 95%
+and the 5% percentiles of each tissue distribution.
+.. warning</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Sometimes (with datasets that have been partially processed), the air
+mask will be empty. In those cases, the background stats will be zero
+for the mean, median, percentiles and kurtosis, the sum of voxels in
+the other remaining labels for ``n``, and finally the MAD and the
+:math:`\sigma` will be calculated as:
+.. math ::
+    \sigma_\text{BG} = \sqrt{\sum \sigma_\text{i}^2}
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.volume_fraction">
+<span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.reports.processes.</span></span><span class="sig-name descname"><span class="pre">volume_fraction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pvms</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#volume_fraction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.volume_fraction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the <abbr title="intracranial volume">ICV</abbr> fractions
+corresponding to the (partial volume maps).
+.. math</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>\<span class="n">text</span><span class="p">{</span><span class="n">ICV</span><span class="p">}</span><span class="o">^</span><span class="n">k</span> <span class="o">=</span> \<span class="n">frac</span><span class="p">{</span>\<span class="n">sum_i</span> <span class="n">p</span><span class="o">^</span><span class="n">k_i</span><span class="p">}{</span>\<span class="nb">sum</span>\<span class="n">limits_</span><span class="p">{</span><span class="n">x</span> \<span class="ow">in</span> <span class="n">X_</span>\<span class="n">text</span><span class="p">{</span><span class="n">brain</span><span class="p">}}</span> <span class="mi">1</span><span class="p">}</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pvms</strong> (<em>list</em>) – list of <code class="code docutils literal notranslate"><span class="pre">numpy.ndarray</span></code> of partial volume maps.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.processes.wm2max">
+<span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.reports.processes.</span></span><span class="sig-name descname"><span class="pre">wm2max</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu_wm</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/processes.html#wm2max"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.processes.wm2max" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the <abbr title="white-matter-to-max ratio">WM2MAX</abbr>,
+defined as the maximum intensity found in the volume w.r.t. the
+mean value of the white matter tissue. Values close to 1.0 are
+better:
+.. math</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>\<span class="n">text</span><span class="p">{</span><span class="n">WM2MAX</span><span class="p">}</span> <span class="o">=</span> \<span class="n">frac</span><span class="p">{</span>\<span class="n">mu_</span>\<span class="n">text</span><span class="p">{</span><span class="n">WM</span><span class="p">}}{</span><span class="n">P_</span><span class="p">{</span><span class="mf">99.95</span><span class="p">}(</span><span class="n">X</span><span class="p">)}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="module-mia_processes.bricks.reports.reporting">
+<span id="mia-processes-bricks-reports-reporting-module"></span><h2>mia_processes.bricks.reports.reporting module<a class="headerlink" href="#module-mia_processes.bricks.reports.reporting" title="Permalink to this headline">¶</a></h2>
+<p>The reporting library of the mia_processes package.</p>
+<p>The purpose of this module is to provide the reporting bricks necessary to
+generate automatic report at the end of a pipeline calculation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Contains</dt>
+<dd class="field-odd"><dl class="field-list simple">
+<dt class="field-odd">Class</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>ReportAnatMriqc</p></li>
+<li><p>ReportFuncMriqc</p></li>
+</ul>
+</dd>
+<dt class="field-even">Function</dt>
+<dd class="field-even"><ul class="simple">
+<li></li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.reporting.ReportAnatMriqc">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.reports.reporting.</span></span><span class="sig-name descname"><span class="pre">ReportAnatMriqc</span></span><a class="reference internal" href="_modules/mia_processes/bricks/reports/reporting.html#ReportAnatMriqc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.reporting.ReportAnatMriqc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
+<ul class="simple">
+<li><p>Generates the report for anatomical data in MRIQC pipeline *</p></li>
+</ul>
+<p>Please, see the complete documentation for the <a href="#id11"><span class="problematic" id="id12">`</span></a>MRIQC_report brick 
+in the populse.mia_processes website
+<a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/bricks/reports/MRIQC_report.html">https://populse.github.io/mia_processes/html/documentation/bricks/reports/MRIQC_report.html</a></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Type ‘ReportAnatMriqc.help()’ for a full description of this process parameters.</p></li>
+<li><p>Type ‘&lt;ReportAnatMriqc&gt;.get_input_spec()’ for a full description of this process input trait types.</p></li>
+<li><p>Type ‘&lt;ReportAnatMriqc&gt;.get_output_spec()’ for a full description of this process output trait types.</p></li>
+</ul>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.reporting.ReportAnatMriqc.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/reporting.html#ReportAnatMriqc.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.reporting.ReportAnatMriqc.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the attributes initialisation / instantiation.</p>
+<p>The input and output plugs are defined here. The special
+‘self.requirement’ attribute (optional) is used to define the
+third-party products necessary for the running of the brick.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.reporting.ReportAnatMriqc.list_outputs">
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/reporting.html#ReportAnatMriqc.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.reporting.ReportAnatMriqc.list_outputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the initialisation step of the brick.</p>
+<p>The main objective of this method is to produce the outputs of the
+bricks (self.outputs) and the associated tags (self.inheritance_dic),
+if defined here. To work properly this method must return
+self.make_initResult() object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.reporting.ReportAnatMriqc.run_process_mia">
+<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/reporting.html#ReportAnatMriqc.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.reporting.ReportAnatMriqc.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the process launch step of the brick.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.reporting.ReportFuncMriqc">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.reports.reporting.</span></span><span class="sig-name descname"><span class="pre">ReportFuncMriqc</span></span><a class="reference internal" href="_modules/mia_processes/bricks/reports/reporting.html#ReportFuncMriqc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.reporting.ReportFuncMriqc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
+<ul class="simple">
+<li><p>Generates the report for functional data in MRIQC pipeline *</p></li>
+</ul>
+<p>Please, see the complete documentation for the <a href="#id13"><span class="problematic" id="id14">`</span></a>MRIQC_report brick in the populse.mia_processes website
+<a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/bricks/reports/MRIQC_report.html">https://populse.github.io/mia_processes/html/documentation/bricks/reports/MRIQC_report.html</a></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Type ‘ReportFuncMriqc.help()’ for a full description of this process parameters.</p></li>
+<li><p>Type ‘&lt;ReportFuncMriqc&gt;.get_input_spec()’ for a full description of this process input trait types.</p></li>
+<li><p>Type ‘&lt;ReportFuncMriqc&gt;.get_output_spec()’ for a full description of this process output trait types.</p></li>
+</ul>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.reporting.ReportFuncMriqc.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/reporting.html#ReportFuncMriqc.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.reporting.ReportFuncMriqc.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the attributes initialisation / instantiation.</p>
+<p>The input and output plugs are defined here. The special
+‘self.requirement’ attribute (optional) is used to define the
+third-party products necessary for the running of the brick.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.reporting.ReportFuncMriqc.list_outputs">
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/reporting.html#ReportFuncMriqc.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.reporting.ReportFuncMriqc.list_outputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the initialisation step of the brick.</p>
+<p>The main objective of this method is to produce the outputs of the
+bricks (self.outputs) and the associated tags (self.inheritance_dic),
+if defined here. To work properly this method must return
+self.make_initResult() object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mia_processes.bricks.reports.reporting.ReportFuncMriqc.run_process_mia">
+<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/reports/reporting.html#ReportFuncMriqc.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.reports.reporting.ReportFuncMriqc.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the process launch step of the brick.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </div>
+  </body>
+</html>

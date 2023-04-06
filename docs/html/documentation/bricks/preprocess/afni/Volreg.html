@@ -1,0 +1,222 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Volreg brick &#8212; mia_processes 2.2.1-dev+2bc8ce9 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
+          <span>mia_processes 2.2.1-dev+2bc8ce9 documentation</span></a></h1>
+        <h2 class="heading"><span>Volreg brick</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <div class="toctree-wrapper compound">
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 35%" />
+<col style="width: 40%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference external" href="../../../../index.html">Home</a></p></td>
+<td><p><a class="reference external" href="../../../documentation.html">Documentation</a></p></td>
+<td><p><a class="reference external" href="https://github.com/populse/mia_processes">GitHub</a></p></td>
+</tr>
+</tbody>
+</table>
+<section id="volreg-brick">
+<h1>Volreg brick<a class="headerlink" href="#volreg-brick" title="Permalink to this headline">¶</a></h1>
+<p>Registers each 3D volume from the input dataset to the base volume using AFNI 3dvolreg command</p>
+<hr class="docutils" />
+<p><strong>Mandatory inputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>in_file</em> (a string representing an existing file)</dt><dd><p>Input file (valid extensions: [.nii, .nii.gz]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/func.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Optional inputs with default value parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>copyorigin</em> (a boolean, optional, default value is False)</dt><dd><p>Copy base file origin coords to output.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>interpolation</em> (Fourier or linear or cubic or quintic or heptic, optional, default value is heptic)</dt><dd><dl class="simple">
+<dt>Different interpolation methods:</dt><dd><p>-Fourier = Use a Fourier method (the default: most accurate; slowest).
+-linear  = Use linear (1st order polynomial) interpolation (least accurate).
+-cubic   = Use the cubic (3rd order) Lagrange polynomial interpolation.
+-quintic = Use the quintic (5th order) Lagrange polynomial interpolation.
+-heptic  = Use the heptic (7th order) Lagrange polynomial interpolation.</p>
+</dd>
+</dl>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="n">heptic</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>output_type</em> (NIFTI or NIFTI_GZ, optional, default value is NIFTI)</dt><dd><div class="line-block">
+<div class="line">Format of the output image (one of NIFTI, NIFTI_GZ).</div>
+<div class="line-block">
+<div class="line">NIFTI: *.nii</div>
+<div class="line">NIFTI_GZ: *.nii.gz</div>
+</div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="n">NIFTI</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>out_prefix</em> (a string, optional, default value is ‘reg’)</dt><dd><p>Prefix of the output image.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;reg_&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>save_oned_matrix</em> (a boolean, optional, default value is False)</dt><dd><p>Save the transformation matrix  oned matrix.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>save_md1d_file</em> (a boolean, optional, default value is False)</dt><dd><p>Save max displacement outputfile (md1d) file.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>timeshift</em> (a boolean, optional, default value is False)</dt><dd><p>Time shift to mean slice time offset.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>twopass</em> (a boolean, optional, default value is False)</dt><dd><p>Do two passes of the registration algorithm:
+(1) with smoothed base and data bricks, with linear interpolation, to get a crude alignment, then’
+(2) with the input base and data bricks, to get a fine alignment.
+This method is useful when aligning high-resolution datasets that may need to be moved more than a few voxels to be aligned.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>zpad</em> (a integer, optional, default value is 4)</dt><dd><p>Zeropad around the edges by ‘n’ voxels during rotations.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">4</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Optional inputs with default value parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>in_weight_volume</em> (a tuple (a string representing an existing file, Integer), optional)</dt><dd><p>Weights for each voxel specified by a file with an optional volume number (defaults to 0).
+Default is Undefined (ie parameter not used).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">(</span><span class="s1">&#39;/home/username/data/raw_data/mask.nii&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Outputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>md1d_file</em> (a strings representing a file, optional)</dt><dd><p>The transformation matrix (extensions: [.aff12.1D]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/reg_func_md.1D&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>oned_file</em> (a strings representing a file)</dt><dd><p>Movement parameters file (extensions: [.txt]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/reg_func_oned.txt&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>oned_matrix</em> (a strings representing a file, optional)</dt><dd><p>Transformation matrix (extensions: [.aff12.1D]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/reg_func_oned_matrix.aff12.1D&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>out_file</em> (a strings representing a file)</dt><dd><p>Register file (extensions: [.nii, .nii.gz]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/reg_func.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<hr class="docutils" />
+<p>Usefull links:</p>
+<p><a class="reference external" href="https://afni.nimh.nih.gov/pub/dist/doc/program_help/3dvolreg.html">AFNI 3dvolreg</a>
+<a class="reference external" href="https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.afni.preprocess.html#volreg">AFNI Volreg - nipype</a></p>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </div>
+  </body>
+</html>

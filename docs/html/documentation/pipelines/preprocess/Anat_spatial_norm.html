@@ -1,0 +1,153 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Anat_spatial_norm pipeline &#8212; mia_processes 2.2.1-dev+2bc8ce9 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/haiku.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
+          <span>mia_processes 2.2.1-dev+2bc8ce9 documentation</span></a></h1>
+        <h2 class="heading"><span>Anat_spatial_norm pipeline</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <div class="toctree-wrapper compound">
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 35%" />
+<col style="width: 42%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference external" href="../../../index.html">Home</a></p></td>
+<td><p><a class="reference external" href="../../documentation.html">Documentation</a></p></td>
+<td><p><a class="reference external" href="https://github.com/populse/mia_processes">GitHub</a></p></td>
+</tr>
+</tbody>
+</table>
+<section id="anat-spatial-norm-pipeline">
+<h1>Anat_spatial_norm pipeline<a class="headerlink" href="#anat-spatial-norm-pipeline" title="Permalink to this headline">¶</a></h1>
+<p>Spatial normalization to MNI (using ‘MNI152NLin2009cAsym’ template).</p>
+<p>Adapted from <a class="reference external" href="https://github.com/nipreps/mriqc/blob/5a0f0408bd0c176dbc46088c6ffe279269180f3f/mriqc/workflows/anatomical.py#L282">mriqc 22.06 anatomical workflow</a></p>
+<hr class="docutils" />
+<p><strong>Pipeline insight</strong></p>
+<div class="line-block">
+<div class="line">Anat_spatial_norm pipeline combines the following pipelines and processes:</div>
+<div class="line-block">
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/others/TemplateFromTemplateFlow.html">Get template from templateFlow</a></div>
+<div class="line-block">
+<div class="line">(default values for template : in_template = ‘MNI152NLin2009cAsym’, resolution = 2, suffix = ‘T1w’,</div>
+<div class="line-block">
+<div class="line">default values for template mask : in_template = ‘MNI152NLin2009cAsym’, resolution = 2, suffix = ‘mask’, desc =’brain’)</div>
+</div>
+</div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/others/Mask.html">Mask</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/ants/AffineInitializer.html">Affine Initilizer</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/ants/Registration.html">Registration</a></div>
+<div class="line-block">
+<div class="line">(default values:</div>
+<div class="line">convergence_threshold= [1e-07, 1e-08],</div>
+<div class="line">convergence_window_size = [15, 5, 3],</div>
+<div class="line">interpolation = ‘LanczosWindowedSinc’,</div>
+<div class="line">metric = [‘Mattes’, ‘Mattes’],</div>
+<div class="line">metric_weight = [1.0, 1.0],</div>
+<div class="line">number_of_iterations = [[20], [15]],</div>
+<div class="line">radius_or_number_of_bins = [56, 56],</div>
+<div class="line">sampling_percentage = [0.2, 0.1],</div>
+<div class="line">sampling_strategy = [‘Random’, ‘Random’],</div>
+<div class="line">shrink_factors = [[2], [1]],</div>
+<div class="line">smoothing_sigmas = [[4.0], [2.0]],</div>
+<div class="line">transform_parameters = [(1.0,),(1.0,)],</div>
+<div class="line">transforms = [‘Rigid’, ‘Affine’],</div>
+<div class="line">use_histogram_matching = [False,True])</div>
+</div>
+</div>
+</div>
+<a class="reference internal image-reference" href="../../../_images/Anat_spatial_norm_pipeline.png"><img alt="Anat spatial norm pipeline" src="../../../_images/Anat_spatial_norm_pipeline.png" style="width: 800px;" /></a>
+<p><strong>Mandatory inputs parameters</strong></p>
+<ul>
+<li><dl>
+<dt><em>moving_image</em> (a string representing an existing file)</dt><dd><p>Anatomical image (T1w or T2w) to register in MNI space (valid extensions: [.nii, .nii.gz]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/T1w.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>moving_mask</em> (a string representing an existing file)</dt><dd><p>Brain mask used to mask moving image (valid extensions: [.nii, .nii.gz]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/T1w_desc-brain_mask.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Outputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>composite_transform</em></dt><dd><p>Composite transform (moving_image masked space –&gt; MNI)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/T1w_masked_Composite.h5&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>inverse_composite_transform</em></dt><dd><p>Inverse composite transform (MNI –&gt; moving_image masked space)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/T1w_masked_InverseComposite.h5&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>warped_image</em></dt><dd><p>Masked moving image in template space.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/w_T1w_masked.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<hr class="docutils" />
+<p>Usefull links:</p>
+<p><a class="reference external" href="https://mriqc.readthedocs.io/en/22.0.6/workflows.html#mriqc.workflows.anatomical.spatial_normalization">mric spatial norm pipeline</a></p>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </div>
+  </body>
+</html>

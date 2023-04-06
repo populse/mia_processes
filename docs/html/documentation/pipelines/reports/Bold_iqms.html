@@ -1,0 +1,289 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Bold_iqms pipeline &#8212; mia_processes 2.2.1-dev+2bc8ce9 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/haiku.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
+          <span>mia_processes 2.2.1-dev+2bc8ce9 documentation</span></a></h1>
+        <h2 class="heading"><span>Bold_iqms pipeline</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <div class="toctree-wrapper compound">
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 35%" />
+<col style="width: 42%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference external" href="../../../index.html">Home</a></p></td>
+<td><p><a class="reference external" href="../../documentation.html">Documentation</a></p></td>
+<td><p><a class="reference external" href="https://github.com/populse/mia_processes">GitHub</a></p></td>
+</tr>
+</tbody>
+</table>
+<section id="bold-iqms-pipeline">
+<h1>Bold_iqms pipeline<a class="headerlink" href="#bold-iqms-pipeline" title="Permalink to this headline">¶</a></h1>
+<p>Compute no-reference IQMs (image quality metrics) from functional (BOLD).
+Used in bold_mriqc pipeline.</p>
+<hr class="docutils" />
+<p><strong>Pipeline insight</strong></p>
+<div class="line-block">
+<div class="line">Bold_iqms pipeline combines the following pipelines and processes:</div>
+<div class="line-block">
+<div class="line">- <a class="reference external" href="../../bricks/reports/OutlierCount.html">Outlier Count</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/reports/CarpetParcellation.html">Carpet parcellation</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/reports/FramewiseDisplacement.html">Compute frame wise displacement</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/reports/Spikes.html">Spikes</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/reports/GCor.html">Compute GCor</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/reports/ComputeDVARS.html">Compute DVARS</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/reports/FWHMX.html">Compute FWHMX</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/reports/QualityIndex.html">Compute quality index</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/reports/BoldIQMS.html">Compute IQMs</a></div>
+</div>
+</div>
+<p><strong>Mandatory inputs parameters</strong></p>
+<ul>
+<li><dl>
+<dt><em>brainmask</em> (a string representing an existing file)</dt><dd><p>Brain mask. An existing file (valid extensions: [.nii, .nii.gz]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/automask_mean_reg_func_valid.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>epi_mean</em> (a string representing an existing file)</dt><dd><p>Mean functional image (BOLD). An existing file (valid extensions: [.nii, .nii.gz]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/mean_reg_func_valid.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>epi_parc</em> (a string representing an existing file)</dt><dd><p>Template data in bold space (extensions: [.nii, .nii.gz]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/t_tpl-MNI152NLin2009cAsym_res-01_desc-carpet_dseg.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>hmc_motion</em> (a string representing an existing file)</dt><dd><p>Movement parameters file (extensions: [.txt]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/reg_d_func_oned.txt&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>ras_epi</em> (a string representing an existing file)</dt><dd><p>Functional image (BOLD). An existing file (valid extensions: [.nii, .nii.gz]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/func_valid.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Optional inputs parameters</strong></p>
+<ul>
+<li><dl>
+<dt><em>dummy_TRS</em> (an interger, optional)</dt><dd><p>Volume to discard</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">3</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>dvars_intensity_normalization</em> (a float, optional)</dt><dd><p>See <a class="reference external" href="../../bricks/reports/ComputeDvars.html">dvars brick</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mf">1000.0</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>dvars_remove_zero_variance</em> (a boolean, optional)</dt><dd><p>See <a class="reference external" href="../../bricks/reports/ComputeDvars.html">dvars brick</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">True</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>epi_tsnr</em> (a string representing an existing file, optional)</dt><dd><p>See <a class="reference external" href="../../bricks/others/TSNR.html">TSNR brick</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/reg_func_valid_tsnr.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><a href="#id2"><span class="problematic" id="id3">*</span></a>fd_normalize (a boolean, optional)</dt><dd><p>See <cite>Frame displacement brick &lt;../../bricks/others/FramewiseDisplacement.html&gt;</cite></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>fd_parameter_source</em> (optional)</dt><dd><p>See <a class="reference external" href="../../bricks/others/FramewiseDisplacement.html">Frame displacement brick</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;AFNI&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>fd_radius</em> (a float, optional)</dt><dd><p>See <a class="reference external" href="../../bricks/others/FramewiseDisplacement.html">Frame displacement brick</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mf">50.0</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>fd_thresh</em> (a float, optional)</dt><dd><p>Frame displacement threshold</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mf">0.2</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>fwhm_combine</em> (a boolean, optional)</dt><dd><p>See <a class="reference external" href="../../bricks/others/FWHMx.html">FWHMx brick</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">True</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>fwhm_detrend</em> (a boolean, optional)</dt><dd><p>See <a class="reference external" href="../../bricks/others/FWHMx.html">FWHMx brick</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">True</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>hmc_epi</em> (a string representing an existing file, optional)</dt><dd><p>Head motion corrected functional image</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/reg_func_valid.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>quality_index_automask</em> (a boolean, optional)</dt><dd><p>See <a class="reference external" href="../../bricks/reports/QualityIndex.html">quality index brick</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">True</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>outlier_fraction</em> (a boolean, optional)</dt><dd><p>See <a class="reference external" href="../../bricks/preprocess/others/OutlierCount.html">Outlier Count brick</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">True</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>spikes_detrend</em> (a boolean, optional)</dt><dd><p>See <a class="reference external" href="../../bricks/reports/Spikes.html">Spikes brick</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>spikes_no_zscore</em> (a boolean, optional)</dt><dd><p>See <a class="reference external" href="../../bricks/reports/Spikes.html">Spikes brick</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">True</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>spikes_skip_frames</em> (an integer, optional)</dt><dd><p>See <a class="reference external" href="../../bricks/reports/Spikes.html">Spikes brick</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>spikes_skipe_thresh</em> (a float, optional)</dt><dd><p>See <a class="reference external" href="../../bricks/reports/Spikes.html">Spikes brick</a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mf">6.0</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Outputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>BoldQC_out_file</em></dt><dd><p>Functional Image-Quality Metrics summary json file.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/mean_reg_func_valid_bold_qc.json&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>carpet_seg</em></dt><dd><p>Carpet segmentation.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/cseg_t_tpl-MNI152NLin2009cAsym_res-01_desc-carpet_dseg.nii.gz&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<hr class="docutils" />
+<p>Usefull links:</p>
+<p><a class="reference external" href="https://mriqc.readthedocs.io/en/22.0.6/">mriqc 22.06</a></p>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </div>
+  </body>
+</html>

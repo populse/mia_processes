@@ -1,0 +1,102 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>mia_processes.pipelines.preprocess.bold_hmc_pipeline &#8212; mia_processes 2.2.1-dev+c0ad978 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
+          <span>mia_processes 2.2.1-dev+c0ad978 documentation</span></a></h1>
+        <h2 class="heading"><span>mia_processes.pipelines.preprocess.bold_hmc_pipeline</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <h1>Source code for mia_processes.pipelines.preprocess.bold_hmc_pipeline</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">capsul.api</span> <span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="kn">import</span> <span class="nn">traits.api</span> <span class="k">as</span> <span class="nn">traits</span>
+
+
+<div class="viewcode-block" id="Bold_hmc_pipeline"><a class="viewcode-back" href="../../../../mia_processes.pipelines.preprocess.html#mia_processes.pipelines.preprocess.bold_hmc_pipeline.Bold_hmc_pipeline">[docs]</a><span class="k">class</span> <span class="nc">Bold_hmc_pipeline</span><span class="p">(</span><span class="n">Pipeline</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Bold_hmc_pipeline.pipeline_definition"><a class="viewcode-back" href="../../../../mia_processes.pipelines.preprocess.html#mia_processes.pipelines.preprocess.bold_hmc_pipeline.Bold_hmc_pipeline.pipeline_definition">[docs]</a>    <span class="k">def</span> <span class="nf">pipeline_definition</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># nodes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;despike&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;mia_processes.bricks.preprocess.&quot;</span>
+                         <span class="s2">&quot;afni.processes.Despike&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;deoblique&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;mia_processes.bricks.preprocess.&quot;</span>
+                         <span class="s2">&quot;afni.processes.RefitDeoblique&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;volreg&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;mia_processes.bricks.preprocess.&quot;</span>
+                         <span class="s2">&quot;afni.processes.Volreg&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;volreg&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">twopass</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;despike&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">despike</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;deoblique&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">deoblique</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="c1"># links</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;despike&quot;</span><span class="p">,</span> <span class="s2">&quot;in_file&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;despike&quot;</span><span class="p">,</span> <span class="s2">&quot;despike&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;deoblique&quot;</span><span class="p">,</span> <span class="s2">&quot;deoblique&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;despike.out_file-&gt;deoblique.in_file&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;deoblique.out_file-&gt;volreg.in_file&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;volreg&quot;</span><span class="p">,</span> <span class="s2">&quot;out_file&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;volreg&quot;</span><span class="p">,</span> <span class="s2">&quot;oned_file&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># parameters order</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reorder_traits</span><span class="p">((</span><span class="s2">&quot;in_file&quot;</span><span class="p">,</span> <span class="s2">&quot;despike&quot;</span><span class="p">,</span> <span class="s2">&quot;deoblique&quot;</span><span class="p">,</span> <span class="s2">&quot;out_file&quot;</span><span class="p">,</span>
+                             <span class="s2">&quot;oned_file&quot;</span><span class="p">))</span>
+
+        <span class="c1"># nodes positions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_position</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;despike&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">21.799999999999983</span><span class="p">,</span> <span class="mf">294.59999999999997</span><span class="p">),</span>
+            <span class="s2">&quot;deoblique&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">186.20000000000005</span><span class="p">,</span> <span class="mf">439.9999999999999</span><span class="p">),</span>
+            <span class="s2">&quot;volreg&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">353.6</span><span class="p">,</span> <span class="mf">514.3999999999999</span><span class="p">),</span>
+            <span class="s2">&quot;inputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">575.73325</span><span class="p">,</span> <span class="mf">294.9679999999999</span><span class="p">),</span>
+            <span class="s2">&quot;outputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">633.9562500000001</span><span class="p">,</span> <span class="mf">514.3999999999999</span><span class="p">),</span>
+        <span class="p">}</span>
+
+        <span class="c1"># nodes dimensions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_dimension</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;despike&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">165.65625</span><span class="p">,</span> <span class="mf">180.0</span><span class="p">),</span>
+            <span class="s2">&quot;deoblique&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">151.03125</span><span class="p">,</span> <span class="mf">110.0</span><span class="p">),</span>
+            <span class="s2">&quot;volreg&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">176.625</span><span class="p">,</span> <span class="mf">250.0</span><span class="p">),</span>
+            <span class="s2">&quot;inputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">110.26875</span><span class="p">,</span> <span class="mf">152.0</span><span class="p">),</span>
+            <span class="s2">&quot;outputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">90.03125</span><span class="p">,</span> <span class="mf">83.0</span><span class="p">),</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_autoexport_nodes_parameters</span> <span class="o">=</span> <span class="kc">False</span></div></div>
+</pre></div>
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </div>
+  </body>
+</html>

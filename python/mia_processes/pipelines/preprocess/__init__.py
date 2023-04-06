@@ -8,15 +8,13 @@
 # for details.
 ##########################################################################
 
-from .anat_airmask_pipeline import Anat_airmask_pipeline
-from .anat_headmask_pipeline import Anat_headmask_pipeline
-from .anat_mni_tpms_pipeline import Anat_mni_tpms_pipeline
-from .anat_mriqc_pipeline import Anat_mriqc_pipeline
-from .anat_skullstrip_pipeline import Anat_skullstrip_pipeline
-from .anat_skullstrip_synthstrip_pipeline import Anat_skullstrip_synthstrip_pipeline
+from .anat_airmask import Anat_airmask
+from .anat_headmask import Anat_headmask
+from .anat_mni_tpms import Anat_mni_tpms
+from .anat_skullstrip import Anat_skullstrip
+from .anat_skullstrip_synthstrip import Anat_skullstrip_synthstrip
 from .anat_spatial_norm import Anat_spatial_norm
-from .bold_hmc_pipeline import Bold_hmc_pipeline
+from .bold_hmc import Bold_hmc
 from .bold_mni_align import Bold_mni_align
-from .bold_mriqc_pipeline import Bold_mriqc_pipeline
 from .spatial_mask import Spatial_mask
 from .spatial_preprocessing import Spatial_preprocessing

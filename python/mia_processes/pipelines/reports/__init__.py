@@ -8,5 +8,5 @@
 # for details.
 ##########################################################################
 
-from .bold_iqms_pipeline import Bold_iqms_pipeline
+from .bold_iqms import Bold_iqms
 from .rois_1 import Rois_1

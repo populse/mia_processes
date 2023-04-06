@@ -4,6 +4,13 @@ import traits.api as traits
 
 class Anat_spatial_norm(Pipeline):
 
+    """
+    Spatial normalization to MNI (using 'MNI152NLin2009cAsym' template).
+
+    Adapted from `mriqc 22.06 anatomical workflow <https://github.com/nipreps/mriqc/blob/5a0f0408bd0c176dbc46088c6ffe279269180f3f/mriqc/workflows/anatomical.py#L282>`_
+
+    """
+
     def pipeline_definition(self):
         # nodes
         self.add_process("mask_moving_image",
@@ -38,14 +45,14 @@ class Anat_spatial_norm(Pipeline):
                                                                      True]
         self.add_process("template_mask",
                          "mia_processes.bricks.preprocess."
-                         "others.processing.Template")
+                         "others.processing.TemplateFromTemplateFlow")
         self.nodes["template_mask"].process.suffix = 'mask'
         self.nodes["template_mask"].process.desc = 'brain'
         self.nodes["template_mask"].process.in_template = 'MNI152NLin2009cAsym'
         self.nodes["template_mask"].process.resolution = 2
         self.add_process("template",
                          "mia_processes.bricks.preprocess."
-                         "others.processing.Template")
+                         "others.processing.TemplateFromTemplateFlow")
         self.nodes["template"].process.suffix = 'T1w'
         self.nodes["template"].process.in_template = 'MNI152NLin2009cAsym'
         self.nodes["template"].process.resolution = 2

@@ -4,6 +4,9 @@ import traits.api as traits
 
 class Bold_mni_align(Pipeline):
 
+    """
+    Registered a mean functional image EPI in MNI space (for checking out registration).
+    """
     def pipeline_definition(self):
         # nodes
         self.add_process("affineinitializer",
@@ -57,17 +60,17 @@ class Bold_mni_align(Pipeline):
         self.nodes["applytransforms"].process.interpolation = 'MultiLabel'
         self.add_process("template",
                          "mia_processes.bricks.preprocess."
-                         "others.processing.Template")
+                         "others.processing.TemplateFromTemplateFlow")
         self.nodes["template"].process.suffix = 'boldref'
         self.nodes["template"].process.desc = 'fMRIPrep'
         self.add_process("template_mask",
                          "mia_processes.bricks.preprocess."
-                         "others.processing.Template")
+                         "others.processing.TemplateFromTemplateFlow")
         self.nodes["template_mask"].process.suffix = 'mask'
         self.nodes["template_mask"].process.desc = 'brain'
         self.add_process("seg_template",
                          "mia_processes.bricks.preprocess."
-                         "others.processing.Template")
+                         "others.processing.TemplateFromTemplateFlow")
         self.nodes["seg_template"].process.suffix = 'dseg'
         self.nodes["seg_template"].process.desc = 'carpet'
 

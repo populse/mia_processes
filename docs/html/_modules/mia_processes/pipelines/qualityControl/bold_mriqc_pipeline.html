@@ -1,0 +1,190 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>mia_processes.pipelines.qualityControl.bold_mriqc_pipeline &#8212; mia_processes 2.2.1-dev+d7ceb28 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
+          <span>mia_processes 2.2.1-dev+d7ceb28 documentation</span></a></h1>
+        <h2 class="heading"><span>mia_processes.pipelines.qualityControl.bold_mriqc_pipeline</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <h1>Source code for mia_processes.pipelines.qualityControl.bold_mriqc_pipeline</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">from</span> <span class="nn">capsul.api</span> <span class="kn">import</span> <span class="n">Pipeline</span>
+<span class="kn">import</span> <span class="nn">traits.api</span> <span class="k">as</span> <span class="nn">traits</span>
+
+
+<div class="viewcode-block" id="Bold_mriqc_pipeline"><a class="viewcode-back" href="../../../../mia_processes.pipelines.qualityControl.html#mia_processes.pipelines.qualityControl.bold_mriqc_pipeline.Bold_mriqc_pipeline">[docs]</a><span class="k">class</span> <span class="nc">Bold_mriqc_pipeline</span><span class="p">(</span><span class="n">Pipeline</span><span class="p">):</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get no-reference IQMs (image quality metrics) from functional MRI data</span>
+<span class="sd">    using mriqc functional workflow (mriqc v22.06).</span>
+
+<span class="sd">    Please, see the complete documention for Anat_mriqc_pipeline </span>
+<span class="sd">    in the populse.mia_processes web site:</span>
+<span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/pipelines/qualiTyControl/Anat_mriqc_pipeline.html&gt;`_</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Bold_mriqc_pipeline.pipeline_definition"><a class="viewcode-back" href="../../../../mia_processes.pipelines.qualityControl.html#mia_processes.pipelines.qualityControl.bold_mriqc_pipeline.Bold_mriqc_pipeline.pipeline_definition">[docs]</a>    <span class="k">def</span> <span class="nf">pipeline_definition</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># nodes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;bold_iqms_pipeline&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;mia_processes.pipelines.reports.bold_iqms_pipeline.&quot;</span>
+                         <span class="s2">&quot;Bold_iqms_pipeline&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;bold_iqms_pipeline&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">nodes_activation</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;outliercount&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s1">&#39;boldiqms&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s1">&#39;carpetparcellation&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s1">&#39;framewisedisplacement&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s1">&#39;spikes&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s1">&#39;gcor&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s1">&#39;computedvars&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s1">&#39;fwhmx&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s1">&#39;qualityindex&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;nonsteadystatedetector&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;mia_processes.bricks.preprocess.others.processing.&quot;</span>
+                         <span class="s2">&quot;NonSteadyStateDetector&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;sanitize&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;mia_processes.bricks.preprocess.others.processing.&quot;</span>
+                         <span class="s2">&quot;Sanitize&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;tsnr&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;mia_processes.bricks.preprocess.others.processing.&quot;</span>
+                         <span class="s2">&quot;TSNR&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;mia_processes.bricks.preprocess.afni.processes.&quot;</span>
+                         <span class="s2">&quot;TStatMean&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;automask&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;mia_processes.bricks.preprocess.afni.processes.&quot;</span>
+                         <span class="s2">&quot;Automask&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;volreg&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;mia_processes.bricks.preprocess.afni.processes.&quot;</span>
+                         <span class="s2">&quot;Volreg&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;volreg&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">twopass</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;volreg&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">interpolation</span> <span class="o">=</span> <span class="s1">&#39;Fourier&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;bold_mni_align&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;mia_processes.pipelines.preprocess.bold_mni_align.&quot;</span>
+                         <span class="s2">&quot;Bold_mni_align&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;bold_mni_align&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_plug_value</span><span class="p">(</span><span class="s2">&quot;epi_mask&quot;</span><span class="p">,</span>
+                                                    <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;bold_mni_align&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span>
+            <span class="s2">&quot;registration&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_plug_value</span><span class="p">(</span><span class="s2">&quot;moving_image_masks&quot;</span><span class="p">,</span>
+                                           <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;bold_mni_align&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">nodes_activation</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;affineinitializer&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s1">&#39;registration&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s1">&#39;n4biasfieldcorrection&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s1">&#39;applytransforms&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s1">&#39;template&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s1">&#39;template_mask&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s1">&#39;seg_template&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;bold_mni_align&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">epi_mask</span> <span class="o">=</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;mriqc_func_report&quot;</span><span class="p">,</span>
+                         <span class="s2">&quot;mia_processes.bricks.reports.reporting.&quot;</span>
+                         <span class="s2">&quot;MRIQC_func_report&quot;</span><span class="p">)</span>
+
+        <span class="c1"># links</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;sanitize&quot;</span><span class="p">,</span> <span class="s2">&quot;in_file&quot;</span><span class="p">,</span>
+                              <span class="n">pipeline_parameter</span><span class="o">=</span><span class="s2">&quot;func_file&quot;</span><span class="p">,</span>
+                              <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;func_file-&gt;nonsteadystatedetector.in_file&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;func_file-&gt;mriqc_func_report.func&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;bold_iqms_pipeline.BoldQC_out_file-&gt;&quot;</span>
+                      <span class="s2">&quot;mriqc_func_report.IQMs_file&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;nonsteadystatedetector.n_volumes_to_discard-&gt;&quot;</span>
+                      <span class="s2">&quot;sanitize.n_volumes_to_discard&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;nonsteadystatedetector.n_volumes_to_discard-&gt;&quot;</span>
+                      <span class="s2">&quot;bold_iqms_pipeline.dummy_TRs&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;sanitize.out_file-&gt;bold_iqms_pipeline.ras_epi&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;sanitize.out_file-&gt;volreg.in_file&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;tsnr.out_tsnr_file-&gt;bold_iqms_pipeline.epi_tsnr&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;mean.out_file-&gt;bold_mni_align.epi_mean&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;mean.out_file-&gt;automask.in_file&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;mean.out_file-&gt;bold_iqms_pipeline.epi_mean&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;automask.out_file-&gt;bold_mni_align.epi_mask&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;automask.out_file-&gt;bold_iqms_pipeline.brainmask&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;volreg.out_file-&gt;tsnr.in_file&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;volreg.out_file-&gt;mean.in_file&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;volreg.out_file-&gt;bold_iqms_pipeline.hmc_epi&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;volreg.oned_file-&gt;&quot;</span>
+                      <span class="s2">&quot;bold_iqms_pipeline.hmc_motion&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;bold_mni_align.epi_parc-&gt;bold_iqms_pipeline.epi_parc&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;bold_mni_align.epi_mni-&gt;mriqc_func_report.norm_func&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;mriqc_func_report&quot;</span><span class="p">,</span> <span class="s2">&quot;report&quot;</span><span class="p">,</span>
+                              <span class="n">pipeline_parameter</span><span class="o">=</span><span class="s2">&quot;func_report&quot;</span><span class="p">,</span>
+                              <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;bold_iqms_pipeline&quot;</span><span class="p">,</span> <span class="s2">&quot;carpet_seg&quot;</span><span class="p">,</span>
+                              <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># parameters order</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reorder_traits</span><span class="p">((</span><span class="s2">&quot;func_file&quot;</span><span class="p">,</span> <span class="s2">&quot;carpet_seg&quot;</span><span class="p">,</span> <span class="s2">&quot;func_report&quot;</span><span class="p">))</span>
+
+        <span class="c1"># nodes positions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_position</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;bold_iqms_pipeline&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">842.4679035022216</span><span class="p">,</span> <span class="mf">159.92981034666673</span><span class="p">),</span>
+            <span class="s2">&quot;nonsteadystatedetector&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">717.1107544384864</span><span class="p">,</span> <span class="mf">113.59195862760868</span><span class="p">),</span>
+            <span class="s2">&quot;sanitize&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">234.51652984508183</span><span class="p">,</span> <span class="mf">346.43391671594577</span><span class="p">),</span>
+            <span class="s2">&quot;tsnr&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">127.7391993962027</span><span class="p">,</span> <span class="mf">60.050718720000134</span><span class="p">),</span>
+            <span class="s2">&quot;mean&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">173.11641600000007</span><span class="p">,</span> <span class="o">-</span><span class="mf">181.6966963199999</span><span class="p">),</span>
+            <span class="s2">&quot;automask&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">144.1320191999998</span><span class="p">,</span> <span class="o">-</span><span class="mf">189.81009407999983</span><span class="p">),</span>
+            <span class="s2">&quot;volreg&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">527.8792115199997</span><span class="p">,</span> <span class="o">-</span><span class="mf">149.2405196799998</span><span class="p">),</span>
+            <span class="s2">&quot;bold_mni_align&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">283.31445431594545</span><span class="p">,</span> <span class="mf">116.08725895240536</span><span class="p">),</span>
+            <span class="s2">&quot;inputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">890.4021152762024</span><span class="p">,</span> <span class="mf">569.7810895696218</span><span class="p">),</span>
+            <span class="s2">&quot;outputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1530.1459691893501</span><span class="p">,</span> <span class="mf">147.22476292910784</span><span class="p">),</span>
+            <span class="s2">&quot;mriqc_func_report&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1282.5825850836268</span><span class="p">,</span> <span class="mf">1058.7313069644374</span><span class="p">),</span>
+        <span class="p">}</span>
+
+        <span class="c1"># nodes dimensions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_dimension</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;bold_iqms_pipeline&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">299.734375</span><span class="p">,</span> <span class="mf">810.0</span><span class="p">),</span>
+            <span class="s2">&quot;nonsteadystatedetector&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">194.09375</span><span class="p">,</span> <span class="mf">75.0</span><span class="p">),</span>
+            <span class="s2">&quot;sanitize&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">202.453125</span><span class="p">,</span> <span class="mf">215.0</span><span class="p">),</span>
+            <span class="s2">&quot;tsnr&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">194.03125</span><span class="p">,</span> <span class="mf">215.0</span><span class="p">),</span>
+            <span class="s2">&quot;mean&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">146.0</span><span class="p">,</span> <span class="mf">145.0</span><span class="p">),</span>
+            <span class="s2">&quot;automask&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">146.0</span><span class="p">,</span> <span class="mf">145.0</span><span class="p">),</span>
+            <span class="s2">&quot;volreg&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">154.453125</span><span class="p">,</span> <span class="mf">215.0</span><span class="p">),</span>
+            <span class="s2">&quot;bold_mni_align&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">377.796875</span><span class="p">,</span> <span class="mf">670.0</span><span class="p">),</span>
+            <span class="s2">&quot;inputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">243.9375</span><span class="p">,</span> <span class="mf">1265.0</span><span class="p">),</span>
+            <span class="s2">&quot;outputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">203.16492003946317</span><span class="p">,</span> <span class="mf">355.0</span><span class="p">),</span>
+            <span class="s2">&quot;mriqc_func_report&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">210.8125</span><span class="p">,</span> <span class="mf">425.0</span><span class="p">),</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_autoexport_nodes_parameters</span> <span class="o">=</span> <span class="kc">False</span></div></div>
+</pre></div>
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </div>
+  </body>
+</html>
