@@ -897,11 +897,11 @@ class BoldIQMs(ProcessMIA):
 
         # Dummy TRs
         try:
-            dummyTRs = int(self.in_dummy_TRs)
+            dummy_trs = int(self.in_dummy_TRs)
         except ValueError:
-             print("\ndummyTRs value error")
+             print("\ndummy_trs value error")
         else:
-            results_dict["dummyTRs"] = dummyTRs
+            results_dict["dummy_trs"] = dummy_trs
 
         # Spikes
         if self.in_spikes_file:

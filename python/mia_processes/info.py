@@ -110,6 +110,7 @@ VERSION = __version__
 CLASSIFIERS = CLASSIFIERS
 PLATFORMS = 'OS Independent'
 REQUIRES = [
+    'dipy',
     'nilearn',
     'nipy',
     'nipype',

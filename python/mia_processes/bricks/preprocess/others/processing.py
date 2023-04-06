@@ -1924,7 +1924,7 @@ class IntensityClip(ProcessMIA):
             if self.output_directory:
                 self.outputs['out_file'] = os.path.join(
                     self.output_directory, os.path.split(
-                        self.in_file)[1].replace('.nii', '_clippep.nii'))
+                        self.in_file)[1].replace('.nii', '_clipped.nii'))
             else:
                 print('No output_directory was found...!\n')
                 return

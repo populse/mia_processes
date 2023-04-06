@@ -367,8 +367,8 @@ class Report():
         # fd_perc
         self.report.append(self.get_iqms_data('fd_perc'))
         self.report.append(Spacer(0 * mm, 2.5 * mm))
-        # dummyTRs
-        self.report.append(self.get_iqms_data('dummyTRs'))
+        # dummy_trs
+        self.report.append(self.get_iqms_data('dummy_trs'))
         self.report.append(Spacer(0 * mm, 82 * mm))
         # Footnote
         line = ReportLine(500)

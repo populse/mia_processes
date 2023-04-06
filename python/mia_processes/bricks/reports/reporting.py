@@ -960,7 +960,7 @@ class ReportFuncMriqc(ProcessMIA):
                         "Correction of Brain Images</i>, NeuroImage, 17(2), "
                         "825-841, 2002."
                         ],
-            "dummyTRs": ["Number of volumes identified as non-steady state",
+            "dummy_trs": ["Number of volumes identified as non-steady state",
                          2,
                          None
                          ],
