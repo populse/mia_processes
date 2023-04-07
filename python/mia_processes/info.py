@@ -111,15 +111,20 @@ CLASSIFIERS = CLASSIFIERS
 PLATFORMS = 'OS Independent'
 REQUIRES = [
     'dipy',
+    'nibabel',
     'nilearn',
     'nipy',
     'nipype',
     'nitime',
+    'nitransforms',
+    'numpy',
     'populse_db >=2.1.0',
     'populse_mia >= 2.2.0',
     'reportlab',
+    'scipy',
     'statsmodels',
-    'templateflow'
+    'templateflow',
+    'torch',
 ]
 EXTRA_REQUIRES = {
     'doc': [

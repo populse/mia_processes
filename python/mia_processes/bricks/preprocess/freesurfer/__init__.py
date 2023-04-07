@@ -8,4 +8,4 @@
 # for details.
 ##########################################################################
 
-from .processes import (Binarize, SynthStrip)
+from .processes import (Binarize, SynthStrip, SynthStrip_2)
