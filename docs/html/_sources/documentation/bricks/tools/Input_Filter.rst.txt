@@ -43,8 +43,6 @@ To filter the content of the Data Browser tab or the output data of another bric
 
 *[Preselected data (or not) from the Data Browser or the output data from another brick] -> Input_Filter -> ['/home/ArthurBlair/data/raw_data/Anat.nii']*
 
->>> from mia_processes.bricks.tools import Input_Filter
->>> Input_Filter.help()
 
 **Inputs parameters:**
 

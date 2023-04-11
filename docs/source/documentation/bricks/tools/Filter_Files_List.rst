@@ -43,8 +43,6 @@ Selects one or more (slicing) elements from a list
 
 ['/home/ArthurBlair/data/raw_data/Anat.nii', '/home/ArthurBlair/data/raw_data/Func.nii'] -> Filter_Files_List -> ['/home/ArthurBlair/data/raw_data/Func.nii']
 
->>> from mia_processes.bricks.tools import Filter_Files_List
->>> Filter_Files_List.help()
 
 **Inputs parameters:**
 

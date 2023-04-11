@@ -65,7 +65,8 @@ Mia_processes's documentation
       - `IntensityClip <bricks/preprocess/others/IntensityClip.html>`_
       - `Mask <bricks/preprocess/others/Mask.html>`_
       - `NonSteadyDetector <bricks/preprocess/others/NonSteadyDetector.html>`_
-      - `Resample <bricks/preprocess/others/Resample.html>`_
+      - `Resample_1 <bricks/preprocess/others/Resample_1.html>`_ (in progress)
+      - `Resample_2 <bricks/preprocess/others/Resample_2.html>`_ (in progress)
       - `RotationMask <bricks/preprocess/others/RotationMask.html>`_
       - `Sanitize <bricks/preprocess/others/Sanitize.html>`_
       - `TemplateFromTemplateFlow <bricks/preprocess/others/TemplateFromTemplateFlow.html>`_
@@ -90,17 +91,29 @@ Mia_processes's documentation
     - `CarpetParcellation <bricks/reports/CarpetParcellation.html>`_
     - `ComputeDVARS <bricks/reports/ComputeDVARS.html>`_
     - `FramewiseDisplacement <bricks/reports/FramewiseDisplacement.html>`_
+    - `Mean_stdDev_calc <bricks/reports/Mean_stdDev_calc.html>`_ (in progress)
     - `ReportAnatMriqc <bricks/reports/ReportAnatMriqc.html>`_
     - `ReportFuncMriqc <bricks/reports/ReportFuncMriqc.html>`_
+    - `Result_collector <bricks/reports/Result_collector.html>`_ (in progress)
     - `Spikes <bricks/reports/Spikes.html>`_
 
+  - **stats**
+
+    - **spm**
+    
+      - `EstimateConstrast <bricks/stats/spm/EstimateConstrast.html>`_ (in progress)
+      - `EstimateModel <bricks/stats/spm/EstimateModel.html>`_ (in progress)
+      - `LevelDesign <bricks/stats/spm/LevelDesign.html>`_ (in progress)
+  
   - **tools**
 
+    - `Concat_to_list_of_list <bricks/tools/Concat_to_list_of_list.html>`_
     - `Files_To_List <bricks/tools/Files_To_List.html>`_
     - `Filter_Files_List <bricks/tools/Filter_Files_List.html>`_
     - `Input_Filter <bricks/tools/Input_Filter.html>`_
     - `List_Duplicate <bricks/tools/List_Duplicate.html>`_
     - `List_To_File <bricks/tools/List_To_File.html>`_  
+    - `Make_A_List <bricks/tools/Make_A_List.html>`_  
 
 - **pipelines**
 
@@ -114,6 +127,7 @@ Mia_processes's documentation
     - `Anat_spatial_norm <pipelines/preprocess/Anat_spatial_norm.html>`_
     - `Bold_hmc <pipelines/preprocess/Bold_hmc.html>`_
     - `Bold_mni_align <pipelines/preprocess/Bold_mni_align.html>`_
+    - `Spatial_mask <pipelines/preprocess/Spatial_mask.html>`_ (in progress)
     - `Spatial_preprocessing_1 <pipelines/preprocess/Spatial_preprocessing_1.html>`_
 
   - **qualityControl**
@@ -124,5 +138,10 @@ Mia_processes's documentation
   - **reports**
 
     - `Bold_iqms <pipelines/reports/Bold_iqms.html>`_
+    - `Rois_1 <pipelines/reports/Rois_1.html>`_ (in progress)
+  
+  - **stats**
+
+    - `Bold_stats <pipelines/stats/Bold_stats.html>`_ (in progress)
 
 

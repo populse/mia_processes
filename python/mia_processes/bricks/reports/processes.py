@@ -10,11 +10,7 @@ compute necessary values for reporting.
         - ComputeDVARS
         - CarpetParcellation
         - FramewiseDisplacement
-        - FWHMx
-        - GCOR
         - Mean_stdDev_calc
-        - OutlierCount
-        - QualityIndex
         - Result_collector
         - Spikes
 

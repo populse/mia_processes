@@ -696,12 +696,14 @@ class List_To_File(ProcessMIA):
         """Dedicated to the process launch step of the brick."""
         return
 
+
 class Make_A_List(ProcessMIA):
     """
     *From 2 objects, generating a list containing all these objects*
 
-    Please, see the complete documentation for the Make_a_List brick in the
-    https://gricad-gitlab.univ-grenoble-alpes.fr/condamie/ec_dev web site
+     Please, see the complete documention for the Make_A_List 
+     in the populse.mia_processes web site
+    <https://populse.github.io/mia_processes/html/documentation/bricks/tools/Make_A_List.html>`_
     """
 
     def __init__(self):

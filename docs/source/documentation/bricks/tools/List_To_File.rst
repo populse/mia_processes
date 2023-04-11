@@ -43,9 +43,6 @@ From a list of files, generation of a single file
 
 *['/home/ArthurBlair/data/Anat.nii', '/home/ArthurBlair/data/Func.nii'] -> List_To_File -> '/home/ArthurBlair/data/Func.nii'*
 
->>> from mia_processes.bricks.tools import List_to_File
->>> List_to_File.help()
-
 **Inputs parameters:**
 
 - *file_list*
