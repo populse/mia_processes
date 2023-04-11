@@ -43,9 +43,6 @@ From a file name, generating a list containing this file name and the file name 
 
 *'/home/ArthurBlair/data/Anat.nii' -> List_Duplicate -> ['/home/ArthurBlair/data/Anat.nii'] + '/home/ArthurBlair/data/Anat.nii'*
 
->>> from mia_processes.bricks.tools import List_Duplicate
->>> List_Duplicate.help()
-
 **Inputs parameters:**
 
 - *file_name*

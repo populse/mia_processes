@@ -27,33 +27,33 @@ Adapted from `niworkflows <https://github.com/nipreps/niworkflows>`_.
 
 **Optional inputs with default value parameters:**
 
-- *max_32bits* (a boolean, optional)
+- *max_32bits* (a boolean, optional, default value is False)
     Cast data to float32 if higher precision is encountered.
 
     ::
 
-      default_value. False
+      ex. False
 
-- *n_volumes_to_discard* (an int, optional)
+- *n_volumes_to_discard* (an int, optional, default value is 0)
     Number of non steady-state volumes.
     
     ::
 
-      default_value. 0
+      ex. 0
 
-- *prefix* (a string, optional)
+- *prefix* (a string, optional, default value is '')
     Prefix of the output image.
     
     ::
 
-      default_value. ''
+      ex. ''
 
-- *suffix* (a string, optional)
+- *suffix* (a string, optional, default value is '_valid')
     Suffix of output image.
    
     ::
 
-      default_value. '_valid'
+      ex. '_valid'
 
 **Outputs parameters:**
 
