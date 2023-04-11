@@ -318,7 +318,7 @@ class ApplyTransforms(ProcessMIA):
                             desc=dimension_desc))
 
         self.add_trait("float",
-                       Bool(False,
+                       Bool(True,
                             output=False,
                             optional=True,
                             desc=float_desc))
@@ -408,7 +408,7 @@ class ApplyTransforms(ProcessMIA):
             if self.out_prefix == Undefined:
                 self.out_prefix = 't_'
                 print('The out_prefix parameter is undefined. Automatically '
-                      'set to "AffineTransform_" ...')
+                      'set to "t_" ...')
 
             if self.output_directory:
                 valid_ext, in_ext, fileName = checkFileExt(self.input_image,

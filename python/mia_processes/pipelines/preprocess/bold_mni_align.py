@@ -1,4 +1,5 @@
 from capsul.api import Pipeline
+import os
 import traits.api as traits
 
 
@@ -12,6 +13,8 @@ class Bold_mni_align(Pipeline):
         self.add_process("affineinitializer",
                          "mia_processes.bricks.preprocess."
                          "ants.processes.AffineInitializer")
+        self.nodes["affineinitializer"].process.num_threads = int(
+            os.getenv("OMP_NUM_THREADS", os.cpu_count()))
         self.add_process("registration",
                          "mia_processes.bricks.preprocess."
                          "ants.processes.Registration")
@@ -50,6 +53,8 @@ class Bold_mni_align(Pipeline):
         self.nodes["registration"].process.transforms = ['Rigid',
                                                          'Affine',
                                                          'SyN']
+        self.nodes["registration"].process.num_threads = int(
+            os.getenv("OMP_NUM_THREADS", os.cpu_count()))
         self.add_process("n4biasfieldcorrection",
                          "mia_processes.bricks.preprocess."
                          "ants.processes.N4BiasFieldCorrection")

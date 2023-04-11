@@ -1,4 +1,5 @@
 from capsul.api import Pipeline
+import os
 import traits.api as traits
 
 
@@ -26,6 +27,9 @@ class Anat_airmask(Pipeline):
         self.nodes["template"].process.suffix = 'mask'
         self.nodes["template"].process.desc = 'head'
         self.nodes["applytransforms"].process.interpolation = 'MultiLabel'
+        self.nodes["applytransforms"].process.float = True
+        self.nodes["applytransforms"].process.num_threads = int(
+            os.getenv("OMP_NUM_THREADS", os.cpu_count()))
 
         # links
         self.export_parameter("artifactmask", "in_file", is_optional=False)

@@ -3448,8 +3448,8 @@ class TemplateFromTemplateFlow(ProcessMIA):
 
         # Outputs traits
         self.add_trait("template",
-                       traits.File(output=True,
-                                   desc=template_desc))
+                       File(output=True,
+                            desc=template_desc))
 
         self.init_default_traits()
 

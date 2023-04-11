@@ -25,6 +25,7 @@ class Anat_mni_tpms(Pipeline):
                          "mia_processes.bricks.preprocess."
                          "ants.processes.ApplyTransforms")
         self.nodes["applytransforms_CSF"].process.out_prefix = 'csf_'
+        self.nodes["applytransforms_CSF"].process.float = True
         self.add_process("template_GM",
                          "mia_processes.bricks.preprocess"
                          ".others.processing.TemplateFromTemplateFlow")
@@ -32,6 +33,11 @@ class Anat_mni_tpms(Pipeline):
         self.nodes["template_GM"].process.resolution = 1
         self.nodes["template_GM"].process.suffix = 'probseg'
         self.nodes["template_GM"].process.label = 'GM'
+        self.add_process("applytransforms_GM",
+                         "mia_processes.bricks.preprocess."
+                         "ants.processes.ApplyTransforms")
+        self.nodes["applytransforms_GM"].process.out_prefix = 'gm_'
+        self.nodes["applytransforms_GM"].process.float = True
         self.add_process("template_WM",
                          "mia_processes.bricks.preprocess."
                          "others.processing.TemplateFromTemplateFlow")
@@ -43,10 +49,7 @@ class Anat_mni_tpms(Pipeline):
                          "mia_processes.bricks.preprocess."
                          "ants.processes.ApplyTransforms")
         self.nodes["applytransforms_WM"].process.out_prefix = 'wm_'
-        self.add_process("applytransforms_GM",
-                         "mia_processes.bricks.preprocess."
-                         "ants.processes.ApplyTransforms")
-        self.nodes["applytransforms_GM"].process.out_prefix = 'gm_'
+        self.nodes["applytransforms_WM"].process.float = True
         self.add_process("files_to_list",
                          "mia_processes.bricks.tools.tools.Files_To_List")
 

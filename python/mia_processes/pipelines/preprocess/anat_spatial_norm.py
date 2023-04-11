@@ -1,4 +1,6 @@
 from capsul.api import Pipeline
+
+import os
 import traits.api as traits
 
 
@@ -43,6 +45,10 @@ class Anat_spatial_norm(Pipeline):
         self.nodes["registration"].process.transforms = ['Rigid', 'Affine']
         self.nodes["registration"].process.use_histogram_matching = [False,
                                                                      True]
+        self.nodes["registration"].process.num_threads = int(
+            os.getenv("OMP_NUM_THREADS", os.cpu_count()))
+        self.nodes["affine_initializer"].process.num_threads = int(
+            os.getenv("OMP_NUM_THREADS", os.cpu_count()))
         self.add_process("template_mask",
                          "mia_processes.bricks.preprocess."
                          "others.processing.TemplateFromTemplateFlow")
