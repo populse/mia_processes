@@ -244,7 +244,7 @@ class AnatIQMs(ProcessMIA):
 
         results_dict = {}
 
-        imdata = nb.load(self.in_ras).get_data()
+        imdata = nb.load(self.in_ras).get_fdata()
 
         # Try to load files
         has_in_noinu = True
@@ -257,7 +257,7 @@ class AnatIQMs(ProcessMIA):
                 print("\nError with in_noinu file: ", e)
             else:
                 # Load image corrected for INU
-                inudata = np.nan_to_num(imnii.get_data())
+                inudata = np.nan_to_num(imnii.get_fdata())
                 inudata[inudata < 0] = 0
         else:
             has_in_noinu = False
@@ -273,7 +273,7 @@ class AnatIQMs(ProcessMIA):
                 print("\nError with segmentation file: ", e)
                 pass
             else:
-                segdata = segnii.get_data().astype(np.uint8)
+                segdata = segnii.get_fdata().astype(np.uint8)
         else:
             has_segmentation = False
 
@@ -288,7 +288,7 @@ class AnatIQMs(ProcessMIA):
                 print("\nError with airmask file: ", e)
                 pass
             else:
-                airdata = airnii.get_data().astype(np.uint8)
+                airdata = airnii.get_fdata().astype(np.uint8)
         else:
             has_airmask = False
 
@@ -303,7 +303,7 @@ class AnatIQMs(ProcessMIA):
                 print("\nError with artmask file: ", e)
                 pass
             else:
-                artdata = artnii.get_data().astype(np.uint8)
+                artdata = artnii.get_fdata().astype(np.uint8)
         else:
             has_artmask = False
 
@@ -318,7 +318,7 @@ class AnatIQMs(ProcessMIA):
                 print("\nError with headmask file: ", e)
                 pass
             else:
-                headdata = headnii.get_data().astype(np.uint8)
+                headdata = headnii.get_fdata().astype(np.uint8)
         else:
             has_headmask = False
 
@@ -333,7 +333,7 @@ class AnatIQMs(ProcessMIA):
                 print("\nError with rotmask file: ", e)
                 pass
             else:
-                rotdata = rotnii.get_data().astype(np.uint8)
+                rotdata = rotnii.get_fdata().astype(np.uint8)
         else:
             has_rotmask = False
 
@@ -504,7 +504,7 @@ class AnatIQMs(ProcessMIA):
 
         if has_segmentation:
             # Bias
-            bias = nb.load(self.in_inu).get_data()[segdata > 0]
+            bias = nb.load(self.in_inu).get_fdata()[segdata > 0]
             results_dict["inu"] = {
                 "range": float(
                     np.abs(np.percentile(bias, 95.0) - np.percentile(bias, 5.0))
@@ -704,7 +704,7 @@ class BoldIQMs(ProcessMIA):
 
         # Get the mean EPI data and get it ready
         epinii = nb.load(self.in_epi)
-        epidata = np.nan_to_num(epinii.get_data())
+        epidata = np.nan_to_num(epinii.get_fdata())
         epidata = epidata.astype(np.float32)
         epidata[epidata < 0] = 0
 
@@ -718,7 +718,7 @@ class BoldIQMs(ProcessMIA):
                 has_in_hmc = False
                 print("\nError with in_hmc file: ", e)
             else:
-                hmcdata = np.nan_to_num(hmcnii.get_data())
+                hmcdata = np.nan_to_num(hmcnii.get_fdata())
                 hmcdata = hmcdata.astype(np.float32)
                 hmcdata[hmcdata < 0] = 0
         else:
@@ -734,7 +734,7 @@ class BoldIQMs(ProcessMIA):
                 has_in_mask = False
                 print("\nError with in_mask file: ", e)
             else:
-                mskdata = np.nan_to_num(msknii.get_data())
+                mskdata = np.nan_to_num(msknii.get_fdata())
                 mskdata[mskdata < 0] = 0
                 mskdata[mskdata > 0] = 1
                 mskdata = mskdata.astype(np.uint8)
@@ -751,7 +751,7 @@ class BoldIQMs(ProcessMIA):
                 has_in_tsnr = False
                 print("\nError with in_mask file: ", e)
             else:
-                tsnr_data = tsnr_nii.get_data()
+                tsnr_data = tsnr_nii.get_fdata()
         else:
             has_in_tsnr = False
 
@@ -2369,7 +2369,7 @@ class Spikes(ProcessMIA):
         super(Spikes, self).run_process_mia()
 
         func_nii = nb.load(self.in_file)
-        func_data = func_nii.get_data()
+        func_data = func_nii.get_fdata()
         func_shape = func_data.shape
 
         orientation = nb.aff2axcodes(func_nii.affine)
