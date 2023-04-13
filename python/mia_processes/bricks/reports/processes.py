@@ -288,7 +288,7 @@ class AnatIQMs(ProcessMIA):
                 print("\nError with airmask file: ", e)
                 pass
             else:
-                airdata = airnii.get_fdata().astype(np.uint8)
+                airdata = airnii.get_fdata()
         else:
             has_airmask = False
 
