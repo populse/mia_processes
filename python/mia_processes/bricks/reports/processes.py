@@ -353,7 +353,13 @@ class AnatIQMs(ProcessMIA):
                 # Load Partial Volume Maps (pvms) from FSL FAST
                 pvmdata = []
                 for pvmnii in pvmniis:
-                    pvmdata.append(pvmnii.get_data().astype(np.float32))
+                    pvmdata.append(pvmnii.get_fdata(dtype="float32"))
+                    if np.sum(pvmdata[-1] > 1e-4) < 10:
+                        raise RuntimeError("Detected less than 10 voxels "
+                                           "belonging to one tissue prob. "
+                                           "map. MRIQC failed to process this "
+                                           "dataset."
+                )
         else:
             has_pvms = False
 
@@ -507,8 +513,8 @@ class AnatIQMs(ProcessMIA):
             }  # pylint: disable=E1101
 
         if has_mni_tpms and has_pvms:
-            mni_tpms = [tpm.get_data() for tpm in mni_tpmsniis]
-            in_tpms = [pvm.get_data() for pvm in pvmniis]
+            mni_tpms = [tpm.get_fdata() for tpm in mni_tpmsniis]
+            in_tpms = [pvm.get_fdata() for pvm in pvmniis]
             overlap = fuzzy_jaccard(in_tpms, mni_tpms)
             results_dict["tpm_overlap"] = {
                 "csf": overlap[0],
