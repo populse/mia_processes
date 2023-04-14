@@ -8,7 +8,7 @@ populse_mia.
     :Class:
         - Binarize
         - SynthStrip
-        - SynthStrip_2
+        - SynthStripMriqc
 
 """
 
@@ -150,7 +150,7 @@ class Binarize(ProcessMIA):
                               output=False,
                               optional=True,
                               desc=min_desc))
-        
+
         self.add_trait('output_type',
                        Enum('NIFTI',
                             'NIFTI_GZ',
@@ -498,7 +498,7 @@ class SynthStrip(ProcessMIA):
         return freesurfer.freesurfer_call(cmd)
 
 
-class SynthStrip_2(ProcessMIA):
+class SynthStripMriqc(ProcessMIA):
     """
     * Skull stripping using SynthStrip *
 
@@ -507,9 +507,9 @@ class SynthStrip_2(ProcessMIA):
     from is found at https://github.com/nipreps/mriqc/blob/22.0.6/mriqc/synthstrip/cli.py
     and https://github.com/nipreps/mriqc/blob/22.0.6/mriqc/synthstrip/model.py
     and https://github.com/freesurfer/freesurfer/blob/2995ded957961a7f3704de57eee88eb6cc30d52d/mri_synthstrip/mri_synthstrip
-    Please, see the complete documention for the 'SynthStrip_2' brick
+    Please, see the complete documention for the 'SynthStripMriqc' brick
     in the populse.mia_processes web site
-    <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/freesurfer/SynthStrip_2.html>`_
+    <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/freesurfer/SynthStripMriqc.html>`_
 
     """
 
@@ -536,7 +536,7 @@ class SynthStrip_2(ProcessMIA):
 
                 if nb_levels is None:
                     raise ValueError(
-                        "SynthStrip_2 brick: must provide unet nb_levels if "
+                        "SynthStripMriqc brick: must provide unet nb_levels if "
                         "nb_features is an integer"
                     )
                 feats = np.round(nb_features * feat_mult ** np.arange(
@@ -549,7 +549,7 @@ class SynthStrip_2(ProcessMIA):
                 ]
 
             elif nb_levels is not None:
-                raise ValueError("SynthStrip_2 brick: cannot use nb_levels if "
+                raise ValueError("SynthStripMriqc brick: cannot use nb_levels if "
                                  "nb_features is not an integer")
 
             # extract any surplus (full resolution) decoder convolutions
@@ -580,7 +580,7 @@ class SynthStrip_2(ProcessMIA):
 
                 for conv in range(nb_conv_per_level):
                     nf = enc_nf[level * nb_conv_per_level + conv]
-                    convs.append(SynthStrip_2.ConvBlock(ndims, prev_nf, nf))
+                    convs.append(SynthStripMriqc.ConvBlock(ndims, prev_nf, nf))
                     prev_nf = nf
 
                 self.encoder.append(convs)
@@ -595,7 +595,7 @@ class SynthStrip_2(ProcessMIA):
 
                 for conv in range(nb_conv_per_level):
                     nf = dec_nf[level * nb_conv_per_level + conv]
-                    convs.append(SynthStrip_2.ConvBlock(ndims, prev_nf, nf))
+                    convs.append(SynthStripMriqc.ConvBlock(ndims, prev_nf, nf))
                     prev_nf = nf
 
                 self.decoder.append(convs)
@@ -607,17 +607,17 @@ class SynthStrip_2(ProcessMIA):
             self.remaining = torch.nn.ModuleList()
 
             for num, nf in enumerate(final_convs):
-                self.remaining.append(SynthStrip_2.ConvBlock(ndims, prev_nf, nf))
+                self.remaining.append(SynthStripMriqc.ConvBlock(ndims, prev_nf, nf))
                 prev_nf = nf
 
             # final convolutions
             if return_mask:
-                self.remaining.append(SynthStrip_2.ConvBlock(ndims, prev_nf, 2,
+                self.remaining.append(SynthStripMriqc.ConvBlock(ndims, prev_nf, 2,
                                                 activation=None))
                 self.remaining.append(torch.nn.Softmax(dim=1))
 
             else:
-                self.remaining.append(SynthStrip_2.ConvBlock(ndims, prev_nf, 1,
+                self.remaining.append(SynthStripMriqc.ConvBlock(ndims, prev_nf, 1,
                                                 activation=None))
 
         def forward(self, x):
@@ -689,7 +689,7 @@ class SynthStrip_2(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(SynthStrip_2, self).__init__()
+        super(SynthStripMriqc, self).__init__()
 
         # Third party softwares required for the execution of the brick
         self.requirement = ['freesurfer']
@@ -824,7 +824,7 @@ class SynthStrip_2(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(SynthStrip_2, self).list_outputs()
+        super(SynthStripMriqc, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
@@ -866,7 +866,7 @@ class SynthStrip_2(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(SynthStrip_2, self).run_process_mia()
+        super(SynthStripMriqc, self).run_process_mia()
 
         # necessary for speed gains (I think)
         torch.backends.cudnn.benchmark = True
@@ -883,7 +883,7 @@ class SynthStrip_2(ProcessMIA):
             device_name = "CPU"
 
         # configure model
-        print(f"SynthStrip_2 brick: Configuring model on the {device_name}")
+        print(f"SynthStripMriqc brick: Configuring model on the {device_name}")
 
         with torch.no_grad():
             model = self.StripModel()
@@ -901,20 +901,20 @@ class SynthStrip_2(ProcessMIA):
                                          'synthstrip.1.pt')
 
             else:
-                raise RuntimeError("SynthStrip_2: No configuration for "
+                raise RuntimeError("SynthStripMriqc: No configuration for "
                                    "freeSurfer was found, so the path for "
                                    "the model cannot be defined. "
                                    "See File > MIA Preferences")
 
         else:
             modelfile = self.model
-            print("SynthStrip_2 brick: Using custom model weights")
+            print("SynthStripMriqc brick: Using custom model weights")
 
         checkpoint = torch.load(modelfile, map_location=device)
         model.load_state_dict(checkpoint["model_state_dict"])
 
         # load input volume
-        print(f"SynthStrip_2 brick: Input image read from: {self.in_file}")
+        print(f"SynthStripMriqc brick: Input image read from: {self.in_file}")
 
         # normalize intensities
         image = nb.load(self.in_file)
@@ -962,10 +962,10 @@ class SynthStrip_2(ProcessMIA):
             hdr = image.header.copy()
             hdr.set_data_dtype("uint8")
             nb.Nifti1Image(mask, image.affine, hdr).to_filename(self.out_mask)
-            print(f"SynthStrip_2 brick: "
+            print(f"SynthStripMriqc brick: "
                   f"Binary brain mask saved to: {self.out_mask}")
 
-        print("If you use SynthStrip_2 in your analysis, please cite:")
+        print("If you use SynthStripMriqc in your analysis, please cite:")
         print("----------------------------------------------------")
         print("SynthStrip: Skull-Stripping for Any Brain Image.")
         print("A Hoopes, JS Mora, AV Dalca, B Fischl, M Hoffmann.")

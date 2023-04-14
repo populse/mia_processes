@@ -20,7 +20,7 @@ class Anat_skullstrip_synthstrip(Pipeline):
                          "others.processing.IntensityClip")
         self.add_process("synthstrip",
                          "mia_processes.bricks.preprocess."
-                         "freesurfer.processes.SynthStrip_2")
+                         "freesurfer.processes.SynthStripMriqc")
         self.add_process("post_n4biasfieldcor",
                          "mia_processes.bricks.preprocess."
                          "ants.processes.N4BiasFieldCorrection")

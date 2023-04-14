@@ -44,6 +44,7 @@ Mia_processes's documentation
 
       - `Binarize <bricks/preprocess/freesurfer/Binarize.html>`_
       - `SynthStrip <bricks/preprocess/freesurfer/SynthStrip.html>`_
+      - `SynthStripMriqc <bricks/preprocess/freesurfer/SynthStripMriqc.html>`_
 
     - **fsl**
 

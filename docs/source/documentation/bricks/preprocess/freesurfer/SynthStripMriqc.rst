@@ -6,9 +6,9 @@
 |`Home <../../../../index.html>`_|`Documentation <../../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +--------------------------------+----------------------------------------------+----------------------------------------------------+
 
-============
-SynthStrip_2 brick
-============
+==========================
+SynthStripMriqc brick
+==========================
  
 Skull-stripping using SynthStrip tool (mri_synthstrip in Freesurfer) as done in mriqc v22.06.
 
