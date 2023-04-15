@@ -373,8 +373,8 @@ class ArtifactMask(ProcessMIA):
             # Remove negative values
             imdata[imdata < 0] = 0
 
-            hmdata = hmnii.get_fdata()
-            npdata = npmnii.get_fdata()
+            hmdata = np.asanyarray(nib.load(head_mask_name).dataobj)
+            npdata = np.asanyarray(nib.load(nasion_post_mask_name).dataobj)
 
             # Invert head mask
             airdata = np.ones_like(hmdata, dtype=np.uint8)
@@ -389,20 +389,14 @@ class ArtifactMask(ProcessMIA):
             dist /= dist.max()
 
             # Apply rotation mask (if supplied)
-            if rot_mask_name:
-                rotmskdata = rmnii.get_fdata()
+            if rot_mask_name != Undefined:
+                rotmskdata = np.asanyarray(nib.load(rot_mask_name).dataobj)
                 airdata[rotmskdata == 1] = 0
 
             # Run the artifact detection
             qi1_img = artifact_mask(imdata, airdata, dist)
-
             hdr = imnii.header.copy()
             hdr.set_data_dtype(np.uint8)
-            art_img = imnii.__class__(qi1_img, imnii.affine, hdr)
-            hat_img = imnii.__class__(airdata, imnii.affine, hdr)
-
-            airdata[qi1_img > 0] = 0
-            air_img = imnii.__class__(airdata, imnii.affine, hdr)
 
             # Image save
             _, file_name = os.path.split(file_name)
@@ -419,21 +413,28 @@ class ArtifactMask(ProcessMIA):
                                          file_name_no_ext +
                                          self.suffix.strip() +
                                          file_extension))
-            nib.save(art_img, art_file_out)
+            nib.Nifti1Image(qi1_img, imnii.affine, hdr).to_filename(
+                art_file_out
+            )
 
             hat_file_out = os.path.join(self.output_directory,
                                         ('hat_' +
                                          file_name_no_ext +
                                          self.suffix.strip() +
                                          file_extension))
-            nib.save(hat_img, hat_file_out)
+            nib.Nifti1Image(airdata, imnii.affine, hdr).to_filename(
+                hat_file_out
+            )
 
             air_file_out = os.path.join(self.output_directory,
                                         ('air_' +
                                          file_name_no_ext +
                                          self.suffix.strip() +
                                          file_extension))
-            nib.save(air_img, air_file_out)
+            airdata[qi1_img > 0] = 0
+            nib.Nifti1Image(airdata, imnii.affine, hdr).to_filename(
+                air_file_out
+            )
 
 
 class Binarize(ProcessMIA):

@@ -435,9 +435,10 @@ class AnatIQMs(ProcessMIA):
             # Artifacts
             results_dict["qi_1"] = art_qi1(airdata, artdata)
 
-        if has_airmask:
+        if self.hatmask != Undefined:
             # Artifacts QI2
-            results_dict["qi_2"], results_dict["histogram_qi2"] = art_qi2(imdata, airdata)
+            results_dict["qi_2"], results_dict["histogram_qi2"] = art_qi2(imdata,
+                                nb.load(self.hatmask).get_fdata())
 
         if has_stats:
             # CJV
