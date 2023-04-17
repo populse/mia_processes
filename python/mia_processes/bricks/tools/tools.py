@@ -27,7 +27,7 @@ needed to run other higher-level bricks.
 ##########################################################################
 
 # nipype import
-from nipype.interfaces.base import traits, InputMultiPath
+from nipype.interfaces.base import File, InputMultiPath, traits
 from nipype.interfaces.spm.base import ImageFileSPM
 
 # populse_mia imports
@@ -558,8 +558,8 @@ class List_Duplicate(ProcessMIA):
         
         # Inputs traits
         self.add_trait("file_name",
-                       traits.File(output=False,
-                                   desc=file_name_desc))
+                       File(output=False,
+                            desc=file_name_desc))
 
         # Outputs traits
         self.add_trait("out_file",
