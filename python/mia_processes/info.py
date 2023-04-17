@@ -110,6 +110,9 @@ VERSION = __version__
 CLASSIFIERS = CLASSIFIERS
 PLATFORMS = 'OS Independent'
 REQUIRES = [
+    'boto',
+    'cmp',
+    'cfflib',
     'dipy',
     'nibabel',
     'nilearn',
@@ -118,13 +121,16 @@ REQUIRES = [
     'nitime',
     'nitransforms',
     'numpy',
+    'paramiko',
     'populse_db >=2.1.0',
     'populse_mia >= 2.2.0',
+    'pyxnat',
     'reportlab',
     'scipy',
     'statsmodels',
     'templateflow',
     'torch',
+    'vtk'
 ]
 EXTRA_REQUIRES = {
     'doc': [
