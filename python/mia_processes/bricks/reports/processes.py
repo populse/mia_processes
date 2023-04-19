@@ -752,7 +752,10 @@ class BoldIQMs(ProcessMIA):
                 has_in_tsnr = False
                 print("\nError with in_mask file: ", e)
             else:
-                tsnr_data = tsnr_nii.get_fdata()
+                # nibabel: get_data() is deprecated in favour of get_fdata().
+                # We only keep here get_data() to achieve reproducibility
+                # with native mriqc results (which use get_data() in V22.06)
+                tsnr_data = tsnr_nii.get_data()
         else:
             has_in_tsnr = False
 
