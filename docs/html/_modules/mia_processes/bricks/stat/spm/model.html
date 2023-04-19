@@ -5,18 +5,20 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.stat.spm.model &#8212; mia_processes 2.2.1-dev+c0ad978 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/haiku.css" />
-    <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+    <title>mia_processes.bricks.stat.spm.model &#8212; mia_processes 2.2.1-dev+8d51d6e documentation</title>
+    <link rel="stylesheet" href="../../../../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
     <script src="../../../../../_static/jquery.js"></script>
     <script src="../../../../../_static/underscore.js"></script>
     <script src="../../../../../_static/doctools.js"></script>
+    <script src="../../../../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../../index.html">
-          <span>mia_processes 2.2.1-dev+c0ad978 documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+8d51d6e documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.stat.spm.model</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -98,9 +100,13 @@
 
 
 <div class="viewcode-block" id="EstimateContrast"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.EstimateContrast">[docs]</a><span class="k">class</span> <span class="nc">EstimateContrast</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Estimate contrasts of interest&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    * Estimate contrasts of interest.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="EstimateContrast.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.EstimateContrast.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -207,7 +213,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s1">&#39;nipype.interfaces.spm.EstimateContrast&#39;</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_get_contrasts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session_type</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;blabla&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;blabla&quot;&quot;&quot;</span>
         <span class="c1">#contrast = tuple()</span>
         <span class="n">contrasts</span> <span class="o">=</span> <span class="p">[</span><span class="nb">tuple</span><span class="p">()]</span>
 
@@ -252,11 +258,11 @@
         <span class="k">return</span> <span class="n">contrasts</span>
 
 <div class="viewcode-block" id="EstimateContrast.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.EstimateContrast.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;blabla&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;blabla&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">EstimateContrast</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="c1"># Old version calling Nipype&#39;s method</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39;process = spm.EstimateContrast()</span>
+        <span class="sd">&#39;&#39;&#39;process = spm.EstimateContrast()</span>
 <span class="sd">        if not self.spm_mat_file:</span>
 <span class="sd">            return {}, {}</span>
 <span class="sd">        else:</span>
@@ -424,7 +430,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="EstimateContrast.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.EstimateContrast.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;blabla&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;blabla&quot;&quot;&quot;</span>
 
         <span class="nb">super</span><span class="p">(</span><span class="n">EstimateContrast</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
@@ -450,7 +456,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
 
 <div class="viewcode-block" id="EstimateModel"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.EstimateModel">[docs]</a><span class="k">class</span> <span class="nc">EstimateModel</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd"> - EstimateModel (User_processes.stats.spm.stats.EstimateModel) &lt;=&gt; Model estimation (SPM12 name).</span>
 <span class="sd">*** Estimation of model parameters using classical (ReML - Restricted Maximum Likelihood) or Bayesian algorithms.***</span>
 <span class="sd">    * Input parameters:</span>
@@ -508,7 +514,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="EstimateModel.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.EstimateModel.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -667,7 +673,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s1">&#39;nipype.interfaces.spm.EstimateModel&#39;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="EstimateModel.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.EstimateModel.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dict),</span>
@@ -690,7 +696,7 @@
         <span class="c1">#    self.inheritance_dict = {}</span>
 
         <span class="c1"># Old version calling Nipype&#39;s method</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+        <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        process = spm.EstimateModel()</span>
 <span class="sd">        if not self.spm_mat_file:</span>
 <span class="sd">            return {}, {}</span>
@@ -734,7 +740,7 @@
             <span class="n">betas</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="c1"># Those lines are false, we cannot read in the</span>
             <span class="c1"># self.spm_mat_file because it is not created yet! (1)</span>
-<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+            <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            try:</span>
 <span class="sd">                spm_matFile = scipy.io.loadmat(self.spm_mat_file)</span>
 <span class="sd">                nb_reg = spm_matFile[&#39;SPM&#39;][0,0][&#39;Sess&#39;][0,0][&#39;col&#39;].shape[1]</span>
@@ -744,7 +750,7 @@
 <span class="sd">            except Exception as e:</span>
 <span class="sd">                print(&#39;\nEstimateModel brick exception; {0}: {1}\n&#39;.format(e.__class__, e))</span>
 <span class="sd">            &quot;&quot;&quot;</span>
-<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+            <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            if (  (not nb_reg) and (self.multi_reg) and</span>
 <span class="sd">              (self.multi_reg not in [&#39;&lt;undefined&gt;&#39;, Undefined])  ):</span>
 
@@ -799,7 +805,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;labels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
                                                     <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
                                                     <span class="s2">&quot;labels.</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">im_form</span><span class="p">))</span>
-<span class="w">                </span><span class="sd">&#39;&#39;&#39;</span>
+                <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">                outputs[&#39;SDerror&#39;] = glob(os.path.join(path, &#39;Sess*_SDerror*&#39;))</span>
 <span class="sd">                outputs[&#39;ARcoef&#39;] = glob(os.path.join(path, &#39;Sess*_AR_*&#39;))</span>
 <span class="sd">                &#39;&#39;&#39;</span>
@@ -951,7 +957,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="EstimateModel.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.EstimateModel.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">EstimateModel</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">spm_mat_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spm_mat_file</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">estimation_method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimation_method</span>
@@ -985,8 +991,8 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
 
 <div class="viewcode-block" id="Level1Design"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.Level1Design">[docs]</a><span class="k">class</span> <span class="nc">Level1Design</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    *Specification of the GLM design matrix, fMRI data files and filtering*</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    * Specification of the GLM design matrix, fMRI data files and filtering.</span>
 
 <span class="sd">    Please, see the complete documentation for the Level1Design brick in the</span>
 <span class="sd">    https://gricad-gitlab.univ-grenoble-alpes.fr/condamie/ec_dev web site</span>
@@ -994,7 +1000,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Level1Design.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.Level1Design.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -1349,7 +1355,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s1">&#39;nipype.interfaces.spm.Level1Design&#39;</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_get_conditions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx_session</span><span class="p">,</span> <span class="n">idx_cond</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate the condition dictionary.</span>
+        <span class="sd">&quot;&quot;&quot;Generate the condition dictionary.</span>
 
 <span class="sd">        One condition dictionary is generated for each condition.</span>
 <span class="sd">        The condition dictionary has the following keys:</span>
@@ -1460,7 +1466,7 @@
         <span class="k">return</span> <span class="n">cond</span>
 
     <span class="k">def</span> <span class="nf">_get_session_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx_session</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate the session_info parameter for each session.</span>
+        <span class="sd">&quot;&quot;&quot;Generate the session_info parameter for each session.</span>
 
 <span class="sd">        The &#39;session_info&#39; dictonary is equivalent to the &#39;sess&#39;</span>
 <span class="sd">        structure array spm parameter, for each session. It therefore includes</span>
@@ -1575,7 +1581,7 @@
         <span class="k">return</span> <span class="n">session_info</span><span class="p">,</span> <span class="n">beta_sess</span><span class="p">,</span> <span class="n">cond_nb</span>
 
 <div class="viewcode-block" id="Level1Design.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.Level1Design.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dict),</span>
@@ -1864,7 +1870,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Level1Design.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.Level1Design.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Level1Design</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="c1"># Removing the spm_mat_file to avoid a bug (nipy/nipype Issues #2612)</span>
         <span class="c1">#cur_dir = os.getcwd()</span>
@@ -1936,7 +1942,7 @@
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
     </div>
   </body>
 </html>

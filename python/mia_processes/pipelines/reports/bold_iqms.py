@@ -5,7 +5,10 @@ import traits.api as traits
 
 
 class Bold_iqms(Pipeline):
+    """
+    * Extraction of IQMs .
 
+    """
     def pipeline_definition(self):
         # nodes
         self.add_process("outliercount", "mia_processes.bricks.preprocess.afni.OutlierCount")

@@ -66,7 +66,11 @@ import numpy as np
 
 
 class EstimateContrast(ProcessMIA):
-    """Estimate contrasts of interest"""
+    """
+    * Estimate contrasts of interest.
+
+    """
+
     def __init__(self):
         """Dedicated to the attributes initialisation / instantiation.
 
@@ -954,7 +958,7 @@ class EstimateModel(ProcessMIA):
 
 class Level1Design(ProcessMIA):
     """
-    *Specification of the GLM design matrix, fMRI data files and filtering*
+    * Specification of the GLM design matrix, fMRI data files and filtering.
 
     Please, see the complete documentation for the Level1Design brick in the
     https://gricad-gitlab.univ-grenoble-alpes.fr/condamie/ec_dev web site

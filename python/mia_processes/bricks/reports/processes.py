@@ -86,7 +86,7 @@ EXT = {'NIFTI_GZ': 'nii.gz',
 
 class AnatIQMs(ProcessMIA):
     """
-        * Computes the anatomical IQMs *
+        * Computes the anatomical IQMs.
 
         Please, see the complete documentation for the `AnatIQMs' brick
         in the populse.mia_processes website
@@ -545,7 +545,7 @@ class AnatIQMs(ProcessMIA):
 
 class BoldIQMs(ProcessMIA):
     """
-        * Computes the functional IQMs *
+        * Computes the functional IQMs.
 
         Please, see the complete documentation for the `BoldIQMs' brick 
         in the populse.mia_processes website
@@ -943,8 +943,8 @@ class BoldIQMs(ProcessMIA):
 
 class CarpetParcellation(ProcessMIA):
     """
-    * Dilate brainmask, substract from itself then generate
-    the union of obtained crown mask and epi parcellation *
+    * | Dilate brainmask, substract from itself then generate
+      | the union of obtained crown mask and epi parcellation.
 
     Please, see the complete documentation for the `CarpetParcellation' brick 
     in the populse.mia_processes website
@@ -1096,7 +1096,7 @@ class CarpetParcellation(ProcessMIA):
 
 class ComputeDVARS(ProcessMIA):
     """
-    * Computes the DVARS *
+    * Computes the DVARS.
 
     Please, see the complete documentation for the `ComputeDVARS' brick 
     in the populse.mia_processes website
@@ -1325,14 +1325,14 @@ class ComputeDVARS(ProcessMIA):
 
 class FramewiseDisplacement(ProcessMIA):
     """
-    * Calculate the FD (framewise displacement)` as in [Power2012].
+    * Calculate the FD (framewise displacement) as in [Power2012].
+
     This implementation reproduces the calculation in fsl_motion_outliers
 
-        [Power2012] Power et al., Spurious but systematic correlations
-         in functional connectivity MRI networks arise from subject
-         motion, NeuroImage 59(3),
-         2012. doi:`10.1016/j.neuroimage.2011.10.018
-         <https://doi.org/10.1016/j.neuroimage.2011.10.018>`.
+    [Power2012] Power et al., Spurious but systematic correlations
+    in functional connectivity MRI networks arise from subject
+    motion, NeuroImage 59(3), 2012. doi:`10.1016/j.neuroimage.2011.10.018
+    <https://doi.org/10.1016/j.neuroimage.2011.10.018>`.
 
     Please, see the complete documentation for the `FramewiseDisplacement'
     brick in the populse.mia_processes website
@@ -1492,7 +1492,8 @@ class FramewiseDisplacement(ProcessMIA):
 
 
 class Mean_stdDev_calc(ProcessMIA):
-    """Makes the mean and standard deviation of the parametric_maps
+    """
+    * Makes the mean and standard deviation of the parametric_maps.
 
     - The parametric_maps are first convolved with the ROIs corresponding
       to doublet_list.
@@ -1762,7 +1763,10 @@ class Mean_stdDev_calc(ProcessMIA):
 
 
 class Result_collector(ProcessMIA):
-    """Blabla"""
+    """
+    * Save a file with the data collection for a patient.
+
+    """
     def __init__(self):
         """Dedicated to the attributes initialisation/instantiation.
 
@@ -2244,7 +2248,7 @@ class Result_collector(ProcessMIA):
 
 class Spikes(ProcessMIA):
     """
-    * Computes the number of spikes *
+    * Computes the number of spikes.
 
     Please, see the complete documentation for the `Spikes' brick in the populse.mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/reports/Spikes.html>`_
@@ -2774,8 +2778,9 @@ def regress_poly(degree, data, remove_mean=True, axis=-1, failure_mode="error"):
 
 def rpve(pvms, seg):
     """
-    Computes the :abbr:`rPVe (residual partial voluming error)`
-    of each tissue class.
+    * | Computes the :abbr:`rPVe (residual partial voluming error)`
+      | of each tissue class.
+
     .. math ::
         \\text{rPVE}^k = \\frac{1}{N} \\left[ \\sum\\limits_{p^k_i \
 \\in [0.5, P_{98}]} p^k_i + \\sum\\limits_{p^k_i \\in [P_{2}, 0.5)} 1 - p^k_i \\right]

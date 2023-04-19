@@ -28,7 +28,8 @@ import traits.api as traits
 
 class Spatial_preprocessing(Pipeline):
     """
-    *Data pre-processing for cerebrovascular reserve analysis (CVRa) at CLUNI - IRMaGe (Grenoble - France)*
+    * Data pre-processing for cerebrovascular reserve analysis (CVRa).
+
     Please, see the complete documention for the `Spatial_preprocessing_1 brick in the populse.mia_processes web site:
     <https://populse.github.io/mia_processes/html/documentation/pipelines/preprocess/Spatial_preprocessing_1.html>`_
     """

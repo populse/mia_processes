@@ -24,7 +24,10 @@ import traits.api as traits
 
 
 class Bold_stat(Pipeline):
-    """Blabla"""
+    """
+    * Blabla.
+
+    """
 
     def pipeline_definition(self):
         # nodes

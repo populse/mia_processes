@@ -81,7 +81,7 @@ EXT = {'NIFTI_GZ': 'nii.gz',
 
 class ApplyBiasCorrection(ProcessMIA):
     """
-    *Apply bias field correction to an input file using the bias image*
+    *Apply bias field correction to an input file using the bias image.
 
     Please, see the complete documentation for the 'ApplyBiasCorrection' brick
     in the populse.mia_processes website
@@ -190,7 +190,7 @@ class ApplyBiasCorrection(ProcessMIA):
 
 class ArtifactMask(ProcessMIA):
     """
-    * Computes the artifact mask using the method described in [Mortamet2009] *
+    * Computes the artifact mask using the method described in [Mortamet2009].
 
     Please, see the complete documentation for the `ArtifactMask' brick
     in the populse.mia_processes website
@@ -439,7 +439,7 @@ class ArtifactMask(ProcessMIA):
 
 class Binarize(ProcessMIA):
     """
-    *Image binarization*
+    *Image binarization.
 
     Please, see the complete documentation for the `Binarize' brick
     in the populse.mia_processes website
@@ -683,7 +683,7 @@ class Binarize(ProcessMIA):
 
 class ConformImage(ProcessMIA):
     """
-    * Conform T1w image to standard *
+    * Conform T1w image to standard.
 
     Please, see the complete documentation for the `ConformImage' brick
     in the populse.mia_processes website
@@ -858,7 +858,8 @@ class ConformImage(ProcessMIA):
 
 
 class ConvROI(ProcessMIA):
-    """Convolve regions of interest with a mask.
+    """
+    * Convolve regions of interest with a mask.
 
     - Resampling the mask to the size of the ROIs, using the first ROI.
     - Then convolve each ROI with resized mask.
@@ -1056,7 +1057,7 @@ class ConvROI(ProcessMIA):
 
 class Enhance(ProcessMIA):
     """
-    *Image enhancing*
+    *Image enhancing.
 
     Please, see the complete documentation for the `Enhance' brick
     in the populse.mia_processes website
@@ -1298,7 +1299,7 @@ class Enhance(ProcessMIA):
 
 class EstimateSNR(ProcessMIA):
     """
-    *Estimate SNR using a segmentation file*
+    *Estimate SNR using a segmentation file.
 
     Please, see the complete documentation for the `EstimateSNR' brick
     in the populse.mia_processes website
@@ -1406,7 +1407,7 @@ class EstimateSNR(ProcessMIA):
 
 class GradientThreshold(ProcessMIA):
     """
-    * Computes a threshold from the histogram of the magnitude gradient image *
+    * Computes a threshold from the histogram of the magnitude gradient image.
 
     Please, see the complete documentation for the `GradientThreshold' brick
     in the populse.mia_processes website
@@ -1625,7 +1626,7 @@ class GradientThreshold(ProcessMIA):
 
 class Harmonize(ProcessMIA):
     """
-    * Harmonize *
+    * Harmonize.
 
     Please, see the complete documentation for the `Harmonize' brick
     in the populse.mia_processes website
@@ -1829,7 +1830,7 @@ class Harmonize(ProcessMIA):
 
 class IntensityClip(ProcessMIA):
     """
-    *Clip the intensity range as prescribed by the percentiles
+    * Clip the intensity range as prescribed by the percentiles.
 
     Please, see the complete documentation for the `Threshold brick in
     the populse.mia_processes website
@@ -1986,7 +1987,7 @@ class IntensityClip(ProcessMIA):
 
 class Mask(ProcessMIA):
     """
-    * Mask image *
+    * Mask image.
 
     Please, see the complete documentation for the `Mask' brick
     in the populse.mia_processes website
@@ -2177,7 +2178,7 @@ class Mask(ProcessMIA):
 
 class NonSteadyStateDetector(ProcessMIA):
     """
-    * Detect non-steady-state at the beginning of a bold 4D image*
+    * Detect non-steady-state at the beginning of a bold 4D image.
 
     Please, see the complete documentation for the `NonSteadyStateDetector' brick in the populse.mia_processes website
     https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/NonSteadyStateDetector.html
@@ -2265,7 +2266,7 @@ class NonSteadyStateDetector(ProcessMIA):
 
 class Resample_1(ProcessMIA):
     """
-    *Resamples an image to the resolution of a reference image*
+    *Resamples an image to the resolution of a reference image.
 
     Please, see the complete documentation for the `Resample_1 brick in the populse.mia_processes website
     https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/Resample_1.html
@@ -2741,7 +2742,7 @@ class Resample_1(ProcessMIA):
 
 
 class Resample_2(ProcessMIA):
-    """Setting regions of interest to the resolution of the reference_image
+    """Setting regions of interest to the resolution of the reference_image.
 
     - ROIs are defined from doublet_list parameter as
       doublet_list[0][0] + doublet_list[0][1] + '.nii',
@@ -2904,7 +2905,7 @@ class Resample_2(ProcessMIA):
 
 class RotationMask(ProcessMIA):
     """
-    * Compute the rotation mask image *
+    * Compute the rotation mask image.
 
     Please, see the complete documentation for the `RotationMask' brick in the populse.mia_processes website
     https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/RotationMask.html
@@ -3108,7 +3109,7 @@ class RotationMask(ProcessMIA):
 
 class Sanitize(ProcessMIA):
     """
-    * Sanitize input bold image *
+    * Sanitize input bold image.
 
     Please, see the complete documentation for the `Sanitize' brick in the populse.mia_processes website
     https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/Sanitize.html
@@ -3377,7 +3378,7 @@ class Sanitize(ProcessMIA):
 
 class TemplateFromTemplateFlow(ProcessMIA):
     """
-    * Get template image from templateflow *
+    * Get template image from templateflow.
 
     Please, see the complete documentation for the `TemplateFromTemplateFlow' brick
     in the populse.mia_processes website
@@ -3515,7 +3516,7 @@ class TemplateFromTemplateFlow(ProcessMIA):
 
 class Threshold(ProcessMIA):
     """
-    *Image thresholding*
+    * Image thresholding.
 
     Please, see the complete documentation for the `Threshold` brick in the populse.mia_processes website
     https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/Threshold.html
@@ -3788,7 +3789,7 @@ class Threshold(ProcessMIA):
 
 class TSNR(ProcessMIA):
     """
-    * Computes the time-course SNR for a time series *
+    * Computes the time-course SNR for a time series.
 
     Please, see the complete documentation for the `TSNR' brick in the populse.mia_processes website
     https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/TSNR.html

@@ -42,7 +42,7 @@ from sys import path
 
 class ReportAnatMriqc(ProcessMIA):
     """
-        * Generates the report for anatomical data in MRIQC pipeline *
+        * Generates the report for anatomical data in MRIQC pipeline.
 
         Please, see the complete documentation for the `MRIQC_report brick 
         in the populse.mia_processes website
@@ -684,7 +684,7 @@ class ReportAnatMriqc(ProcessMIA):
 
 class ReportFuncMriqc(ProcessMIA):
     """
-        * Generates the report for functional data in MRIQC pipeline *
+        * Generates the report for functional data in MRIQC pipeline.
 
         Please, see the complete documentation for the `MRIQC_report brick in the populse.mia_processes website
         https://populse.github.io/mia_processes/html/documentation/bricks/reports/MRIQC_report.html

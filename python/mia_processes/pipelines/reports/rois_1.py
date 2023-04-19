@@ -26,6 +26,10 @@ import traits.api as traits
 
 
 class Rois_1(Pipeline):
+    """
+    * Blabla.
+
+    """
 
     def pipeline_definition(self):
         # nodes

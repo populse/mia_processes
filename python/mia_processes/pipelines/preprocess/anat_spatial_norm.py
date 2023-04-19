@@ -5,9 +5,8 @@ import traits.api as traits
 
 
 class Anat_spatial_norm(Pipeline):
-
     """
-    Spatial normalization to MNI (using 'MNI152NLin2009cAsym' template).
+    * Spatial normalization to MNI (using 'MNI152NLin2009cAsym' template).
 
     Adapted from `mriqc 22.06 anatomical workflow <https://github.com/nipreps/mriqc/blob/5a0f0408bd0c176dbc46088c6ffe279269180f3f/mriqc/workflows/anatomical.py#L282>`_
 

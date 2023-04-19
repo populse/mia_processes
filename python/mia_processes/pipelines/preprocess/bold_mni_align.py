@@ -4,9 +4,11 @@ import traits.api as traits
 
 
 class Bold_mni_align(Pipeline):
-
     """
-    Registered a mean functional image EPI in MNI space (for checking out registration).
+    * Registered a mean functional image EPI in MNI space.
+
+    For checking out registration.
+
     """
     def pipeline_definition(self):
         # nodes

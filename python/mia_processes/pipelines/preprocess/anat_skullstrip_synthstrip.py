@@ -2,9 +2,9 @@ from capsul.api import Pipeline
 import os
 
 class Anat_skullstrip_synthstrip(Pipeline):
-
     """
-    Create a brain-extraction workflow using SynthStrip (Freesurfer).
+    * Create a brain-extraction workflow using SynthStrip (Freesurfer).
+
     Adapted from `mriqc v22.06 synthstrip workflow
     <https://github.com/nipreps/mriqc/blob/5a0f0408bd0c176dbc46088c6ffe279269180f3f/mriqc/workflows/anatomical.py#L849>`_
 

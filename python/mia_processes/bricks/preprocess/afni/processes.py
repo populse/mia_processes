@@ -51,7 +51,7 @@ EXT = {'NIFTI_GZ': 'nii.gz',
 
 class Automask(ProcessMIA):
     """
-    * Create a brain-only mask of the image using AFNI 3dAutomask command *
+    * Create a brain-only mask of the image using AFNI 3dAutomask command.
 
     Please, see the complete documentation for the `Automask' brick in
     the populse.mia_processes website
@@ -236,7 +236,7 @@ class Automask(ProcessMIA):
 
 class Calc(ProcessMIA):
     """
-    * Voxel-by-voxel arithmetic on 3D datasets *
+    * Voxel-by-voxel arithmetic on 3D datasets.
 
     Please, see the complete documentation for the `Calc' brick
     in the populse.mia_processes website
@@ -427,7 +427,7 @@ class Calc(ProcessMIA):
 
 class CalcDropTRs(ProcessMIA):
     """
-    * DropTRs of bold datasets (using AFNI 3dCalc command)*
+    * DropTRs of bold datasets (using AFNI 3dCalc command).
 
     Please, see the complete documentation for the `CalcDropTRs' brick in
     the populse.mia_processes website
@@ -596,7 +596,7 @@ class CalcDropTRs(ProcessMIA):
 
 class Despike(ProcessMIA):
     """
-    * Removes ‘spikes’ from the 3D+time input dataset *
+    * Removes ‘spikes’ from the 3D+time input dataset.
 
     Please, see the complete documentation for the `Despike' brick
     in the populse.mia_processes website
@@ -730,8 +730,8 @@ class Despike(ProcessMIA):
 
 class FWHMx(ProcessMIA):
     """
-    * Computes FWHMs for all sub-bricks in the input dataset,
-    each one separately *
+    * | Computes FWHMs for all sub-bricks in the input dataset,
+      | each one separately.
 
     Please, see the complete documentation for the `FWHMx' brick
     in the populse.mia_processes website
@@ -877,8 +877,8 @@ class FWHMx(ProcessMIA):
 
 class GCOR(ProcessMIA):
     """
-    * Computes the average correlation between every voxel and ever other
-    voxel, over any give mask *
+    * | Computes the average correlation between every voxel and ever other
+      | voxel, over any give mask.
 
     Please, see the complete documentation for the `GCOR' brick
     in the populse.mia_processes website
@@ -993,8 +993,8 @@ class GCOR(ProcessMIA):
 
 class OutlierCount(ProcessMIA):
     """
-    * Computes outliers for all sub-bricks in the input dataset, 
-    each one separately *
+    * | Computes outliers for all sub-bricks in the input dataset, 
+      | each one separately.
 
     Please, see the complete documentation for the `OutlierCount' brick 
     in the populse.mia_processes website
@@ -1192,8 +1192,8 @@ class OutlierCount(ProcessMIA):
 
 class QualityIndex(ProcessMIA):
     """
-    * Computes a quality index for each sub-brick in a 3D+time dataset.
-    The output is a 1D time series with the index for each sub-brick *
+    * | Computes a quality index for each sub-brick in a 3D+time dataset.
+      | The output is a 1D time series with the index for each sub-brick.
 
     Please, see the complete documentation for the `QualityIndex' brick
     in the populse.mia_processes website
@@ -1372,7 +1372,7 @@ class QualityIndex(ProcessMIA):
 
 class RefitDeoblique(ProcessMIA):
     """
-    * Deoblique dataset *
+    * Deoblique dataset.
 
     Please, see the complete documentation for the `RefitDeoblique' brick in
     the populse.mia_processes website
@@ -1462,7 +1462,7 @@ class RefitDeoblique(ProcessMIA):
 
 class SkullStrip(ProcessMIA):
     """
-    * Extract the brain from surrounding tissue from MRI T1-weighted images *
+    * Extract the brain from surrounding tissue from MRI T1-weighted images.
 
     Please, see the complete documentation for the `SkullStrip' brick
     in the populse.mia_processes website
@@ -1588,7 +1588,7 @@ class SkullStrip(ProcessMIA):
 
 class TShift(ProcessMIA):
     """
-    * Slice-time correction of bold images *
+    * Slice-time correction of bold images.
 
     Please, see the complete documentation for the `TShift' brick
     in the populse.mia_processes website
@@ -1863,7 +1863,7 @@ class TShift(ProcessMIA):
 
 class TStatMean(ProcessMIA):
     """
-    * Mean of bold images (using AFNI 3dTstat command)*
+    * Mean of bold images (using AFNI 3dTstat command)
 
     Please, see the complete documentation for the `TStatMean' brick
     in the populse.mia_processes website
@@ -1990,7 +1990,7 @@ class TStatMean(ProcessMIA):
 
 class Volreg(ProcessMIA):
     """
-    * Register an input volume to a base volume using AFNI 3dvolreg command *
+    * Register an input volume to a base volume using AFNI 3dvolreg command.
 
     Please, see the complete documentation for the `Volreg' brick in
     the populse.mia_processes website

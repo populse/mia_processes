@@ -3,11 +3,9 @@ import traits.api as traits
 
 
 class Anat_headmask(Pipeline):
-
     """
-
-    Compute head mask from skull stripped structural image using "Denoise"
-    from Dipy.
+    * | Compute head mask from skull stripped structural image using
+      | "Denoise" from Dipy.
 
     """
 

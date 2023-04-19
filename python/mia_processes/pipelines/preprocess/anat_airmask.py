@@ -4,10 +4,11 @@ import traits.api as traits
 
 
 class Anat_airmask(Pipeline):
-
     """
-    Compute rotation mask, air mask, artifact mask and hat mask for structural
-    data following step 1 from
+    * | Compute rotation mask, air mask, artifact mask and hat mask for
+      | structural data.
+
+    following step 1 from
     (`[Mortamet2009] <https://onlinelibrary.wiley.com/doi/10.1002/mrm.21992>`_).
 
     """

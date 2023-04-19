@@ -28,7 +28,8 @@ import traits.api as traits
 
 class Spatial_mask(Pipeline):
     """
-    *Makes the grey matter native mask for cerebrovascular reserve analyse*
+    * Makes the grey matter native mask for cerebrovascular reserve analyse.
+
     User_processes_ECdev.studies.spatial_mask_1.Spatial_mask_1()
 
     Please, see the complete documentation for the Spatial_mask_1 pipeline in the

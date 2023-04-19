@@ -40,8 +40,9 @@ import os
 
 
 class Concat_to_list_of_list(ProcessMIA):
-    """Make an output list of list containing the iteration of the input list1
-    with each element of the input list2
+    """
+    * | Make an output list of list containing the iteration of
+      | the input list1 with each element of the input list2.
 
     Ex. ['a', 'b', 'c'] and ['_1', '_2'] gives
     [['a', '_1'], ['a', '_2'],
@@ -124,7 +125,7 @@ class Concat_to_list_of_list(ProcessMIA):
 
 class Files_To_List(ProcessMIA):
     """
-    *From 2 file names, generating a list containing all these file names*
+    * From 2 file names, generating a list containing all these file names.
 
     Please, see the complete documention for the `Files_To_List in the populse.mia_processes web site
     <https://populse.github.io/mia_processes/html/documentation/bricks/tools/Files_To_List.html>`_
@@ -216,7 +217,7 @@ class Files_To_List(ProcessMIA):
 
 class Filter_Files_List(ProcessMIA):
     """
-    *Selects one or more (slicing) element(s) from a list*
+    * Selects one or more (slicing) element(s) from a list.
 
     Please, see the complete documention for the `Filter_Files_List in the populse.mia_processes web site
     <https://populse.github.io/mia_processes/html/documentation/bricks/tools/Filter_Files_List.html>`_
@@ -339,7 +340,8 @@ class Filter_Files_List(ProcessMIA):
 
 class Find_In_List(ProcessMIA):
     """
-    From a list of files, select the 1rst element that contains a pattern.
+    * From a list of files, select the 1rst element that contains a pattern.
+
     """
 
     def __init__(self):
@@ -420,7 +422,8 @@ class Find_In_List(ProcessMIA):
 
 class Input_Filter(ProcessMIA):
     """
-    *To filter the content of the Data Browser tab or the output data of another brick*
+    * | To filter the content of the Data Browser tab or the
+      | output data of another brick.
 
     Please, see the complete documention for the `Input_Filter in the populse.mia_processes web site
     <https://populse.github.io/mia_processes/html/documentation/bricks/tools/Input_Filter.html>`_
@@ -528,7 +531,8 @@ class Input_Filter(ProcessMIA):
 
 class List_Duplicate(ProcessMIA):
     """
-    *From a file name, generating a list containing this file name and the file name itself*
+    * | From a file name, generating a list containing this file name
+      | and the file name itself.
 
     Please, see the complete documention for the `List_Duplicate in the populse.mia_processes web site
     <https://populse.github.io/mia_processes/html/documentation/bricks/tools/List_Duplicate.html>`_
@@ -604,7 +608,7 @@ class List_Duplicate(ProcessMIA):
 
 class List_To_File(ProcessMIA):
     """
-    *From several filenames, selects and generates a file.*
+    * From several filenames, selects and generates a file.
 
     Please, see the complete documention for the `List_To_File in the populse.mia_processes web site
     <https://populse.github.io/mia_processes/html/documentation/bricks/tools/List_To_File.html>`_
@@ -699,7 +703,7 @@ class List_To_File(ProcessMIA):
 
 class Make_A_List(ProcessMIA):
     """
-    *From 2 objects, generating a list containing all these objects*
+    * From 2 objects, generating a list containing all these objects.
 
      Please, see the complete documention for the Make_A_List 
      in the populse.mia_processes web site

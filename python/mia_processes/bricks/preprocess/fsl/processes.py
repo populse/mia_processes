@@ -38,8 +38,8 @@ EXT = {'NIFTI_GZ': 'nii.gz',
 
 class BetSurfacesExtraction(ProcessMIA):
     """
-    * Surfaces (skull, inskull, outskull, outskin) extraction and skull
-    stripping using BET (FSL) with option -A (bet2 and betsurf)*
+    * | Surfaces (skull, inskull, outskull, outskin) extraction and skull
+      | stripping using BET (FSL) with option -A (bet2 and betsurf).
 
     Please, see the complete documention for the `SurfacesExtraction' brick
     in the populse.mia_processes web site
@@ -234,7 +234,7 @@ class BetSurfacesExtraction(ProcessMIA):
 
 class FastSegment(ProcessMIA):
     """
-    * Brain tissue segmentation using fsl.FAST *
+    * Brain tissue segmentation using fsl.FAST.
 
     Please, see the complete documention for the `FastSegment' brick
     in the populse.mia_processes web site
@@ -439,7 +439,7 @@ class FastSegment(ProcessMIA):
 
 class Smooth(ProcessMIA):
     """
-    *3D Gaussian smoothing of image volumes*
+    *3D Gaussian smoothing of image volumes.
 
     Please, see the complete documention for the `Smooth' brick in
     the populse.mia_processes web site

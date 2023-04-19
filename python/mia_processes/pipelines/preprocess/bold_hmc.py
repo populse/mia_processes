@@ -3,6 +3,10 @@ import traits.api as traits
 
 
 class Bold_hmc(Pipeline):
+    """
+    * Head-motion correction based on 3dvolreg from AFNI.
+
+    """
 
     def pipeline_definition(self):
         # nodes

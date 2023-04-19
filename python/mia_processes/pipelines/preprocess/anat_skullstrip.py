@@ -3,10 +3,8 @@ import traits.api as traits
 
 
 class Anat_skullstrip(Pipeline):
-
     """
-
-    Bias correction and skull stripping of a structural image.
+    * Bias correction and skull stripping of a structural image.
 
     """
 

@@ -47,9 +47,10 @@ EXT = {'NIFTI_GZ': 'nii.gz',
 
 class Binarize(ProcessMIA):
     """
-    * Binarize a volume (or volume-encoded surface file) using 
-    FreeSurfer mri_binarize.
-    Binarization can be done based on threshold or on matched values. *
+    * | Binarize a volume (or volume-encoded surface file) using 
+      | FreeSurfer mri_binarize.
+
+    Binarization can be done based on threshold or on matched values.
 
     Please, see the complete documentation for the `Binarize' brick in
     the populse.mia_processes website
@@ -354,7 +355,7 @@ class Binarize(ProcessMIA):
 
 class SynthStrip(ProcessMIA):
     """
-    * Skull stripping using SynthStrip *
+    * Skull stripping using SynthStrip.
 
     Please, see the complete documention for the 'SynthStrip' brick
     in the populse.mia_processes web site
@@ -500,7 +501,7 @@ class SynthStrip(ProcessMIA):
 
 class SynthStripMriqc(ProcessMIA):
     """
-    * Skull stripping using SynthStrip *
+    * Skull stripping using SynthStrip.
 
     STATEMENT OF CHANGES: This class is derived from the work done by
     MRIQC 22.06 and  FreeSurfer 1.0. The original file for this work derives
@@ -652,7 +653,8 @@ class SynthStripMriqc(ProcessMIA):
 
     class ConvBlock(torch.nn.Module):
         """
-        Specific convolutional block followed by leakyrelu for unet.
+        * Specific convolutional block followed by leakyrelu for unet.
+
         """
 
         def __init__(self, ndims, in_channels, out_channels,

@@ -43,7 +43,7 @@ EXT = {'NIFTI_GZ': 'nii.gz',
 
 class AffineInitializer(ProcessMIA):
     """
-    * A multi-start optimizer for affine registration *
+    * A multi-start optimizer for affine registration.
 
     Please, see the complete documentation for the `AffineInitializer' brick
     in the populse.mia_processes website
@@ -218,11 +218,11 @@ class AffineInitializer(ProcessMIA):
 
 class ApplyTransforms(ProcessMIA):
     """
-    * Transforms an image according to  a reference image and a
-      transformation (or set of transformation) *
+    * | Transforms an image according to  a reference image and a
+      | transformation (or set of transformation).
 
     Please, see the complete documentation for the `ApplyTransforms' brick
-     in the populse.mia_processes website
+    in the populse.mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/afni/ApplyTransforms.html>`_
 
     """
@@ -459,7 +459,7 @@ class ApplyTransforms(ProcessMIA):
 
 class N4BiasFieldCorrection(ProcessMIA):
     """
-    * N4 retrospective bias correction algorithm *
+    * N4 retrospective bias correction algorithm.
 
     Please, see the complete documentation for the `N4BiasFieldCorrection'
     brick in the populse.mia_processes website
@@ -762,7 +762,7 @@ class N4BiasFieldCorrection(ProcessMIA):
 
 class Registration(ProcessMIA):
     """
-    * Registers a moving image to a fixed image *
+    * Registers a moving image to a fixed image.
 
     Please, see the complete documentation for the `Registration' brick in
     the populse.mia_processes website

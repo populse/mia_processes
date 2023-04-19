@@ -42,7 +42,7 @@ EXT = {'NIFTI_GZ': 'nii.gz',
 
 class Denoise(ProcessMIA):
     """
-    * Non-local means for denoising 3D images *
+    * Non-local means for denoising 3D images.
 
     Please, see the complete documentation for the `Denoise' brick
     in the populse.mia_processes website

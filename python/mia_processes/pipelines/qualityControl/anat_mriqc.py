@@ -3,10 +3,9 @@ import traits.api as traits
 
 
 class Anat_mriqc(Pipeline):
-
     """
-    Get no-reference IQMs (image quality metrics) from structural (T1w and T2w)
-    data using mriqc anatomical workflow (mriqc v22.06).
+    * | Get no-reference IQMs (image quality metrics) from structural (T1w and T2w)
+      | data using mriqc anatomical workflow (mriqc v22.06).
 
     Please, see the complete documention for Anat_mriqc_pipeline
     in the populse.mia_processes web site:

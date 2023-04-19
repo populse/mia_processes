@@ -4,20 +4,21 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
-    <title>mia_processes.bricks.preprocess.ants package &#8212; mia_processes 2.2.1-dev+ab8d572 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/haiku.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>mia_processes.bricks.preprocess.ants package &#8212; mia_processes 2.2.1-dev+8d51d6e documentation</title>
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="index.html">
-          <span>mia_processes 2.2.1-dev+ab8d572 documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+8d51d6e documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.preprocess.ants package</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -30,15 +31,257 @@
       <div class="content" role="main">
         
         
-  <section id="mia-processes-bricks-preprocess-ants-package">
-<h1>mia_processes.bricks.preprocess.ants package<a class="headerlink" href="#mia-processes-bricks-preprocess-ants-package" title="Permalink to this headline">¶</a></h1>
-<section id="submodules">
+  <div class="section" id="module-mia_processes.bricks.preprocess.ants">
+<span id="mia-processes-bricks-preprocess-ants-package"></span><h1>mia_processes.bricks.preprocess.ants package<a class="headerlink" href="#module-mia_processes.bricks.preprocess.ants" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
-</section>
-<section id="mia-processes-bricks-preprocess-ants-processes-module">
-<h2>mia_processes.bricks.preprocess.ants.processes module<a class="headerlink" href="#mia-processes-bricks-preprocess-ants-processes-module" title="Permalink to this headline">¶</a></h2>
-</section>
-</section>
+</div>
+<div class="section" id="module-mia_processes.bricks.preprocess.ants.processes">
+<span id="mia-processes-bricks-preprocess-ants-processes-module"></span><h2>mia_processes.bricks.preprocess.ants.processes module<a class="headerlink" href="#module-mia_processes.bricks.preprocess.ants.processes" title="Permalink to this headline">¶</a></h2>
+<p>The ants preprocess library of the mia_processes package.</p>
+<p>The purpose of this module is to customise the main ants preprocessing bricks
+provided by nipype and to correct some things that do not work directly in
+populse_mia.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Contains</dt>
+<dd class="field-odd"><dl class="field-list simple">
+<dt class="field-odd">Class</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>AffineInitializer</p></li>
+<li><p>ApplyTransforms</p></li>
+<li><p>N4BiasFieldCorrection</p></li>
+<li><p>Registration</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py class">
+<dt id="mia_processes.bricks.preprocess.ants.processes.AffineInitializer">
+<em class="property">class </em><code class="sig-prename descclassname">mia_processes.bricks.preprocess.ants.processes.</code><code class="sig-name descname">AffineInitializer</code><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/ants/processes.html#AffineInitializer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.ants.processes.AffineInitializer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
+<ul class="simple">
+<li><p>A multi-start optimizer for affine registration.</p></li>
+</ul>
+<p>Please, see the complete documentation for the <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/afni/AffineInitializer.html">AffineInitializer’ brick
+in the populse.mia_processes website</a></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Type ‘AffineInitializer.help()’ for a full description of this process parameters.</p></li>
+<li><p>Type ‘&lt;AffineInitializer&gt;.get_input_spec()’ for a full description of this process input trait types.</p></li>
+<li><p>Type ‘&lt;AffineInitializer&gt;.get_output_spec()’ for a full description of this process output trait types.</p></li>
+</ul>
+</div>
+<dl class="py method">
+<dt id="mia_processes.bricks.preprocess.ants.processes.AffineInitializer.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/ants/processes.html#AffineInitializer.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.ants.processes.AffineInitializer.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the attributes initialisation/instantiation.</p>
+<p>The input and output plugs are defined here. The special
+‘self.requirement’ attribute (optional) is used to define the
+third-party products necessary for the running of the brick.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mia_processes.bricks.preprocess.ants.processes.AffineInitializer.list_outputs">
+<code class="sig-name descname">list_outputs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">is_plugged</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/ants/processes.html#AffineInitializer.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.ants.processes.AffineInitializer.list_outputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the initialisation step of the brick.</p>
+<p>The main objective of this method is to produce the outputs of the
+bricks (self.outputs) and the associated tags (self.inheritance_dic),
+if defined here. In order not to include an output in the database,
+this output must be a value of the optional key ‘notInDb’ of the
+self.outputs dictionary. To work properly this method must return
+self.make_initResult() object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mia_processes.bricks.preprocess.ants.processes.AffineInitializer.run_process_mia">
+<code class="sig-name descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/ants/processes.html#AffineInitializer.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.ants.processes.AffineInitializer.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the process launch step of the brick.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="mia_processes.bricks.preprocess.ants.processes.ApplyTransforms">
+<em class="property">class </em><code class="sig-prename descclassname">mia_processes.bricks.preprocess.ants.processes.</code><code class="sig-name descname">ApplyTransforms</code><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/ants/processes.html#ApplyTransforms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.ants.processes.ApplyTransforms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
+<ul>
+<li><div class="line-block">
+<div class="line">Transforms an image according to  a reference image and a</div>
+<div class="line">transformation (or set of transformation).</div>
+</div>
+</li>
+</ul>
+<p>Please, see the complete documentation for the <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/afni/ApplyTransforms.html">ApplyTransforms’ brick
+in the populse.mia_processes website</a></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Type ‘ApplyTransforms.help()’ for a full description of this process parameters.</p></li>
+<li><p>Type ‘&lt;ApplyTransforms&gt;.get_input_spec()’ for a full description of this process input trait types.</p></li>
+<li><p>Type ‘&lt;ApplyTransforms&gt;.get_output_spec()’ for a full description of this process output trait types.</p></li>
+</ul>
+</div>
+<dl class="py method">
+<dt id="mia_processes.bricks.preprocess.ants.processes.ApplyTransforms.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/ants/processes.html#ApplyTransforms.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.ants.processes.ApplyTransforms.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the attributes initialisation/instantiation.</p>
+<p>The input and output plugs are defined here. The special
+‘self.requirement’ attribute (optional) is used to define the
+third-party products necessary for the running of the brick.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mia_processes.bricks.preprocess.ants.processes.ApplyTransforms.list_outputs">
+<code class="sig-name descname">list_outputs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">is_plugged</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/ants/processes.html#ApplyTransforms.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.ants.processes.ApplyTransforms.list_outputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the initialisation step of the brick.</p>
+<p>The main objective of this method is to produce the outputs of the
+bricks (self.outputs) and the associated tags (self.inheritance_dic),
+if defined here. In order not to include an output in the database,
+this output must be a value of the optional key ‘notInDb’ of the
+self.outputs dictionary. To work properly this method must return
+self.make_initResult() object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mia_processes.bricks.preprocess.ants.processes.ApplyTransforms.run_process_mia">
+<code class="sig-name descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/ants/processes.html#ApplyTransforms.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.ants.processes.ApplyTransforms.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the process launch step of the brick.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="mia_processes.bricks.preprocess.ants.processes.N4BiasFieldCorrection">
+<em class="property">class </em><code class="sig-prename descclassname">mia_processes.bricks.preprocess.ants.processes.</code><code class="sig-name descname">N4BiasFieldCorrection</code><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/ants/processes.html#N4BiasFieldCorrection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.ants.processes.N4BiasFieldCorrection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
+<ul class="simple">
+<li><p>N4 retrospective bias correction algorithm.</p></li>
+</ul>
+<p>Please, see the complete documentation for the <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/afni/N4BiasFieldCorrection.html">N4BiasFieldCorrection’
+brick in the populse.mia_processes website</a></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Type ‘N4BiasFieldCorrection.help()’ for a full description of this process parameters.</p></li>
+<li><p>Type ‘&lt;N4BiasFieldCorrection&gt;.get_input_spec()’ for a full description of this process input trait types.</p></li>
+<li><p>Type ‘&lt;N4BiasFieldCorrection&gt;.get_output_spec()’ for a full description of this process output trait types.</p></li>
+</ul>
+</div>
+<dl class="py method">
+<dt id="mia_processes.bricks.preprocess.ants.processes.N4BiasFieldCorrection.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/ants/processes.html#N4BiasFieldCorrection.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.ants.processes.N4BiasFieldCorrection.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the attributes initialisation/instantiation.</p>
+<p>The input and output plugs are defined here. The special
+‘self.requirement’ attribute (optional) is used to define the
+third-party products necessary for the running of the brick.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mia_processes.bricks.preprocess.ants.processes.N4BiasFieldCorrection.list_outputs">
+<code class="sig-name descname">list_outputs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">is_plugged</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/ants/processes.html#N4BiasFieldCorrection.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.ants.processes.N4BiasFieldCorrection.list_outputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the initialisation step of the brick.</p>
+<p>The main objective of this method is to produce the outputs of the
+bricks (self.outputs) and the associated tags (self.inheritance_dic),
+if defined here. In order not to include an output in the database,
+this output must be a value of the optional key ‘notInDb’ of the
+self.outputs dictionary. To work properly this method must return
+self.make_initResult() object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mia_processes.bricks.preprocess.ants.processes.N4BiasFieldCorrection.run_process_mia">
+<code class="sig-name descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/ants/processes.html#N4BiasFieldCorrection.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.ants.processes.N4BiasFieldCorrection.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the process launch step of the brick.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="mia_processes.bricks.preprocess.ants.processes.Registration">
+<em class="property">class </em><code class="sig-prename descclassname">mia_processes.bricks.preprocess.ants.processes.</code><code class="sig-name descname">Registration</code><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/ants/processes.html#Registration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.ants.processes.Registration" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
+<ul class="simple">
+<li><p>Registers a moving image to a fixed image.</p></li>
+</ul>
+<p>Please, see the complete documentation for the <cite>Registration’ brick in
+the populse.mia_processes website
+&lt;https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/afni/Registration.html&gt;</cite></p>
+<p>Here can be found some of classical registration parameters 
+(used in fMRIPrep and MRIQC)
+<a class="reference external" href="https://github.com/nipreps/niworkflows/tree/master/niworkflows/data">https://github.com/nipreps/niworkflows/tree/master/niworkflows/data</a></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Type ‘Registration.help()’ for a full description of this process parameters.</p></li>
+<li><p>Type ‘&lt;Registration&gt;.get_input_spec()’ for a full description of this process input trait types.</p></li>
+<li><p>Type ‘&lt;Registration&gt;.get_output_spec()’ for a full description of this process output trait types.</p></li>
+</ul>
+</div>
+<dl class="py method">
+<dt id="mia_processes.bricks.preprocess.ants.processes.Registration.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/ants/processes.html#Registration.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.ants.processes.Registration.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the attributes initialisation/instantiation.</p>
+<p>The input and output plugs are defined here. The special
+‘self.requirement’ attribute (optional) is used to define the
+third-party products necessary for the running of the brick.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mia_processes.bricks.preprocess.ants.processes.Registration.list_outputs">
+<code class="sig-name descname">list_outputs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">is_plugged</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/ants/processes.html#Registration.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.ants.processes.Registration.list_outputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the initialisation step of the brick.</p>
+<p>The main objective of this method is to produce the outputs of the
+bricks (self.outputs) and the associated tags (self.inheritance_dic),
+if defined here. In order not to include an output in the database,
+this output must be a value of the optional key ‘notInDb’ of the
+self.outputs dictionary. To work properly this method must return
+self.make_initResult() object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mia_processes.bricks.preprocess.ants.processes.Registration.run_process_mia">
+<code class="sig-name descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/ants/processes.html#Registration.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.ants.processes.Registration.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the process launch step of the brick.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
 
 
       </div>
@@ -52,7 +295,7 @@
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.2.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
     </div>
   </body>
 </html>
