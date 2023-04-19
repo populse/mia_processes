@@ -13,6 +13,13 @@ Bold_mriqc pipeline
 Get no-reference IQMs (image quality metrics) from functional (BOLD)
 data using mriqc functional workflow (`mriqc v22.06 <https://mriqc.readthedocs.io/en/22.0.6/>`_).
 
+**Disclaimer**: A special effort has been made to provide a pipeline in Mia that gives as much as possible
+the same result as when computing with the native MRIQC. The variation in results between multiple runs
+of the same inputs is the result of random sampling and floating point precision errors. These variations
+are usually small, but if an identical result is sought between multiple runs, the environment variable
+ANTS_RANDOM_SEED should be set (e.g. ANTS_RANDOM_SEED = 1). Further discussion is available
+`in a mia_processes ticket <https://github.com/populse/mia_processes/issues/16>`_.
+
 --------------------------------------
 
 **Pipeline insight**

@@ -5,18 +5,20 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.preprocess.freesurfer.processes &#8212; mia_processes 2.2.1-dev+c0ad978 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/haiku.css" />
-    <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+    <title>mia_processes.bricks.preprocess.freesurfer.processes &#8212; mia_processes 2.2.1-dev+8d51d6e documentation</title>
+    <link rel="stylesheet" href="../../../../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
     <script src="../../../../../_static/jquery.js"></script>
     <script src="../../../../../_static/underscore.js"></script>
     <script src="../../../../../_static/doctools.js"></script>
+    <script src="../../../../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../../index.html">
-          <span>mia_processes 2.2.1-dev+c0ad978 documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+8d51d6e documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.preprocess.freesurfer.processes</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -40,6 +42,7 @@
 <span class="sd">    :Class:</span>
 <span class="sd">        - Binarize</span>
 <span class="sd">        - SynthStrip</span>
+<span class="sd">        - SynthStripMriqc</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 
@@ -51,16 +54,25 @@
 <span class="c1"># for details.</span>
 <span class="c1">##########################################################################</span>
 
-<span class="c1"># populse_mia import</span>
-<span class="kn">from</span> <span class="nn">populse_mia.user_interface.pipeline_manager.process_mia</span> <span class="kn">import</span> <span class="n">ProcessMIA</span>
-<span class="kn">from</span> <span class="nn">mia_processes.utils</span> <span class="kn">import</span> <span class="n">checkFileExt</span>
-
-<span class="c1"># Other import</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="p">(</span><span class="n">Bool</span><span class="p">,</span> <span class="n">Either</span><span class="p">,</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">File</span><span class="p">,</span> <span class="n">Float</span><span class="p">,</span> <span class="n">Int</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> 
-                        <span class="n">Undefined</span><span class="p">,</span> <span class="n">String</span><span class="p">)</span>
+<span class="c1"># capsul import</span>
 <span class="kn">import</span> <span class="nn">capsul</span>
 <span class="kn">from</span> <span class="nn">capsul.in_context</span> <span class="kn">import</span> <span class="n">freesurfer</span>
+
+<span class="c1"># mia_processes import</span>
+<span class="kn">from</span> <span class="nn">mia_processes.utils</span> <span class="kn">import</span> <span class="n">checkFileExt</span>
+
+<span class="c1"># populse_mia import</span>
+<span class="kn">from</span> <span class="nn">populse_mia.user_interface.pipeline_manager.process_mia</span> <span class="kn">import</span> <span class="n">ProcessMIA</span>
+
+<span class="c1"># Other import</span>
+<span class="kn">import</span> <span class="nn">nibabel</span> <span class="k">as</span> <span class="nn">nb</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">nipype.interfaces.base</span> <span class="kn">import</span> <span class="n">File</span><span class="p">,</span> <span class="n">Undefined</span>
+<span class="kn">from</span> <span class="nn">nitransforms.linear</span> <span class="kn">import</span> <span class="n">Affine</span>
+<span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="n">Bool</span><span class="p">,</span> <span class="n">Either</span><span class="p">,</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">Float</span><span class="p">,</span> <span class="n">Int</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">String</span>
 
 <span class="n">EXT</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;NIFTI_GZ&#39;</span><span class="p">:</span> <span class="s1">&#39;nii.gz&#39;</span><span class="p">,</span>
        <span class="s1">&#39;NIFTI&#39;</span><span class="p">:</span> <span class="s1">&#39;nii&#39;</span><span class="p">,</span>
@@ -68,10 +80,11 @@
 
 
 <div class="viewcode-block" id="Binarize"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.Binarize">[docs]</a><span class="k">class</span> <span class="nc">Binarize</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    * Binarize a volume (or volume-encoded surface file) using </span>
-<span class="sd">    FreeSurfer mri_binarize.</span>
-<span class="sd">    Binarization can be done based on threshold or on matched values. *</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    * | Binarize a volume (or volume-encoded surface file) using </span>
+<span class="sd">      | FreeSurfer mri_binarize.</span>
+
+<span class="sd">    Binarization can be done based on threshold or on matched values.</span>
 
 <span class="sd">    Please, see the complete documentation for the `Binarize&#39; brick in</span>
 <span class="sd">    the populse.mia_processes website</span>
@@ -80,7 +93,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Binarize.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.Binarize.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&#39;&#39;&#39;Dedicated to the attributes initialisation/instantiation.</span>
+        <span class="sd">&#39;&#39;&#39;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -172,7 +185,7 @@
                               <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                               <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                               <span class="n">desc</span><span class="o">=</span><span class="n">min_desc</span><span class="p">))</span>
-        
+
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;output_type&#39;</span><span class="p">,</span>
                        <span class="n">Enum</span><span class="p">(</span><span class="s1">&#39;NIFTI&#39;</span><span class="p">,</span>
                             <span class="s1">&#39;NIFTI_GZ&#39;</span><span class="p">,</span>
@@ -284,7 +297,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s1">&#39;nipype.interfaces.freesurfer.Binarize&#39;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Binarize.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.Binarize.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -343,7 +356,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Binarize.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.Binarize.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Binarize</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
         <span class="c1"># madatory inputs / outputs</span>
@@ -375,8 +388,8 @@
 
 
 <div class="viewcode-block" id="SynthStrip"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStrip">[docs]</a><span class="k">class</span> <span class="nc">SynthStrip</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    * Skul stripping using SynthStrip *</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    * Skull stripping using SynthStrip.</span>
 
 <span class="sd">    Please, see the complete documention for the &#39;SynthStrip&#39; brick</span>
 <span class="sd">    in the populse.mia_processes web site</span>
@@ -385,7 +398,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="SynthStrip.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStrip.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -400,13 +413,13 @@
         <span class="c1"># Mandatory inputs description</span>
         <span class="n">in_file_desc</span> <span class="o">=</span> <span class="s1">&#39;Input image to be brain extracted&#39;</span>
         <span class="c1"># Optional inputs with default value description</span>
-        <span class="n">border_mm_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Mask border threshold in mm&#39;</span><span class="p">)</span>
+        <span class="n">border_mm_desc</span> <span class="o">=</span> <span class="s1">&#39;Mask border threshold in mm&#39;</span>
         <span class="n">no_csf_desc</span> <span class="o">=</span> <span class="s1">&#39;Exclude CSF from brain border&#39;</span>
         <span class="n">output_type_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Typecodes of the output image formats (one &#39;</span>
                             <span class="s1">&#39;of NIFTI, MGZ, NIFTI_GZ).&#39;</span><span class="p">)</span>
         <span class="c1"># Outputs description</span>
         <span class="n">out_file_desc</span> <span class="o">=</span> <span class="s1">&#39;Brain-extracted path&#39;</span>
-        <span class="n">out_mask_desc</span> <span class="o">=</span> <span class="s1">&#39;Brainmask path&#39;</span>
+        <span class="n">out_mask_desc</span> <span class="o">=</span> <span class="s1">&#39;Brain mask path&#39;</span>
 
         <span class="c1"># Mandatory inputs traits</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;in_file&#39;</span><span class="p">,</span>
@@ -448,7 +461,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="SynthStrip.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStrip.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -501,7 +514,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="SynthStrip.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStrip.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">SynthStrip</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
         <span class="c1"># default input</span>
@@ -518,6 +531,481 @@
             <span class="n">cmd</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;--no-csf&#39;</span><span class="p">]</span>
 
         <span class="k">return</span> <span class="n">freesurfer</span><span class="o">.</span><span class="n">freesurfer_call</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="SynthStripMriqc"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStripMriqc">[docs]</a><span class="k">class</span> <span class="nc">SynthStripMriqc</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    * Skull stripping using SynthStrip.</span>
+
+<span class="sd">    STATEMENT OF CHANGES: This class is derived from the work done by</span>
+<span class="sd">    MRIQC 22.06 and  FreeSurfer 1.0. The original file for this work derives</span>
+<span class="sd">    from is found at https://github.com/nipreps/mriqc/blob/22.0.6/mriqc/synthstrip/cli.py</span>
+<span class="sd">    and https://github.com/nipreps/mriqc/blob/22.0.6/mriqc/synthstrip/model.py</span>
+<span class="sd">    and https://github.com/freesurfer/freesurfer/blob/2995ded957961a7f3704de57eee88eb6cc30d52d/mri_synthstrip/mri_synthstrip</span>
+<span class="sd">    Please, see the complete documention for the &#39;SynthStripMriqc&#39; brick</span>
+<span class="sd">    in the populse.mia_processes web site</span>
+<span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/freesurfer/SynthStripMriqc.html&gt;`_</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SynthStripMriqc.StripModel"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStripMriqc.StripModel">[docs]</a>    <span class="k">class</span> <span class="nc">StripModel</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;blabla&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SynthStripMriqc.StripModel.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStripMriqc.StripModel.__init__">[docs]</a>        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">,</span>
+                <span class="n">nb_features</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
+                <span class="n">nb_levels</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span>
+                <span class="n">feat_mult</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                <span class="n">max_features</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
+                <span class="n">nb_conv_per_level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                <span class="n">max_pool</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                <span class="n">return_mask</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;blabla&quot;&quot;&quot;</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+            <span class="c1"># dimensionality</span>
+            <span class="n">ndims</span> <span class="o">=</span> <span class="mi">3</span>
+
+            <span class="c1"># build feature list automatically</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">nb_features</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+
+                <span class="k">if</span> <span class="n">nb_levels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="s2">&quot;SynthStripMriqc brick: must provide unet nb_levels if &quot;</span>
+                        <span class="s2">&quot;nb_features is an integer&quot;</span>
+                    <span class="p">)</span>
+                <span class="n">feats</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">nb_features</span> <span class="o">*</span> <span class="n">feat_mult</span> <span class="o">**</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span>
+                                                                     <span class="n">nb_levels</span><span class="p">)</span>
+                                 <span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+                <span class="n">feats</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">feats</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">max_features</span><span class="p">)</span>
+                <span class="n">nb_features</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">feats</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">nb_conv_per_level</span><span class="p">),</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="n">feats</span><span class="p">),</span> <span class="n">nb_conv_per_level</span><span class="p">),</span>
+                <span class="p">]</span>
+
+            <span class="k">elif</span> <span class="n">nb_levels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;SynthStripMriqc brick: cannot use nb_levels if &quot;</span>
+                                 <span class="s2">&quot;nb_features is not an integer&quot;</span><span class="p">)</span>
+
+            <span class="c1"># extract any surplus (full resolution) decoder convolutions</span>
+            <span class="n">enc_nf</span><span class="p">,</span> <span class="n">dec_nf</span> <span class="o">=</span> <span class="n">nb_features</span>
+            <span class="n">nb_dec_convs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">enc_nf</span><span class="p">)</span>
+            <span class="n">final_convs</span> <span class="o">=</span> <span class="n">dec_nf</span><span class="p">[</span><span class="n">nb_dec_convs</span><span class="p">:]</span>
+            <span class="n">dec_nf</span> <span class="o">=</span> <span class="n">dec_nf</span><span class="p">[:</span><span class="n">nb_dec_convs</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nb_levels</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">nb_dec_convs</span> <span class="o">/</span> <span class="n">nb_conv_per_level</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">max_pool</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+                <span class="n">max_pool</span> <span class="o">=</span> <span class="p">[</span><span class="n">max_pool</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">nb_levels</span>
+
+            <span class="c1"># cache downsampling / upsampling operations</span>
+            <span class="n">MaxPooling</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="p">,</span> <span class="s2">&quot;MaxPool</span><span class="si">%d</span><span class="s2">d&quot;</span> <span class="o">%</span> <span class="n">ndims</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pooling</span> <span class="o">=</span> <span class="p">[</span><span class="n">MaxPooling</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">max_pool</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">upsampling</span> <span class="o">=</span> <span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Upsample</span><span class="p">(</span><span class="n">scale_factor</span><span class="o">=</span><span class="n">s</span><span class="p">,</span>
+                                                 <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;nearest&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span>
+                                                                       <span class="n">max_pool</span>
+            <span class="p">]</span>
+
+            <span class="c1"># configure encoder (down-sampling path)</span>
+            <span class="n">prev_nf</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">encoder_nfs</span> <span class="o">=</span> <span class="p">[</span><span class="n">prev_nf</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">()</span>
+
+            <span class="k">for</span> <span class="n">level</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nb_levels</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">convs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">()</span>
+
+                <span class="k">for</span> <span class="n">conv</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nb_conv_per_level</span><span class="p">):</span>
+                    <span class="n">nf</span> <span class="o">=</span> <span class="n">enc_nf</span><span class="p">[</span><span class="n">level</span> <span class="o">*</span> <span class="n">nb_conv_per_level</span> <span class="o">+</span> <span class="n">conv</span><span class="p">]</span>
+                    <span class="n">convs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">SynthStripMriqc</span><span class="o">.</span><span class="n">ConvBlock</span><span class="p">(</span><span class="n">ndims</span><span class="p">,</span> <span class="n">prev_nf</span><span class="p">,</span> <span class="n">nf</span><span class="p">))</span>
+                    <span class="n">prev_nf</span> <span class="o">=</span> <span class="n">nf</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">encoder</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">convs</span><span class="p">)</span>
+                <span class="n">encoder_nfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prev_nf</span><span class="p">)</span>
+
+            <span class="c1"># configure decoder (up-sampling path)</span>
+            <span class="n">encoder_nfs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="n">encoder_nfs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">decoder</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">()</span>
+
+            <span class="k">for</span> <span class="n">level</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nb_levels</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">convs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">()</span>
+
+                <span class="k">for</span> <span class="n">conv</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nb_conv_per_level</span><span class="p">):</span>
+                    <span class="n">nf</span> <span class="o">=</span> <span class="n">dec_nf</span><span class="p">[</span><span class="n">level</span> <span class="o">*</span> <span class="n">nb_conv_per_level</span> <span class="o">+</span> <span class="n">conv</span><span class="p">]</span>
+                    <span class="n">convs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">SynthStripMriqc</span><span class="o">.</span><span class="n">ConvBlock</span><span class="p">(</span><span class="n">ndims</span><span class="p">,</span> <span class="n">prev_nf</span><span class="p">,</span> <span class="n">nf</span><span class="p">))</span>
+                    <span class="n">prev_nf</span> <span class="o">=</span> <span class="n">nf</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">decoder</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">convs</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">level</span> <span class="o">&lt;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nb_levels</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+                    <span class="n">prev_nf</span> <span class="o">+=</span> <span class="n">encoder_nfs</span><span class="p">[</span><span class="n">level</span><span class="p">]</span>
+
+            <span class="c1"># now we take care of any remaining convolutions</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">remaining</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">()</span>
+
+            <span class="k">for</span> <span class="n">num</span><span class="p">,</span> <span class="n">nf</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">final_convs</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">remaining</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">SynthStripMriqc</span><span class="o">.</span><span class="n">ConvBlock</span><span class="p">(</span><span class="n">ndims</span><span class="p">,</span> <span class="n">prev_nf</span><span class="p">,</span> <span class="n">nf</span><span class="p">))</span>
+                <span class="n">prev_nf</span> <span class="o">=</span> <span class="n">nf</span>
+
+            <span class="c1"># final convolutions</span>
+            <span class="k">if</span> <span class="n">return_mask</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">remaining</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">SynthStripMriqc</span><span class="o">.</span><span class="n">ConvBlock</span><span class="p">(</span><span class="n">ndims</span><span class="p">,</span> <span class="n">prev_nf</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span>
+                                                <span class="n">activation</span><span class="o">=</span><span class="kc">None</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">remaining</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">remaining</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">SynthStripMriqc</span><span class="o">.</span><span class="n">ConvBlock</span><span class="p">(</span><span class="n">ndims</span><span class="p">,</span> <span class="n">prev_nf</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
+                                                <span class="n">activation</span><span class="o">=</span><span class="kc">None</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="SynthStripMriqc.StripModel.forward"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStripMriqc.StripModel.forward">[docs]</a>        <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;blabla&quot;&quot;&quot;</span>
+            <span class="c1"># encoder forward pass</span>
+            <span class="n">x_history</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">]</span>
+
+            <span class="k">for</span> <span class="n">level</span><span class="p">,</span> <span class="n">convs</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">encoder</span><span class="p">):</span>
+
+                <span class="k">for</span> <span class="n">conv</span> <span class="ow">in</span> <span class="n">convs</span><span class="p">:</span>
+                    <span class="n">x</span> <span class="o">=</span> <span class="n">conv</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+                <span class="n">x_history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pooling</span><span class="p">[</span><span class="n">level</span><span class="p">](</span><span class="n">x</span><span class="p">)</span>
+
+            <span class="c1"># decoder forward pass with upsampling and concatenation</span>
+            <span class="k">for</span> <span class="n">level</span><span class="p">,</span> <span class="n">convs</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">decoder</span><span class="p">):</span>
+
+                <span class="k">for</span> <span class="n">conv</span> <span class="ow">in</span> <span class="n">convs</span><span class="p">:</span>
+                    <span class="n">x</span> <span class="o">=</span> <span class="n">conv</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">level</span> <span class="o">&lt;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nb_levels</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+                    <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">upsampling</span><span class="p">[</span><span class="n">level</span><span class="p">](</span><span class="n">x</span><span class="p">)</span>
+                    <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">x_history</span><span class="o">.</span><span class="n">pop</span><span class="p">()],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+            <span class="c1"># remaining convs at full resolution</span>
+            <span class="k">for</span> <span class="n">conv</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">remaining</span><span class="p">:</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="n">conv</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">x</span></div></div>
+
+
+<div class="viewcode-block" id="SynthStripMriqc.ConvBlock"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStripMriqc.ConvBlock">[docs]</a>    <span class="k">class</span> <span class="nc">ConvBlock</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        * Specific convolutional block followed by leakyrelu for unet.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SynthStripMriqc.ConvBlock.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStripMriqc.ConvBlock.__init__">[docs]</a>        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span>
+                     <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s2">&quot;leaky&quot;</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;blabla&quot;&quot;&quot;</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+            <span class="n">Conv</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="p">,</span> <span class="s2">&quot;Conv</span><span class="si">%d</span><span class="s2">d&quot;</span> <span class="o">%</span> <span class="n">ndims</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conv</span> <span class="o">=</span> <span class="n">Conv</span><span class="p">(</span><span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">stride</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">activation</span> <span class="o">==</span> <span class="s2">&quot;leaky&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">activation</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">LeakyReLU</span><span class="p">(</span><span class="mf">0.2</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">activation</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">activation</span> <span class="o">=</span> <span class="kc">None</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown activation: </span><span class="si">{</span><span class="n">activation</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SynthStripMriqc.ConvBlock.forward"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStripMriqc.ConvBlock.forward">[docs]</a>        <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;blabla&quot;&quot;&quot;</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">activation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">activation</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">out</span></div></div>
+
+
+<div class="viewcode-block" id="SynthStripMriqc.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStripMriqc.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
+
+<span class="sd">        The input and output plugs are defined here. The special</span>
+<span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
+<span class="sd">        third-party products necessary for the running of the brick.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">SynthStripMriqc</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;freesurfer&#39;</span><span class="p">]</span>
+
+        <span class="c1"># Mandatory inputs description</span>
+        <span class="n">in_file_desc</span> <span class="o">=</span> <span class="s1">&#39;Input image to be brain extracted (a path to a file)&#39;</span> <span class="c1">##</span>
+        <span class="c1"># Optional inputs with default value description</span>
+        <span class="n">model_desc</span> <span class="o">=</span> <span class="s1">&#39;Alternative model weights (a path to a file)&#39;</span>
+        <span class="n">border_mm_desc</span> <span class="o">=</span> <span class="s1">&#39;Mask border threshold in mm (integer, default: 1)&#39;</span> <span class="c1">##</span>
+        <span class="c1">#no_csf_desc = &#39;Exclude CSF from brain border&#39;</span>
+        <span class="n">output_type_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Typecodes of the output image formats (one &#39;</span>
+                            <span class="s1">&#39;of NIFTI, MGZ, NIFTI_GZ).&#39;</span><span class="p">)</span>
+        <span class="n">gpu_desc</span> <span class="o">=</span> <span class="s2">&quot;Use the GPU (bool, default: False)&quot;</span> <span class="c1">##</span>
+        <span class="c1"># Outputs description</span>
+        <span class="n">out_file_desc</span> <span class="o">=</span> <span class="s1">&#39;Brain-extracted path (a path to a file)&#39;</span> <span class="c1">##</span>
+        <span class="n">out_mask_desc</span> <span class="o">=</span> <span class="s1">&#39;Brain mask path (a path to a file)&#39;</span> <span class="c1">##</span>
+
+        <span class="c1"># Mandatory inputs traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;in_file&#39;</span><span class="p">,</span>
+                       <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">in_file_desc</span><span class="p">))</span>
+
+        <span class="c1"># Optional inputs with default value traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;model&#39;</span><span class="p">,</span>
+                       <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">model_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;border_mm&#39;</span><span class="p">,</span>
+                       <span class="n">Int</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span>
+                           <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                           <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                           <span class="n">desc</span><span class="o">=</span><span class="n">border_mm_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;output_type&#39;</span><span class="p">,</span>
+                       <span class="n">Enum</span><span class="p">(</span><span class="s1">&#39;NIFTI&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;NIFTI_GZ&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;MGZ&#39;</span><span class="p">,</span>
+                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">output_type_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;gpu&#39;</span><span class="p">,</span>
+                       <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">gpu_desc</span><span class="p">))</span>
+
+        <span class="c1"># Outputs traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;out_file&#39;</span><span class="p">,</span>
+                       <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">out_file_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;out_mask&#39;</span><span class="p">,</span>
+                       <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">desc</span><span class="o">=</span><span class="n">out_mask_desc</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SynthStripMriqc.conform"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStripMriqc.conform">[docs]</a>    <span class="k">def</span> <span class="nf">conform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_nii</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Resample image as SynthStrip likes it.&quot;&quot;&quot;</span>
+        <span class="n">shape</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">input_nii</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">3</span><span class="p">])</span>
+        <span class="n">affine</span> <span class="o">=</span> <span class="n">input_nii</span><span class="o">.</span><span class="n">affine</span>
+
+        <span class="c1"># Get corner voxel centers in index coords</span>
+        <span class="n">corner_centers_ijk</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+                                          <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+                                          <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+                                          <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+                                       <span class="p">]</span>
+                                      <span class="p">)</span>
+                                       <span class="o">+</span> <span class="mf">0.5</span>
+                             <span class="p">)</span>
+
+        <span class="c1"># Get corner voxel centers in mm</span>
+        <span class="n">corners_xyz</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">affine</span>
+<div class="viewcode-block" id="SynthStripMriqc.resample_like"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStripMriqc.resample_like">[docs]</a>            <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">corner_centers_ijk</span><span class="p">,</span>
+                         <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">corner_centers_ijk</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+                                <span class="p">)</span>
+                        <span class="p">))</span><span class="o">.</span><span class="n">T</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Target affine is 1mm voxels in LIA orientation</span>
+        <span class="n">target_affine</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">([</span><span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])[:,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)]</span>
+
+        <span class="c1"># Target shape</span>
+        <span class="n">extent</span> <span class="o">=</span> <span class="n">corners_xyz</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="mi">1</span><span class="p">)[:</span><span class="mi">3</span><span class="p">],</span> <span class="n">corners_xyz</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="mi">1</span><span class="p">)[:</span><span class="mi">3</span><span class="p">]</span>
+        <span class="n">target_shape</span> <span class="o">=</span> <span class="p">((</span><span class="n">extent</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">extent</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="mf">0.999</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+        <span class="c1"># SynthStrip likes dimensions be multiple of 64 (192, 256, or 320)</span>
+        <span class="n">target_shape</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">target_shape</span><span class="p">)</span> <span class="o">/</span> <span class="mi">64</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="o">*</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">192</span><span class="p">,</span> <span class="mi">320</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Ensure shape ordering is LIA too</span>
+        <span class="n">target_shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">target_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">target_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>
+
+        <span class="c1"># Coordinates of center voxel do not change</span>
+        <span class="n">input_c</span> <span class="o">=</span> <span class="n">affine</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">shape</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="mf">1.0</span><span class="p">))</span>
+        <span class="n">target_c</span> <span class="o">=</span> <span class="n">target_affine</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">target_shape</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="mf">1.0</span><span class="p">))</span>
+
+        <span class="c1"># Rebase the origin of the new, plumb affine</span>
+        <span class="n">target_affine</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">-=</span> <span class="n">target_c</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="n">input_c</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
+
+        <span class="n">nii</span> <span class="o">=</span> <span class="n">Affine</span><span class="p">(</span>
+            <span class="n">reference</span><span class="o">=</span><span class="n">nb</span><span class="o">.</span><span class="n">Nifti1Image</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">target_shape</span><span class="p">),</span>
+                                     <span class="n">target_affine</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">input_nii</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">nii</span></div>
+
+    <span class="k">def</span> <span class="nf">resample_like</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">output_dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cval</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Resample the input image to be in the target&#39;s grid via identity</span>
+<span class="sd">        transform.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Affine</span><span class="p">(</span><span class="n">reference</span><span class="o">=</span><span class="n">target</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">image</span><span class="p">,</span>
+                                              <span class="n">output_dtype</span><span class="o">=</span><span class="n">output_dtype</span><span class="p">,</span>
+                                              <span class="n">cval</span><span class="o">=</span><span class="n">cval</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SynthStripMriqc.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStripMriqc.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+
+<span class="sd">        The main objective of this method is to produce the outputs of the</span>
+<span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
+<span class="sd">        if defined here. In order not to include an output in the database,</span>
+<span class="sd">        this output must be a value of the optional key &#39;notInDb&#39; of the</span>
+<span class="sd">        self.outputs dictionary. To work properly this method must return</span>
+<span class="sd">        self.make_initResult() object.</span>
+
+<span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">SynthStripMriqc</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+
+        <span class="c1"># Outputs definition and tags inheritance (optional)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">:</span>
+                <span class="n">valid_ext</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">fileName</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">,</span> <span class="n">EXT</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_ext</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">The input image format is&#39;</span>
+                          <span class="s1">&#39; not recognized...!&#39;</span><span class="p">)</span>
+                    <span class="k">return</span>
+
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">output_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_type</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;out_file&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+                            <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="n">in_ext</span><span class="p">,</span>
+                            <span class="s1">&#39;_desc-brain.&#39;</span> <span class="o">+</span> <span class="n">EXT</span><span class="p">[</span><span class="n">output_type</span><span class="p">]))</span>
+
+                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;out_mask&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+                            <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="n">in_ext</span><span class="p">,</span>
+                            <span class="s1">&#39;_desc-brain_mask.&#39;</span> <span class="o">+</span> <span class="n">EXT</span><span class="p">[</span><span class="n">output_type</span><span class="p">]))</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;No output_directory was found...!</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="k">return</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span>
+                <span class="s1">&#39;out_file&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span>
+                <span class="s1">&#39;out_mask&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
+
+        <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SynthStripMriqc.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStripMriqc.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">SynthStripMriqc</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+
+        <span class="c1"># necessary for speed gains (I think)</span>
+        <span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">cudnn</span><span class="o">.</span><span class="n">benchmark</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">cudnn</span><span class="o">.</span><span class="n">deterministic</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="c1"># configure GPU device</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">gpu</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;CUDA_VISIBLE_DEVICES&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;0&quot;</span>
+            <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cuda&quot;</span><span class="p">)</span>
+            <span class="n">device_name</span> <span class="o">=</span> <span class="s2">&quot;GPU&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;CUDA_VISIBLE_DEVICES&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;-1&quot;</span>
+            <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
+            <span class="n">device_name</span> <span class="o">=</span> <span class="s2">&quot;CPU&quot;</span>
+
+        <span class="c1"># configure model</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;SynthStripMriqc brick: Configuring model on the </span><span class="si">{</span><span class="n">device_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">StripModel</span><span class="p">()</span>
+            <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+            <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+
+        <span class="c1"># load model weights</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="ow">in</span> <span class="p">[</span><span class="n">Undefined</span><span class="p">,</span> <span class="s1">&#39;&lt;undefined&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">]:</span>
+            <span class="n">fconf</span> <span class="o">=</span> <span class="n">capsul</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">configurations</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="s1">&#39;capsul.engine.module.freesurfer&#39;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">fconf</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">modelfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">fconf</span><span class="p">[</span><span class="s1">&#39;setup&#39;</span><span class="p">]),</span>
+                                         <span class="s1">&#39;models&#39;</span><span class="p">,</span>
+                                         <span class="s1">&#39;synthstrip.1.pt&#39;</span><span class="p">)</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;SynthStripMriqc: No configuration for &quot;</span>
+                                   <span class="s2">&quot;freeSurfer was found, so the path for &quot;</span>
+                                   <span class="s2">&quot;the model cannot be defined. &quot;</span>
+                                   <span class="s2">&quot;See File &gt; MIA Preferences&quot;</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">modelfile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;SynthStripMriqc brick: Using custom model weights&quot;</span><span class="p">)</span>
+
+        <span class="n">checkpoint</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">modelfile</span><span class="p">,</span> <span class="n">map_location</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">[</span><span class="s2">&quot;model_state_dict&quot;</span><span class="p">])</span>
+
+        <span class="c1"># load input volume</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;SynthStripMriqc brick: Input image read from: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># normalize intensities</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">nb</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">)</span>
+        <span class="n">conformed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conform</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+        <span class="n">in_data</span> <span class="o">=</span> <span class="n">conformed</span><span class="o">.</span><span class="n">get_fdata</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+        <span class="n">in_data</span> <span class="o">-=</span> <span class="n">in_data</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+        <span class="n">in_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">in_data</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">in_data</span><span class="p">,</span> <span class="mi">99</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">in_data</span> <span class="o">=</span> <span class="n">in_data</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+
+        <span class="c1"># predict the surface distance transform</span>
+        <span class="n">input_tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">in_data</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+            <span class="n">sdt</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+
+        <span class="c1"># unconform the sdt and extract mask</span>
+        <span class="n">sdt_target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resample_like</span><span class="p">(</span><span class="n">nb</span><span class="o">.</span><span class="n">Nifti1Image</span><span class="p">(</span><span class="n">sdt</span><span class="p">,</span>
+                                                       <span class="n">conformed</span><span class="o">.</span><span class="n">affine</span><span class="p">,</span>
+                                                       <span class="kc">None</span><span class="p">),</span>
+                                        <span class="n">image</span><span class="p">,</span>
+                                        <span class="n">output_dtype</span><span class="o">=</span><span class="s2">&quot;int16&quot;</span><span class="p">,</span>
+                                        <span class="n">cval</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">sdt_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asanyarray</span><span class="p">(</span><span class="n">sdt_target</span><span class="o">.</span><span class="n">dataobj</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;int16&quot;</span><span class="p">)</span>
+
+        <span class="c1"># find largest CC (just do this to be safe for now)</span>
+        <span class="n">components</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">ndimage</span><span class="o">.</span><span class="n">label</span><span class="p">(</span>
+                                <span class="n">sdt_data</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">border_mm</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">bincount</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">bincount</span><span class="p">(</span><span class="n">components</span><span class="o">.</span><span class="n">flatten</span><span class="p">())[</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">components</span> <span class="o">==</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">bincount</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">ndimage</span><span class="o">.</span><span class="n">morphology</span><span class="o">.</span><span class="n">binary_fill_holes</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
+
+        <span class="c1"># write the masked output</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_file</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="n">Undefined</span><span class="p">,</span> <span class="s1">&#39;&lt;undefined&gt;&#39;</span><span class="p">]:</span>
+            <span class="n">img_data</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">get_fdata</span><span class="p">()</span>
+            <span class="n">bg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">img_data</span><span class="o">.</span><span class="n">min</span><span class="p">()])</span>
+            <span class="n">img_data</span><span class="p">[</span><span class="n">mask</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">bg</span>
+            <span class="n">nb</span><span class="o">.</span><span class="n">Nifti1Image</span><span class="p">(</span><span class="n">img_data</span><span class="p">,</span>
+                           <span class="n">image</span><span class="o">.</span><span class="n">affine</span><span class="p">,</span>
+                           <span class="n">image</span><span class="o">.</span><span class="n">header</span><span class="p">)</span><span class="o">.</span><span class="n">to_filename</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out_file</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Masked image saved to: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">out_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># write the brain mask</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_mask</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="n">Undefined</span><span class="p">,</span> <span class="s1">&#39;&lt;undefined&gt;&#39;</span><span class="p">]:</span>
+            <span class="n">hdr</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">hdr</span><span class="o">.</span><span class="n">set_data_dtype</span><span class="p">(</span><span class="s2">&quot;uint8&quot;</span><span class="p">)</span>
+            <span class="n">nb</span><span class="o">.</span><span class="n">Nifti1Image</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">image</span><span class="o">.</span><span class="n">affine</span><span class="p">,</span> <span class="n">hdr</span><span class="p">)</span><span class="o">.</span><span class="n">to_filename</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out_mask</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;SynthStripMriqc brick: &quot;</span>
+                  <span class="sa">f</span><span class="s2">&quot;Binary brain mask saved to: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">out_mask</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;If you use SynthStripMriqc in your analysis, please cite:&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;----------------------------------------------------&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;SynthStrip: Skull-Stripping for Any Brain Image.&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;A Hoopes, JS Mora, AV Dalca, B Fischl, M Hoffmann.&quot;</span><span class="p">)</span></div></div>
+
 </pre></div>
 
       </div>
@@ -531,7 +1019,7 @@
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
     </div>
   </body>
 </html>

@@ -5,18 +5,20 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.reports.reporting &#8212; mia_processes 2.2.1-dev+2bc8ce9 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css" />
-    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <title>mia_processes.bricks.reports.reporting &#8212; mia_processes 2.2.1-dev+8d51d6e documentation</title>
+    <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
     <script src="../../../../_static/jquery.js"></script>
     <script src="../../../../_static/underscore.js"></script>
     <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.2.1-dev+2bc8ce9 documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+8d51d6e documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.reports.reporting</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -73,8 +75,8 @@
 
 
 <div class="viewcode-block" id="ReportAnatMriqc"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportAnatMriqc">[docs]</a><span class="k">class</span> <span class="nc">ReportAnatMriqc</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        * Generates the report for anatomical data in MRIQC pipeline *</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        * Generates the report for anatomical data in MRIQC pipeline.</span>
 
 <span class="sd">        Please, see the complete documentation for the `MRIQC_report brick </span>
 <span class="sd">        in the populse.mia_processes website</span>
@@ -83,7 +85,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="ReportAnatMriqc.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportAnatMriqc.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -223,7 +225,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="ReportAnatMriqc.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportAnatMriqc.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -695,7 +697,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="ReportAnatMriqc.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportAnatMriqc.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ReportAnatMriqc</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
         <span class="n">report</span> <span class="o">=</span> <span class="n">Report</span><span class="p">(</span>
@@ -715,8 +717,8 @@
 
 
 <div class="viewcode-block" id="ReportFuncMriqc"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportFuncMriqc">[docs]</a><span class="k">class</span> <span class="nc">ReportFuncMriqc</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        * Generates the report for functional data in MRIQC pipeline *</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        * Generates the report for functional data in MRIQC pipeline.</span>
 
 <span class="sd">        Please, see the complete documentation for the `MRIQC_report brick in the populse.mia_processes website</span>
 <span class="sd">        https://populse.github.io/mia_processes/html/documentation/bricks/reports/MRIQC_report.html</span>
@@ -724,7 +726,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="ReportFuncMriqc.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportFuncMriqc.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -864,7 +866,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="ReportFuncMriqc.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportFuncMriqc.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -992,7 +994,7 @@
                         <span class="s2">&quot;Correction of Brain Images&lt;/i&gt;, NeuroImage, 17(2), &quot;</span>
                         <span class="s2">&quot;825-841, 2002.&quot;</span>
                         <span class="p">],</span>
-            <span class="s2">&quot;dummyTRs&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Number of volumes identified as non-steady state&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;dummy_trs&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Number of volumes identified as non-steady state&quot;</span><span class="p">,</span>
                          <span class="mi">2</span><span class="p">,</span>
                          <span class="kc">None</span>
                          <span class="p">],</span>
@@ -1204,7 +1206,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="ReportFuncMriqc.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportFuncMriqc.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ReportFuncMriqc</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
         <span class="n">report</span> <span class="o">=</span> <span class="n">Report</span><span class="p">(</span>
@@ -1234,7 +1236,7 @@
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
     </div>
   </body>
 </html>

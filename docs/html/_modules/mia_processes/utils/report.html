@@ -5,18 +5,20 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.utils.report &#8212; mia_processes 2.2.1-dev+c0ad978 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/haiku.css" />
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <title>mia_processes.utils.report &#8212; mia_processes 2.2.1-dev+8d51d6e documentation</title>
+    <link rel="stylesheet" href="../../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
-          <span>mia_processes 2.2.1-dev+c0ad978 documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+8d51d6e documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.utils.report</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -99,10 +101,10 @@
 
 
 <div class="viewcode-block" id="Report"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.report.Report">[docs]</a><span class="k">class</span> <span class="nc">Report</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;blabla&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;blabla&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Report.__init__"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.report.Report.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">report_file</span><span class="p">,</span> <span class="n">dict4runtime</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;blabla&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;blabla&quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span> <span class="o">=</span> <span class="n">dict4runtime</span>
         <span class="n">ref_exp</span> <span class="o">=</span> <span class="s2">&quot;Undefined&quot;</span>
@@ -297,7 +299,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">report</span> <span class="o">=</span> <span class="p">[]</span></div>
 
 <div class="viewcode-block" id="Report.mriqc_func_make_report"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.report.Report.mriqc_func_make_report">[docs]</a>    <span class="k">def</span> <span class="nf">mriqc_func_make_report</span><span class="p">(</span><span class="bp">self</span><span class="p">,):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;blabla&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;blabla&quot;&quot;&quot;</span>
 
         <span class="c1"># First page - cover ##################################################</span>
         <span class="c1">#######################################################################</span>
@@ -399,8 +401,8 @@
         <span class="c1"># fd_perc</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s1">&#39;fd_perc&#39;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mf">2.5</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># dummyTRs</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s1">&#39;dummyTRs&#39;</span><span class="p">))</span>
+        <span class="c1"># dummy_trs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s1">&#39;dummy_trs&#39;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">82</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
         <span class="c1"># Footnote</span>
         <span class="n">line</span> <span class="o">=</span> <span class="n">ReportLine</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span>
@@ -637,7 +639,7 @@
         <span class="n">tmpdir</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Report.mriqc_anat_make_report"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.report.Report.mriqc_anat_make_report">[docs]</a>    <span class="k">def</span> <span class="nf">mriqc_anat_make_report</span><span class="p">(</span><span class="bp">self</span><span class="p">,):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;blabla&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;blabla&quot;&quot;&quot;</span>
 
        <span class="c1"># First page - cover ##################################################</span>
         <span class="c1">#######################################################################</span>
@@ -1124,7 +1126,7 @@
         <span class="n">tmpdir</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Report.get_iqms_data"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.report.Report.get_iqms_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_iqms_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;blabla&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;blabla&quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">iqms_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">param</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 
@@ -1185,7 +1187,7 @@
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
     </div>
   </body>
 </html>

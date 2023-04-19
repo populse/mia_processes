@@ -5,18 +5,20 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.preprocess.ants.processes &#8212; mia_processes 2.2.1-dev+0715924 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/haiku.css" />
-    <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+    <title>mia_processes.bricks.preprocess.ants.processes &#8212; mia_processes 2.2.1-dev+8d51d6e documentation</title>
+    <link rel="stylesheet" href="../../../../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
     <script src="../../../../../_static/jquery.js"></script>
     <script src="../../../../../_static/underscore.js"></script>
     <script src="../../../../../_static/doctools.js"></script>
+    <script src="../../../../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../../index.html">
-          <span>mia_processes 2.2.1-dev+0715924 documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+8d51d6e documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.preprocess.ants.processes</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -74,8 +76,8 @@
 
 
 <div class="viewcode-block" id="AffineInitializer"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.ants.html#mia_processes.bricks.preprocess.ants.processes.AffineInitializer">[docs]</a><span class="k">class</span> <span class="nc">AffineInitializer</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    * A multi-start optimizer for affine registration *</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    * A multi-start optimizer for affine registration.</span>
 
 <span class="sd">    Please, see the complete documentation for the `AffineInitializer&#39; brick</span>
 <span class="sd">    in the populse.mia_processes website</span>
@@ -84,7 +86,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="AffineInitializer.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.ants.html#mia_processes.bricks.preprocess.ants.processes.AffineInitializer.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -182,7 +184,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s1">&#39;nipype.interfaces.ants.AffineInitializer&#39;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="AffineInitializer.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.ants.html#mia_processes.bricks.preprocess.ants.processes.AffineInitializer.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -228,8 +230,12 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="AffineInitializer.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.ants.html#mia_processes.bricks.preprocess.ants.processes.AffineInitializer.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">AffineInitializer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+
+        <span class="c1"># TODO: We see in soma_workflow: nipype.interface INFO:</span>
+        <span class="c1">#       bad det -1 v 1 u -1</span>
+
         <span class="c1"># Mandatory inputs</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">fixed_image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fixed_image</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">moving_image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">moving_image</span>
@@ -245,18 +251,18 @@
 
 
 <div class="viewcode-block" id="ApplyTransforms"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.ants.html#mia_processes.bricks.preprocess.ants.processes.ApplyTransforms">[docs]</a><span class="k">class</span> <span class="nc">ApplyTransforms</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    * Transforms an image according to  a reference image and a</span>
-<span class="sd">      transformation (or set of transformation) *</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    * | Transforms an image according to  a reference image and a</span>
+<span class="sd">      | transformation (or set of transformation).</span>
 
 <span class="sd">    Please, see the complete documentation for the `ApplyTransforms&#39; brick</span>
-<span class="sd">     in the populse.mia_processes website</span>
+<span class="sd">    in the populse.mia_processes website</span>
 <span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/afni/ApplyTransforms.html&gt;`_</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="ApplyTransforms.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.ants.html#mia_processes.bricks.preprocess.ants.processes.ApplyTransforms.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -346,7 +352,7 @@
                             <span class="n">desc</span><span class="o">=</span><span class="n">dimension_desc</span><span class="p">))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;float&quot;</span><span class="p">,</span>
-                       <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span>
+                       <span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span>
                             <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                             <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                             <span class="n">desc</span><span class="o">=</span><span class="n">float_desc</span><span class="p">))</span>
@@ -415,7 +421,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s1">&#39;nipype.interfaces.ants.ApplyTransforms&#39;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ApplyTransforms.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.ants.html#mia_processes.bricks.preprocess.ants.processes.ApplyTransforms.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -436,7 +442,7 @@
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span> <span class="o">==</span> <span class="n">Undefined</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span> <span class="o">=</span> <span class="s1">&#39;t_&#39;</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The out_prefix parameter is undefined. Automatically &#39;</span>
-                      <span class="s1">&#39;set to &quot;AffineTransform_&quot; ...&#39;</span><span class="p">)</span>
+                      <span class="s1">&#39;set to &quot;t_&quot; ...&#39;</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">:</span>
                 <span class="n">valid_ext</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">fileName</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input_image</span><span class="p">,</span>
@@ -461,7 +467,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="ApplyTransforms.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.ants.html#mia_processes.bricks.preprocess.ants.processes.ApplyTransforms.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ApplyTransforms</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">input_image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_image</span>
@@ -486,8 +492,8 @@
 
 
 <div class="viewcode-block" id="N4BiasFieldCorrection"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.ants.html#mia_processes.bricks.preprocess.ants.processes.N4BiasFieldCorrection">[docs]</a><span class="k">class</span> <span class="nc">N4BiasFieldCorrection</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    * N4 retrospective bias correction algorithm *</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    * N4 retrospective bias correction algorithm.</span>
 
 <span class="sd">    Please, see the complete documentation for the `N4BiasFieldCorrection&#39;</span>
 <span class="sd">    brick in the populse.mia_processes website</span>
@@ -496,7 +502,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="N4BiasFieldCorrection.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.ants.html#mia_processes.bricks.preprocess.ants.processes.N4BiasFieldCorrection.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -678,7 +684,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s1">&#39;nipype.interfaces.ants.N4BiasFieldCorrection&#39;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="N4BiasFieldCorrection.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.ants.html#mia_processes.bricks.preprocess.ants.processes.N4BiasFieldCorrection.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -718,13 +724,14 @@
                         <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span> <span class="o">+</span> <span class="n">fileName</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="n">in_ext</span><span class="p">)</span>
 
-                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;bias_image&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span> <span class="o">+</span> <span class="n">fileName</span> <span class="o">+</span>
-                        <span class="s1">&#39;_bias.&#39;</span> <span class="o">+</span> <span class="n">in_ext</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_bias</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;bias_image&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                                                <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                                                <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span> <span class="o">+</span> <span class="n">fileName</span> <span class="o">+</span>
+                                                <span class="s1">&#39;_bias.&#39;</span> <span class="o">+</span> <span class="n">in_ext</span><span class="p">)</span>
 
-                    <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span>
-                        <span class="s1">&#39;out_file&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span>
+                            <span class="s1">&#39;out_file&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
 
                     <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span>
                         <span class="s1">&#39;bias_image&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
@@ -737,36 +744,35 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="N4BiasFieldCorrection.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.ants.html#mia_processes.bricks.preprocess.ants.processes.N4BiasFieldCorrection.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">N4BiasFieldCorrection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
         <span class="c1"># If negative values, scale image</span>
         <span class="n">input_nii</span> <span class="o">=</span> <span class="n">nib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">)</span>
-        <span class="n">datamin</span> <span class="o">=</span> <span class="n">input_nii</span><span class="o">.</span><span class="n">get_fdata</span><span class="p">()</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">datamin</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="n">input_nii</span><span class="o">.</span><span class="n">get_fdata</span><span class="p">()</span> <span class="o">-</span> <span class="n">datamin</span>
-            <span class="n">newnii</span> <span class="o">=</span> <span class="n">input_nii</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">input_nii</span><span class="o">.</span><span class="n">affine</span><span class="p">,</span>
-                                         <span class="n">input_nii</span><span class="o">.</span><span class="n">header</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">input_nii</span><span class="o">.</span><span class="n">get_fdata</span><span class="p">()</span>
+        <span class="n">data_min</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
 
-            <span class="n">fileName</span><span class="p">,</span> <span class="n">trail</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-
-            <span class="n">nib</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">newnii</span><span class="p">,</span> <span class="n">fileName</span> <span class="o">+</span> <span class="s1">&#39;_scaled.&#39;</span> <span class="o">+</span> <span class="n">trail</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span> <span class="o">=</span> <span class="n">fileName</span> <span class="o">+</span> <span class="s1">&#39;_scaled.&#39;</span> <span class="o">+</span> <span class="n">trail</span>
+        <span class="k">if</span> <span class="n">data_min</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">data_new</span> <span class="o">=</span> <span class="n">data</span> <span class="o">-</span> <span class="n">data_min</span>
+            <span class="n">new_nii</span> <span class="o">=</span> <span class="n">input_nii</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span><span class="n">data_new</span><span class="p">,</span> <span class="n">input_nii</span><span class="o">.</span><span class="n">affine</span><span class="p">,</span>
+                                          <span class="n">input_nii</span><span class="o">.</span><span class="n">header</span><span class="p">)</span>
+            <span class="n">file_name</span><span class="p">,</span> <span class="n">trail</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">nib</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">new_nii</span><span class="p">,</span> <span class="n">file_name</span> <span class="o">+</span> <span class="s1">&#39;_scaled.&#39;</span> <span class="o">+</span> <span class="n">trail</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span> <span class="o">=</span> <span class="n">file_name</span> <span class="o">+</span> <span class="s1">&#39;_scaled.&#39;</span> <span class="o">+</span> <span class="n">trail</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">negative_values</span> <span class="o">=</span> <span class="kc">True</span>
 
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">The input image contains negative values &#39;</span>
                   <span class="s1">&#39;A scaled copy was created and set as input&#39;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">input_image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">copy_header</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy_header</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">dimension</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dimension</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">rescale_intensities</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rescale_intensities</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rescale_intensities</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">rescale_intensities</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rescale_intensities</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_bias</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">bias_image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bias_image</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">save_bias</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_bias</span>
-
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bspline_fitting_distance</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">bspline_fitting_distance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bspline_fitting_distance</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bspline_order</span><span class="p">:</span>
@@ -781,17 +787,16 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">n_iterations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_iterations</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shrink_factor</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">shrink_factor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shrink_factor</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight_image</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight_image</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="n">Undefined</span><span class="p">,</span> <span class="s1">&#39;&lt;undefined&gt;&#39;</span><span class="p">]:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">weight_image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight_image</span>
-
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">output_image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_file</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
 
 
 <div class="viewcode-block" id="Registration"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.ants.html#mia_processes.bricks.preprocess.ants.processes.Registration">[docs]</a><span class="k">class</span> <span class="nc">Registration</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    * Registers a moving image to a fixed image *</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    * Registers a moving image to a fixed image.</span>
 
 <span class="sd">    Please, see the complete documentation for the `Registration&#39; brick in</span>
 <span class="sd">    the populse.mia_processes website</span>
@@ -804,7 +809,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Registration.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.ants.html#mia_processes.bricks.preprocess.ants.processes.Registration.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -1276,7 +1281,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s1">&#39;nipype.interfaces.ants.Registration&#39;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Registration.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.ants.html#mia_processes.bricks.preprocess.ants.processes.Registration.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -1374,8 +1379,11 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Registration.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.ants.html#mia_processes.bricks.preprocess.ants.processes.Registration.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Registration</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+
+        <span class="c1"># TODO: We see in soma_workflow: nipype.interface INFO: file NULL does</span>
+        <span class="c1">#       not exist, with MRIQC anat</span>
 
         <span class="c1"># Mandatory inputs (in Nipype)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">fixed_image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fixed_image</span>
@@ -1449,7 +1457,7 @@
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
     </div>
   </body>
 </html>
