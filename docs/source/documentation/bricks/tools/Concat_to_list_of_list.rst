@@ -13,14 +13,14 @@ Make an output list of list containing the iteration of the input list1 with eac
     [['a', '_1'], ['a', '_2'],
      ['b', '_1'], ['b', '_2'],
      ['c', '_1'], ['c', '_2']]
-     
+
 ---------------------------------------------------------------------
 
 **Inputs parameters:**
 
 - *list1* (a list of string, optional, default value is ['ACA', 'ACM', 'ACP', 'PICA', 'ROI_CING', 'ROI_FRON', 'ROI_INSULA', 'ROI_OCC', 'ROI_PAR', 'ROI_STR', 'ROI_TEMP', 'ROI_THA', 'SCA'])
     List 1.
-    
+
     ::
 
       ex. ['ACA', 'ACM', 'ACP', 'PICA', 'ROI_CING', 'ROI_FRON', 'ROI_INSULA', 'ROI_OCC', 'ROI_PAR', 'ROI_STR', 'ROI_TEMP', 'ROI_THA', 'SCA']
@@ -39,6 +39,4 @@ Make an output list of list containing the iteration of the input list1 with eac
 
     ::
 
-      ex. 
-
-
+      ex.

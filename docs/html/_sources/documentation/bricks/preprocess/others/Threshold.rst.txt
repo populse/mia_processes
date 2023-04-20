@@ -32,7 +32,7 @@ Makes a binary mask image at a given threshold
 - *GM_filtering* (a boolean, optional, default value is True)
     A boolean to indicate if the input images list (in_files input parameter) is filtered to retain only grey matter (based on the name of the
     image which must contain c1 in the first part, according to the SPM syntax).
-    
+
     ::
 
       ex. True

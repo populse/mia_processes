@@ -49,7 +49,7 @@ Resamples an image to the resolution of a reference image, using N-D spline inte
 
 - *suffix_to_delete* (a string, optional)
     The suffix to delete from the files_to_resample, when creating the out_files.
-    
+
     ::
 
       default value. _002
@@ -77,4 +77,3 @@ NOTE:
 - In addition to the resolution settings, it seems the size, the orientation and the position of the reference image is also transferred to the resampled image.
 - Currently, this brick use `nibabel.processing.resample_from_to() <https://nipy.org/nibabel/reference/nibabel.processing.html#nibabel.processing.resample_from_to>`_. It seems this method produces `a little noise (non-zero intensity for the background) <https://mail.python.org/pipermail/neuroimaging/2019-January/001902.html>`_.
 - Currently, resampling is only done for 3D images and using 3D or 4D images for reference.
-	

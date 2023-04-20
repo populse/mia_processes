@@ -10,14 +10,14 @@
 BetSurfacesExtraction brick
 ============
 
-Surfaces (skull, inskull, outskull, outskin) extraction using BET (FSL). 
+Surfaces (skull, inskull, outskull, outskin) extraction using BET (FSL).
 
 Both bet2 and betsurf programs are used in order to get skull and scalp
 surfaces created by betsurf (fsl BET -A option)
 This involves registering to standard space in order to allow betsurf
 to find the standard space masks it needs.
 
-The mask and mesh files (.vtk) are generated. 
+The mask and mesh files (.vtk) are generated.
 
 --------------------------------------
 
@@ -99,7 +99,7 @@ The mask and mesh files (.vtk) are generated.
     ::
 
       ex. '/home/username/data/raw_data/T1w_brain_skull_mask.nii'
-      
+
 
 -------------
 

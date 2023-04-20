@@ -10,7 +10,7 @@
 ConformImage brick
 ============
 
-Conform T1w image: 
+Conform T1w image:
 - remove axes length 1 at end of image shapes if needed (nibabel.squeeze_image)
 - reordered to be closest to canonical if needed (nibabel.as_closest_canonical)
 
@@ -33,7 +33,7 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
 
 - *prefix* (a string, optional, default value is '')
     Prefix of the output image. Default is ''.
-    
+
     ::
 
       ex. ''
@@ -41,7 +41,7 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
 
 - *suffix* (a string, optional, default value is '')
     Suffix of output image. Default is ''.
-    
+
     ::
 
       ex. ''
@@ -51,7 +51,7 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
 
 - *out_file* (a strings representing a file)
   Conforme Image (extensions: [.nii, .nii.gz]).
-    
+
     ::
 
       ex. '/home/username/data/derived_data/T1w.nii'

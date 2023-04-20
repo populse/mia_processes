@@ -64,7 +64,7 @@ Align together scans of different modalities
 
 - *apply_to_files <=> other* [#label]_
     These are any images that need to remain in alignment with the source image (a list of items which are an existing file name).
-    
+
     ::
 
       ex. ['/home/ArthurBlair/data/raw_data/Func.nii']
@@ -86,7 +86,7 @@ Align together scans of different modalities
 - *cost_function <=> eoptions.cost_fun* [#label]_
     One of 'mi' or 'nmi' or 'ecc' or 'ncc'. Registration involves finding parameters that either maximise or minimise some objective
     function. For inter-modal registration, 'Mutual Information', 'Normalised Mutual Information' or 'Entropy Correlation Coefficient' could be used. For
-    within modality, 'Normalised Cross Correlation' could be used. 
+    within modality, 'Normalised Cross Correlation' could be used.
 
       - 'mi': Mutual Information
       - 'nmi': Normalised Mutual Information
@@ -118,7 +118,7 @@ Align together scans of different modalities
 
     ::
 
-      ex. [7, 7] 
+      ex. [7, 7]
 
 - *write_interp <=> roptions.interp* [#label]_
     0 <= a long integer <= 7. The method by which the images are sampled when being written in a different space. Nearest neighbour is
@@ -185,7 +185,7 @@ Align together scans of different modalities
 -------------
 
 .. [#label] Syntax: mia_processes/nipype Coregister <=> SPM12 Coregister.
-	    
+
 	    Usefull links:
 	    `SPM12 Coregister <https://www.fil.ion.ucl.ac.uk/spm/doc/manual.pdf#page=39>`_,
 	    `nipype Coregister <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.spm.preprocess.html#coregister>`_

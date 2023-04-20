@@ -49,14 +49,14 @@ ANTS_RANDOM_SEED should be set (e.g. ANTS_RANDOM_SEED = 1). Further discussion i
 **Outputs parameters:**
 
 - *func_report*
-    Functional Image-Quality Metrics summary report. 
+    Functional Image-Quality Metrics summary report.
 
     ::
 
       ex. '/home/username/data/derived_data/func_ref_functional_mriqcReport_2023_03_31_11_42_10_75.pdf'
 
 - *carpet_seg*
-    Carpet segmentation. 
+    Carpet segmentation.
 
     ::
 

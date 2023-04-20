@@ -10,7 +10,7 @@
 Spikes brick
 ============
 
-Computes the number of spikes. 
+Computes the number of spikes.
 
 Adapted from mriqc functional workflow (`spikes <https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/functional.py#L939>`_
 and `spikes mask <https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/functional.py#L939>`_)
@@ -30,15 +30,15 @@ and `spikes mask <https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882ba
 **Optional inputs with default value parameters:**
 
 - *detrend* (a boolean, optional, default value is False)
-    Detrend data.  
-    
+    Detrend data.
+
     ::
 
       ex. False
 
 - *no_zscore* (a boolean, optional, default value is True)
-    Do not zscore 
-    
+    Do not zscore
+
     ::
 
       ex. True
@@ -52,14 +52,14 @@ and `spikes mask <https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882ba
 
 - *skip_frames* (an integer, optional, default value is 0)
     Number of frames to skip in the beginning of the time series.
-    
+
     ::
 
       ex. 0
 
 - *spike_thresh* (a float, optional, default value is 6.0)
     z-score to call one timepoint of one axial slice a spike.
-    
+
     ::
 
       ex. 6.0
@@ -70,7 +70,7 @@ and `spikes mask <https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882ba
 
 - *out_file* (a strings representing a file)
     Out file with all the spkies detected.
-    
+
     ::
 
       ex. '/home/username/data/derived_data/spikes_func.out'

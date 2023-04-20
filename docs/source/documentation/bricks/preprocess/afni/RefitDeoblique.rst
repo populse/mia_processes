@@ -10,9 +10,9 @@
 RefitDeoblique brick
 ============
 
-Deoblique dataset (ie transform dataset from oblique to cardinal) using AFNI 3drefit command. 
+Deoblique dataset (ie transform dataset from oblique to cardinal) using AFNI 3drefit command.
 
-Output file name is the same as input file name. 
+Output file name is the same as input file name.
 
 **Mandatory inputs parameters:**
 
@@ -26,7 +26,7 @@ Output file name is the same as input file name.
 **Optional inputs with default value parameters:**
 
 - *deoblique* (a boolean, optional, default value is True)
-    Deoblique dataset. 
+    Deoblique dataset.
 
     ::
 
@@ -37,7 +37,7 @@ Output file name is the same as input file name.
 
 - *out_file* (a strings representing a file)
     Deoblique file (extensions: [.nii, .nii.gz]).
-    
+
     ::
 
       ex. '/home/username/data/derived_data/func.nii'

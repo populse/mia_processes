@@ -29,7 +29,7 @@ Adapted from  `Nipype Cofounds <https://github.com/nipy/nipype/blob/f662acfce8de
 
 - *prefix_stddev* (a string, optional, default value is '')
     Prefix of the stddev output.
-    
+
     ::
 
       ex. ''
@@ -44,11 +44,11 @@ Adapted from  `Nipype Cofounds <https://github.com/nipy/nipype/blob/f662acfce8de
 
 - *suffix_stddev* (a string, optional, default value is '_stddev')
     Suffix of the STD dev output.
-    
+
     ::
 
       ex. '_stddev'
-      
+
 - *suffix_tnsr* (a string, optional, default value is '_tsnr')
     Suffix of the TSNR output image.
 
@@ -61,14 +61,14 @@ Adapted from  `Nipype Cofounds <https://github.com/nipy/nipype/blob/f662acfce8de
 
 - *out_tsnr_file* (a strings representing a file)
     Path of the tsnr image (extensions: [.nii, .nii.gz]).
-    
+
     ::
 
       ex. '/home/username/data/derived_data/func_tsnr.nii'
 
 - *out_stddev_file* (a strings representing a file)
     Path of the  STD dev image (extensions: [.nii, .nii.gz]).
-    
+
     ::
 
       ex. '/home/username/data/derived_data/func_stddev.nii'

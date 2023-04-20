@@ -10,10 +10,10 @@
 FastSegment brick
 ============
 
-Brain tissue segmentation using FAST (FSL). 
-This brick can be used to segment one input image. 
+Brain tissue segmentation using FAST (FSL).
+This brick can be used to segment one input image.
 The tissue class segmented are Grey Matter, White Matter and CSF.
-By default the image type is set to T1 but it is also possible to segment T2 and PD images by changing the img_type parameter. 
+By default the image type is set to T1 but it is also possible to segment T2 and PD images by changing the img_type parameter.
 
 --------------------------------------
 
@@ -29,7 +29,7 @@ By default the image type is set to T1 but it is also possible to segment T2 and
 **Optional inputs with default value parameters:**
 
 - *img_type* (an int, 1, 2 or 3, optional, default value is 1)
-    Int specifying type of image: (1 = T1, 2 = T2, 3 = PD). Default image type is T1. 
+    Int specifying type of image: (1 = T1, 2 = T2, 3 = PD). Default image type is T1.
     This option aids the segmentation in identifying which classes are which tissue type.
 
     ::
@@ -55,8 +55,8 @@ By default the image type is set to T1 but it is also possible to segment T2 and
 **Outputs parameters:**
 
 - *mixeltype* (a pathlike object or string representing a file)
-    The mixeltype file represents the classification of each voxel's tissue mixture.  That is, voxels containing only one tissue type have a different mixeltype from that containing mixtures of two tissues, which is different again from those containing mixtures of all three tissues. 
-   
+    The mixeltype file represents the classification of each voxel's tissue mixture.  That is, voxels containing only one tissue type have a different mixeltype from that containing mixtures of two tissues, which is different again from those containing mixtures of all three tissues.
+
     ::
 
       ex. '/home/username/data/derived_data/T1w_mixeltype.nii'
@@ -69,10 +69,10 @@ By default the image type is set to T1 but it is also possible to segment T2 and
       ex.['/home/username/data/derived_data/T1w_pve_0.nii', '/home/username/data/derived_data/T1w_pve_1.nii', '/home/username/data/derived_data/T1w_pve_2.nii']
 
 - *partial_volume_map* (a pathlike object or string representing a file)
-    The pveseg map  contains the best hard segmentation that follows from the partial volume segmentation results. 
+    The pveseg map  contains the best hard segmentation that follows from the partial volume segmentation results.
     That is, each voxel contains one number, representing the tissue type with the largest partial volume fraction.
     It can be useful for a quick visual assessment of the segmentation.
-   
+
     ::
 
       ex. '/home/username/data/derived_data/T1w_pveseg.nii'
@@ -86,7 +86,7 @@ By default the image type is set to T1 but it is also possible to segment T2 and
 
 - *tissue_class_map* (a pathlike object or string representing a file)
     A binary segmented volume file where each voxel is classified into only one class.
-    It is a single image that contains all the necessary information, with the first class taking intensity value 1 in the image, etc. 
+    It is a single image that contains all the necessary information, with the first class taking intensity value 1 in the image, etc.
 
     ::
 

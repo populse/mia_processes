@@ -18,34 +18,34 @@
 
     Try:
         `python -V`
-	
+
     If it returns `Python 3.x.x`, replace all the `python3` commands below by `python`.
-    
+
     If not installed, install it ...
- 
+
  * Make sure to have pip installed.
- 
+
     Try:
         `pip -V`
 
     If it returns a path including `/python3.x/`, replace all the `pip3` commands below by `pip`.
-    
+
     If not installed, install it ...
-    
+
 * From PyPI
 
   * [Install the latest version of mia_processes and its dependencies from the Python Packaging Index](https://docs.python.org/3/installing/index.html):
-  
+
         pip3 install mia_processes # depending of the setup, it could be necessary to add --user option
 
 * From source, for Linux distributions.
 
   * Install a Version Control System, for example [git](https://git-scm.com/book/en/v2/Getting-Started-About-Version-Control). Depending of your distribution, [package management system](https://en.wikipedia.org/wiki/Package_manager) can be different:
-  
+
         sudo apt-get install git # Debian like
         sudo dnf install git # Fedora 22 and later
         # etc.
-	
+
   * Clone the source codes.
 
     * Get source codes from Github. Replace [mia_processes_install_dir] with a directory of your choice:
@@ -55,16 +55,16 @@
     * Or download the zip file (mia_processes-master.zip) of the project ([green button "Clone or download"](https://github.com/populse/mia_processes)), then extract the data in the directory of your choice ([mia_processes_install_dir]):
 
           unzip mia_processes-master.zip -d [mia_processes_install_dir]  # In this case [mia_processes_install_dir] becomes [mia_processes_install_dir]/mia_processes-master
-	
+
   * Install the Python module distribution:
 
-        cd [mia_processes_install_dir]  
+        cd [mia_processes_install_dir]
         python3 setup.py install # depending of the setup, it could be necessary to add --user option
 
   * Remove the [mia_processes_install_dir] directory:
 
-        cd ..  
-        rm -r [mia_install_dir]  
+        cd ..
+        rm -r [mia_install_dir]
 
 # License
 

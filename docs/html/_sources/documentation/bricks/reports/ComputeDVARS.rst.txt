@@ -10,7 +10,7 @@
 ComputeDVARS brick
 ====================
 
-Computes DVARS (derivative of variance). 
+Computes DVARS (derivative of variance).
 
 The average change in mean intensity between each pair of fMRI volumes in a series.
 Higher values indicate more dramatic changes (e.g., due to motion or spiking).
@@ -40,7 +40,7 @@ Adapted from `nipype Cofunds <https://github.com/nipy/nipype/blob/f662acfce8def4
 - *intensity_normalization* (a float, optional, default value is 1000)
     Divide value in each voxel at each' timepoint by the median calculated across all voxels and timepoints
     within the mask (if specified) and then multiply by the value specified by this parameter.
-    
+
     By using the default (1000) output DVARS will be expressed in x10 % BOLD units compatible with Power et al.2012.'
     Set this to 0 to disable intensity normalization altogether.
 
@@ -74,7 +74,7 @@ Adapted from `nipype Cofunds <https://github.com/nipy/nipype/blob/f662acfce8def4
 
 - *out_file* (a strings representing a file)
     Out file with DVARS information.
-    
+
     ::
 
       ex. '/home/username/data/derived_data/dvars_reg_func_valid.out'
@@ -83,5 +83,5 @@ Adapted from `nipype Cofunds <https://github.com/nipy/nipype/blob/f662acfce8def4
 
 Usefull links:
 
-`nipype Cofunds <https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5de5913b31/nipype/algorithms/confounds.py#L100>`_ 
+`nipype Cofunds <https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5de5913b31/nipype/algorithms/confounds.py#L100>`_
 `mriqc IQMS <https://mriqc.readthedocs.io/en/22.0.6/iqms/bold.html>`_

@@ -10,7 +10,7 @@
 Bold_hmc pipeline
 ================================
 
-Head motion correction of a bold image. 
+Head motion correction of a bold image.
 
 Adapted from `bold HCM pipeline in mriqc 22.06 <https://github.com/nipreps/mriqc/blob/22.0.6/mriqc/workflows/functional.py#L666>`_
 
@@ -20,8 +20,8 @@ Adapted from `bold HCM pipeline in mriqc 22.06 <https://github.com/nipreps/mriqc
 
 | Bold_hcm pipeline combines the following pipelines and processes:
 |   - `Despike <../../bricks/preprocess/afni/Despike.html>`_
-|   - `Deoblique <../../bricks/preprocess/ants/RefitDeoblique.html>`_ 
-|   - `Volume Registration <../../bricks/preprocess/afni/VolReg.html>`_ 
+|   - `Deoblique <../../bricks/preprocess/ants/RefitDeoblique.html>`_
+|   - `Volume Registration <../../bricks/preprocess/afni/VolReg.html>`_
 
 .. image:: ../../images/Bold_hmc_pipeline.png
   :width: 800
@@ -36,17 +36,17 @@ Adapted from `bold HCM pipeline in mriqc 22.06 <https://github.com/nipreps/mriqc
 
       ex. '/home/username/data/raw_data/func.nii'
 
-**Optional inputs parameters with a default value** 
+**Optional inputs parameters with a default value**
 
 - *despike* (a boolean, optional)
-    Despike step done if True. 
+    Despike step done if True.
 
     ::
 
       default value. False
 
 - *deobliqe* (a boolean, optional)
-    Deoblique step done if True. 
+    Deoblique step done if True.
 
     ::
 
@@ -56,14 +56,14 @@ Adapted from `bold HCM pipeline in mriqc 22.06 <https://github.com/nipreps/mriqc
 
 - *oned_file*
     Movement parameters file (extensions: [.txt]).
-    
+
     ::
 
       ex. '/home/username/data/derived_data/reg_d_func_oned.txt'
 
 - *out_file*
     Register file (extensions: [.nii, .nii.gz]).
-    
+
     ::
 
       ex. '/home/username/data/derived_data/reg_d_func.nii'
@@ -71,6 +71,4 @@ Adapted from `bold HCM pipeline in mriqc 22.06 <https://github.com/nipreps/mriqc
 
 Usefull links:
 
-`mriq HMC pipeline <https://mriqc.readthedocs.io/en/22.0.6/workflows.html#mriqc.workflows.functional.hmc>`_ 
-
-
+`mriq HMC pipeline <https://mriqc.readthedocs.io/en/22.0.6/workflows.html#mriqc.workflows.functional.hmc>`_

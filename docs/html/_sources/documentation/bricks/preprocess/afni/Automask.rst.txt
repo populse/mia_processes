@@ -12,7 +12,7 @@ Automask brick
 
 Create a brain-only mask of the image using AFNI 3dAutomask command.
 
-AFNI 3dClipLevel algorithm is used to find clipping level and after an erosion/dilation step, only the largest connected component of the supra-threshold voxels are kept. 
+AFNI 3dClipLevel algorithm is used to find clipping level and after an erosion/dilation step, only the largest connected component of the supra-threshold voxels are kept.
 
 Be carreful this program by itself does NOT do 'skull-stripping'.
 
@@ -31,15 +31,15 @@ Be carreful this program by itself does NOT do 'skull-stripping'.
 **Optional inputs with default value  is parameters:**
 
 - *clfrac* (a float, optional, default value is 0.5)
-    Sets the clip level fraction (must be 0.1-0.9). A small value will tend to make the mask larger. 
-    
+    Sets the clip level fraction (must be 0.1-0.9). A small value will tend to make the mask larger.
+
     ::
 
       ex. 0.5
 
 - *out_brain_suffix* (a string, optional, default value is '_masked')
     Suffix of the brain masked image.
-    
+
     ::
 
       ex. '_masked'
@@ -64,14 +64,14 @@ Be carreful this program by itself does NOT do 'skull-stripping'.
 
 - *dilate* (an integer, optional)
     Dilate the mask outwards. Default is Undefined (ie parameter not used).
-    
+
     ::
 
       ex. 1
 
 - *erode* (an integer, optional)
     Erode the mask inwards. Default is Undefined (ie parameter not used).
-    
+
     ::
 
       ex. 1
@@ -81,14 +81,14 @@ Be carreful this program by itself does NOT do 'skull-stripping'.
 
 - *out_brain* (a strings representing a file)
     Masked image (extensions: [.nii, .nii.gz]).
-    
+
     ::
 
       ex. '/home/username/data/derived_data/func_masked.nii'
 
 - *out_file* (a strings representing a file)
     Brain mask image (extensions: [.nii, .nii.gz]).
-    
+
     ::
 
       ex. '/home/username/data/derived_data/automask_func.nii'

@@ -27,15 +27,15 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
 
 - *head_mask* (a string representing an existing file)
     Head mask image (valid extensions: [.nii, .nii.gz])
-    
+
     ::
 
       ex. '/home/username/data/raw_data/T1w_outskin_mask.nii'
 
 - *nasion_post_mask* (a string representing an existing file)
-    Template mask registred in the in-file space (valid extensions: [.nii, .nii.gz]). 
-    
-    
+    Template mask registred in the in-file space (valid extensions: [.nii, .nii.gz]).
+
+
     ::
 
       ex. '/home/username/data/raw_data/t_tpl-MNI152NLin2009cAsym_res-01_desc-head_mask.nii'
@@ -43,8 +43,8 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
 **Optional inputs with default value parameters:**
 
 - *suffix* (a string, optional, default value is '_mask')
-    Suffix of output images. 
-    
+    Suffix of output images.
+
     ::
 
       ex. '_mask'
@@ -53,7 +53,7 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
 
 - *rot_mask* (a string representing an existing file, optional)
     Rotation mask image (valid extensions: [.nii, .nii.gz]).
-    
+
     ::
 
       ex. '/home/username/data/raw_data/T1w_rotmasked.nii'
@@ -62,21 +62,21 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
 
 - *out_art_mask* (a pathlike object or string representing a file)
     Out artifact mask image (extensions: [.nii, .nii.gz]).
-    
+
     ::
 
       ex. '/home/username/data/derived_data/art_T1w_mask.nii'
 
 - *out_hat_mask* (a pathlike object or string representing a file)
     Out hat mask image (extensions: [.nii, .nii.gz]).
-    
+
     ::
 
       ex. '/home/username/data/derived_data/hat_T1w_mask.nii'
 
 - *out_air_mask* (a pathlike object or string representing a file)
     Out air mask ("hat" mask without artifacts) image (extensions: [.nii, .nii.gz]).
-    
+
     ::
 
       ex. '/home/username/data/derived_data/air_T1w_mask.nii'

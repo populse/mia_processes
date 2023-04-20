@@ -10,7 +10,7 @@
 Despike brick
 ============
 
-Removes spikes from the 3D+time input dataset using AFNI 3dDespike command. 
+Removes spikes from the 3D+time input dataset using AFNI 3dDespike command.
 The spike values replaced by something more pleasing to the eye.
 The output dataset will always be stored in floats.
 
@@ -45,7 +45,7 @@ The output dataset will always be stored in floats.
 
 - *out_prefix* (a string, optional, default value is 'd')
     Prefix of the output image.
-    
+
     ::
 
       ex. 'd_'
@@ -55,7 +55,7 @@ The output dataset will always be stored in floats.
 
 - *out_file* (a strings representing a file)
     Despike file (extensions: [.nii, .nii.gz]).
-    
+
     ::
 
       ex. '/home/username/data/derived_data/d_func.nii'

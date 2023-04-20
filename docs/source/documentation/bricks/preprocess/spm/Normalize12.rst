@@ -83,7 +83,7 @@ Computes the warp that best aligns the template (atlas) to the individual's imag
       | \- estwrite: Needs, at least, the tpm and image_to_align input parameters. The deformation_field and normalized_image
       | \ |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| output parameters come from the image_to_align parameter. If the apply_to_files input parameter is defined,
       | \ |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| the normalized_files output parameter is also created.
-      
+
     ::
 
       ex. write
@@ -103,7 +103,7 @@ Computes the warp that best aligns the template (atlas) to the individual's imag
 
 - *bias_fwhm <=> eoptions.biasfwhm* [#label]_
     Full Width at Half Maximum of Gaussian smoothness of bias (a value in [30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, ‘Inf’). Smoother bias fields need fewer parameters to describe them. This means that the algorithm is faster for smoother intensity non-uniformities (e.g. 150 mm cutoff gives faster results than 30 mm cutoff).
-  
+
     ::
 
       ex. 60
@@ -124,7 +124,7 @@ Computes the warp that best aligns the template (atlas) to the individual's imag
 
 - *warping_regularization <=> eoptions.reg* [#label]_
     The measure of the roughness of the deformations for registration. Involve the sum of 5 elements (list of floats).
-            
+
     ::
 
       ex. [0.0, 0.001, 0.5, 0.05, 0.2]
@@ -184,7 +184,7 @@ Computes the warp that best aligns the template (atlas) to the individual's imag
     Normalised other files (a list of items which are a pathlike object or string representing an existing file).
 
     ::
-       
+
       ex. /home/ArthurBlair/data/derived_data/wAnat.nii
 
 -------------

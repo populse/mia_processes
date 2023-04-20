@@ -62,7 +62,7 @@ Computes the average correlation between every voxel and ever other voxel, over 
 
 - *out* (a float)
     Global correlation.
-    
+
     ::
 
       ex. 0.06123
@@ -71,5 +71,5 @@ Computes the average correlation between every voxel and ever other voxel, over 
 
 Usefull links:
 
-`AFNI GCOR <https://afni.nimh.nih.gov/pub/dist/doc/program_help/@compute_gcor.html>`_ 
+`AFNI GCOR <https://afni.nimh.nih.gov/pub/dist/doc/program_help/@compute_gcor.html>`_
 `AFNI GCOR - nipype <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.afni.utils.html#gcor>`_

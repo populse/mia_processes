@@ -10,8 +10,8 @@
 Calc brick
 ============
 
-Voxel-by-voxel arithmetic on 3D datasets (using AFNI 3dcalc command). 
-This bricks assumes that the voxel-by-voxel computations are being performed on datasets that occupy the same space and have the same orientations.    
+Voxel-by-voxel arithmetic on 3D datasets (using AFNI 3dcalc command).
+This bricks assumes that the voxel-by-voxel computations are being performed on datasets that occupy the same space and have the same orientations.
 
 --------------------------------------
 
@@ -27,11 +27,11 @@ This bricks assumes that the voxel-by-voxel computations are being performed on 
 **Optional inputs with default value parameters:**
 
 - *expr* (a string, optional, default value is 'a*step(b)')
-    Arithmetic expression to apply between a, b and c. 
+    Arithmetic expression to apply between a, b and c.
 
     Arithmetic expressions are allowed, using + - * / ** ^ and parentheses.
     It is also possible to use built in functions such as sin, cos, sqrt, mean, stdev...
-    Some functions are also designed to help implement logical functions such as step(x)  = { 1 if x > 0; 0 if x <= 0 }. 
+    Some functions are also designed to help implement logical functions such as step(x)  = { 1 if x > 0; 0 if x <= 0 }.
 
     For more example, refers to the AFNI documentation.
 
@@ -50,12 +50,12 @@ This bricks assumes that the voxel-by-voxel computations are being performed on 
 
 - *out_prefix* (a string, optional, default value is 'c')
     Prefix of the output image.
-    
+
     ::
 
         ex. 'c_'
 
-**Optional inputs parameters:** 
+**Optional inputs parameters:**
 
 - *in_file_b* (a string representing an existing file, optional)
     Second input 3D file (valid extensions: [.nii, .nii.gz]).
@@ -98,7 +98,7 @@ This bricks assumes that the voxel-by-voxel computations are being performed on 
 
 - *out_file* (a strings representing a file)
     Out image (extensions: [.nii, .nii.gz]).
-    
+
     ::
 
       ex. '/home/username/data/derived_data/c_img_1.nii'

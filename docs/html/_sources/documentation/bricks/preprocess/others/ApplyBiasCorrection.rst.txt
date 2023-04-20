@@ -25,7 +25,7 @@ Apply bias field correction to an input file using the bias image
 
 - *bias_image* (a string representing an existing file)
     Bias field image (valid extensions: [.nii, .nii.gz])
-    
+
     ::
 
       ex. '/home/username/data/raw_data/T1w_bias.nii'

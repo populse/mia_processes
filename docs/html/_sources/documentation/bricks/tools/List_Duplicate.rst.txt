@@ -47,7 +47,7 @@ From a file name, generating a list containing this file name and the file name 
 
 - *file_name*
     A string corresponding to an existing path file.
- 
+
     ::
 
       ex. /home/ArthurBlair/data/Func.nii
@@ -67,5 +67,3 @@ From a file name, generating a list containing this file name and the file name 
     ::
 
       ex. ['/home/ArthurBlair/data/Func.nii']
-
-

@@ -20,10 +20,10 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
 
 | Anat_airmask pipeline combines the following pipelines and processes:
 |   - `Rotation mask  <../../bricks/preprocess/others/RotationMask.html>`_
-|   - `Apply Transform <../../bricks/preprocess/ants/ApplyTransform.html>`_ 
+|   - `Apply Transform <../../bricks/preprocess/ants/ApplyTransform.html>`_
 |      (default values: interpolation = 'MultiLabel')
 |   - `Artifact mask  <../../bricks/preprocess/others/ArtifactMask.html>`_
-|   - `Get template from templateFlow  <../../bricks/preprocess/others/TemplateFromTemplateFlow.html>`_ 
+|   - `Get template from templateFlow  <../../bricks/preprocess/others/TemplateFromTemplateFlow.html>`_
 |      (default values : in_template = 'MNI152NLin2009cAsym', resolution = 1, suffix = 'mask', desc = 'head')
 
 .. image:: ../../images/Anat_airmask_pipeline.png
@@ -64,28 +64,28 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
 **Outputs parameters:**
 
 - *out_air_mask*
-    Air mask. 
+    Air mask.
 
     ::
 
       ex. '/home/username/data/derived_data/air_T1w_mask.nii'
 
 - *out_art_mask*
-    Artifact mask. 
+    Artifact mask.
 
     ::
 
       ex. '/home/username/data/derived_data/art_T1w_mask.nii'
 
 - *out_hat_mask*
-    Hat mask. 
+    Hat mask.
 
     ::
 
       ex. '/home/username/data/derived_data/hat_T1w_mask.nii'
 
 - *out_rot_mask*
-    Rotation mask. 
+    Rotation mask.
 
     ::
 

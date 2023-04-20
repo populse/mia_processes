@@ -52,7 +52,7 @@ The *in_filter* parameter can take the following values:
   - WM (white matter images will be selected before to be normalised)
   - GM & WM (grey and white matter images will be selected before to be normalised)
   - GM + WM (grey and white matter images will be selected and then added together before to be normalised)
-            
+
 For the *deformation_file*, *apply_to_files*, *write_bounding_box*, *write_voxel_sizes*, *write_interp* input parameters and *normalized_files* output parameter, please see the `Normalize12 <https://populse.github.io/mia_processes/html/documentation/preprocess/spm/Normalize12.html>`_ brick of the mia_processes library.
 
 -------------

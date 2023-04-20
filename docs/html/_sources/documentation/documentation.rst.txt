@@ -28,14 +28,14 @@ Mia_processes's documentation
       - `TShift <bricks/preprocess/afni/TShift.html>`_
       - `TStatMean <bricks/preprocess/afni/TStatMean.html>`_
       - `Volreg <bricks/preprocess/afni/Volreg.html>`_
-    
+
     - **ants**
 
       - `AffineInitializer <bricks/preprocess/ants/AffineInitializer.html>`_
       - `ApplyTransform <bricks/preprocess/ants/ApplyTransform.html>`_
       - `N4BiasFieldCorrection <bricks/preprocess/ants/N4BiasFieldCorrection.html>`_
       - `Registration <bricks/preprocess/ants/Registration.html>`_
-    
+
     - **dipy**
 
       - `Denoise <bricks/preprocess/dipy/Denoise.html>`_
@@ -51,7 +51,7 @@ Mia_processes's documentation
       - `BetSurfacesExtraction <bricks/preprocess/fsl/BetSurfacesExtraction.html>`_
       - `FastSegment <bricks/preprocess/fsl/FastSegment.html>`_
       - `Smooth <bricks/preprocess/fsl/Smooth.html>`_
-    
+
     - **others**
 
       - `ApplyBiasCorrection <bricks/preprocess/others/ApplyBiasCorrection.html>`_
@@ -84,7 +84,7 @@ Mia_processes's documentation
       - `Realign <bricks/preprocess/spm/Realign.html>`_
       - `SliceTiming <bricks/preprocess/spm/SliceTiming.html>`_
       - `Smooth <bricks/preprocess/spm/Smooth.html>`_
- 
+
   - **reports**
 
     - `AnatIQMS <bricks/reports/AnatIQMS.html>`_
@@ -101,11 +101,11 @@ Mia_processes's documentation
   - **stats**
 
     - **spm**
-    
+
       - `EstimateConstrast <bricks/stats/spm/EstimateConstrast.html>`_ (in progress)
       - `EstimateModel <bricks/stats/spm/EstimateModel.html>`_ (in progress)
       - `LevelDesign <bricks/stats/spm/LevelDesign.html>`_ (in progress)
-  
+
   - **tools**
 
     - `Concat_to_list_of_list <bricks/tools/Concat_to_list_of_list.html>`_
@@ -113,8 +113,8 @@ Mia_processes's documentation
     - `Filter_Files_List <bricks/tools/Filter_Files_List.html>`_
     - `Input_Filter <bricks/tools/Input_Filter.html>`_
     - `List_Duplicate <bricks/tools/List_Duplicate.html>`_
-    - `List_To_File <bricks/tools/List_To_File.html>`_  
-    - `Make_A_List <bricks/tools/Make_A_List.html>`_  
+    - `List_To_File <bricks/tools/List_To_File.html>`_
+    - `Make_A_List <bricks/tools/Make_A_List.html>`_
 
 - **pipelines**
 
@@ -135,14 +135,12 @@ Mia_processes's documentation
 
     - `Anat_mriqc <pipelines/qualityControl/Anat_mriqc.html>`_
     - `Bold_mri_qc <pipelines/qualityControl/Bold_mriqc.html>`_
-  
+
   - **reports**
 
     - `Bold_iqms <pipelines/reports/Bold_iqms.html>`_
     - `Rois_1 <pipelines/reports/Rois_1.html>`_ (in progress)
-  
+
   - **stats**
 
     - `Bold_stats <pipelines/stats/Bold_stats.html>`_ (in progress)
-
-

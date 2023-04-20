@@ -37,7 +37,7 @@ Adapted from `niworkflows <https://github.com/nipreps/niworkflows>`_.
 
 - *prefix* (a string, optional, default value is '')
     Prefix of the output image. Default is ''.
-    
+
     ::
 
       ex. ''
@@ -45,7 +45,7 @@ Adapted from `niworkflows <https://github.com/nipreps/niworkflows>`_.
 
 - *suffix* (a string, optional, default value is '_masked')
     Suffix of output image. Default is '_masked'.
-    
+
     ::
 
       ex. '_masked'
@@ -56,7 +56,7 @@ Adapted from `niworkflows <https://github.com/nipreps/niworkflows>`_.
 
 - *out_file* (a strings representing a file)
     Path of the masked image (extensions: [.nii, .nii.gz]).
-    
+
     ::
 
       ex. '/home/username/data/derived_data/T1w_masked.nii'

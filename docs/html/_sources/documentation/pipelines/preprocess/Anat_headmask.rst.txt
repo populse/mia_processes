@@ -20,9 +20,9 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
 
 | Anat_headmask pipeline combines the following pipelines and processes:
 |   - `Estimate SNR <../../bricks/preprocess/others/EstimateSNR.html>`_
-|   - `Enhance <../../bricks/preprocess/others/Enhance.html>`_ 
-|   - `Denoise <../../bricks/preprocess/dipy/Denoise.html>`_ 
-|   - `Gradient Threshold <../../bricks/preprocess/others/GradientThreshold.html>`_ 
+|   - `Enhance <../../bricks/preprocess/others/Enhance.html>`_
+|   - `Denoise <../../bricks/preprocess/dipy/Denoise.html>`_
+|   - `Gradient Threshold <../../bricks/preprocess/others/GradientThreshold.html>`_
 
 .. image:: ../../images/Anat_headmask_pipeline.png
   :width: 800
@@ -48,7 +48,7 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
 **Outputs parameters:**
 
 - *out_file*
-    Head mask. 
+    Head mask.
 
     ::
 

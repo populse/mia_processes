@@ -10,7 +10,7 @@
 Anat_spatial_norm pipeline
 ================================
 
-Spatial normalization to MNI (using 'MNI152NLin2009cAsym' template). 
+Spatial normalization to MNI (using 'MNI152NLin2009cAsym' template).
 
 Adapted from `mriqc 22.06 anatomical workflow <https://github.com/nipreps/mriqc/blob/5a0f0408bd0c176dbc46088c6ffe279269180f3f/mriqc/workflows/anatomical.py#L282>`_
 
@@ -19,12 +19,12 @@ Adapted from `mriqc 22.06 anatomical workflow <https://github.com/nipreps/mriqc/
 **Pipeline insight**
 
 | Anat_spatial_norm pipeline combines the following pipelines and processes:
-|   - `Get template from templateFlow  <../../bricks/preprocess/others/TemplateFromTemplateFlow.html>`_ 
+|   - `Get template from templateFlow  <../../bricks/preprocess/others/TemplateFromTemplateFlow.html>`_
 |      (default values for template : in_template = 'MNI152NLin2009cAsym', resolution = 2, suffix = 'T1w',
 |       default values for template mask : in_template = 'MNI152NLin2009cAsym', resolution = 2, suffix = 'mask', desc ='brain')
 |   - `Mask <../../bricks/preprocess/others/Mask.html>`_
-|   - `Affine Initilizer <../../bricks/preprocess/ants/AffineInitializer.html>`_ 
-|   - `Registration <../../bricks/preprocess/ants/Registration.html>`_ 
+|   - `Affine Initilizer <../../bricks/preprocess/ants/AffineInitializer.html>`_
+|   - `Registration <../../bricks/preprocess/ants/Registration.html>`_
 |       (default values:
 |       convergence_threshold= [1e-07, 1e-08],
 |       convergence_window_size = [15, 5, 3],
@@ -78,17 +78,15 @@ Adapted from `mriqc 22.06 anatomical workflow <https://github.com/nipreps/mriqc/
       ex. '/home/username/data/derived_data/T1w_masked_InverseComposite.h5'
 
 - *warped_image*
-    Masked moving image in template space. 
+    Masked moving image in template space.
 
     ::
 
       ex. '/home/username/data/derived_data/w_T1w_masked.nii'
 
-    
+
 -------------
 
 Usefull links:
 
-`mric spatial norm pipeline <https://mriqc.readthedocs.io/en/22.0.6/workflows.html#mriqc.workflows.anatomical.spatial_normalization>`_ 
-
-
+`mric spatial norm pipeline <https://mriqc.readthedocs.io/en/22.0.6/workflows.html#mriqc.workflows.anatomical.spatial_normalization>`_

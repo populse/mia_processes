@@ -14,7 +14,7 @@ Calculate the FD (framewise displacement) as in `[Power2012] <https://doi.org/10
 This implementation reproduces the calculation in fsl_motion_outliers.
 
 
-Adapted from `nipype Cofunds <https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5de5913b31/nipype/algorithms/confounds.py#L298>`_ 
+Adapted from `nipype Cofunds <https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5de5913b31/nipype/algorithms/confounds.py#L298>`_
 
 --------------------------------------
 
@@ -62,7 +62,7 @@ Adapted from `nipype Cofunds <https://github.com/nipy/nipype/blob/f662acfce8def4
 
 - *out_file* (a strings representing a file)
     Out file.
-    
+
     ::
 
       ex. '/home/username/data/derived_data/fd_reg_func_valid_oned.out'
@@ -71,5 +71,5 @@ Adapted from `nipype Cofunds <https://github.com/nipy/nipype/blob/f662acfce8def4
 
 Usefull links:
 
-`nipype Cofunds <https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5de5913b31/nipype/algorithms/confounds.py#L298>`_ 
+`nipype Cofunds <https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5de5913b31/nipype/algorithms/confounds.py#L298>`_
 `mriqc IQMS <https://mriqc.readthedocs.io/en/22.0.6/iqms/bold.html>`_

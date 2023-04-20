@@ -11,7 +11,7 @@ Bold_iqms pipeline
 ================================
 
 Compute no-reference IQMs (image quality metrics) from functional (BOLD).
-Used in bold_mriqc pipeline. 
+Used in bold_mriqc pipeline.
 
 --------------------------------------
 
@@ -46,14 +46,14 @@ Used in bold_mriqc pipeline.
 
 - *epi_parc* (a string representing an existing file)
     Template data in bold space (extensions: [.nii, .nii.gz]).
-    
+
     ::
 
       ex. '/home/username/data/derived_data/t_tpl-MNI152NLin2009cAsym_res-01_desc-carpet_dseg.nii'
 
 - *hmc_motion* (a string representing an existing file)
     Movement parameters file (extensions: [.txt]).
-    
+
     ::
 
       ex. '/home/username/data/derived_data/reg_d_func_oned.txt'
@@ -143,7 +143,7 @@ Used in bold_mriqc pipeline.
     ::
 
       ex. '/home/username/data/raw_data/reg_func_valid.nii'
-  
+
 
 - *quality_index_automask* (a boolean, optional)
     See `quality index brick <../../bricks/reports/QualityIndex.html>`_
@@ -190,14 +190,14 @@ Used in bold_mriqc pipeline.
 **Outputs parameters:**
 
 - *BoldQC_out_file*
-    Functional Image-Quality Metrics summary json file. 
+    Functional Image-Quality Metrics summary json file.
 
     ::
 
       ex. '/home/username/data/derived_data/mean_reg_func_valid_bold_qc.json'
 
 - *carpet_seg*
-    Carpet segmentation. 
+    Carpet segmentation.
 
     ::
 
