@@ -47,36 +47,85 @@ fMRI model specification for GLM analysis.
       ex. 8
 
 - *sess_scans <=> sess.scans* [#label]_
-    The fMRI scans for the sessions (a list of items which are a pathlike object or string representing an existing file). They must all have the same image dimensions, orientation, voxel size, etc. Each scan will define (will be associated with) one session. In a general way, ``sess_scans`` can be defined as:  
-        ``[sess_1_ScanPath_1, sess_2_scanPath_2, ..., sess_n_scanPath_n]``
+    The fMRI scans for the sessions (a list of items which are a pathlike object or string representing an existing file). They must all have the same image dimensions, orientation, voxel size, etc. Each scan will define (will be associated with) one session. In a general way, ``sess_scans`` can be defined as:
 
-    ::
+    .. code-block:: python
 
-      ex. ['/home/ArthurBlair/data/raw_data/Func_1.nii', '/home/ArthurBlair/data/raw_data/Func_2.nii']
+        [sess_1_ScanPath_1, sess_2_scanPath_2, ..., sess_n_scanPath_n]
+
+        ex. ['/home/ArthurBlair/data/raw_data/Func_1.nii', '/home/ArthurBlair/data/raw_data/Func_2.nii']
 
 - *sess_cond_names <=> sess.cond.name* [#label]_
-    The name of each condition (list of items which are a list of items which are a string). Each session can have several or no conditions, so any number of condition types (event or time) can be specified for each session. In a general way, ``sess_cond_names`` can be defined as:  
-        ``[[sess_1_condName_1, sess_1_condName_2, ..., sess_1_condName_n], [sess_2_condName_1, sess_2_condName_2, ..., sess_2_condName_n], ..., [sess_n_condName_1, sess_n_condName_2, ..., sess_n_condName_n]] # Use None if there is no condition for a session``
+    The name of each condition (list of items which are a list of items which are a string). Each session can have several or no conditions, so any number of condition types (event or time) can be specified for each session. In a general way, ``sess_cond_names`` can be defined as:
 
-    ::
+    .. code-block:: python
 
-      ex. [None, ['cond1', 'cond2']]
+        [
+          [sess_1_condName_1, sess_1_condName_2, ..., sess_1_condName_n],
+          [sess_2_condName_1, sess_2_condName_2, ..., sess_2_condName_n],
+          ...,
+          [sess_n_condName_1, sess_n_condName_2, ..., sess_n_condName_n]
+        ] # Use None if there is no condition for a session
+
+        ex. [None, ['cond1', 'cond2']]
 
 - *sess_cond_onsets <=> sess.cond.onsets* [#label]_
-    The onset times (in seconds or in scans) of the epochs or events within each condition (a list of items which are a list of items which are a list of items which are a float). In a general way, ``sess_cond_onsets`` can be defined as:  
-        ``[[[sess_1_cond_1_onset_1, sess_1_cond_1_onset_2, ..., sess_1_cond_1_onset_n], [sess_1_cond_2_onset_1, sess_1_cond_2_onset_2, ..., sess_1_cond_2_onset_n ], ..., [sess_1_cond_n_onset_1, sess_1_cond_n_onset_2, ..., sess_1_cond_n_onset_n]], [[sess_2_cond_1_onset_1, sess_2_cond_1_onset_2, ..., sess_2_cond_1_onset_n], [sess_2_cond_2_onset_1, sess_2_cond_2_onset_2, ..., sess_2_cond_2_onset_n ], ..., [sess_2_cond_n_onset_1, sess_2_cond_n_onset_2, ..., sess_2_cond_n_onset_n]], ..., [[sess_n_cond_1_onset_1, sess_n_cond_1_onset_2, ..., sess_n_cond_1_onset_n], [sess_n_cond_2_onset_1, sess_n_cond_2_onset_2, ..., sess_n_cond_2_onset_n ], ..., [sess_n_cond_n_onset_1, sess_n_cond_n_onset_2, ..., sess_n_cond_n_onset_n]]] # Use None if there is no condition for a session``
+    The onset times (in seconds or in scans) of the epochs or events within each condition (a list of items which are a list of items which are a list of items which are a float). In a general way, ``sess_cond_onsets`` can be defined as:
 
-    ::
+    .. code-block:: python
 
-      ex. [None, [[43.72, 117.27, 152.59, 225.20], [21.23, 98.21, 206.98, 282.41]]]
+        [
+          [
+            [sess_1_cond_1_onset_1, sess_1_cond_1_onset_2, ..., sess_1_cond_1_onset_n],
+	    [sess_1_cond_2_onset_1, sess_1_cond_2_onset_2, ..., sess_1_cond_2_onset_n],
+	    ...,
+	    [sess_1_cond_n_onset_1, sess_1_cond_n_onset_2, ..., sess_1_cond_n_onset_n]
+          ],
+          [
+            [sess_2_cond_1_onset_1, sess_2_cond_1_onset_2, ..., sess_2_cond_1_onset_n],
+	    [sess_2_cond_2_onset_1, sess_2_cond_2_onset_2, ..., sess_2_cond_2_onset_n],
+	    ...,
+	    [sess_2_cond_n_onset_1, sess_2_cond_n_onset_2, ..., sess_2_cond_n_onset_n]
+          ],
+          ...,
+          [
+            [sess_n_cond_1_onset_1, sess_n_cond_1_onset_2, ..., sess_n_cond_1_onset_n],
+	    [sess_n_cond_2_onset_1, sess_n_cond_2_onset_2, ..., sess_n_cond_2_onset_n],
+	    ...,
+	    [sess_n_cond_n_onset_1, sess_n_cond_n_onset_2, ..., sess_n_cond_n_onset_n]
+          ]
+        ] # Use None if there is no condition for a session
+
+        ex. [None, [[43.72, 117.27, 152.59, 225.20], [21.23, 98.21, 206.98, 282.41]]]
 
 - *sess_cond_durations <=> sess.cond.durations* [#label]_
-    The duration times (in seconds or in scans) of the epochs within each condition (a list of items which are a list of items which are a list of items which are a float). Events are specified with a duration of 0. If a single number is specified for durations, it will be assumed that all trials comply with that duration. In a general way, ``sess_cond_durations`` can be defined as:  
-        ``[[[sess_1_cond_1_duration_1, sess_1_cond_1_duration_2, ..., sess_1_cond_1_duration_n], [sess_1_cond_2_duration_1, sess_1_cond_2_duration_2, ..., sess_1_cond_2_duration_n ], ..., [sess_1_cond_n_duration_1, sess_1_cond_n_duration_2, ..., sess_1_cond_n_duration_n]], [[sess_2_cond_1_duration_1, sess_2_cond_1_duration_2, ..., sess_2_cond_1_duration_n], [sess_2_cond_2_duration_1, sess_2_cond_2_duration_2, ..., sess_2_cond_2_duration_n ], ..., [sess_2_cond_n_duration_1, sess_2_cond_n_duration_2, ..., sess_2_cond_n_duration_n]], ..., [[sess_n_cond_1_duration_1, sess_n_cond_1_duration_2, ..., sess_n_cond_1_duration_n], [sess_n_cond_2_duration_1, sess_n_cond_2_duration_2, ..., sess_n_cond_2_duration_n ], ..., [sess_n_cond_n_duration_1, sess_n_cond_n_duration_2, ..., sess_n_cond_n_duration_n]]] # Use None if there is no condition for a session``
+    The duration times (in seconds or in scans) of the epochs within each condition (a list of items which are a list of items which are a list of items which are a float). Events are specified with a duration of 0. If a single number is specified for durations, it will be assumed that all trials comply with that duration. In a general way, ``sess_cond_durations`` can be defined as:
 
-    ::
+    .. code-block:: python
 
-      ex. [None, [[0], [10.54, 10.42, 8.59, 9.81]]]
+        [
+          [
+            [sess_1_cond_1_duration_1, sess_1_cond_1_duration_2, ..., sess_1_cond_1_duration_n],
+	    [sess_1_cond_2_duration_1, sess_1_cond_2_duration_2, ..., sess_1_cond_2_duration_n],
+	    ...,
+	    [sess_1_cond_n_duration_1, sess_1_cond_n_duration_2, ..., sess_1_cond_n_duration_n]
+          ],
+          [
+            [sess_2_cond_1_duration_1, sess_2_cond_1_duration_2, ..., sess_2_cond_1_duration_n],
+	    [sess_2_cond_2_duration_1, sess_2_cond_2_duration_2, ..., sess_2_cond_2_duration_n],
+	    ...,
+	    [sess_2_cond_n_duration_1, sess_2_cond_n_duration_2, ..., sess_2_cond_n_duration_n]
+          ],
+          ...,
+          [
+            [sess_n_cond_1_duration_1, sess_n_cond_1_duration_2, ..., sess_n_cond_1_duration_n],
+	    [sess_n_cond_2_duration_1, sess_n_cond_2_duration_2, ..., sess_n_cond_2_duration_n ],
+	    ...,
+	    [sess_n_cond_n_duration_1, sess_n_cond_n_duration_2, ..., sess_n_cond_n_duration_n]
+          ]
+        ] # Use None if there is no condition for a session
+
+        ex. [None, [[0], [10.54, 10.42, 8.59, 9.81]]]
 
 - *sess_cond_tmod <=> sess.cond.tmod* [#label]_
     Allows for the characterisation of linear or nonlinear time effects (a list of items which are a list of items which are 0 or 1 or 2 or 3 or 4 or 5 or 6). One time modulation parameter for each condition must be applied.
@@ -88,138 +137,218 @@ fMRI model specification for GLM analysis.
       | - 5: 5th order time modulation
       | - 6: 6th order time modulation
 
-    In a general way, ``sess_cond_tmod`` can be defined as:  
-        ``[[sess_1_cond_1_tmod, sess_1_cond_2_tmod, ..., sess_1_cond_n_tmod], [sess_2_cond_1_tmod, sess_2_cond_2_tmod, ..., sess2_cond_n_tmod], ..., [sess_n_cond_1_tmod, sess_n_cond_2_tmod, ..., sess_n_cond_n_tmod]] # Use None if there is no condition for a session``
+    In a general way, ``sess_cond_tmod`` can be defined as:
 
-    ::
+    .. code-block:: python
 
-      ex. [None, [3, 0]]
+        [
+          [sess_1_cond_1_tmod, sess_1_cond_2_tmod, ..., sess_1_cond_n_tmod],
+          [sess_2_cond_1_tmod, sess_2_cond_2_tmod, ..., sess2_cond_n_tmod],
+          ...,
+          [sess_n_cond_1_tmod, sess_n_cond_2_tmod, ..., sess_n_cond_n_tmod]
+        ] # Use None if there is no condition for a session
+
+        ex. [None, [3, 0]]
 
 - *sess_cond_pmod_names <=> sess.cond.pmod.name* [#label]_
     The name of the parametric modulation (a list of items which are a list of items which are a list of items which are a string). Modeling interactions with these user specified parameters, allows model in the design matrix nonlinear effects relating to some other measures. Several (or none) parametric modulations can be applied for each condition. In a general way, ``sess_cond_pmod_names`` can be defined as:
-        ``[[[sess_1_cond_1_pmodName_1, sess_1_cond_1_pmodName_2, ..., sess_1_cond_1_pmodName_n], [sess_1_cond_2_pmodName_1, sess_1_cond_2_pmodName_2, ..., sess_1_cond_2_pmodName_n], ..., [sess_1_cond_n_pmodName_1, sess_1_cond_n_pmodName_2, ..., sess_1_cond_n_pmodName_n]], [[sess_2_cond_1_pmodName_1, sess_2_cond_1_pmodName_2, ..., sess_2_cond_1_pmodName_n], [sess_2_cond_2_pmodName_1, sess_2_cond_2_pmodName_2, ..., sess_2_cond_2_pmodName_n], ..., [sess_2_cond_n_pmodName_1, sess_2_cond_n_pmodName_2, ..., sess_2_cond_n_pmodName_n]], ..., [[sess_n_cond_1_pmodName_1, sess_n_cond_1_pmodName_2, ..., sess_n_cond_1_pmodName_n], [sess_n_cond_2_pmodName_1, sess_n_cond_2_pmodName_2, ..., sess_n_cond_2_pmodName_n], ..., [sess_n_cond_n_pmodName_1, sess_n_cond_n_pmodName_2, ..., sess_n_cond_n_pmodName_n]]] # Use None if there is no parametric modulation for a condition or if there is no condition for a session``
 
-    ::
+    .. code-block:: python
 
-      ex. [None, [None, ['pmod1', 'pmod2']]]
+        [
+          [
+            [sess_1_cond_1_pmodName_1, sess_1_cond_1_pmodName_2, ..., sess_1_cond_1_pmodName_n],
+	    [sess_1_cond_2_pmodName_1, sess_1_cond_2_pmodName_2, ..., sess_1_cond_2_pmodName_n],
+	    ...,
+	    [sess_1_cond_n_pmodName_1, sess_1_cond_n_pmodName_2, ..., sess_1_cond_n_pmodName_n]
+          ],
+          [
+            [sess_2_cond_1_pmodName_1, sess_2_cond_1_pmodName_2, ..., sess_2_cond_1_pmodName_n],
+	    [sess_2_cond_2_pmodName_1, sess_2_cond_2_pmodName_2, ..., sess_2_cond_2_pmodName_n],
+	    ...,
+	    [sess_2_cond_n_pmodName_1, sess_2_cond_n_pmodName_2, ..., sess_2_cond_n_pmodName_n]
+          ],
+          ...,
+          [
+            [sess_n_cond_1_pmodName_1, sess_n_cond_1_pmodName_2, ..., sess_n_cond_1_pmodName_n],
+	    [sess_n_cond_2_pmodName_1, sess_n_cond_2_pmodName_2, ..., sess_n_cond_2_pmodName_n],
+	    ...,
+	    [sess_n_cond_n_pmodName_1, sess_n_cond_n_pmodName_2, ..., sess_n_cond_n_pmodName_n]
+          ]
+        ] # Use None if there is no parametric modulation for a condition or if there is no condition for a session
+
+        ex. [None, [None, ['pmod1', 'pmod2']]]
 
 - *sess_cond_pmod_values <=> sess.cond.pmod.param* [#label]_
-    The values used for the parametric modulation, one for each occurence of the event (a list of items which are a list of items which are a list of items which are a list of items which are a float). In a general way, ``sess_cond_pmod_values`` can be defined as:  
-              ``[
-                  [
-                    [
-                      [sess_1_cond_1_pmod_1_val_1, sess_1_cond_1_pmod_1_val_2, ..., sess_1_cond_1_pmod_1_val_n],
-                      [sess_1_cond_1_pmod_2_val_1, sess_1_cond_1_pmod_2_val_2, ..., sess_1_cond_1_pmod_2_val_n],
-                      \...,
-                      [sess_1_cond_1_pmod_n_val_1, sess_1_cond_1_pmod_n_val_2, ..., sess_1_cond_1_pmod_n_val_n]
-                    ],
-                    [
-                      [sess_1_cond_2_pmod_1_val_1, sess_1_cond_2_pmod_1_val_2, ..., sess_1_cond_2_pmod_1_val_n],
-                      [sess_1_cond_2_pmod_2_val_1, sess_1_cond_2_pmod_2_val_2, ..., sess_1_cond_2_pmod_2_val_n],
-                      \...,
-                      [sess_1_cond_2_pmod_n_val_1, sess_1_cond_2_pmod_n_val_2, ..., sess_1_cond_2_pmod_n_val_n]
-                    ],
-                    \...,
-                    [
-                      [sess_1_cond_n_pmod_1_val_1, sess_1_cond_n_pmod_1_val_2, ..., sess_1_cond_n_pmod_1_val_n],
-                      [sess_1_cond_n_pmod_2_val_1, sess_1_cond_n_pmod_2_val_2, ..., sess_1_cond_n_pmod_2_val_n],
-                      \...,
-                      [sess_1_cond_n_pmod_n_val_1, sess_1_cond_n_pmod_n_val_2, ..., sess_1_cond_n_pmod_n_val_n]
-                    ]
-                  ],
-                  [
-                    [
-                      [sess_2_cond_1_pmod_1_val_1, sess_2_cond_1_pmod_1_val_2, ..., sess_2_cond_1_pmod_1_val_n],
-                      [sess_2_cond_1_pmod_2_val_1, sess_2_cond_1_pmod_2_val_2, ..., sess_2_cond_1_pmod_2_val_n],
-                      \...,
-                      [sess_2_cond_1_pmod_n_val_1, sess_2_cond_1_pmod_n_val_2, ..., sess_2_cond_1_pmod_n_val_n]
-                    ],
-                    [
-                      [sess_2_cond_2_pmod_1_val_1, sess_2_cond_2_pmod_1_val_2, ..., sess_2_cond_2_pmod_1_val_n],
-                      [sess_2_cond_2_pmod_2_val_1, sess_2_cond_2_pmod_2_val_2, ..., sess_2_cond_2_pmod_2_val_n],
-                      \...,
-                      [sess_2_cond_2_pmod_n_val_1, sess_2_cond_2_pmod_n_val_2, ..., sess_2_cond_2_pmod_n_val_n]
-                    ],
-                    \...,
-                    [
-                      [sess_2_cond_n_pmod_1_val_1, sess_2_cond_n_pmod_1_val_2, ..., sess_2_cond_n_pmod_1_val_n],
-                      [sess_2_cond_n_pmod_2_val_1, sess_2_cond_n_pmod_2_val_2, ..., sess_2_cond_n_pmod_2_val_n],
-                      \...,
-                      [sess_2_cond_n_pmod_n_val_1, sess_2_cond_n_pmod_n_val_2, ..., sess_2_cond_n_pmod_n_val_n]
-                    ]
-                  ],
-                  \...,
-                  [
-                    [
-                      [sess_n_cond_1_pmod_1_val_1, sess_n_cond_1_pmod_1_val_2, ..., sess_n_cond_1_pmod_1_val_n],
-                      [sess_n_cond_1_pmod_2_val_1, sess_n_cond_1_pmod_2_val_2, ..., sess_n_cond_1_pmod_2_val_n],
-                      \...,
-                      [sess_n_cond_1_pmod_n_val_1, sess_n_cond_1_pmod_n_val_2, ..., sess_n_cond_1_pmod_n_val_n]
-                    ],
-                    [
-                      [sess_n_cond_2_pmod_1_val_1, sess_n_cond_2_pmod_1_val_2, ..., sess_n_cond_2_pmod_1_val_n],
-                      [sess_n_cond_2_pmod_2_val_1, sess_n_cond_2_pmod_2_val_2, ..., sess_n_cond_2_pmod_2_val_n],
-                      \...,
-                      [sess_n_cond_2_pmod_n_val_1, sess_n_cond_2_pmod_n_val_2, ..., sess_n_cond_2_pmod_n_val_n]
-                    ],
-                    \...,
-                    [
-                      [sess_n_cond_n_pmod_1_val_1, sess_n_cond_n_pmod_1_val_2, ..., sess_n_cond_n_pmod_1_val_n],
-                      [sess_n_cond_n_pmod_2_val_1, sess_n_cond_n_pmod_2_val_2, ..., sess_n_cond_n_pmod_2_val_n],
-                      \...,
-                      [sess_n_cond_n_pmod_n_val_1, sess_n_cond_n_pmod_n_val_2, ..., sess_n_cond_n_pmod_n_val_n]
-                    ]
-                  ]
-                ] # Use None if there is no parametric modulation for a condition or if there is no condition for a session.``
+    The values used for the parametric modulation, one for each occurence of the event (a list of items which are a list of items which are a list of items which are a list of items which are a float). In a general way, ``sess_cond_pmod_values`` can be defined as:
 
+.. code-block:: python
 
-    ::
+    [
+      [
+        [
+          [sess_1_cond_1_pmod_1_val_1, sess_1_cond_1_pmod_1_val_2, ..., sess_1_cond_1_pmod_1_val_n],
+          [sess_1_cond_1_pmod_2_val_1, sess_1_cond_1_pmod_2_val_2, ..., sess_1_cond_1_pmod_2_val_n],
+          ...,
+          [sess_1_cond_1_pmod_n_val_1, sess_1_cond_1_pmod_n_val_2, ..., sess_1_cond_1_pmod_n_val_n]
+        ],
+        [
+          [sess_1_cond_2_pmod_1_val_1, sess_1_cond_2_pmod_1_val_2, ..., sess_1_cond_2_pmod_1_val_n],
+          [sess_1_cond_2_pmod_2_val_1, sess_1_cond_2_pmod_2_val_2, ..., sess_1_cond_2_pmod_2_val_n],
+          ...,
+          [sess_1_cond_2_pmod_n_val_1, sess_1_cond_2_pmod_n_val_2, ..., sess_1_cond_2_pmod_n_val_n]
+        ],
+        ...,
+        [
+          [sess_1_cond_n_pmod_1_val_1, sess_1_cond_n_pmod_1_val_2, ..., sess_1_cond_n_pmod_1_val_n],
+          [sess_1_cond_n_pmod_2_val_1, sess_1_cond_n_pmod_2_val_2, ..., sess_1_cond_n_pmod_2_val_n],
+          ...,
+          [sess_1_cond_n_pmod_n_val_1, sess_1_cond_n_pmod_n_val_2, ..., sess_1_cond_n_pmod_n_val_n]
+        ]
+      ],
+      [
+        [
+          [sess_2_cond_1_pmod_1_val_1, sess_2_cond_1_pmod_1_val_2, ..., sess_2_cond_1_pmod_1_val_n],
+          [sess_2_cond_1_pmod_2_val_1, sess_2_cond_1_pmod_2_val_2, ..., sess_2_cond_1_pmod_2_val_n],
+          ...,
+          [sess_2_cond_1_pmod_n_val_1, sess_2_cond_1_pmod_n_val_2, ..., sess_2_cond_1_pmod_n_val_n]
+        ],
+        [
+          [sess_2_cond_2_pmod_1_val_1, sess_2_cond_2_pmod_1_val_2, ..., sess_2_cond_2_pmod_1_val_n],
+          [sess_2_cond_2_pmod_2_val_1, sess_2_cond_2_pmod_2_val_2, ..., sess_2_cond_2_pmod_2_val_n],
+          ...,
+          [sess_2_cond_2_pmod_n_val_1, sess_2_cond_2_pmod_n_val_2, ..., sess_2_cond_2_pmod_n_val_n]
+        ],
+        ...,
+        [
+          [sess_2_cond_n_pmod_1_val_1, sess_2_cond_n_pmod_1_val_2, ..., sess_2_cond_n_pmod_1_val_n],
+          [sess_2_cond_n_pmod_2_val_1, sess_2_cond_n_pmod_2_val_2, ..., sess_2_cond_n_pmod_2_val_n],
+          ...,
+          [sess_2_cond_n_pmod_n_val_1, sess_2_cond_n_pmod_n_val_2, ..., sess_2_cond_n_pmod_n_val_n]
+        ]
+      ],
+      ...,
+      [
+        [
+          [sess_n_cond_1_pmod_1_val_1, sess_n_cond_1_pmod_1_val_2, ..., sess_n_cond_1_pmod_1_val_n],
+          [sess_n_cond_1_pmod_2_val_1, sess_n_cond_1_pmod_2_val_2, ..., sess_n_cond_1_pmod_2_val_n],
+          ...,
+          [sess_n_cond_1_pmod_n_val_1, sess_n_cond_1_pmod_n_val_2, ..., sess_n_cond_1_pmod_n_val_n]
+        ],
+        [
+          [sess_n_cond_2_pmod_1_val_1, sess_n_cond_2_pmod_1_val_2, ..., sess_n_cond_2_pmod_1_val_n],
+          [sess_n_cond_2_pmod_2_val_1, sess_n_cond_2_pmod_2_val_2, ..., sess_n_cond_2_pmod_2_val_n],
+          ...,
+          [sess_n_cond_2_pmod_n_val_1, sess_n_cond_2_pmod_n_val_2, ..., sess_n_cond_2_pmod_n_val_n]
+        ],
+        ...,
+        [
+          [sess_n_cond_n_pmod_1_val_1, sess_n_cond_n_pmod_1_val_2, ..., sess_n_cond_n_pmod_1_val_n],
+          [sess_n_cond_n_pmod_2_val_1, sess_n_cond_n_pmod_2_val_2, ..., sess_n_cond_n_pmod_2_val_n],
+          ...,
+          [sess_n_cond_n_pmod_n_val_1, sess_n_cond_n_pmod_n_val_2, ..., sess_n_cond_n_pmod_n_val_n]
+        ]
+      ]
+    ] # Use None if there is no parametric modulation for a condition or if there is no condition for a session.
 
-      ex. [None, [None, [[36.4, 61.9, 105.1, 178.7], [7.2, 19.6, 65.9, 221.4]]]]
+    ex. [None, [None, [[36.4, 61.9, 105.1, 178.7], [7.2, 19.6, 65.9, 221.4]]]]
 
 - *sess_cond_pmod_polys <=> sess.cond.pmod.poly* [#label]_
     The polynomial expansion used for the parametric modulation (a list of items which are a list of items which are a list of items which are 1 or 2 or 3 or 4 or 5 or 6). 1st order modulation would model the stick functions and a linear change of the stick function heights over different values of the parameter. Higher order modulation will introduce further columns that contain the stick functions scaled by parameter squared, cubed etc. In a general way, ``sess_cond_pmod_polys`` can be defined as:
-        ``[[[sess_1_cond_1_pmod_1_poly, sess_1_cond_1_pmod_2_poly, ..., sess_1_cond_1_pmod_n_poly], [sess_1_cond_2_pmod_1_poly, sess_1_cond_2_pmod_2_poly, ..., sess_1_cond_2_pmod_n_poly], ..., [sess_1_cond_n_pmod_1_poly, sess_1_cond_n_pmod_2_poly, ..., sess_1_cond_n_pmod_n_poly]], [[sess_2_cond_1_pmod_1_poly, sess_2_cond_1_pmod_2_poly, ..., sess_2_cond_1_pmod_n_poly], [sess_2_cond_2_pmod_1_poly, sess_2_cond_2_pmod_2_poly, ..., sess_2_cond_2_pmod_n_poly], ..., [sess_2_cond_n_pmod_1_poly, sess_2_cond_n_pmod_2_poly, ..., sess_2_cond_n_pmod_n_poly]], ..., [[sess_n_cond_1_pmod_1_poly, sess_n_cond_1_pmod_2_poly, ..., sess_n_cond_1_pmod_n_poly], [sess_n_cond_2_pmod_1_poly, sess_n_cond_2_pmod_2_poly, ..., sess_n_cond_2_pmod_n_poly], ..., [sess_n_cond_n_pmod_1_poly, sess_n_cond_n_pmod_2_poly, ..., sess_n_cond_n_pmod_n_poly]]] # Use None if there is no parametric modulation for a condition or if there is no condition for a session``
 
-    ::
+.. code-block:: python
 
-      ex. [None, [None, [1, 6]]]
+    [
+      [
+        [sess_1_cond_1_pmod_1_poly, sess_1_cond_1_pmod_2_poly, ..., sess_1_cond_1_pmod_n_poly],
+	[sess_1_cond_2_pmod_1_poly, sess_1_cond_2_pmod_2_poly, ..., sess_1_cond_2_pmod_n_poly],
+	...,
+	[sess_1_cond_n_pmod_1_poly, sess_1_cond_n_pmod_2_poly, ..., sess_1_cond_n_pmod_n_poly]
+      ],
+        [sess_2_cond_1_pmod_1_poly, sess_2_cond_1_pmod_2_poly, ..., sess_2_cond_1_pmod_n_poly],
+	[sess_2_cond_2_pmod_1_poly, sess_2_cond_2_pmod_2_poly, ..., sess_2_cond_2_pmod_n_poly],
+	...,
+	[sess_2_cond_n_pmod_1_poly, sess_2_cond_n_pmod_2_poly, ..., sess_2_cond_n_pmod_n_poly]
+      ],
+      ...,
+      [
+        [sess_n_cond_1_pmod_1_poly, sess_n_cond_1_pmod_2_poly, ..., sess_n_cond_1_pmod_n_poly],
+	[sess_n_cond_2_pmod_1_poly, sess_n_cond_2_pmod_2_poly, ..., sess_n_cond_2_pmod_n_poly],
+	...,
+	[sess_n_cond_n_pmod_1_poly, sess_n_cond_n_pmod_2_poly, ..., sess_n_cond_n_pmod_n_poly]
+      ]
+    ] # Use None if there is no parametric modulation for a condition or if there is no condition for a session
+
+    ex. [None, [None, [1, 6]]]
 
 - *sess_cond_orth <=> sess.cond.orth* [#label]_
     Orthogonalise regressors within trial types (a list of items which are a list of items which are 0 or 1). One orthogonalise modulation parameter for each condition must be applied.
       | - 0: no othogonalisation
       | - 1: othogonalisation
 
-    In a general way, ``sess_cond_orth`` can be defined as:  
-        ``[[sess_1_cond_1_orth, sess_1_cond_2_orth, ..., sess_1_cond_n_orth], [sess_2_cond_1_orth, sess_2_cond_2_orth, ..., sess2_cond_n_orth], ..., [sess_n_cond_1_orth, sess_n_cond_2_orth ..., sess_n_cond_n_orth]] # Use None if there is no condition for a session``
+    In a general way, ``sess_cond_orth`` can be defined as:
 
-    ::
+.. code-block:: python
 
-      ex. [None, [1, 0]]
+    [
+      [sess_1_cond_1_orth, sess_1_cond_2_orth, ..., sess_1_cond_n_orth],
+      [sess_2_cond_1_orth, sess_2_cond_2_orth, ..., sess2_cond_n_orth],
+      ...,
+      [sess_n_cond_1_orth, sess_n_cond_2_orth ..., sess_n_cond_n_orth]
+    ] # Use None if there is no condition for a session``
+
+    ex. [None, [1, 0]]
 
 - *sess_multi <=> sess.multi* [#label]_
-    A *.mat file containing details of the multiple experimental conditions for each session (a list of items which are a filename). This *.mat file must include the following cell arrays (each 1 x n): names, onsets and durations. This option can be used to load in one go all the information that can also be given with the ``sess_cond_names``, ``sess_cond_onsets`` and ``sess_cond_durations``. The time, parametric and orthogonalise effects can also be included (please see spm documentation for more informations). In a general way ``sess_multi`` can be defined as:  
-        ``[sess_1_multi, sess_2_multi, ..., sess_n_multi] # Use None if there is no value for a session or [] if no value for all sessions``
+    A \*.mat file containing details of the multiple experimental conditions for each session (a list of items which are a filename). This \*.mat file must include the following cell arrays (each 1 x n): names, onsets and durations. This option can be used to load in one go all the information that can also be given with the ``sess_cond_names``, ``sess_cond_onsets`` and ``sess_cond_durations``. The time, parametric and orthogonalise effects can also be included (please see spm documentation for more informations). In a general way ``sess_multi`` can be defined as:
 
-    ::
+.. code-block:: python
 
-      ex. []
+    [sess_1_multi, sess_2_multi, ..., sess_n_multi] # Use None if there is no value for a session or [] if no value for all sessions
+  
+    ex. []
 
 - *sess_regress <=> sess.regress* [#label]_
-    Additional columns included in the design matrix, which may model effects that would not be convolved with the haemodynamic response (a list of items which are a list of items which are a dictionary with keys which are 'name' or 'val' and with values which are a string or a list of float). In a general way ``sess_regress`` can be defined as:  
-        ``[[sess_1_dict_1('name' = string, 'val' = list of float), sess_1_dict_2('name' = string, 'val' = list of float), ..., sess_1_dict_n('name' = string, 'val' = list of float)], [sess_2_dict_1('name' = string, 'val' = list of float), sess_2_dict_2('name' = string, 'val' = list of float), ...,  sess_2_dict_n('name' = string, 'val' = list of float)], ..., [sess_n_dict_1('name' = string, 'val' = list of float), sess_n_dict_2('name' = string, 'val' = list of float), ..., sess_n_dict_n('name' = string, 'val' = list of float)]] # Use None if no value for a session or [[]] if no value for all sessions``
+    Additional columns included in the design matrix, which may model effects that would not be convolved with the haemodynamic response (a list of items which are a list of items which are a dictionary with keys which are 'name' or 'val' and with values which are a string or a list of float). In a general way ``sess_regress`` can be defined as:
 
-    ::
+.. code-block:: python
 
-      ex. [[{'name': 'reg1', 'val': [0.79, 0.98, 0.585, 0.805, 0.53, 1.155, 0.66, 1.14, 0.195, 1.045, 0.82, 0.49, 0.765, 0.67, 0.0, 0.12, 0.955, 0.935, 0.26, 0.865]}, {'name': 'reg2', 'val': [1.58, 1.96, 1.17, 1.61, 1.06, 2.31, 1.32, 2.28, 0.39, 2.09, 1.64, 0.98, 1.53, 1.34, 0.0, 0.24, 1.91, 1.87, 0.52, 1.73]}], None]
+    [
+      [sess_1_dict_1('name' = string, 'val' = list of float),
+       sess_1_dict_2('name' = string, 'val' = list of float),
+       ...,
+       sess_1_dict_n('name' = string, 'val' = list of float)
+      ],
+      [sess_2_dict_1('name' = string, 'val' = list of float),
+       sess_2_dict_2('name' = string, 'val' = list of float),
+       ...,
+       sess_2_dict_n('name' = string, 'val' = list of float)
+      ],
+      ...,
+      [sess_n_dict_1('name' = string, 'val' = list of float),
+       sess_n_dict_2('name' = string, 'val' = list of float),
+       ...,
+       sess_n_dict_n('name' = string, 'val' = list of float)
+      ]
+    ] # Use None if no value for a session or [[]] if no value for all sessions
+
+    ex. [[{'name': 'reg1', 'val': [0.79, 0.98, 0.585, 0.805, 0.53, 1.155, 0.66, 1.14, 0.195, 1.045, 0.82, 0.49, 0.765, 0.67, 0.0, 0.12, 0.955, 0.935, 0.26, 0.865]},
+          {'name': 'reg2', 'val': [1.58, 1.96, 1.17, 1.61, 1.06, 2.31, 1.32, 2.28, 0.39, 2.09, 1.64, 0.98, 1.53, 1.34, 0.0, 0.24, 1.91, 1.87, 0.52, 1.73]}
+	 ], None]
 
 - *sess_multi_reg <=> sess.multi_reg* [#label]_
-    The *.mat/*.txt file(s) containing details of multiple regressors (a list of items which are a filename). This option can be used to load in one go all the information that can also be given with the ``sess_regress`` parameter (please see spm documentation for more informations). In a general way ``sess_multi_reg`` can be defined as: 
-        ``[[sess_1_file_1, sess_1_file_2, ..., sess_1_file_n], [sess_2_file_1, sess_2_file_2, ..., sess_2_file_n], ..., [sess_n_file_1, sess_n_file_2, ..., sess_n_file_n]] # Use None if no value for a session``
+    The \*.mat/\*.txt file(s) containing details of multiple regressors (a list of items which are a filename). This option can be used to load in one go all the information that can also be given with the ``sess_regress`` parameter (please see spm documentation for more informations). In a general way ``sess_multi_reg`` can be defined as:
 
-    ::
+.. code-block:: python
 
-      ex. [['/home/ArthurBlair/data/raw_data/file1.mat', '/home/ArthurBlair/data/raw_data/file2.txt'], None]
+    [
+      [sess_1_file_1, sess_1_file_2, ..., sess_1_file_n],
+      [sess_2_file_1, sess_2_file_2, ..., sess_2_file_n],
+      ...,
+      [sess_n_file_1, sess_n_file_2, ..., sess_n_file_n]
+    ] # Use None if no value for a session
+
+    ex. [['/home/ArthurBlair/data/raw_data/file1.mat', '/home/ArthurBlair/data/raw_data/file2.txt'], None]
 
 - *sess_hpf <=> sess.hpf* [#label]_
     High-pass filter (a list of items which are a float). One value per session must be applied. Slow signal drifts with a period longer than the applied value will be removed.

@@ -61,12 +61,12 @@ Realigns a time-series of images acquired from the same subject
     One of 'estwrite', 'estimate' or 'write':
 
       | - estimate: generates realignment_parameters and modified_in_files
-      | - write: |ws4| |ws4| with write_which == [2, 0] or [1, 0] generates realigned_files
+      | - write: with write_which == [2, 0] or [1, 0] generates realigned_files
       | |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| with write_which == [2, 1] generates mean_image and realigned_files
       | |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| with write_which == [0, 1] generates mean_image
       | - estwrite:|ws1| with write_which == [2, 0] or [1, 0] generates realignment_parameters, modified_in_files and realigned_files
-      | |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| with write_which == [2, 1] generates realignment_parameters, modified_in_file, mean_image and realigned_files
-      | |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| with write_which == [0, 1] generates realignment_parameters, modified_in_file and mean_image
+      | |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| with write_which == [2, 1] generates realignment_parameters, modified_in_file, mean_image and realigned_files
+      | |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| |ws4| with write_which == [0, 1] generates realignment_parameters, modified_in_file and mean_image
 
     ::
 
@@ -115,7 +115,7 @@ Realigns a time-series of images acquired from the same subject
     Check if interpolation should wrap in [x,y,z] (a list of 3 items which are integer int or long). For example, in MRI scans, the images wrap
     around in the phase encode direction, so the subject's nose may poke into the back of the subject's head. These are typically:
 
-      | \- No wrapping [0, 0, 0]: for PET or images that have already been spatially transformed. (Also the recommended option if
+      | \- No wrapping [0, 0, 0]: for PET or images that have already been spatially transformed (also the recommended option if
       | |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| you are not really sure).
       | \- Wrap in Y [0, 1, 0], for (un-resliced) MRI where phase encoding is in the Y direction (voxel space).
 
