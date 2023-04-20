@@ -9,7 +9,7 @@
 ==========================
 SynthStripMriqc brick
 ==========================
- 
+
 Skull-stripping using SynthStrip tool (mri_synthstrip in FreeSurfer) as done in `mriqc v22.06 <https://mriqc.readthedocs.io/en/22.0.6/>`_ .
 
 Adapted from  `mriqc_1 <https://github.com/nipreps/mriqc/blob/22.0.6/mriqc/synthstrip/cli.py>`_,
@@ -73,7 +73,7 @@ If you use this bricks in your analysis, please cite: `SynthStrip: Skull-Strippi
       ex. '/home/username/data/raw_data/T1w_desc-brain.nii'
 
 - *out_mask* (a pathlike object or string representing a file)
-    Binary brain mask 
+    Binary brain mask
 
     ::
 

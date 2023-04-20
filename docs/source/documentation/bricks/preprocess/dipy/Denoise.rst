@@ -12,7 +12,7 @@ Denoise brick
 
 Denoise image using Non-Local Means algorithm (NLMEANS).
 The value of a pixel is replaced by an average of a set of other pixel values: the specific patches centered on the other pixels are contrasted to the patch centered on the pixel of interest, a
-nd the average only applies to pixels with patches close to the current patch. 
+nd the average only applies to pixels with patches close to the current patch.
 
 --------------------------------------
 
@@ -33,7 +33,7 @@ nd the average only applies to pixels with patches close to the current patch.
     ::
 
       ex. 5
-  
+
 - *noise_model* (rician or gaussian, optional, default value is rician)
     Noise distribution model.
 
@@ -42,8 +42,8 @@ nd the average only applies to pixels with patches close to the current patch.
       ex. rician
 
 - *out_prefix* (a string, optional, default value is 'denoise')
-    Prefix of the output image. 
-    
+    Prefix of the output image.
+
     ::
 
       ex. 'denoise_'
@@ -54,7 +54,7 @@ nd the average only applies to pixels with patches close to the current patch.
     ::
 
       ex. 1
-  
+
   **Optional inputs parameters:**
 
 - *in_mask* (a string representing an existing file, optional)
@@ -79,7 +79,7 @@ nd the average only applies to pixels with patches close to the current patch.
       ex. '/home/username/data/derived_data/func_brain_mask.nii'
 
 - *snr* (a float, optional)
-    Set manually Signal to Noise Ratio. 
+    Set manually Signal to Noise Ratio.
     Default is Undefined (ie parameter not used).
 
     ::
@@ -90,7 +90,7 @@ nd the average only applies to pixels with patches close to the current patch.
 
 - *out_file* (a strings representing a file)
     Out image (extensions: [.nii, .nii.gz]).
-    
+
     ::
 
       ex. '/home/username/data/derived_data/denoise_func.nii'
@@ -103,4 +103,3 @@ Usefull links:
 `Dipy Denoise <https://dipy.org/documentation/1.6.0./examples_built/denoise_nlmeans/#example-denoise-nlmeans>`_
 `NLMEANS article 1 <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2881565/>`_
 `NLMEANS article 2 <https://hal.science/hal-00645538/document>`_
-

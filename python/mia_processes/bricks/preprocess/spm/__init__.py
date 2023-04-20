@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*- #
+# -*- coding: utf-8 -*-
 
 ##########################################################################
 # mia_processes - Copyright (C) IRMaGe/CEA, 2018
@@ -8,5 +8,12 @@
 # for details.
 ##########################################################################
 
-from .spatial_preprocessing import (Coregister, GM_WM_Normalize, NewSegment,
-                                    Normalize12, Realign, SliceTiming, Smooth)
+from .spatial_preprocessing import (
+    Coregister,
+    GM_WM_Normalize,
+    NewSegment,
+    Normalize12,
+    Realign,
+    SliceTiming,
+    Smooth,
+)

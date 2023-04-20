@@ -12,9 +12,9 @@ N4BiasFieldCorrection brick
 
 Bias field correction using ANTs N4BiasFieldCorrection
 
-N4 is a variant of the popular N3 (nonparameteric nonuniform normalization) retrospective bias correction algorithm. 
-Based on the assumption that the corruption of the low frequency bias field can be modeled as a convolution of the intensity histogram by a Gaussian, 
-the basic algorithmic protocol is to iterate between deconvolving the intensity histogram by a Gaussian, remapping the intensities, 
+N4 is a variant of the popular N3 (nonparameteric nonuniform normalization) retrospective bias correction algorithm.
+Based on the assumption that the corruption of the low frequency bias field can be modeled as a convolution of the intensity histogram by a Gaussian,
+the basic algorithmic protocol is to iterate between deconvolving the intensity histogram by a Gaussian, remapping the intensities,
 and then spatially smoothing this result by a B-spline modeling of the bias field itself
 
 --------------------------------------
@@ -47,7 +47,7 @@ and then spatially smoothing this result by a B-spline modeling of the bias fiel
 
 - *out_prefix* (a string, optional, default value is ''n4c')
     Prefix of the output image.
-    
+
     ::
 
         ex. 'n4c_'
@@ -86,7 +86,7 @@ and then spatially smoothing this result by a B-spline modeling of the bias fiel
 
 - *convergence_threshold* (a float, optional)
     Set convergence threshold.
-    Require n_iterations parameters. 
+    Require n_iterations parameters.
     Default is Undefined (ie parameter not used).
 
     ::
@@ -94,7 +94,7 @@ and then spatially smoothing this result by a B-spline modeling of the bias fiel
       ex. 1e-6
 
 - *histogram_sharpening* (a tuple of the form: (a float, a float, an integer), optional)
-    Three-values tuple of histogram sharpening parameters (FWHM, wienerNose, numberOfHistogramBins). 
+    Three-values tuple of histogram sharpening parameters (FWHM, wienerNose, numberOfHistogramBins).
     These options describe the histogram sharpening parameters, i.e. the deconvolution step parameters described in the original N3 algorithm.
     Note that the default values have been shown to work fairly well.
     Default is Undefined (ie parameter not used).
@@ -139,22 +139,22 @@ and then spatially smoothing this result by a B-spline modeling of the bias fiel
 
 - *bias_image* (a strings representing a file)
     Estimated bias (extensions: [.nii, .nii.gz]).
-    
+
     ::
 
       ex. '/home/username/data/derived_data/T1w_bias.nii'
-  
+
 - *negative_values* (a strings representing a file)
     True if negative values are present in the input image. False otherwise.
     If thera are negative values or values close to zero, they are processed prior to correction.
-    
+
     ::
 
       ex. False
 
 - *out_file* (a strings representing a file)
     Out image (extensions: [.nii, .nii.gz]).
-    
+
     ::
 
       ex. '/home/username/data/derived_data/n4c_T1w.nii'
@@ -164,4 +164,3 @@ and then spatially smoothing this result by a B-spline modeling of the bias fiel
 Usefull links:
 
 `ANTS N4BiasFieldCorrection - nipype <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.ants.html#n4biasfieldcorrection>`_
-

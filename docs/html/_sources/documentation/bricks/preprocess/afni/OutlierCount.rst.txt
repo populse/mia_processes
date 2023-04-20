@@ -94,7 +94,7 @@ Computes outliers for all sub-bricks in the input dataset, each one separately u
 
 - *out_file* (a strings representing a file)
     Out file.
-    
+
     ::
 
       ex. '/home/username/data/derived_data/outliers_reg_func_valid.out'
@@ -103,5 +103,5 @@ Computes outliers for all sub-bricks in the input dataset, each one separately u
 
 Usefull links:
 
-`AFNI 3dToutcount <https://afni.nimh.nih.gov/pub/dist/doc/program_help/3dToutcount.html>`_ 
+`AFNI 3dToutcount <https://afni.nimh.nih.gov/pub/dist/doc/program_help/3dToutcount.html>`_
 `AFNI OutlierCount - nipype <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.afni.preprocess.html#outliercount>`_

@@ -55,20 +55,20 @@ Registers each 3D volume from the input dataset to the base volume using AFNI 3d
 
 - *out_prefix* (a string, optional, default value is 'reg')
     Prefix of the output image.
-    
+
     ::
 
       ex. 'reg_'
 
 - *save_oned_matrix* (a boolean, optional, default value is False)
-    Save the transformation matrix  oned matrix. 
+    Save the transformation matrix  oned matrix.
 
     ::
 
       ex. False
 
 - *save_md1d_file* (a boolean, optional, default value is False)
-    Save max displacement outputfile (md1d) file. 
+    Save max displacement outputfile (md1d) file.
 
     ::
 
@@ -84,7 +84,7 @@ Registers each 3D volume from the input dataset to the base volume using AFNI 3d
 - *twopass* (a boolean, optional, default value is False)
     Do two passes of the registration algorithm:
     (1) with smoothed base and data bricks, with linear interpolation, to get a crude alignment, then'
-    (2) with the input base and data bricks, to get a fine alignment. 
+    (2) with the input base and data bricks, to get a fine alignment.
     This method is useful when aligning high-resolution datasets that may need to be moved more than a few voxels to be aligned.
 
     ::
@@ -92,7 +92,7 @@ Registers each 3D volume from the input dataset to the base volume using AFNI 3d
       ex. False
 
 - *zpad* (a integer, optional, default value is 4)
-    Zeropad around the edges by ‘n’ voxels during rotations. 
+    Zeropad around the edges by ‘n’ voxels during rotations.
 
     ::
 
@@ -113,28 +113,28 @@ Registers each 3D volume from the input dataset to the base volume using AFNI 3d
 
 - *md1d_file* (a strings representing a file, optional)
     The transformation matrix (extensions: [.aff12.1D]).
-    
+
     ::
 
       ex. '/home/username/data/derived_data/reg_func_md.1D'
 
 - *oned_file* (a strings representing a file)
     Movement parameters file (extensions: [.txt]).
-    
+
     ::
 
       ex. '/home/username/data/derived_data/reg_func_oned.txt'
 
 - *oned_matrix* (a strings representing a file, optional)
     Transformation matrix (extensions: [.aff12.1D]).
-    
+
     ::
 
       ex. '/home/username/data/derived_data/reg_func_oned_matrix.aff12.1D'
 
 - *out_file* (a strings representing a file)
     Register file (extensions: [.nii, .nii.gz]).
-    
+
     ::
 
       ex. '/home/username/data/derived_data/reg_func.nii'

@@ -12,8 +12,8 @@ AnatIQMs brick
 
 Computes the anatomical Image Quality Metrics (IQMs) as defined in mriqc v22.06
 
-A no-reference IQM is a measurement of some aspect of the actual image which cannot be compared to a reference value for 
-the metric since there is no ground-truth about what this number should be. 
+A no-reference IQM is a measurement of some aspect of the actual image which cannot be compared to a reference value for
+the metric since there is no ground-truth about what this number should be.
 All the computed IQMs corresponding to an image are saved in a JSON file.
 
 Adapted from `mriqc <https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/anatomical.py#L332>`_.
@@ -112,7 +112,7 @@ Adapted from `mriqc <https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e88
 
 - *out_file* (a strings representing a file)
     A json file with all the IQMs computed.
-    
+
     ::
 
       ex. '/home/username/data/derived_data/T1w_anat_qc.json'

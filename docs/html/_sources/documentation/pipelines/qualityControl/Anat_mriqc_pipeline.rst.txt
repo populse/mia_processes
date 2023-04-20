@@ -43,7 +43,7 @@ data using mriqc anatomical workflow (`mriqc v22.06 <https://mriqc.readthedocs.i
 **Outputs parameters:**
 
 - *anat_report*
-    Anatomical Image-Quality Metrics summary report. 
+    Anatomical Image-Quality Metrics summary report.
 
     ::
 

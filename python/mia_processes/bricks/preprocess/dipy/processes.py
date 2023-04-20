@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*- #
+# -*- coding: utf-8 -*-
 
 """The dipy preprocess library of the mia_processes package.
 
@@ -35,9 +35,7 @@ import os
 from traits.api import Either, Enum, Float, Int, String, Undefined
 import numpy as np
 
-EXT = {'NIFTI_GZ': 'nii.gz',
-       'NIFTI': 'nii'
-       }
+EXT = {"NIFTI_GZ": "nii.gz", "NIFTI": "nii"}
 
 
 class Denoise(ProcessMIA):
@@ -61,97 +59,113 @@ class Denoise(ProcessMIA):
         super(Denoise, self).__init__()
 
         # Third party softwares required for the execution of the brick
-        self.requirement = ['nipype']
+        self.requirement = ["nipype"]
 
         # Mandatory inputs description
-        in_file_desc = ('A file to denoise (a pathlike object or string '
-                        'representing a file).')
+        in_file_desc = (
+            "A file to denoise (a pathlike object or string "
+            "representing a file)."
+        )
         # Optional inputs with default value description
-        block_radius_desc = ('Block_radius (an integer). Default is 5.')
-        noise_model_desc = ('Noise distribution model (‘rician’ or'
-                            ' ‘gaussian’). Default is rician')
-        out_prefix_desc = ('Specify the string to be prepended to the '
-                           'filenames of the smoothed image file(s) '
-                           '(a string).')
-        patch_radius_desc = ('Patch radius (an integer). Default is 1.')
+        block_radius_desc = "Block_radius (an integer). Default is 5."
+        noise_model_desc = (
+            "Noise distribution model (‘rician’ or"
+            " ‘gaussian’). Default is rician"
+        )
+        out_prefix_desc = (
+            "Specify the string to be prepended to the "
+            "filenames of the smoothed image file(s) "
+            "(a string)."
+        )
+        patch_radius_desc = "Patch radius (an integer). Default is 1."
         # Optional inputs description
-        in_mask_desc = ('Brain mask (a pathlike '
-                        'object or string representing a file).')
-        noise_mask_desc = ('Mask in which the mean signal will'
-                           ' be computed. (a pathlike object or'
-                           'string representing a file).')
-        signal_mask_desc = ('Mask in which the standard deviation of noise'
-                            'will be computed. (a pathlike object or'
-                            'string representing a file).')
-        snr_desc = ('Set manually Signal to noise ratio (a float)')
+        in_mask_desc = (
+            "Brain mask (a pathlike " "object or string representing a file)."
+        )
+        noise_mask_desc = (
+            "Mask in which the mean signal will"
+            " be computed. (a pathlike object or"
+            "string representing a file)."
+        )
+        signal_mask_desc = (
+            "Mask in which the standard deviation of noise"
+            "will be computed. (a pathlike object or"
+            "string representing a file)."
+        )
+        snr_desc = "Set manually Signal to noise ratio (a float)"
         # Outputs description
-        out_file_desc = ('The denoised file (a pathlike object or a '
-                         'string representing a file).')
+        out_file_desc = (
+            "The denoised file (a pathlike object or a "
+            "string representing a file)."
+        )
 
         # Mandatory inputs traits
-        self.add_trait("in_file",
-                       File(output=False,
-                            optional=False,
-                            desc=in_file_desc))
+        self.add_trait(
+            "in_file", File(output=False, optional=False, desc=in_file_desc)
+        )
 
         # Optional inputs with default value traits
-        self.add_trait("block_radius",
-                       Int(5,
-                           output=False,
-                           optional=True,
-                           desc=block_radius_desc))
+        self.add_trait(
+            "block_radius",
+            Int(5, output=False, optional=True, desc=block_radius_desc),
+        )
 
-        self.add_trait("noise_model",
-                       Enum('rician',
-                            'gaussian',
-                            output=False,
-                            optional=True,
-                            desc=noise_model_desc))
+        self.add_trait(
+            "noise_model",
+            Enum(
+                "rician",
+                "gaussian",
+                output=False,
+                optional=True,
+                desc=noise_model_desc,
+            ),
+        )
 
-        self.add_trait("out_prefix",
-                       String('denoise_',
-                              output=False,
-                              optional=True,
-                              desc=out_prefix_desc))
+        self.add_trait(
+            "out_prefix",
+            String(
+                "denoise_", output=False, optional=True, desc=out_prefix_desc
+            ),
+        )
 
-        self.add_trait("patch_radius",
-                       Int(1,
-                           output=False,
-                           optional=True,
-                           desc=patch_radius_desc))
+        self.add_trait(
+            "patch_radius",
+            Int(1, output=False, optional=True, desc=patch_radius_desc),
+        )
 
         # Optional inputs value traits
-        self.add_trait("in_mask",
-                       File(output=False,
-                            optional=True,
-                            desc=in_mask_desc))
+        self.add_trait(
+            "in_mask", File(output=False, optional=True, desc=in_mask_desc)
+        )
 
-        self.add_trait("noise_mask",
-                       File(output=False,
-                            optional=True,
-                            desc=noise_mask_desc))
+        self.add_trait(
+            "noise_mask",
+            File(output=False, optional=True, desc=noise_mask_desc),
+        )
 
-        self.add_trait("signal_mask",
-                       File(output=False,
-                            optional=True,
-                            desc=signal_mask_desc))
+        self.add_trait(
+            "signal_mask",
+            File(output=False, optional=True, desc=signal_mask_desc),
+        )
 
-        self.add_trait("snr",
-                       Either(Undefined,
-                              Float(),
-                              default=Undefined,
-                              output=False,
-                              optional=True,
-                              desc=snr_desc))
+        self.add_trait(
+            "snr",
+            Either(
+                Undefined,
+                Float(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=snr_desc,
+            ),
+        )
 
         # Outputs traits
-        self.add_trait("out_file",
-                       File(output=True,
-                            desc=out_file_desc))
+        self.add_trait("out_file", File(output=True, desc=out_file_desc))
 
         self.init_default_traits()
 
-        self.init_process('nipype.interfaces.dipy.Denoise')
+        self.init_process("nipype.interfaces.dipy.Denoise")
 
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
@@ -171,30 +185,31 @@ class Denoise(ProcessMIA):
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
-
             if not self.out_prefix:
-                self.out_prefix = 'denoise_'
-                print('The out_prefix parameter is undefined. Automatically '
-                      'set to "denoise" ...')
+                self.out_prefix = "denoise_"
+                print(
+                    "The out_prefix parameter is undefined. Automatically "
+                    'set to "denoise" ...'
+                )
 
             if self.output_directory:
-                valid_ext, in_ext, fileName = checkFileExt(self.in_file,
-                                                           EXT)
+                valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
 
                 if not valid_ext:
-                    print('\nThe input image format is'
-                          ' not recognized...!')
+                    print("\nThe input image format is" " not recognized...!")
                     return
                 else:
-                    self.outputs['out_file'] = os.path.join(
+                    self.outputs["out_file"] = os.path.join(
                         self.output_directory,
-                        self.out_prefix + fileName + '.' + in_ext)
+                        self.out_prefix + fileName + "." + in_ext,
+                    )
 
-                    self.inheritance_dict[self.outputs[
-                        'out_file']] = self.in_file
+                    self.inheritance_dict[
+                        self.outputs["out_file"]
+                    ] = self.in_file
 
             else:
-                print('No output_directory was found...!\n')
+                print("No output_directory was found...!\n")
                 return
 
         # Return the requirement, outputs and inheritance_dict

@@ -31,34 +31,73 @@ class Bold_stat(Pipeline):
 
     def pipeline_definition(self):
         # nodes
-        self.add_process("estimatecontrast", "mia_processes.bricks.stat.spm.model.EstimateContrast")
-        self.nodes["estimatecontrast"].set_plug_value("multi_reg", traits.Undefined)
+        self.add_process(
+            "estimatecontrast",
+            "mia_processes.bricks.stat.spm.model.EstimateContrast",
+        )
+        self.nodes["estimatecontrast"].set_plug_value(
+            "multi_reg", traits.Undefined
+        )
         self.nodes["estimatecontrast"].process.multi_reg = traits.Undefined
-        self.add_process("level1design", "mia_processes.bricks.stat.spm.model.Level1Design")
-        self.nodes["level1design"].set_plug_value("sess_multi_reg", traits.Undefined)
+        self.add_process(
+            "level1design", "mia_processes.bricks.stat.spm.model.Level1Design"
+        )
+        self.nodes["level1design"].set_plug_value(
+            "sess_multi_reg", traits.Undefined
+        )
         self.nodes["level1design"].process.sess_multi_reg = traits.Undefined
-        self.add_process("estimatemodel", "mia_processes.bricks.stat.spm.model.EstimateModel")
-        self.add_process("make_a_list", "mia_processes.bricks.tools.Make_A_List")
+        self.add_process(
+            "estimatemodel",
+            "mia_processes.bricks.stat.spm.model.EstimateModel",
+        )
+        self.add_process(
+            "make_a_list", "mia_processes.bricks.tools.Make_A_List"
+        )
         self.nodes["make_a_list"].set_plug_value("obj1", traits.Undefined)
         self.nodes["make_a_list"].process.obj1 = traits.Undefined
 
         # links
-        self.export_parameter("estimatecontrast", "multi_reg", "regressors", is_optional=False)
+        self.export_parameter(
+            "estimatecontrast", "multi_reg", "regressors", is_optional=False
+        )
         self.add_link("regressors->make_a_list.obj1")
-        self.export_parameter("level1design", "sess_scans", "smoothed_func", is_optional=False)
-        self.export_parameter("level1design", "mask_image", "mask_002", is_optional=True)
-        self.export_parameter("estimatecontrast", "spmT_images", is_optional=True)
-        self.export_parameter("estimatecontrast", "out_spm_mat_file", is_optional=False)
+        self.export_parameter(
+            "level1design", "sess_scans", "smoothed_func", is_optional=False
+        )
+        self.export_parameter(
+            "level1design", "mask_image", "mask_002", is_optional=True
+        )
+        self.export_parameter(
+            "estimatecontrast", "spmT_images", is_optional=True
+        )
+        self.export_parameter(
+            "estimatecontrast", "out_spm_mat_file", is_optional=False
+        )
         self.add_link("level1design.spm_mat_file->estimatemodel.spm_mat_file")
-        self.add_link("estimatemodel.out_spm_mat_file->estimatecontrast.spm_mat_file")
+        self.add_link(
+            "estimatemodel.out_spm_mat_file->estimatecontrast.spm_mat_file"
+        )
         self.export_parameter("estimatemodel", "beta_images", is_optional=True)
-        self.add_link("estimatemodel.beta_images->estimatecontrast.beta_images")
-        self.add_link("estimatemodel.residual_image->estimatecontrast.residual_image")
+        self.add_link(
+            "estimatemodel.beta_images->estimatecontrast.beta_images"
+        )
+        self.add_link(
+            "estimatemodel.residual_image->estimatecontrast.residual_image"
+        )
         self.add_link("make_a_list.obj_list->level1design.sess_multi_reg")
 
         # parameters order
 
-        self.reorder_traits(("regressors", "smoothed_func", "mask_002", "spmT_images", "out_spm_mat_file", "beta_images"))
+        self.reorder_traits(
+            (
+                "regressors",
+                "smoothed_func",
+                "mask_002",
+                "spmT_images",
+                "out_spm_mat_file",
+                "beta_images",
+            )
+        )
 
         # nodes positions
         self.node_position = {

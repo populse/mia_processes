@@ -61,7 +61,7 @@ using ANTs ApplyTransforms command.
       ex. False
 
 - *input_image_type* (0 or 1 or 2 or 3, optional, default value is 0)
-    Option specifying the input image type of scalar (0), vector (1), tensor(2), or time series(3). 
+    Option specifying the input image type of scalar (0), vector (1), tensor(2), or time series(3).
 
     ::
 
@@ -73,10 +73,10 @@ using ANTs ApplyTransforms command.
     ::
 
       ex. 'Linear'
-  
+
 - *out_prefix* (a string, optional, default value is 't')
     Prefix of the output image.
-    
+
     ::
 
         ex. 't_'
@@ -91,7 +91,7 @@ using ANTs ApplyTransforms command.
 **Optional inputs parameters:**
 
 - *interpolation_parameters* (a tuple of the form: (an integer) or a tuple of the form: (a float, a float), optional)
-    Interpolation parameters. For example for BSpline order or for sigma/alphaparameters for Gaussian/Multilabel  
+    Interpolation parameters. For example for BSpline order or for sigma/alphaparameters for Gaussian/Multilabel
     Default is Undefined (ie parameter not used).
 
     ::
@@ -99,8 +99,8 @@ using ANTs ApplyTransforms command.
       ex. (5,) (if interpolation = 'BSpline')
 
 - *invert_transform_flags* (a list of boolean, optional)
-    Invert transform flags. 
-    For example if transforms parameter is equal to ['ants_Warp.nii.gz', 'trans.mat'] and invert_transform_flags is [False, True], the follinw trnasform will be applied: 
+    Invert transform flags.
+    For example if transforms parameter is equal to ['ants_Warp.nii.gz', 'trans.mat'] and invert_transform_flags is [False, True], the follinw trnasform will be applied:
     `--transform ants_Warp.nii.gz --transform [ trans.mat, 1 ]`
     Default is Undefined (ie parameter not used).
 
@@ -112,7 +112,7 @@ using ANTs ApplyTransforms command.
 
 - *out_file* (a strings representing a file)
     Out image (extensions: [.nii, .nii.gz]).
-    
+
     ::
 
       ex. '/home/username/data/derived_data/denoise_func.nii'
@@ -122,4 +122,3 @@ using ANTs ApplyTransforms command.
 Usefull links:
 
 `ANTS ApplyTransforms - nipype <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.ants.html#applytransforms>`_
-

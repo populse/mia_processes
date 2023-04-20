@@ -10,7 +10,7 @@
 Sanitize brick
 ============
 
-Sanitize input bold image. 
+Sanitize input bold image.
 
 Adapted from `niworkflows <https://github.com/nipreps/niworkflows>`_.
 
@@ -36,21 +36,21 @@ Adapted from `niworkflows <https://github.com/nipreps/niworkflows>`_.
 
 - *n_volumes_to_discard* (an int, optional, default value is 0)
     Number of non steady-state volumes.
-    
+
     ::
 
       ex. 0
 
 - *prefix* (a string, optional, default value is '')
     Prefix of the output image.
-    
+
     ::
 
       ex. ''
 
 - *suffix* (a string, optional, default value is '_valid')
     Suffix of output image.
-   
+
     ::
 
       ex. '_valid'
@@ -59,7 +59,7 @@ Adapted from `niworkflows <https://github.com/nipreps/niworkflows>`_.
 
 - *out_file* (a strings representing a file)
     Path of the sanitize image (extensions: [.nii, .nii.gz]).
-    
+
     ::
 
       ex. '/home/username/data/derived_data/func_valid.nii'

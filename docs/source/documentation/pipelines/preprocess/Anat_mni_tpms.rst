@@ -10,8 +10,8 @@
 Anat_mni_tpms pipeline
 ================================
 
-Get templates tissues probability map (white matter (WM), grey matter (GM) and cerebrospinal (CSF)) 
-from 'MNI152NLin2009cAsym' template (resolution 1 mm) and register them in subject space.  
+Get templates tissues probability map (white matter (WM), grey matter (GM) and cerebrospinal (CSF))
+from 'MNI152NLin2009cAsym' template (resolution 1 mm) and register them in subject space.
 
 Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical workflow.
 
@@ -20,9 +20,9 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
 **Pipeline insight**
 
 | Anat_mni_tpms pipeline combines the following pipelines and processes:
-|   - `Get tissue map templates (CSF, GM and WM) from templateFlow  <../../bricks/preprocess/others/TemplateFromTemplateFlow.html>`_ 
+|   - `Get tissue map templates (CSF, GM and WM) from templateFlow  <../../bricks/preprocess/others/TemplateFromTemplateFlow.html>`_
 |       (default values : in_template = 'MNI152NLin2009cAsym', resolution = 1, suffix = 'probseg', label = 'CSF' or 'GM' or 'WM')
-|   - `Apply Transform <../../bricks/preprocess/ants/ApplyTransform.html>`_ 
+|   - `Apply Transform <../../bricks/preprocess/ants/ApplyTransform.html>`_
 |       (default values: interpolation = 'Linear')
 
 .. image:: ../../images/Anat_mni_tpms_pipeline.png
@@ -50,7 +50,7 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
 **Outputs parameters:**
 
 - *mni_tpms* (a list representing files)
-    Air mask. 
+    Air mask.
 
     ::
 

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """The freesurfer preprocess library of the mia_processes package.
 
 The purpose of this module is to customise the main freesurfer preprocessing bricks
@@ -40,14 +41,12 @@ from nipype.interfaces.base import File, Undefined
 from nitransforms.linear import Affine
 from traits.api import Bool, Either, Enum, Float, Int, List, String
 
-EXT = {'NIFTI_GZ': 'nii.gz',
-       'NIFTI': 'nii',
-       'MGZ': 'mgz'}
+EXT = {"NIFTI_GZ": "nii.gz", "NIFTI": "nii", "MGZ": "mgz"}
 
 
 class Binarize(ProcessMIA):
     """
-    * | Binarize a volume (or volume-encoded surface file) using 
+    * | Binarize a volume (or volume-encoded surface file) using
       | FreeSurfer mri_binarize.
 
     Binarization can be done based on threshold or on matched values.
@@ -59,208 +58,275 @@ class Binarize(ProcessMIA):
     """
 
     def __init__(self):
-        '''Dedicated to the attributes initialisation/instantiation.
+        """Dedicated to the attributes initialisation/instantiation.
 
         The input and output plugs are defined here. The special
         'self.requirement' attribute (optional) is used to define the
         third-party products necessary for the running of the brick.
-        '''
+        """
         # Initialisation of the objects needed for the launch of the brick
         super(Binarize, self).__init__()
 
         # Third party softwares required for the execution of the brick
-        self.requirement = ['freesurfer', 'nipype']
+        self.requirement = ["freesurfer", "nipype"]
 
         # Mandatory inputs description
-        in_file_desc = ('Input file (a pathlike object or string '
-                        'representing a file).')
+        in_file_desc = (
+            "Input file (a pathlike object or string " "representing a file)."
+        )
         # Optional inputs with default value description
-        abs_desc = 'take abs of invol first (ie, make unsigned)'
-        bin_col_num_desc = 'set binarized voxel value to its column number'
-        get_count_file_desc = ('save number of hits in ascii file'
-                               '(hits, ntotvox, pct)')
-        invert_desc = 'set binval=0, binvalnot=1'
-        max_desc = 'Maximum voxel threshold(float).'
-        min_desc = 'Minimum voxel threshold(float).'
-        output_type_desc = ('Typecodes of the output image formats (one '
-                            'of NIFTI, MGZ, NIFTI_GZ).')
-        out_suffix_desc = 'Suffix of the output image (a string).'
-        zero_edges_desc = 'zero the edge voxels'
-        zero_slice_edge_desc = 'zero the edge slice voxels'
+        abs_desc = "take abs of invol first (ie, make unsigned)"
+        bin_col_num_desc = "set binarized voxel value to its column number"
+        get_count_file_desc = (
+            "save number of hits in ascii file" "(hits, ntotvox, pct)"
+        )
+        invert_desc = "set binval=0, binvalnot=1"
+        max_desc = "Maximum voxel threshold(float)."
+        min_desc = "Minimum voxel threshold(float)."
+        output_type_desc = (
+            "Typecodes of the output image formats (one "
+            "of NIFTI, MGZ, NIFTI_GZ)."
+        )
+        out_suffix_desc = "Suffix of the output image (a string)."
+        zero_edges_desc = "zero the edge voxels"
+        zero_slice_edge_desc = "zero the edge slice voxels"
         # Optional inputs description
-        bin_val_desc = 'set vox outside range to val (default is 0)'
-        bin_val_not_desc = 'set vox outside range to val (default is 0)'
-        dilate_desc = 'niters: dilate binarization in 3D'
-        erode_desc = ('nerode: erode binarization in 3D '
-                      '(after any dilation)')
-        erode2d_desc = ('nerode2d: erode binarization in 2D '
-                        '(after any 3D erosion)')
-        frame_no_desc = 'use 0-based frame of input (default is 0)'
-        match_desc = 'Match instead of threshold'
+        bin_val_desc = "set vox outside range to val (default is 0)"
+        bin_val_not_desc = "set vox outside range to val (default is 0)"
+        dilate_desc = "niters: dilate binarization in 3D"
+        erode_desc = "nerode: erode binarization in 3D " "(after any dilation)"
+        erode2d_desc = (
+            "nerode2d: erode binarization in 2D " "(after any 3D erosion)"
+        )
+        frame_no_desc = "use 0-based frame of input (default is 0)"
+        match_desc = "Match instead of threshold"
 
-        rmax_desc = 'Compute max based on rmax*globalmean.'
-        rmin_desc = 'Compute min based on rmin*globalmean.'
+        rmax_desc = "Compute max based on rmax*globalmean."
+        rmin_desc = "Compute min based on rmin*globalmean."
         # Outputs description
-        count_file_desc = ('File that contains number of hits'
-                           '(hits, ntotvox, pct)')
-        out_file_desc = ('The binanized file (a pathlike object or a '
-                         'string representing a file).')
+        count_file_desc = (
+            "File that contains number of hits" "(hits, ntotvox, pct)"
+        )
+        out_file_desc = (
+            "The binanized file (a pathlike object or a "
+            "string representing a file)."
+        )
 
         # Mandatory inputs traits
-        self.add_trait('in_file',
-                       File(output=False,
-                            optional=False,
-                            desc=in_file_desc))
+        self.add_trait(
+            "in_file", File(output=False, optional=False, desc=in_file_desc)
+        )
 
         # Optional inputs with default value traits
-        self.add_trait('abs',
-                       Bool(default=False,
-                            output=False,
-                            optional=True,
-                            desc=abs_desc))
+        self.add_trait(
+            "abs",
+            Bool(default=False, output=False, optional=True, desc=abs_desc),
+        )
 
-        self.add_trait('bin_col_num',
-                       Bool(default=False,
-                            output=False,
-                            optional=True,
-                            desc=bin_col_num_desc))
+        self.add_trait(
+            "bin_col_num",
+            Bool(
+                default=False,
+                output=False,
+                optional=True,
+                desc=bin_col_num_desc,
+            ),
+        )
 
-        self.add_trait('get_count_file',
-                       Bool(False,
-                            default=False,
-                            output=False,
-                            optional=True,
-                            desc=get_count_file_desc))
+        self.add_trait(
+            "get_count_file",
+            Bool(
+                False,
+                default=False,
+                output=False,
+                optional=True,
+                desc=get_count_file_desc,
+            ),
+        )
 
-        self.add_trait('invert',
-                       Bool(default=False,
-                            output=False,
-                            optional=True,
-                            desc=invert_desc))
-        self.add_trait('max',
-                       Either(Float(),
-                              Undefined,
-                              default=100.0,
-                              output=False,
-                              optional=True,
-                              desc=max_desc))
-        self.add_trait('min',
-                       Either(Float(),
-                              Undefined,
-                              default=0.0,
-                              output=False,
-                              optional=True,
-                              desc=min_desc))
+        self.add_trait(
+            "invert",
+            Bool(default=False, output=False, optional=True, desc=invert_desc),
+        )
+        self.add_trait(
+            "max",
+            Either(
+                Float(),
+                Undefined,
+                default=100.0,
+                output=False,
+                optional=True,
+                desc=max_desc,
+            ),
+        )
+        self.add_trait(
+            "min",
+            Either(
+                Float(),
+                Undefined,
+                default=0.0,
+                output=False,
+                optional=True,
+                desc=min_desc,
+            ),
+        )
 
-        self.add_trait('output_type',
-                       Enum('NIFTI',
-                            'NIFTI_GZ',
-                            'MGZ',
-                            output=False,
-                            optional=True,
-                            desc=output_type_desc))
+        self.add_trait(
+            "output_type",
+            Enum(
+                "NIFTI",
+                "NIFTI_GZ",
+                "MGZ",
+                output=False,
+                optional=True,
+                desc=output_type_desc,
+            ),
+        )
 
-        self.add_trait('out_suffix',
-                       String('_thresh',
-                              output=False,
-                              optional=True,
-                              desc=out_suffix_desc))
+        self.add_trait(
+            "out_suffix",
+            String(
+                "_thresh", output=False, optional=True, desc=out_suffix_desc
+            ),
+        )
 
-        self.add_trait('zero_edges',
-                       Bool(default=False,
-                            output=False,
-                            optional=True,
-                            desc=zero_edges_desc))
+        self.add_trait(
+            "zero_edges",
+            Bool(
+                default=False,
+                output=False,
+                optional=True,
+                desc=zero_edges_desc,
+            ),
+        )
 
-        self.add_trait('zero_slice_edge',
-                       Bool(default=False,
-                            output=False,
-                            optional=True,
-                            desc=zero_slice_edge_desc))
+        self.add_trait(
+            "zero_slice_edge",
+            Bool(
+                default=False,
+                output=False,
+                optional=True,
+                desc=zero_slice_edge_desc,
+            ),
+        )
 
         # Optional inputs traits
-        self.add_trait('bin_val',
-                       Either(Undefined,
-                              Int(),
-                              default=Undefined,
-                              output=False,
-                              optional=True,
-                              desc=bin_val_desc))
+        self.add_trait(
+            "bin_val",
+            Either(
+                Undefined,
+                Int(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=bin_val_desc,
+            ),
+        )
 
-        self.add_trait('bin_val_not',
-                       Either(Undefined,
-                              Int(),
-                              default=Undefined,
-                              output=False,
-                              optional=True,
-                              desc=bin_val_not_desc))
+        self.add_trait(
+            "bin_val_not",
+            Either(
+                Undefined,
+                Int(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=bin_val_not_desc,
+            ),
+        )
 
-        self.add_trait('dilate',
-                       Either(Undefined,
-                              Int(),
-                              default=Undefined,
-                              output=False,
-                              optional=True,
-                              desc=dilate_desc))
+        self.add_trait(
+            "dilate",
+            Either(
+                Undefined,
+                Int(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=dilate_desc,
+            ),
+        )
 
-        self.add_trait('erode',
-                       Either(Undefined,
-                              Int(),
-                              default=Undefined,
-                              output=False,
-                              optional=True,
-                              desc=erode_desc))
+        self.add_trait(
+            "erode",
+            Either(
+                Undefined,
+                Int(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=erode_desc,
+            ),
+        )
 
-        self.add_trait('erode2d',
-                       Either(Undefined,
-                              Int(),
-                              default=Undefined,
-                              output=False,
-                              optional=True,
-                              desc=erode2d_desc))
-        self.add_trait('frame_no',
-                       Either(Undefined,
-                              Int(),
-                              default=Undefined,
-                              output=False,
-                              optional=True,
-                              desc=frame_no_desc))
+        self.add_trait(
+            "erode2d",
+            Either(
+                Undefined,
+                Int(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=erode2d_desc,
+            ),
+        )
+        self.add_trait(
+            "frame_no",
+            Either(
+                Undefined,
+                Int(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=frame_no_desc,
+            ),
+        )
 
-        self.add_trait('match',
-                       Either(Undefined,
-                              List(Int()),
-                              default=Undefined,
-                              output=False,
-                              optional=True,
-                              desc=match_desc))
+        self.add_trait(
+            "match",
+            Either(
+                Undefined,
+                List(Int()),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=match_desc,
+            ),
+        )
 
-        self.add_trait('rmax',
-                       Either(Undefined,
-                              Float(),
-                              default=Undefined,
-                              output=False,
-                              optional=True,
-                              desc=rmax_desc))
+        self.add_trait(
+            "rmax",
+            Either(
+                Undefined,
+                Float(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=rmax_desc,
+            ),
+        )
 
-        self.add_trait('rmin',
-                       Either(Undefined,
-                              Float(),
-                              default=Undefined,
-                              output=False,
-                              optional=True,
-                              desc=rmin_desc))
+        self.add_trait(
+            "rmin",
+            Either(
+                Undefined,
+                Float(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=rmin_desc,
+            ),
+        )
         # Outputs traits
-        self.add_trait('count_file',
-                       File(output=True,
-                            optional=True,
-                            desc=count_file_desc))
+        self.add_trait(
+            "count_file",
+            File(output=True, optional=True, desc=count_file_desc),
+        )
 
-        self.add_trait('out_file',
-                       File(output=True,
-                            desc=out_file_desc))
+        self.add_trait("out_file", File(output=True, desc=out_file_desc))
 
         self.init_default_traits()
-        self.init_process('nipype.interfaces.freesurfer.Binarize')
+        self.init_process("nipype.interfaces.freesurfer.Binarize")
 
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
@@ -279,43 +345,49 @@ class Binarize(ProcessMIA):
         super(Binarize, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
-        if (self.min != Undefined or
-                self.max != Undefined or
-                self.rmin != Undefined or
-                self.rmax != Undefined) and self.match != Undefined:
-            print('\nInitialisation failed. "match" parameter can not be used '
-                  'with "min" and/or "max" parameters'
-                  ' Please, define only "min"/"max" paremeters or "match"'
-                  'parameters (set the other as Undefined) ...!')
+        if (
+            self.min != Undefined
+            or self.max != Undefined
+            or self.rmin != Undefined
+            or self.rmax != Undefined
+        ) and self.match != Undefined:
+            print(
+                '\nInitialisation failed. "match" parameter can not be used '
+                'with "min" and/or "max" parameters'
+                ' Please, define only "min"/"max" paremeters or "match"'
+                "parameters (set the other as Undefined) ...!"
+            )
             return
 
         if self.in_file:
             if self.output_directory:
-                valid_ext, in_ext, fileName = checkFileExt(self.in_file,
-                                                           EXT)
+                valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
 
                 if not valid_ext:
-                    print('\nThe input image format is'
-                          ' not recognized...!')
+                    print("\nThe input image format is" " not recognized...!")
                     return
                 else:
                     output_type = self.output_type
-                    self.outputs['out_file'] = os.path.join(
+                    self.outputs["out_file"] = os.path.join(
                         self.output_directory,
                         os.path.split(self.in_file)[1].replace(
-                            '.' + in_ext,
-                            self.out_suffix + '.' + EXT[output_type]))
+                            "." + in_ext,
+                            self.out_suffix + "." + EXT[output_type],
+                        ),
+                    )
 
-                    self.outputs['count_file'] = os.path.join(
+                    self.outputs["count_file"] = os.path.join(
                         self.output_directory,
                         os.path.split(self.in_file)[1].replace(
-                            '.' + in_ext,
-                            self.out_suffix + '_count.txt'))
+                            "." + in_ext, self.out_suffix + "_count.txt"
+                        ),
+                    )
 
-                    self.inheritance_dict[self.outputs[
-                        'out_file']] = self.in_file
+                    self.inheritance_dict[
+                        self.outputs["out_file"]
+                    ] = self.in_file
             else:
-                print('No output_directory was found...!\n')
+                print("No output_directory was found...!\n")
                 return
 
         # Return the requirement, outputs and inheritance_dict
@@ -374,55 +446,55 @@ class SynthStrip(ProcessMIA):
         super(SynthStrip, self).__init__()
 
         # Third party softwares required for the execution of the brick
-        self.requirement = ['freesurfer', 'nipype']
+        self.requirement = ["freesurfer", "nipype"]
 
         # Mandatory inputs description
-        in_file_desc = 'Input image to be brain extracted'
+        in_file_desc = "Input image to be brain extracted"
         # Optional inputs with default value description
-        border_mm_desc = 'Mask border threshold in mm'
-        no_csf_desc = 'Exclude CSF from brain border'
-        output_type_desc = ('Typecodes of the output image formats (one '
-                            'of NIFTI, MGZ, NIFTI_GZ).')
+        border_mm_desc = "Mask border threshold in mm"
+        no_csf_desc = "Exclude CSF from brain border"
+        output_type_desc = (
+            "Typecodes of the output image formats (one "
+            "of NIFTI, MGZ, NIFTI_GZ)."
+        )
         # Outputs description
-        out_file_desc = 'Brain-extracted path'
-        out_mask_desc = 'Brain mask path'
+        out_file_desc = "Brain-extracted path"
+        out_mask_desc = "Brain mask path"
 
         # Mandatory inputs traits
-        self.add_trait('in_file',
-                       File(output=False,
-                            optional=False,
-                            desc=in_file_desc))
+        self.add_trait(
+            "in_file", File(output=False, optional=False, desc=in_file_desc)
+        )
 
         # Optional inputs with default value traits
-        self.add_trait('border_mm',
-                       Int(1,
-                           output=False,
-                           optional=True,
-                           desc=border_mm_desc))
+        self.add_trait(
+            "border_mm",
+            Int(1, output=False, optional=True, desc=border_mm_desc),
+        )
 
-        self.add_trait('no_csf',
-                       Bool(False,
-                            output=False,
-                            optional=True,
-                            desc=no_csf_desc))
+        self.add_trait(
+            "no_csf",
+            Bool(False, output=False, optional=True, desc=no_csf_desc),
+        )
 
-        self.add_trait('output_type',
-                       Enum('NIFTI',
-                            'NIFTI_GZ',
-                            'MGZ',
-                            output=False,
-                            optional=True,
-                            desc=output_type_desc))
+        self.add_trait(
+            "output_type",
+            Enum(
+                "NIFTI",
+                "NIFTI_GZ",
+                "MGZ",
+                output=False,
+                optional=True,
+                desc=output_type_desc,
+            ),
+        )
 
         # Outputs traits
-        self.add_trait('out_file',
-                       File(output=True,
-                            optional=True,
-                            desc=out_file_desc))
+        self.add_trait(
+            "out_file", File(output=True, optional=True, desc=out_file_desc)
+        )
 
-        self.add_trait('out_mask',
-                       File(output=True,
-                            desc=out_mask_desc))
+        self.add_trait("out_mask", File(output=True, desc=out_mask_desc))
 
         self.init_default_traits()
 
@@ -445,36 +517,35 @@ class SynthStrip(ProcessMIA):
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
             if self.output_directory:
-                valid_ext, in_ext, fileName = checkFileExt(self.in_file,
-                                                           EXT)
+                valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
 
                 if not valid_ext:
-                    print('\nThe input image format is'
-                          ' not recognized...!')
+                    print("\nThe input image format is" " not recognized...!")
                     return
                 else:
                     output_type = self.output_type
-                    self.outputs['out_file'] = os.path.join(
+                    self.outputs["out_file"] = os.path.join(
                         self.output_directory,
                         os.path.split(self.in_file)[1].replace(
-                            '.' + in_ext,
-                            '_desc-brain.' + EXT[output_type]))
+                            "." + in_ext, "_desc-brain." + EXT[output_type]
+                        ),
+                    )
 
-                    self.outputs['out_mask'] = os.path.join(
+                    self.outputs["out_mask"] = os.path.join(
                         self.output_directory,
                         os.path.split(self.in_file)[1].replace(
-                            '.' + in_ext,
-                            '_desc-brain_mask.' + EXT[output_type]))
+                            "." + in_ext,
+                            "_desc-brain_mask." + EXT[output_type],
+                        ),
+                    )
 
             else:
-                print('No output_directory was found...!\n')
+                print("No output_directory was found...!\n")
                 return
 
         if self.outputs:
-            self.inheritance_dict[self.outputs[
-                'out_file']] = self.in_file
-            self.inheritance_dict[self.outputs[
-                'out_mask']] = self.in_file
+            self.inheritance_dict[self.outputs["out_file"]] = self.in_file
+            self.inheritance_dict[self.outputs["out_mask"]] = self.in_file
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -485,16 +556,28 @@ class SynthStrip(ProcessMIA):
 
         # default input
         fconf = capsul.engine.configurations.get(
-            'capsul.engine.module.freesurfer')
-        model_path = os.path.join(os.path.dirname(fconf['setup']), 'models',
-                                  'synthstrip.1.pt')
+            "capsul.engine.module.freesurfer"
+        )
+        model_path = os.path.join(
+            os.path.dirname(fconf["setup"]), "models", "synthstrip.1.pt"
+        )
 
-        cmd = ['mri_synthstrip', '-i', self.in_file, '-o',
-               self.out_file, '-m', self.out_mask, '-b', str(self.border_mm),
-               '--model', model_path]
+        cmd = [
+            "mri_synthstrip",
+            "-i",
+            self.in_file,
+            "-o",
+            self.out_file,
+            "-m",
+            self.out_mask,
+            "-b",
+            str(self.border_mm),
+            "--model",
+            model_path,
+        ]
 
         if self.no_csf:
-            cmd += ['--no-csf']
+            cmd += ["--no-csf"]
 
         return freesurfer.freesurfer_call(cmd)
 
@@ -518,14 +601,14 @@ class SynthStripMriqc(ProcessMIA):
         """blabla"""
 
         def __init__(
-                self,
-                nb_features=16,
-                nb_levels=7,
-                feat_mult=2,
-                max_features=64,
-                nb_conv_per_level=2,
-                max_pool=2,
-                return_mask=False,
+            self,
+            nb_features=16,
+            nb_levels=7,
+            feat_mult=2,
+            max_features=64,
+            nb_conv_per_level=2,
+            max_pool=2,
+            return_mask=False,
         ):
             """blabla"""
             super().__init__()
@@ -534,15 +617,14 @@ class SynthStripMriqc(ProcessMIA):
 
             # build feature list automatically
             if isinstance(nb_features, int):
-
                 if nb_levels is None:
                     raise ValueError(
                         "SynthStripMriqc brick: must provide unet nb_levels if "
                         "nb_features is an integer"
                     )
-                feats = np.round(nb_features * feat_mult ** np.arange(
-                                                                     nb_levels)
-                                 ).astype(int)
+                feats = np.round(
+                    nb_features * feat_mult ** np.arange(nb_levels)
+                ).astype(int)
                 feats = np.clip(feats, 1, max_features)
                 nb_features = [
                     np.repeat(feats[:-1], nb_conv_per_level),
@@ -550,8 +632,10 @@ class SynthStripMriqc(ProcessMIA):
                 ]
 
             elif nb_levels is not None:
-                raise ValueError("SynthStripMriqc brick: cannot use nb_levels if "
-                                 "nb_features is not an integer")
+                raise ValueError(
+                    "SynthStripMriqc brick: cannot use nb_levels if "
+                    "nb_features is not an integer"
+                )
 
             # extract any surplus (full resolution) decoder convolutions
             enc_nf, dec_nf = nb_features
@@ -566,9 +650,9 @@ class SynthStripMriqc(ProcessMIA):
             # cache downsampling / upsampling operations
             MaxPooling = getattr(torch.nn, "MaxPool%dd" % ndims)
             self.pooling = [MaxPooling(s) for s in max_pool]
-            self.upsampling = [torch.nn.Upsample(scale_factor=s,
-                                                 mode="nearest") for s in
-                                                                       max_pool
+            self.upsampling = [
+                torch.nn.Upsample(scale_factor=s, mode="nearest")
+                for s in max_pool
             ]
 
             # configure encoder (down-sampling path)
@@ -608,18 +692,26 @@ class SynthStripMriqc(ProcessMIA):
             self.remaining = torch.nn.ModuleList()
 
             for num, nf in enumerate(final_convs):
-                self.remaining.append(SynthStripMriqc.ConvBlock(ndims, prev_nf, nf))
+                self.remaining.append(
+                    SynthStripMriqc.ConvBlock(ndims, prev_nf, nf)
+                )
                 prev_nf = nf
 
             # final convolutions
             if return_mask:
-                self.remaining.append(SynthStripMriqc.ConvBlock(ndims, prev_nf, 2,
-                                                activation=None))
+                self.remaining.append(
+                    SynthStripMriqc.ConvBlock(
+                        ndims, prev_nf, 2, activation=None
+                    )
+                )
                 self.remaining.append(torch.nn.Softmax(dim=1))
 
             else:
-                self.remaining.append(SynthStripMriqc.ConvBlock(ndims, prev_nf, 1,
-                                                activation=None))
+                self.remaining.append(
+                    SynthStripMriqc.ConvBlock(
+                        ndims, prev_nf, 1, activation=None
+                    )
+                )
 
         def forward(self, x):
             """blabla"""
@@ -627,7 +719,6 @@ class SynthStripMriqc(ProcessMIA):
             x_history = [x]
 
             for level, convs in enumerate(self.encoder):
-
                 for conv in convs:
                     x = conv(x)
 
@@ -636,7 +727,6 @@ class SynthStripMriqc(ProcessMIA):
 
             # decoder forward pass with upsampling and concatenation
             for level, convs in enumerate(self.decoder):
-
                 for conv in convs:
                     x = conv(x)
 
@@ -650,15 +740,20 @@ class SynthStripMriqc(ProcessMIA):
 
             return x
 
-
     class ConvBlock(torch.nn.Module):
         """
         * Specific convolutional block followed by leakyrelu for unet.
 
         """
 
-        def __init__(self, ndims, in_channels, out_channels,
-                     stride=1, activation="leaky"):
+        def __init__(
+            self,
+            ndims,
+            in_channels,
+            out_channels,
+            stride=1,
+            activation="leaky",
+        ):
             """blabla"""
             super().__init__()
             Conv = getattr(torch.nn, "Conv%dd" % ndims)
@@ -682,7 +777,6 @@ class SynthStripMriqc(ProcessMIA):
 
             return out
 
-
     def __init__(self):
         """Dedicated to the attributes initialisation/instantiation.
 
@@ -694,62 +788,64 @@ class SynthStripMriqc(ProcessMIA):
         super(SynthStripMriqc, self).__init__()
 
         # Third party softwares required for the execution of the brick
-        self.requirement = ['freesurfer']
+        self.requirement = ["freesurfer"]
 
         # Mandatory inputs description
-        in_file_desc = 'Input image to be brain extracted (a path to a file)' ##
+        in_file_desc = (
+            "Input image to be brain extracted (a path to a file)"  ##
+        )
         # Optional inputs with default value description
-        model_desc = 'Alternative model weights (a path to a file)'
-        border_mm_desc = 'Mask border threshold in mm (integer, default: 1)' ##
-        #no_csf_desc = 'Exclude CSF from brain border'
-        output_type_desc = ('Typecodes of the output image formats (one '
-                            'of NIFTI, MGZ, NIFTI_GZ).')
-        gpu_desc = "Use the GPU (bool, default: False)" ##
+        model_desc = "Alternative model weights (a path to a file)"
+        border_mm_desc = (
+            "Mask border threshold in mm (integer, default: 1)"  ##
+        )
+        # no_csf_desc = 'Exclude CSF from brain border'
+        output_type_desc = (
+            "Typecodes of the output image formats (one "
+            "of NIFTI, MGZ, NIFTI_GZ)."
+        )
+        gpu_desc = "Use the GPU (bool, default: False)"  ##
         # Outputs description
-        out_file_desc = 'Brain-extracted path (a path to a file)' ##
-        out_mask_desc = 'Brain mask path (a path to a file)' ##
+        out_file_desc = "Brain-extracted path (a path to a file)"  ##
+        out_mask_desc = "Brain mask path (a path to a file)"  ##
 
         # Mandatory inputs traits
-        self.add_trait('in_file',
-                       File(output=False,
-                            optional=False,
-                            desc=in_file_desc))
+        self.add_trait(
+            "in_file", File(output=False, optional=False, desc=in_file_desc)
+        )
 
         # Optional inputs with default value traits
-        self.add_trait('model',
-                       File(output=False,
-                            optional=True,
-                            desc=model_desc))
+        self.add_trait(
+            "model", File(output=False, optional=True, desc=model_desc)
+        )
 
-        self.add_trait('border_mm',
-                       Int(1,
-                           output=False,
-                           optional=True,
-                           desc=border_mm_desc))
+        self.add_trait(
+            "border_mm",
+            Int(1, output=False, optional=True, desc=border_mm_desc),
+        )
 
-        self.add_trait('output_type',
-                       Enum('NIFTI',
-                            'NIFTI_GZ',
-                            'MGZ',
-                            output=False,
-                            optional=True,
-                            desc=output_type_desc))
+        self.add_trait(
+            "output_type",
+            Enum(
+                "NIFTI",
+                "NIFTI_GZ",
+                "MGZ",
+                output=False,
+                optional=True,
+                desc=output_type_desc,
+            ),
+        )
 
-        self.add_trait('gpu',
-                       Bool(False,
-                            output=False,
-                            optional=True,
-                            desc=gpu_desc))
+        self.add_trait(
+            "gpu", Bool(False, output=False, optional=True, desc=gpu_desc)
+        )
 
         # Outputs traits
-        self.add_trait('out_file',
-                       File(output=True,
-                            optional=True,
-                            desc=out_file_desc))
+        self.add_trait(
+            "out_file", File(output=True, optional=True, desc=out_file_desc)
+        )
 
-        self.add_trait('out_mask',
-                       File(output=True,
-                            desc=out_mask_desc))
+        self.add_trait("out_mask", File(output=True, desc=out_mask_desc))
 
         self.init_default_traits()
 
@@ -759,22 +855,24 @@ class SynthStripMriqc(ProcessMIA):
         affine = input_nii.affine
 
         # Get corner voxel centers in index coords
-        corner_centers_ijk = (np.array([(i, j, k)
-                                          for k in (0, shape[2] - 1)
-                                          for j in (0, shape[1] - 1)
-                                          for i in (0, shape[0] - 1)
-                                       ]
-                                      )
-                                       + 0.5
-                             )
+        corner_centers_ijk = (
+            np.array(
+                [
+                    (i, j, k)
+                    for k in (0, shape[2] - 1)
+                    for j in (0, shape[1] - 1)
+                    for i in (0, shape[0] - 1)
+                ]
+            )
+            + 0.5
+        )
 
         # Get corner voxel centers in mm
         corners_xyz = (
             affine
-            @ np.hstack((corner_centers_ijk,
-                         np.ones((len(corner_centers_ijk), 1)
-                                )
-                        )).T
+            @ np.hstack(
+                (corner_centers_ijk, np.ones((len(corner_centers_ijk), 1)))
+            ).T
         )
 
         # Target affine is 1mm voxels in LIA orientation
@@ -786,7 +884,7 @@ class SynthStripMriqc(ProcessMIA):
 
         # SynthStrip likes dimensions be multiple of 64 (192, 256, or 320)
         target_shape = np.clip(
-        np.ceil(np.array(target_shape) / 64).astype(int) * 64, 192, 320
+            np.ceil(np.array(target_shape) / 64).astype(int) * 64, 192, 320
         )
 
         # Ensure shape ordering is LIA too
@@ -800,17 +898,18 @@ class SynthStripMriqc(ProcessMIA):
         target_affine[:3, 3] -= target_c[:3] - input_c[:3]
 
         nii = Affine(
-            reference=nb.Nifti1Image(np.zeros(target_shape),
-                                     target_affine, None),
+            reference=nb.Nifti1Image(
+                np.zeros(target_shape), target_affine, None
+            ),
         ).apply(input_nii)
         return nii
 
     def resample_like(self, image, target, output_dtype=None, cval=0):
         """Resample the input image to be in the target's grid via identity
         transform."""
-        return Affine(reference=target).apply(image,
-                                              output_dtype=output_dtype,
-                                              cval=cval)
+        return Affine(reference=target).apply(
+            image, output_dtype=output_dtype, cval=cval
+        )
 
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
@@ -830,38 +929,37 @@ class SynthStripMriqc(ProcessMIA):
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
-
             if self.output_directory:
                 valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
 
                 if not valid_ext:
-                    print('\nThe input image format is'
-                          ' not recognized...!')
+                    print("\nThe input image format is" " not recognized...!")
                     return
 
                 else:
                     output_type = self.output_type
-                    self.outputs['out_file'] = os.path.join(
+                    self.outputs["out_file"] = os.path.join(
                         self.output_directory,
                         os.path.split(self.in_file)[1].replace(
-                            '.' + in_ext,
-                            '_desc-brain.' + EXT[output_type]))
+                            "." + in_ext, "_desc-brain." + EXT[output_type]
+                        ),
+                    )
 
-                    self.outputs['out_mask'] = os.path.join(
+                    self.outputs["out_mask"] = os.path.join(
                         self.output_directory,
                         os.path.split(self.in_file)[1].replace(
-                            '.' + in_ext,
-                            '_desc-brain_mask.' + EXT[output_type]))
+                            "." + in_ext,
+                            "_desc-brain_mask." + EXT[output_type],
+                        ),
+                    )
 
             else:
-                print('No output_directory was found...!\n')
+                print("No output_directory was found...!\n")
                 return
 
         if self.outputs:
-            self.inheritance_dict[self.outputs[
-                'out_file']] = self.in_file
-            self.inheritance_dict[self.outputs[
-                'out_mask']] = self.in_file
+            self.inheritance_dict[self.outputs["out_file"]] = self.in_file
+            self.inheritance_dict[self.outputs["out_mask"]] = self.in_file
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -893,20 +991,25 @@ class SynthStripMriqc(ProcessMIA):
             model.eval()
 
         # load model weights
-        if self.model in [Undefined, '<undefined>', '']:
+        if self.model in [Undefined, "<undefined>", ""]:
             fconf = capsul.engine.configurations.get(
-            'capsul.engine.module.freesurfer')
+                "capsul.engine.module.freesurfer"
+            )
 
             if fconf is not None:
-                modelfile = os.path.join(os.path.dirname(fconf['setup']),
-                                         'models',
-                                         'synthstrip.1.pt')
+                modelfile = os.path.join(
+                    os.path.dirname(fconf["setup"]),
+                    "models",
+                    "synthstrip.1.pt",
+                )
 
             else:
-                raise RuntimeError("SynthStripMriqc: No configuration for "
-                                   "freeSurfer was found, so the path for "
-                                   "the model cannot be defined. "
-                                   "See File > MIA Preferences")
+                raise RuntimeError(
+                    "SynthStripMriqc: No configuration for "
+                    "freeSurfer was found, so the path for "
+                    "the model cannot be defined. "
+                    "See File > MIA Preferences"
+                )
 
         else:
             modelfile = self.model
@@ -933,42 +1036,43 @@ class SynthStripMriqc(ProcessMIA):
             sdt = model(input_tensor).cpu().numpy().squeeze()
 
         # unconform the sdt and extract mask
-        sdt_target = self.resample_like(nb.Nifti1Image(sdt,
-                                                       conformed.affine,
-                                                       None),
-                                        image,
-                                        output_dtype="int16",
-                                        cval=100,
+        sdt_target = self.resample_like(
+            nb.Nifti1Image(sdt, conformed.affine, None),
+            image,
+            output_dtype="int16",
+            cval=100,
         )
         sdt_data = np.asanyarray(sdt_target.dataobj).astype("int16")
 
         # find largest CC (just do this to be safe for now)
-        components = scipy.ndimage.label(
-                                sdt_data.squeeze() < self.border_mm)[0]
+        components = scipy.ndimage.label(sdt_data.squeeze() < self.border_mm)[
+            0
+        ]
         bincount = np.bincount(components.flatten())[1:]
         mask = components == (np.argmax(bincount) + 1)
         mask = scipy.ndimage.morphology.binary_fill_holes(mask)
 
         # write the masked output
-        if self.out_file not in [Undefined, '<undefined>']:
+        if self.out_file not in [Undefined, "<undefined>"]:
             img_data = image.get_fdata()
             bg = np.min([0, img_data.min()])
             img_data[mask == 0] = bg
-            nb.Nifti1Image(img_data,
-                           image.affine,
-                           image.header).to_filename(self.out_file)
+            nb.Nifti1Image(img_data, image.affine, image.header).to_filename(
+                self.out_file
+            )
             print(f"Masked image saved to: {self.out_file}")
 
         # write the brain mask
-        if self.out_mask not in [Undefined, '<undefined>']:
+        if self.out_mask not in [Undefined, "<undefined>"]:
             hdr = image.header.copy()
             hdr.set_data_dtype("uint8")
             nb.Nifti1Image(mask, image.affine, hdr).to_filename(self.out_mask)
-            print(f"SynthStripMriqc brick: "
-                  f"Binary brain mask saved to: {self.out_mask}")
+            print(
+                f"SynthStripMriqc brick: "
+                f"Binary brain mask saved to: {self.out_mask}"
+            )
 
         print("If you use SynthStripMriqc in your analysis, please cite:")
         print("----------------------------------------------------")
         print("SynthStrip: Skull-Stripping for Any Brain Image.")
         print("A Hoopes, JS Mora, AV Dalca, B Fischl, M Hoffmann.")
-

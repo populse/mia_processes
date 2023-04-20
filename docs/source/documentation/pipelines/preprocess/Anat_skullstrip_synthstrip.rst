@@ -25,7 +25,7 @@ Adapted from `mriqc v22.06 synthstrip workflow <https://github.com/nipreps/mriqc
 |       default for second correction: dimension = 3, n_iterations = [50] * 4)
 |   - `Skull Stripping <../../bricks/preprocess/afni/SkullStrip.html>`_  (using Freesurfer Synthstrip)
 |   - `Intesity Clip <../../bricks/preprocess/others/IntensityClip.html>`_
-|   - `Mask <../../bricks/preprocess/others/Mask.html>`_ 
+|   - `Mask <../../bricks/preprocess/others/Mask.html>`_
 
 .. image:: ../../images/Anat_skullstrip_synthstrip_pipeline.png
   :width: 800
@@ -50,14 +50,14 @@ Adapted from `mriqc v22.06 synthstrip workflow <https://github.com/nipreps/mriqc
       ex. '/home/username/data/derived_data/n4c_T1w_clipped_bias.nii'
 
 - *out_corrected*
-    Bias corrected image. 
+    Bias corrected image.
 
     ::
 
       ex. '/home/username/data/derived_data/n4c_T1w_clipped.nii'
 
 - *out_brain*
-    Skull stripped image. 
+    Skull stripped image.
 
     ::
 
@@ -65,17 +65,15 @@ Adapted from `mriqc v22.06 synthstrip workflow <https://github.com/nipreps/mriqc
 
 
 - *out_mask*
-    Head mask from SynthStrip. 
+    Head mask from SynthStrip.
 
     ::
 
       ex. '/home/username/data/derived_data/pre_n4c_T1w_clipped_desc_brain_mask.nii'
-    
+
 -------------
 
 Usefull links:
 
 `SynthStrip <https://surfer.nmr.mgh.harvard.edu/docs/synthstrip/>`_
 `mriqc synthstrip workflow <https://mriqc.readthedocs.io/en/22.0.6/workflows.html#mriqc.workflows.anatomical.synthstrip_wf>`_
-
-

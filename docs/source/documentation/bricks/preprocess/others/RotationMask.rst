@@ -10,7 +10,7 @@
 RotationMask brick
 ============
 
-Compute the rotation mask image as decribed in the method to compute the arfifact mask described in [Mortamet2009]. 
+Compute the rotation mask image as decribed in the method to compute the arfifact mask described in [Mortamet2009].
 
 Be carrefull, if the suffix and prefix input parameters are not defined or consist only of one or more white spaces, the input parameter will be overwritten.
 
@@ -31,7 +31,7 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
 
 - *prefix* (a string, optional, default value is '')
     Prefix of the output image.
-    
+
     ::
 
       ex. ''
@@ -39,7 +39,7 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
 
 - *suffix* (a string, optional, default value is '_rotmasked')
     Suffix of output image.
-    
+
     ::
 
       ex. '_rotmasked'
@@ -49,7 +49,7 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
 
 - *out_file* (a strings representing a file)
     Path of the harmonized image (extensions: [.nii, .nii.gz]).
-    
+
     ::
 
       ex. '/home/username/data/derived_data/T1w_rotmasked.nii'

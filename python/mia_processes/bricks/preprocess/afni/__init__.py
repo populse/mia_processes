@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*- #
+# -*- coding: utf-8 -*-
 
 ##########################################################################
 # mia_processes - Copyright (C) IRMaGe/CEA, 2018
@@ -8,7 +8,18 @@
 # for details.
 ##########################################################################
 
-from .processes import (Automask, Calc, CalcDropTRs, Despike,
-                        FWHMx, GCOR, OutlierCount, QualityIndex,
-                        RefitDeoblique, SkullStrip, TShift,
-                        TStatMean, Volreg)
+from .processes import (
+    Automask,
+    Calc,
+    CalcDropTRs,
+    Despike,
+    FWHMx,
+    GCOR,
+    OutlierCount,
+    QualityIndex,
+    RefitDeoblique,
+    SkullStrip,
+    TShift,
+    TStatMean,
+    Volreg,
+)

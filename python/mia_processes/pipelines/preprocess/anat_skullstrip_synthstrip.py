@@ -1,5 +1,7 @@
+# -*- coding: utf-8 -*-
 from capsul.api import Pipeline
 import os
+
 
 class Anat_skullstrip_synthstrip(Pipeline):
     """
@@ -12,57 +14,80 @@ class Anat_skullstrip_synthstrip(Pipeline):
 
     def pipeline_definition(self):
         # nodes
-        self.add_process("pre_n4biasfieldcor",
-                         "mia_processes.bricks.preprocess."
-                         "ants.processes.N4BiasFieldCorrection")
-        self.add_process("pre_clip",
-                         "mia_processes.bricks.preprocess."
-                         "others.processing.IntensityClip")
-        self.add_process("synthstrip",
-                         "mia_processes.bricks.preprocess."
-                         "freesurfer.processes.SynthStripMriqc")
-        self.add_process("post_n4biasfieldcor",
-                         "mia_processes.bricks.preprocess."
-                         "ants.processes.N4BiasFieldCorrection")
-        self.add_process("mask",
-                         "mia_processes.bricks.preprocess."
-                         "others.processing.Mask")
+        self.add_process(
+            "pre_n4biasfieldcor",
+            "mia_processes.bricks.preprocess."
+            "ants.processes.N4BiasFieldCorrection",
+        )
+        self.add_process(
+            "pre_clip",
+            "mia_processes.bricks.preprocess."
+            "others.processing.IntensityClip",
+        )
+        self.add_process(
+            "synthstrip",
+            "mia_processes.bricks.preprocess."
+            "freesurfer.processes.SynthStripMriqc",
+        )
+        self.add_process(
+            "post_n4biasfieldcor",
+            "mia_processes.bricks.preprocess."
+            "ants.processes.N4BiasFieldCorrection",
+        )
+        self.add_process(
+            "mask", "mia_processes.bricks.preprocess." "others.processing.Mask"
+        )
 
         self.nodes["pre_n4biasfieldcor"].process.dimension = 3
-        self.nodes["pre_n4biasfieldcor"].process.out_prefix = 'pre_n4c_'
+        self.nodes["pre_n4biasfieldcor"].process.out_prefix = "pre_n4c_"
         self.nodes["pre_n4biasfieldcor"].process.rescale_intensities = True
         self.nodes["pre_n4biasfieldcor"].process.num_threads = int(
-            os.getenv("OMP_NUM_THREADS", os.cpu_count()))
+            os.getenv("OMP_NUM_THREADS", os.cpu_count())
+        )
         self.nodes["post_n4biasfieldcor"].process.n_iterations = [50] * 4
-        self.nodes["post_n4biasfieldcor"].process.out_prefix = 'post_n4c_'
+        self.nodes["post_n4biasfieldcor"].process.out_prefix = "post_n4c_"
         self.nodes["post_n4biasfieldcor"].process.dimension = 3
         self.nodes["post_n4biasfieldcor"].process.num_threads = int(
-            os.getenv("OMP_NUM_THREADS", os.cpu_count()))
-        self.nodes["mask"].process.suffix = ''
-        self.nodes["mask"].process.prefix = 'ss_'
+            os.getenv("OMP_NUM_THREADS", os.cpu_count())
+        )
+        self.nodes["mask"].process.suffix = ""
+        self.nodes["mask"].process.prefix = "ss_"
 
         # links
-        self.export_parameter("pre_clip",
-                              "in_file", is_optional=False)
+        self.export_parameter("pre_clip", "in_file", is_optional=False)
         self.add_link("pre_n4biasfieldcor.out_file->synthstrip.in_file")
         self.add_link("pre_clip.out_file->pre_n4biasfieldcor.in_file")
         self.add_link("pre_clip.out_file->post_n4biasfieldcor.in_file")
-        self.add_link("synthstrip.out_mask->"
-                      "post_n4biasfieldcor.weight_image")
+        self.add_link(
+            "synthstrip.out_mask->" "post_n4biasfieldcor.weight_image"
+        )
         self.add_link("synthstrip.out_mask->mask.mask_file")
         self.add_link("post_n4biasfieldcor.out_file->mask.in_file")
-        self.export_parameter("synthstrip", "out_mask",
-                              "out_mask_synthstrip", is_optional=True)
-        self.export_parameter("post_n4biasfieldcor",
-                              "bias_image", is_optional=True)
-        self.export_parameter("post_n4biasfieldcor",
-                              "out_file", "out_corrected", is_optional=True)
-        self.export_parameter("mask",
-                              "out_file", "out_brain", is_optional=True)
+        self.export_parameter(
+            "synthstrip", "out_mask", "out_mask_synthstrip", is_optional=True
+        )
+        self.export_parameter(
+            "post_n4biasfieldcor", "bias_image", is_optional=True
+        )
+        self.export_parameter(
+            "post_n4biasfieldcor",
+            "out_file",
+            "out_corrected",
+            is_optional=True,
+        )
+        self.export_parameter(
+            "mask", "out_file", "out_brain", is_optional=True
+        )
 
-        self.reorder_traits(("in_file", "out_mask_synthstrip",
-                             "out_brain", "out_corrected",
-                             "bias_image"))
+        self.reorder_traits(
+            (
+                "in_file",
+                "out_mask_synthstrip",
+                "out_brain",
+                "out_corrected",
+                "bias_image",
+            )
+        )
 
         # nodes positions
         self.node_position = {

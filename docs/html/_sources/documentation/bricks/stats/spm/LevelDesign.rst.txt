@@ -13,7 +13,7 @@ LevelDesign brick
 fMRI model specification for GLM analysis.
 ------------------------------------------
 
->>> from mia_processes.bricks.stat.spm import Level1Design  
+>>> from mia_processes.bricks.stat.spm import Level1Design
 >>> Level1Design.help()
 
 **Inputs parameters:**
@@ -305,7 +305,7 @@ fMRI model specification for GLM analysis.
 .. code-block:: python
 
     [sess_1_multi, sess_2_multi, ..., sess_n_multi] # Use None if there is no value for a session or [] if no value for all sessions
-  
+
     ex. []
 
 - *sess_regress <=> sess.regress* [#label]_
@@ -385,7 +385,7 @@ fMRI model specification for GLM analysis.
       ex. {"hrf":{"derivs":[0,0]}}
 
 - *volterra_expansion_order <=> volt* [#label]_
-    Modeling using a Volterra series formulation (one of 1 or 2).  
+    Modeling using a Volterra series formulation (one of 1 or 2).
         | - 1: do not model interactions
         | - 2: model interactions
 
@@ -447,7 +447,7 @@ fMRI model specification for GLM analysis.
 
 
 
-        
 
-            
+
+
                 ```

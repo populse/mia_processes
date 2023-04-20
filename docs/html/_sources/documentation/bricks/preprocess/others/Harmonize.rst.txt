@@ -10,7 +10,7 @@
 Harmonize brick
 ============
 
-Harmonize input image using a white matter mask as decribed in the method to compute the arfifact mask described in [Mortamet2009].  
+Harmonize input image using a white matter mask as decribed in the method to compute the arfifact mask described in [Mortamet2009].
 Be carrefull, if the suffix and prefix input parameters are not defined or consist only of one or more white spaces, the input parameter will be overwritten.
 
 Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical workflow.
@@ -27,7 +27,7 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
       ex. '/home/username/data/raw_data/T1w.nii'
 
 - *wm_mask* (a string representing an existing file)
-    Whithe matter mask file (valid extensions: [.nii, .nii.gz]). 
+    Whithe matter mask file (valid extensions: [.nii, .nii.gz]).
 
     ::
 
@@ -44,7 +44,7 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
 
 - *prefix* (a string, optional, default value is '')
     Prefix of the output image.
-    
+
     ::
 
       ex. ''
@@ -52,7 +52,7 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
 
 - *suffix* (a string, optional, default value is '_harmonized')
     Suffix of output image.
-    
+
     ::
 
       ex. '_harmonized'
@@ -62,7 +62,7 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
 
 - *out_file* (a strings representing a file)
     Path of the harmonized image (extensions: [.nii, .nii.gz]).
-    
+
     ::
 
       ex. '/home/username/data/derived_data/T1w_harmonized.nii'

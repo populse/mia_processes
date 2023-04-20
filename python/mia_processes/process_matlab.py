@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*- #
+# -*- coding: utf-8 -*-
 
 """The toobox to run a brick using Matlab.
 
@@ -47,7 +47,7 @@ class ProcessMatlab(ProcessMIA):
 
     def add_exit(self):
         """Adds an exit to the Matlab script."""
-        self.matlab_script += 'exit'
+        self.matlab_script += "exit"
 
     def add_path(self, path):
         """Adds a Matlab path to the Matlab script.
@@ -68,20 +68,21 @@ class ProcessMatlab(ProcessMIA):
 
         :param parameter_name: name of the parameter
         """
-        self.matlab_script += 'disp({0});'.format(parameter_name)
+        self.matlab_script += "disp({0});".format(parameter_name)
 
     def run(self):
         """Runs the Matlab script."""
         config = Config()
-        subprocess.run([config.get_matlab_path(), '-nodisplay', '-r',
-                        self.matlab_script])
+        subprocess.run(
+            [config.get_matlab_path(), "-nodisplay", "-r", self.matlab_script]
+        )
 
     def set_global_variable(self, variable_name):
         """Adds a global variable to the Matlab script.
 
         :param variable_name: name of the variable
         """
-        self.matlab_script += 'global {0};'.format(variable_name)
+        self.matlab_script += "global {0};".format(variable_name)
 
     def set_variable(self, variable_name, value):
         """Assign a value to a variable in the Matlab script.
@@ -92,4 +93,4 @@ class ProcessMatlab(ProcessMIA):
         if type(value) is str:
             self.matlab_script += '{0} = "{1}";'.format(variable_name, value)
         else:
-            self.matlab_script += '{0} = {1};'.format(variable_name, value)
+            self.matlab_script += "{0} = {1};".format(variable_name, value)

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Utilities and tools used across mia_processes
 
@@ -14,7 +15,14 @@ Contains:
 # for details.
 ###############################################################################
 
-from .tools import (checkFileExt, dict4runtime_update, get_dbFieldValue,
-                    PageNumCanvas, plot_qi2, ReportLine, set_dbFieldValue,
-                    slice_planes_plot)
+from .tools import (
+    checkFileExt,
+    dict4runtime_update,
+    get_dbFieldValue,
+    PageNumCanvas,
+    plot_qi2,
+    ReportLine,
+    set_dbFieldValue,
+    slice_planes_plot,
+)
 from .report import Report

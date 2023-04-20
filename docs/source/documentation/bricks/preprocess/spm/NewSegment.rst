@@ -39,7 +39,7 @@ NewSegment brick
 ================
 
 Segments,  bias  corrects  and  spatially normalises - all in the same model
----------------------------------------------------------------------------- 
+----------------------------------------------------------------------------
 
 >>> from mia_processes.bricks.preprocess.spm import NewSegment
 >>> NewSegment.help()
@@ -130,7 +130,7 @@ Segments,  bias  corrects  and  spatially normalises - all in the same model
     ::
 
       ex.  [(('/home/ArthurBlair/spm12/tpm/TPM.nii', 1), 2, (True, False), (False, False)),
-            (('/home/ArthurBlair/spm12/tpm/TPM.nii', 2), 2, (True, False), (False, False)), 
+            (('/home/ArthurBlair/spm12/tpm/TPM.nii', 2), 2, (True, False), (False, False)),
             (('/home/ArthurBlair/spm12/tpm/TPM.nii', 3), 2, (True, False), (False, False)),
             (('/home/ArthurBlair/spm12/tpm/TPM.nii', 4), 3, (True, False), (False, False)),
             (('/home/ArthurBlair/spm12/tpm/TPM.nii', 5), 4, (True, False), (False, False)),
@@ -150,7 +150,7 @@ Segments,  bias  corrects  and  spatially normalises - all in the same model
     ::
 
        ex. mni
- 
+
 - *sampling_distance <=> warp.samp* [#label]_
     Approximate distance between sampled points when estimating the model parameters (a float).
 
@@ -258,11 +258,11 @@ Segments,  bias  corrects  and  spatially normalises - all in the same model
 -------------
 
 .. [#label] Syntax: mia_processes/nipype NewSegment <=> SPM12 Segment.
-	    
+
 	    NOTE:
 	        - This interface currently supports single channel input only.
 	        - The warp.mrf, warp.cleanup and warp.fwhm, from  SPM12, are not used in this brick.
-		  
+
 	    Usefull links:
 	    `SPM12 Segment <https://www.fil.ion.ucl.ac.uk/spm/doc/manual.pdf#page=45>`_,
 	    `nipype NewSegment <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.spm.preprocess.html#newsegment>`_

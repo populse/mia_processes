@@ -29,8 +29,8 @@ Adapted from  `Nipype Cofounds <https://github.com/nipy/nipype/blob/f662acfce8de
 **Outputs parameters:**
 
 - *n_volumes_to_discard* (int)
-    Number of volumes to discard. 
-    
+    Number of volumes to discard.
+
     ::
 
       ex. 1

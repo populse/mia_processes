@@ -10,7 +10,7 @@
 FWHMx brick
 ============================
 
-Computes FWHMs using AFNI FWHMx command. 
+Computes FWHMs using AFNI FWHMx command.
 This program computes FWHMs for all sub-bricks in the input dataset, each one separately
 
 --------------------------------------
@@ -54,7 +54,7 @@ This program computes FWHMs for all sub-bricks in the input dataset, each one se
 
     ::
 
-      ex. '-ShowMeClassicFWHM' 
+      ex. '-ShowMeClassicFWHM'
 
 - *mask_file* (a string representing an existing file, optional)
     Mask image.
@@ -68,7 +68,7 @@ This program computes FWHMs for all sub-bricks in the input dataset, each one se
 
 - *out_file* (a strings representing a file)
     Out file.
-    
+
     ::
 
       ex. '/home/username/data/derived_data/fwhm_mean_reg_func_valid.out'
@@ -77,5 +77,5 @@ This program computes FWHMs for all sub-bricks in the input dataset, each one se
 
 Usefull links:
 
-`AFNI FWHMx <https://afni.nimh.nih.gov/pub/dist/doc/program_help/3dFWHMx.html>`_ 
+`AFNI FWHMx <https://afni.nimh.nih.gov/pub/dist/doc/program_help/3dFWHMx.html>`_
 `AFNI FWHMx - nipype <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.afni.utils.html#fwhmx>`_

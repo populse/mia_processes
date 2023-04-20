@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*- #
+# -*- coding: utf-8 -*-
 
 """blabla.
 
@@ -33,28 +33,39 @@ class Rois_1(Pipeline):
 
     def pipeline_definition(self):
         # nodes
-        self.add_process("find_in_list1",
-                         "mia_processes.bricks.tools.Find_In_List")
-        self.add_process("resample1",
-                         "mia_processes.bricks.preprocess.others.Resample_1")
+        self.add_process(
+            "find_in_list1", "mia_processes.bricks.tools.Find_In_List"
+        )
+        self.add_process(
+            "resample1", "mia_processes.bricks.preprocess.others.Resample_1"
+        )
         self.nodes["resample1"].process.reference_image = traits.Undefined
         self.nodes["resample1"].process.files_to_resample = traits.Undefined
-        self.add_process("roi_list_generator1",
-                         "mia_processes.bricks.tools.Concat_to_list_of_list")
-        self.add_process("conv_roi1",
-                         "mia_processes.bricks.preprocess.others.ConvROI")
-        self.nodes["conv_roi1"].process.in_image = traits.Undefined
-        self.add_process("resample2",
-                         "mia_processes.bricks.preprocess.others.Resample_2")
-        self.add_process("files_to_list1",
-                         "mia_processes.bricks.tools.tools.Files_To_List")
-        self.add_process("find_in_list2",
-                         "mia_processes.bricks.tools.Find_In_List")
         self.add_process(
-                        "result_collector1",
-                        "mia_processes.bricks.reports.Result_collector")
-        self.add_process("mean_&_stdDev_calc1",
-                         "mia_processes.bricks.reports.Mean_stdDev_calc")
+            "roi_list_generator1",
+            "mia_processes.bricks.tools.Concat_to_list_of_list",
+        )
+        self.add_process(
+            "conv_roi1", "mia_processes.bricks.preprocess.others.ConvROI"
+        )
+        self.nodes["conv_roi1"].process.in_image = traits.Undefined
+        self.add_process(
+            "resample2", "mia_processes.bricks.preprocess.others.Resample_2"
+        )
+        self.add_process(
+            "files_to_list1", "mia_processes.bricks.tools.tools.Files_To_List"
+        )
+        self.add_process(
+            "find_in_list2", "mia_processes.bricks.tools.Find_In_List"
+        )
+        self.add_process(
+            "result_collector1",
+            "mia_processes.bricks.reports.Result_collector",
+        )
+        self.add_process(
+            "mean_&_stdDev_calc1",
+            "mia_processes.bricks.reports.Mean_stdDev_calc",
+        )
 
         # links
         self.export_parameter("find_in_list1", "in_list", "spmT_images")
@@ -66,23 +77,34 @@ class Rois_1(Pipeline):
         self.add_link("resample1.out_files->resample2.reference_image")
         self.add_link("roi_list_generator1.listOflist->resample2.doublet_list")
         self.add_link("roi_list_generator1.listOflist->conv_roi1.doublet_list")
-        self.add_link("roi_list_generator1.listOflist->"
-                      "result_collector1.doublet_list")
-        self.add_link("roi_list_generator1.listOflist->"
-                      "mean_&_stdDev_calc1.doublet_list")
+        self.add_link(
+            "roi_list_generator1.listOflist->" "result_collector1.doublet_list"
+        )
+        self.add_link(
+            "roi_list_generator1.listOflist->"
+            "mean_&_stdDev_calc1.doublet_list"
+        )
         self.export_parameter("conv_roi1", "out_images", "conv_roi_masks")
         self.export_parameter("resample2", "out_images", "resample2_masks")
-        self.add_link("files_to_list1.file_list->"
-                      "mean_&_stdDev_calc1.parametric_maps")
-        self.add_link("files_to_list1.file_list->result_collector1.parametric_maps")
+        self.add_link(
+            "files_to_list1.file_list->" "mean_&_stdDev_calc1.parametric_maps"
+        )
+        self.add_link(
+            "files_to_list1.file_list->result_collector1.parametric_maps"
+        )
         self.add_link("find_in_list2.out_file->files_to_list1.file2")
         self.export_parameter("result_collector1", "out_files", "xls_files")
-        self.add_link("mean_&_stdDev_calc1.mean_out_files->"
-                      "result_collector1.mean_in_files")
-        self.add_link("mean_&_stdDev_calc1.std_out_files->"
-                      "result_collector1.std_in_files")
-        self.export_parameter("result_collector1", "patient_info",
-                              is_optional=True)
+        self.add_link(
+            "mean_&_stdDev_calc1.mean_out_files->"
+            "result_collector1.mean_in_files"
+        )
+        self.add_link(
+            "mean_&_stdDev_calc1.std_out_files->"
+            "result_collector1.std_in_files"
+        )
+        self.export_parameter(
+            "result_collector1", "patient_info", is_optional=True
+        )
 
         # nodes positions
         self.node_position = {

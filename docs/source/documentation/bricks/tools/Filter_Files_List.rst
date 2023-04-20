@@ -48,7 +48,7 @@ Selects one or more (slicing) elements from a list
 
 - *in_list*
     The list of elements to be filtered.
- 
+
     ::
 
       ex. ['/home/ArthurBlair/data/raw_data/Anat.nii',
@@ -73,6 +73,3 @@ Selects one or more (slicing) elements from a list
       ex. ['/home/ArthurBlair/data/Func.nii',
            '/home/ArthurBlair/data/raw_data/rp_Func.txt',
            '/home/ArthurBlair/data/raw_data/meanFunc.nii']
-
-
-

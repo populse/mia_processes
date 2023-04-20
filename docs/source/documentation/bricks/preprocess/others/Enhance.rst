@@ -10,7 +10,7 @@
 Enhance brick
 ============
 
-Image enhancing. The aims is to resample signal excess voxels. 
+Image enhancing. The aims is to resample signal excess voxels.
 
 For each images, voxels with signal excess (superior to 99.8%) are set to a random value among the voxel's values superior to the median.
 
@@ -24,7 +24,7 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
 
 - *in_files* (a list of pathlike objects or strings representing an existing file)
     Input images (valid extensions: [.nii, .nii.gz]).
-    
+
     ::
 
       ex. ['/home/username/data/raw_data/T1w.nii']
@@ -33,7 +33,7 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
 
 - *prefix* (a string, optional, default value is '')
     Prefix of the output image.
-    
+
     ::
 
       ex. ''
@@ -41,7 +41,7 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
 
 - *suffix* (a string, optional, default value is '_enh')
     Suffix of output image.
-    
+
     ::
 
       ex. '_enh'
@@ -51,7 +51,7 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
 
 - *out_files* (a list of pathlike objects or strings representing a file)
     Output Images (extensions: [.nii, .nii.gz]).
-    
+
     ::
 
       ex. ['/home/username/data/derived_data/T1w_enh.nii']

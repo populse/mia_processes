@@ -10,7 +10,7 @@
 Binarize brick
 ============
 
-Binarizes the input image applying the given lower threshold. 
+Binarizes the input image applying the given lower threshold.
 All voxels lower than the threshold are set to 0 and all the others voxels are set to 1.
 
 Be carrefull, if the suffix and prefix input parameters are not defined or consist only of one or more white spaces, the input parameter will be overwritten.
@@ -32,8 +32,8 @@ Adapted from `niworkflows <https://github.com/nipreps/niworkflows>`_.
 **Optional inputs with default value parameters:**
 
 - *prefix* (a string, optional, default value is '')
-    Prefix of the output images. 
-    
+    Prefix of the output images.
+
     ::
 
       ex. ''
@@ -41,14 +41,14 @@ Adapted from `niworkflows <https://github.com/nipreps/niworkflows>`_.
 
 - *suffix* (a string, optional, default value is '_bin')
     Suffix of output images.
-    
+
     ::
 
       ex. '_bin'
-  
+
 - *thresh_low* (a float, default value is 0.0)
-    Lower threshold for binarization. 
-    
+    Lower threshold for binarization.
+
     ::
 
       ex. 0.0
@@ -58,7 +58,7 @@ Adapted from `niworkflows <https://github.com/nipreps/niworkflows>`_.
 
 - *out_files* (a list of pathlike objects or strings representing a file)
     Images after application of the binarization (extensions: [.nii, .nii.gz]).
-    
+
     ::
 
       ex. ['/home/username/data/derived_data/T1w_bin.nii']

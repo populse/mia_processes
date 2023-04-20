@@ -9,9 +9,9 @@
 ============
 SynthStrip brick
 ============
- 
-Skull-stripping using SynthStrip tool (mri_synthstrip in Freesurfer). 
-It is a is a skull-stripping tool that extracts brain signal from a landscape of image types, ranging across imaging modality, contrast, resolution, and subject population. 
+
+Skull-stripping using SynthStrip tool (mri_synthstrip in Freesurfer).
+It is a is a skull-stripping tool that extracts brain signal from a landscape of image types, ranging across imaging modality, contrast, resolution, and subject population.
 It leverages a deep learning strategy  that synthesizes arbitrary training images from segmentation maps to optimize a robust model agnostic to acquisition specifics.
 
 If you use this bricks in your analysis, please cite: `SynthStrip: Skull-Stripping for Any Brain Image. <https://doi.org/10.1016/j.neuroimage.2022.119474>`_.
@@ -64,7 +64,7 @@ If you use this bricks in your analysis, please cite: `SynthStrip: Skull-Strippi
       ex. '/home/username/data/raw_data/T1w_desc-brain.nii'
 
 - *out_mask* (a pathlike object or string representing a file)
-    Binary brain mask 
+    Binary brain mask
 
     ::
 

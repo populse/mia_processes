@@ -50,7 +50,7 @@ ANTS_RANDOM_SEED should be set (e.g. ANTS_RANDOM_SEED = 1). Further discussion i
 **Outputs parameters:**
 
 - *anat_report*
-    Anatomical Image-Quality Metrics summary report. 
+    Anatomical Image-Quality Metrics summary report.
 
     ::
 

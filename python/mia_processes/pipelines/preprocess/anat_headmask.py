@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from capsul.api import Pipeline
 import traits.api as traits
 
@@ -11,31 +12,39 @@ class Anat_headmask(Pipeline):
 
     def pipeline_definition(self):
         # nodes
-        self.add_process("estimateSNR",
-                         "mia_processes.bricks.preprocess."
-                         "others.processing.EstimateSNR")
-        self.add_process("denoise",
-                         "mia_processes.bricks.preprocess."
-                         "dipy.processes.Denoise")
-        self.add_process("enhance",
-                         "mia_processes.bricks.preprocess."
-                         "others.processing.Enhance")
-        self.add_process("gradient_threshold",
-                         "mia_processes.bricks.preprocess."
-                         "others.processing.GradientThreshold")
+        self.add_process(
+            "estimateSNR",
+            "mia_processes.bricks.preprocess." "others.processing.EstimateSNR",
+        )
+        self.add_process(
+            "denoise",
+            "mia_processes.bricks.preprocess." "dipy.processes.Denoise",
+        )
+        self.add_process(
+            "enhance",
+            "mia_processes.bricks.preprocess." "others.processing.Enhance",
+        )
+        self.add_process(
+            "gradient_threshold",
+            "mia_processes.bricks.preprocess."
+            "others.processing.GradientThreshold",
+        )
 
         # links
-        self.export_parameter("estimateSNR", "in_file", "in_file",
-                              is_optional=False)
-        self.export_parameter("gradient_threshold", "seg_file",
-                              is_optional=False)
+        self.export_parameter(
+            "estimateSNR", "in_file", "in_file", is_optional=False
+        )
+        self.export_parameter(
+            "gradient_threshold", "seg_file", is_optional=False
+        )
         self.add_link("in_file->enhance.in_files")
         self.add_link("seg_file->estimateSNR.seg_file")
         self.add_link("estimateSNR.out_snr->denoise.snr")
         self.add_link("enhance.out_files->denoise.in_file")
         self.add_link("denoise.out_file->gradient_threshold.in_file")
-        self.export_parameter("gradient_threshold", "out_file",
-                              is_optional=False)
+        self.export_parameter(
+            "gradient_threshold", "out_file", is_optional=False
+        )
 
         # parameters order
 

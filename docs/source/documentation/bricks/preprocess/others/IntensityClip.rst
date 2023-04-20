@@ -32,21 +32,21 @@ Adapted from `niworkflows <https://github.com/nipreps/niworkflows>`_.
 
 - *dtype* (one of int16, float32, uint8, optional, default value is int16)
     Output datatype.
-    
+
     ::
 
       ex. int16
 
 - *invert* (a boolean, optional, default value is False)
     Finalize by inverting contrast.
-    
+
     ::
 
       ex. False
-      
+
 - *nonnegative* (a boolean, optional, default value is True)
-    Whether input intensities must be positive. 
-    
+    Whether input intensities must be positive.
+
     ::
 
       ex. True
@@ -69,7 +69,7 @@ Adapted from `niworkflows <https://github.com/nipreps/niworkflows>`_.
 
 - *out_file* (a strings representing a file)
     Path of the clipped image (xtensions: [.nii, .nii.gz]).
-    
+
     ::
 
       ex. '/home/username/data/derived_data/T1w_clipped.nii'

@@ -12,7 +12,7 @@ TStatMean brick
 
 Mean of bold images (using mean option of the AFNI 3dTstat command).
 
-Compute mean of input voxels for a 3D+time dataset image. 
+Compute mean of input voxels for a 3D+time dataset image.
 
 --------------------------------------
 
@@ -38,7 +38,7 @@ Compute mean of input voxels for a 3D+time dataset image.
 
 - *out_prefix* (a string, optional, default value is 'mean')
     Prefix of the output image.
-    
+
     ::
 
         ex. 'mean_'
@@ -47,7 +47,7 @@ Compute mean of input voxels for a 3D+time dataset image.
 
 - *out_file* (a strings representing a file)
     Out image (extensions: [.nii, .nii.gz]).
-    
+
     ::
 
       ex. '/home/username/data/derived_data/mean_func.nii'

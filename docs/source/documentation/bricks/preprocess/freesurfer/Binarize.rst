@@ -9,10 +9,10 @@
 ============
 Binarize brick
 ============
- 
-Binarize an input volume (or volume-encoded surface file). 
 
-Binarization can be done based on threshold (using min or rmin and/or max or rmax options) or on matched values (using match option). 
+Binarize an input volume (or volume-encoded surface file).
+
+Binarization can be done based on threshold (using min or rmin and/or max or rmax options) or on matched values (using match option).
 All voxels in the threshold/match are set to the binval value (1 by default) and all voxels out of range are set to the binvalnot value (0 by default)
 
 By default all the option are set to Undefined.
@@ -22,7 +22,7 @@ By default all the option are set to Undefined.
 **Mandatory inputs parameters:**
 
 - *in_file* (a string representing an existing file)
-    Input volume to be binarized. 
+    Input volume to be binarized.
 
     ::
 
@@ -31,29 +31,29 @@ By default all the option are set to Undefined.
 **Optional inputs with default value  parameters:**
 
 - *abs* (a boolean, optional, default value is False)
-    Take absolute value of the input volume (ie, make input unsigned). 
+    Take absolute value of the input volume (ie, make input unsigned).
 
     ::
 
       ex. False
 
 - *bin_col_nul* (a boolean, optional, default value is False)
-    Set binarized voxel value to its column number. 
+    Set binarized voxel value to its column number.
 
     ::
 
       ex. False
 
 - *get_count_file* (a boolean, optional, default value is False)
-    Save number of hits in ascii file (hits, ntotvox, pct). 
-    Four numbers are saved: the number of voxels that match(nhits), the volume of the voxels that match, the total number of voxels in the volume (nvoxtot), and the percent matching (100*nhits/nvoxtot). 
+    Save number of hits in ascii file (hits, ntotvox, pct).
+    Four numbers are saved: the number of voxels that match(nhits), the volume of the voxels that match, the total number of voxels in the volume (nvoxtot), and the percent matching (100*nhits/nvoxtot).
 
     ::
 
       ex. False
 
 - *invert* (a boolean, optional, default value is False)
-    Invert binval and binvalnot (set binval=0 and binvalnot=1). 
+    Invert binval and binvalnot (set binval=0 and binvalnot=1).
 
     ::
 
@@ -76,7 +76,7 @@ By default all the option are set to Undefined.
       ex. 0.0
 
 - *out_suffix* (a string, optional, default value is '_thresh')
-    Output suffix. 
+    Output suffix.
 
     ::
 
@@ -94,7 +94,7 @@ By default all the option are set to Undefined.
       ex. NIFTI
 
 - *zero_edges* (a boolean, optional, default value is False)
-    Set the first and last planes in all dimensions to binvalnot(0 by default). This makes sure that all the voxels on the edge of the imaging volume are zero. 
+    Set the first and last planes in all dimensions to binvalnot(0 by default). This makes sure that all the voxels on the edge of the imaging volume are zero.
 
     ::
 
@@ -110,7 +110,7 @@ By default all the option are set to Undefined.
 **Optional inputs parameters:**
 
 - *binval* (an integer, optional)
-    Value to use for all voxels that are in the threshold/match. 
+    Value to use for all voxels that are in the threshold/match.
     By default this value is 1.
 
     ::
@@ -126,7 +126,7 @@ By default all the option are set to Undefined.
       ex. 0
 
 - *dilate* (an integer, optional)
-    Dilate binarization in 3D 
+    Dilate binarization in 3D
 
     ::
 
@@ -152,10 +152,10 @@ By default all the option are set to Undefined.
       ex. 0
 
 - *match* (a list of items which are an integer, optional)
-    This option allows to use match instead of threshold to binarize.  Any number of match values can be specified. 
-    Cannot be used with min/rmin and max/rmax option. 
+    This option allows to use match instead of threshold to binarize.  Any number of match values can be specified.
+    Cannot be used with min/rmin and max/rmax option.
 
-    For example, it can be used to extract all the voxel with a label equal to 4 in the input file. 
+    For example, it can be used to extract all the voxel with a label equal to 4 in the input file.
 
     ::
 

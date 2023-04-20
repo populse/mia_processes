@@ -10,7 +10,7 @@
 Anat_skullstrip pipeline
 ================================
 
-Bias correction and skull stripping of a structural image. 
+Bias correction and skull stripping of a structural image.
 
 --------------------------------------
 
@@ -20,9 +20,9 @@ Bias correction and skull stripping of a structural image.
 |   - `Bias field correction <../../bricks/preprocess/ants/N4BiasFieldCorrection.html>`_ (using ANTs N4BiasFieldCorrection)
 |       (default: dimension = 3)
 |   - `Skull Stripping <../../bricks/preprocess/afni/SkullStrip.html>`_  (using AFNI SkullStrip)
-|   - `Calc <../../bricks/preprocess/afni/Calc.html>`_ 
+|   - `Calc <../../bricks/preprocess/afni/Calc.html>`_
 |       (default expr = 'a*step(b)')
-|   - `Binarize <../../bricks/preprocess/others/Binarize.html>`_ 
+|   - `Binarize <../../bricks/preprocess/others/Binarize.html>`_
 
 .. image:: ../../images/Anat_skullstrip_pipeline.png
   :width: 800
@@ -40,7 +40,7 @@ Bias correction and skull stripping of a structural image.
 **Outputs parameters:**
 
 - *bias_corrected*
-    Bias corrected image. 
+    Bias corrected image.
 
     ::
 
@@ -54,7 +54,7 @@ Bias correction and skull stripping of a structural image.
       ex. '/home/username/data/derived_data/n4c_T1w_bias.nii'
 
 - *out_file*
-    Skull stripped image. 
+    Skull stripped image.
 
     ::
 
@@ -62,12 +62,10 @@ Bias correction and skull stripping of a structural image.
 
 
 - *out_mask*
-    Head mask. 
+    Head mask.
 
     ::
 
       ex. '/home/username/data/derived_data/ss_orig_T1w_bin.nii'
-    
+
 -------------
-
-

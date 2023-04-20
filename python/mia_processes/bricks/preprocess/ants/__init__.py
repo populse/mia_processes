@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*- #
+# -*- coding: utf-8 -*-
 
 ##########################################################################
 # mia_processes - Copyright (C) IRMaGe/CEA, 2018
@@ -8,5 +8,9 @@
 # for details.
 ##########################################################################
 
-from .processes import (AffineInitializer, ApplyTransforms,
-                        N4BiasFieldCorrection, Registration)
+from .processes import (
+    AffineInitializer,
+    ApplyTransforms,
+    N4BiasFieldCorrection,
+    Registration,
+)

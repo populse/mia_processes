@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """The report preprocess library of the mia_processes package.
 
 The purpose of this module is to provide bricks and functions to
@@ -47,9 +48,16 @@ compute necessary values for reporting.
 import nibabel as nb
 
 # nipype import
-from nipype.interfaces.base import (OutputMultiPath, InputMultiPath, File,
-                                    traits, TraitListObject, Undefined,
-                                    DictStrStr, Str)
+from nipype.interfaces.base import (
+    OutputMultiPath,
+    InputMultiPath,
+    File,
+    traits,
+    TraitListObject,
+    Undefined,
+    DictStrStr,
+    Str,
+)
 
 # populse_mia import
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
@@ -79,23 +87,21 @@ from skimage.transform import resize
 DIETRICH_FACTOR = 0.6551364  # 1.0 / sqrt(2 / (4 - pi))
 FSL_FAST_LABELS = {"csf": 1, "gm": 2, "wm": 3, "bg": 0}
 RAS_AXIS_ORDER = {"x": 0, "y": 1, "z": 2}
-EXT = {'NIFTI_GZ': 'nii.gz',
-       'NIFTI': 'nii'
-       }
+EXT = {"NIFTI_GZ": "nii.gz", "NIFTI": "nii"}
 
 
 class AnatIQMs(ProcessMIA):
     """
-        * Computes the anatomical IQMs.
+    * Computes the anatomical IQMs.
 
-        Please, see the complete documentation for the `AnatIQMs' brick
-        in the populse.mia_processes website
-        https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/AnatIQMs.html
+    Please, see the complete documentation for the `AnatIQMs' brick
+    in the populse.mia_processes website
+    https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/AnatIQMs.html
 
-        adapted from:
-        https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/anatomical.py#L332
+    adapted from:
+    https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/anatomical.py#L332
 
-        """
+    """
 
     def __init__(self):
         """Dedicated to the attributes initialisation / instantiation.
@@ -111,89 +117,99 @@ class AnatIQMs(ProcessMIA):
         self.requirement = []
 
         # Inputs description
-        in_ras_desc = ('RAS input image (a pathlike object or string '
-                       'representing a file).')
-        airmask_desc = ('Air mask image (a pathlike object or string '
-                        'representing a file).')
-        artmask_desc = ('Artifact mask image (a pathlike object or string '
-                        'representing a file).')
-        headmask_desc = ('Head mask image (a pathlike object or string '
-                         'representing a file).')
-        rotmask_desc = ('Rotation mask image (a pathlike object or string '
-                        'representing a file).')
-        hatmask_desc = ('Hat mask image (a pathlike object or string '
-                        'representing a file).')
-        segmentation_desc = ('Segmentation mask image (a pathlike object or '
-                             'string representing a file).')
-        in_inu_desc = ('Input INU image (a pathlike object or string '
-                       'representing a file).')
-        in_noinu_desc = ('Input no-INU image (a pathlike object or string '
-                         'representing a file).')
-        pvms_desc = ('PVMS image (a pathlike object or string '
-                     'representing a file).')
-        mni_tpms_desc = ('MNI TPMS file (a pathlike '
-                         'object or string representing a file).')
-        in_fwhm_desc = ('FWHM (a float).')
+        in_ras_desc = (
+            "RAS input image (a pathlike object or string "
+            "representing a file)."
+        )
+        airmask_desc = (
+            "Air mask image (a pathlike object or string "
+            "representing a file)."
+        )
+        artmask_desc = (
+            "Artifact mask image (a pathlike object or string "
+            "representing a file)."
+        )
+        headmask_desc = (
+            "Head mask image (a pathlike object or string "
+            "representing a file)."
+        )
+        rotmask_desc = (
+            "Rotation mask image (a pathlike object or string "
+            "representing a file)."
+        )
+        hatmask_desc = (
+            "Hat mask image (a pathlike object or string "
+            "representing a file)."
+        )
+        segmentation_desc = (
+            "Segmentation mask image (a pathlike object or "
+            "string representing a file)."
+        )
+        in_inu_desc = (
+            "Input INU image (a pathlike object or string "
+            "representing a file)."
+        )
+        in_noinu_desc = (
+            "Input no-INU image (a pathlike object or string "
+            "representing a file)."
+        )
+        pvms_desc = (
+            "PVMS image (a pathlike object or string " "representing a file)."
+        )
+        mni_tpms_desc = (
+            "MNI TPMS file (a pathlike "
+            "object or string representing a file)."
+        )
+        in_fwhm_desc = "FWHM (a float)."
 
         # Outputs description
-        out_file_desc = 'a json file containing IQMs'
+        out_file_desc = "a json file containing IQMs"
 
         # Inputs traits
-        self.add_trait("in_ras",
-                       File(output=False,
-                            optional=False,
-                            desc=in_ras_desc))
-        self.add_trait("airmask",
-                       File(output=False,
-                            optional=True,
-                            desc=airmask_desc))
-        self.add_trait("artmask",
-                       File(output=False,
-                            optional=True,
-                            desc=artmask_desc))
-        self.add_trait("headmask",
-                       File(output=False,
-                            optional=True,
-                            desc=headmask_desc))
-        self.add_trait("rotmask",
-                       File(output=False,
-                            optional=True,
-                            desc=rotmask_desc))
-        self.add_trait("hatmask",
-                       File(output=False,
-                            optional=True,
-                            desc=hatmask_desc))
-        self.add_trait("segmentation",
-                       File(output=False,
-                            optional=True,
-                            desc=segmentation_desc))
-        self.add_trait("in_inu",
-                       File(output=False,
-                            optional=True,
-                            desc=in_inu_desc))
-        self.add_trait("in_noinu",
-                       File(output=False,
-                            optional=True,
-                            desc=in_noinu_desc))
-        self.add_trait("pvms",
-                       traits.List(File(),
-                                   output=False,
-                                   optional=True,
-                                   desc=pvms_desc))
-        self.add_trait("mni_tpms",
-                       traits.List(File(),
-                                   output=False,
-                                   optional=True,
-                                   desc=mni_tpms_desc))
-        self.add_trait("in_fwhm",
-                       File(output=False,
-                            optional=True,
-                            desc=in_fwhm_desc))
+        self.add_trait(
+            "in_ras", File(output=False, optional=False, desc=in_ras_desc)
+        )
+        self.add_trait(
+            "airmask", File(output=False, optional=True, desc=airmask_desc)
+        )
+        self.add_trait(
+            "artmask", File(output=False, optional=True, desc=artmask_desc)
+        )
+        self.add_trait(
+            "headmask", File(output=False, optional=True, desc=headmask_desc)
+        )
+        self.add_trait(
+            "rotmask", File(output=False, optional=True, desc=rotmask_desc)
+        )
+        self.add_trait(
+            "hatmask", File(output=False, optional=True, desc=hatmask_desc)
+        )
+        self.add_trait(
+            "segmentation",
+            File(output=False, optional=True, desc=segmentation_desc),
+        )
+        self.add_trait(
+            "in_inu", File(output=False, optional=True, desc=in_inu_desc)
+        )
+        self.add_trait(
+            "in_noinu", File(output=False, optional=True, desc=in_noinu_desc)
+        )
+        self.add_trait(
+            "pvms",
+            traits.List(File(), output=False, optional=True, desc=pvms_desc),
+        )
+        self.add_trait(
+            "mni_tpms",
+            traits.List(
+                File(), output=False, optional=True, desc=mni_tpms_desc
+            ),
+        )
+        self.add_trait(
+            "in_fwhm", File(output=False, optional=True, desc=in_fwhm_desc)
+        )
 
         # Outputs traits
-        self.add_trait("out_file",
-                       File(output=True,
-                            desc=out_file_desc))
+        self.add_trait("out_file", File(output=True, desc=out_file_desc))
 
         self.init_default_traits()
 
@@ -212,28 +228,28 @@ class AnatIQMs(ProcessMIA):
         super(AnatIQMs, self).list_outputs()
 
         if self.in_ras:
-
             valid_ext, in_ext, fileName = checkFileExt(self.in_ras, EXT)
 
             if not valid_ext:
-                print('\nThe input image format is not recognized ...!')
+                print("\nThe input image format is not recognized ...!")
                 return
 
-            report_file = os.path.join(self.output_directory,
-                                       (fileName +
-                                        '_anat_qc.json'))
+            report_file = os.path.join(
+                self.output_directory, (fileName + "_anat_qc.json")
+            )
 
             if fileName:
-                self.outputs['out_file'] = report_file
+                self.outputs["out_file"] = report_file
 
             else:
-                print('- There was no output file deducted during '
-                      'initialisation. Please check the input parameters...!')
+                print(
+                    "- There was no output file deducted during "
+                    "initialisation. Please check the input parameters...!"
+                )
 
             # tags inheritance (optional)
             if self.outputs:
-                self.inheritance_dict[self.outputs[
-                    'out_file']] = self.in_ras
+                self.inheritance_dict[self.outputs["out_file"]] = self.in_ras
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -251,8 +267,11 @@ class AnatIQMs(ProcessMIA):
         if self.in_noinu:
             try:
                 imnii = nb.load(self.in_noinu)
-            except (nb.filebasedimages.ImageFileError,
-                    FileNotFoundError, TypeError) as e:
+            except (
+                nb.filebasedimages.ImageFileError,
+                FileNotFoundError,
+                TypeError,
+            ) as e:
                 has_in_noinu = False
                 print("\nError with in_noinu file: ", e)
             else:
@@ -267,8 +286,11 @@ class AnatIQMs(ProcessMIA):
             try:
                 # Load binary segmentation from FSL FAST
                 segnii = nb.load(self.segmentation)
-            except (nb.filebasedimages.ImageFileError,
-                    FileNotFoundError, TypeError) as e:
+            except (
+                nb.filebasedimages.ImageFileError,
+                FileNotFoundError,
+                TypeError,
+            ) as e:
                 has_segmentation = False
                 print("\nError with segmentation file: ", e)
                 pass
@@ -282,8 +304,11 @@ class AnatIQMs(ProcessMIA):
             try:
                 # Load binary segmentation from FSL FAST
                 airnii = nb.load(self.airmask)
-            except (nb.filebasedimages.ImageFileError,
-                    FileNotFoundError, TypeError) as e:
+            except (
+                nb.filebasedimages.ImageFileError,
+                FileNotFoundError,
+                TypeError,
+            ) as e:
                 has_airmask = False
                 print("\nError with airmask file: ", e)
                 pass
@@ -297,8 +322,11 @@ class AnatIQMs(ProcessMIA):
             try:
                 # Load binary segmentation from FSL FAST
                 artnii = nb.load(self.artmask)
-            except (nb.filebasedimages.ImageFileError,
-                    FileNotFoundError, TypeError) as e:
+            except (
+                nb.filebasedimages.ImageFileError,
+                FileNotFoundError,
+                TypeError,
+            ) as e:
                 has_artmask = False
                 print("\nError with artmask file: ", e)
                 pass
@@ -312,8 +340,11 @@ class AnatIQMs(ProcessMIA):
             try:
                 # Load binary segmentation from FSL FAST
                 headnii = nb.load(self.headmask)
-            except (nb.filebasedimages.ImageFileError,
-                    FileNotFoundError, TypeError) as e:
+            except (
+                nb.filebasedimages.ImageFileError,
+                FileNotFoundError,
+                TypeError,
+            ) as e:
                 has_headmask = False
                 print("\nError with headmask file: ", e)
                 pass
@@ -327,8 +358,11 @@ class AnatIQMs(ProcessMIA):
             try:
                 # Load binary segmentation from FSL FAST
                 rotnii = nb.load(self.rotmask)
-            except (nb.filebasedimages.ImageFileError,
-                    FileNotFoundError, TypeError) as e:
+            except (
+                nb.filebasedimages.ImageFileError,
+                FileNotFoundError,
+                TypeError,
+            ) as e:
                 has_rotmask = False
                 print("\nError with rotmask file: ", e)
                 pass
@@ -344,8 +378,11 @@ class AnatIQMs(ProcessMIA):
                 pvmniis = []
                 for fname in self.pvms:
                     pvmniis.append(nb.load(fname))
-            except (nb.filebasedimages.ImageFileError,
-                    FileNotFoundError, TypeError) as e:
+            except (
+                nb.filebasedimages.ImageFileError,
+                FileNotFoundError,
+                TypeError,
+            ) as e:
                 has_pvms = False
                 print("\nError with pvms files: ", e)
                 pass
@@ -355,11 +392,12 @@ class AnatIQMs(ProcessMIA):
                 for pvmnii in pvmniis:
                     pvmdata.append(pvmnii.get_fdata(dtype="float32"))
                     if np.sum(pvmdata[-1] > 1e-4) < 10:
-                        raise RuntimeError("Detected less than 10 voxels "
-                                           "belonging to one tissue prob. "
-                                           "map. MRIQC failed to process this "
-                                           "dataset."
-                )
+                        raise RuntimeError(
+                            "Detected less than 10 voxels "
+                            "belonging to one tissue prob. "
+                            "map. MRIQC failed to process this "
+                            "dataset."
+                        )
         else:
             has_pvms = False
 
@@ -369,8 +407,11 @@ class AnatIQMs(ProcessMIA):
                 mni_tpmsniis = []
                 for fname in self.mni_tpms:
                     mni_tpmsniis.append(nb.load(fname))
-            except (nb.filebasedimages.ImageFileError,
-                    FileNotFoundError, TypeError) as e:
+            except (
+                nb.filebasedimages.ImageFileError,
+                FileNotFoundError,
+                TypeError,
+            ) as e:
                 has_mni_tpms = False
                 print("\nError with mni_tpms files: ", e)
                 pass
@@ -379,8 +420,9 @@ class AnatIQMs(ProcessMIA):
 
         has_stats = False
         if has_in_noinu and has_pvms and has_airmask:
-            erode = np.all(np.array(imnii.header.get_zooms()[:3],
-                                    dtype=np.float32) < 1.9)
+            erode = np.all(
+                np.array(imnii.header.get_zooms()[:3], dtype=np.float32) < 1.9
+            )
 
             # Summary stats
             stats = summary_stats(inudata, pvmdata, airdata, erode=erode)
@@ -403,9 +445,11 @@ class AnatIQMs(ProcessMIA):
 
             snrvals = []
             results_dict["snrd"] = {
-                tlabel: snr_dietrich(stats[tlabel]["median"],
-                                     mad_air=stats["bg"]["mad"],
-                                     sigma_air=stats["bg"]["stdv"])
+                tlabel: snr_dietrich(
+                    stats[tlabel]["median"],
+                    mad_air=stats["bg"]["mad"],
+                    sigma_air=stats["bg"]["stdv"],
+                )
                 for tlabel in ["csf", "wm", "gm"]
             }
             results_dict["snrd"]["total"] = float(
@@ -437,8 +481,9 @@ class AnatIQMs(ProcessMIA):
 
         if self.hatmask != Undefined:
             # Artifacts QI2
-            results_dict["qi_2"], results_dict["histogram_qi2"] = art_qi2(imdata,
-                                nb.load(self.hatmask).get_fdata())
+            results_dict["qi_2"], results_dict["histogram_qi2"] = art_qi2(
+                imdata, nb.load(self.hatmask).get_fdata()
+            )
 
         if has_stats:
             # CJV
@@ -489,8 +534,8 @@ class AnatIQMs(ProcessMIA):
                 "z": int(inudata.shape[2]),
             }
             results_dict["spacing"] = {
-                i: float(v) for i, v in zip(["x", "y", "z"],
-                                            imnii.header.get_zooms()[:3])
+                i: float(v)
+                for i, v in zip(["x", "y", "z"], imnii.header.get_zooms()[:3])
             }
 
             try:
@@ -499,7 +544,9 @@ class AnatIQMs(ProcessMIA):
                 pass
 
             try:
-                results_dict["spacing"]["tr"] = float(imnii.header.get_zooms()[3])
+                results_dict["spacing"]["tr"] = float(
+                    imnii.header.get_zooms()[3]
+                )
             except IndexError:
                 pass
 
@@ -508,7 +555,9 @@ class AnatIQMs(ProcessMIA):
             bias = nb.load(self.in_inu).get_fdata()[segdata > 0]
             results_dict["inu"] = {
                 "range": float(
-                    np.abs(np.percentile(bias, 95.0) - np.percentile(bias, 5.0))
+                    np.abs(
+                        np.percentile(bias, 95.0) - np.percentile(bias, 5.0)
+                    )
                 ),
                 "med": float(np.median(bias)),
             }  # pylint: disable=E1101
@@ -529,32 +578,33 @@ class AnatIQMs(ProcessMIA):
         # Save results as json
         _, file_name = os.path.split(self.in_ras)
         file_name_no_ext, file_extension = os.path.splitext(file_name)
-        if file_extension == '.gz':
-            (file_name_no_ext_2,
-             file_extension_2) = os.path.splitext(file_name_no_ext)
-            if file_extension_2 == '.nii':
+        if file_extension == ".gz":
+            (file_name_no_ext_2, file_extension_2) = os.path.splitext(
+                file_name_no_ext
+            )
+            if file_extension_2 == ".nii":
                 file_name_no_ext = file_name_no_ext_2
 
-        report_file = os.path.join(self.output_directory,
-                                   (file_name_no_ext +
-                                    '_anat_qc.json'))
+        report_file = os.path.join(
+            self.output_directory, (file_name_no_ext + "_anat_qc.json")
+        )
 
-        with open(report_file, 'w') as fp:
+        with open(report_file, "w") as fp:
             json.dump(flat_results_dict, fp)
 
 
 class BoldIQMs(ProcessMIA):
     """
-        * Computes the functional IQMs.
+    * Computes the functional IQMs.
 
-        Please, see the complete documentation for the `BoldIQMs' brick 
-        in the populse.mia_processes website
-        https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/BoldIQMs.html
+    Please, see the complete documentation for the `BoldIQMs' brick
+    in the populse.mia_processes website
+    https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/BoldIQMs.html
 
-        adapted from:
-        https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/functional.py#L243
+    adapted from:
+    https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/functional.py#L243
 
-        """
+    """
 
     def __init__(self):
         """Dedicated to the attributes initialisation / instantiation.
@@ -570,92 +620,103 @@ class BoldIQMs(ProcessMIA):
         self.requirement = []
 
         # Inputs description
-        in_epi_desc = ('EPI input image (a pathlike object or string '
-                       'representing a file).')
-        in_hmc_desc = ('Motion corrected input image (a pathlike object or'
-                       'string representing a file).')
-        in_tsnr_desc = ('tSNR input volume (a pathlike object or string '
-                        'representing a file).')
-        in_mask_desc = ('Input mask image (a pathlike object or string '
-                        'representing a file).')
-        in_fd_thresh_desc = 'Motion threshold for FD computation (a float)'
-        in_outliers_file_desc = ('outliers file (a pathlike object or string '
-                                 'representing a file).')
-        in_QI_file_desc = ('Quality index file (a pathlike object or string '
-                           'representing a file).')
-        in_fwhm_file_desc = ('FWHM file (a pathlike object or string '
-                             'representing a file).')
-        in_dvars_file_desc = ('DVARS file (a pathlike object or string '
-                              'representing a file).')
-        in_fd_file_desc = ('FD file (a pathlike object or string '
-                           'representing a file).')
-        in_spikes_file_desc = ('Spikes file (a pathlike object or string '
-                               'representing a file).')
-        in_gcor_desc = 'Global correlation value (a float)'
-        in_dummy_TRs_desc = 'Number of dummy scans (an int)'
+        in_epi_desc = (
+            "EPI input image (a pathlike object or string "
+            "representing a file)."
+        )
+        in_hmc_desc = (
+            "Motion corrected input image (a pathlike object or"
+            "string representing a file)."
+        )
+        in_tsnr_desc = (
+            "tSNR input volume (a pathlike object or string "
+            "representing a file)."
+        )
+        in_mask_desc = (
+            "Input mask image (a pathlike object or string "
+            "representing a file)."
+        )
+        in_fd_thresh_desc = "Motion threshold for FD computation (a float)"
+        in_outliers_file_desc = (
+            "outliers file (a pathlike object or string "
+            "representing a file)."
+        )
+        in_QI_file_desc = (
+            "Quality index file (a pathlike object or string "
+            "representing a file)."
+        )
+        in_fwhm_file_desc = (
+            "FWHM file (a pathlike object or string " "representing a file)."
+        )
+        in_dvars_file_desc = (
+            "DVARS file (a pathlike object or string " "representing a file)."
+        )
+        in_fd_file_desc = (
+            "FD file (a pathlike object or string " "representing a file)."
+        )
+        in_spikes_file_desc = (
+            "Spikes file (a pathlike object or string " "representing a file)."
+        )
+        in_gcor_desc = "Global correlation value (a float)"
+        in_dummy_TRs_desc = "Number of dummy scans (an int)"
 
         # Outputs description
-        out_file_desc = 'a json file containing IQMs'
+        out_file_desc = "a json file containing IQMs"
 
         # Inputs traits
-        self.add_trait("in_epi",
-                       File(output=False,
-                            optional=False,
-                            desc=in_epi_desc))
-        self.add_trait("in_hmc",
-                       File(output=False,
-                            optional=True,
-                            desc=in_hmc_desc))
-        self.add_trait("in_tsnr",
-                       File(output=False,
-                            optional=True,
-                            desc=in_tsnr_desc))
-        self.add_trait("in_mask",
-                       File(output=False,
-                            optional=True,
-                            desc=in_mask_desc))
-        self.add_trait("in_outliers_file",
-                       File(output=False,
-                            optional=True,
-                            desc=in_outliers_file_desc))
-        self.add_trait("in_QI_file",
-                       File(output=False,
-                            optional=True,
-                            desc=in_QI_file_desc))
-        self.add_trait("in_fwhm_file",
-                       File(output=False,
-                            optional=True,
-                            desc=in_fwhm_file_desc))
-        self.add_trait("in_dvars_file",
-                       File(output=False,
-                            optional=True,
-                            desc=in_dvars_file_desc))
-        self.add_trait("in_fd_file",
-                       File(output=False,
-                            optional=True,
-                            desc=in_fd_file_desc))
-        self.add_trait("in_fd_thresh",
-                       traits.Float(0.2,
-                                    output=False,
-                                    optional=True,
-                                    desc=in_fd_thresh_desc))
-        self.add_trait("in_spikes_file",
-                       File(output=False,
-                            optional=True,
-                            desc=in_spikes_file_desc))
-        self.add_trait("in_gcor",
-                       traits.Float(output=False,
-                                    optional=True,
-                                    desc=in_gcor_desc))
-        self.add_trait("in_dummy_TRs",
-                       traits.Int(output=False,
-                                  optional=True,
-                                  desc=in_dummy_TRs_desc))
+        self.add_trait(
+            "in_epi", File(output=False, optional=False, desc=in_epi_desc)
+        )
+        self.add_trait(
+            "in_hmc", File(output=False, optional=True, desc=in_hmc_desc)
+        )
+        self.add_trait(
+            "in_tsnr", File(output=False, optional=True, desc=in_tsnr_desc)
+        )
+        self.add_trait(
+            "in_mask", File(output=False, optional=True, desc=in_mask_desc)
+        )
+        self.add_trait(
+            "in_outliers_file",
+            File(output=False, optional=True, desc=in_outliers_file_desc),
+        )
+        self.add_trait(
+            "in_QI_file",
+            File(output=False, optional=True, desc=in_QI_file_desc),
+        )
+        self.add_trait(
+            "in_fwhm_file",
+            File(output=False, optional=True, desc=in_fwhm_file_desc),
+        )
+        self.add_trait(
+            "in_dvars_file",
+            File(output=False, optional=True, desc=in_dvars_file_desc),
+        )
+        self.add_trait(
+            "in_fd_file",
+            File(output=False, optional=True, desc=in_fd_file_desc),
+        )
+        self.add_trait(
+            "in_fd_thresh",
+            traits.Float(
+                0.2, output=False, optional=True, desc=in_fd_thresh_desc
+            ),
+        )
+        self.add_trait(
+            "in_spikes_file",
+            File(output=False, optional=True, desc=in_spikes_file_desc),
+        )
+        self.add_trait(
+            "in_gcor",
+            traits.Float(output=False, optional=True, desc=in_gcor_desc),
+        )
+        self.add_trait(
+            "in_dummy_TRs",
+            traits.Int(output=False, optional=True, desc=in_dummy_TRs_desc),
+        )
 
         # Outputs traits
-        self.add_trait("out_file",
-                       File(output=True,
-                            desc=out_file_desc))
+        self.add_trait("out_file", File(output=True, desc=out_file_desc))
 
         self.init_default_traits()
 
@@ -677,24 +738,25 @@ class BoldIQMs(ProcessMIA):
             valid_ext, in_ext, fileName = checkFileExt(self.in_epi, EXT)
 
             if not valid_ext:
-                print('\nThe input image format is not recognized ...!')
+                print("\nThe input image format is not recognized ...!")
                 return
 
-            report_file = os.path.join(self.output_directory,
-                                       (fileName +
-                                        '_bold_qc.json'))
+            report_file = os.path.join(
+                self.output_directory, (fileName + "_bold_qc.json")
+            )
 
             if fileName:
-                self.outputs['out_file'] = report_file
+                self.outputs["out_file"] = report_file
 
             else:
-                print('- There was no output file deducted during '
-                      'initialisation. Please check the input parameters...!')
+                print(
+                    "- There was no output file deducted during "
+                    "initialisation. Please check the input parameters...!"
+                )
 
             # tags inheritance (optional)
             if self.outputs:
-                self.inheritance_dict[self.outputs[
-                    'out_file']] = self.in_epi
+                self.inheritance_dict[self.outputs["out_file"]] = self.in_epi
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -714,8 +776,11 @@ class BoldIQMs(ProcessMIA):
         if self.in_hmc:
             try:
                 hmcnii = nb.load(self.in_hmc)
-            except (nb.filebasedimages.ImageFileError,
-                    FileNotFoundError, TypeError) as e:
+            except (
+                nb.filebasedimages.ImageFileError,
+                FileNotFoundError,
+                TypeError,
+            ) as e:
                 has_in_hmc = False
                 print("\nError with in_hmc file: ", e)
             else:
@@ -730,8 +795,11 @@ class BoldIQMs(ProcessMIA):
         if self.in_mask:
             try:
                 msknii = nb.load(self.in_mask)
-            except (nb.filebasedimages.ImageFileError,
-                    FileNotFoundError, TypeError) as e:
+            except (
+                nb.filebasedimages.ImageFileError,
+                FileNotFoundError,
+                TypeError,
+            ) as e:
                 has_in_mask = False
                 print("\nError with in_mask file: ", e)
             else:
@@ -747,8 +815,11 @@ class BoldIQMs(ProcessMIA):
         if self.in_tsnr:
             try:
                 tsnr_nii = nb.load(self.in_tsnr)
-            except (nb.filebasedimages.ImageFileError,
-                    FileNotFoundError, TypeError) as e:
+            except (
+                nb.filebasedimages.ImageFileError,
+                FileNotFoundError,
+                TypeError,
+            ) as e:
                 has_in_tsnr = False
                 print("\nError with in_mask file: ", e)
             else:
@@ -780,15 +851,14 @@ class BoldIQMs(ProcessMIA):
             results_dict["gsr"] = {}
             epidir = ["x", "y"]
             for axis in epidir:
-                results_dict["gsr"][axis] = gsr(epidata, mskdata,
-                                                direction=axis)
+                results_dict["gsr"][axis] = gsr(
+                    epidata, mskdata, direction=axis
+                )
 
         # aor
         if self.in_outliers_file:
             try:
-                outliers = np.loadtxt(
-                    self.in_outliers_file, skiprows=0
-                )
+                outliers = np.loadtxt(self.in_outliers_file, skiprows=0)
             except (FileNotFoundError, TypeError):
                 print("\nError with aor file: ", e)
                 pass
@@ -805,7 +875,13 @@ class BoldIQMs(ProcessMIA):
                 print("\nError with aqi file: ", e)
                 pass
             else:
-                results_dict["aqi"] = np.mean([float(line.strip()) for line in lines if not line.startswith("++")])
+                results_dict["aqi"] = np.mean(
+                    [
+                        float(line.strip())
+                        for line in lines
+                        if not line.startswith("++")
+                    ]
+                )
 
         # DVARS
         if self.in_dvars_file:
@@ -845,9 +921,7 @@ class BoldIQMs(ProcessMIA):
                         "perc": float(num_fd * 100 / (len(fd_data) + 1)),
                     }
                 else:
-                    results_dict["fd"] = {
-                        "mean": float(fd_data.mean())
-                    }
+                    results_dict["fd"] = {"mean": float(fd_data.mean())}
 
         # FWHM
         if self.in_fwhm_file and has_in_hmc:
@@ -880,7 +954,8 @@ class BoldIQMs(ProcessMIA):
                 "z": int(hmcdata.shape[2]),
             }
             results_dict["spacing"] = {
-                i: float(v) for i, v in zip(["x", "y", "z"], hmcnii.header.get_zooms()[:3])
+                i: float(v)
+                for i, v in zip(["x", "y", "z"], hmcnii.header.get_zooms()[:3])
             }
 
             try:
@@ -889,7 +964,9 @@ class BoldIQMs(ProcessMIA):
                 pass
 
             try:
-                results_dict["spacing"]["tr"] = float(hmcnii.header.get_zooms()[3])
+                results_dict["spacing"]["tr"] = float(
+                    hmcnii.header.get_zooms()[3]
+                )
             except IndexError:
                 pass
 
@@ -897,7 +974,7 @@ class BoldIQMs(ProcessMIA):
         try:
             gcor = float(self.in_gcor)
         except ValueError:
-             print("\ngcor value error")
+            print("\ngcor value error")
         else:
             results_dict["gcor"] = gcor
 
@@ -905,7 +982,7 @@ class BoldIQMs(ProcessMIA):
         try:
             dummy_trs = int(self.in_dummy_TRs)
         except ValueError:
-             print("\ndummy_trs value error")
+            print("\ndummy_trs value error")
         else:
             results_dict["dummy_trs"] = dummy_trs
 
@@ -927,17 +1004,18 @@ class BoldIQMs(ProcessMIA):
         # Save results as json
         _, file_name = os.path.split(self.in_epi)
         file_name_no_ext, file_extension = os.path.splitext(file_name)
-        if file_extension == '.gz':
-            (file_name_no_ext_2,
-             file_extension_2) = os.path.splitext(file_name_no_ext)
-            if file_extension_2 == '.nii':
+        if file_extension == ".gz":
+            (file_name_no_ext_2, file_extension_2) = os.path.splitext(
+                file_name_no_ext
+            )
+            if file_extension_2 == ".nii":
                 file_name_no_ext = file_name_no_ext_2
 
-        report_file = os.path.join(self.output_directory,
-                                   (file_name_no_ext +
-                                    '_bold_qc.json'))
+        report_file = os.path.join(
+            self.output_directory, (file_name_no_ext + "_bold_qc.json")
+        )
 
-        with open(report_file, 'w') as fp:
+        with open(report_file, "w") as fp:
             json.dump(flat_results_dict, fp)
 
 
@@ -946,7 +1024,7 @@ class CarpetParcellation(ProcessMIA):
     * | Dilate brainmask, substract from itself then generate
       | the union of obtained crown mask and epi parcellation.
 
-    Please, see the complete documentation for the `CarpetParcellation' brick 
+    Please, see the complete documentation for the `CarpetParcellation' brick
     in the populse.mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/reports/CarpetParcellation.html>`_
 
@@ -971,40 +1049,47 @@ class CarpetParcellation(ProcessMIA):
         self.requirement = []
 
         # Inputs description
-        segmentation_desc = ('EPI segmentation (a pathlike object or string '
-                             'representing a file).')
-        brainmask_desc = ('Brain mask (a pathlike object or string '
-                          'representing a file).')
+        segmentation_desc = (
+            "EPI segmentation (a pathlike object or string "
+            "representing a file)."
+        )
+        brainmask_desc = (
+            "Brain mask (a pathlike object or string " "representing a file)."
+        )
 
-        out_prefix_desc = ('Specify the string to be prepended to the '
-                           'segmentation filename of the output file (a string).')
+        out_prefix_desc = (
+            "Specify the string to be prepended to the "
+            "segmentation filename of the output file (a string)."
+        )
 
         # Outputs description
-        out_file_desc = ('The output file (a pathlike object or a '
-                         'string representing a file).')
+        out_file_desc = (
+            "The output file (a pathlike object or a "
+            "string representing a file)."
+        )
 
         # Inputs traits
-        self.add_trait("segmentation",
-                       File(output=False,
-                            optional=False,
-                            desc=segmentation_desc))
+        self.add_trait(
+            "segmentation",
+            File(output=False, optional=False, desc=segmentation_desc),
+        )
 
-        self.add_trait("brainmask",
-                       File(output=False,
-                            optional=False,
-                            desc=brainmask_desc))
+        self.add_trait(
+            "brainmask",
+            File(output=False, optional=False, desc=brainmask_desc),
+        )
 
-        self.add_trait("out_prefix",
-                       traits.String('cseg_',
-                                     output=False,
-                                     optional=True,
-                                     desc=out_prefix_desc))
+        self.add_trait(
+            "out_prefix",
+            traits.String(
+                "cseg_", output=False, optional=True, desc=out_prefix_desc
+            ),
+        )
 
         # Outputs traits
-        self.add_trait("out_file",
-                       File(output=True,
-                            optional=True,
-                            desc=out_file_desc))
+        self.add_trait(
+            "out_file", File(output=True, optional=True, desc=out_file_desc)
+        )
 
         self.init_default_traits()
 
@@ -1026,29 +1111,32 @@ class CarpetParcellation(ProcessMIA):
 
         # Outputs definition and tags inheritance (optional)
         if self.segmentation and self.brainmask:
-
             if self.out_prefix == Undefined:
-                self.out_prefix = 'cseg_'
-                print('The out_prefix parameter is undefined. Automatically '
-                      'set to "cseg" ...')
+                self.out_prefix = "cseg_"
+                print(
+                    "The out_prefix parameter is undefined. Automatically "
+                    'set to "cseg" ...'
+                )
 
             if self.output_directory:
-                valid_ext, in_ext, fileName = checkFileExt(self.segmentation, EXT)
+                valid_ext, in_ext, fileName = checkFileExt(
+                    self.segmentation, EXT
+                )
 
                 if not valid_ext:
-                    print('\nThe input image format is not recognized ...!')
+                    print("\nThe input image format is not recognized ...!")
                     return
 
-                self.outputs['out_file'] = os.path.join(
+                self.outputs["out_file"] = os.path.join(
                     self.output_directory,
-                    self.out_prefix + fileName + '.' + in_ext)
+                    self.out_prefix + fileName + "." + in_ext,
+                )
 
             else:
-                print('No output_directory was found...!\n')
+                print("No output_directory was found...!\n")
                 return
 
-            self.inheritance_dict[self.outputs[
-                'out_file']] = self.segmentation
+            self.inheritance_dict[self.outputs["out_file"]] = self.segmentation
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -1085,9 +1173,9 @@ class CarpetParcellation(ProcessMIA):
         # Out file name
         _, file_name = os.path.split(self.segmentation)
 
-        file_out = os.path.join(self.output_directory,
-                                (self.out_prefix +
-                                 file_name))
+        file_out = os.path.join(
+            self.output_directory, (self.out_prefix + file_name)
+        )
 
         outimg = img.__class__(seg.astype("uint8"), img.affine, img.header)
         outimg.set_data_dtype("uint8")
@@ -1098,7 +1186,7 @@ class ComputeDVARS(ProcessMIA):
     """
     * Computes the DVARS.
 
-    Please, see the complete documentation for the `ComputeDVARS' brick 
+    Please, see the complete documentation for the `ComputeDVARS' brick
     in the populse.mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/reports/ComputeDVARS.html>`_
 
@@ -1121,72 +1209,93 @@ class ComputeDVARS(ProcessMIA):
         self.requirement = []
 
         # Inputs description
-        in_file_desc = ('Bold image after HMC (a pathlike object or string '
-                        'representing a file).')
-        in_mask_desc = ('Brain mask (a pathlike object or string '
-                        'representing a file).')
-        remove_zero_variance_desc = ('Remove voxels with zero variance'
-                                     '(a bool).')
-        intensity_normalization_desc = ('Divide value in each voxel at each'
-                                        'timepoint by the median calculated'
-                                        'across all voxels and timepoints'
-                                        'within the mask (if specified) and'
-                                        'then multiply by the value specified'
-                                        'by this parameter.'
-                                        'By using the default (1000)'
-                                        'output DVARS will be expressed in '
-                                        'x10 % BOLD units compatible'
-                                        'with Power et al.2012.'
-                                        'Set this to 0 to disable intensity'
-                                        'normalization altogether. (a float)')
-        variance_tol_desc = ('Maximum variance to consider "close to" zero'
-                             'for the purposes of removal')
-        out_prefix_desc = ('Specify the string to be prepended to the '
-                           'filename of the output file (a string).')
+        in_file_desc = (
+            "Bold image after HMC (a pathlike object or string "
+            "representing a file)."
+        )
+        in_mask_desc = (
+            "Brain mask (a pathlike object or string " "representing a file)."
+        )
+        remove_zero_variance_desc = (
+            "Remove voxels with zero variance" "(a bool)."
+        )
+        intensity_normalization_desc = (
+            "Divide value in each voxel at each"
+            "timepoint by the median calculated"
+            "across all voxels and timepoints"
+            "within the mask (if specified) and"
+            "then multiply by the value specified"
+            "by this parameter."
+            "By using the default (1000)"
+            "output DVARS will be expressed in "
+            "x10 % BOLD units compatible"
+            "with Power et al.2012."
+            "Set this to 0 to disable intensity"
+            "normalization altogether. (a float)"
+        )
+        variance_tol_desc = (
+            'Maximum variance to consider "close to" zero'
+            "for the purposes of removal"
+        )
+        out_prefix_desc = (
+            "Specify the string to be prepended to the "
+            "filename of the output file (a string)."
+        )
 
         # Outputs description
-        out_file_desc = ('The output file (a pathlike object or a '
-                         'string representing a file).')
+        out_file_desc = (
+            "The output file (a pathlike object or a "
+            "string representing a file)."
+        )
 
         # Inputs traits
-        self.add_trait("in_file",
-                       File(output=False,
-                            optional=False,
-                            desc=in_file_desc))
+        self.add_trait(
+            "in_file", File(output=False, optional=False, desc=in_file_desc)
+        )
 
-        self.add_trait("in_mask",
-                       File(output=False,
-                            optional=False,
-                            desc=in_mask_desc))
+        self.add_trait(
+            "in_mask", File(output=False, optional=False, desc=in_mask_desc)
+        )
 
-        self.add_trait("remove_zero_variance",
-                       traits.Bool(True,
-                                   optional=True,
-                                   output=False,
-                                   desc=remove_zero_variance_desc))
+        self.add_trait(
+            "remove_zero_variance",
+            traits.Bool(
+                True,
+                optional=True,
+                output=False,
+                desc=remove_zero_variance_desc,
+            ),
+        )
 
-        self.add_trait("intensity_normalization",
-                       traits.Float(1000.0,
-                                    optional=True,
-                                    output=False,
-                                    desc=intensity_normalization_desc))
+        self.add_trait(
+            "intensity_normalization",
+            traits.Float(
+                1000.0,
+                optional=True,
+                output=False,
+                desc=intensity_normalization_desc,
+            ),
+        )
 
-        self.add_trait("variance_tol",
-                       traits.Float(0.0000001000,
-                                    optional=True,
-                                    output=False,
-                                    desc=variance_tol_desc))
+        self.add_trait(
+            "variance_tol",
+            traits.Float(
+                0.0000001000,
+                optional=True,
+                output=False,
+                desc=variance_tol_desc,
+            ),
+        )
 
-        self.add_trait("out_prefix",
-                       traits.String('dvars_',
-                                     output=False,
-                                     optional=True,
-                                     desc=out_prefix_desc))
+        self.add_trait(
+            "out_prefix",
+            traits.String(
+                "dvars_", output=False, optional=True, desc=out_prefix_desc
+            ),
+        )
 
         # Outputs traits
-        self.add_trait("out_file",
-                       File(output=True,
-                            desc=out_file_desc))
+        self.add_trait("out_file", File(output=True, desc=out_file_desc))
 
         self.init_default_traits()
 
@@ -1208,29 +1317,29 @@ class ComputeDVARS(ProcessMIA):
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file and self.in_mask:
-
             if self.out_prefix == Undefined:
-                self.out_prefix = 'dvars_'
-                print('The out_prefix parameter is undefined. Automatically '
-                      'set to "dvars" ...')
+                self.out_prefix = "dvars_"
+                print(
+                    "The out_prefix parameter is undefined. Automatically "
+                    'set to "dvars" ...'
+                )
 
             if self.output_directory:
                 valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
 
                 if not valid_ext:
-                    print('\nThe input image format is not recognized ...!')
+                    print("\nThe input image format is not recognized ...!")
                     return
 
-                self.outputs['out_file'] = os.path.join(
-                    self.output_directory,
-                    self.out_prefix + fileName + '.out')
+                self.outputs["out_file"] = os.path.join(
+                    self.output_directory, self.out_prefix + fileName + ".out"
+                )
 
             else:
-                print('No output_directory was found...!\n')
+                print("No output_directory was found...!\n")
                 return
 
-            self.inheritance_dict[self.outputs[
-                'out_file']] = self.in_file
+            self.inheritance_dict[self.outputs["out_file"]] = self.in_file
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -1242,16 +1351,17 @@ class ComputeDVARS(ProcessMIA):
         # Out file name
         _, file_name = os.path.split(self.in_file)
         file_name_no_ext, file_extension = os.path.splitext(file_name)
-        if file_extension == '.gz':
-            (file_name_no_ext_2,
-             file_extension_2) = os.path.splitext(file_name_no_ext)
-            if file_extension_2 == '.nii':
+        if file_extension == ".gz":
+            (file_name_no_ext_2, file_extension_2) = os.path.splitext(
+                file_name_no_ext
+            )
+            if file_extension_2 == ".nii":
                 file_name_no_ext = file_name_no_ext_2
 
-        file_out = os.path.join(self.output_directory,
-                                (self.out_prefix +
-                                 file_name_no_ext +
-                                 '.out'))
+        file_out = os.path.join(
+            self.output_directory,
+            (self.out_prefix + file_name_no_ext + ".out"),
+        )
 
         # Load data
         func = np.float32(nb.load(self.in_file).dataobj)
@@ -1279,8 +1389,10 @@ class ComputeDVARS(ProcessMIA):
 
         # Compute (non-robust) estimate of lag-1 autocorrelation
         ar1 = np.apply_along_axis(
-            _AR_est_YW, 1,
-            regress_poly(0, mfunc, remove_mean=True)[0].astype(np.float32), 1
+            _AR_est_YW,
+            1,
+            regress_poly(0, mfunc, remove_mean=True)[0].astype(np.float32),
+            1,
         )[:, 0]
 
         # Compute (predicted) standard deviation of temporal difference time series
@@ -1303,7 +1415,7 @@ class ComputeDVARS(ProcessMIA):
             )
             dvars_vx_stdz = np.sqrt(diff_vx_stdz.mean(axis=0))
         except:
-            print('\nError calculating vx-wise std DVARS...!')
+            print("\nError calculating vx-wise std DVARS...!")
             np.savetxt(
                 file_out,
                 np.vstack((dvars_stdz, dvars_nstd)).T,
@@ -1357,58 +1469,68 @@ class FramewiseDisplacement(ProcessMIA):
         self.requirement = []
 
         # Inputs description
-        in_file_desc = ('Motion parameters file (a pathlike object or string '
-                        'representing a file).')
-        parameter_source_desc = ('Source of movement parameters'
-                                 '(a string which is FSL '
-                                 'or AFNI or SPM or FSFAST or NIPY')
-        radius_desc = 'Radius in mm to calculate angular FDs (a float).'
-        normalize_desc = 'Calculate FD in mm/s (a bool).'
-        out_prefix_desc = ('Specify the string to be prepended to the '
-                           'filename of the output file (a string).')
+        in_file_desc = (
+            "Motion parameters file (a pathlike object or string "
+            "representing a file)."
+        )
+        parameter_source_desc = (
+            "Source of movement parameters"
+            "(a string which is FSL "
+            "or AFNI or SPM or FSFAST or NIPY"
+        )
+        radius_desc = "Radius in mm to calculate angular FDs (a float)."
+        normalize_desc = "Calculate FD in mm/s (a bool)."
+        out_prefix_desc = (
+            "Specify the string to be prepended to the "
+            "filename of the output file (a string)."
+        )
 
         # Outputs description
-        out_file_desc = ('The output file (a pathlike object or a '
-                         'string representing a file).')
+        out_file_desc = (
+            "The output file (a pathlike object or a "
+            "string representing a file)."
+        )
 
         # Inputs traits
-        self.add_trait("in_file",
-                       File(output=False,
-                            optional=False,
-                            desc=in_file_desc))
+        self.add_trait(
+            "in_file", File(output=False, optional=False, desc=in_file_desc)
+        )
 
-        self.add_trait("parameter_source",
-                       traits.Enum('FSL',
-                                   'AFNI',
-                                   'SPM',
-                                   'FSFAST',
-                                   'NIPY',
-                                   output=False,
-                                   optional=True,
-                                   desc=parameter_source_desc))
+        self.add_trait(
+            "parameter_source",
+            traits.Enum(
+                "FSL",
+                "AFNI",
+                "SPM",
+                "FSFAST",
+                "NIPY",
+                output=False,
+                optional=True,
+                desc=parameter_source_desc,
+            ),
+        )
 
-        self.add_trait("radius",
-                       traits.Float(50.0,
-                                    optional=True,
-                                    output=False,
-                                    desc=radius_desc))
+        self.add_trait(
+            "radius",
+            traits.Float(50.0, optional=True, output=False, desc=radius_desc),
+        )
 
-        self.add_trait("normalize",
-                       traits.Bool(False,
-                                   optional=True,
-                                   output=False,
-                                   desc=normalize_desc))
+        self.add_trait(
+            "normalize",
+            traits.Bool(
+                False, optional=True, output=False, desc=normalize_desc
+            ),
+        )
 
-        self.add_trait("out_prefix",
-                       traits.String('fd_',
-                                     output=False,
-                                     optional=True,
-                                     desc=out_prefix_desc))
+        self.add_trait(
+            "out_prefix",
+            traits.String(
+                "fd_", output=False, optional=True, desc=out_prefix_desc
+            ),
+        )
 
         # Outputs traits
-        self.add_trait("out_file",
-                       File(output=True,
-                            desc=out_file_desc))
+        self.add_trait("out_file", File(output=True, desc=out_file_desc))
 
         self.init_default_traits()
 
@@ -1430,29 +1552,31 @@ class FramewiseDisplacement(ProcessMIA):
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
-
             if self.out_prefix == Undefined:
-                self.out_prefix = 'fd_'
-                print('The out_prefix parameter is undefined. Automatically '
-                      'set to "fd" ...')
+                self.out_prefix = "fd_"
+                print(
+                    "The out_prefix parameter is undefined. Automatically "
+                    'set to "fd" ...'
+                )
 
             if self.output_directory:
-                valid_ext, in_ext, fileName = checkFileExt(self.in_file, {'TXT': 'txt'})
+                valid_ext, in_ext, fileName = checkFileExt(
+                    self.in_file, {"TXT": "txt"}
+                )
 
                 if not valid_ext:
-                    print('\nThe input image format is not recognized ...!')
+                    print("\nThe input image format is not recognized ...!")
                     return
 
-                self.outputs['out_file'] = os.path.join(
-                    self.output_directory,
-                    self.out_prefix + fileName + '.out')
+                self.outputs["out_file"] = os.path.join(
+                    self.output_directory, self.out_prefix + fileName + ".out"
+                )
 
             else:
-                print('No output_directory was found...!\n')
+                print("No output_directory was found...!\n")
                 return
 
-            self.inheritance_dict[self.outputs[
-                'out_file']] = self.in_file
+            self.inheritance_dict[self.outputs["out_file"]] = self.in_file
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -1475,16 +1599,17 @@ class FramewiseDisplacement(ProcessMIA):
         # Image save
         _, file_name = os.path.split(self.in_file)
         file_name_no_ext, file_extension = os.path.splitext(file_name)
-        if file_extension == '.gz':
-            (file_name_no_ext_2,
-             file_extension_2) = os.path.splitext(file_name_no_ext)
-            if file_extension_2 == '.nii':
+        if file_extension == ".gz":
+            (file_name_no_ext_2, file_extension_2) = os.path.splitext(
+                file_name_no_ext
+            )
+            if file_extension_2 == ".nii":
                 file_name_no_ext = file_name_no_ext_2
 
-        file_out = os.path.join(self.output_directory,
-                                (self.out_prefix +
-                                 file_name_no_ext +
-                                 '.out'))
+        file_out = os.path.join(
+            self.output_directory,
+            (self.out_prefix + file_name_no_ext + ".out"),
+        )
 
         np.savetxt(
             file_out, fd_res, header="FramewiseDisplacement", comments=""
@@ -1520,44 +1645,54 @@ class Mean_stdDev_calc(ProcessMIA):
 
         # Inputs description
         parametric_maps_desc = "A list of files (existing, uncompressed file)"
-        doublet_list_desc = ('A list of lists containing doublets of strings '
-                             '(e.g. [["ROI_OCC", "_L"], ["ROI_OCC", "_R"], '
-                             '["ROI_PAR", "_l"], ...]')
+        doublet_list_desc = (
+            "A list of lists containing doublets of strings "
+            '(e.g. [["ROI_OCC", "_L"], ["ROI_OCC", "_R"], '
+            '["ROI_PAR", "_l"], ...]'
+        )
 
         # Outputs description
-        mean_out_files_desc = ("A list of .txt files with the calculated "
-                               "average for each ROI determined after "
-                               "convolution")
-        std_out_files_desc = ("A list of .txt files with the standard "
-                              "deviation for each ROI determined "
-                              "after convolution")
+        mean_out_files_desc = (
+            "A list of .txt files with the calculated "
+            "average for each ROI determined after "
+            "convolution"
+        )
+        std_out_files_desc = (
+            "A list of .txt files with the standard "
+            "deviation for each ROI determined "
+            "after convolution"
+        )
 
         # Inputs traits
-        self.add_trait("parametric_maps",
-                       traits.List(traits.File(exists=True),
-                                   output=False,
-                                   desc=parametric_maps_desc))
+        self.add_trait(
+            "parametric_maps",
+            traits.List(
+                traits.File(exists=True),
+                output=False,
+                desc=parametric_maps_desc,
+            ),
+        )
 
-        self.add_trait("doublet_list",
-                       traits.List(output=False,
-                                   desc=doublet_list_desc))
+        self.add_trait(
+            "doublet_list", traits.List(output=False, desc=doublet_list_desc)
+        )
 
         # Output traits
-        self.add_trait("mean_out_files",
-                       OutputMultiPath(File(),
-                                       output=True,
-                                       desc=mean_out_files_desc))
+        self.add_trait(
+            "mean_out_files",
+            OutputMultiPath(File(), output=True, desc=mean_out_files_desc),
+        )
 
-        self.add_trait("std_out_files",
-                       OutputMultiPath(File(),
-                                       output=True,
-                                       desc=std_out_files_desc))
+        self.add_trait(
+            "std_out_files",
+            OutputMultiPath(File(), output=True, desc=std_out_files_desc),
+        )
 
         # Special parameter used as a messenger for the run_process_mia method
-        self.add_trait("dict4runtime",
-                       traits.Dict(output=False,
-                                   optional=True,
-                                   userlevel=1))
+        self.add_trait(
+            "dict4runtime",
+            traits.Dict(output=False, optional=True, userlevel=1),
+        )
 
         self.init_default_traits()
 
@@ -1582,36 +1717,41 @@ class Mean_stdDev_calc(ProcessMIA):
             # FIXME: We retrieve the name of the patient from the first element
             #        of parametric_maps. This is only fine if all the elements
             #        of parametric_maps correspond to the same patient.
-            patient_name = get_dbFieldValue(self.project,
-                                            self.parametric_maps[0],
-                                            'PatientName')
+            patient_name = get_dbFieldValue(
+                self.project, self.parametric_maps[0], "PatientName"
+            )
 
             if patient_name is None:
-                print('\nMean_stdDev_cal brick:\nThe PatientName tag is not '
-                      'filled in the database for the {} file ...\n The '
-                      'initialization is '
-                      'aborted...'.format(self.parametric_maps[0]))
+                print(
+                    "\nMean_stdDev_cal brick:\nThe PatientName tag is not "
+                    "filled in the database for the {} file ...\n The "
+                    "initialization is "
+                    "aborted...".format(self.parametric_maps[0])
+                )
                 return self.make_initResult()
 
-            self.dict4runtime['patient_name'] = patient_name
-            roi_dir = os.path.join(self.output_directory,
-                                   'roi_' + patient_name)
+            self.dict4runtime["patient_name"] = patient_name
+            roi_dir = os.path.join(
+                self.output_directory, "roi_" + patient_name
+            )
 
             if not os.path.isdir(roi_dir):
                 print(
                     "\nMean_stdDev_cal brick:\nNo {} folder detected ...\nThe "
-                    "initialization is aborted ...".format(roi_dir))
+                    "initialization is aborted ...".format(roi_dir)
+                )
                 return self.make_initResult()
 
-            conv_dir = os.path.join(roi_dir, 'convROI_BOLD')
+            conv_dir = os.path.join(roi_dir, "convROI_BOLD")
 
             if not os.path.isdir(conv_dir):
                 print(
                     "\nMean_stdDev_cal brick:\nNo {} folder detected ...\nThe "
-                    "initialization is aborted ...".format(conv_dir))
+                    "initialization is aborted ...".format(conv_dir)
+                )
                 return self.make_initResult()
 
-            analysis_dir = os.path.join(roi_dir, 'ROI_analysis')
+            analysis_dir = os.path.join(roi_dir, "ROI_analysis")
 
             if os.path.isdir(analysis_dir):
                 shutil.rmtree(analysis_dir)
@@ -1621,19 +1761,24 @@ class Mean_stdDev_calc(ProcessMIA):
             std_out_files = []
 
             for parametric_map in self.parametric_maps:
-
                 for roi in self.doublet_list:
                     # spmT_BOLD or beta_BOLD
-                    map_name = os.path.basename(parametric_map)[0:4] + '_BOLD'
-                    mean_out_files.append(os.path.join(
-                        analysis_dir,
-                        roi[0] + roi[1] + '_mean' + map_name + '.txt'))
-                    std_out_files.append(os.path.join(
-                        analysis_dir,
-                        roi[0] + roi[1] + '_std' + map_name + '.txt'))
+                    map_name = os.path.basename(parametric_map)[0:4] + "_BOLD"
+                    mean_out_files.append(
+                        os.path.join(
+                            analysis_dir,
+                            roi[0] + roi[1] + "_mean" + map_name + ".txt",
+                        )
+                    )
+                    std_out_files.append(
+                        os.path.join(
+                            analysis_dir,
+                            roi[0] + roi[1] + "_std" + map_name + ".txt",
+                        )
+                    )
 
-            self.outputs['mean_out_files'] = mean_out_files
-            self.outputs['std_out_files'] = std_out_files
+            self.outputs["mean_out_files"] = mean_out_files
+            self.outputs["std_out_files"] = std_out_files
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -1643,21 +1788,28 @@ class Mean_stdDev_calc(ProcessMIA):
         # No need the next line (we don't use self.process and SPM)
         # super(Mean_stdDev_calc, self).run_process_mia()
 
-        roi_dir = os.path.join(self.output_directory,
-                               'roi_' + self.dict4runtime['patient_name'])
-        conv_dir = os.path.join(roi_dir, 'convROI_BOLD')
+        roi_dir = os.path.join(
+            self.output_directory, "roi_" + self.dict4runtime["patient_name"]
+        )
+        conv_dir = os.path.join(roi_dir, "convROI_BOLD")
 
         if not os.path.isdir(conv_dir):
-            print("\nMean_stdDev_cal brick:\nNo {} folder detected ...".format(
-                                                                      conv_dir))
-            #return
+            print(
+                "\nMean_stdDev_cal brick:\nNo {} folder detected ...".format(
+                    conv_dir
+                )
+            )
+            # return
 
-        analysis_dir = os.path.join(roi_dir, 'ROI_analysis')
+        analysis_dir = os.path.join(roi_dir, "ROI_analysis")
 
         if not os.path.isdir(analysis_dir):
-            print("\nMean_stdDev_cal brick:\nNo {} folder detected ...".format(
-                                                                  analysis_dir))
-            #return
+            print(
+                "\nMean_stdDev_cal brick:\nNo {} folder detected ...".format(
+                    analysis_dir
+                )
+            )
+            # return
 
         for parametric_map in self.parametric_maps:
             # Resampling, if necessary, the parametric_map to the size of the
@@ -1669,7 +1821,7 @@ class Mean_stdDev_calc(ProcessMIA):
             # roi_dir'/'roi_1[0]roi_1[1]'.nii' should be the same given the
             # pipeline used for the CVR
             roi_1 = self.doublet_list[0]
-            roi_file = os.path.join(roi_dir, roi_1[0] + roi_1[1] + '.nii')
+            roi_file = os.path.join(roi_dir, roi_1[0] + roi_1[1] + ".nii")
             roi_img = nb.load(roi_file)
             roi_data = roi_img.get_fdata()
             roi_size = roi_data.shape[:3]
@@ -1682,19 +1834,21 @@ class Mean_stdDev_calc(ProcessMIA):
             map_data = np.nan_to_num(map_data)
 
             # Give name with spmT_BOLD or beta_BOLD
-            map_name = os.path.basename(parametric_map)[0:4] + '_BOLD'
+            map_name = os.path.basename(parametric_map)[0:4] + "_BOLD"
 
             # Making sure that the ROI and parametric images
             # are at the same size
             if roi_size != map_data.shape[:3]:
                 map_data_max = max(map_data.max(), -map_data.min())
-                map_data = resize(
-                    map_data / map_data_max, roi_size) * map_data_max
+                map_data = (
+                    resize(map_data / map_data_max, roi_size) * map_data_max
+                )
 
             for roi in self.doublet_list:
                 # Reading ROI file
-                roi_file = os.path.join(conv_dir,
-                                        'conv' + roi[0] + roi[1] + '.nii')
+                roi_file = os.path.join(
+                    conv_dir, "conv" + roi[0] + roi[1] + ".nii"
+                )
 
                 # it seems that it is necessary to leave a little time so that
                 # the data calculated previously are well recorded on the disc!
@@ -1703,10 +1857,11 @@ class Mean_stdDev_calc(ProcessMIA):
                 wait_time = 0
 
                 while True:
-
                     if wait_time > 15:
-                        print('Mean_stdDev_calc:\nThe {} file has not been '
-                              'found ...\n'.format(roi_file))
+                        print(
+                            "Mean_stdDev_calc:\nThe {} file has not been "
+                            "found ...\n".format(roi_file)
+                        )
                         roi_img = None
                         break
 
@@ -1715,9 +1870,12 @@ class Mean_stdDev_calc(ProcessMIA):
                         break
 
                     except FileNotFoundError:
-                        print('Mean_stdDev_calc:\n{} does not exist yet ... '
-                              'waiting 1s ...'.format(roi_file))
+                        print(
+                            "Mean_stdDev_calc:\n{} does not exist yet ... "
+                            "waiting 1s ...".format(roi_file)
+                        )
                         import time
+
                         time.sleep(1)
                         wait_time += 1
                         continue
@@ -1733,9 +1891,11 @@ class Mean_stdDev_calc(ProcessMIA):
 
                 # Calculating mean and standard deviation
                 if np.size(result[result.nonzero()]) == 0:
-                    print("\nMean_stdDev_cal brick:\nWarning: No result found "
-                          "after convolution of the {0} ROI and the {1} "
-                          "data".format(roi[0] + roi[1], parametric_map))
+                    print(
+                        "\nMean_stdDev_cal brick:\nWarning: No result found "
+                        "after convolution of the {0} ROI and the {1} "
+                        "data".format(roi[0] + roi[1], parametric_map)
+                    )
                     mean_result = 0
                     std_result = 0
 
@@ -1746,19 +1906,19 @@ class Mean_stdDev_calc(ProcessMIA):
                 # Writing the value in the corresponding file:
                 # analysis_dir'/'roi[0]roi[1]'_mean'map_name'.txt')
                 mean_out_file = os.path.join(
-                    analysis_dir,
-                    roi[0] + roi[1] + '_mean' + map_name + '.txt')
+                    analysis_dir, roi[0] + roi[1] + "_mean" + map_name + ".txt"
+                )
 
-                with open(mean_out_file, 'w') as f:
+                with open(mean_out_file, "w") as f:
                     f.write("%.3f" % mean_result)
 
                 # Writing the value in the corresponding file:
                 # analysis_dir'/'roi[0]roi[1]'_std'map_name'.txt')
                 std_out_file = os.path.join(
-                    analysis_dir,
-                    roi[0] + roi[1] + '_std' + map_name + '.txt')
+                    analysis_dir, roi[0] + roi[1] + "_std" + map_name + ".txt"
+                )
 
-                with open(std_out_file, 'w') as f:
+                with open(std_out_file, "w") as f:
                     f.write("%.3f" % std_result)
 
 
@@ -1767,6 +1927,7 @@ class Result_collector(ProcessMIA):
     * Save a file with the data collection for a patient.
 
     """
+
     def __init__(self):
         """Dedicated to the attributes initialisation/instantiation.
 
@@ -1780,86 +1941,106 @@ class Result_collector(ProcessMIA):
         # Inputs description
         parametric_maps_desc = "A list of files (existing, uncompressed file)"
         data_desc = "Defines the data type (a string, e.g. BOLD)"
-        calculs_desc = ('Defines the type of calculation (a list of strings, '
-                        'e.g. ["mean", "std", "IL_mean", "IL_std"]')
-        mean_in_files_desc = ("A list of .txt files containing the average "
-                              "value of a parameter for a given territory or "
-                              "region of interest (a list of files)")
-        std_in_files_desc = ("A list of .txt files containing the standard "
-                             "deviation for a parameter in a given territory "
-                             "or region of interest (a list of files)")
-        doublet_list_desc = ('A list of lists containing doublets of strings '
-                             '(e.g. [["ROI_OCC", "_L"], ["ROI_OCC", "_R"], '
-                             '["ROI_PAR", "_l"], ...]')
-        patient_info_desc = ("A dictionary whose keys/values correspond to "
-                             "information about the patient "
-                             "(e.g. {"
-                             "'PatientName': 'ablair','Pathology': 'ACMD', "
-                             "'Age': 64, 'Sex': 'M', 'MR': '3T', "
-                             "'Gas': 'BACTAL', 'GasAdmin': 'MASK'}")
+        calculs_desc = (
+            "Defines the type of calculation (a list of strings, "
+            'e.g. ["mean", "std", "IL_mean", "IL_std"]'
+        )
+        mean_in_files_desc = (
+            "A list of .txt files containing the average "
+            "value of a parameter for a given territory or "
+            "region of interest (a list of files)"
+        )
+        std_in_files_desc = (
+            "A list of .txt files containing the standard "
+            "deviation for a parameter in a given territory "
+            "or region of interest (a list of files)"
+        )
+        doublet_list_desc = (
+            "A list of lists containing doublets of strings "
+            '(e.g. [["ROI_OCC", "_L"], ["ROI_OCC", "_R"], '
+            '["ROI_PAR", "_l"], ...]'
+        )
+        patient_info_desc = (
+            "A dictionary whose keys/values correspond to "
+            "information about the patient "
+            "(e.g. {"
+            "'PatientName': 'ablair','Pathology': 'ACMD', "
+            "'Age': 64, 'Sex': 'M', 'MR': '3T', "
+            "'Gas': 'BACTAL', 'GasAdmin': 'MASK'}"
+        )
 
         # Outputs description
-        out_files_desc = ("A list of .xml files containing a summary of the "
-                         "requested results")
+        out_files_desc = (
+            "A list of .xml files containing a summary of the "
+            "requested results"
+        )
 
         # Inputs traits
-        self.add_trait("parametric_maps",
-                       traits.List(traits.File(exists=True),
-                                   output=False,
-                                   desc=parametric_maps_desc))
+        self.add_trait(
+            "parametric_maps",
+            traits.List(
+                traits.File(exists=True),
+                output=False,
+                desc=parametric_maps_desc,
+            ),
+        )
 
-        self.add_trait("data",
-                       traits.String("BOLD",
-                                     output=False,
-                                     optional=True,
-                                     desc=data_desc))
+        self.add_trait(
+            "data",
+            traits.String("BOLD", output=False, optional=True, desc=data_desc),
+        )
 
-        self.add_trait("calculs",
-                       traits.List(traits.String(),
-                                   value=["mean", "std", "IL_mean", "IL_std"],
-                                   output=False,
-                                   optional=True,
-                                   desc=calculs_desc))
+        self.add_trait(
+            "calculs",
+            traits.List(
+                traits.String(),
+                value=["mean", "std", "IL_mean", "IL_std"],
+                output=False,
+                optional=True,
+                desc=calculs_desc,
+            ),
+        )
 
-        self.add_trait("mean_in_files",
-                       traits.List(traits.File(),
-                                   output=False,
-                                   desc=mean_in_files_desc))
+        self.add_trait(
+            "mean_in_files",
+            traits.List(traits.File(), output=False, desc=mean_in_files_desc),
+        )
 
-        self.add_trait("std_in_files",
-                       traits.List(traits.File(),
-                                   output=False,
-                                   desc=std_in_files_desc))
+        self.add_trait(
+            "std_in_files",
+            traits.List(traits.File(), output=False, desc=std_in_files_desc),
+        )
 
-        self.add_trait("doublet_list",
-                       traits.List(output=False,
-                                   desc=doublet_list_desc))
+        self.add_trait(
+            "doublet_list", traits.List(output=False, desc=doublet_list_desc)
+        )
 
-        self.add_trait("patient_info",
-                       #traits.Dict(patient_info_dict,
-                       traits.Dict(
-                                   output=False,
-                                   optional=True,
-                                   desc=patient_info_desc))
-        self.patient_info = dict(PatientName=Undefined,
-                                 Pathology=Undefined,
-                                 Age=Undefined,
-                                 Sex=Undefined,
-                                 MR=Undefined,
-                                 Gas=Undefined,
-                                 GasAdmin=Undefined)
+        self.add_trait(
+            "patient_info",
+            # traits.Dict(patient_info_dict,
+            traits.Dict(output=False, optional=True, desc=patient_info_desc),
+        )
+        self.patient_info = dict(
+            PatientName=Undefined,
+            Pathology=Undefined,
+            Age=Undefined,
+            Sex=Undefined,
+            MR=Undefined,
+            Gas=Undefined,
+            GasAdmin=Undefined,
+        )
 
         # Outputs traits
-        self.add_trait("out_files",
-                       traits.List(traits.File(),
-                                   output=True,
-                                   desc=out_files_desc))
+        self.add_trait(
+            "out_files",
+            traits.List(traits.File(), output=True, desc=out_files_desc),
+        )
 
         # Special parameter used as a messenger for the run_process_mia method
-        self.add_trait("dict4runtime",
-                       traits.Dict(output=False,
-                                   optional=True,
-                                   userlevel=1))
+        self.add_trait(
+            "dict4runtime",
+            traits.Dict(output=False, optional=True, userlevel=1),
+        )
 
         self.init_default_traits()
 
@@ -1887,135 +2068,158 @@ class Result_collector(ProcessMIA):
             #          patient.
             # FIXME 2: The data should be anonymised and we should use
             #          PatientRef instead of PatientName !
-            patient_name = get_dbFieldValue(self.project,
-                                            self.parametric_maps[0],
-                                            'PatientName')
+            patient_name = get_dbFieldValue(
+                self.project, self.parametric_maps[0], "PatientName"
+            )
 
             if patient_name is None:
-                print('\nResult_collector brick:\nThe PatientName tag is not '
-                      'filled in the database for the {} file ...\n The '
-                      'initialization is '
-                      'aborted...'.format(self.parametric_maps[0]))
+                print(
+                    "\nResult_collector brick:\nThe PatientName tag is not "
+                    "filled in the database for the {} file ...\n The "
+                    "initialization is "
+                    "aborted...".format(self.parametric_maps[0])
+                )
 
                 return self.make_initResult()
 
-            self.dict4runtime['patient_name'] = patient_name
-            roi_dir = os.path.join(self.output_directory,
-                                   'roi_' + patient_name)
+            self.dict4runtime["patient_name"] = patient_name
+            roi_dir = os.path.join(
+                self.output_directory, "roi_" + patient_name
+            )
 
             if not os.path.isdir(roi_dir):
-                print("\nResult_collector brick:\nNo {} folder detected ..."
-                      "\nThe initialization is aborted ...".format(roi_dir))
+                print(
+                    "\nResult_collector brick:\nNo {} folder detected ..."
+                    "\nThe initialization is aborted ...".format(roi_dir)
+                )
                 return self.make_initResult()
 
-            analysis_dir = os.path.join(roi_dir, 'ROI_analysis')
+            analysis_dir = os.path.join(roi_dir, "ROI_analysis")
 
             if not os.path.isdir(analysis_dir):
-                print("\nMean_stdDev_cal brick:\nNo {} folder detected ..."
-                      "\nThe initialization is "
-                      "aborted ...".format(analysis_dir))
+                print(
+                    "\nMean_stdDev_cal brick:\nNo {} folder detected ..."
+                    "\nThe initialization is "
+                    "aborted ...".format(analysis_dir)
+                )
                 return self.make_initResult()
 
             out_files = []
 
             for parametric_map in self.parametric_maps:
-
                 for calcul in self.calculs:
                     out_files.append(
-                        os.path.join(analysis_dir,
-                                     "{0}_{1}_{2}.xls".format(
-                                         self.data,
-                                         calcul,
-                                         os.path.basename(
-                                             parametric_map)[0:9])))
+                        os.path.join(
+                            analysis_dir,
+                            "{0}_{1}_{2}.xls".format(
+                                self.data,
+                                calcul,
+                                os.path.basename(parametric_map)[0:9],
+                            ),
+                        )
+                    )
 
-            self.outputs['out_files'] = out_files
+            self.outputs["out_files"] = out_files
 
             # FIXME: the data should be anonymised and we should use PatientRef
             #        instead of PatientName !
-            if (self.patient_info.get('PatientName') is None or
-                                 self.patient_info['PatientName'] == Undefined):
-                patient_ref = get_dbFieldValue(self.project,
-                                               self.parametric_maps[0],
-                                               'PatientRef')
+            if (
+                self.patient_info.get("PatientName") is None
+                or self.patient_info["PatientName"] == Undefined
+            ):
+                patient_ref = get_dbFieldValue(
+                    self.project, self.parametric_maps[0], "PatientRef"
+                )
 
                 if patient_ref is None:
-                    self.patient_info['PatientName'] = patient_name
+                    self.patient_info["PatientName"] = patient_name
 
                 else:
-                    self.patient_info['PatientName'] = patient_ref
+                    self.patient_info["PatientName"] = patient_ref
 
-            if (self.patient_info.get('Pathology') is None or
-                                   self.patient_info['Pathology'] == Undefined):
-                pathology = get_dbFieldValue(self.project,
-                                             self.parametric_maps[0],
-                                             'Pathology')
+            if (
+                self.patient_info.get("Pathology") is None
+                or self.patient_info["Pathology"] == Undefined
+            ):
+                pathology = get_dbFieldValue(
+                    self.project, self.parametric_maps[0], "Pathology"
+                )
 
                 if pathology is None:
-                    self.patient_info['Pathology'] = 'Undefined'
+                    self.patient_info["Pathology"] = "Undefined"
 
                 else:
-                    self.patient_info['Pathology'] = pathology
+                    self.patient_info["Pathology"] = pathology
 
-            if (self.patient_info.get('Age') is None or
-                                         self.patient_info['Age'] == Undefined):
-                age = get_dbFieldValue(self.project,
-                                       self.parametric_maps[0],
-                                       'Age')
+            if (
+                self.patient_info.get("Age") is None
+                or self.patient_info["Age"] == Undefined
+            ):
+                age = get_dbFieldValue(
+                    self.project, self.parametric_maps[0], "Age"
+                )
 
                 if age is None:
-                    self.patient_info['Age'] = 'Undefined'
+                    self.patient_info["Age"] = "Undefined"
 
                 else:
-                    self.patient_info['Age'] = age
+                    self.patient_info["Age"] = age
 
-            if (self.patient_info.get('Sex') is None or
-                                         self.patient_info['Sex'] == Undefined):
-                sex = get_dbFieldValue(self.project,
-                                       self.parametric_maps[0],
-                                       'Sex')
+            if (
+                self.patient_info.get("Sex") is None
+                or self.patient_info["Sex"] == Undefined
+            ):
+                sex = get_dbFieldValue(
+                    self.project, self.parametric_maps[0], "Sex"
+                )
 
                 if sex is None:
-                    self.patient_info['Sex'] = 'Undefined'
+                    self.patient_info["Sex"] = "Undefined"
 
                 else:
-                    self.patient_info['Sex'] = sex
+                    self.patient_info["Sex"] = sex
 
-            if (self.patient_info.get('MR') is None or
-                                          self.patient_info['MR'] == Undefined):
-                mr = get_dbFieldValue(self.project,
-                                      self.parametric_maps[0],
-                                      'MR')
+            if (
+                self.patient_info.get("MR") is None
+                or self.patient_info["MR"] == Undefined
+            ):
+                mr = get_dbFieldValue(
+                    self.project, self.parametric_maps[0], "MR"
+                )
 
                 if mr is None:
-                    self.patient_info['MR'] = 'Undefined'
+                    self.patient_info["MR"] = "Undefined"
 
                 else:
-                    self.patient_info['MR'] = mr
+                    self.patient_info["MR"] = mr
 
-            if (self.patient_info.get('Gas') is None or
-                                         self.patient_info['Gas'] == Undefined):
-                gas = get_dbFieldValue(self.project,
-                                       self.parametric_maps[0],
-                                       'Gas')
+            if (
+                self.patient_info.get("Gas") is None
+                or self.patient_info["Gas"] == Undefined
+            ):
+                gas = get_dbFieldValue(
+                    self.project, self.parametric_maps[0], "Gas"
+                )
 
                 if gas is None:
-                    self.patient_info['Gas'] = 'Undefined'
+                    self.patient_info["Gas"] = "Undefined"
 
                 else:
-                    self.patient_info['Gas'] = gas
+                    self.patient_info["Gas"] = gas
 
-            if (self.patient_info.get('GasAdmin') is None or
-                                    self.patient_info['GasAdmin'] == Undefined):
-                gas_admin = get_dbFieldValue(self.project,
-                                             self.parametric_maps[0],
-                                             'GasAdmin')
+            if (
+                self.patient_info.get("GasAdmin") is None
+                or self.patient_info["GasAdmin"] == Undefined
+            ):
+                gas_admin = get_dbFieldValue(
+                    self.project, self.parametric_maps[0], "GasAdmin"
+                )
 
                 if gas_admin is None:
-                    self.patient_info['GasAdmin'] = 'Undefined'
+                    self.patient_info["GasAdmin"] = "Undefined"
 
                 else:
-                    self.patient_info['GasAdmin'] = gas_admin
+                    self.patient_info["GasAdmin"] = gas_admin
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -2023,7 +2227,7 @@ class Result_collector(ProcessMIA):
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
         # No need the next line (we don't use self.process and SPM)
-        #super(Mean_stdDev_calc, self).run_process_mia()
+        # super(Mean_stdDev_calc, self).run_process_mia()
 
         # Getting the list of all positions (doublet_list without hemisphere)
         roi_list = []  # list of all ROIs
@@ -2033,13 +2237,17 @@ class Result_collector(ProcessMIA):
             if pos not in roi_list:
                 roi_list.append(pos)
 
-        roi_dir = os.path.join(self.output_directory,
-                               'roi_' + self.dict4runtime['patient_name'])
-        analysis_dir = os.path.join(roi_dir, 'ROI_analysis')
+        roi_dir = os.path.join(
+            self.output_directory, "roi_" + self.dict4runtime["patient_name"]
+        )
+        analysis_dir = os.path.join(roi_dir, "ROI_analysis")
 
         if not os.path.isdir(analysis_dir):
-            print("No 'ROI_analysis' folder in the working directory {0}.".
-                  format(os.path.dirname(self.parametric_maps[0])))
+            print(
+                "No 'ROI_analysis' folder in the working directory {0}.".format(
+                    os.path.dirname(self.parametric_maps[0])
+                )
+            )
             return {}  # FIXME: Test what exactly happens in this case
 
         for parametric_map in self.parametric_maps:
@@ -2047,25 +2255,25 @@ class Result_collector(ProcessMIA):
             map_name = map_name_file[0:4]
 
             for calcul in self.calculs:
-                out_file = os.path.join(analysis_dir,
-                                        "{0}_{1}_{2}.xls".format(self.data,
-                                                                 calcul,
-                                                                 map_name_file))
+                out_file = os.path.join(
+                    analysis_dir,
+                    "{0}_{1}_{2}.xls".format(self.data, calcul, map_name_file),
+                )
 
-                with open(out_file, 'w') as f:
-                    f.write("{0}\t".format('subjects'))
-                    f.write("{0}\t".format('patho'))
-                    f.write("{0}\t".format('age'))
-                    f.write("{0}\t".format('sex'))
-                    f.write("{0}\t".format('MR'))
-                    f.write("{0}\t".format('Gaz'))
-                    f.write("{0}\t".format('Admin'))
+                with open(out_file, "w") as f:
+                    f.write("{0}\t".format("subjects"))
+                    f.write("{0}\t".format("patho"))
+                    f.write("{0}\t".format("age"))
+                    f.write("{0}\t".format("sex"))
+                    f.write("{0}\t".format("MR"))
+                    f.write("{0}\t".format("Gaz"))
+                    f.write("{0}\t".format("Admin"))
 
-                    if calcul not in ['IL_mean', 'IL_std']:
-
+                    if calcul not in ["IL_mean", "IL_std"]:
                         for roi in self.doublet_list:
-                            f.write("{0}_{1}\t".format(map_name,
-                                                       roi[0] + roi[1]))
+                            f.write(
+                                "{0}_{1}\t".format(map_name, roi[0] + roi[1])
+                            )
 
                     else:
                         for pos in roi_list:
@@ -2074,78 +2282,84 @@ class Result_collector(ProcessMIA):
                     # FIXME: We should iterate on each patient here ?
                     f.write("\n{0}\t".format(self.patient_info["PatientName"]))
                     f.write("{0}\t".format(self.patient_info["Pathology"]))
-                    #f.write("%3.1f\t" % self.patient_info["Age"])
+                    # f.write("%3.1f\t" % self.patient_info["Age"])
                     f.write("{0}\t".format(self.patient_info["Age"]))
                     f.write("{0}\t".format(self.patient_info["Sex"]))
                     f.write("{0}\t".format(self.patient_info["MR"]))
                     f.write("{0}\t".format(self.patient_info["Gas"]))
                     f.write("{0}\t".format(self.patient_info["GasAdmin"]))
 
-                    if calcul == 'mean':
-
+                    if calcul == "mean":
                         for roi in self.doublet_list:
                             roi_file = os.path.join(
                                 analysis_dir,
-                                "{0}_mean{1}_{2}.txt".format(roi[0] + roi[1],
-                                                             map_name,
-                                                             self.data))
+                                "{0}_mean{1}_{2}.txt".format(
+                                    roi[0] + roi[1], map_name, self.data
+                                ),
+                            )
                             try:
-
-                                with open(roi_file, 'r') as f_read:
+                                with open(roi_file, "r") as f_read:
                                     final_res = float(f_read.read())
 
                                 f.write("{0}\t".format(final_res))
 
                             except FileNotFoundError:
-                                print('\nResult_collector brick:\n {} not '
-                                      'found ...\n'.format(roi_file))
+                                print(
+                                    "\nResult_collector brick:\n {} not "
+                                    "found ...\n".format(roi_file)
+                                )
                                 f.write("Undefined\t")
 
-                    elif calcul == 'IL_mean':
+                    elif calcul == "IL_mean":
                         roi_checked = []
 
                         for roi in self.doublet_list:
-
                             if roi[0] in roi_checked:
                                 continue
 
                             roi_file = os.path.join(
                                 analysis_dir,
-                                "{0}_mean{1}_{2}.txt".format(roi[0] + roi[1],
-                                                             map_name,
-                                                             self.data))
+                                "{0}_mean{1}_{2}.txt".format(
+                                    roi[0] + roi[1], map_name, self.data
+                                ),
+                            )
                             try:
-
-                                with open(roi_file, 'r') as f_read:
+                                with open(roi_file, "r") as f_read:
                                     roi_value = float(f_read.read())
 
                             except FileNotFoundError:
-                                print('\nResult_collector brick:\n {} not '
-                                      'found ...\n'.format(roi_file))
+                                print(
+                                    "\nResult_collector brick:\n {} not "
+                                    "found ...\n".format(roi_file)
+                                )
                                 roi_value = None
 
                             # Searching the ROI that has the same first element
-                            roi_2 = [s for s in self.doublet_list
-                                     if roi[0] in s[0] and
-                                     roi[1] != s[1]][0]
+                            roi_2 = [
+                                s
+                                for s in self.doublet_list
+                                if roi[0] in s[0] and roi[1] != s[1]
+                            ][0]
                             roi_file_2 = os.path.join(
                                 analysis_dir,
                                 "{0}_mean{1}_{2}."
                                 "txt".format(
-                                    roi_2[0] + roi_2[1],
-                                    map_name,
-                                    self.data))
+                                    roi_2[0] + roi_2[1], map_name, self.data
+                                ),
+                            )
                             try:
-                                with open(roi_file_2, 'r') as f_read:
+                                with open(roi_file_2, "r") as f_read:
                                     roi_value_2 = float(f_read.read())
 
                             except FileNotFoundError:
-                                print('\nResult_collector brick:\n {} not '
-                                      'found ...\n'.format(roi_file_2))
+                                print(
+                                    "\nResult_collector brick:\n {} not "
+                                    "found ...\n".format(roi_file_2)
+                                )
                                 roi_value_2 = None
 
                             # IL = (Left - Right) / ((Left + Right)
-                            if roi[1] == '_L':
+                            if roi[1] == "_L":
                                 sub_1 = roi_value
                                 sub_2 = roi_value_2
 
@@ -2163,73 +2377,79 @@ class Result_collector(ProcessMIA):
                             roi_checked.append(roi[0])
 
                     elif calcul == "std":
-
                         for roi in self.doublet_list:
                             roi_file = os.path.join(
                                 analysis_dir,
-                                "{0}_std{1}_{2}.txt".format(roi[0] + roi[1],
-                                                            map_name,
-                                                            self.data))
+                                "{0}_std{1}_{2}.txt".format(
+                                    roi[0] + roi[1], map_name, self.data
+                                ),
+                            )
 
                             try:
-
-                                with open(roi_file, 'r') as f_read:
+                                with open(roi_file, "r") as f_read:
                                     final_res = float(f_read.read())
 
                                 f.write("{0}\t".format(final_res))
 
                             except FileNotFoundError:
-                                print('\nResult_collector brick:\n {} not '
-                                      'found ...\n'.format(roi_file))
+                                print(
+                                    "\nResult_collector brick:\n {} not "
+                                    "found ...\n".format(roi_file)
+                                )
                                 f.write("Undefined\t")
 
-                    elif calcul == 'IL_std':
+                    elif calcul == "IL_std":
                         roi_checked = []
 
                         for roi in self.doublet_list:
-
                             if roi[0] in roi_checked:
                                 continue
 
                             roi_file = os.path.join(
                                 analysis_dir,
-                                "{0}_std{1}_{2}.txt".format(roi[0] + roi[1],
-                                                            map_name,
-                                                            self.data))
+                                "{0}_std{1}_{2}.txt".format(
+                                    roi[0] + roi[1], map_name, self.data
+                                ),
+                            )
 
                             try:
-
-                                with open(roi_file, 'r') as f_read:
+                                with open(roi_file, "r") as f_read:
                                     roi_value = float(f_read.read())
 
                             except FileNotFoundError:
-                                print('\nResult_collector brick:\n {} not '
-                                      'found ...\n'.format(roi_file))
+                                print(
+                                    "\nResult_collector brick:\n {} not "
+                                    "found ...\n".format(roi_file)
+                                )
                                 roi_value = None
 
                             # Searching the roi that has the same first element
-                            roi_2 = [s for s in self.doublet_list if
-                                     roi[0] in s[0] and
-                                     roi[1] != s[1]][0]
+                            roi_2 = [
+                                s
+                                for s in self.doublet_list
+                                if roi[0] in s[0] and roi[1] != s[1]
+                            ][0]
 
                             roi_file_2 = os.path.join(
                                 analysis_dir,
                                 "{0}_std{1}_{2}.txt".format(
-                                    roi_2[0] + roi_2[1],
-                                    map_name,
-                                    self.data))
+                                    roi_2[0] + roi_2[1], map_name, self.data
+                                ),
+                            )
 
                             try:
-                                with open(roi_file_2, 'r') as f_read:
+                                with open(roi_file_2, "r") as f_read:
                                     roi_value_2 = float(f_read.read())
 
                             except FileNotFoundError:
-                                print('\nResult_collector brick:\n {} not '
-                                      'found ...\n'.format(roi_file_2))
+                                print(
+                                    "\nResult_collector brick:\n {} not "
+                                    "found ...\n".format(roi_file_2)
+                                )
                                 roi_value_2 = None
 
                             # IL = (Left - Right) / ((Left + Right)
-                            if roi[1] == '_L':
+                            if roi[1] == "_L":
                                 sub_1 = roi_value
                                 sub_2 = roi_value_2
                             else:
@@ -2273,57 +2493,64 @@ class Spikes(ProcessMIA):
         self.requirement = []
 
         # Inputs description
-        in_file_desc = ('A bold file (a pathlike object or string '
-                        'representing a file).')
-        no_zscore_desc = 'Do not zscore (a boolean)'
-        detrend_desc = 'Do detrend (a boolean).'
-        out_prefix_desc = ('Specify the string to be prepended to the '
-                           'filenames of the output image file '
-                           '(a string).')
-        spike_thresh_desc = ("z-score to call one timepoint of one axial"
-                             " slice a spike (a float)")
-        skip_frames_desc = ("number of frames to skip in the beginning "
-                            "of the time series (an int)")
+        in_file_desc = (
+            "A bold file (a pathlike object or string " "representing a file)."
+        )
+        no_zscore_desc = "Do not zscore (a boolean)"
+        detrend_desc = "Do detrend (a boolean)."
+        out_prefix_desc = (
+            "Specify the string to be prepended to the "
+            "filenames of the output image file "
+            "(a string)."
+        )
+        spike_thresh_desc = (
+            "z-score to call one timepoint of one axial"
+            " slice a spike (a float)"
+        )
+        skip_frames_desc = (
+            "number of frames to skip in the beginning "
+            "of the time series (an int)"
+        )
 
         # Outputs description
-        out_file_desc = ('The output file (a pathlike object or a '
-                         'string representing a file).')
+        out_file_desc = (
+            "The output file (a pathlike object or a "
+            "string representing a file)."
+        )
 
         # Inputs traits
-        self.add_trait("in_file",
-                       File(output=False,
-                            optional=False,
-                            desc=in_file_desc))
-        self.add_trait("no_zscore",
-                       traits.Bool(True,
-                                   output=False,
-                                   optional=True,
-                                   desc=no_zscore_desc))
-        self.add_trait("detrend",
-                       traits.Bool(False,
-                                   output=False,
-                                   optional=True,
-                                   desc=detrend_desc))
-        self.add_trait("spike_thresh",
-                       traits.Float(6.0,
-                                    output=False,
-                                    optional=True,
-                                    desc=spike_thresh_desc))
-        self.add_trait("skip_frames",
-                       traits.Int(0,
-                                  output=False,
-                                  optional=True,
-                                  desc=skip_frames_desc))
-        self.add_trait("out_prefix",
-                       traits.String('spikes_',
-                                     output=False,
-                                     optional=True,
-                                     desc=out_prefix_desc))
+        self.add_trait(
+            "in_file", File(output=False, optional=False, desc=in_file_desc)
+        )
+        self.add_trait(
+            "no_zscore",
+            traits.Bool(
+                True, output=False, optional=True, desc=no_zscore_desc
+            ),
+        )
+        self.add_trait(
+            "detrend",
+            traits.Bool(False, output=False, optional=True, desc=detrend_desc),
+        )
+        self.add_trait(
+            "spike_thresh",
+            traits.Float(
+                6.0, output=False, optional=True, desc=spike_thresh_desc
+            ),
+        )
+        self.add_trait(
+            "skip_frames",
+            traits.Int(0, output=False, optional=True, desc=skip_frames_desc),
+        )
+        self.add_trait(
+            "out_prefix",
+            traits.String(
+                "spikes_", output=False, optional=True, desc=out_prefix_desc
+            ),
+        )
 
         # Outputs traits
-        self.add_trait("out_file",
-                       File(output=True,
-                            desc=out_file_desc))
+        self.add_trait("out_file", File(output=True, desc=out_file_desc))
 
         self.init_default_traits()
 
@@ -2345,29 +2572,29 @@ class Spikes(ProcessMIA):
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
-
             if self.out_prefix == Undefined:
-                self.out_prefix = 'spikes_'
-                print('The out_prefix parameter is undefined. Automatically '
-                      'set to "spikes" ...')
+                self.out_prefix = "spikes_"
+                print(
+                    "The out_prefix parameter is undefined. Automatically "
+                    'set to "spikes" ...'
+                )
 
             if self.output_directory:
                 valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
 
                 if not valid_ext:
-                    print('\nThe input image format is not recognized ...!')
+                    print("\nThe input image format is not recognized ...!")
                     return
 
-                self.outputs['out_file'] = os.path.join(
-                    self.output_directory,
-                    self.out_prefix + fileName + '.out')
+                self.outputs["out_file"] = os.path.join(
+                    self.output_directory, self.out_prefix + fileName + ".out"
+                )
 
             else:
-                print('No output_directory was found...!\n')
+                print("No output_directory was found...!\n")
                 return
 
-            self.inheritance_dict[self.outputs[
-                'out_file']] = self.in_file
+            self.inheritance_dict[self.outputs["out_file"]] = self.in_file
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -2422,16 +2649,17 @@ class Spikes(ProcessMIA):
         # File save
         _, file_name = os.path.split(self.in_file)
         file_name_no_ext, file_extension = os.path.splitext(file_name)
-        if file_extension == '.gz':
-            (file_name_no_ext_2,
-             file_extension_2) = os.path.splitext(file_name_no_ext)
-            if file_extension_2 == '.nii':
+        if file_extension == ".gz":
+            (file_name_no_ext_2, file_extension_2) = os.path.splitext(
+                file_name_no_ext
+            )
+            if file_extension_2 == ".nii":
                 file_name_no_ext = file_name_no_ext_2
 
-        file_out = os.path.join(self.output_directory,
-                                (self.out_prefix +
-                                 file_name_no_ext +
-                                 '.out'))
+        file_out = os.path.join(
+            self.output_directory,
+            (self.out_prefix + file_name_no_ext + ".out"),
+        )
 
         np.savetxt(file_out, ts_z)
 
@@ -2481,7 +2709,11 @@ def art_qi2(img, airmask, min_voxels=int(1e3), max_voxels=int(3e5)):
     if len(data) < min_voxels:
         return 0.0
 
-    modelx = data if len(data) < max_voxels else np.random.choice(data, size=max_voxels)
+    modelx = (
+        data
+        if len(data) < max_voxels
+        else np.random.choice(data, size=max_voxels)
+    )
 
     x_grid = np.linspace(0.0, np.percentile(data, 99), 1000)
 
@@ -2501,9 +2733,13 @@ def art_qi2(img, airmask, min_voxels=int(1e3), max_voxels=int(3e5)):
     # Compute goodness-of-fit (gof)
     gof = float(np.abs(kde[-kdethi:] - chi_pdf[-kdethi:]).mean())
 
-    hist_dict = {'x_grid': x_grid.tolist(), 'ref_pdf': kde.tolist(),
-                 'fit_pdf': chi_pdf.tolist(),
-                 'ref_data': modelx.tolist(), 'cutoff_idx': float(kdethi)}
+    hist_dict = {
+        "x_grid": x_grid.tolist(),
+        "ref_pdf": kde.tolist(),
+        "fit_pdf": chi_pdf.tolist(),
+        "ref_data": modelx.tolist(),
+        "cutoff_idx": float(kdethi),
+    }
     return gof, hist_dict
 
 
@@ -2568,7 +2804,9 @@ def efc(img, framemask=None):
     n_vox = np.sum(1 - framemask)
     # Calculate the maximum value of the EFC (which occurs any time all
     # voxels have the same value)
-    efc_max = 1.0 * n_vox * (1.0 / np.sqrt(n_vox)) * np.log(1.0 / np.sqrt(n_vox))
+    efc_max = (
+        1.0 * n_vox * (1.0 / np.sqrt(n_vox)) * np.log(1.0 / np.sqrt(n_vox))
+    )
 
     # Calculate the total image energy
     b_max = np.sqrt((img[framemask == 0] ** 2).sum())
@@ -2609,7 +2847,10 @@ def fber(img, headmask, rotmask=None):
 
 
 def find_peaks(data):
-    t_z = [data[:, :, i, :].mean(axis=0).mean(axis=0) for i in range(data.shape[2])]
+    t_z = [
+        data[:, :, i, :].mean(axis=0).mean(axis=0)
+        for i in range(data.shape[2])
+    ]
     return t_z
 
 
@@ -2664,7 +2905,8 @@ def gsr(epi_data, mask, direction="y", ref_file=None, out_file=None):
     if direction[-1] not in ["x", "y", "all"]:
         raise Exception(
             "Unknown direction {}, should be one of x, -x, y, -y, all".format(
-                direction)
+                direction
+            )
         )
 
     if direction == "all":
@@ -2677,8 +2919,9 @@ def gsr(epi_data, mask, direction="y", ref_file=None, out_file=None):
                     fname, ext2 = os.path.splitext(fname)
                     ext = ext2 + ext
                 ofile = "{0}_{1}{2}".format(fname, newdir, ext)
-            result += [gsr(epi_data, mask, newdir, ref_file=ref_file,
-                           out_file=ofile)]
+            result += [
+                gsr(epi_data, mask, newdir, ref_file=ref_file, out_file=ofile)
+            ]
         return result
 
     # Roll data of mask through the appropriate axis
@@ -2738,7 +2981,9 @@ def normalize_mc_params(params, source):
     return params
 
 
-def regress_poly(degree, data, remove_mean=True, axis=-1, failure_mode="error"):
+def regress_poly(
+    degree, data, remove_mean=True, axis=-1, failure_mode="error"
+):
     """
     Returns data with degree polynomial regressed out.
     :param bool remove_mean: whether or not demean data (i.e. degree 0),
@@ -2844,7 +3089,11 @@ def snr_dietrich(mu_fg, mad_air=0.0, sigma_air=1.0):
     if mad_air > 1.0:
         return float(DIETRICH_FACTOR * mu_fg / mad_air)
 
-    return float(DIETRICH_FACTOR * mu_fg / sigma_air) if sigma_air > 1e-3 else -1.0
+    return (
+        float(DIETRICH_FACTOR * mu_fg / sigma_air)
+        if sigma_air > 1e-3
+        else -1.0
+    )
 
 
 def summary_stats(img, pvms, airmask=None, erode=True):
@@ -2910,7 +3159,7 @@ def summary_stats(img, pvms, airmask=None, erode=True):
                     "n": nvox,
                 }
                 continue
-    
+
         output[k] = {
             "mean": float(img[mask == 1].mean()),
             "stdv": float(img[mask == 1].std()),

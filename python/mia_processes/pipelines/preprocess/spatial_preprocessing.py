@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*- #
+# -*- coding: utf-8 -*-
 
 """The pipelines library of the mia_processes package.
 
@@ -36,27 +36,47 @@ class Spatial_preprocessing(Pipeline):
 
     def pipeline_definition(self):
         # nodes
-        self.add_process("newsegment1", "mia_processes.bricks.preprocess.spm.spatial_preprocessing.NewSegment")
+        self.add_process(
+            "newsegment1",
+            "mia_processes.bricks.preprocess.spm.spatial_preprocessing.NewSegment",
+        )
         self.nodes["newsegment1"].process.channel_files = traits.Undefined
 
-        self.add_process("realign1", "mia_processes.bricks.preprocess.spm.spatial_preprocessing.Realign")
+        self.add_process(
+            "realign1",
+            "mia_processes.bricks.preprocess.spm.spatial_preprocessing.Realign",
+        )
 
-        self.add_process("list_duplicate1", "mia_processes.bricks.tools.tools.List_Duplicate")
+        self.add_process(
+            "list_duplicate1",
+            "mia_processes.bricks.tools.tools.List_Duplicate",
+        )
 
-        self.add_process("normalize12_1", "mia_processes.bricks.preprocess.spm.spatial_preprocessing.Normalize12")
+        self.add_process(
+            "normalize12_1",
+            "mia_processes.bricks.preprocess.spm.spatial_preprocessing.Normalize12",
+        )
         self.nodes["normalize12_1"].process.apply_to_files = traits.Undefined
 
-        self.add_process("normalize12_2", "mia_processes.bricks.preprocess.spm.spatial_preprocessing.Normalize12")
+        self.add_process(
+            "normalize12_2",
+            "mia_processes.bricks.preprocess.spm.spatial_preprocessing.Normalize12",
+        )
         self.nodes["normalize12_2"].process.apply_to_files = traits.Undefined
         self.nodes["normalize12_2"].process.write_voxel_sizes = [2.0, 2.0, 2.0]
 
-        self.add_process("smooth1", "mia_processes.bricks.preprocess.spm.spatial_preprocessing.Smooth")
+        self.add_process(
+            "smooth1",
+            "mia_processes.bricks.preprocess.spm.spatial_preprocessing.Smooth",
+        )
         self.nodes["smooth1"].process.in_files = traits.Undefined
 
-        self.add_process("coregister1", "mia_processes.bricks.preprocess.spm.spatial_preprocessing.Coregister")
+        self.add_process(
+            "coregister1",
+            "mia_processes.bricks.preprocess.spm.spatial_preprocessing.Coregister",
+        )
         self.nodes["coregister1"].process.source = traits.Undefined
         self.nodes["coregister1"].process.apply_to_files = traits.Undefined
-
 
         # links
         self.export_parameter("list_duplicate1", "file_name", "anat_file")
@@ -65,20 +85,27 @@ class Spatial_preprocessing(Pipeline):
         self.export_parameter("newsegment1", "bias_field_images")
         self.export_parameter("newsegment1", "native_class_images")
         self.export_parameter("newsegment1", "forward_deformation_field")
-        self.add_link("newsegment1.forward_deformation_field->normalize12_2.deformation_file")
-        self.add_link("newsegment1.forward_deformation_field->normalize12_1.deformation_file")
+        self.add_link(
+            "newsegment1.forward_deformation_field->normalize12_2.deformation_file"
+        )
+        self.add_link(
+            "newsegment1.forward_deformation_field->normalize12_1.deformation_file"
+        )
         self.add_link("realign1.realigned_files->coregister1.apply_to_files")
         self.add_link("realign1.mean_image->coregister1.source")
         self.export_parameter("realign1", "realignment_parameters")
         self.add_link("list_duplicate1.out_file->coregister1.target")
         self.add_link("list_duplicate1.out_list->normalize12_1.apply_to_files")
         self.add_link("list_duplicate1.out_list->newsegment1.channel_files")
-        self.export_parameter("normalize12_1", "normalized_files", "normalized_anat")
+        self.export_parameter(
+            "normalize12_1", "normalized_files", "normalized_anat"
+        )
         self.add_link("normalize12_2.normalized_files->smooth1.in_files")
         self.export_parameter("smooth1", "smoothed_files", "smoothed_func")
         self.export_parameter("coregister1", "coregistered_source")
-        self.add_link("coregister1.coregistered_files->normalize12_2.apply_to_files")
-
+        self.add_link(
+            "coregister1.coregistered_files->normalize12_2.apply_to_files"
+        )
 
         # nodes positions
         self.node_position = {
@@ -93,7 +120,6 @@ class Spatial_preprocessing(Pipeline):
             "smooth1": (508.92506000990295, 860.8153736997155),
         }
 
-
         # nodes dimensions
         self.node_dimension = {
             "inputs": (279.359375, 90.0),
@@ -106,6 +132,5 @@ class Spatial_preprocessing(Pipeline):
             "coregister1": (224.171875, 460.0),
             "outputs": (239.515625, 320.0),
         }
-
 
         self.do_autoexport_nodes_parameters = False

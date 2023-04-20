@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 .. toctree::
-   
+
 +-----------------------------------------------------+----------------------------------------------------+
 |`Documentation <./documentation/documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +-----------------------------------------------------+----------------------------------------------------+

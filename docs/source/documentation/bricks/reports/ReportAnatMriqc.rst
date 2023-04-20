@@ -10,7 +10,7 @@
 ReportAnatMriqc brick
 ======================
 
-Generates the report for anatomical data in mriqc pipeline 
+Generates the report for anatomical data in mriqc pipeline
 
 --------------------------------------
 
@@ -34,14 +34,14 @@ Generates the report for anatomical data in mriqc pipeline
 
 - *anat_fig_cols* (an integer, optional, default value is 5)
     The number of lines for the anatomical slice planes plot.
-    
+
     ::
 
       ex. 5
 
 - *anat_fig_rows* (an integer, optional, default value is 5)
     The number of columns for the anatomical slice planes plot.
-    
+
     ::
 
       ex. 5
@@ -62,14 +62,14 @@ Generates the report for anatomical data in mriqc pipeline
 
 - *norm_anat_fig_cols* (an integer, optional, default value is 5)
     The number of lines for the normalised anatomical slice planes plot.
-    
+
     ::
 
       ex. 5
 
 - *norm_anat_fig_rows* (an integer, optional, default value is 5)
     The number of columns for the normalised anatomical slice planes plot.
-    
+
     ::
 
       ex. 5
@@ -77,9 +77,9 @@ Generates the report for anatomical data in mriqc pipeline
 **Optional inputs:**
 
 - *anat_inf_slice_start* (an integer, optional)
-    The first index displayed in anatomical slice planes plot. 
+    The first index displayed in anatomical slice planes plot.
     Default is Undefined (ie parameter not used).
-    
+
     ::
 
       ex. 0
@@ -87,16 +87,16 @@ Generates the report for anatomical data in mriqc pipeline
 - *anat_slices_gap* (an integer, optional)
     Gap between slices in anatomical slice planes plot.
     Default is Undefined (ie parameter not used).
-    
+
     ::
 
       ex. 0
 
 
 - *norm_anat_inf_slice_start* (an integer, optional)
-    The first index displayed in normalised anatomical slice planes plot. 
+    The first index displayed in normalised anatomical slice planes plot.
     Default is Undefined (ie parameter not used).
-    
+
     ::
 
       ex. 0
@@ -104,7 +104,7 @@ Generates the report for anatomical data in mriqc pipeline
 - *norm_anat_slices_gap* (an integer, optional)
     Gap between slices in normalised anatomical slice planes plot.
     Default is Undefined (ie parameter not used).
-    
+
     ::
 
       ex. 0
@@ -115,7 +115,7 @@ Generates the report for anatomical data in mriqc pipeline
 
 - *report* (a strings representing a file)
     The generated report (pdf).
-    
+
     ::
 
       ex. '/home/username/data/derived_data/T1w_ref_anatomical_mriqcReport_2023_03_31_11_42_10_75.pdf'

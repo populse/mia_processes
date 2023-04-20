@@ -53,4 +53,3 @@ Setting regions of interest to the resolution of the reference_image
       ex. []
 
 -------------
-

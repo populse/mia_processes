@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*- #
+# -*- coding: utf-8 -*-
 
 """The module for the Spatial_mask pipeline.
 
@@ -23,7 +23,7 @@ from capsul.api import Pipeline
 import traits.api as traits
 
 # populse_mia import
-#from populse_mia.project.filter import Filter
+# from populse_mia.project.filter import Filter
 
 
 class Spatial_mask(Pipeline):
@@ -36,29 +36,42 @@ class Spatial_mask(Pipeline):
     https://gricad-gitlab.univ-grenoble-alpes.fr/condamie/ec_dev web site
 
     """
- 
+
     def pipeline_definition(self):
         # nodes
-        self.add_process("gm_wm_normalize1", "mia_processes.bricks.preprocess.spm.GM_WM_Normalize")
+        self.add_process(
+            "gm_wm_normalize1",
+            "mia_processes.bricks.preprocess.spm.GM_WM_Normalize",
+        )
 
-        self.add_process("threshold1", "mia_processes.bricks.preprocess.others.Threshold")
+        self.add_process(
+            "threshold1", "mia_processes.bricks.preprocess.others.Threshold"
+        )
         self.nodes["threshold1"].process.in_files = traits.Undefined
         self.nodes["threshold1"].process.prefix = traits.Undefined
 
-        self.add_process("smooth1", "mia_processes.bricks.preprocess.spm.Smooth")
+        self.add_process(
+            "smooth1", "mia_processes.bricks.preprocess.spm.Smooth"
+        )
         self.nodes["smooth1"].process.in_files = traits.Undefined
 
-        self.add_process("threshold2", "mia_processes.bricks.preprocess.others.Threshold")
+        self.add_process(
+            "threshold2", "mia_processes.bricks.preprocess.others.Threshold"
+        )
         self.nodes["threshold2"].process.in_files = traits.Undefined
         self.nodes["threshold2"].process.suffix = traits.Undefined
-        self.nodes["threshold2"].process.prefix = 'mask_'
+        self.nodes["threshold2"].process.prefix = "mask_"
 
-        self.add_process("resample1", "mia_processes.bricks.preprocess.others.Resample_1")
+        self.add_process(
+            "resample1", "mia_processes.bricks.preprocess.others.Resample_1"
+        )
         self.nodes["resample1"].process.files_to_resample = traits.Undefined
         self.nodes["resample1"].process.prefix = traits.Undefined
 
         # links
-        self.export_parameter("gm_wm_normalize1", "apply_to_files", "native_class_images")
+        self.export_parameter(
+            "gm_wm_normalize1", "apply_to_files", "native_class_images"
+        )
         self.export_parameter("gm_wm_normalize1", "deformation_file")
         self.add_link("gm_wm_normalize1.normalized_files->threshold1.in_files")
         self.add_link("threshold1.out_files->smooth1.in_files")
@@ -79,7 +92,6 @@ class Spatial_mask(Pipeline):
             "threshold1": (440.7735314209599, -168.49913686833992),
         }
 
-
         # nodes dimensions
         self.node_dimension = {
             "inputs": (155.453125, 145.0),
@@ -92,4 +104,3 @@ class Spatial_mask(Pipeline):
         }
 
         self.do_autoexport_nodes_parameters = False
-

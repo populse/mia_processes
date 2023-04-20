@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*- #
+# -*- coding: utf-8 -*-
 
 ##########################################################################
 # mia_processes - Copyright (C) IRMaGe/CEA, 2018
@@ -8,8 +8,14 @@
 # for details.
 ##########################################################################
 
-from .processes import (AnatIQMs, BoldIQMs, CarpetParcellation,
-                        ComputeDVARS, FramewiseDisplacement,
-                        Mean_stdDev_calc,
-                        Result_collector, Spikes)
+from .processes import (
+    AnatIQMs,
+    BoldIQMs,
+    CarpetParcellation,
+    ComputeDVARS,
+    FramewiseDisplacement,
+    Mean_stdDev_calc,
+    Result_collector,
+    Spikes,
+)
 from .reporting import ReportAnatMriqc, ReportFuncMriqc

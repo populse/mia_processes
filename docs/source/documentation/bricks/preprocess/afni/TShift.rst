@@ -13,8 +13,8 @@ TShift brick
 Slice-time correction of bold images (using mean option of the AFNI 3dTshift command).
 Shifts voxel time series from input so that separate slices are aligned to the same temporal origin.
 
-You can either used "slice_timing" parameter or "tpattern" parameter to specify slice time. 
-If neither of this two parameters are defined, the process return the input file. 
+You can either used "slice_timing" parameter or "tpattern" parameter to specify slice time.
+If neither of this two parameters are defined, the process return the input file.
 
 
 --------------------------------------
@@ -53,7 +53,7 @@ If neither of this two parameters are defined, the process return the input file
 
 - *out_prefix* (a string, optional, default value is 'st_corr')
     Prefix of the output image.
-    
+
     ::
 
         ex. 'st_corr_'
@@ -74,14 +74,14 @@ If neither of this two parameters are defined, the process return the input file
       ex. False
 
 - *slice_encoding_dir* (k or k-, optional, default value is k)
-    Direction in which slice_timing is specified. 
-    If negative, slice_timing is defined in reverse order, that is, the first entry corresponds to the slice 
+    Direction in which slice_timing is specified.
+    If negative, slice_timing is defined in reverse order, that is, the first entry corresponds to the slice
     with the largest index and the final entry corresponds to slice index zero.
 
     ::
 
       ex. k
-  
+
 
 **Optional inputs parameters:**
 
@@ -95,7 +95,7 @@ If neither of this two parameters are defined, the process return the input file
       ex. 2
 
 - *slice_timing* (a string representing an existing file or a list of floats, optional)
-    Time offsets from the volume acquisition onset for each slice. 
+    Time offsets from the volume acquisition onset for each slice.
     Mutually exclusive with "tpattern" parameter.
 
     ::
@@ -103,7 +103,7 @@ If neither of this two parameters are defined, the process return the input file
       ex. 'slice_timing.1D'
 
 - *tpattern* (alt+z or altplus or alt+z2 or alt-z or altminus or alt-z2 or seq+z or seqplus or seq-z or seqminus, optional)
-    Use specified slice time pattern rather than one in header. 
+    Use specified slice time pattern rather than one in header.
     One of ‘alt+z’ or ‘altplus’ or ‘alt+z2’ or ‘alt-z’ or ‘altminus’ or ‘alt-z2’ or ‘seq+z’ or ‘seqplus’ or‘seq-z’ or ‘seqminus’.
     Mutually exclusive with "slice_timming" parameter.
     Default is Undefined (ie parameter not used).
@@ -113,7 +113,7 @@ If neither of this two parameters are defined, the process return the input file
       ex. False
 
 - *tr* (a string, optional)
-    Manually set the TR. Add suffix “s” for seconds or “ms” for milliseconds. 
+    Manually set the TR. Add suffix “s” for seconds or “ms” for milliseconds.
     Default is Undefined (ie parameter not used).
 
     ::
@@ -137,7 +137,7 @@ If neither of this two parameters are defined, the process return the input file
     Mutually exclusive with tslice parameter.
     Default is Undefined (ie parameter not used).
 
-    Note that the default alignment time (when tzero is not used) is the average of the 'tpattern' values 
+    Note that the default alignment time (when tzero is not used) is the average of the 'tpattern' values
     (either from tpattern option or slice_timing option).
 
     For example if tzero = 0.0, each slice will be align to time offset 0.0.
@@ -150,7 +150,7 @@ If neither of this two parameters are defined, the process return the input file
 
 - *out_file* (a strings representing a file)
     Out image (extensions: [.nii, .nii.gz]).
-    
+
     ::
 
       ex. '/home/username/data/derived_data/st_corr_func.nii'

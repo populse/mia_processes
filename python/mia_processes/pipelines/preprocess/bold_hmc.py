@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from capsul.api import Pipeline
 import traits.api as traits
 
@@ -10,15 +11,18 @@ class Bold_hmc(Pipeline):
 
     def pipeline_definition(self):
         # nodes
-        self.add_process("despike",
-                         "mia_processes.bricks.preprocess."
-                         "afni.processes.Despike")
-        self.add_process("deoblique",
-                         "mia_processes.bricks.preprocess."
-                         "afni.processes.RefitDeoblique")
-        self.add_process("volreg",
-                         "mia_processes.bricks.preprocess."
-                         "afni.processes.Volreg")
+        self.add_process(
+            "despike",
+            "mia_processes.bricks.preprocess." "afni.processes.Despike",
+        )
+        self.add_process(
+            "deoblique",
+            "mia_processes.bricks.preprocess." "afni.processes.RefitDeoblique",
+        )
+        self.add_process(
+            "volreg",
+            "mia_processes.bricks.preprocess." "afni.processes.Volreg",
+        )
         self.nodes["volreg"].process.twopass = True
         self.nodes["despike"].process.despike = False
         self.nodes["deoblique"].process.deoblique = False
@@ -33,8 +37,9 @@ class Bold_hmc(Pipeline):
         self.export_parameter("volreg", "oned_file", is_optional=False)
 
         # parameters order
-        self.reorder_traits(("in_file", "despike", "deoblique", "out_file",
-                             "oned_file"))
+        self.reorder_traits(
+            ("in_file", "despike", "deoblique", "out_file", "oned_file")
+        )
 
         # nodes positions
         self.node_position = {

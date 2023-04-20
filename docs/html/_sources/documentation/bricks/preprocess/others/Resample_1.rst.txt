@@ -37,23 +37,23 @@ Resamples an image to the resolution of a reference image.
 **Optional inputs with default value parameters:**
 
 - *interp* (an integer between 0 and 5, default value is 3)
-    The order of the spline interpolation. 
+    The order of the spline interpolation.
     Default value is trilinear (3).
-    
+
     ::
 
       ex. 3
 
 - *prefix* (a string, optional, default value is '')
     Prefix of the output image.
-    
+
     ::
 
       ex. ''
 
 - *suffix* (a string, optional, default value is '_003')
     Suffix of output image.
-   
+
     ::
 
       ex. '_003'
@@ -75,4 +75,3 @@ Resamples an image to the resolution of a reference image.
       ex. ['/home/username/data/raw_data/T1w_003.nii']
 
 -------------
-

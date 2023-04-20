@@ -37,7 +37,7 @@ Extract the brain from surrounding tissue from MRI T1-weighted images (using AFN
 
 - *out_prefix* (a string, optional, default value is 'ss')
     Prefix of the output image.
-    
+
     ::
 
         ex. 'ss_'
@@ -46,7 +46,7 @@ Extract the brain from surrounding tissue from MRI T1-weighted images (using AFN
 
 - *out_file* (a strings representing a file)
     Out image (extensions: [.nii, .nii.gz]).
-    
+
     ::
 
       ex. '/home/username/data/derived_data/ss_T1w.nii'

@@ -26,8 +26,8 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
       ex. '/home/username/data/raw_data/T1w.nii'
 
 - *seg_file* (a string representing an existing file)
-    Segmentation file (valid extensions: [.nii, .nii.gz]). 
-    For example, a tissue class map from the brick FastSegment (FSL). 
+    Segmentation file (valid extensions: [.nii, .nii.gz]).
+    For example, a tissue class map from the brick FastSegment (FSL).
 
     ::
 
@@ -37,7 +37,7 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
 
 - *prefix* (a string, optional, default value is '')
     Prefix of the output image.
-    
+
     ::
 
       ex. ''
@@ -45,7 +45,7 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
 
 - *suffix* (a string, optional, default value is '_grad')
     Suffix of output image.
-    
+
     ::
 
       ex. '_grad'
@@ -55,7 +55,7 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
 
 - *out_file* (a strings representing a file)
     Path of the thresholded scan (extensions: [.nii, .nii.gz]).
-    
+
     ::
 
       ex. '/home/username/data/derived_data/T1w_grad.nii'

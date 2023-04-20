@@ -22,12 +22,12 @@ Adapted from `mriqc 22.06 <https://github.com/nipreps/mriqc/blob/22.0.6/mriqc/wo
 | Bold_mni_align combines the following pipelines and processes:
 |   - `Bias field correction <../../bricks/preprocess/ants/N4BiasFieldCorrection.html>`_ (using ANTs N4BiasFieldCorrection)
 |       (default: dimension = 3)
-|   - `Affine Initilizer <../../bricks/preprocess/ants/AffineInitializer.html>`_ 
-|   - `Get template from templateFlow  <../../bricks/preprocess/others/TemplateFromTemplateFlow.html>`_ 
+|   - `Affine Initilizer <../../bricks/preprocess/ants/AffineInitializer.html>`_
+|   - `Get template from templateFlow  <../../bricks/preprocess/others/TemplateFromTemplateFlow.html>`_
 |      (default values for template : in_template = 'MNI152NLin2009cAsym', resolution = 2, suffix = 'boldref',  desc ='fMRIPrep'
 |       default values for template mask : in_template = 'MNI152NLin2009cAsym', resolution = 2, suffix = 'mask', desc ='brain'
 |       default values for template seg : in_template = 'MNI152NLin2009cAsym', resolution = 1, suffix = 'dseg', desc ='carpet')
-|   - `Registration <../../bricks/preprocess/ants/Registration.html>`_ 
+|   - `Registration <../../bricks/preprocess/ants/Registration.html>`_
 |       (default values:
 |       convergence_threshold = [1e-06, 1e-06, 1e-06],
 |       convergence_window_size = [20, 20, 10],
@@ -40,9 +40,9 @@ Adapted from `mriqc 22.06 <https://github.com/nipreps/mriqc/blob/22.0.6/mriqc/wo
 |       sampling_strategy = ['Regular', 'Regular', 'None'],
 |       shrink_factors = [[4, 2, 1], [8, 4, 2], [8, 4, 2]],
 |       smoothing_sigmas = [[4.0, 2.0, 1.0], [4.0, 2.0, 0.0], [3.0, 2.0, 1.0]],
-|       transform_parameters = [(0.05,), (0.08,), (0.1, 3.0, 0.0)], 
+|       transform_parameters = [(0.05,), (0.08,), (0.1, 3.0, 0.0)],
 |       transforms = ['Rigid', 'Affine', 'SyN'])
-|   - `Apply Transform <../../bricks/preprocess/ants/ApplyTransform.html>`_ 
+|   - `Apply Transform <../../bricks/preprocess/ants/ApplyTransform.html>`_
 |      (default values: interpolation = 'MultiLabel')
 
 .. image:: ../../images/Bold_mni_align_pipeline.png
@@ -57,7 +57,7 @@ Adapted from `mriqc 22.06 <https://github.com/nipreps/mriqc/blob/22.0.6/mriqc/wo
     ::
 
       ex. '/home/username/data/raw_data/automask_mean_reg_func_valid.nii'
-  
+
 - *epi_mean* (a string representing an existing file)
     Mean functional image (valid extensions: [.nii, .nii.gz]).
 
@@ -65,7 +65,7 @@ Adapted from `mriqc 22.06 <https://github.com/nipreps/mriqc/blob/22.0.6/mriqc/wo
 
       ex. '/home/username/data/raw_data/mean_reg_func_valid.nii'
 
-**Optional inputs parameters with a default value** 
+**Optional inputs parameters with a default value**
 
 - *reg_convergence_threshold* (a list of items which are a float, optional)
     See `Registration brick <../../bricks/preprocess/ants/Registration.html>`_
@@ -192,21 +192,21 @@ Adapted from `mriqc 22.06 <https://github.com/nipreps/mriqc/blob/22.0.6/mriqc/wo
 
 - *bias_image*
     Register file (extensions: [.nii, .nii.gz]).
-    
+
     ::
 
       ex. '/home/username/data/derived_data/n4c_mean_reg_func_valid_bias.nii'
 
 - *epi_mni*
     Bold data in template space (extensions: [.nii, .nii.gz]).
-    
+
     ::
 
       ex. '/home/username/data/derived_data/w_n4c_mean_reg_func_valid.nii'
 
 - *epi_parc*
     Template data in bold space (extensions: [.nii, .nii.gz]).
-    
+
     ::
 
       ex. '/home/username/data/derived_data/t_tpl-MNI152NLin2009cAsym_res-01_desc-carpet_dseg.nii'
@@ -222,6 +222,4 @@ Adapted from `mriqc 22.06 <https://github.com/nipreps/mriqc/blob/22.0.6/mriqc/wo
 
 Usefull links:
 
-`mriq EPI mni align pipeline <https://mriqc.readthedocs.io/en/22.0.6/workflows.html#mriqc.workflows.functional.epi_mni_align>`_ 
-
-
+`mriq EPI mni align pipeline <https://mriqc.readthedocs.io/en/22.0.6/workflows.html#mriqc.workflows.functional.epi_mni_align>`_

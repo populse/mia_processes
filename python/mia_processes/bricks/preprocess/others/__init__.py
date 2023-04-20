@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*- #
+# -*- coding: utf-8 -*-
 
 ##########################################################################
 # mia_processes - Copyright (C) IRMaGe/CEA, 2018
@@ -8,11 +8,24 @@
 # for details.
 ##########################################################################
 
-from .processing import (ApplyBiasCorrection, ArtifactMask, Binarize,
-                         ConformImage, ConvROI, Enhance, EstimateSNR,
-                         GradientThreshold,
-                         Harmonize, IntensityClip,
-                         Mask, NonSteadyStateDetector, Resample_1,
-                         Resample_2,
-                         RotationMask, Sanitize, TemplateFromTemplateFlow,
-                         Threshold, TSNR)
+from .processing import (
+    ApplyBiasCorrection,
+    ArtifactMask,
+    Binarize,
+    ConformImage,
+    ConvROI,
+    Enhance,
+    EstimateSNR,
+    GradientThreshold,
+    Harmonize,
+    IntensityClip,
+    Mask,
+    NonSteadyStateDetector,
+    Resample_1,
+    Resample_2,
+    RotationMask,
+    Sanitize,
+    TemplateFromTemplateFlow,
+    Threshold,
+    TSNR,
+)

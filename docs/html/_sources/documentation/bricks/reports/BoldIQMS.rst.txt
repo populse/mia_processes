@@ -12,8 +12,8 @@ AnatIQMs brick
 
 Computes the functional Image Quality Metrics (IQMs) as defined in mriqc v22.06.
 
-A no-reference IQM is a measurement of some aspect of the actual image which cannot be compared to a reference value for 
-the metric since there is no ground-truth about what this number should be. 
+A no-reference IQM is a measurement of some aspect of the actual image which cannot be compared to a reference value for
+the metric since there is no ground-truth about what this number should be.
 All the computed IQMs corresponding to an image are saved in a JSON file
 
 Adapted from `mriqc <https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/functional.py#L243>`_
@@ -32,13 +32,13 @@ Adapted from `mriqc <https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e88
 **Optional inputs with default value parameters:**
 
 - *in_fd_thresh* (a float, optional, default value is 0.2)
-    Motion threshold for FD computation 
+    Motion threshold for FD computation
 
     ::
 
       ex. 0.2
 
-**Optional inputs:** 
+**Optional inputs:**
 
 - *in_dummy_TRs* (an integer , optional)
     Number of dummy scans.
@@ -128,7 +128,7 @@ Adapted from `mriqc <https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e88
 
 - *out_file* (a strings representing a file)
     A json file with all the IQMs computed.
-    
+
     ::
 
       ex. '/home/username/data/derived_data/mean_reg_func_valid_functional_qc.json'

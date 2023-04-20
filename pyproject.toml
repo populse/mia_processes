@@ -1,0 +1,48 @@
+[tool.black]
+line-length = 79
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+atomic = true
+profile = "black"
+line_length = 79
+skip_gitignore = true
+#known_first_party = ['mia_processes']
+
+#[tool.coverage.run]
+#omit = [
+#    "python/populse_mia/user_interface/data_viewer/anatomist_2/*",
+#    "python/populse_mia/user_interface/data_viewer/anatomist/*",
+#    "processes/*"
+#]
+
+[tool.interrogate]
+ignore-init-method = true
+ignore-init-module = false
+ignore-magic = false
+ignore-semiprivate = false
+ignore-private = false
+ignore-property-decorators = false
+ignore-module = false
+ignore-nested-functions = false
+ignore-nested-classes = true
+ignore-setters = false
+fail-under = 100
+exclude = ["setup.py", "docs", "build", "processes"]
+verbose = 2
+quiet = false
+color = true
+omit-covered-files = false

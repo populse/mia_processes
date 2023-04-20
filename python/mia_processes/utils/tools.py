@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Module that contains multiple functions used across mia_processes
 
@@ -27,8 +28,10 @@ import nibabel as nib
 import numpy as np
 import os
 
-from populse_mia.data_manager.project import (COLLECTION_CURRENT,
-                                              COLLECTION_INITIAL)
+from populse_mia.data_manager.project import (
+    COLLECTION_CURRENT,
+    COLLECTION_INITIAL,
+)
 
 from matplotlib.cm import get_cmap
 from mpl_toolkits.axes_grid1 import ImageGrid
@@ -87,7 +90,7 @@ class ReportLine(Flowable):
 
 
 def checkFileExt(in_file, ext_dic):
-    """ Check file extension
+    """Check file extension
 
     :param in_file: file name (a string)
     :param ext_dic: dictionary of the valid extensions for the file
@@ -102,10 +105,10 @@ def checkFileExt(in_file, ext_dic):
     # Get file extension
     valid_bool = False
     ifile = os.path.split(in_file)[-1]
-    file_name, in_ext = ifile.rsplit('.', 1)
-    if in_ext == 'gz':
-        (file_name_2, in_ext_2) = file_name.rsplit('.', 1)
-        in_ext = in_ext_2 + '.' + in_ext
+    file_name, in_ext = ifile.rsplit(".", 1)
+    if in_ext == "gz":
+        (file_name_2, in_ext_2) = file_name.rsplit(".", 1)
+        in_ext = in_ext_2 + "." + in_ext
         file_name = file_name_2
 
     valid_ext = list(ext_dic.values())
@@ -120,11 +123,10 @@ def dict4runtime_update(dict4runtime, database, db_filename, *args):
     """blabla"""
 
     for tag in args:
-
         if tag in database.get_fields_names(COLLECTION_CURRENT):
-            dict4runtime[tag] = database.get_value(COLLECTION_CURRENT,
-                                                   db_filename,
-                                                   tag)
+            dict4runtime[tag] = database.get_value(
+                COLLECTION_CURRENT, db_filename, tag
+            )
 
         else:
             dict4runtime[tag] = "Undefined"
@@ -146,13 +148,14 @@ def get_dbFieldValue(project, document, field):
      :param : the field name.
      :returns: the value of the field for the document in the database.
      """
-    file_position = (document.find(project.getName()) +
-                     len(project.getName()) + 1)
+    file_position = (
+        document.find(project.getName()) + len(project.getName()) + 1
+    )
     database_filename = document[file_position:]
 
-    return project.session.get_value(COLLECTION_CURRENT,
-                                     database_filename,
-                                     field)
+    return project.session.get_value(
+        COLLECTION_CURRENT, database_filename, field
+    )
 
 
 def plot_qi2(x_grid, ref_pdf, fit_pdf, ref_data, cutoff_idx, out_file=None):
@@ -165,7 +168,8 @@ def plot_qi2(x_grid, ref_pdf, fit_pdf, ref_data, cutoff_idx, out_file=None):
         linewidth=2,
         alpha=0.5,
         label="background",
-        color="dodgerblue")
+        color="dodgerblue",
+    )
 
     refmax = np.percentile(ref_data, 99.95)
     x_max = x_grid[-1]
@@ -176,7 +180,8 @@ def plot_qi2(x_grid, ref_pdf, fit_pdf, ref_data, cutoff_idx, out_file=None):
         fc="dodgerblue",
         histtype="stepfilled",
         alpha=0.2,
-        density=True)
+        density=True,
+    )
 
     fit_pdf[fit_pdf > 1.0] = np.nan
 
@@ -186,14 +191,16 @@ def plot_qi2(x_grid, ref_pdf, fit_pdf, ref_data, cutoff_idx, out_file=None):
         linewidth=2,
         alpha=0.5,
         label="chi2",
-        color="darkorange")
+        color="darkorange",
+    )
 
     ylims = ax.get_ylim()
 
     ax.axvline(
         x_grid[-cutoff_idx],
         ymax=ref_pdf[-cutoff_idx] / ylims[1],
-        color="dodgerblue")
+        color="dodgerblue",
+    )
 
     plt.xlabel('Intensity within "hat" mask')
     plt.ylabel("Frequency")
@@ -208,34 +215,39 @@ def plot_qi2(x_grid, ref_pdf, fit_pdf, ref_data, cutoff_idx, out_file=None):
 
 
 def set_dbFieldValue(project, document, tag_to_add):
-    """blabla
-    """
-    file_position = (document.find(project.getName()) +
-                     len(project.getName()) +
-                     1)
+    """blabla"""
+    file_position = (
+        document.find(project.getName()) + len(project.getName()) + 1
+    )
     database_filename = document[file_position:]
 
     if tag_to_add["name"] not in project.session.get_fields_names(
-                                                            COLLECTION_CURRENT):
-        project.session.add_field(COLLECTION_CURRENT,
-                                  tag_to_add["name"],
-                                  tag_to_add["field_type"],
-                                  tag_to_add["description"],
-                                  tag_to_add["visibility"],
-                                  tag_to_add["origin"],
-                                  tag_to_add["unit"],
-                                  tag_to_add["default_value"])
+        COLLECTION_CURRENT
+    ):
+        project.session.add_field(
+            COLLECTION_CURRENT,
+            tag_to_add["name"],
+            tag_to_add["field_type"],
+            tag_to_add["description"],
+            tag_to_add["visibility"],
+            tag_to_add["origin"],
+            tag_to_add["unit"],
+            tag_to_add["default_value"],
+        )
 
     if tag_to_add["name"] not in project.session.get_fields_names(
-                                                            COLLECTION_INITIAL):
-        project.session.add_field(COLLECTION_INITIAL,
-                                  tag_to_add["name"],
-                                  tag_to_add["field_type"],
-                                  tag_to_add["description"],
-                                  tag_to_add["visibility"],
-                                  tag_to_add["origin"],
-                                  tag_to_add["unit"],
-                                  tag_to_add["default_value"])
+        COLLECTION_INITIAL
+    ):
+        project.session.add_field(
+            COLLECTION_INITIAL,
+            tag_to_add["name"],
+            tag_to_add["field_type"],
+            tag_to_add["description"],
+            tag_to_add["visibility"],
+            tag_to_add["origin"],
+            tag_to_add["unit"],
+            tag_to_add["default_value"],
+        )
 
     if project.session.get_document(COLLECTION_CURRENT, database_filename):
         print("Path {0} already in database.".format(database_filename))
@@ -244,14 +256,28 @@ def set_dbFieldValue(project, document, tag_to_add):
         project.session.add_document(COLLECTION_CURRENT, database_filename)
         project.session.add_document(COLLECTION_INITIAL, database_filename)
 
-    project.session.set_values(COLLECTION_CURRENT, database_filename,
-                               {tag_to_add["name"]: tag_to_add['value']})
-    project.session.set_values(COLLECTION_INITIAL, database_filename,
-                               {tag_to_add["name"]: tag_to_add['value']})
+    project.session.set_values(
+        COLLECTION_CURRENT,
+        database_filename,
+        {tag_to_add["name"]: tag_to_add["value"]},
+    )
+    project.session.set_values(
+        COLLECTION_INITIAL,
+        database_filename,
+        {tag_to_add["name"]: tag_to_add["value"]},
+    )
 
 
-def slice_planes_plot(data, fig_rows, fig_cols, inf_slice_start=None,
-                      slices_gap=None, dyn=1, cmap="Greys_r", out_dir=None):
+def slice_planes_plot(
+    data,
+    fig_rows,
+    fig_cols,
+    inf_slice_start=None,
+    slices_gap=None,
+    dyn=1,
+    cmap="Greys_r",
+    out_dir=None,
+):
     "blablabla"
 
     brain_img = nib.as_closest_canonical(nib.load(data))
@@ -269,70 +295,111 @@ def slice_planes_plot(data, fig_rows, fig_cols, inf_slice_start=None,
     mask_data = np.ones_like(brain_data)
     mask_data[brain_data <= min_thres] = 0
     ind_non_zero = np.argwhere(mask_data)
-    (ystart, xstart, zstart), (ystop, xstop, zstop) = (ind_non_zero.min(0),
-                                                      ind_non_zero.max(0) + 1)
+    (ystart, xstart, zstart), (ystop, xstop, zstop) = (
+        ind_non_zero.min(0),
+        ind_non_zero.max(0) + 1,
+    )
     brain_data = brain_data[ystart:ystop, xstart:xstop, zstart:zstop]
     disp_slices = fig_rows * fig_cols
 
-    if inf_slice_start in (None, Undefined) and slices_gap in (None, Undefined):
+    if inf_slice_start in (None, Undefined) and slices_gap in (
+        None,
+        Undefined,
+    ):
         slices_gap = brain_data.shape[2] // disp_slices
         memory = set()
         ind_slices = None
 
-        while len(np.arange(start=0, stop=brain_data.shape[2],
-                            step=slices_gap)) != disp_slices:
-
-            if len(np.arange(start=0, stop=brain_data.shape[2],
-                             step=slices_gap)) in memory:
-                ind_slices = np.arange(start=0, stop=brain_data.shape[2],
-                                       step=slices_gap)
+        while (
+            len(np.arange(start=0, stop=brain_data.shape[2], step=slices_gap))
+            != disp_slices
+        ):
+            if (
+                len(
+                    np.arange(
+                        start=0, stop=brain_data.shape[2], step=slices_gap
+                    )
+                )
+                in memory
+            ):
+                ind_slices = np.arange(
+                    start=0, stop=brain_data.shape[2], step=slices_gap
+                )
 
                 if len(ind_slices) > disp_slices:
-
                     while len(ind_slices) != disp_slices:
                         ind_slices = ind_slices[:-1]
 
                     ind_slices = ind_slices[:-1]
                     ind_slices = np.append(
-                                    ind_slices,
-                                    ind_slices[-1] + (
-                                     brain_data.shape[2] - ind_slices[-1]) // 2)
+                        ind_slices,
+                        ind_slices[-1]
+                        + (brain_data.shape[2] - ind_slices[-1]) // 2,
+                    )
                     break
 
                 if len(ind_slices) < disp_slices:
                     slices_gap -= 1
 
-            elif len(np.arange(start=0, stop=brain_data.shape[2],
-                               step=slices_gap)) > disp_slices:
-                memory.add(len(np.arange(start=0, stop=brain_data.shape[2],
-                                         step=slices_gap)))
+            elif (
+                len(
+                    np.arange(
+                        start=0, stop=brain_data.shape[2], step=slices_gap
+                    )
+                )
+                > disp_slices
+            ):
+                memory.add(
+                    len(
+                        np.arange(
+                            start=0, stop=brain_data.shape[2], step=slices_gap
+                        )
+                    )
+                )
                 slices_gap += 1
 
-            elif len(np.arange(start=0, stop=brain_data.shape[2],
-                               step=slices_gap)) < disp_slices:
-                memory.add(len(np.arange(start=0, stop=brain_data.shape[2],
-                                         step=slices_gap)))
+            elif (
+                len(
+                    np.arange(
+                        start=0, stop=brain_data.shape[2], step=slices_gap
+                    )
+                )
+                < disp_slices
+            ):
+                memory.add(
+                    len(
+                        np.arange(
+                            start=0, stop=brain_data.shape[2], step=slices_gap
+                        )
+                    )
+                )
                 slices_gap -= 1
 
         if ind_slices is None:
-            inf_slice_start = (brain_data.shape[2] -
-                      np.arange(start=0,
-                                stop=brain_data.shape[2],
-                                step=slices_gap)[
-                                      len(np.arange(start=0,
-                                                    stop=brain_data.shape[2],
-                                                    step=slices_gap)) - 1]) // 2
-            ind_slices = np.arange(start=inf_slice_start,
-                                   stop=brain_data.shape[2],
-                                   step=slices_gap)
+            inf_slice_start = (
+                brain_data.shape[2]
+                - np.arange(
+                    start=0, stop=brain_data.shape[2], step=slices_gap
+                )[
+                    len(
+                        np.arange(
+                            start=0, stop=brain_data.shape[2], step=slices_gap
+                        )
+                    )
+                    - 1
+                ]
+            ) // 2
+            ind_slices = np.arange(
+                start=inf_slice_start,
+                stop=brain_data.shape[2],
+                step=slices_gap,
+            )
 
     elif len(np.array(list(range(0, brain_data.shape[2])))) > disp_slices:
-        ind_slices = np.array(list(
-                        range(0,
-                        brain_data.shape[2])))[
-                                   inf_slice_start:
-                                   inf_slice_start + (slices_gap * disp_slices):
-                                   slices_gap]
+        ind_slices = np.array(list(range(0, brain_data.shape[2])))[
+            inf_slice_start : inf_slice_start
+            + (slices_gap * disp_slices) : slices_gap
+        ]
 
     else:
         ind_slices = np.array(list(range(0, brain_data.shape[2])))
@@ -372,13 +439,15 @@ def slice_planes_plot(data, fig_rows, fig_cols, inf_slice_start=None,
     for ax, ind_slice in zip(grid, ind_slices):
         phys_sp = np.array(zooms[:2]) * brain_data[:, :, ind_slice].shape
 
-        ax.imshow(np.swapaxes(brain_data[:, :, ind_slice], 0, 1),
-                  vmin=vmin,
-                  vmax=vmax,
-                  cmap=cmap,
-                  interpolation="nearest",
-                  origin="lower",
-                  extent=[0, phys_sp[0], 0, phys_sp[1]])
+        ax.imshow(
+            np.swapaxes(brain_data[:, :, ind_slice], 0, 1),
+            vmin=vmin,
+            vmax=vmax,
+            cmap=cmap,
+            interpolation="nearest",
+            origin="lower",
+            extent=[0, phys_sp[0], 0, phys_sp[1]],
+        )
         ax.set_xticklabels([])
         ax.set_yticklabels([])
         ax.grid(False)
@@ -387,16 +456,19 @@ def slice_planes_plot(data, fig_rows, fig_cols, inf_slice_start=None,
         bgcolor = cmap(min(vmin, 0.0))
         fgcolor = cmap(vmax)
 
-        ax.text(0.98,
-                0.01,
-                "%d" % ind_slice,
-                color=fgcolor,
-                transform=ax.transAxes,
-                horizontalalignment="right",
-                verticalalignment="bottom",
-                fontsize=fontsize,
-                bbox=dict(boxstyle="square,pad=0", edgecolor=bgcolor,
-                          facecolor=bgcolor))
+        ax.text(
+            0.98,
+            0.01,
+            "%d" % ind_slice,
+            color=fgcolor,
+            transform=ax.transAxes,
+            horizontalalignment="right",
+            verticalalignment="bottom",
+            fontsize=fontsize,
+            bbox=dict(
+                boxstyle="square,pad=0", edgecolor=bgcolor, facecolor=bgcolor
+            ),
+        )
 
     fname, ext = os.path.splitext(os.path.basename(data))
 

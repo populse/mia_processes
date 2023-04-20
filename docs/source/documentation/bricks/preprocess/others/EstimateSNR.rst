@@ -10,7 +10,7 @@
 EstimateSNR brick
 ============
 
-Estimate SNR using a segmentation file 
+Estimate SNR using a segmentation file
 
 Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical workflow.
 
@@ -35,8 +35,8 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
 **Outputs parameters:**
 
 - *out_snr* (a float)
-    Computed SNR 
-    
+    Computed SNR
+
     ::
 
       ex. 10.96

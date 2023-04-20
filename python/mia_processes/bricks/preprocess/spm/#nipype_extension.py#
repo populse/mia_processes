@@ -30,7 +30,7 @@ from nipype.interfaces.spm.base import SPMCommand
 
 class NewSegmentMia(NewSegment):
     """ Derived class to avoid to instance SPMCommand().version that takes
-    around 6 seconds. 
+    around 6 seconds.
 
     """
 

@@ -134,7 +134,7 @@ Realigns a time-series of images acquired from the same subject
 
 - *write_which <=> roptions.which* [#label]_
     Determines which images to reslice (a list of items which are a value of class 'int'):
-    
+
       | \- [2,0]: Reslices all the images (1..n), including the first image selected, which will remain in its original position.
       | \- [1,0]: Reslices images (2..n) only. Useful for if you wish to reslice (for example) a PET image to fit a structural MRI, without
       | |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| |ws1| creating a second identical MRI volume.
@@ -174,7 +174,7 @@ Realigns a time-series of images acquired from the same subject
       | \...
 
     ::
-     
+
       ex. [0, 0, 0]
 
 - *write_mask <=> roptions.mask* [#label]_
@@ -185,7 +185,7 @@ Realigns a time-series of images acquired from the same subject
     ::
 
       ex. True
- 
+
 - *out_prefix <=> roptions.prefix* [#label]_
     Realigned output prefix (a string).
 
@@ -228,13 +228,13 @@ Realigns a time-series of images acquired from the same subject
     ::
 
       ex. /home/ArthurBlair/data/derived_data/rp_Func.txt
- 
+
 -------------
 
 .. [#label] Syntax: mia_processes/nipype Realign <=> SPM12 Realign.
-	    
+
 	    Usefull links:
-	    `SPM12 Realign <https://www.fil.ion.ucl.ac.uk/spm/doc/manual.pdf#page=25>`_, 
+	    `SPM12 Realign <https://www.fil.ion.ucl.ac.uk/spm/doc/manual.pdf#page=25>`_,
 	    `nipype Realign <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.spm.preprocess.html#realign>`_
 ..
 	    `nipype <https://nipype.readthedocs.io/en/latest/interfaces/generated/interfaces.spm/preprocess.html#realign>`_

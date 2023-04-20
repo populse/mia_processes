@@ -10,9 +10,9 @@
 CalcDropTRs brick
 ==================
 
-Drop volumes of bold datasets (using AFNI 3dcalc command). 
+Drop volumes of bold datasets (using AFNI 3dcalc command).
 
-If "stop_idx" parameter is set to None or set to default (-1), "stop_idx" will be automatically set to the length of input file. 
+If "stop_idx" parameter is set to None or set to default (-1), "stop_idx" will be automatically set to the length of input file.
 
 --------------------------------------
 
@@ -38,7 +38,7 @@ If "stop_idx" parameter is set to None or set to default (-1), "stop_idx" will b
 
 - *out_prefix* (a string, optional, default value is 'cropped')
     Prefix of the output image.
-    
+
     ::
 
       ex. 'cropped_'
@@ -52,8 +52,8 @@ If "stop_idx" parameter is set to None or set to default (-1), "stop_idx" will b
 
 - *stop_idx* (an integer, optional, default value is -1)
     Stop index for in_file_a.
-    If "stop_idx" parameter is set to None or set to default (-1), "stop_idx" will be automatically set to the length of input file. 
-    Cannot be lower than or equal to "start_idx" parameters. 
+    If "stop_idx" parameter is set to None or set to default (-1), "stop_idx" will be automatically set to the length of input file.
+    Cannot be lower than or equal to "start_idx" parameters.
 
     ::
 
@@ -63,7 +63,7 @@ If "stop_idx" parameter is set to None or set to default (-1), "stop_idx" will b
 
 - *out_file* (a strings representing a file)
     Out image (extensions: [.nii, .nii.gz]).
-    
+
     ::
 
       ex. '/home/username/data/derived_data/cropped_func.nii'

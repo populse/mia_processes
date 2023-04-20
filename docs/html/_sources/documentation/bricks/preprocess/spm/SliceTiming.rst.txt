@@ -88,5 +88,5 @@ Bring back every slice of a BOLD image to the reference slice time.
 .. [#label] Syntax: mia_processes/nipype SliceTiming <=> SPM12 Slice Timing.
 
 	    Usefull links:
-	    `SPM12 Slice Timing <https://www.fil.ion.ucl.ac.uk/spm/doc/manual.pdf#page=19>`_, 
+	    `SPM12 Slice Timing <https://www.fil.ion.ucl.ac.uk/spm/doc/manual.pdf#page=19>`_,
 	    `nipype SliceTiming <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.spm.preprocess.html#slicetiming>`_

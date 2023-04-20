@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*- #
+# -*- coding: utf-8 -*-
 
 ##########################################################################
 # mia_processes - Copyright (C) IRMaGe/CEA, 2018
@@ -8,6 +8,13 @@
 # for details.
 ##########################################################################
 
-from .tools import (Concat_to_list_of_list, Files_To_List, Filter_Files_List,
-                    Find_In_List, Input_Filter, List_Duplicate, List_To_File,
-                    Make_A_List)
+from .tools import (
+    Concat_to_list_of_list,
+    Files_To_List,
+    Filter_Files_List,
+    Find_In_List,
+    Input_Filter,
+    List_Duplicate,
+    List_To_File,
+    Make_A_List,
+)

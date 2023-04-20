@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*- #
+# -*- coding: utf-8 -*-
 
 """The module dedicated to install the mia_processes library."""
 
@@ -14,8 +14,8 @@ import os
 from setuptools import find_packages, setup
 
 # Select modules to include in distribution
-modules = find_packages('python')
-print('\nmodules found: ', modules)
+modules = find_packages("python")
+print("\nmodules found: ", modules)
 
 # Additional script files to include in distribution
 scripts = []
@@ -24,14 +24,14 @@ scripts = []
 pkgdata = {
     # format is:
     # <python module>: <file extensions list>
-    'mia_processes.resources.spm12.tpm':  ['*.nii']
+    "mia_processes.resources.spm12.tpm": ["*.nii"]
 }
 
 # Read the info.py file in mia_processes module
 release_info = {}
-python_dir = os.path.join(os.path.dirname(__file__), 'python')
+python_dir = os.path.join(os.path.dirname(__file__), "python")
 
-with open(os.path.join(python_dir, 'mia_processes', 'info.py')) as f:
+with open(os.path.join(python_dir, "mia_processes", "info.py")) as f:
     code = f.read()
     exec(code, release_info)
 
@@ -47,12 +47,12 @@ setup(
     author_email=release_info["AUTHOR_EMAIL"],
     version=release_info["VERSION"],
     url=release_info["URL"],
-    package_dir={'': 'python'},
+    package_dir={"": "python"},
     packages=modules,
     package_data=pkgdata,
     platforms=release_info["PLATFORMS"],
     install_requires=release_info["REQUIRES"],
     extras_require=release_info["EXTRA_REQUIRES"],
     scripts=scripts,
-    zip_safe=False
+    zip_safe=False,
 )
