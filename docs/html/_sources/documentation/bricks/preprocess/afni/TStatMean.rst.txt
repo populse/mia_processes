@@ -6,9 +6,9 @@
 |`Home <../../../../index.html>`_|`Documentation <../../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +--------------------------------+----------------------------------------------+----------------------------------------------------+
 
-============
+===============
 TStatMean brick
-============
+===============
 
 Mean of bold images (using mean option of the AFNI 3dTstat command).
 

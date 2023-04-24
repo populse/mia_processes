@@ -19,12 +19,13 @@ the launch of the bricks using Matlab.
 # for details.
 ##########################################################################
 
-# Populse_MIA imports
-from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
-from populse_mia.software_properties import Config
-
 # Other imports
 import subprocess
+
+from populse_mia.software_properties import Config
+
+# Populse_MIA imports
+from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 
 
 class ProcessMatlab(ProcessMIA):

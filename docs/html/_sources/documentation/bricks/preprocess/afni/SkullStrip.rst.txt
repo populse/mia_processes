@@ -6,9 +6,9 @@
 |`Home <../../../../index.html>`_|`Documentation <../../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +--------------------------------+----------------------------------------------+----------------------------------------------------+
 
-============
+================
 SkullStrip brick
-============
+================
 
 Extract the brain from surrounding tissue from MRI T1-weighted images (using AFNI 3dSkullStrip command).
 

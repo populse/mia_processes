@@ -21,25 +21,26 @@ populse_mia.
 # for details.
 ##########################################################################
 
+import os
+
 # capsul import
 import capsul
-from capsul.in_context import freesurfer
-
-# mia_processes import
-from mia_processes.utils import checkFileExt
-
-# populse_mia import
-from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 
 # Other import
 import nibabel as nb
 import numpy as np
 import scipy
-import os
 import torch
+from capsul.in_context import freesurfer
 from nipype.interfaces.base import File, Undefined
 from nitransforms.linear import Affine
+
+# populse_mia import
+from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 from traits.api import Bool, Either, Enum, Float, Int, List, String
+
+# mia_processes import
+from mia_processes.utils import checkFileExt
 
 EXT = {"NIFTI_GZ": "nii.gz", "NIFTI": "nii", "MGZ": "mgz"}
 

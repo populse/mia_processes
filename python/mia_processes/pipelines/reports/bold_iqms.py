@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from capsul.api import Pipeline
 import traits.api as traits
+from capsul.api import Pipeline
 
 
 class Bold_iqms(Pipeline):

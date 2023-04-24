@@ -18,11 +18,11 @@ The purpose of this module is to blabla.
 # for details.
 ##########################################################################
 
-# Capsul import
-from capsul.api import Pipeline
-
 # Other import
 import traits.api as traits
+
+# Capsul import
+from capsul.api import Pipeline
 
 
 class Rois_1(Pipeline):

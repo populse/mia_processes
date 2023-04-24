@@ -6,13 +6,13 @@
 |`Home <../../../../index.html>`_|`Documentation <../../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +--------------------------------+----------------------------------------------+----------------------------------------------------+
 
-============
+=================
 EstimateSNR brick
-============
+=================
 
 Estimate SNR using a segmentation file
 
-Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical workflow.
+Adapted from `MRIQC <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical workflow.
 
 --------------------------------------
 
@@ -43,6 +43,5 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
 
 -------------
 
-
 Usefull links:
-`mriqc <https://github.com/nipreps/mriqc/blob/22.0.6/mriqc/workflows/anatomical.py#L970>`_
+`_estimate_snr function <https://github.com/nipreps/mriqc/blob/22.0.6/mriqc/workflows/anatomical.py#L970>`_

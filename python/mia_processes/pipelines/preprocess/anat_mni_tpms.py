@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-from capsul.api import Pipeline
 import traits.api as traits
+from capsul.api import Pipeline
 
 
 class Anat_mni_tpms(Pipeline):
     """
-    * |Get templates tissues probability map (white matter (WM),
+    * | Get templates tissues probability map (white matter (WM),
       | grey matter (GM) and cerebrospinal (CSF)).
 
     From 'MNI152NLin2009cAsym' template

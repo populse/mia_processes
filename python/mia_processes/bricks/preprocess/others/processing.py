@@ -40,26 +40,44 @@ pre-processing steps, which are not found in nipype.
 # for details.
 ##########################################################################
 
+import os
+import shutil
+import tempfile
+
+# Other import
+from distutils.dir_util import copy_tree
+
 # nibabel import
 import nibabel as nib
 import nibabel.processing as nibp
+import numpy as np
 
 # nipype import
 from nipype.interfaces.base import (
-    OutputMultiPath,
-    InputMultiPath,
+    DictStrStr,
     File,
-    traits,
+    InputMultiPath,
+    OutputMultiPath,
+    Str,
     TraitListObject,
     Undefined,
-    DictStrStr,
-    Str,
+    traits,
 )
 from nipype.interfaces.spm.base import ImageFileSPM
+from populse_mia.software_properties import Config
 
 # populse_mia import
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
-from populse_mia.software_properties import Config
+from scipy import ndimage as sim
+from skimage.morphology import ball
+from skimage.transform import resize
+
+# soma-base imports
+from soma.qt_gui.qt_backend.Qt import QMessageBox
+from statsmodels.robust.scale import mad
+
+# import templateflow to get anatomical templates
+from templateflow.api import get as get_template
 
 # mia_processes import
 from mia_processes.utils import (
@@ -67,23 +85,6 @@ from mia_processes.utils import (
     get_dbFieldValue,
     set_dbFieldValue,
 )
-
-# soma-base imports
-from soma.qt_gui.qt_backend.Qt import QMessageBox
-
-# Other import
-from distutils.dir_util import copy_tree
-from scipy import ndimage as sim
-from skimage.transform import resize
-from skimage.morphology import ball
-import numpy as np
-import os
-import shutil
-import tempfile
-
-# import templateflow to get anatomical templates
-from templateflow.api import get as get_template
-from statsmodels.robust.scale import mad
 
 EXT = {"NIFTI_GZ": "nii.gz", "NIFTI": "nii"}
 

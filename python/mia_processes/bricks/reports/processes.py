@@ -44,45 +44,44 @@ compute necessary values for reporting.
 # for details.
 ##########################################################################
 
+# Other import
+import json
+import os
+import re
+import shutil
+from math import pi, sqrt
+
 # nibabel import
 import nibabel as nb
+import numpy as np
+import scipy.ndimage as nd
+from nilearn.signal import clean
+from nipy.algorithms.registration import aff2euler, to_matrix44
 
 # nipype import
 from nipype.interfaces.base import (
-    OutputMultiPath,
-    InputMultiPath,
+    DictStrStr,
     File,
-    traits,
+    InputMultiPath,
+    OutputMultiPath,
+    Str,
     TraitListObject,
     Undefined,
-    DictStrStr,
-    Str,
+    traits,
 )
+from nitime.algorithms import AR_est_YW
+from numpy.polynomial import Legendre
 
 # populse_mia import
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
-from mia_processes.utils import checkFileExt
-
-# mia_processes import
-from mia_processes.utils import get_dbFieldValue
+from scipy.stats import kurtosis  # pylint: disable=E0611
+from skimage.transform import resize
 
 # soma-base imports
 from soma.qt_gui.qt_backend.Qt import QMessageBox
 
-# Other import
-import json
-from math import pi, sqrt
-from nilearn.signal import clean
-from nipy.algorithms.registration import to_matrix44, aff2euler
-from nitime.algorithms import AR_est_YW
-import numpy as np
-from numpy.polynomial import Legendre
-import os
-import re
-import scipy.ndimage as nd
-from scipy.stats import kurtosis  # pylint: disable=E0611
-import shutil
-from skimage.transform import resize
+# mia_processes import
+from mia_processes.utils import checkFileExt, get_dbFieldValue
 
 DIETRICH_FACTOR = 0.6551364  # 1.0 / sqrt(2 / (4 - pi))
 FSL_FAST_LABELS = {"csf": 1, "gm": 2, "wm": 3, "bg": 0}

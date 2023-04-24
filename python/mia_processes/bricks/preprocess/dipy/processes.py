@@ -20,20 +20,21 @@ populse_mia.
 # for details.
 ##########################################################################
 
+# Other import
+import os
+
 # nibabel import
 import nibabel as nib
+import numpy as np
 
 # nipype imports
 from nipype.interfaces.base import File
 
 # populse_mia import
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
-from mia_processes.utils import checkFileExt
-
-# Other import
-import os
 from traits.api import Either, Enum, Float, Int, String, Undefined
-import numpy as np
+
+from mia_processes.utils import checkFileExt
 
 EXT = {"NIFTI_GZ": "nii.gz", "NIFTI": "nii"}
 

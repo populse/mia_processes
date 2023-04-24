@@ -23,66 +23,66 @@ in populse_mia.
 # for details.
 ##########################################################################
 
-# mia_processes import
-from mia_processes.utils import get_dbFieldValue, set_dbFieldValue
-
-# from .stats_pop_ups import _SessionQuery # currently in ec_dev package
+# Other import
+import os
+from shutil import copy2
 
 # nibabel import
 import nibabel as nib
 import nibabel.processing as nibp
+import numpy as np
+import scipy.io
 
 # nipype import
 from nipype.interfaces import spm
 from nipype.interfaces.base import (
-    OutputMultiPath,
-    InputMultiPath,
     File,
+    InputMultiPath,
+    OutputMultiPath,
     traits,
 )
 from nipype.interfaces.spm.base import ImageFileSPM
-
-# populse_db and populse_mia import
-from populse_mia.data_manager.project import (
-    COLLECTION_CURRENT,
-    COLLECTION_INITIAL,
-)
 from populse_db.database import FIELD_TYPE_INTEGER, FIELD_TYPE_STRING
 from populse_mia.data_manager.database_mia import (
     TAG_ORIGIN_USER,
     TAG_UNIT_DEGREE,
 )
 
+# populse_db and populse_mia import
+from populse_mia.data_manager.project import (
+    COLLECTION_CURRENT,
+    COLLECTION_INITIAL,
+)
+
 # populse_mia imports
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
+from PyQt5.QtCore import pyqtSignal
 
 # PyQt5 imports
 from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import (
-    QPushButton,
-    QVBoxLayout,
-    QWidget,
+    QApplication,
+    QDialog,
+    QDialogButtonBox,
+    QGroupBox,
     QHBoxLayout,
     QLabel,
     QLineEdit,
-    QGroupBox,
     QMessageBox,
+    QPushButton,
     QToolButton,
-    QDialog,
-    QDialogButtonBox,
-    QApplication,
+    QVBoxLayout,
+    QWidget,
 )
 
 # soma-base imports
 from soma.qt_gui.qt_backend.Qt import QMessageBox
-
-# Other import
-import os
-import scipy.io
-from shutil import copy2
 from traits.api import Undefined
-import numpy as np
+
+# mia_processes import
+from mia_processes.utils import get_dbFieldValue, set_dbFieldValue
+
+# from .stats_pop_ups import _SessionQuery # currently in ec_dev package
 
 
 class EstimateContrast(ProcessMIA):

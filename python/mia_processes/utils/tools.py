@@ -23,18 +23,17 @@ Module that contains multiple functions used across mia_processes
 ##########################################################################
 
 import datetime
+import os
+
 import matplotlib.pyplot as plt
 import nibabel as nib
 import numpy as np
-import os
-
+from matplotlib.cm import get_cmap
+from mpl_toolkits.axes_grid1 import ImageGrid
 from populse_mia.data_manager.project import (
     COLLECTION_CURRENT,
     COLLECTION_INITIAL,
 )
-
-from matplotlib.cm import get_cmap
-from mpl_toolkits.axes_grid1 import ImageGrid
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import mm
 from reportlab.pdfgen import canvas

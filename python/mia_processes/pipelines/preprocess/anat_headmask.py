@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from capsul.api import Pipeline
 import traits.api as traits
+from capsul.api import Pipeline
 
 
 class Anat_headmask(Pipeline):

@@ -7,5 +7,5 @@
 # for details.
 ##########################################################################
 
-from .bold_mriqc import Bold_mriqc
 from .anat_mriqc import Anat_mriqc
+from .bold_mriqc import Bold_mriqc

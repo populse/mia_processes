@@ -6,9 +6,9 @@
 |`Home <../../../../index.html>`_|`Documentation <../../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +--------------------------------+----------------------------------------------+----------------------------------------------------+
 
-============
+===================
 IntensityClip brick
-============
+===================
 
 Clip the intensity range as prescribed by the percentiles
 Remove outliers at both ends of the intensity distribution and fit into a given dtype.

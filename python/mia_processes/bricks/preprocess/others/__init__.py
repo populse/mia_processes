@@ -9,6 +9,7 @@
 ##########################################################################
 
 from .processing import (
+    TSNR,
     ApplyBiasCorrection,
     ArtifactMask,
     Binarize,
@@ -27,5 +28,4 @@ from .processing import (
     Sanitize,
     TemplateFromTemplateFlow,
     Threshold,
-    TSNR,
 )

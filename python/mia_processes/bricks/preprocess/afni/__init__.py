@@ -9,12 +9,12 @@
 ##########################################################################
 
 from .processes import (
+    GCOR,
     Automask,
     Calc,
     CalcDropTRs,
     Despike,
     FWHMx,
-    GCOR,
     OutlierCount,
     QualityIndex,
     RefitDeoblique,

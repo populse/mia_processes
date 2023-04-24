@@ -6,9 +6,9 @@
 |`Home <../../../../index.html>`_|`Documentation <../../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +--------------------------------+----------------------------------------------+----------------------------------------------------+
 
-============
+=============
 Despike brick
-============
+=============
 
 Removes spikes from the 3D+time input dataset using AFNI 3dDespike command.
 The spike values replaced by something more pleasing to the eye.

@@ -6,9 +6,9 @@
 |`Home <../../../index.html>`_|`Documentation <../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +-----------------------------+-------------------------------------------+----------------------------------------------------+
 
-================================
+=================
 Bold_hmc pipeline
-================================
+=================
 
 Head motion correction of a bold image.
 
@@ -43,14 +43,14 @@ Adapted from `bold HCM pipeline in mriqc 22.06 <https://github.com/nipreps/mriqc
 
     ::
 
-      default value. False
+      ex. False (default value)
 
 - *deobliqe* (a boolean, optional)
     Deoblique step done if True.
 
     ::
 
-      default value. False
+      ex. False (default value)
 
 **Outputs parameters:**
 
@@ -67,6 +67,7 @@ Adapted from `bold HCM pipeline in mriqc 22.06 <https://github.com/nipreps/mriqc
     ::
 
       ex. '/home/username/data/derived_data/reg_d_func.nii'
+
 -------------
 
 Usefull links:

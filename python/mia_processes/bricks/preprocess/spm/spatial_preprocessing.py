@@ -26,21 +26,28 @@ populse_mia.
 # for details.
 ##########################################################################
 
+# Other imports
+import itertools
+import math
+import os
+import tempfile
+from pathlib import Path
+
+import nibabel as nib
+import numpy as np
+
 # capsul import
 from capsul.api import capsul_engine
-
-# mia_processes import
-from mia_processes.utils import get_dbFieldValue, set_dbFieldValue
 
 # nipype imports
 from nipype.interfaces import spm
 from nipype.interfaces.base import (
     File,
-    InputMultiPath,
     InputMultiObject,
+    InputMultiPath,
     OutputMultiPath,
-    traits,
     TraitListObject,
+    traits,
     traits_extension,
 )
 from nipype.interfaces.spm.base import ImageFileSPM
@@ -53,13 +60,6 @@ from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 # soma-base import
 from soma.controller.trait_utils import relax_exists_constraint
 from soma.qt_gui.qt_backend.Qt import QMessageBox
-
-# Other imports
-import itertools, math, os
-import nibabel as nib
-import numpy as np
-import tempfile
-from pathlib import Path
 from traits.api import (
     Bool,
     Either,
@@ -72,6 +72,9 @@ from traits.api import (
     Tuple,
     Undefined,
 )
+
+# mia_processes import
+from mia_processes.utils import get_dbFieldValue, set_dbFieldValue
 
 
 class Coregister(ProcessMIA):

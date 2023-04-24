@@ -6,9 +6,9 @@
 |`Home <../../../../index.html>`_|`Documentation <../../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +--------------------------------+----------------------------------------------+----------------------------------------------------+
 
-============
+==================
 ConformImage brick
-============
+==================
 
 Conform T1w image:
 - remove axes length 1 at end of image shapes if needed (nibabel.squeeze_image)

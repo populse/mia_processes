@@ -15,14 +15,14 @@ Contains:
 # for details.
 ###############################################################################
 
+from .report import Report
 from .tools import (
+    PageNumCanvas,
+    ReportLine,
     checkFileExt,
     dict4runtime_update,
     get_dbFieldValue,
-    PageNumCanvas,
     plot_qi2,
-    ReportLine,
     set_dbFieldValue,
     slice_planes_plot,
 )
-from .report import Report

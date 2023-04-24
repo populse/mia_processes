@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-from capsul.api import Pipeline
-
 import os
+
 import traits.api as traits
+from capsul.api import Pipeline
 
 
 class Anat_spatial_norm(Pipeline):

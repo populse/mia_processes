@@ -19,11 +19,11 @@ or other pipelines provided in the mia_processes library.
 # for details.
 ##########################################################################
 
-# capsul import
-from capsul.api import Pipeline
-
 # other import
 import traits.api as traits
+
+# capsul import
+from capsul.api import Pipeline
 
 
 class Spatial_preprocessing(Pipeline):

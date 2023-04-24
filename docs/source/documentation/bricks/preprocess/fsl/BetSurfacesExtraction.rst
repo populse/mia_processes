@@ -6,9 +6,9 @@
 |`Home <../../../../index.html>`_|`Documentation <../../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +--------------------------------+----------------------------------------------+----------------------------------------------------+
 
-============
+===========================
 BetSurfacesExtraction brick
-============
+===========================
 
 Surfaces (skull, inskull, outskull, outskin) extraction using BET (FSL).
 

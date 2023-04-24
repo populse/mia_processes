@@ -26,6 +26,9 @@ needed to run other higher-level bricks.
 # for details.
 ##########################################################################
 
+# Other imports
+import os
+
 # nipype import
 from nipype.interfaces.base import File, InputMultiPath, traits
 from nipype.interfaces.spm.base import ImageFileSPM
@@ -35,9 +38,6 @@ from populse_mia.data_manager.filter import Filter
 from populse_mia.data_manager.project import COLLECTION_CURRENT
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 
-# Other imports
-import os
-
 
 class Concat_to_list_of_list(ProcessMIA):
     """
@@ -45,9 +45,9 @@ class Concat_to_list_of_list(ProcessMIA):
       | the input list1 with each element of the input list2.
 
     Ex. ['a', 'b', 'c'] and ['_1', '_2'] gives
-    [['a', '_1'], ['a', '_2'],
-     ['b', '_1'], ['b', '_2'],
-     ['c', '_1'], ['c', '_2']
+        [['a', '_1'], ['a', '_2'],
+         ['b', '_1'], ['b', '_2'],
+         ['c', '_1'], ['c', '_2']
     """
 
     def __init__(self):
@@ -750,9 +750,9 @@ class Make_A_List(ProcessMIA):
     """
     * From 2 objects, generating a list containing all these objects.
 
-     Please, see the complete documention for the Make_A_List
-     in the populse.mia_processes web site
+    Please, see the complete documention for the Make_A_List in the populse.mia_processes web site
     <https://populse.github.io/mia_processes/html/documentation/bricks/tools/Make_A_List.html>`_
+
     """
 
     def __init__(self):

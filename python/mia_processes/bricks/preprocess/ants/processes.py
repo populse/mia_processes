@@ -23,15 +23,16 @@ populse_mia.
 # for details.
 ##########################################################################
 
+# Other import
+import os
+
+import nibabel as nib
+
 # nipype imports
 from nipype.interfaces.base import File, InputMultiPath
 
 # populse_mia import
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
-from mia_processes.utils import checkFileExt
-
-# Other import
-import os
 from traits.api import (
     Bool,
     Either,
@@ -44,7 +45,8 @@ from traits.api import (
     Tuple,
     Undefined,
 )
-import nibabel as nib
+
+from mia_processes.utils import checkFileExt
 
 EXT = {"NIFTI_GZ": "nii.gz", "NIFTI": "nii"}
 

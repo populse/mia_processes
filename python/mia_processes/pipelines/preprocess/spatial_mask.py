@@ -16,11 +16,11 @@
 # for details.
 ##########################################################################
 
-# Capsul import
-from capsul.api import Pipeline
-
 # other import
 import traits.api as traits
+
+# Capsul import
+from capsul.api import Pipeline
 
 # populse_mia import
 # from populse_mia.project.filter import Filter

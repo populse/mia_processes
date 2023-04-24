@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from capsul.api import Pipeline
 import traits.api as traits
+from capsul.api import Pipeline
 
 
 class Bold_mriqc(Pipeline):
     """
-    * Get no-reference IQMs (image quality metrics) from functional MRI data
-    using mriqc functional workflow (mriqc v22.06).
+    * | Get no-reference IQMs (image quality metrics) from functional MRI data
+      | using mriqc functional workflow (mriqc v22.06).
 
     Please, see the complete documention for Anat_mriqc_pipeline
     in the populse.mia_processes web site:

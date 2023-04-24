@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.info &#8212; mia_processes 2.2.1-dev+2d129ae documentation</title>
+    <title>mia_processes.info &#8212; mia_processes 2.2.1-dev+2f07c5e documentation</title>
     <link rel="stylesheet" href="../../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -13,12 +13,11 @@
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../index.html">
-          <span>mia_processes 2.2.1-dev+2d129ae documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+2f07c5e documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.info</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -32,7 +31,7 @@
 
 
   <h1>Source code for mia_processes.info</h1><div class="highlight"><pre>
-<span></span><span class="c1"># -*- coding: utf-8 -*- #</span>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 
 <span class="sd">&quot;&quot;&quot;The module dedicated to the main informations on mia_processes.</span>
 
@@ -56,15 +55,20 @@
 <span class="n">version_major</span> <span class="o">=</span> <span class="mi">2</span>
 <span class="n">version_minor</span> <span class="o">=</span> <span class="mi">2</span>
 <span class="n">version_micro</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="n">version_extra</span> <span class="o">=</span> <span class="s2">&quot;dev&quot;</span> <span class="c1"># leave empty for release</span>
-<span class="c1">#version_extra = &quot;&quot;</span>
+<span class="n">version_extra</span> <span class="o">=</span> <span class="s2">&quot;dev&quot;</span>  <span class="c1"># leave empty for release</span>
+<span class="c1"># version_extra = &quot;&quot;</span>
 
 <span class="c1"># Expected by setup.py: string of form &quot;X.Y.Z&quot;</span>
 <span class="k">if</span> <span class="n">version_extra</span><span class="p">:</span>
-    <span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">.</span><span class="si">{1}</span><span class="s2">.</span><span class="si">{2}</span><span class="s2">-</span><span class="si">{3}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">version_major</span><span class="p">,</span> <span class="n">version_minor</span><span class="p">,</span> <span class="n">version_micro</span><span class="p">,</span> <span class="n">version_extra</span><span class="p">)</span>
+    <span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">.</span><span class="si">{1}</span><span class="s2">.</span><span class="si">{2}</span><span class="s2">-</span><span class="si">{3}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">version_major</span><span class="p">,</span> <span class="n">version_minor</span><span class="p">,</span> <span class="n">version_micro</span><span class="p">,</span> <span class="n">version_extra</span>
+    <span class="p">)</span>
 
 <span class="k">else</span><span class="p">:</span>
-    <span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">.</span><span class="si">{1}</span><span class="s2">.</span><span class="si">{2}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">version_major</span><span class="p">,</span> <span class="n">version_minor</span><span class="p">,</span> <span class="n">version_micro</span><span class="p">)</span>
+    <span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">.</span><span class="si">{1}</span><span class="s2">.</span><span class="si">{2}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">version_major</span><span class="p">,</span> <span class="n">version_minor</span><span class="p">,</span> <span class="n">version_micro</span>
+    <span class="p">)</span>
+
 
 <div class="viewcode-block" id="get_gitversion"><a class="viewcode-back" href="../../mia_processes.html#mia_processes.info.get_gitversion">[docs]</a><span class="k">def</span> <span class="nf">get_gitversion</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Mia_processes version as reported by the last commit in git</span>
@@ -72,8 +76,14 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">import</span> <span class="nn">mia_processes</span>
+
         <span class="n">dir_mia_processes</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">mia_processes</span><span class="o">.</span><span class="vm">__file__</span><span class="p">),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">pardir</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">pardir</span><span class="p">))</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">mia_processes</span><span class="o">.</span><span class="vm">__file__</span><span class="p">),</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">pardir</span><span class="p">,</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">pardir</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
 
     <span class="k">except</span><span class="p">:</span>
         <span class="n">dir_mia_processes</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
@@ -87,7 +97,10 @@
 
     <span class="k">try</span><span class="p">:</span>
         <span class="n">gitversion</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span>
-            <span class="s2">&quot;git show -s --format=%h&quot;</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cwd</span><span class="o">=</span><span class="n">dir_mia_processes</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span>
+            <span class="s2">&quot;git show -s --format=%h&quot;</span><span class="p">,</span>
+            <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">cwd</span><span class="o">=</span><span class="n">dir_mia_processes</span><span class="p">,</span>
+            <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
         <span class="p">)</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span>
 
     <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
@@ -98,6 +111,7 @@
 
     <span class="k">return</span> <span class="n">ver</span></div>
 
+
 <span class="k">if</span> <span class="n">__version__</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;-dev&quot;</span><span class="p">):</span>
     <span class="n">gitversion</span> <span class="o">=</span> <span class="n">get_gitversion</span><span class="p">()</span>
 
@@ -105,22 +119,24 @@
         <span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">+</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">__version__</span><span class="p">,</span> <span class="n">gitversion</span><span class="p">)</span>
 
 <span class="c1"># Expected by setup.py: the status of the project</span>
-<span class="n">CLASSIFIERS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Development Status :: 5 - Production/Stable&#39;</span><span class="p">,</span>
-               <span class="s1">&#39;Intended Audience :: Developers&#39;</span><span class="p">,</span>
-               <span class="s1">&#39;License :: OSI Approved :: CEA CNRS Inria Logiciel Libre &#39;</span>
-                 <span class="s1">&#39;License, version 2.1 (CeCILL-2.1)&#39;</span><span class="p">,</span>
-               <span class="s1">&#39;Topic :: Software Development :: Libraries :: Python Modules&#39;</span><span class="p">,</span>
-               <span class="s1">&#39;Operating System :: OS Independent&#39;</span><span class="p">,</span>
-               <span class="s1">&#39;Programming Language :: Python :: 3.5&#39;</span><span class="p">,</span>
-               <span class="s1">&#39;Programming Language :: Python :: 3.6&#39;</span><span class="p">,</span>
-               <span class="s1">&#39;Programming Language :: Python :: 3.7&#39;</span><span class="p">,</span>
-               <span class="s1">&#39;Programming Language :: Python :: 3.8&#39;</span><span class="p">,</span>
-               <span class="s1">&#39;Programming Language :: Python :: 3 :: Only&#39;</span><span class="p">,</span>
-               <span class="s1">&#39;Topic :: Scientific/Engineering&#39;</span><span class="p">,</span>
-               <span class="s1">&#39;Topic :: Utilities&#39;</span><span class="p">]</span>
+<span class="n">CLASSIFIERS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;Development Status :: 5 - Production/Stable&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Intended Audience :: Developers&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;License :: OSI Approved :: CEA CNRS Inria Logiciel Libre &quot;</span>
+    <span class="s2">&quot;License, version 2.1 (CeCILL-2.1)&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Topic :: Software Development :: Libraries :: Python Modules&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Operating System :: OS Independent&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Programming Language :: Python :: 3.5&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Programming Language :: Python :: 3.6&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Programming Language :: Python :: 3.7&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Programming Language :: Python :: 3.8&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Programming Language :: Python :: 3 :: Only&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Topic :: Scientific/Engineering&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Topic :: Utilities&quot;</span><span class="p">,</span>
+<span class="p">]</span>
 
 <span class="c1"># project descriptions</span>
-<span class="n">DESCRIPTION</span> <span class="o">=</span> <span class="s1">&#39;mia_processes&#39;</span>
+<span class="n">DESCRIPTION</span> <span class="o">=</span> <span class="s2">&quot;mia_processes&quot;</span>
 <span class="n">LONG_DESCRIPTION</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">===============</span>
 <span class="s2">mia_processes</span>
@@ -131,48 +147,48 @@
 <span class="s2">&quot;&quot;&quot;</span>
 
 <span class="c1"># Other values used in setup.py</span>
-<span class="n">NAME</span> <span class="o">=</span> <span class="s1">&#39;mia_processes&#39;</span>
-<span class="n">ORGANISATION</span> <span class="o">=</span> <span class="s1">&#39;populse&#39;</span>
-<span class="n">MAINTAINER</span> <span class="o">=</span> <span class="s1">&#39;Populse team&#39;</span>
-<span class="n">MAINTAINER_EMAIL</span> <span class="o">=</span> <span class="s1">&#39;populse-support@univ-grenoble-alpes.fr&#39;</span>
-<span class="n">AUTHOR</span> <span class="o">=</span> <span class="s1">&#39;Populse team&#39;</span>
-<span class="n">AUTHOR_EMAIL</span> <span class="o">=</span> <span class="s1">&#39;populse-support@univ-grenoble-alpes.fr&#39;</span>
-<span class="n">URL</span> <span class="o">=</span> <span class="s1">&#39;http://populse.github.io/mia_processes&#39;</span>
-<span class="n">DOWNLOAD_URL</span> <span class="o">=</span> <span class="s1">&#39;http://populse.github.io/mia_processes&#39;</span>
-<span class="n">LICENSE</span> <span class="o">=</span> <span class="s1">&#39;CeCILL&#39;</span>
+<span class="n">NAME</span> <span class="o">=</span> <span class="s2">&quot;mia_processes&quot;</span>
+<span class="n">ORGANISATION</span> <span class="o">=</span> <span class="s2">&quot;populse&quot;</span>
+<span class="n">MAINTAINER</span> <span class="o">=</span> <span class="s2">&quot;Populse team&quot;</span>
+<span class="n">MAINTAINER_EMAIL</span> <span class="o">=</span> <span class="s2">&quot;populse-support@univ-grenoble-alpes.fr&quot;</span>
+<span class="n">AUTHOR</span> <span class="o">=</span> <span class="s2">&quot;Populse team&quot;</span>
+<span class="n">AUTHOR_EMAIL</span> <span class="o">=</span> <span class="s2">&quot;populse-support@univ-grenoble-alpes.fr&quot;</span>
+<span class="n">URL</span> <span class="o">=</span> <span class="s2">&quot;http://populse.github.io/mia_processes&quot;</span>
+<span class="n">DOWNLOAD_URL</span> <span class="o">=</span> <span class="s2">&quot;http://populse.github.io/mia_processes&quot;</span>
+<span class="n">LICENSE</span> <span class="o">=</span> <span class="s2">&quot;CeCILL&quot;</span>
 <span class="n">VERSION</span> <span class="o">=</span> <span class="n">__version__</span>
 <span class="n">CLASSIFIERS</span> <span class="o">=</span> <span class="n">CLASSIFIERS</span>
-<span class="n">PLATFORMS</span> <span class="o">=</span> <span class="s1">&#39;OS Independent&#39;</span>
+<span class="n">PLATFORMS</span> <span class="o">=</span> <span class="s2">&quot;OS Independent&quot;</span>
 <span class="n">REQUIRES</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s1">&#39;boto&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;cmp&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;cfflib&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;dipy&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;nibabel&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;nilearn&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;nipy&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;nipype&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;nitime&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;nitransforms&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;numpy&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;paramiko&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;populse_db &gt;=2.1.0&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;populse_mia &gt;= 2.2.0&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;pyxnat&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;reportlab&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;scipy&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;statsmodels&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;templateflow&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;torch&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;vtk&#39;</span>
+    <span class="s2">&quot;boto&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;cmp&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;cfflib&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;dipy&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;nibabel&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;nilearn&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;nipy&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;nipype&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;nitime&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;nitransforms&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;numpy&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;paramiko&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;populse_db &gt;=2.1.0&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;populse_mia &gt;= 2.2.0&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;pyxnat&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;reportlab&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;scipy&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;statsmodels&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;templateflow&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;torch&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;vtk&quot;</span><span class="p">,</span>
 <span class="p">]</span>
 <span class="n">EXTRA_REQUIRES</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;doc&#39;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="s1">&#39;sphinx&gt;=1.0&#39;</span><span class="p">,</span>
+    <span class="s2">&quot;doc&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;sphinx&gt;=1.0&quot;</span><span class="p">,</span>
     <span class="p">],</span>
 <span class="p">}</span>
 
-<span class="n">brainvisa_build_model</span> <span class="o">=</span> <span class="s1">&#39;pure_python&#39;</span>
+<span class="n">brainvisa_build_model</span> <span class="o">=</span> <span class="s2">&quot;pure_python&quot;</span>
 
 <span class="c1"># tests to run</span>
 <span class="c1"># test_commands = [&#39;%s -m mia_processes.test&#39; % sys.executable]</span>

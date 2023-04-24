@@ -6,9 +6,9 @@
 |`Home <../../../../index.html>`_|`Documentation <../../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +--------------------------------+----------------------------------------------+----------------------------------------------------+
 
-============
+=======================
 GradientThreshold brick
-============
+=======================
 
 Computes a threshold from the histogram of the magnitude gradient image using a segmentation of the input image.
 

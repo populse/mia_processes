@@ -6,9 +6,9 @@
 |`Home <../../../index.html>`_|`Documentation <../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +-----------------------------+-------------------------------------------+----------------------------------------------------+
 
-================================
+========================
 Anat_skullstrip pipeline
-================================
+========================
 
 Bias correction and skull stripping of a structural image.
 
@@ -67,5 +67,3 @@ Bias correction and skull stripping of a structural image.
     ::
 
       ex. '/home/username/data/derived_data/ss_orig_T1w_bin.nii'
-
--------------

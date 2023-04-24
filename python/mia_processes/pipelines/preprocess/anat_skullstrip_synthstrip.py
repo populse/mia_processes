@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-from capsul.api import Pipeline
 import os
+
+from capsul.api import Pipeline
 
 
 class Anat_skullstrip_synthstrip(Pipeline):

@@ -8,4 +8,4 @@
 # for details.
 ##########################################################################
 
-from .processes import FastSegment, Smooth, BetSurfacesExtraction
+from .processes import BetSurfacesExtraction, FastSegment, Smooth
