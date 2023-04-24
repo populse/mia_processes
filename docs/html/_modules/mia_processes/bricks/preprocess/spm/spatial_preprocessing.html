@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.preprocess.spm.spatial_preprocessing &#8212; mia_processes 2.2.1-dev+82d8ef0 documentation</title>
+    <title>mia_processes.bricks.preprocess.spm.spatial_preprocessing &#8212; mia_processes 2.2.1-dev+19aadc3 documentation</title>
     <link rel="stylesheet" href="../../../../../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
@@ -14,22 +14,22 @@
     <script src="../../../../../_static/doctools.js"></script>
     <script src="../../../../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
-    <link rel="search" title="Search" href="../../../../../search.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../../index.html">
-          <span>mia_processes 2.2.1-dev+82d8ef0 documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+19aadc3 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.preprocess.spm.spatial_preprocessing</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
-
+      
         <p>
         <a class="uplink" href="../../../../../index.html">Contents</a>
         </p>
 
       </div>
       <div class="content" role="main">
-
-
+        
+        
   <h1>Source code for mia_processes.bricks.preprocess.spm.spatial_preprocessing</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*- #</span>
 
@@ -139,7 +139,7 @@
                            <span class="s1">&#39; (int or long).&#39;</span><span class="p">)</span>
         <span class="n">write_mask_desc</span> <span class="o">=</span> <span class="s1">&#39;Mask output image (a boolean)&#39;</span>
         <span class="n">out_prefix_desc</span> <span class="o">=</span> <span class="s1">&#39;Coregisterd output prefix (a string).&#39;</span>
-
+        
         <span class="c1"># Outputs description</span>
         <span class="n">coregistered_source_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;Coregistered source files, corresponding &quot;</span>
                                     <span class="s2">&quot;to &#39;source&#39; images, (a pathlike object &quot;</span>
@@ -158,7 +158,7 @@
                                     <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                                     <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                                     <span class="n">desc</span><span class="o">=</span><span class="n">target_desc</span><span class="p">))</span>
-
+        
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;source&quot;</span><span class="p">,</span>
                        <span class="n">InputMultiPath</span><span class="p">(</span><span class="n">Either</span><span class="p">(</span><span class="n">ImageFileSPM</span><span class="p">(),</span>
                                              <span class="n">Undefined</span><span class="p">),</span>
@@ -166,7 +166,7 @@
                                       <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                                       <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                                       <span class="n">desc</span><span class="o">=</span><span class="n">source_desc</span><span class="p">))</span>
-
+        
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;apply_to_files&quot;</span><span class="p">,</span>
                        <span class="n">InputMultiPath</span><span class="p">(</span><span class="n">Either</span><span class="p">(</span><span class="n">ImageFileSPM</span><span class="p">(),</span>
                                              <span class="n">Undefined</span><span class="p">),</span>
@@ -279,7 +279,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Coregister</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
-
+        
         <span class="c1"># Outputs definition and tags inheritance (optional)</span>
         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">!=</span> <span class="n">Undefined</span> <span class="ow">and</span>
               <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">!=</span> <span class="p">[</span><span class="n">Undefined</span><span class="p">]</span> <span class="ow">and</span>
@@ -320,7 +320,7 @@
             <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
 
                 <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;coregistered_source&quot;</span><span class="p">:</span>
-
+                    
                     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
                         <span class="n">val</span> <span class="o">=</span> <span class="p">[</span><span class="n">val</span><span class="p">]</span>
 
@@ -332,7 +332,7 @@
 
                             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span><span class="p">:</span>
                                 <span class="n">fileOvalNoPref</span> <span class="o">=</span> <span class="n">fileOval</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span><span class="p">):]</span>
-
+                        
                             <span class="k">else</span><span class="p">:</span>
                                 <span class="n">fileOvalNoPref</span> <span class="o">=</span> <span class="n">fileOval</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">):]</span>
 
@@ -364,7 +364,7 @@
 
                             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span><span class="p">:</span>
                                 <span class="n">fileOvalNoPref</span> <span class="o">=</span> <span class="n">fileOval</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span><span class="p">):]</span>
-
+                        
                             <span class="k">else</span><span class="p">:</span>
                                 <span class="n">fileOvalNoPref</span> <span class="o">=</span> <span class="n">fileOval</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">):]</span>
 
@@ -543,7 +543,7 @@
 <span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/spm/GM_WM_Normalize.html&gt;`_</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-
+    
 <div class="viewcode-block" id="GM_WM_Normalize.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.GM_WM_Normalize.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 <span class="sd">        </span>
@@ -580,19 +580,19 @@
         <span class="n">write_interp_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Degree of b-spline used for interpolation &#39;</span>
                              <span class="s1">&#39;(0 &lt;= a long integer &lt;= 7; 1 is OK for PET, &#39;</span>
                              <span class="s1">&#39;realigned fMRI, or segmentations).&#39;</span><span class="p">)</span>
-
+        
         <span class="c1"># Outputs description</span>
         <span class="n">normalized_files_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Normalised files (a pathlike object or &#39;</span>
                                  <span class="s1">&#39;string representing a file, or a list of &#39;</span>
                                  <span class="s1">&#39;pathlike objects or strings representing a &#39;</span>
                                  <span class="s1">&#39;file).&#39;</span><span class="p">)</span>
-
+        
         <span class="c1"># Inputs traits </span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;deformation_file&quot;</span><span class="p">,</span>
                        <span class="n">ImageFileSPM</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                                     <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                                     <span class="n">desc</span><span class="o">=</span><span class="n">deformation_file_desc</span><span class="p">))</span>
-
+ 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;apply_to_files&quot;</span><span class="p">,</span>
                        <span class="n">InputMultiPath</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span><span class="n">ImageFileSPM</span><span class="p">(),</span>
                                                     <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">ImageFileSPM</span><span class="p">()),</span>
@@ -647,7 +647,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s1">&#39;nipype.interfaces.spm.Normalize12&#39;</span><span class="p">)</span></div>
-
+        
     <span class="k">def</span> <span class="nf">_namesFilter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Filtering of apply_to_files input parameter for GM, WM, etc.</span>
 
@@ -659,7 +659,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">runFlag</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
 
             <span class="k">for</span> <span class="n">file_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span><span class="p">:</span>
-
+            
                 <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="n">TraitListObject</span><span class="p">]:</span>
                     <span class="n">file_name</span> <span class="o">=</span> <span class="n">file_name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
@@ -671,7 +671,7 @@
                 <span class="k">elif</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_filter</span> <span class="o">==</span> <span class="s1">&#39;WM&#39;</span> <span class="ow">and</span>
                         <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span>
                                                      <span class="n">file_name</span><span class="p">))[:</span><span class="mi">2</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;c2&#39;</span><span class="p">]):</span>
-                    <span class="n">files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
+                    <span class="n">files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>         
 
                 <span class="k">elif</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">in_filter</span> <span class="o">==</span> <span class="s1">&#39;GM &amp; WM&#39;</span> <span class="ow">or</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">in_filter</span> <span class="o">==</span> <span class="s1">&#39;GM + WM&#39;</span><span class="p">)</span> <span class="ow">and</span>
@@ -685,15 +685,15 @@
                 <span class="k">return</span> <span class="p">[]</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">files</span> <span class="o">=</span> <span class="n">files</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-
+    
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_filter</span> <span class="o">==</span> <span class="s1">&#39;GM + WM&#39;</span><span class="p">:</span>
                 <span class="n">j</span> <span class="o">=</span> <span class="p">[]</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">files</span> <span class="o">=</span> <span class="p">[]</span>
-
+                
                 <span class="k">while</span> <span class="n">files</span><span class="p">:</span>
                     <span class="n">i</span> <span class="o">=</span> <span class="n">files</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
                     <span class="n">i_path</span><span class="p">,</span> <span class="n">i_file</span> <span class="o">=</span>  <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-
+                
                     <span class="k">if</span> <span class="n">i_file</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;c1&#39;</span><span class="p">,</span> <span class="s1">&#39;c2&#39;</span><span class="p">]:</span>
 
                         <span class="k">try</span><span class="p">:</span>
@@ -707,7 +707,7 @@
                             <span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">files</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">ind</span><span class="p">))</span>
                             <span class="n">j</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">i_path</span><span class="p">,</span> <span class="s1">&#39;c1c2&#39;</span> <span class="o">+</span> <span class="n">i_file</span><span class="p">[</span><span class="mi">2</span><span class="p">:]))</span>
-
+                        
                         <span class="k">try</span><span class="p">:</span>
                             <span class="n">ind</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">k</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">files</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span>
                                                               <span class="s1">&#39;c1&#39;</span> <span class="o">+</span> <span class="n">i_file</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span>
@@ -721,7 +721,7 @@
                             <span class="n">j</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">i_path</span><span class="p">,</span> <span class="s1">&#39;c1c2&#39;</span> <span class="o">+</span> <span class="n">i_file</span><span class="p">[</span><span class="mi">2</span><span class="p">:]))</span>
 
                 <span class="n">files</span> <span class="o">=</span> <span class="n">j</span>
-
+               
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">files</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Warning: no c1+c2 doublet was detected ... &#39;</span>
                           <span class="s1">&#39;Please, check the input data and/or the in_filter &#39;</span>
@@ -729,7 +729,7 @@
                     <span class="k">return</span> <span class="p">[]</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">runFlag</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-
+        
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_filter</span> <span class="o">==</span> <span class="s1">&#39;GM + WM&#39;</span><span class="p">:</span>
 
                 <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="mi">0</span><span class="p">::</span><span class="mi">2</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">]):</span>
@@ -743,7 +743,7 @@
 
                     <span class="n">img1_data</span> <span class="o">=</span> <span class="n">img1</span><span class="o">.</span><span class="n">get_fdata</span><span class="p">()</span>
                     <span class="n">img2_data</span> <span class="o">=</span> <span class="n">img2</span><span class="o">.</span><span class="n">get_fdata</span><span class="p">()</span>
-
+            
                     <span class="k">if</span> <span class="n">img1_data</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">img2_data</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
                         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Warning! The shapes for </span><span class="si">{0}</span><span class="s1"> and </span><span class="si">{1}</span><span class="s1"> are not &#39;</span>
                               <span class="s1">&#39;the same. This can produce an erroneous &#39;</span>
@@ -763,10 +763,10 @@
                     <span class="n">files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c1c2_file</span><span class="p">)</span>
 
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">files</span>
+                <span class="n">files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">files</span>   
 
         <span class="k">return</span> <span class="n">files</span>
-
+    
 <div class="viewcode-block" id="GM_WM_Normalize.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.GM_WM_Normalize.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
@@ -850,7 +850,7 @@
 
                         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
                             <span class="n">val</span> <span class="o">=</span> <span class="p">[</span><span class="n">val</span><span class="p">]</span>
-
+                        
                         <span class="k">for</span> <span class="p">(</span><span class="n">in_val</span><span class="p">,</span>
                               <span class="n">out_val</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">apply_to_files</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
                             <span class="n">_</span><span class="p">,</span> <span class="n">fileOval</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">out_val</span><span class="p">)</span>
@@ -895,7 +895,7 @@
 
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
-
+ 
 <div class="viewcode-block" id="GM_WM_Normalize.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.GM_WM_Normalize.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">runFlag</span> <span class="o">=</span> <span class="kc">True</span>
@@ -937,7 +937,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;spm&#39;</span><span class="p">,</span> <span class="s1">&#39;nipype&#39;</span><span class="p">]</span>
 
         <span class="c1"># Inputs description</span>
-
+        
         <span class="n">channel_files_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Path of the scans for processing, valid &#39;</span>
                               <span class="s1">&#39;extensions: [.img, .nii, .hdr]. A list with one &#39;</span>
                               <span class="s1">&#39;string element corresponding to an existing &#39;</span>
@@ -1004,7 +1004,7 @@
                                           <span class="s1">&#39;pathlike object or string &#39;</span>
                                           <span class="s1">&#39;representing a file).&#39;</span><span class="p">)</span>
         <span class="n">transformation_mat_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Normalisation transformation (a pathlike &#39;</span>
-                                   <span class="s1">&#39;object or string representing a file).&#39;</span><span class="p">)</span>
+                                   <span class="s1">&#39;object or string representing a file).&#39;</span><span class="p">)</span>     
 
         <span class="c1"># Tissues parameter definition</span>
         <span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">()</span>
@@ -1085,7 +1085,7 @@
                             <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                             <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                             <span class="n">desc</span><span class="o">=</span><span class="n">affine_regularization_desc</span><span class="p">))</span>
-
+        
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;sampling_distance&quot;</span><span class="p">,</span>
                        <span class="n">Float</span><span class="p">(</span><span class="mf">3.0</span><span class="p">,</span>
                              <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -1210,7 +1210,7 @@
                       <span class="s1">&#39;inverse_deformation_field&#39;</span><span class="p">,</span> <span class="s1">&#39;forward_deformation_field&#39;</span><span class="p">,</span>
                       <span class="s1">&#39;transformation_mat&#39;</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">k</span><span class="p">)</span>
-
+        
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        When there is only one image at the input, the tags inheritance is</span>
 <span class="sd">        directly managed in PipelineManagerTab.add_plug_value_to_database().</span>
@@ -1282,7 +1282,7 @@
 
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
-
+    
 <div class="viewcode-block" id="NewSegment.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.NewSegment.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">NewSegment</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
@@ -1363,7 +1363,7 @@
         <span class="n">write_interp_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Degree of b-spline used for interpolation &#39;</span>
                              <span class="s1">&#39;(0 &lt;= a long integer &lt;= 7; 1 is OK for PET, &#39;</span>
                              <span class="s1">&#39;realigned fMRI, or segmentations).&#39;</span><span class="p">)</span>
-
+        
         <span class="c1"># Outputs description</span>
         <span class="n">deformation_field_desc</span>  <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;File y_*.nii containing 3 deformation &#39;</span>
                                    <span class="s1">&#39;fields for the deformation in x, y and z &#39;</span>
@@ -1386,7 +1386,7 @@
         <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">get_resources_path</span><span class="p">():</span>
             <span class="n">tpm_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get_resources_path</span><span class="p">(),</span> <span class="s1">&#39;spm12&#39;</span><span class="p">,</span>
                                     <span class="s1">&#39;tpm&#39;</span><span class="p">,</span> <span class="s1">&#39;TPM.nii&#39;</span><span class="p">)</span>
-
+        
             <span class="k">if</span> <span class="ow">not</span> <span class="n">Path</span><span class="p">(</span><span class="n">tpm_path</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Normalize12 brick:</span><span class="se">\n</span><span class="s1">  - The </span><span class="si">{}</span><span class="s1"> file &#39;</span>
                       <span class="s1">&#39;seems to not exists ...&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tpm_path</span><span class="p">))</span>
@@ -1402,7 +1402,7 @@
                        <span class="n">ImageFileSPM</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                                     <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                                     <span class="n">desc</span><span class="o">=</span><span class="n">deformation_file_desc</span><span class="p">))</span>
-
+ 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;apply_to_files&quot;</span><span class="p">,</span>
                        <span class="n">InputMultiPath</span><span class="p">(</span><span class="n">Either</span><span class="p">(</span><span class="n">ImageFileSPM</span><span class="p">(),</span>
                                              <span class="n">List</span><span class="p">(</span><span class="n">ImageFileSPM</span><span class="p">()),</span>
@@ -1506,7 +1506,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s1">&#39;nipype.interfaces.spm.Normalize12&#39;</span><span class="p">)</span></div>
-
+    
 
 <div class="viewcode-block" id="Normalize12.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Normalize12.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
@@ -1526,7 +1526,7 @@
 
         <span class="c1"># Outputs definition</span>
         <span class="n">_flag</span> <span class="o">=</span> <span class="kc">False</span>
-
+        
         <span class="k">if</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span> <span class="o">!=</span> <span class="p">[</span><span class="n">Undefined</span><span class="p">])</span> <span class="ow">and</span>
                          <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">deformation_file</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">==</span> <span class="s1">&#39;write&#39;</span><span class="p">)):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span>
@@ -1539,7 +1539,7 @@
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tpm</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">tpm</span> <span class="o">=</span> <span class="n">Undefined</span>
-
+                
         <span class="k">elif</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">image_to_align</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image_to_align</span> <span class="o">!=</span> <span class="n">Undefined</span><span class="p">)</span> <span class="ow">and</span>
                                         <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tpm</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">==</span> <span class="s1">&#39;est&#39;</span><span class="p">)):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">image_to_align</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_to_align</span>
@@ -1552,7 +1552,7 @@
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">deformation_file</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">deformation_file</span> <span class="o">=</span> <span class="n">Undefined</span>
-
+                
         <span class="k">elif</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">image_to_align</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image_to_align</span> <span class="o">!=</span> <span class="n">Undefined</span><span class="p">)</span> <span class="ow">and</span>
                                    <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tpm</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">==</span> <span class="s1">&#39;estwrite&#39;</span><span class="p">)):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">image_to_align</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_to_align</span>
@@ -1725,7 +1725,7 @@
                     <span class="n">pathOval</span><span class="p">,</span> <span class="n">fileOval</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
                     <span class="n">_</span><span class="p">,</span> <span class="n">fileIval</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image_to_align</span><span class="p">)</span>
                     <span class="n">fileOvalNoPref</span> <span class="o">=</span> <span class="n">fileOval</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
-
+                    
                     <span class="k">if</span> <span class="n">fileOvalNoPref</span> <span class="o">==</span> <span class="n">fileIval</span><span class="p">:</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="n">val</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_to_align</span>
 
@@ -1739,7 +1739,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">trait</span><span class="p">(</span><span class="s1">&#39;deformation_file&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">optional</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">deformation_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">deformation_file</span>
-
+        
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span> <span class="o">==</span> <span class="p">[</span><span class="n">Undefined</span><span class="p">]:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">apply_to_files</span> <span class="o">=</span> <span class="n">Undefined</span>
 
@@ -1789,7 +1789,7 @@
 
         <span class="c1"># Third party softwares required for the execution of the brick</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;spm&#39;</span><span class="p">,</span> <span class="s1">&#39;nipype&#39;</span><span class="p">]</span>
-
+        
         <span class="c1"># Inputs description</span>
         <span class="n">in_files_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;The images to realign (a list of pathlike objects or &#39;</span>
                          <span class="s1">&#39;strings representing a file or of list of items &#39;</span>
@@ -1851,7 +1851,7 @@
                                        <span class="s1">&#39;string representing a file, or a list &#39;</span>
                                        <span class="s1">&#39;of pathlike objects or strings &#39;</span>
                                        <span class="s1">&#39;representing a file).&#39;</span><span class="p">)</span>
-
+        
         <span class="c1"># Inputs traits</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;in_files&#39;</span><span class="p">,</span>
                        <span class="n">InputMultiPath</span><span class="p">(</span><span class="n">Either</span><span class="p">(</span><span class="n">ImageFileSPM</span><span class="p">(),</span>
@@ -1861,7 +1861,7 @@
                                       <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                                       <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                                       <span class="n">desc</span><span class="o">=</span><span class="n">in_files_desc</span><span class="p">))</span>
-
+        
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;jobtype&quot;</span><span class="p">,</span>
                        <span class="n">Enum</span><span class="p">(</span><span class="s1">&#39;estwrite&#39;</span><span class="p">,</span>
                             <span class="s1">&#39;estimate&#39;</span><span class="p">,</span>
@@ -1931,7 +1931,7 @@
                             <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                             <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                             <span class="n">desc</span><span class="o">=</span><span class="n">write_which_desc</span><span class="p">))</span>
-
+ 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;write_interp&quot;</span><span class="p">,</span>
                        <span class="n">Range</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
                              <span class="n">low</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
@@ -1980,7 +1980,7 @@
                        <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                             <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                             <span class="n">desc</span><span class="o">=</span><span class="n">mean_image_desc</span><span class="p">))</span>
-
+        
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;realignment_parameters&quot;</span><span class="p">,</span>
                        <span class="n">OutputMultiPath</span><span class="p">(</span><span class="n">File</span><span class="p">(),</span>
                                        <span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -2006,14 +2006,14 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Realign</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
-
+        
         <span class="c1"># Outputs definition and tags inheritance (optional)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_files</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_files</span> <span class="o">!=</span> <span class="p">[</span><span class="n">Undefined</span><span class="p">]:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_files</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">out_prefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span>
-
+                
             <span class="c1"># The management of self.process.output_directory could be delegated</span>
             <span class="c1"># to the populse_mia.user_interface.pipeline_manager.process_mia</span>
             <span class="c1"># module. We can&#39;t do it at the moment because the</span>
@@ -2182,7 +2182,7 @@
 
                             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span><span class="p">:</span>
                                 <span class="n">fileOvalNoPref</span> <span class="o">=</span> <span class="n">fileOval</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span><span class="p">):]</span>
-
+                        
                             <span class="k">else</span><span class="p">:</span>
                                 <span class="n">fileOvalNoPref</span> <span class="o">=</span> <span class="n">fileOval</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">):]</span>
 
@@ -2198,7 +2198,7 @@
 
                         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
                             <span class="n">val</span> <span class="o">=</span> <span class="p">[</span><span class="n">val</span><span class="p">]</span>
-
+                            
                         <span class="k">for</span> <span class="n">in_val</span><span class="p">,</span> <span class="n">out_val</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_files</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
                             <span class="n">_</span><span class="p">,</span> <span class="n">fileOval</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">out_val</span><span class="p">)</span>
                             <span class="n">_</span><span class="p">,</span> <span class="n">fileIval</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">in_val</span><span class="p">)</span>
@@ -2435,7 +2435,7 @@
                             <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">getName</span><span class="p">())</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
         <span class="n">database_filename</span> <span class="o">=</span> <span class="n">complete_path</span><span class="p">[</span><span class="n">file_position</span><span class="p">:]</span>
         <span class="n">temp</span> <span class="o">=</span> <span class="kc">None</span>
-
+        
         <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;Dataset dimensions (Count, X,Y,Z,T...)&#39;</span> <span class="ow">in</span>
                      <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get_fields_names</span><span class="p">(</span><span class="n">COLLECTION_CURRENT</span><span class="p">)):</span>
             <span class="n">temp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span><span class="n">COLLECTION_CURRENT</span><span class="p">,</span>
@@ -2529,9 +2529,9 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">TA</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">TR</span> <span class="o">!=</span> <span class="n">Undefined</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_slices</span> <span class="o">!=</span> <span class="n">Undefined</span><span class="p">:</span>
-
+       
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">TA</span> <span class="o">!=</span> <span class="n">Undefined</span><span class="p">:</span>
-
+             
                     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">TA</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">TR</span> <span class="o">-</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">TR</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_slices</span><span class="p">):</span>
                         <span class="n">msg</span> <span class="o">=</span> <span class="n">QMessageBox</span><span class="p">()</span>
                         <span class="n">msg</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">Warning</span><span class="p">)</span>
@@ -2577,7 +2577,7 @@
                 <span class="n">result</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_slices</span> <span class="o">!=</span> <span class="n">Undefined</span><span class="p">:</span>
-
+            
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">acquisition</span> <span class="o">==</span> <span class="s2">&quot;sequential ascending&quot;</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">slice_order</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_slices</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
 
@@ -2634,7 +2634,7 @@
 
             <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">acquisition</span> <span class="o">==</span> <span class="s2">&quot;sequential ascending&quot;</span> <span class="ow">or</span>
                                    <span class="bp">self</span><span class="o">.</span><span class="n">acquisition</span> <span class="o">==</span> <span class="s2">&quot;sequential descending&quot;</span><span class="p">):</span>
-
+                
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_slices</span> <span class="o">!=</span> <span class="n">Undefined</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">ref_slice</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_slices</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
 
@@ -2716,7 +2716,7 @@
             <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
 
                 <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;timed_files&quot;</span><span class="p">:</span>
-
+                    
                     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
                         <span class="n">val</span> <span class="o">=</span> <span class="p">[</span><span class="n">val</span><span class="p">]</span>
 
@@ -2726,7 +2726,7 @@
 
                         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span><span class="p">:</span>
                             <span class="n">fileOvalNoPref</span> <span class="o">=</span> <span class="n">fileOval</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span><span class="p">):]</span>
-
+                        
                         <span class="k">else</span><span class="p">:</span>
                            <span class="n">fileOvalNoPref</span> <span class="o">=</span> <span class="n">fileOval</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">):]</span>
 
@@ -2824,7 +2824,7 @@
                        <span class="n">Int</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                            <span class="n">desc</span><span class="o">=</span><span class="n">data_type_desc</span><span class="p">))</span>
-
+        
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;implicit_masking&quot;</span><span class="p">,</span>
                        <span class="n">Bool</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                             <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -2883,7 +2883,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;smoothed_files&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">_smoothed_files</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
-
+        
             <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
 
                 <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;smoothed_files&quot;</span><span class="p">:</span>
@@ -3012,10 +3012,10 @@
 
                         <span class="n">_</span><span class="p">,</span> <span class="n">fileOval</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">out_val</span><span class="p">)</span>
                         <span class="n">_</span><span class="p">,</span> <span class="n">fileIval</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">in_val</span><span class="p">)</span>
-
+                        
                         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span><span class="p">:</span>
                             <span class="n">fileOvalNoPref</span> <span class="o">=</span> <span class="n">fileOval</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span><span class="p">):]</span>
-
+                        
                         <span class="k">else</span><span class="p">:</span>
                            <span class="n">fileOvalNoPref</span> <span class="o">=</span> <span class="n">fileOval</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">):]</span>
 
@@ -3024,7 +3024,7 @@
 
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
-
+    
 <div class="viewcode-block" id="Smooth.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Smooth.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Smooth</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
@@ -3039,7 +3039,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">fwhm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fwhm</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">data_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_type</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">implicit_masking</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">implicit_masking</span>
-
+            
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">out_prefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span>
 
@@ -3048,7 +3048,7 @@
 
       </div>
       <div class="bottomnav" role="navigation" aria-label="bottom navigation">
-
+      
         <p>
         <a class="uplink" href="../../../../../index.html">Contents</a>
         </p>
