@@ -87,8 +87,8 @@ Mia_processes's documentation
 
   - **reports**
 
-    - `AnatIQMS <bricks/reports/AnatIQMS.html>`_
-    - `BoldIQMS <bricks/reports/BoldIQMS.html>`_
+    - `AnatIQMs <bricks/reports/AnatIQMs.html>`_
+    - `BoldIQMs <bricks/reports/BoldIQMs.html>`_
     - `CarpetParcellation <bricks/reports/CarpetParcellation.html>`_
     - `ComputeDVARS <bricks/reports/ComputeDVARS.html>`_
     - `FramewiseDisplacement <bricks/reports/FramewiseDisplacement.html>`_
