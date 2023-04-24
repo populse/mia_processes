@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+"""
+Statistical calculations from spm.
+
+"""
 
 ##########################################################################
 # mia_processes - Copyright (C) IRMaGe/CEA, 2018

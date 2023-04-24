@@ -35,6 +35,7 @@ class Spatial_preprocessing(Pipeline):
     """
 
     def pipeline_definition(self):
+        """Building the pipeline"""
         # nodes
         self.add_process(
             "newsegment1",

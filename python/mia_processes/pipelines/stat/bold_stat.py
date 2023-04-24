@@ -25,11 +25,12 @@ from capsul.api import Pipeline
 
 class Bold_stat(Pipeline):
     """
-    * Blabla.
+    * The statistical calculation pipeline used in the CVR evaluation.
 
     """
 
     def pipeline_definition(self):
+        """Building the pipeline"""
         # nodes
         self.add_process(
             "estimatecontrast",

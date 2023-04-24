@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+"""
+The atomic calculations from spm.
+
+"""
 
 ##########################################################################
 # mia_processes - Copyright (C) IRMaGe/CEA, 2018

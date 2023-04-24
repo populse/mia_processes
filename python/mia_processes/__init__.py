@@ -1,4 +1,16 @@
 # -*- coding: utf-8 -*-
+"""
+Mia_processes is the official bricks library for populse_mia.
+A brick can be an atomic operation or a pipeline (a succession of atomic
+calculations).
+
+:Contains:
+    :Packages:
+        - bricks: the library of atomic bricks
+        - pipelines: the pipelines library
+        - utils: various general tools used in bricks or pipelines
+
+"""
 
 ##########################################################################
 # mia_processes - Copyright (C) IRMaGe/CEA, 2018

@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+"""
+The atomic calculations from freesurfer.
+
+"""
 
 ##########################################################################
 # mia_processes - Copyright (C) IRMaGe/CEA, 2018

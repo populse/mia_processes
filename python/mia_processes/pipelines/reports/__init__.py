@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+"""
+Pipelines used in the reports generation.
+"""
 
 ##########################################################################
 # mia_processes - Copyright (C) IRMaGe/CEA, 2018

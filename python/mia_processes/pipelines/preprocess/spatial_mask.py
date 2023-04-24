@@ -38,6 +38,7 @@ class Spatial_mask(Pipeline):
     """
 
     def pipeline_definition(self):
+        """Building the pipeline"""
         # nodes
         self.add_process(
             "gm_wm_normalize1",

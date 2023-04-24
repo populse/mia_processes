@@ -73,7 +73,7 @@ class PageNumCanvas(canvas.Canvas):
 
 
 class ReportLine(Flowable):
-    "Line flowable --- draws a line in a flowable"
+    """Line flowable --- draws a line in a flowable"""
 
     def __init__(self, width, height=0):
         Flowable.__init__(self)
@@ -81,10 +81,14 @@ class ReportLine(Flowable):
         self.height = height
 
     def __repr__(self):
+        """Customise the string representation of the ReportLine object
+
+        :returns: the string representation of the object
+        """
         return "Line(w=%s)" % self.width
 
     def draw(self):
-        "draw the line"
+        "Draw the line"
         self.canv.line(0, self.height, self.width, self.height)
 
 
@@ -138,15 +142,13 @@ def dict4runtime_update(dict4runtime, database, db_filename, *args):
 
 
 def get_dbFieldValue(project, document, field):
-    """blabla"""
-
     """Return, for a document, the field value from the database.
 
-     :param project: the project.
-     :param document: the absolute path of the document.
-     :param : the field name.
-     :returns: the value of the field for the document in the database.
-     """
+    :param project: the project.
+    :param document: the absolute path of the document.
+    :param : the field name.
+    :returns: the value of the field for the document in the database.
+    """
     file_position = (
         document.find(project.getName()) + len(project.getName()) + 1
     )
@@ -214,7 +216,14 @@ def plot_qi2(x_grid, ref_pdf, fit_pdf, ref_data, cutoff_idx, out_file=None):
 
 
 def set_dbFieldValue(project, document, tag_to_add):
-    """blabla"""
+    """Creates for a document, the field and the corresponding value in the db.
+
+    :param project: the project.
+    :param document: the absolute path of the document.
+    :param tag_to_add: a dictionary with 'default_value', 'description',
+                      'field_type', 'name', 'origin', 'unit', 'value',
+                      'visibility' keys.
+    """
     file_position = (
         document.find(project.getName()) + len(project.getName()) + 1
     )

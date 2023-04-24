@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+"""
+The various pipelines used for the pre-treatment stage.
+
+"""
 
 ##########################################################################
 # mia_processes - Copyright (C) IRMaGe/CEA, 2018

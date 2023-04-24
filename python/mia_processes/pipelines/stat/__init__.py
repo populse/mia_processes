@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+"""
+The Bold_stat pipeline.
+
+"""
 
 ##########################################################################
 # mia_processes - Copyright (C) IRMaGe/CEA, 2018

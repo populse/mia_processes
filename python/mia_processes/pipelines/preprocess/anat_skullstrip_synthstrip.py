@@ -1,4 +1,16 @@
 # -*- coding: utf-8 -*-
+"""
+The .Anat_skullstrip_synthstrip pipeline.
+
+"""
+
+##########################################################################
+# mia_processes - Copyright (C) IRMaGe/CEA, 2018
+# Distributed under the terms of the CeCILL license, as published by
+# the CEA-CNRS-INRIA. Refer to the LICENSE file or to
+# http://www.cecill.info/licences/Licence_CeCILL_V2.1-en.html
+# for details.
+##########################################################################
 import os
 
 from capsul.api import Pipeline
@@ -14,6 +26,7 @@ class Anat_skullstrip_synthstrip(Pipeline):
     """
 
     def pipeline_definition(self):
+        """Building the pipeline"""
         # nodes
         self.add_process(
             "pre_n4biasfieldcor",

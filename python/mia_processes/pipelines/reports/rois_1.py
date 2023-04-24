@@ -32,6 +32,7 @@ class Rois_1(Pipeline):
     """
 
     def pipeline_definition(self):
+        """Building the pipeline"""
         # nodes
         self.add_process(
             "find_in_list1", "mia_processes.bricks.tools.Find_In_List"

@@ -2846,6 +2846,10 @@ def fber(img, headmask, rotmask=None):
 
 
 def find_peaks(data):
+    """
+    :param data: a numpy ndarray
+    :returns: a list
+    """
     t_z = [
         data[:, :, i, :].mean(axis=0).mean(axis=0)
         for i in range(data.shape[2])
@@ -2854,6 +2858,7 @@ def find_peaks(data):
 
 
 def find_spikes(data, spike_thresh):
+    """blabla"""
     data -= np.median(np.median(np.median(data, axis=0), axis=0), axis=0)
     slice_mean = np.median(np.median(data, axis=0), axis=0)
     t_z = _robust_zscore(slice_mean)
@@ -2872,6 +2877,7 @@ def find_spikes(data, spike_thresh):
 
 
 def fuzzy_jaccard(in_tpms, in_mni_tpms):
+    """blabla"""
     overlaps = []
     for tpm, mni_tpm in zip(in_tpms, in_mni_tpms):
         tpm = tpm.reshape(-1)
@@ -3207,6 +3213,13 @@ def wm2max(img, mu_wm):
 
 
 def _flatten_dict(indict):
+    """Reduce a dictionary of dictionaries to a dictionary
+
+    Does not exceed two levels in depth.
+
+    :param indict: a dictionary
+    :returns: the flattened dictionary
+    """
     out_qc = {}
     for k, value in list(indict.items()):
         if not isinstance(value, dict):
@@ -3222,6 +3235,14 @@ def _flatten_dict(indict):
 
 
 def _prepare_mask(mask, label, erode=True):
+    """blabla
+
+
+    :param mask: blabla
+    :param label: blabla
+    :param erode: blabla
+    :returns: blabla
+    """
     fgmask = mask.copy()
 
     if np.issubdtype(fgmask.dtype, np.integer):
@@ -3244,6 +3265,10 @@ def _prepare_mask(mask, label, erode=True):
 
 
 def _robust_zscore(data):
+    """Blabla
+
+    :return: blabla
+    """
     return (data - np.atleast_2d(np.median(data, axis=1)).T) / np.atleast_2d(
         data.std(axis=1)
     ).T

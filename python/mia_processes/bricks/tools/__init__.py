@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+"""
+General bricks needed to build pipelines or to operate other
+bricks (input data manipulations, etc.).
+
+"""
 
 ##########################################################################
 # mia_processes - Copyright (C) IRMaGe/CEA, 2018

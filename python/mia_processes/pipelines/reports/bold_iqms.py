@@ -1,4 +1,16 @@
 # -*- coding: utf-8 -*-
+"""
+The pipeline dedicated to the IQMs extraction for functional IRM data.
+
+"""
+
+##########################################################################
+# mia_processes - Copyright (C) IRMaGe/CEA, 2018
+# Distributed under the terms of the CeCILL license, as published by
+# the CEA-CNRS-INRIA. Refer to the LICENSE file or to
+# http://www.cecill.info/licences/Licence_CeCILL_V2.1-en.html
+# for details.
+##########################################################################
 
 import traits.api as traits
 from capsul.api import Pipeline
@@ -11,6 +23,7 @@ class Bold_iqms(Pipeline):
     """
 
     def pipeline_definition(self):
+        """Building the pipeline"""
         # nodes
         self.add_process(
             "outliercount", "mia_processes.bricks.preprocess.afni.OutlierCount"

@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+"""
+The bricks and functions to calculate the values needed in the reports
+and to create the report itself.
+
+"""
 
 ##########################################################################
 # mia_processes - Copyright (C) IRMaGe/CEA, 2018
