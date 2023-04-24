@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.pipelines.qualityControl package &#8212; mia_processes 2.2.1-dev+336a1e0 documentation</title>
+    <title>mia_processes.pipelines.qualityControl package &#8212; mia_processes 2.2.1-dev+82d8ef0 documentation</title>
     <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -17,7 +17,7 @@
     <link rel="search" title="Search" href="search.html" />
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="index.html">
-          <span>mia_processes 2.2.1-dev+336a1e0 documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+82d8ef0 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.pipelines.qualityControl package</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -32,11 +32,13 @@
 
   <div class="section" id="module-mia_processes.pipelines.qualityControl">
 <span id="mia-processes-pipelines-qualitycontrol-package"></span><h1>mia_processes.pipelines.qualityControl package<a class="headerlink" href="#module-mia_processes.pipelines.qualityControl" title="Permalink to this headline">¶</a></h1>
+<p>The pipelines dedicated to the quality control measurement.</p>
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="module-mia_processes.pipelines.qualityControl.anat_mriqc">
 <span id="mia-processes-pipelines-qualitycontrol-anat-mriqc-module"></span><h2>mia_processes.pipelines.qualityControl.anat_mriqc module<a class="headerlink" href="#module-mia_processes.pipelines.qualityControl.anat_mriqc" title="Permalink to this headline">¶</a></h2>
+<p>The atomic calculations from afni.</p>
 <dl class="py class">
 <dt id="mia_processes.pipelines.qualityControl.anat_mriqc.Anat_mriqc">
 <em class="property">class </em><code class="sig-prename descclassname">mia_processes.pipelines.qualityControl.anat_mriqc.</code><code class="sig-name descname">Anat_mriqc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">autoexport_nodes_parameters</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/qualityControl/anat_mriqc.html#Anat_mriqc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.pipelines.qualityControl.anat_mriqc.Anat_mriqc" title="Permalink to this definition">¶</a></dt>
@@ -62,10 +64,7 @@ in the populse.mia_processes web site:
 <dl class="py method">
 <dt id="mia_processes.pipelines.qualityControl.anat_mriqc.Anat_mriqc.pipeline_definition">
 <code class="sig-name descname">pipeline_definition</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/qualityControl/anat_mriqc.html#Anat_mriqc.pipeline_definition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.pipelines.qualityControl.anat_mriqc.Anat_mriqc.pipeline_definition" title="Permalink to this definition">¶</a></dt>
-<dd><p>Define pipeline structure, nodes, sub-pipelines, switches, and
-links.</p>
-<p>This method should be overloaded in subclasses, it does nothing in the
-base Pipeline class.</p>
+<dd><p>Building the pipeline</p>
 </dd></dl>
 
 </dd></dl>
@@ -73,6 +72,7 @@ base Pipeline class.</p>
 </div>
 <div class="section" id="module-mia_processes.pipelines.qualityControl.bold_mriqc">
 <span id="mia-processes-pipelines-qualitycontrol-bold-mriqc-module"></span><h2>mia_processes.pipelines.qualityControl.bold_mriqc module<a class="headerlink" href="#module-mia_processes.pipelines.qualityControl.bold_mriqc" title="Permalink to this headline">¶</a></h2>
+<p>The MRIQC pipeline for functional MRI data.</p>
 <dl class="py class">
 <dt id="mia_processes.pipelines.qualityControl.bold_mriqc.Bold_mriqc">
 <em class="property">class </em><code class="sig-prename descclassname">mia_processes.pipelines.qualityControl.bold_mriqc.</code><code class="sig-name descname">Bold_mriqc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">autoexport_nodes_parameters</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/qualityControl/bold_mriqc.html#Bold_mriqc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.pipelines.qualityControl.bold_mriqc.Bold_mriqc" title="Permalink to this definition">¶</a></dt>
@@ -98,10 +98,7 @@ in the populse.mia_processes web site:
 <dl class="py method">
 <dt id="mia_processes.pipelines.qualityControl.bold_mriqc.Bold_mriqc.pipeline_definition">
 <code class="sig-name descname">pipeline_definition</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/qualityControl/bold_mriqc.html#Bold_mriqc.pipeline_definition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.pipelines.qualityControl.bold_mriqc.Bold_mriqc.pipeline_definition" title="Permalink to this definition">¶</a></dt>
-<dd><p>Define pipeline structure, nodes, sub-pipelines, switches, and
-links.</p>
-<p>This method should be overloaded in subclasses, it does nothing in the
-base Pipeline class.</p>
+<dd><p>Building the pipeline</p>
 </dd></dl>
 
 </dd></dl>
