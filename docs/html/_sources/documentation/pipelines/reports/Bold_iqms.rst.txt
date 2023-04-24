@@ -6,9 +6,9 @@
 |`Home <../../../index.html>`_|`Documentation <../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +-----------------------------+-------------------------------------------+----------------------------------------------------+
 
-================================
+==================
 Bold_iqms pipeline
-================================
+==================
 
 Compute no-reference IQMs (image quality metrics) from functional (BOLD).
 Used in bold_mriqc pipeline.
@@ -95,8 +95,8 @@ Used in bold_mriqc pipeline.
 
       ex. '/home/username/data/derived_data/reg_func_valid_tsnr.nii'
 
-- *fd_normalize (a boolean, optional)
-    See `Frame displacement brick <../../bricks/others/FramewiseDisplacement.html>`
+- *fd_normalize* (a boolean, optional)
+    See `Frame displacement brick <../../bricks/others/FramewiseDisplacement.html>`_
 
     ::
 

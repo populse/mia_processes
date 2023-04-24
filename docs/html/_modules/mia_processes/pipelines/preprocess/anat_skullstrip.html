@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.pipelines.preprocess.anat_skullstrip &#8212; mia_processes 2.2.1-dev+2d129ae documentation</title>
+    <title>mia_processes.pipelines.preprocess.anat_skullstrip &#8212; mia_processes 2.2.1-dev+2f07c5e documentation</title>
     <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
@@ -13,12 +13,11 @@
     <script src="../../../../_static/underscore.js"></script>
     <script src="../../../../_static/doctools.js"></script>
     <script src="../../../../_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.2.1-dev+2d129ae documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+2f07c5e documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.pipelines.preprocess.anat_skullstrip</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -32,8 +31,9 @@
 
 
   <h1>Source code for mia_processes.pipelines.preprocess.anat_skullstrip</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">capsul.api</span> <span class="kn">import</span> <span class="n">Pipeline</span>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="kn">import</span> <span class="nn">traits.api</span> <span class="k">as</span> <span class="nn">traits</span>
+<span class="kn">from</span> <span class="nn">capsul.api</span> <span class="kn">import</span> <span class="n">Pipeline</span>
 
 
 <div class="viewcode-block" id="Anat_skullstrip"><a class="viewcode-back" href="../../../../mia_processes.pipelines.preprocess.html#mia_processes.pipelines.preprocess.anat_skullstrip.Anat_skullstrip">[docs]</a><span class="k">class</span> <span class="nc">Anat_skullstrip</span><span class="p">(</span><span class="n">Pipeline</span><span class="p">):</span>
@@ -44,41 +44,56 @@
 
 <div class="viewcode-block" id="Anat_skullstrip.pipeline_definition"><a class="viewcode-back" href="../../../../mia_processes.pipelines.preprocess.html#mia_processes.pipelines.preprocess.anat_skullstrip.Anat_skullstrip.pipeline_definition">[docs]</a>    <span class="k">def</span> <span class="nf">pipeline_definition</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># nodes</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;n4_bias_field_correction&quot;</span><span class="p">,</span>
-                         <span class="s2">&quot;mia_processes.bricks.preprocess.&quot;</span>
-                         <span class="s2">&quot;ants.processes.N4BiasFieldCorrection&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;n4_bias_field_correction&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.preprocess.&quot;</span>
+            <span class="s2">&quot;ants.processes.N4BiasFieldCorrection&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;n4_bias_field_correction&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">dimension</span> <span class="o">=</span> <span class="mi">3</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;skull_stripping&quot;</span><span class="p">,</span>
-                         <span class="s2">&quot;mia_processes.bricks.preprocess.&quot;</span>
-                         <span class="s2">&quot;afni.processes.SkullStrip&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;calc&quot;</span><span class="p">,</span> <span class="s2">&quot;mia_processes.bricks.preprocess&quot;</span>
-                         <span class="s2">&quot;.afni.processes.Calc&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;binarize&quot;</span><span class="p">,</span> <span class="s2">&quot;mia_processes.bricks.preprocess.&quot;</span>
-                         <span class="s2">&quot;others.processing.Binarize&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;skull_stripping&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.preprocess.&quot;</span> <span class="s2">&quot;afni.processes.SkullStrip&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;calc&quot;</span><span class="p">,</span> <span class="s2">&quot;mia_processes.bricks.preprocess&quot;</span> <span class="s2">&quot;.afni.processes.Calc&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;binarize&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.preprocess.&quot;</span> <span class="s2">&quot;others.processing.Binarize&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="c1"># links</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;calc&quot;</span><span class="p">,</span> <span class="s2">&quot;in_file_a&quot;</span><span class="p">,</span>
-                              <span class="s2">&quot;in_file&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;calc&quot;</span><span class="p">,</span> <span class="s2">&quot;in_file_a&quot;</span><span class="p">,</span> <span class="s2">&quot;in_file&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;in_file-&gt;n4_bias_field_correction.in_file&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;n4_bias_field_correction.out_file-&gt;&quot;</span>
-                      <span class="s2">&quot;skull_stripping.in_file&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;n4_bias_field_correction&quot;</span><span class="p">,</span> <span class="s2">&quot;out_file&quot;</span><span class="p">,</span>
-                              <span class="s2">&quot;bias_corrected&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;n4_bias_field_correction&quot;</span><span class="p">,</span>
-                              <span class="s2">&quot;bias_image&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span>
+            <span class="s2">&quot;n4_bias_field_correction.out_file-&gt;&quot;</span> <span class="s2">&quot;skull_stripping.in_file&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;n4_bias_field_correction&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;out_file&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;bias_corrected&quot;</span><span class="p">,</span>
+            <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;n4_bias_field_correction&quot;</span><span class="p">,</span> <span class="s2">&quot;bias_image&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;skull_stripping.out_file-&gt;calc.in_file_b&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;calc&quot;</span><span class="p">,</span> <span class="s2">&quot;out_file&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;calc.out_file-&gt;binarize.in_files&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;binarize&quot;</span><span class="p">,</span> <span class="s2">&quot;out_files&quot;</span><span class="p">,</span>
-                              <span class="s2">&quot;out_mask&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;binarize&quot;</span><span class="p">,</span> <span class="s2">&quot;out_files&quot;</span><span class="p">,</span> <span class="s2">&quot;out_mask&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
 
         <span class="c1"># parameters order</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">reorder_traits</span><span class="p">((</span><span class="s2">&quot;out_file&quot;</span><span class="p">,</span> <span class="s2">&quot;out_mask&quot;</span><span class="p">,</span> <span class="s2">&quot;bias_corrected&quot;</span><span class="p">,</span>
-                             <span class="s2">&quot;bias_image&quot;</span><span class="p">,</span> <span class="s2">&quot;in_file&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reorder_traits</span><span class="p">(</span>
+            <span class="p">(</span><span class="s2">&quot;out_file&quot;</span><span class="p">,</span> <span class="s2">&quot;out_mask&quot;</span><span class="p">,</span> <span class="s2">&quot;bias_corrected&quot;</span><span class="p">,</span> <span class="s2">&quot;bias_image&quot;</span><span class="p">,</span> <span class="s2">&quot;in_file&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
 
         <span class="c1"># default and initial values</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;calc&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">expr</span> <span class="o">=</span> <span class="s1">&#39;a*step(b)&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;calc&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">out_prefix</span> <span class="o">=</span> <span class="s1">&#39;ss_orig_&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;calc&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">expr</span> <span class="o">=</span> <span class="s2">&quot;a*step(b)&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;calc&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">out_prefix</span> <span class="o">=</span> <span class="s2">&quot;ss_orig_&quot;</span>
 
         <span class="c1"># nodes positions</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_position</span> <span class="o">=</span> <span class="p">{</span>

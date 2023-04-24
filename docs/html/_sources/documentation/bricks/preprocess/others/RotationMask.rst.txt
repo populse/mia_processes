@@ -6,9 +6,9 @@
 |`Home <../../../../index.html>`_|`Documentation <../../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +--------------------------------+----------------------------------------------+----------------------------------------------------+
 
-============
+==================
 RotationMask brick
-============
+==================
 
 Compute the rotation mask image as decribed in the method to compute the arfifact mask described in [Mortamet2009].
 

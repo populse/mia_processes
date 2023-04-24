@@ -11,6 +11,7 @@
 ##########################################################################
 
 import os
+
 from setuptools import find_packages, setup
 
 # Select modules to include in distribution

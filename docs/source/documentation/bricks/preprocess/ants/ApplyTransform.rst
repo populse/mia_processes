@@ -6,9 +6,9 @@
 |`Home <../../../../index.html>`_|`Documentation <../../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +--------------------------------+----------------------------------------------+----------------------------------------------------+
 
-============
+=====================
 ApplyTransforms brick
-============
+=====================
 
 ApplyTransforms, applied to an input image, transforms it according to a reference image and a transform (or a set of transforms)
 using ANTs ApplyTransforms command.
@@ -67,7 +67,7 @@ using ANTs ApplyTransforms command.
 
       ex. 0
 
-- *interpolation*(Linear or NearestNeighbor or CosineWindowedSinc or WelchWindowedSinc or HammingWindowedSinc or LanczosWindowedSinc or MultiLabel or Gaussian or BSpline, optional, default value is Linear)
+- *interpolation* (Linear or NearestNeighbor or CosineWindowedSinc or WelchWindowedSinc or HammingWindowedSinc or LanczosWindowedSinc or MultiLabel or Gaussian or BSpline, optional, default value is Linear)
     Interpolation model.
 
     ::

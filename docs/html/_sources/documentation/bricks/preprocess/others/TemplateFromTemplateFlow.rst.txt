@@ -6,9 +6,9 @@
 |`Home <../../../../index.html>`_|`Documentation <../../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +--------------------------------+----------------------------------------------+----------------------------------------------------+
 
-============
+==============================
 TemplateFromTemplateFlow brick
-============
+==============================
 
 TemplateFlow is a repository of neuroimaging templates including spatial mapping across standard space.
 Each tempalte is described by a template name (for example: 'MNI152NLin2009cAsym', 'MNIColin27', 'MNIPediatricAsym') and by several optional entities (resolustion, suffix, label..).

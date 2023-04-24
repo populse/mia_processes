@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.pipelines.reports.bold_iqms &#8212; mia_processes 2.2.1-dev+2d129ae documentation</title>
+    <title>mia_processes.pipelines.reports.bold_iqms &#8212; mia_processes 2.2.1-dev+2f07c5e documentation</title>
     <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
@@ -13,12 +13,11 @@
     <script src="../../../../_static/underscore.js"></script>
     <script src="../../../../_static/doctools.js"></script>
     <script src="../../../../_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.2.1-dev+2d129ae documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+2f07c5e documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.pipelines.reports.bold_iqms</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -34,8 +33,8 @@
   <h1>Source code for mia_processes.pipelines.reports.bold_iqms</h1><div class="highlight"><pre>
 <span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 
-<span class="kn">from</span> <span class="nn">capsul.api</span> <span class="kn">import</span> <span class="n">Pipeline</span>
 <span class="kn">import</span> <span class="nn">traits.api</span> <span class="k">as</span> <span class="nn">traits</span>
+<span class="kn">from</span> <span class="nn">capsul.api</span> <span class="kn">import</span> <span class="n">Pipeline</span>
 
 
 <div class="viewcode-block" id="Bold_iqms"><a class="viewcode-back" href="../../../../mia_processes.pipelines.reports.html#mia_processes.pipelines.reports.bold_iqms.Bold_iqms">[docs]</a><span class="k">class</span> <span class="nc">Bold_iqms</span><span class="p">(</span><span class="n">Pipeline</span><span class="p">):</span>
@@ -43,57 +42,136 @@
 <span class="sd">    * Extraction of IQMs .</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="Bold_iqms.pipeline_definition"><a class="viewcode-back" href="../../../../mia_processes.pipelines.reports.html#mia_processes.pipelines.reports.bold_iqms.Bold_iqms.pipeline_definition">[docs]</a>    <span class="k">def</span> <span class="nf">pipeline_definition</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># nodes</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;outliercount&quot;</span><span class="p">,</span> <span class="s2">&quot;mia_processes.bricks.preprocess.afni.OutlierCount&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;boldiqms&quot;</span><span class="p">,</span> <span class="s2">&quot;mia_processes.bricks.reports.processes.BoldIQMs&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;carpetparcellation&quot;</span><span class="p">,</span> <span class="s2">&quot;mia_processes.bricks.reports.processes.CarpetParcellation&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;framewisedisplacement&quot;</span><span class="p">,</span> <span class="s2">&quot;mia_processes.bricks.reports.processes.FramewiseDisplacement&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;framewisedisplacement&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">parameter_source</span> <span class="o">=</span> <span class="s1">&#39;AFNI&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;spikes&quot;</span><span class="p">,</span> <span class="s2">&quot;mia_processes.bricks.reports.processes.Spikes&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;outliercount&quot;</span><span class="p">,</span> <span class="s2">&quot;mia_processes.bricks.preprocess.afni.OutlierCount&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;boldiqms&quot;</span><span class="p">,</span> <span class="s2">&quot;mia_processes.bricks.reports.processes.BoldIQMs&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;carpetparcellation&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.reports.processes.CarpetParcellation&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;framewisedisplacement&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.reports.processes.FramewiseDisplacement&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;framewisedisplacement&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">parameter_source</span> <span class="o">=</span> <span class="s2">&quot;AFNI&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;spikes&quot;</span><span class="p">,</span> <span class="s2">&quot;mia_processes.bricks.reports.processes.Spikes&quot;</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;gcor&quot;</span><span class="p">,</span> <span class="s2">&quot;mia_processes.bricks.preprocess.afni.GCOR&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;computedvars&quot;</span><span class="p">,</span> <span class="s2">&quot;mia_processes.bricks.reports.processes.ComputeDVARS&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;computedvars&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.reports.processes.ComputeDVARS&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;fwhmx&quot;</span><span class="p">,</span> <span class="s2">&quot;mia_processes.bricks.preprocess.afni.FWHMx&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;qualityindex&quot;</span><span class="p">,</span> <span class="s2">&quot;mia_processes.bricks.preprocess.afni.QualityIndex&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;qualityindex&quot;</span><span class="p">,</span> <span class="s2">&quot;mia_processes.bricks.preprocess.afni.QualityIndex&quot;</span>
+        <span class="p">)</span>
 
         <span class="c1"># links</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;fwhmx&quot;</span><span class="p">,</span> <span class="s2">&quot;in_file&quot;</span><span class="p">,</span> <span class="s2">&quot;epi_mean&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;fwhmx&quot;</span><span class="p">,</span> <span class="s2">&quot;in_file&quot;</span><span class="p">,</span> <span class="s2">&quot;epi_mean&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;epi_mean-&gt;boldiqms.in_epi&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;boldiqms&quot;</span><span class="p">,</span> <span class="s2">&quot;in_hmc&quot;</span><span class="p">,</span> <span class="s2">&quot;hmc_epi&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;boldiqms&quot;</span><span class="p">,</span> <span class="s2">&quot;in_hmc&quot;</span><span class="p">,</span> <span class="s2">&quot;hmc_epi&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;hmc_epi-&gt;computedvars.in_file&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;hmc_epi-&gt;qualityindex.in_file&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;hmc_epi-&gt;outliercount.in_file&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;hmc_epi-&gt;gcor.in_file&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;boldiqms&quot;</span><span class="p">,</span> <span class="s2">&quot;in_tsnr&quot;</span><span class="p">,</span> <span class="s2">&quot;epi_tsnr&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;boldiqms&quot;</span><span class="p">,</span> <span class="s2">&quot;in_fd_thresh&quot;</span><span class="p">,</span> <span class="s2">&quot;fd_thresh&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;boldiqms&quot;</span><span class="p">,</span> <span class="s2">&quot;in_dummy_TRs&quot;</span><span class="p">,</span> <span class="s2">&quot;dummy_TRs&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;carpetparcellation&quot;</span><span class="p">,</span> <span class="s2">&quot;brainmask&quot;</span><span class="p">,</span>
-                              <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;boldiqms&quot;</span><span class="p">,</span> <span class="s2">&quot;in_tsnr&quot;</span><span class="p">,</span> <span class="s2">&quot;epi_tsnr&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;boldiqms&quot;</span><span class="p">,</span> <span class="s2">&quot;in_fd_thresh&quot;</span><span class="p">,</span> <span class="s2">&quot;fd_thresh&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;boldiqms&quot;</span><span class="p">,</span> <span class="s2">&quot;in_dummy_TRs&quot;</span><span class="p">,</span> <span class="s2">&quot;dummy_TRs&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;carpetparcellation&quot;</span><span class="p">,</span> <span class="s2">&quot;brainmask&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;brainmask-&gt;gcor.mask_file&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;brainmask-&gt;fwhmx.mask_file&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;brainmask-&gt;computedvars.in_mask&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;brainmask-&gt;boldiqms.in_mask&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;brainmask-&gt;outliercount.mask_file&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;carpetparcellation&quot;</span><span class="p">,</span> <span class="s2">&quot;segmentation&quot;</span><span class="p">,</span> <span class="s2">&quot;epi_parc&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;framewisedisplacement&quot;</span><span class="p">,</span> <span class="s2">&quot;in_file&quot;</span><span class="p">,</span> <span class="s2">&quot;hmc_motion&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;spikes&quot;</span><span class="p">,</span> <span class="s2">&quot;in_file&quot;</span><span class="p">,</span> <span class="s2">&quot;ras_epi&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;outliercount&quot;</span><span class="p">,</span> <span class="s2">&quot;fraction&quot;</span><span class="p">,</span> <span class="s2">&quot;outlier_fraction&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;qualityindex&quot;</span><span class="p">,</span> <span class="s2">&quot;automask&quot;</span><span class="p">,</span> <span class="s2">&quot;quality_index_automask&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;fwhmx&quot;</span><span class="p">,</span> <span class="s2">&quot;combine&quot;</span><span class="p">,</span> <span class="s2">&quot;fwhm_combine&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;fwhmx&quot;</span><span class="p">,</span> <span class="s2">&quot;detrend&quot;</span><span class="p">,</span> <span class="s2">&quot;fwhm_detrend&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;computedvars&quot;</span><span class="p">,</span> <span class="s2">&quot;remove_zero_variance&quot;</span><span class="p">,</span> <span class="s2">&quot;dvars_remove_zero_variance&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;computedvars&quot;</span><span class="p">,</span> <span class="s2">&quot;intensity_normalization&quot;</span><span class="p">,</span> <span class="s2">&quot;dvars_intensity_normalization&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;framewisedisplacement&quot;</span><span class="p">,</span> <span class="s2">&quot;parameter_source&quot;</span><span class="p">,</span> <span class="s2">&quot;fd_parameter_source&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;framewisedisplacement&quot;</span><span class="p">,</span> <span class="s2">&quot;radius&quot;</span><span class="p">,</span> <span class="s2">&quot;fd_radius&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;framewisedisplacement&quot;</span><span class="p">,</span> <span class="s2">&quot;normalize&quot;</span><span class="p">,</span> <span class="s2">&quot;fd_normalize&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;spikes&quot;</span><span class="p">,</span> <span class="s2">&quot;no_zscore&quot;</span><span class="p">,</span> <span class="s2">&quot;spikes_no_zscore&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;spikes&quot;</span><span class="p">,</span> <span class="s2">&quot;detrend&quot;</span><span class="p">,</span> <span class="s2">&quot;spikes_detrend&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;spikes&quot;</span><span class="p">,</span> <span class="s2">&quot;spike_thresh&quot;</span><span class="p">,</span> <span class="s2">&quot;spikes_spike_thresh&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;spikes&quot;</span><span class="p">,</span> <span class="s2">&quot;skip_frames&quot;</span><span class="p">,</span> <span class="s2">&quot;spikes_skip_frames&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;carpetparcellation&quot;</span><span class="p">,</span> <span class="s2">&quot;segmentation&quot;</span><span class="p">,</span> <span class="s2">&quot;epi_parc&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;framewisedisplacement&quot;</span><span class="p">,</span> <span class="s2">&quot;in_file&quot;</span><span class="p">,</span> <span class="s2">&quot;hmc_motion&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;spikes&quot;</span><span class="p">,</span> <span class="s2">&quot;in_file&quot;</span><span class="p">,</span> <span class="s2">&quot;ras_epi&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;outliercount&quot;</span><span class="p">,</span> <span class="s2">&quot;fraction&quot;</span><span class="p">,</span> <span class="s2">&quot;outlier_fraction&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;qualityindex&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;automask&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;quality_index_automask&quot;</span><span class="p">,</span>
+            <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;fwhmx&quot;</span><span class="p">,</span> <span class="s2">&quot;combine&quot;</span><span class="p">,</span> <span class="s2">&quot;fwhm_combine&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;fwhmx&quot;</span><span class="p">,</span> <span class="s2">&quot;detrend&quot;</span><span class="p">,</span> <span class="s2">&quot;fwhm_detrend&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;computedvars&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;remove_zero_variance&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;dvars_remove_zero_variance&quot;</span><span class="p">,</span>
+            <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;computedvars&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;intensity_normalization&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;dvars_intensity_normalization&quot;</span><span class="p">,</span>
+            <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;framewisedisplacement&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;parameter_source&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;fd_parameter_source&quot;</span><span class="p">,</span>
+            <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;framewisedisplacement&quot;</span><span class="p">,</span> <span class="s2">&quot;radius&quot;</span><span class="p">,</span> <span class="s2">&quot;fd_radius&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;framewisedisplacement&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;normalize&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;fd_normalize&quot;</span><span class="p">,</span>
+            <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;spikes&quot;</span><span class="p">,</span> <span class="s2">&quot;no_zscore&quot;</span><span class="p">,</span> <span class="s2">&quot;spikes_no_zscore&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;spikes&quot;</span><span class="p">,</span> <span class="s2">&quot;detrend&quot;</span><span class="p">,</span> <span class="s2">&quot;spikes_detrend&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;spikes&quot;</span><span class="p">,</span> <span class="s2">&quot;spike_thresh&quot;</span><span class="p">,</span> <span class="s2">&quot;spikes_spike_thresh&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;spikes&quot;</span><span class="p">,</span> <span class="s2">&quot;skip_frames&quot;</span><span class="p">,</span> <span class="s2">&quot;spikes_skip_frames&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;outliercount.out_file-&gt;boldiqms.in_outliers_file&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;boldiqms&quot;</span><span class="p">,</span> <span class="s2">&quot;out_file&quot;</span><span class="p">,</span> <span class="s2">&quot;BoldQC_out_file&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;carpetparcellation&quot;</span><span class="p">,</span> <span class="s2">&quot;out_file&quot;</span><span class="p">,</span> <span class="s2">&quot;carpet_seg&quot;</span><span class="p">,</span>
-                              <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;boldiqms&quot;</span><span class="p">,</span> <span class="s2">&quot;out_file&quot;</span><span class="p">,</span> <span class="s2">&quot;BoldQC_out_file&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;carpetparcellation&quot;</span><span class="p">,</span> <span class="s2">&quot;out_file&quot;</span><span class="p">,</span> <span class="s2">&quot;carpet_seg&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;framewisedisplacement.out_file-&gt;boldiqms.in_fd_file&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;spikes.out_file-&gt;boldiqms.in_spikes_file&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;gcor.out-&gt;boldiqms.in_gcor&quot;</span><span class="p">)</span>
@@ -103,19 +181,37 @@
 
         <span class="c1"># parameters order</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">reorder_traits</span><span class="p">((</span><span class="s2">&quot;ras_epi&quot;</span><span class="p">,</span> <span class="s2">&quot;epi_mean&quot;</span><span class="p">,</span> <span class="s2">&quot;hmc_epi&quot;</span><span class="p">,</span> <span class="s2">&quot;epi_tsnr&quot;</span><span class="p">,</span>
-                             <span class="s2">&quot;brainmask&quot;</span><span class="p">,</span> <span class="s2">&quot;epi_parc&quot;</span><span class="p">,</span> <span class="s2">&quot;hmc_motion&quot;</span><span class="p">,</span>
-                             <span class="s2">&quot;BoldQC_out_file&quot;</span><span class="p">,</span> <span class="s2">&quot;carpet_seg&quot;</span><span class="p">,</span> <span class="s2">&quot;dummy_TRs&quot;</span><span class="p">,</span>
-                             <span class="s2">&quot;outlier_fraction&quot;</span><span class="p">,</span> <span class="s2">&quot;quality_index_automask&quot;</span><span class="p">,</span>
-                             <span class="s2">&quot;fwhm_combine&quot;</span><span class="p">,</span> <span class="s2">&quot;fwhm_detrend&quot;</span><span class="p">,</span>
-                             <span class="s2">&quot;dvars_remove_zero_variance&quot;</span><span class="p">,</span>
-                             <span class="s2">&quot;dvars_intensity_normalization&quot;</span><span class="p">,</span>
-                             <span class="s2">&quot;fd_parameter_source&quot;</span><span class="p">,</span> <span class="s2">&quot;fd_radius&quot;</span><span class="p">,</span> <span class="s2">&quot;fd_normalize&quot;</span><span class="p">,</span>
-                             <span class="s2">&quot;fd_thresh&quot;</span><span class="p">,</span> <span class="s2">&quot;spikes_no_zscore&quot;</span><span class="p">,</span> <span class="s2">&quot;spikes_detrend&quot;</span><span class="p">,</span>
-                             <span class="s2">&quot;spikes_spike_thresh&quot;</span><span class="p">,</span> <span class="s2">&quot;spikes_skip_frames&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reorder_traits</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;ras_epi&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;epi_mean&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;hmc_epi&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;epi_tsnr&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;brainmask&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;epi_parc&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;hmc_motion&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;BoldQC_out_file&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;carpet_seg&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;dummy_TRs&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;outlier_fraction&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;quality_index_automask&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;fwhm_combine&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;fwhm_detrend&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;dvars_remove_zero_variance&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;dvars_intensity_normalization&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;fd_parameter_source&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;fd_radius&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;fd_normalize&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;fd_thresh&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;spikes_no_zscore&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;spikes_detrend&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;spikes_spike_thresh&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;spikes_skip_frames&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
 
         <span class="c1"># default and initial values</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;fwhmx&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="s1">&#39;-ShowMeClassicFWHM&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;fwhmx&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="s2">&quot;-ShowMeClassicFWHM&quot;</span>
 
         <span class="c1"># nodes positions</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_position</span> <span class="o">=</span> <span class="p">{</span>

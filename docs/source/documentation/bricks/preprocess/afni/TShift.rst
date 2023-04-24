@@ -30,8 +30,8 @@ If neither of this two parameters are defined, the process return the input file
 
 **Optional inputs with default value parameters:**
 
-- *interpolation* (Fourier or linear or cubic or quintic or heptic, optional, , default value is Fourier)
-    |Different interpolation methods:
+- *interpolation* (Fourier or linear or cubic or quintic or heptic, optional, default value is Fourier)
+    | Different interpolation methods:
     | - Fourier = Use a Fourier method (the default: most accurate; slowest).
     | - linear  = Use linear (1st order polynomial) interpolation (least accurate).
     | - cubic   = Use the cubic (3rd order) Lagrange polynomial interpolation.

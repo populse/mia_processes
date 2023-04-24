@@ -3,16 +3,16 @@
 |`Home <../../../index.html>`_|`Documentation <../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +-----------------------------+-------------------------------------------+----------------------------------------------------+
 
-===================
+============================
 Concat_to_list_of_list brick
-===================
+============================
 
 Make an output list of list containing the iteration of the input list1 with each element of the input list2
 
-    Ex. ['a', 'b', 'c'] and ['_1', '_2'] gives
-    [['a', '_1'], ['a', '_2'],
-     ['b', '_1'], ['b', '_2'],
-     ['c', '_1'], ['c', '_2']]
+    Ex. ['a', 'b', 'c'] and ['_1', '_2'] gives:
+        [['a', '_1'], ['a', '_2'],
+         ['b', '_1'], ['b', '_2'],
+         ['c', '_1'], ['c', '_2']]
 
 ---------------------------------------------------------------------
 

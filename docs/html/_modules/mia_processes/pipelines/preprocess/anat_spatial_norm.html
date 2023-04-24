@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.pipelines.preprocess.anat_spatial_norm &#8212; mia_processes 2.2.1-dev+2d129ae documentation</title>
+    <title>mia_processes.pipelines.preprocess.anat_spatial_norm &#8212; mia_processes 2.2.1-dev+2f07c5e documentation</title>
     <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
@@ -13,12 +13,11 @@
     <script src="../../../../_static/underscore.js"></script>
     <script src="../../../../_static/doctools.js"></script>
     <script src="../../../../_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.2.1-dev+2d129ae documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+2f07c5e documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.pipelines.preprocess.anat_spatial_norm</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -32,10 +31,11 @@
 
 
   <h1>Source code for mia_processes.pipelines.preprocess.anat_spatial_norm</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">capsul.api</span> <span class="kn">import</span> <span class="n">Pipeline</span>
-
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="kn">import</span> <span class="nn">os</span>
+
 <span class="kn">import</span> <span class="nn">traits.api</span> <span class="k">as</span> <span class="nn">traits</span>
+<span class="kn">from</span> <span class="nn">capsul.api</span> <span class="kn">import</span> <span class="n">Pipeline</span>
 
 
 <div class="viewcode-block" id="Anat_spatial_norm"><a class="viewcode-back" href="../../../../mia_processes.pipelines.preprocess.html#mia_processes.pipelines.preprocess.anat_spatial_norm.Anat_spatial_norm">[docs]</a><span class="k">class</span> <span class="nc">Anat_spatial_norm</span><span class="p">(</span><span class="n">Pipeline</span><span class="p">):</span>
@@ -48,84 +48,119 @@
 
 <div class="viewcode-block" id="Anat_spatial_norm.pipeline_definition"><a class="viewcode-back" href="../../../../mia_processes.pipelines.preprocess.html#mia_processes.pipelines.preprocess.anat_spatial_norm.Anat_spatial_norm.pipeline_definition">[docs]</a>    <span class="k">def</span> <span class="nf">pipeline_definition</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># nodes</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;mask_moving_image&quot;</span><span class="p">,</span>
-                         <span class="s2">&quot;mia_processes.bricks.preprocess.&quot;</span>
-                         <span class="s2">&quot;others.processing.Mask&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;mask_fixed_image&quot;</span><span class="p">,</span>
-                         <span class="s2">&quot;mia_processes.bricks.preprocess.&quot;</span>
-                         <span class="s2">&quot;others.processing.Mask&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;affine_initializer&quot;</span><span class="p">,</span>
-                         <span class="s2">&quot;mia_processes.bricks.preprocess.&quot;</span>
-                         <span class="s2">&quot;ants.processes.AffineInitializer&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;registration&quot;</span><span class="p">,</span>
-                         <span class="s2">&quot;mia_processes.bricks.preprocess.&quot;</span>
-                         <span class="s2">&quot;ants.processes.Registration&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;registration&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">convergence_threshold</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1e-07</span><span class="p">,</span>
-                                                                    <span class="mf">1e-08</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;mask_moving_image&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.preprocess.&quot;</span> <span class="s2">&quot;others.processing.Mask&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;mask_fixed_image&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.preprocess.&quot;</span> <span class="s2">&quot;others.processing.Mask&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;affine_initializer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.preprocess.&quot;</span>
+            <span class="s2">&quot;ants.processes.AffineInitializer&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;registration&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.preprocess.&quot;</span> <span class="s2">&quot;ants.processes.Registration&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;registration&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">convergence_threshold</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="mf">1e-07</span><span class="p">,</span>
+            <span class="mf">1e-08</span><span class="p">,</span>
+        <span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;registration&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">convergence_window_size</span> <span class="o">=</span> <span class="p">[</span><span class="mi">15</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;registration&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">interpolation</span> <span class="o">=</span> <span class="s1">&#39;LanczosWindowedSinc&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;registration&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">metric</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Mattes&#39;</span><span class="p">,</span> <span class="s1">&#39;Mattes&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span>
+            <span class="s2">&quot;registration&quot;</span>
+        <span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">interpolation</span> <span class="o">=</span> <span class="s2">&quot;LanczosWindowedSinc&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;registration&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">metric</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Mattes&quot;</span><span class="p">,</span> <span class="s2">&quot;Mattes&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;registration&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">metric_weight</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;registration&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">number_of_iterations</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">20</span><span class="p">],</span> <span class="p">[</span><span class="mi">15</span><span class="p">]]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;registration&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">radius_or_number_of_bins</span> <span class="o">=</span> <span class="p">[</span><span class="mi">56</span><span class="p">,</span> <span class="mi">56</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;registration&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">sampling_percentage</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;registration&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">sampling_strategy</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Random&#39;</span><span class="p">,</span>
-                                                                <span class="s1">&#39;Random&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;registration&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">sampling_strategy</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;Random&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Random&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;registration&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">shrink_factors</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;registration&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">smoothing_sigmas</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">4.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">2.0</span><span class="p">]]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;registration&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">transform_parameters</span> <span class="o">=</span> <span class="p">[(</span><span class="mf">1.0</span><span class="p">,),</span>
-                                                                   <span class="p">(</span><span class="mf">1.0</span><span class="p">,)]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;registration&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">transforms</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Rigid&#39;</span><span class="p">,</span> <span class="s1">&#39;Affine&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;registration&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">use_histogram_matching</span> <span class="o">=</span> <span class="p">[</span><span class="kc">False</span><span class="p">,</span>
-                                                                     <span class="kc">True</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;registration&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">transform_parameters</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="mf">1.0</span><span class="p">,),</span>
+            <span class="p">(</span><span class="mf">1.0</span><span class="p">,),</span>
+        <span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;registration&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">transforms</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Rigid&quot;</span><span class="p">,</span> <span class="s2">&quot;Affine&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;registration&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">use_histogram_matching</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="kc">False</span><span class="p">,</span>
+            <span class="kc">True</span><span class="p">,</span>
+        <span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;registration&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">num_threads</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;OMP_NUM_THREADS&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()))</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;OMP_NUM_THREADS&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">())</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;affine_initializer&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">num_threads</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;OMP_NUM_THREADS&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;template_mask&quot;</span><span class="p">,</span>
-                         <span class="s2">&quot;mia_processes.bricks.preprocess.&quot;</span>
-                         <span class="s2">&quot;others.processing.TemplateFromTemplateFlow&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;template_mask&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">suffix</span> <span class="o">=</span> <span class="s1">&#39;mask&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;template_mask&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">desc</span> <span class="o">=</span> <span class="s1">&#39;brain&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;template_mask&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_template</span> <span class="o">=</span> <span class="s1">&#39;MNI152NLin2009cAsym&#39;</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;OMP_NUM_THREADS&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">())</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;template_mask&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.preprocess.&quot;</span>
+            <span class="s2">&quot;others.processing.TemplateFromTemplateFlow&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;template_mask&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">suffix</span> <span class="o">=</span> <span class="s2">&quot;mask&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;template_mask&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">desc</span> <span class="o">=</span> <span class="s2">&quot;brain&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;template_mask&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_template</span> <span class="o">=</span> <span class="s2">&quot;MNI152NLin2009cAsym&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;template_mask&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">resolution</span> <span class="o">=</span> <span class="mi">2</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span><span class="s2">&quot;template&quot;</span><span class="p">,</span>
-                         <span class="s2">&quot;mia_processes.bricks.preprocess.&quot;</span>
-                         <span class="s2">&quot;others.processing.TemplateFromTemplateFlow&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;template&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">suffix</span> <span class="o">=</span> <span class="s1">&#39;T1w&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;template&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_template</span> <span class="o">=</span> <span class="s1">&#39;MNI152NLin2009cAsym&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;template&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.preprocess.&quot;</span>
+            <span class="s2">&quot;others.processing.TemplateFromTemplateFlow&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;template&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">suffix</span> <span class="o">=</span> <span class="s2">&quot;T1w&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;template&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_template</span> <span class="o">=</span> <span class="s2">&quot;MNI152NLin2009cAsym&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;template&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">resolution</span> <span class="o">=</span> <span class="mi">2</span>
 
         <span class="c1"># links</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;mask_moving_image&quot;</span><span class="p">,</span> <span class="s2">&quot;in_file&quot;</span><span class="p">,</span>
-                              <span class="s2">&quot;moving_image&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;mask_moving_image&quot;</span><span class="p">,</span> <span class="s2">&quot;mask_file&quot;</span><span class="p">,</span>
-                              <span class="s2">&quot;moving_mask&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;mask_moving_image.out_file-&gt;&quot;</span>
-                      <span class="s2">&quot;affine_initializer.moving_image&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;mask_moving_image&quot;</span><span class="p">,</span> <span class="s2">&quot;in_file&quot;</span><span class="p">,</span> <span class="s2">&quot;moving_image&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;mask_moving_image&quot;</span><span class="p">,</span> <span class="s2">&quot;mask_file&quot;</span><span class="p">,</span> <span class="s2">&quot;moving_mask&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span>
+            <span class="s2">&quot;mask_moving_image.out_file-&gt;&quot;</span> <span class="s2">&quot;affine_initializer.moving_image&quot;</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;mask_moving_image.out_file-&gt;registration.moving_image&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;mask_fixed_image.out_file-&gt;&quot;</span>
-                      <span class="s2">&quot;affine_initializer.fixed_image&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span>
+            <span class="s2">&quot;mask_fixed_image.out_file-&gt;&quot;</span> <span class="s2">&quot;affine_initializer.fixed_image&quot;</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;mask_fixed_image.out_file-&gt;registration.fixed_image&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;affine_initializer.out_file-&gt;&quot;</span>
-                      <span class="s2">&quot;registration.initial_moving_transform&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;registration&quot;</span><span class="p">,</span> <span class="s2">&quot;composite_transform&quot;</span><span class="p">,</span>
-                              <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;registration&quot;</span><span class="p">,</span> <span class="s2">&quot;inverse_composite_transform&quot;</span><span class="p">,</span>
-                              <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;registration&quot;</span><span class="p">,</span> <span class="s2">&quot;warped_image&quot;</span><span class="p">,</span>
-                              <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span>
+            <span class="s2">&quot;affine_initializer.out_file-&gt;&quot;</span>
+            <span class="s2">&quot;registration.initial_moving_transform&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;registration&quot;</span><span class="p">,</span> <span class="s2">&quot;composite_transform&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;registration&quot;</span><span class="p">,</span> <span class="s2">&quot;inverse_composite_transform&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;registration&quot;</span><span class="p">,</span> <span class="s2">&quot;warped_image&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;template_mask.template-&gt;mask_fixed_image.mask_file&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;template.template-&gt;mask_fixed_image.in_file&quot;</span><span class="p">)</span>
 
         <span class="c1"># parameters order</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">reorder_traits</span><span class="p">((</span><span class="s2">&quot;moving_image&quot;</span><span class="p">,</span> <span class="s2">&quot;moving_mask&quot;</span><span class="p">,</span>
-                             <span class="s2">&quot;composite_transform&quot;</span><span class="p">,</span>
-                             <span class="s2">&quot;inverse_composite_transform&quot;</span><span class="p">,</span>
-                             <span class="s2">&quot;warped_image&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reorder_traits</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;moving_image&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;moving_mask&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;composite_transform&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;inverse_composite_transform&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;warped_image&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
 
         <span class="c1"># default and initial values</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;MNI152NLin2009cAsym&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">template</span> <span class="o">=</span> <span class="s2">&quot;MNI152NLin2009cAsym&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">template_res</span> <span class="o">=</span> <span class="mi">2</span>
 
         <span class="c1"># nodes positions</span>

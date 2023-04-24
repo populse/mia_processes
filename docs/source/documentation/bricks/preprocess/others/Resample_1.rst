@@ -73,5 +73,3 @@ Resamples an image to the resolution of a reference image.
     ::
 
       ex. ['/home/username/data/raw_data/T1w_003.nii']
-
--------------

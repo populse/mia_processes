@@ -6,9 +6,9 @@
 |`Home <../../../../index.html>`_|`Documentation <../../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +--------------------------------+----------------------------------------------+----------------------------------------------------+
 
-============
+=======================
 NonSteadyDetector brick
-============
+=======================
 
 Detect non-steady-state at the beginning of a bold 4D image
 

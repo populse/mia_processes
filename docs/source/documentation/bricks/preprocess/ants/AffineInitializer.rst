@@ -6,9 +6,9 @@
 |`Home <../../../../index.html>`_|`Documentation <../../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +--------------------------------+----------------------------------------------+----------------------------------------------------+
 
-============
+=======================
 AffineInitializer brick
-============
+=======================
 
 Initialize an affine transform using ANTs AffineInitizer command.
 

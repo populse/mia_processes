@@ -6,9 +6,9 @@
 |`Home <../../../../index.html>`_|`Documentation <../../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +--------------------------------+----------------------------------------------+----------------------------------------------------+
 
-============
+=========================
 ApplyBiasCorrection brick
-============
+=========================
 
 Apply bias field correction to an input file using the bias image
 
@@ -39,5 +39,3 @@ Apply bias field correction to an input file using the bias image
     ::
 
       ex. '/home/username/data/derived_data/T1w_inu.nii'
-
--------------

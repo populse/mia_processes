@@ -6,9 +6,9 @@
 |`Home <../../../../index.html>`_|`Documentation <../../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +--------------------------------+----------------------------------------------+----------------------------------------------------+
 
-============
+==============
 Binarize brick
-============
+==============
 
 Binarizes the input image applying the given lower threshold.
 All voxels lower than the threshold are set to 0 and all the others voxels are set to 1.

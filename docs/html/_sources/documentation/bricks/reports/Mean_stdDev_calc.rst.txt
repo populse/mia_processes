@@ -6,9 +6,9 @@
 |`Home <../../../../index.html>`_|`Documentation <../../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +--------------------------------+----------------------------------------------+----------------------------------------------------+
 
-=====================
+======================
 Mean_stdDev_calc brick
-=====================
+======================
 
 Makes the mean and standard deviation of the parametric_maps
 
@@ -20,7 +20,7 @@ Makes the mean and standard deviation of the parametric_maps
       etc.
     - To work correctly, the database entry for the parametric_maps items must
       have the "PatientName" tag filled in
-    - To work correctly, the output_directory "/roi_"PatientName"/convROI_BOLD"
+    - To work correctly, the output_directory "/roi\_"PatientName"/convROI_BOLD"
       must exist and contain a previous convolution results (normally using
       the ConvROI brick)
 
@@ -61,6 +61,3 @@ Makes the mean and standard deviation of the parametric_maps
     ::
 
       ex. []
-
-
--------------

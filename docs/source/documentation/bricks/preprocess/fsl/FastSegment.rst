@@ -6,9 +6,9 @@
 |`Home <../../../../index.html>`_|`Documentation <../../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +--------------------------------+----------------------------------------------+----------------------------------------------------+
 
-============
+=================
 FastSegment brick
-============
+=================
 
 Brain tissue segmentation using FAST (FSL).
 This brick can be used to segment one input image.

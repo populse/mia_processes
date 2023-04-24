@@ -23,7 +23,6 @@ sys.path.insert(0, os.path.abspath("../../../capsul"))
 sys.path.insert(0, os.path.abspath("../../../soma-base/python"))
 import mia_processes
 
-
 # -- Project information -----------------------------------------------------
 
 project = "mia_processes"

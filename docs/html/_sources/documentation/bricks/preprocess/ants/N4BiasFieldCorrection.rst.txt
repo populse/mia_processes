@@ -6,9 +6,9 @@
 |`Home <../../../../index.html>`_|`Documentation <../../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +--------------------------------+----------------------------------------------+----------------------------------------------------+
 
-============
+===========================
 N4BiasFieldCorrection brick
-============
+===========================
 
 Bias field correction using ANTs N4BiasFieldCorrection
 

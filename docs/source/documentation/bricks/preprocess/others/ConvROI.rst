@@ -6,9 +6,9 @@
 |`Home <../../../../index.html>`_|`Documentation <../../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +--------------------------------+----------------------------------------------+----------------------------------------------------+
 
-============
+=============
 ConvROI brick
-============
+=============
 
 Convolve regions of interest with a mask.
 
@@ -29,10 +29,12 @@ This tag is used to create the folder `output_directory/roi_PatientName` (that w
 
 - *doublet_list* (a list of lists)
     A list of lists containing doublets of strings.
+
     It is used to define ROI names as:
-      doublet_list[0][0] + doublet_list[0][1] + '.nii',
-      doublet_list[1][0] + doublet_list[1][1] + '.nii',
-      ect
+
+      - doublet_list[0][0] + doublet_list[0][1] + '.nii',
+      - doublet_list[1][0] + doublet_list[1][1] + '.nii',
+      - etc.
 
     ::
 
@@ -56,5 +58,3 @@ This tag is used to create the folder `output_directory/roi_PatientName` (that w
     ::
 
       ex. ['/home/username/data/raw_data/func.nii']
-
--------------

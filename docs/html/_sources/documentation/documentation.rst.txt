@@ -42,7 +42,7 @@ Mia_processes's documentation
 
     - **freesurfer**
 
-      - `Binarize <bricks/preprocess/freesurfer/Binarize.html>`_
+      - `Binarize <bricks/preprocess/freesurfer/Binarize.html>`__
       - `SynthStrip <bricks/preprocess/freesurfer/SynthStrip.html>`_
       - `SynthStripMriqc <bricks/preprocess/freesurfer/SynthStripMriqc.html>`_
 
@@ -50,13 +50,13 @@ Mia_processes's documentation
 
       - `BetSurfacesExtraction <bricks/preprocess/fsl/BetSurfacesExtraction.html>`_
       - `FastSegment <bricks/preprocess/fsl/FastSegment.html>`_
-      - `Smooth <bricks/preprocess/fsl/Smooth.html>`_
+      - `Smooth <bricks/preprocess/fsl/Smooth.html>`__
 
     - **others**
 
       - `ApplyBiasCorrection <bricks/preprocess/others/ApplyBiasCorrection.html>`_
       - `ArtifactMask <bricks/preprocess/others/ArtifactMask.html>`_
-      - `Binarize <bricks/preprocess/others/Binarize.html>`_
+      - `Binarize <bricks/preprocess/others/Binarize.html>`__
       - `ConformImage <bricks/preprocess/others/ConformImage.html>`_
       - `ConvROI <bricks/preprocess/others/ConvROI.html>`_
       - `Enhance <bricks/preprocess/others/Enhance.html>`_
@@ -83,7 +83,7 @@ Mia_processes's documentation
       - `Normalize12 <bricks/preprocess/spm/Normalize12.html>`_
       - `Realign <bricks/preprocess/spm/Realign.html>`_
       - `SliceTiming <bricks/preprocess/spm/SliceTiming.html>`_
-      - `Smooth <bricks/preprocess/spm/Smooth.html>`_
+      - `Smooth <bricks/preprocess/spm/Smooth.html>`__
 
   - **reports**
 
