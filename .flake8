@@ -2,6 +2,26 @@
 ignore =
 #         is too complex
           C901,
+#         colons should not have any space before them
+	  E203,
+#	  inline comment should start with '# '
+	  E262,
+#	  there should be only one leading # for a block comment
+	  E266,
+#	  line too long
+	  E501,
+#	  x not in the_list rather than not x in the_list
+	  E713,
+#	  do not use bare 'except'
+	  E722,
+#	  imported but unused
+	  F401,
+#	  a module has been imported twice, and the original import is unused
+	  F811,
+#	  The variable name is not defined where it is used
+	  F821,
+# 	  local variable is assigned but never used
+	  F841,
 #	  line break before binary operator
 	  W503
 exclude =
