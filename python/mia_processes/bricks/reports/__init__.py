@@ -23,8 +23,4 @@ from .processes import (
     Result_collector,
     Spikes,
 )
-from .reporting import (
-    ReportAnatMriqc,
-    ReportFuncMriqc,
-    ReportGroupMriqc
-)
+from .reporting import ReportAnatMriqc, ReportFuncMriqc, ReportGroupMriqc

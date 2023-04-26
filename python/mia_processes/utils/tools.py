@@ -167,7 +167,7 @@ def get_dbFieldValue(project, document, field):
 
 
 def mriqc_get_all_run(modality, project, output_directory):
-    '''
+    """
     Get all raw files name with a mriqc run for one project and
     for one modality.
 
@@ -177,25 +177,28 @@ def mriqc_get_all_run(modality, project, output_directory):
                              (a string that representing a path)
     :returns:
         - files_names (a list)
-    '''
+    """
     # Get all json
-    jsonfiles = glob.glob(os.path.join(output_directory,
-                                       '*' + modality + '_qc.json'))
+    jsonfiles = glob.glob(
+        os.path.join(output_directory, "*" + modality + "_qc.json")
+    )
     if not jsonfiles:
         return None
     files_name = []
     for jsonfile in jsonfiles:
-        file_position = (jsonfile.find(project.getName())
-                         + len(project.getName()) + 1)
+        file_position = (
+            jsonfile.find(project.getName()) + len(project.getName()) + 1
+        )
         json_database_filename = jsonfile[file_position:]
-        file_name = data_history_pipeline(json_database_filename,
-                                          project).in_file
+        file_name = data_history_pipeline(
+            json_database_filename, project
+        ).in_file
         files_name.append(file_name)
     return files_name
 
 
 def mriqc_group_iqms_tsv(modality, output_directory):
-    '''
+    """
     Get all IQMs from mriqc json report for one project
     and for one modality and put them together in one tsv file.
 
@@ -205,18 +208,25 @@ def mriqc_group_iqms_tsv(modality, output_directory):
     :returns:
         - dataframe: all IQMs in a panda dataframe
         - out_tsv: out tsv file (a string that representing a file)
-    '''
-    date = datetime.datetime.now().strftime('_%Y_%m_%d_%H_%M_%S_%f')[:22]
+    """
+    date = datetime.datetime.now().strftime("_%Y_%m_%d_%H_%M_%S_%f")[:22]
     # Get all json
-    jsonfiles = glob.glob(os.path.join(output_directory,
-                                       '*' + modality + '_qc.json'))
+    jsonfiles = glob.glob(
+        os.path.join(output_directory, "*" + modality + "_qc.json")
+    )
     if not jsonfiles:
         return None, None
 
-    tags_to_remove = ['histogram_qi2_x_grid', 'histogram_qi2_ref_pdf',
-                      'histogram_qi2_fit_pdf', 'histogram_qi2_ref_data',
-                      'histogram_qi2_cutoff_idx', 'vec_outliers', 'vec_fd',
-                      'vec_dvars']
+    tags_to_remove = [
+        "histogram_qi2_x_grid",
+        "histogram_qi2_ref_pdf",
+        "histogram_qi2_fit_pdf",
+        "histogram_qi2_ref_data",
+        "histogram_qi2_cutoff_idx",
+        "vec_outliers",
+        "vec_fd",
+        "vec_dvars",
+    ]
     datalist = []
     for jsonfile in jsonfiles:
         with open(jsonfile) as f:
@@ -225,21 +235,23 @@ def mriqc_group_iqms_tsv(modality, output_directory):
                 if tag in list(data.keys()):
                     data.pop(tag)
             for tag in list(data.keys()):
-                if 'vec_spikes' in tag:
+                if "vec_spikes" in tag:
                     data.pop(tag)
-            data['file_name'] = jsonfile.split(
-                '/')[-1].replace(
-                'anat_qc.json', '').replace(
-                'bold_qc.json', '').replace(
-                'mean_reg_', '')
+            data["file_name"] = (
+                jsonfile.split("/")[-1]
+                .replace("anat_qc.json", "")
+                .replace("bold_qc.json", "")
+                .replace("mean_reg_", "")
+            )
             datalist.append(data)
 
     dataframe = pd.DataFrame(datalist)
     cols = dataframe.columns.tolist()
     dataframe = dataframe.sort_values(by=["file_name"])
 
-    out_tsv = os.path.join(output_directory,
-                           'mriqc_group_report_' + modality + date + '.tsv')
+    out_tsv = os.path.join(
+        output_directory, "mriqc_group_report_" + modality + date + ".tsv"
+    )
 
     # Set filename at front
     cols.insert(0, cols.pop(cols.index("file_name")))
@@ -249,7 +261,7 @@ def mriqc_group_iqms_tsv(modality, output_directory):
 
 
 def plot_boxplot_points(dataframe, title, ylabel, out_file=None):
-    '''
+    """
     Plot boxplot with points data and save the figure in a png image
 
     :param dataframe:  tabular data. (a pandas dataframe)
@@ -259,18 +271,20 @@ def plot_boxplot_points(dataframe, title, ylabel, out_file=None):
 
     :returns:
         - out_file: out figure path (a string)
-    '''
+    """
 
     vals, names, xs = [], [], []
     for i, col in enumerate(dataframe.columns):
         vals.append(dataframe[col].values)
         names.append(col)
-        xs.append(np.random.normal(i + 1.3, 0.04, dataframe[col].values.shape[0]))
+        xs.append(
+            np.random.normal(i + 1.3, 0.04, dataframe[col].values.shape[0])
+        )
 
     plt.figure()
-    plt.boxplot(vals, sym='', labels=names)
+    plt.boxplot(vals, sym="", labels=names)
 
-    palette = ['r', 'g', 'b', 'y', 'c', 'm']
+    palette = ["r", "g", "b", "y", "c", "m"]
     while len(palette) < len(vals):
         palette += palette
 
@@ -278,14 +292,11 @@ def plot_boxplot_points(dataframe, title, ylabel, out_file=None):
         plt.scatter(x, val, alpha=0.4, color=c)
 
     ax = plt.gca()
-    ax.set(
-        axisbelow=True,
-        title=title,
-        ylabel=ylabel)
-    ax.tick_params(axis='x', labelrotation=45)
+    ax.set(axisbelow=True, title=title, ylabel=ylabel)
+    ax.tick_params(axis="x", labelrotation=45)
     if out_file is None:
         out_file = os.path.abspath("box_plot.png")
-    plt.savefig(out_file, format='png', bbox_inches='tight')
+    plt.savefig(out_file, format="png", bbox_inches="tight")
 
     return out_file
 
