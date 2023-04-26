@@ -15,7 +15,6 @@ Contains:
 # for details.
 ###############################################################################
 
-from .report import Report
 from .tools import (
     PageNumCanvas,
     ReportLine,
@@ -26,3 +25,9 @@ from .tools import (
     set_dbFieldValue,
     slice_planes_plot,
 )
+
+# Prevent circular import (PageNumCanvas)
+# isort: off
+from .report import Report
+
+# isort: on
