@@ -87,10 +87,20 @@ from mia_processes.utils import (
 
 
 class Report:
-    """blabla"""
+    """Create pdf report
+
+    IQMs_file --> mriqc individual report (with all IQMs)
+    mriqc_group ---> mriqc report group
+
+    Functions:
+    - get_iqms_data
+    - mriqc_anat_make_report
+    - mriqc_func_make_report
+    - mriqc_group_make_report
+    """
 
     def __init__(self, report_file, dict4runtime, **kwargs):
-        """blabla"""
+        """Create Canvas , create cover and make report"""
 
         self.dict4runtime = dict4runtime
         ref_exp = "Undefined"
@@ -117,6 +127,18 @@ class Report:
                     "<font size=18><b>Functional Image-Quality "
                     "Metrics summary report</b></font>"
                 )
+
+            self.header_title = (
+                "<sup rise=20 size=9>$</sup>"
+                "<font size=30><b>MRIQ</b></font>"
+                "<font size=11>uality</font>"
+                "<font size=30><b>C</b></font>"
+                "<font size=11>ontrol</font>"
+            )
+
+        elif "mriqc_group" in kwargs:
+            self.make_report = self.mriqc_group_make_report
+            self.title = "<font size=18><b>MRIQc" "group report</b></font>"
 
             self.header_title = (
                 "<sup rise=20 size=9>$</sup>"
@@ -188,20 +210,42 @@ class Report:
             )
         )
 
-        infos = [
-            self.dict4runtime[i]
-            for i in (
-                "Site",
-                "Spectro",
-                "StudyName",
-                "AcquisitionDate",
-                "PatientName",
-                "Sex",
-                "Age",
-            )
-        ]
-        infos.insert(4, datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-        infos.insert(5, ref_exp)
+        today_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        if "IQMs_file" in kwargs:
+            infos = [
+                self.dict4runtime[i]
+                for i in (
+                    "Site",
+                    "Spectro",
+                    "StudyName",
+                    "AcquisitionDate",
+                    "PatientName",
+                    "Sex",
+                    "Age",
+                )
+            ]
+            infos.insert(4, today_date)
+            infos.insert(5, ref_exp)
+
+            headers = [
+                "SITE",
+                "MRI SCANNER",
+                "STUDY NAME",
+                "EXAMINATION DATE",
+                "MRIQC CALCULATION DATE",
+                "NAME OF THE INPUT DATA",
+                "PATIENT REFERENCE",
+                "PATIENT SEX",
+                "PATIENT AGE",
+                "SOFTWARES",
+            ]
+        elif "mriqc_group" in kwargs:
+            infos = [today_date]
+            headers = [
+                "MRIQC GROUPS CALCULATION DATE",
+                "SOFTWARES",
+            ]
         infos.extend(
             (
                 "Python " + version.split()[0],
@@ -217,18 +261,7 @@ class Report:
                 ),
             )
         )
-        headers = [
-            "SITE",
-            "MRI SCANNER",
-            "STUDY NAME",
-            "EXAMINATION DATE",
-            "MRIQC CALCULATION DATE",
-            "NAME OF THE INPUT DATA",
-            "PATIENT REFERENCE",
-            "PATIENT SEX",
-            "PATIENT AGE",
-            "SOFTWARES",
-        ]
+
         headers.extend([" "] * 5)
 
         cover_data = [[0, 0]]
@@ -353,7 +386,7 @@ class Report:
     def mriqc_func_make_report(
         self,
     ):
-        """blabla"""
+        """Make mriqc functional individual report"""
 
         # First page - cover ##################################################
         #######################################################################
@@ -766,7 +799,7 @@ class Report:
     def mriqc_anat_make_report(
         self,
     ):
-        """blabla"""
+        """Make mriqc anat individual report"""
 
         # First page - cover ##################################################
         #######################################################################
@@ -1353,8 +1386,434 @@ class Report:
         self.page.build(self.report, canvasmaker=PageNumCanvas)
         tmpdir.cleanup()
 
+    def mriqc_group_make_report(self):
+        """Make mriqc group report"""
+
+        # First page - cover ##################################################
+        #######################################################################
+
+        self.report.append(self.image_cov)
+        # width, height
+        self.report.append(Spacer(0 * mm, 8 * mm))
+        self.report.append(Paragraph(self.header_title, self.styles["Center"]))
+        self.report.append(Spacer(0 * mm, 10 * mm))
+        line = ReportLine(150)
+        line.hAlign = "CENTER"
+        self.report.append(line)
+        self.report.append(Spacer(0 * mm, 10 * mm))
+        self.report.append(Paragraph(self.title, self.styles["Center"]))
+        self.report.append(Spacer(0 * mm, 10 * mm))
+        self.report.append(self.cover_data)
+        self.report.append(Spacer(0 * mm, 6 * mm))
+        self.report.append(
+            Paragraph(self.textDisclaimer, self.styles["Justify"])
+        )
+        self.report.append(Spacer(0 * mm, 6 * mm))
+        # Footnote
+        line = ReportLine(500)
+        line.hAlign = "CENTER"
+        self.report.append(line)
+        self.report.append(Spacer(0 * mm, 2.5 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size = 8><sup>$</sup>Esteban O et "
+                "al., <i>MRIQC: Advancing the Automatic "
+                "Prediction of Image Quality in MRI from"
+                " Unseen Sites</i>, PLOS ONE 12(9)"
+                ":e0184661.</font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(PageBreak())
+
+        # Second page - Subject #########################################
+        #######################################################################
+        self.report.append(
+            Paragraph(
+                "<font size = 18 > <b>Subjects</b> </font>",
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        line = ReportLine(150)
+        line.hAlign = "CENTER"
+        self.report.append(line)
+        self.report.append(Spacer(0 * mm, 4 * mm))
+
+        data = [["Input data", "Site", "MRI scanner"]]
+        for key in list(self.dict4runtime.keys()):
+            data_file = []
+            for i in ("FileName", "Site", "Spectro"):
+                tag = self.dict4runtime[key][i]
+                if len(tag) > 30:
+                    tag = f"{tag[:30]}\n{tag[30:]}"
+                data_file.append(tag)
+            data.append(data_file)
+
+        subjects_table = Table(data)
+        subjects_table.setStyle(
+            TableStyle(
+                [
+                    ("FONT", (0, 0), (-1, 0), "Times-Bold"),
+                    ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+                    ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+                ]
+            )
+        )
+        self.report.append(subjects_table)
+        self.report.append(PageBreak())
+
+        modality = self.mriqc_group["modality"]
+        if modality == "anat":
+            # Third page - Boxplots Noise ####################################
+            ##################################################################
+            self.report.append(
+                Paragraph(
+                    "<font size = 18 > <b>Noise</b> </font>",
+                    self.styles["Center"],
+                )
+            )
+            self.report.append(Spacer(0 * mm, 4 * mm))
+            line = ReportLine(150)
+            line.hAlign = "CENTER"
+            self.report.append(line)
+            self.report.append(Spacer(0 * mm, 4 * mm))
+
+            boxplot_snr_image = Image(
+                self.mriqc_group["SNR"], width=3 * inch, height=2.5 * inch
+            )
+            boxplot_snrd_image = Image(
+                self.mriqc_group["SNRD"], width=3 * inch, height=2.5 * inch
+            )
+            boxplot_cnr_image = Image(
+                self.mriqc_group["CNR"], width=3 * inch, height=2.5 * inch
+            )
+            boxplot_cjv_image = Image(
+                self.mriqc_group["CJV"], width=3 * inch, height=2.5 * inch
+            )
+            boxplot_qi2_image = Image(
+                self.mriqc_group["QI"], width=3 * inch, height=2.5 * inch
+            )
+
+            noise_data = [
+                [boxplot_snr_image, boxplot_snrd_image],
+                [boxplot_cnr_image, boxplot_cjv_image],
+                [boxplot_qi2_image],
+            ]
+            noise_table = Table(noise_data, [90 * mm, 70 * mm])
+            noise_table.setStyle(
+                TableStyle(
+                    [
+                        ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+                        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+                    ]
+                )
+            )
+            self.report.append(noise_table)
+            self.report.append(PageBreak())
+
+            # 4 page - Boxplots  #############################################
+            ##################################################################
+            # FBER, EFC
+            self.report.append(
+                Paragraph(
+                    (
+                        "<font size = 18 > <b>Spatial "
+                        "distribution</b> </font>"
+                    ),
+                    self.styles["Center"],
+                )
+            )
+            self.report.append(Spacer(0 * mm, 4 * mm))
+            line = ReportLine(150)
+            line.hAlign = "CENTER"
+            self.report.append(line)
+            self.report.append(Spacer(0 * mm, 4 * mm))
+            boxplot_fber_image = Image(
+                self.mriqc_group["FBER"], width=3 * inch, height=2.5 * inch
+            )
+            boxplot_efc_image = Image(
+                self.mriqc_group["EFC"], width=3 * inch, height=2.5 * inch
+            )
+            spatial_distribution_data = [
+                [boxplot_fber_image, boxplot_efc_image]
+            ]
+            spatial_distribution_table = Table(
+                spatial_distribution_data, [90 * mm, 70 * mm]
+            )
+            spatial_distribution_table.setStyle(
+                TableStyle(
+                    [
+                        ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+                        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+                    ]
+                )
+            )
+            self.report.append(spatial_distribution_table)
+            self.report.append(Spacer(0 * mm, 4 * mm))
+            self.report.append(Spacer(0 * mm, 4 * mm))
+
+            # wm2max, inu_range, inu_med
+            self.report.append(
+                Paragraph(
+                    "<font size = 18 > <b>ARTIFACTS</b> </font>",
+                    self.styles["Center"],
+                )
+            )
+            self.report.append(Spacer(0 * mm, 4 * mm))
+            line = ReportLine(150)
+            line.hAlign = "CENTER"
+            self.report.append(line)
+            self.report.append(Spacer(0 * mm, 4 * mm))
+            boxplot_w2max_image = Image(
+                self.mriqc_group["WM2MAX"], width=3 * inch, height=2.5 * inch
+            )
+            boxplot_inu_image = Image(
+                self.mriqc_group["INU"], width=3 * inch, height=2.5 * inch
+            )
+            artifact_data = [[boxplot_w2max_image, boxplot_inu_image]]
+            artifact_table = Table(artifact_data, [90 * mm, 70 * mm])
+            artifact_table.setStyle(
+                TableStyle(
+                    [
+                        ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+                        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+                    ]
+                )
+            )
+            self.report.append(artifact_table)
+            self.report.append(PageBreak())
+
+            # 4 page - Boxplots  #############################################
+            ##################################################################
+            self.report.append(
+                Paragraph(
+                    "<font size = 18 > <b>Tissues quality</b> </font>",
+                    self.styles["Center"],
+                )
+            )
+            self.report.append(Spacer(0 * mm, 4 * mm))
+            line = ReportLine(150)
+            line.hAlign = "CENTER"
+            self.report.append(line)
+            self.report.append(Spacer(0 * mm, 4 * mm))
+
+            # FWHM, ICVS, RPVE, TMP_OVERLAP, SUMMARY
+            boxplot_fwhm_image = Image(
+                self.mriqc_group["FWHM"], width=3 * inch, height=2.5 * inch
+            )
+            boxplot_icvs_image = Image(
+                self.mriqc_group["ICVS"], width=3 * inch, height=2.5 * inch
+            )
+            boxplot_rpve_image = Image(
+                self.mriqc_group["RPVE"], width=3 * inch, height=2.5 * inch
+            )
+            boxplot_tmp_image = Image(
+                self.mriqc_group["TMP_OVERLAP"],
+                width=3 * inch,
+                height=2.5 * inch,
+            )
+            boxplot_wm_image = Image(
+                self.mriqc_group["SUMMARY_WM"],
+                width=3 * inch,
+                height=2.5 * inch,
+            )
+            boxplot_csf_image = Image(
+                self.mriqc_group["SUMMARY_CSF"],
+                width=3 * inch,
+                height=2.5 * inch,
+            )
+            boxplot_gm_image = Image(
+                self.mriqc_group["SUMMARY_GM"],
+                width=3 * inch,
+                height=2.5 * inch,
+            )
+            boxplot_bg_image = Image(
+                self.mriqc_group["SUMMARY_BG"],
+                width=3 * inch,
+                height=2.5 * inch,
+            )
+
+            tissues_data = [
+                [boxplot_fwhm_image, boxplot_icvs_image],
+                [boxplot_rpve_image, boxplot_tmp_image],
+                [boxplot_wm_image, boxplot_csf_image],
+                [boxplot_gm_image, boxplot_bg_image],
+            ]
+            tissues_data_table = Table(tissues_data, [90 * mm, 70 * mm])
+            tissues_data_table.setStyle(
+                TableStyle(
+                    [
+                        ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+                        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+                    ]
+                )
+            )
+
+            self.report.append(tissues_data_table)
+
+        elif modality == "bold":
+            # Third page - Boxplots ##########################################
+            ##################################################################
+            self.report.append(
+                Paragraph(
+                    "<font size = 18 > <b>Artifact</b> </font>",
+                    self.styles["Center"],
+                )
+            )
+            self.report.append(Spacer(0 * mm, 4 * mm))
+            line = ReportLine(150)
+            line.hAlign = "CENTER"
+            self.report.append(line)
+            self.report.append(Spacer(0 * mm, 4 * mm))
+            boxplot_aor_image = Image(
+                self.mriqc_group["AOR"], width=3 * inch, height=2.5 * inch
+            )
+            boxplot_aqi_image = Image(
+                self.mriqc_group["AQI"], width=3 * inch, height=2.5 * inch
+            )
+            boxplot_dummy_image = Image(
+                self.mriqc_group["DUMMY"], width=3 * inch, height=2.5 * inch
+            )
+            boxplot_gsr_image = Image(
+                self.mriqc_group["GSR"], width=3 * inch, height=2.5 * inch
+            )
+            boxplot_fd_image = Image(
+                self.mriqc_group["FD"], width=3 * inch, height=2.5 * inch
+            )
+            boxplot_fd_num_image = Image(
+                self.mriqc_group["FD_NUM"], width=3 * inch, height=2.5 * inch
+            )
+            boxplot_fd_perc_image = Image(
+                self.mriqc_group["FD_PERC"], width=3 * inch, height=2.5 * inch
+            )
+            data = [
+                [boxplot_aor_image, boxplot_aqi_image],
+                [boxplot_dummy_image, boxplot_gsr_image],
+                [boxplot_fd_image, boxplot_fd_num_image],
+                [boxplot_fd_perc_image],
+            ]
+            table = Table(data, [90 * mm, 70 * mm])
+            table.setStyle(
+                TableStyle(
+                    [
+                        ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+                        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+                    ]
+                )
+            )
+            self.report.append(table)
+            self.report.append(PageBreak())
+
+            # 4 page - Boxplots ##############################################
+            ##################################################################
+            self.report.append(
+                Paragraph(
+                    (
+                        "<font size = 18 > <b>Temporal "
+                        "information</b> </font>"
+                    ),
+                    self.styles["Center"],
+                )
+            )
+            self.report.append(Spacer(0 * mm, 4 * mm))
+            line = ReportLine(150)
+            line.hAlign = "CENTER"
+            self.report.append(line)
+            self.report.append(Spacer(0 * mm, 4 * mm))
+
+            boxplot_dvars_image = Image(
+                self.mriqc_group["DVARS"], width=3 * inch, height=2.5 * inch
+            )
+            boxplot_dvarsn_image = Image(
+                self.mriqc_group["DVARSN"], width=3 * inch, height=2.5 * inch
+            )
+            boxplot_tsnr_num_image = Image(
+                self.mriqc_group["TSNR"], width=3 * inch, height=2.5 * inch
+            )
+            boxplot_gcor_perc_image = Image(
+                self.mriqc_group["GCOR"], width=3 * inch, height=2.5 * inch
+            )
+
+            data = [
+                [boxplot_dvars_image, boxplot_dvarsn_image],
+                [boxplot_tsnr_num_image, boxplot_gcor_perc_image],
+            ]
+            table = Table(data, [90 * mm, 70 * mm])
+            table.setStyle(
+                TableStyle(
+                    [
+                        ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+                        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+                    ]
+                )
+            )
+            self.report.append(table)
+            self.report.append(PageBreak())
+
+            # 5 page - Boxplots ##############################################
+            ##################################################################
+            self.report.append(
+                Paragraph(
+                    (
+                        "<font size = 18 > <b>Spatial "
+                        "information</b> </font>"
+                    ),
+                    self.styles["Center"],
+                )
+            )
+            self.report.append(Spacer(0 * mm, 4 * mm))
+            line = ReportLine(150)
+            line.hAlign = "CENTER"
+            self.report.append(line)
+            self.report.append(Spacer(0 * mm, 4 * mm))
+
+            boxplot_fwhm_image = Image(
+                self.mriqc_group["FWHM"], width=3 * inch, height=2.5 * inch
+            )
+            boxplot_icvs_image = Image(
+                self.mriqc_group["SNR"], width=3 * inch, height=2.5 * inch
+            )
+            boxplot_rpve_image = Image(
+                self.mriqc_group["FBER"], width=3 * inch, height=2.5 * inch
+            )
+            boxplot_tmp_image = Image(
+                self.mriqc_group["EFC"], width=3 * inch, height=2.5 * inch
+            )
+            boxplot_gm_image = Image(
+                self.mriqc_group["SUMMARY_FG"],
+                width=3 * inch,
+                height=2.5 * inch,
+            )
+            boxplot_bg_image = Image(
+                self.mriqc_group["SUMMARY_BG"],
+                width=3 * inch,
+                height=2.5 * inch,
+            )
+
+            data = [
+                [boxplot_fwhm_image, boxplot_icvs_image],
+                [boxplot_rpve_image, boxplot_tmp_image],
+                [boxplot_gm_image, boxplot_bg_image],
+            ]
+            table = Table(data, [90 * mm, 70 * mm])
+            table.setStyle(
+                TableStyle(
+                    [
+                        ("ALIGN", (0, 0), (-1, -1), "CENTER"),
+                        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+                    ]
+                )
+            )
+            self.report.append(table)
+            self.report.append(PageBreak())
+
+        self.report.append(PageBreak())
+
+        self.page.build(self.report, canvasmaker=PageNumCanvas)
+
     def get_iqms_data(self, param):
-        """blabla"""
+        """Get iqms data"""
 
         if self.iqms_data.get(param) is None:
             if self.dict4runtime["extra_info"][param][2] is None:

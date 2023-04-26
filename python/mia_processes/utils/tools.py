@@ -10,6 +10,9 @@ Module that contains multiple functions used across mia_processes
         - checkFileExt
         - dict4runtime_update
         - get_dbFieldValue
+        - mriqc_get_all_run
+        - mriqc_group_iqms_tsv
+        - plot_boxplot_points
         - plot_qi2
         - slice_planes_plot
 """
@@ -23,13 +26,17 @@ Module that contains multiple functions used across mia_processes
 ##########################################################################
 
 import datetime
+import glob
+import json
 import os
-
 import matplotlib.pyplot as plt
 import nibabel as nib
 import numpy as np
+import pandas as pd
+
 from matplotlib.cm import get_cmap
 from mpl_toolkits.axes_grid1 import ImageGrid
+from populse_mia.data_manager.data_history_inspect import data_history_pipeline
 from populse_mia.data_manager.project import (
     COLLECTION_CURRENT,
     COLLECTION_INITIAL,
@@ -157,6 +164,141 @@ def get_dbFieldValue(project, document, field):
     return project.session.get_value(
         COLLECTION_CURRENT, database_filename, field
     )
+
+
+def mriqc_get_all_run(modality, project, output_directory):
+    """
+    Get all raw files name with a mriqc run for one project and
+    for one modality.
+
+    :param modality:  modality (a string, 'bold' or 'anat')
+    :param project:  the project (Project Object)
+    :param output_directory: output directory where all json files are stored
+                             (a string that representing a path)
+    :returns:
+        - files_names (a list)
+    """
+    # Get all json
+    jsonfiles = glob.glob(
+        os.path.join(output_directory, "*" + modality + "_qc.json")
+    )
+    if not jsonfiles:
+        return None
+    files_name = []
+    for jsonfile in jsonfiles:
+        file_position = (
+            jsonfile.find(project.getName()) + len(project.getName()) + 1
+        )
+        json_database_filename = jsonfile[file_position:]
+        file_name = data_history_pipeline(
+            json_database_filename, project
+        ).in_file
+        files_name.append(file_name)
+    return files_name
+
+
+def mriqc_group_iqms_tsv(modality, output_directory):
+    """
+    Get all IQMs from mriqc json report for one project
+    and for one modality and put them together in one tsv file.
+
+    :param modality:  modality (a string, 'bold' or 'anat')
+    :param output_directory: output directory where all json files are stored
+                             (a sting that representing a path)
+    :returns:
+        - dataframe: all IQMs in a panda dataframe
+        - out_tsv: out tsv file (a string that representing a file)
+    """
+    date = datetime.datetime.now().strftime("_%Y_%m_%d_%H_%M_%S_%f")[:22]
+    # Get all json
+    jsonfiles = glob.glob(
+        os.path.join(output_directory, "*" + modality + "_qc.json")
+    )
+    if not jsonfiles:
+        return None, None
+
+    tags_to_remove = [
+        "histogram_qi2_x_grid",
+        "histogram_qi2_ref_pdf",
+        "histogram_qi2_fit_pdf",
+        "histogram_qi2_ref_data",
+        "histogram_qi2_cutoff_idx",
+        "vec_outliers",
+        "vec_fd",
+        "vec_dvars",
+    ]
+    datalist = []
+    for jsonfile in jsonfiles:
+        with open(jsonfile) as f:
+            data = json.load(f)
+            for tag in tags_to_remove:
+                if tag in list(data.keys()):
+                    data.pop(tag)
+            for tag in list(data.keys()):
+                if "vec_spikes" in tag:
+                    data.pop(tag)
+            data["file_name"] = (
+                jsonfile.split("/")[-1]
+                .replace("anat_qc.json", "")
+                .replace("bold_qc.json", "")
+                .replace("mean_reg_", "")
+            )
+            datalist.append(data)
+
+    dataframe = pd.DataFrame(datalist)
+    cols = dataframe.columns.tolist()
+    dataframe = dataframe.sort_values(by=["file_name"])
+
+    out_tsv = os.path.join(
+        output_directory, "mriqc_group_report_" + modality + date + ".tsv"
+    )
+
+    # Set filename at front
+    cols.insert(0, cols.pop(cols.index("file_name")))
+    dataframe[cols].to_csv(str(out_tsv), index=False, sep="\t")
+
+    return dataframe, out_tsv
+
+
+def plot_boxplot_points(dataframe, title, ylabel, out_file=None):
+    """
+    Plot boxplot with points data and save the figure in a png image
+
+    :param dataframe:  tabular data. (a pandas dataframe)
+    :param title: figure title (a string)
+    :param ylabel: y axis label (a string)
+    :param out_file: out figure path (a string)
+
+    :returns:
+        - out_file: out figure path (a string)
+    """
+
+    vals, names, xs = [], [], []
+    for i, col in enumerate(dataframe.columns):
+        vals.append(dataframe[col].values)
+        names.append(col)
+        xs.append(
+            np.random.normal(i + 1.3, 0.04, dataframe[col].values.shape[0])
+        )
+
+    plt.figure()
+    plt.boxplot(vals, sym="", labels=names)
+
+    palette = ["r", "g", "b", "y", "c", "m"]
+    while len(palette) < len(vals):
+        palette += palette
+
+    for x, val, c in zip(xs, vals, palette):
+        plt.scatter(x, val, alpha=0.4, color=c)
+
+    ax = plt.gca()
+    ax.set(axisbelow=True, title=title, ylabel=ylabel)
+    ax.tick_params(axis="x", labelrotation=45)
+    if out_file is None:
+        out_file = os.path.abspath("box_plot.png")
+    plt.savefig(out_file, format="png", bbox_inches="tight")
+
+    return out_file
 
 
 def plot_qi2(x_grid, ref_pdf, fit_pdf, ref_data, cutoff_idx, out_file=None):
