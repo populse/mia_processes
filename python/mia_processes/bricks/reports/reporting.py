@@ -8,6 +8,7 @@ generate automatic report at the end of a pipeline calculation.
     :Class:
         - ReportAnatMriqc
         - ReportFuncMriqc
+        - ReportGroupMriqc
 
     :Function:
         -
@@ -25,6 +26,7 @@ generate automatic report at the end of a pipeline calculation.
 import os
 from datetime import datetime
 from sys import path
+import tempfile
 
 # nipype import
 from nipype.interfaces.base import (
@@ -36,13 +38,21 @@ from nipype.interfaces.base import (
 )
 from nipype.interfaces.spm.base import ImageFileSPM
 
+# traits import
+from traits.api import Enum
+
 # populse_mia import
 from populse_mia.data_manager.project import COLLECTION_CURRENT
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 
-from mia_processes.utils import Report, dict4runtime_update
-
 # mia_processes import:
+from mia_processes.utils import (
+    Report,
+    dict4runtime_update,
+    mriqc_get_all_run,
+    mriqc_group_iqms_tsv,
+    plot_boxplot_points
+)
 
 
 class ReportAnatMriqc(ProcessMIA):
@@ -1315,3 +1325,216 @@ class ReportFuncMriqc(ProcessMIA):
         )
 
         report.make_report()
+
+
+class ReportGroupMriqc(ProcessMIA):
+    """
+        * Generates a group report for mriqc pipelines *
+
+        Please, see the complete documentation for the ReportGroupMriqc brick
+        in the populse.mia_processes website
+        https://populse.github.io/mia_processes/html/documentation/bricks/reports/ReportGroupMriqc.html
+
+        """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation / instantiation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(ReportGroupMriqc, self).__init__()
+
+        # Third party software required for the execution of the brick
+        # TODO: change requirement
+        self.requirement = ['fsl']
+
+        # Inputs description
+        modality_desc = 'Modality'
+
+        # Outputs description
+        report_pdf_desc = 'The generated report (pdf)'
+        out_tsv_desc = 'tsv file'
+
+        # Inputs traits
+        self.add_trait("modality",
+                       Enum('anat',
+                            'bold',
+                            output=False,
+                            optional=True,
+                            desc=modality_desc))
+        # Outputs traits
+        self.add_trait("out_tsv",
+                       File(output=True,
+                            desc=out_tsv_desc))
+        self.add_trait("report_pdf",
+                       File(output=True,
+                            desc=report_pdf_desc))
+
+        # Special parameter used as a messenger for the run_process_mia method
+        self.add_trait("dict4runtime",
+                       traits.Dict(output=False,
+                                   optional=True,
+                                   userlevel=1))
+
+        self.init_default_traits()
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(ReportGroupMriqc, self).list_outputs()
+
+        # Update dict4runtime
+        # As we do not have access to the database at the runtime (see #272),
+        # we prepare here the data that the run_process_mia method will need
+        # via dict4runtime parameter
+        # for mriqc group we need to get all subjects involved
+        # and info about each subject
+        files_name = mriqc_get_all_run(self.modality, self.project,
+                                       self.output_directory)
+
+        if files_name is None:
+            print('There is no mriqc report for this project.'
+                  'Please used mriqc anat and func pipeline first')
+            return
+        i = 0
+        self.dict4runtime = {}
+        for file_name in files_name:
+            dict4runtime_file = {'FileName': os.path.basename(file_name)}
+            file_position = (file_name.find(self.project.getName())
+                             + len(self.project.getName()) + 1)
+            database_filename = file_name[file_position:]
+            dict4runtime_update(dict4runtime_file, self.project.session,
+                                database_filename,
+                                'PatientName', 'StudyName', 'AcquisitionDate',
+                                'Sex', 'Site', 'Spectro', 'Age')
+            # FIXME: Currently, Site and Spectro data is hard-coded. A solution
+            #        should be found to retrieve them automatically or to put
+            #        them in the input parameters of the brick:
+            # Site
+            if dict4runtime_file['Site'] in ("", "Undefined"):
+                dict4runtime_file['Site'] = ('Grenoble University Hospital'
+                                             '- CLUNI')
+
+            # MriScanner
+            if dict4runtime_file['Spectro'] in ("", "Undefined"):
+                dict4runtime_file['Spectro'] = 'Philips Achieva 3.0T TX'
+
+            self.dict4runtime[str(i)] = dict4runtime_file
+            i += 1
+
+        # Get report name
+        date = datetime.now().strftime('_%Y_%m_%d_%H_%M')
+        if self.output_directory:
+            self.outputs['report_pdf'] = os.path.join(
+                self.output_directory,
+                'mriqc_group_report_' + self.modality + date + '.pdf')
+            self.outputs['out_tsv'] = os.path.join(
+                self.output_directory,
+                'mriqc_group_report_' + self.modality + date + '.tsv')
+        else:
+            print('No output_directory was found,'
+                  'please select a project!\n')
+            return
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(ReportGroupMriqc, self).run_process_mia()
+        # Get all info in a tsv file and in a panda dataframe
+        df, out_tsv = mriqc_group_iqms_tsv(self.modality,
+                                           self.output_directory)
+
+        # Plot boxplot and save them in a '.png' image
+        date = datetime.now().strftime('_%Y_%m_%d_%H_%M')
+        iqms_df = {
+            'EFC': df[['efc']],
+            'FBER': df[['fber']],
+            'FWHM': df[['fwhm_avg', 'fwhm_x', 'fwhm_y', 'fwhm_z']],
+        }
+        if self.modality == 'anat':
+            iqms_df.update({
+                'SNR': df[['snr_csf', 'snr_wm', 'snr_gm']],
+                'CJV': df[['cjv']],
+                'CNR': df[['cnr']],
+                'WM2MAX': df[['wm2max']],
+                'SNRD': df[['snrd_csf', 'snrd_wm', 'snrd_gm']],
+                'QI': df[['qi_1', 'qi_2']],
+                'ICVS': df[['icvs_csf', 'icvs_gm', 'icvs_wm']],
+                'INU': df[['inu_range', 'inu_med']],
+                'RPVE': df[['rpve_csf', 'rpve_gm', 'rpve_wm']],
+                'TMP_OVERLAP': df[['tpm_overlap_csf', 'tpm_overlap_gm',
+                                   'tpm_overlap_wm']],
+                'SUMMARY_WM': df[['summary_wm_mean', 'summary_wm_stdv',
+                                  'summary_wm_median', 'summary_wm_mad',
+                                  'summary_wm_p95', 'summary_wm_p05',
+                                  'summary_wm_k', 'summary_wm_n']],
+                'SUMMARY_CSF': df[['summary_csf_mean', 'summary_csf_stdv',
+                                   'summary_csf_median', 'summary_csf_mad',
+                                   'summary_csf_p95', 'summary_csf_p05',
+                                   'summary_csf_k', 'summary_csf_n']],
+                'SUMMARY_GM': df[['summary_gm_mean', 'summary_gm_stdv',
+                                  'summary_gm_median', 'summary_gm_mad',
+                                  'summary_gm_p95', 'summary_gm_p05',
+                                  'summary_gm_k', 'summary_gm_n']],
+                'SUMMARY_BG': df[['summary_bg_mean', 'summary_bg_stdv',
+                                  'summary_bg_median', 'summary_bg_mad',
+                                  'summary_bg_p95', 'summary_bg_p05',
+                                  'summary_bg_k', 'summary_bg_n']]
+            })
+
+        if self.modality == 'bold':
+            iqms_df.update({
+                'SNR': df[['snr']],
+                'GSR': df[['gsr_x', 'gsr_y']],
+                'DVARS': df[['dvars_std', 'dvars_vstd']],
+                'DVARSN': df[['dvars_nstd']],
+                'FD': df[['fd_mean']],
+                'FD_NUM': df[['fd_num']],
+                'FD_PERC': df[['fd_perc']],
+                'DUMMY': df[['dummy_trs']],
+                'GCOR': df[['gcor']],
+                'TSNR': df[['tsnr']],
+                'AOR': df[['aor']],
+                'AQI': df[['aqi']],
+                'SUMMARY_FG': df[['summary_fg_mean', 'summary_fg_stdv',
+                                  'summary_fg_p95', 'summary_fg_p05',
+                                  'summary_fg_k']],
+                'SUMMARY_BG': df[['summary_bg_mean', 'summary_bg_stdv',
+                                  'summary_bg_p95', 'summary_bg_p05',
+                                  'summary_bg_k']]
+            })
+
+        mriqc_iqms_group = {'modality': self.modality}
+
+        tpm_dir = tempfile.TemporaryDirectory()
+
+        for iqm in list(iqms_df.keys()):
+            df_i = iqms_df[iqm]
+            out_image_path = os.path.join(tpm_dir.name,
+                                          'group_plot_' + self.modality + '_'
+                                          + iqm + date + '.png')
+            boxplot_path = plot_boxplot_points(df_i, iqm, iqm, out_image_path)
+            mriqc_iqms_group[iqm] = boxplot_path
+
+        report = Report(
+            self.report_pdf, self.dict4runtime,
+            mriqc_group=mriqc_iqms_group)
+
+        report.make_report()
+
+        tpm_dir.cleanup()
