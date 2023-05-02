@@ -2411,6 +2411,14 @@ class Realign(ProcessMIA):
 
         # Outputs definition and tags inheritance (optional)
         if self.in_files and self.in_files != [Undefined]:
+            for in_val in self.in_files:
+                if isinstance(in_val, list):
+                    print(
+                        "\nRealign brick: Currently only 4D in_files "
+                        "are accepted !...\n"
+                    )
+                    return self.make_initResult()
+
             self.process.in_files = self.in_files
 
             if self.out_prefix:
@@ -2434,238 +2442,202 @@ class Realign(ProcessMIA):
             if self.write_which:
                 self.process.write_which = self.write_which
 
-            for k in (
-                "realigned_files",
-                "modified_in_files",
-                "mean_image",
-                "realignment_parameters",
+            # We define here the outputs because at the initialisation time
+            # nipype can't do it (see #28)
+            # TODO: We currently manage only self.in_files as 4D (it remains to
+            #       manage the case when the data are a sequence of 3D
+            # realigned_files:
+            if (self.jobtype == "estimate") or (
+                self.write_which == [0, 1] and "write" in self.jobtype
             ):
-                self.outputs[k] = getattr(self.process, "_" + k)
+                self.outputs["realigned_files"] = Undefined
 
-        if self.outputs:
-            for key, val in self.outputs.items():
-                if key == "realigned_files":
-                    if (self.jobtype == "estimate") or (
-                        self.write_which == [0, 1]
-                        and (
-                            self.jobtype == "write"
-                            or self.jobtype == "estwrite"
+            else:
+                self.outputs["realigned_files"] = []
+
+                for in_val in self.in_files:
+                    _, fileIval = os.path.split(in_val)
+
+                    if self.out_prefix:
+                        out_val = os.path.join(
+                            self.output_directory, self.out_prefix + fileIval
                         )
-                    ):
-                        self.outputs["realigned_files"] = Undefined
 
                     else:
-                        if not isinstance(val, list):
-                            val = [val]
-
-                        for in_val, out_val in zip(self.in_files, val):
-                            # FIXME: In the latest version of mia, indexing of the database with
-                            #        particular tags defined in the processes is done only at
-                            #        the end of the initialisation of the whole pipeline. So we
-                            #        cannot use the value of these tags in other processes of
-                            #        the pipeline at the time of initialisation
-                            #        (see populse_mia #290). Until better we use a quick and
-                            #        dirty hack with the set_dbFieldValue() method !
-                            tag_to_add = dict()
-                            tag_to_add["name"] = "RepetitionTime"
-                            tag_to_add["field_type"] = "float"
-                            tag_to_add["description"] = (
-                                "The period of time "
-                                "in msec between the "
-                                "beginning of a pulse "
-                                "sequence and the "
-                                "beginning of the "
-                                "succeeding pulse "
-                                "sequence"
-                            )
-                            tag_to_add["visibility"] = True
-                            tag_to_add["origin"] = "user"
-                            tag_to_add["unit"] = "ms"
-                            tag_to_add["default_value"] = None
-                            tag_to_add["value"] = get_dbFieldValue(
-                                self.project, in_val, "RepetitionTime"
-                            )
-
-                            if tag_to_add["value"] is not None:
-                                set_dbFieldValue(
-                                    self.project, out_val, tag_to_add
-                                )
-
-                            else:
-                                print(
-                                    "\nRealign:\nThe 'RepetitionTime' tag "
-                                    "could not be added to the database for "
-                                    "the '{}' parameter. This can lead to a "
-                                    "subsequent issue during "
-                                    "initialization!!\n".format(out_val)
-                                )
-
-                            tag_to_add = dict()
-                            tag_to_add["name"] = (
-                                "Dataset dimensions " "(Count, X,Y,Z,T...)"
-                            )
-                            tag_to_add["field_type"] = "int"
-                            tag_to_add["description"] = (
-                                "data array dimensions" " (from Nifti header)"
-                            )
-                            tag_to_add["visibility"] = True
-                            tag_to_add["origin"] = "user"
-                            tag_to_add["unit"] = None
-                            tag_to_add["default_value"] = None
-                            tag_to_add["value"] = get_dbFieldValue(
-                                self.project,
-                                in_val,
-                                ("Dataset dimensions " "(Count, X,Y,Z,T...)"),
-                            )
-
-                            if tag_to_add["value"] is not None:
-                                set_dbFieldValue(
-                                    self.project, out_val, tag_to_add
-                                )
-
-                            else:
-                                print(
-                                    "\nRealign:\nThe 'Dataset dimensions "
-                                    "(Count, X,Y,Z,T...)' tag could not be "
-                                    "added to the database for the '{}' "
-                                    "parameter. This can lead to a "
-                                    "subsequent issue during "
-                                    "initialization!!\n".format(out_val)
-                                )
-
-                            tag_to_add = dict()
-                            tag_to_add["name"] = "PatientName"
-                            tag_to_add["field_type"] = "string"
-                            tag_to_add["description"] = ""
-                            tag_to_add["visibility"] = True
-                            tag_to_add["origin"] = "user"
-                            tag_to_add["unit"] = None
-                            tag_to_add["default_value"] = None
-                            tag_to_add["value"] = get_dbFieldValue(
-                                self.project, in_val, "PatientName"
-                            )
-
-                            if tag_to_add["value"] is not None:
-                                set_dbFieldValue(
-                                    self.project, out_val, tag_to_add
-                                )
-
-                            else:
-                                print(
-                                    "\nRealign:\nThe 'PatientName' tag could not "
-                                    "be added to the database for the '{}' "
-                                    "parameter. This can lead to a subsequent "
-                                    "issue during "
-                                    "initialization!!\n".format(out_val)
-                                )
-
-                            age = get_dbFieldValue(self.project, in_val, "Age")
-
-                            if age is not None:
-                                tag_to_add = dict()
-                                tag_to_add["name"] = "Age"
-                                tag_to_add["field_type"] = "int"
-                                tag_to_add["description"] = ""
-                                tag_to_add["visibility"] = True
-                                tag_to_add["origin"] = "user"
-                                tag_to_add["unit"] = None
-                                tag_to_add["default_value"] = None
-                                tag_to_add["value"] = age
-                                set_dbFieldValue(
-                                    self.project, out_val, tag_to_add
-                                )
-
-                            pathology = get_dbFieldValue(
-                                self.project, in_val, "Pathology"
-                            )
-
-                            if pathology is not None:
-                                tag_to_add = dict()
-                                tag_to_add["name"] = "Pathology"
-                                tag_to_add["field_type"] = "string"
-                                tag_to_add["description"] = ""
-                                tag_to_add["visibility"] = True
-                                tag_to_add["origin"] = "user"
-                                tag_to_add["unit"] = None
-                                tag_to_add["default_value"] = None
-                                tag_to_add["value"] = pathology
-                                set_dbFieldValue(
-                                    self.project, out_val, tag_to_add
-                                )
-
-                            _, fileOval = os.path.split(out_val)
-                            _, fileIval = os.path.split(in_val)
-
-                            if self.out_prefix:
-                                fileOvalNoPref = fileOval[
-                                    len(self.out_prefix) :
-                                ]
-
-                            else:
-                                fileOvalNoPref = fileOval[len("r") :]
-
-                            if fileOvalNoPref == fileIval:
-                                self.inheritance_dict[out_val] = in_val
-
-                if key == "modified_in_files":
-                    if self.jobtype == "write":
-                        self.outputs["modified_in_files"] = Undefined
-
-                    else:
-                        if not isinstance(val, list):
-                            val = [val]
-
-                        for in_val, out_val in zip(self.in_files, val):
-                            _, fileOval = os.path.split(out_val)
-                            _, fileIval = os.path.split(in_val)
-                            fileOvalNoPref = fileOval
-
-                            if fileOvalNoPref == fileIval:
-                                self.inheritance_dict[out_val] = in_val
-
-                # Only the first data in in_files gives mean_image
-                if key == "mean_image":
-                    if (self.jobtype == "estimate") or (
-                        (
-                            self.write_which == [2, 0]
-                            or self.write_which == [1, 0]
+                        out_val = os.path.join(
+                            self.output_directory, "r" + fileIval
                         )
-                        and (
-                            self.jobtype == "write"
-                            or self.jobtype == "estwrite"
+
+                    self.outputs["realigned_files"].append(out_val)
+                    self.inheritance_dict[out_val] = in_val
+
+                    # FIXME: In the latest version of mia, indexing of the database with
+                    #        particular tags defined in the processes is done only at
+                    #        the end of the initialisation of the whole pipeline. So we
+                    #        cannot use the value of these tags in other processes of
+                    #        the pipeline at the time of initialisation
+                    #        (see populse_mia #290). Until better we use a quick and
+                    #        dirty hack with the set_dbFieldValue() method !
+                    # Add RepetitionTime tag:
+                    tag_to_add = dict()
+                    tag_to_add["name"] = "RepetitionTime"
+                    tag_to_add["field_type"] = "float"
+                    tag_to_add["description"] = (
+                        "The period of time in msec between the "
+                        "beginning of a pulse sequence and the "
+                        "beginning of the succeeding pulse sequence"
+                    )
+                    tag_to_add["visibility"] = True
+                    tag_to_add["origin"] = "user"
+                    tag_to_add["unit"] = "ms"
+                    tag_to_add["default_value"] = None
+                    tag_to_add["value"] = get_dbFieldValue(
+                        self.project, in_val, "RepetitionTime"
+                    )
+
+                    if tag_to_add["value"] is not None:
+                        set_dbFieldValue(self.project, out_val, tag_to_add)
+
+                    else:
+                        print(
+                            "\nRealign brick:\nThe 'RepetitionTime' tag "
+                            "could not be added to the database for "
+                            "the '{}' parameter. This can lead to a "
+                            "subsequent issue during "
+                            "initialisation!!\n".format(out_val)
                         )
-                    ):
-                        self.outputs["mean_image"] = Undefined
+
+                    # Add Dataset dimensions (Count, X,Y,Z,T...) tag:
+                    tag_to_add = dict()
+                    tag_to_add[
+                        "name"
+                    ] = "Dataset dimensions (Count, X,Y,Z,T...)"
+                    tag_to_add["field_type"] = "int"
+                    tag_to_add["description"] = (
+                        "data array dimensions" " (from Nifti header)"
+                    )
+                    tag_to_add["visibility"] = True
+                    tag_to_add["origin"] = "user"
+                    tag_to_add["unit"] = None
+                    tag_to_add["default_value"] = None
+                    tag_to_add["value"] = get_dbFieldValue(
+                        self.project,
+                        in_val,
+                        ("Dataset dimensions " "(Count, X,Y,Z,T...)"),
+                    )
+
+                    if tag_to_add["value"] is not None:
+                        set_dbFieldValue(self.project, out_val, tag_to_add)
 
                     else:
-                        if not isinstance(val, list):
-                            values = [val]
+                        print(
+                            "\nRealign brick:\nThe 'Dataset dimensions "
+                            "(Count, X,Y,Z,T...)' tag could not be "
+                            "added to the database for the '{}' "
+                            "parameter. This can lead to a "
+                            "subsequent issue during "
+                            "initialization!!\n".format(out_val)
+                        )
 
-                        for in_val, out_val in zip(self.in_files, val):
-                            _, fileOval = os.path.split(out_val)
-                            _, fileIval = os.path.split(in_val)
-                            fileOvalNoPref = fileOval[len("mean") :]
+                    # Add PatientName tag:
+                    tag_to_add = dict()
+                    tag_to_add["name"] = "PatientName"
+                    tag_to_add["field_type"] = "string"
+                    tag_to_add["description"] = ""
+                    tag_to_add["visibility"] = True
+                    tag_to_add["origin"] = "user"
+                    tag_to_add["unit"] = None
+                    tag_to_add["default_value"] = None
+                    tag_to_add["value"] = get_dbFieldValue(
+                        self.project, in_val, "PatientName"
+                    )
 
-                            if fileOvalNoPref == fileIval:
-                                self.inheritance_dict[out_val] = in_val
-
-                if key == "realignment_parameters":
-                    if self.jobtype == "write":
-                        self.outputs["realignment_parameters"] = Undefined
+                    if tag_to_add["value"] is not None:
+                        set_dbFieldValue(self.project, out_val, tag_to_add)
 
                     else:
-                        if not isinstance(val, list):
-                            values = [val]
+                        print(
+                            "\nRealign brick:\nThe 'PatientName' tag could "
+                            "not be added to the database for the '{}' "
+                            "parameter. This can lead to a subsequent issue "
+                            "during initialization!!\n".format(out_val)
+                        )
 
-                        for in_val, out_val in zip(self.in_files, val):
-                            _, fileOval = os.path.split(out_val)
-                            _, fileIval = os.path.split(in_val)
-                            fileOvalNoPref = fileOval[len("rp_") :]
+                    # Add Age tag:
+                    age = get_dbFieldValue(self.project, in_val, "Age")
 
-                            if ".".join(
-                                fileOvalNoPref.split(".")[:-1]
-                            ) == ".".join(fileIval.split(".")[:-1]):
-                                self.inheritance_dict[out_val] = in_val
+                    if age is not None:
+                        tag_to_add = dict()
+                        tag_to_add["name"] = "Age"
+                        tag_to_add["field_type"] = "int"
+                        tag_to_add["description"] = ""
+                        tag_to_add["visibility"] = True
+                        tag_to_add["origin"] = "user"
+                        tag_to_add["unit"] = None
+                        tag_to_add["default_value"] = None
+                        tag_to_add["value"] = age
+                        set_dbFieldValue(self.project, out_val, tag_to_add)
+
+                    # Add Pathology tag:
+                    pathology = get_dbFieldValue(
+                        self.project, in_val, "Pathology"
+                    )
+
+                    if pathology is not None:
+                        tag_to_add = dict()
+                        tag_to_add["name"] = "Pathology"
+                        tag_to_add["field_type"] = "string"
+                        tag_to_add["description"] = ""
+                        tag_to_add["visibility"] = True
+                        tag_to_add["origin"] = "user"
+                        tag_to_add["unit"] = None
+                        tag_to_add["default_value"] = None
+                        tag_to_add["value"] = pathology
+                        set_dbFieldValue(self.project, out_val, tag_to_add)
+
+                # modified_in_files
+                if self.jobtype == "write":
+                    self.outputs["modified_in_files"] = Undefined
+
+                else:
+                    self.outputs["modified_in_files"] = []
+
+                    for in_val in self.in_files:
+                        _, fileIval = os.path.split(in_val)
+                        out_val = os.path.join(self.output_directory, fileIval)
+                        self.outputs["modified_in_files"].append(out_val)
+                        self.inheritance_dict[out_val] = in_val
+
+                # mean_image
+                if (self.jobtype == "estimate") or (
+                    self.write_which[1] == 0 and "write" in self.jobtype
+                ):
+                    self.outputs["mean_image"] = Undefined
+
+                else:
+                    first_val = self.in_files[0]
+                    _, fileIval = os.path.split(first_val)
+                    out_val = os.path.join(
+                        self.output_directory, "mean" + fileIval
+                    )
+                    self.outputs["mean_image"] = out_val
+                    self.inheritance_dict[out_val] = in_val
+
+                # realignment_parameters
+                if self.jobtype == "write":
+                    self.outputs["realignment_parameters"] = Undefined
+
+                else:
+                    self.outputs["realignment_parameters"] = []
+
+                    for in_val in self.in_files:
+                        _, fileIval = os.path.split(in_val)
+                        fileIval, ext = os.path.splitext(fileIval)
+                        out_val = os.path.join(
+                            self.output_directory, "rp_" + fileIval + ".txt"
+                        )
+                        self.outputs["realignment_parameters"].append(out_val)
+                        self.inheritance_dict[out_val] = in_val
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
