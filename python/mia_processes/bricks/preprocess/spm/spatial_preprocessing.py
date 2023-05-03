@@ -2087,7 +2087,7 @@ class Realign(ProcessMIA):
     """
     *Realigns a time-series of images acquired from the same subject*
 
-    Please, see the complete documention for the `Realign brick in the populse.mia_processes web site
+    Please, see the complete documentation for the `Realign brick in the populse.mia_processes web site
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/spm/Realign.html>`_
 
     """
@@ -2595,49 +2595,49 @@ class Realign(ProcessMIA):
                         tag_to_add["value"] = pathology
                         set_dbFieldValue(self.project, out_val, tag_to_add)
 
-                # modified_in_files
-                if self.jobtype == "write":
-                    self.outputs["modified_in_files"] = Undefined
+            # modified_in_files
+            if self.jobtype == "write":
+                self.outputs["modified_in_files"] = Undefined
 
-                else:
-                    self.outputs["modified_in_files"] = []
+            else:
+                self.outputs["modified_in_files"] = []
 
-                    for in_val in self.in_files:
-                        _, fileIval = os.path.split(in_val)
-                        out_val = os.path.join(self.output_directory, fileIval)
-                        self.outputs["modified_in_files"].append(out_val)
-                        self.inheritance_dict[out_val] = in_val
-
-                # mean_image
-                if (self.jobtype == "estimate") or (
-                    self.write_which[1] == 0 and "write" in self.jobtype
-                ):
-                    self.outputs["mean_image"] = Undefined
-
-                else:
-                    first_val = self.in_files[0]
-                    _, fileIval = os.path.split(first_val)
-                    out_val = os.path.join(
-                        self.output_directory, "mean" + fileIval
-                    )
-                    self.outputs["mean_image"] = out_val
+                for in_val in self.in_files:
+                    _, fileIval = os.path.split(in_val)
+                    out_val = os.path.join(self.output_directory, fileIval)
+                    self.outputs["modified_in_files"].append(out_val)
                     self.inheritance_dict[out_val] = in_val
 
-                # realignment_parameters
-                if self.jobtype == "write":
-                    self.outputs["realignment_parameters"] = Undefined
+            # mean_image
+            if (self.jobtype == "estimate") or (
+                self.write_which[1] == 0 and "write" in self.jobtype
+            ):
+                self.outputs["mean_image"] = Undefined
 
-                else:
-                    self.outputs["realignment_parameters"] = []
+            else:
+                first_val = self.in_files[0]
+                _, fileIval = os.path.split(first_val)
+                out_val = os.path.join(
+                    self.output_directory, "mean" + fileIval
+                )
+                self.outputs["mean_image"] = out_val
+                self.inheritance_dict[out_val] = in_val
 
-                    for in_val in self.in_files:
-                        _, fileIval = os.path.split(in_val)
-                        fileIval, ext = os.path.splitext(fileIval)
-                        out_val = os.path.join(
-                            self.output_directory, "rp_" + fileIval + ".txt"
-                        )
-                        self.outputs["realignment_parameters"].append(out_val)
-                        self.inheritance_dict[out_val] = in_val
+            # realignment_parameters
+            if self.jobtype == "write":
+                self.outputs["realignment_parameters"] = Undefined
+
+            else:
+                self.outputs["realignment_parameters"] = []
+
+                for in_val in self.in_files:
+                    _, fileIval = os.path.split(in_val)
+                    fileIval, ext = os.path.splitext(fileIval)
+                    out_val = os.path.join(
+                        self.output_directory, "rp_" + fileIval + ".txt"
+                    )
+                    self.outputs["realignment_parameters"].append(out_val)
+                    self.inheritance_dict[out_val] = in_val
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
