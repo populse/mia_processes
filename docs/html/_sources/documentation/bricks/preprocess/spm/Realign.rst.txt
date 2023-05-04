@@ -52,6 +52,8 @@ Realigns a time-series of images acquired from the same subject
 
 - *in_files <=> data* [#label]_
     The images to realign (a list of items which are an existing, uncompressed file (valid extensions: [.img, .nii, .hdr]).
+    Currently, this brick is only coded for 4D images (no 3D list).
+    If you need an improvement on this, `please contact the development team <https://github.com/populse/mia_processes/issues>`_.
 
     ::
 
@@ -133,6 +135,7 @@ Realigns a time-series of images acquired from the same subject
       ex. ''
 
 - *write_which <=> roptions.which* [#label]_
+    This parameter is not taken into account if *jobtype* is set to *estimate*.
     Determines which images to reslice (a list of items which are a value of class 'int'):
 
       | \- [2,0]: Reslices all the images (1..n), including the first image selected, which will remain in its original position.

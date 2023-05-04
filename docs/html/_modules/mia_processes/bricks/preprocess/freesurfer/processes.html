@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.preprocess.freesurfer.processes &#8212; mia_processes 2.2.1-dev+19aadc3 documentation</title>
+    <title>mia_processes.bricks.preprocess.freesurfer.processes &#8212; mia_processes 2.2.1-dev+17d7d44 documentation</title>
     <link rel="stylesheet" href="../../../../../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
@@ -13,11 +13,12 @@
     <script src="../../../../../_static/underscore.js"></script>
     <script src="../../../../../_static/doctools.js"></script>
     <script src="../../../../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../../index.html">
-          <span>mia_processes 2.2.1-dev+19aadc3 documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+17d7d44 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.preprocess.freesurfer.processes</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -31,7 +32,8 @@
         
         
   <h1>Source code for mia_processes.bricks.preprocess.freesurfer.processes</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;The freesurfer preprocess library of the mia_processes package.</span>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;The freesurfer preprocess library of the mia_processes package.</span>
 
 <span class="sd">The purpose of this module is to customise the main freesurfer preprocessing bricks</span>
 <span class="sd">provided by nipype and to correct some things that do not work directly in</span>
@@ -53,34 +55,33 @@
 <span class="c1"># for details.</span>
 <span class="c1">##########################################################################</span>
 
+<span class="kn">import</span> <span class="nn">os</span>
+
 <span class="c1"># capsul import</span>
 <span class="kn">import</span> <span class="nn">capsul</span>
-<span class="kn">from</span> <span class="nn">capsul.in_context</span> <span class="kn">import</span> <span class="n">freesurfer</span>
-
-<span class="c1"># mia_processes import</span>
-<span class="kn">from</span> <span class="nn">mia_processes.utils</span> <span class="kn">import</span> <span class="n">checkFileExt</span>
-
-<span class="c1"># populse_mia import</span>
-<span class="kn">from</span> <span class="nn">populse_mia.user_interface.pipeline_manager.process_mia</span> <span class="kn">import</span> <span class="n">ProcessMIA</span>
 
 <span class="c1"># Other import</span>
 <span class="kn">import</span> <span class="nn">nibabel</span> <span class="k">as</span> <span class="nn">nb</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">scipy</span>
-<span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">capsul.in_context</span> <span class="kn">import</span> <span class="n">freesurfer</span>
 <span class="kn">from</span> <span class="nn">nipype.interfaces.base</span> <span class="kn">import</span> <span class="n">File</span><span class="p">,</span> <span class="n">Undefined</span>
 <span class="kn">from</span> <span class="nn">nitransforms.linear</span> <span class="kn">import</span> <span class="n">Affine</span>
+
+<span class="c1"># populse_mia import</span>
+<span class="kn">from</span> <span class="nn">populse_mia.user_interface.pipeline_manager.process_mia</span> <span class="kn">import</span> <span class="n">ProcessMIA</span>
 <span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="n">Bool</span><span class="p">,</span> <span class="n">Either</span><span class="p">,</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">Float</span><span class="p">,</span> <span class="n">Int</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">String</span>
 
-<span class="n">EXT</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;NIFTI_GZ&#39;</span><span class="p">:</span> <span class="s1">&#39;nii.gz&#39;</span><span class="p">,</span>
-       <span class="s1">&#39;NIFTI&#39;</span><span class="p">:</span> <span class="s1">&#39;nii&#39;</span><span class="p">,</span>
-       <span class="s1">&#39;MGZ&#39;</span><span class="p">:</span> <span class="s1">&#39;mgz&#39;</span><span class="p">}</span>
+<span class="c1"># mia_processes import</span>
+<span class="kn">from</span> <span class="nn">mia_processes.utils</span> <span class="kn">import</span> <span class="n">checkFileExt</span>
+
+<span class="n">EXT</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;NIFTI_GZ&quot;</span><span class="p">:</span> <span class="s2">&quot;nii.gz&quot;</span><span class="p">,</span> <span class="s2">&quot;NIFTI&quot;</span><span class="p">:</span> <span class="s2">&quot;nii&quot;</span><span class="p">,</span> <span class="s2">&quot;MGZ&quot;</span><span class="p">:</span> <span class="s2">&quot;mgz&quot;</span><span class="p">}</span>
 
 
 <div class="viewcode-block" id="Binarize"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.Binarize">[docs]</a><span class="k">class</span> <span class="nc">Binarize</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    * | Binarize a volume (or volume-encoded surface file) using </span>
+<span class="sd">    * | Binarize a volume (or volume-encoded surface file) using</span>
 <span class="sd">      | FreeSurfer mri_binarize.</span>
 
 <span class="sd">    Binarization can be done based on threshold or on matched values.</span>
@@ -92,208 +93,275 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Binarize.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.Binarize.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;Dedicated to the attributes initialisation/instantiation.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
 <span class="sd">        third-party products necessary for the running of the brick.</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Binarize</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="c1"># Third party softwares required for the execution of the brick</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;freesurfer&#39;</span><span class="p">,</span> <span class="s1">&#39;nipype&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;freesurfer&quot;</span><span class="p">,</span> <span class="s2">&quot;nipype&quot;</span><span class="p">]</span>
 
         <span class="c1"># Mandatory inputs description</span>
-        <span class="n">in_file_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Input file (a pathlike object or string &#39;</span>
-                        <span class="s1">&#39;representing a file).&#39;</span><span class="p">)</span>
+        <span class="n">in_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Input file (a pathlike object or string &quot;</span> <span class="s2">&quot;representing a file).&quot;</span>
+        <span class="p">)</span>
         <span class="c1"># Optional inputs with default value description</span>
-        <span class="n">abs_desc</span> <span class="o">=</span> <span class="s1">&#39;take abs of invol first (ie, make unsigned)&#39;</span>
-        <span class="n">bin_col_num_desc</span> <span class="o">=</span> <span class="s1">&#39;set binarized voxel value to its column number&#39;</span>
-        <span class="n">get_count_file_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;save number of hits in ascii file&#39;</span>
-                               <span class="s1">&#39;(hits, ntotvox, pct)&#39;</span><span class="p">)</span>
-        <span class="n">invert_desc</span> <span class="o">=</span> <span class="s1">&#39;set binval=0, binvalnot=1&#39;</span>
-        <span class="n">max_desc</span> <span class="o">=</span> <span class="s1">&#39;Maximum voxel threshold(float).&#39;</span>
-        <span class="n">min_desc</span> <span class="o">=</span> <span class="s1">&#39;Minimum voxel threshold(float).&#39;</span>
-        <span class="n">output_type_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Typecodes of the output image formats (one &#39;</span>
-                            <span class="s1">&#39;of NIFTI, MGZ, NIFTI_GZ).&#39;</span><span class="p">)</span>
-        <span class="n">out_suffix_desc</span> <span class="o">=</span> <span class="s1">&#39;Suffix of the output image (a string).&#39;</span>
-        <span class="n">zero_edges_desc</span> <span class="o">=</span> <span class="s1">&#39;zero the edge voxels&#39;</span>
-        <span class="n">zero_slice_edge_desc</span> <span class="o">=</span> <span class="s1">&#39;zero the edge slice voxels&#39;</span>
+        <span class="n">abs_desc</span> <span class="o">=</span> <span class="s2">&quot;take abs of invol first (ie, make unsigned)&quot;</span>
+        <span class="n">bin_col_num_desc</span> <span class="o">=</span> <span class="s2">&quot;set binarized voxel value to its column number&quot;</span>
+        <span class="n">get_count_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;save number of hits in ascii file&quot;</span> <span class="s2">&quot;(hits, ntotvox, pct)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">invert_desc</span> <span class="o">=</span> <span class="s2">&quot;set binval=0, binvalnot=1&quot;</span>
+        <span class="n">max_desc</span> <span class="o">=</span> <span class="s2">&quot;Maximum voxel threshold(float).&quot;</span>
+        <span class="n">min_desc</span> <span class="o">=</span> <span class="s2">&quot;Minimum voxel threshold(float).&quot;</span>
+        <span class="n">output_type_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Typecodes of the output image formats (one &quot;</span>
+            <span class="s2">&quot;of NIFTI, MGZ, NIFTI_GZ).&quot;</span>
+        <span class="p">)</span>
+        <span class="n">out_suffix_desc</span> <span class="o">=</span> <span class="s2">&quot;Suffix of the output image (a string).&quot;</span>
+        <span class="n">zero_edges_desc</span> <span class="o">=</span> <span class="s2">&quot;zero the edge voxels&quot;</span>
+        <span class="n">zero_slice_edge_desc</span> <span class="o">=</span> <span class="s2">&quot;zero the edge slice voxels&quot;</span>
         <span class="c1"># Optional inputs description</span>
-        <span class="n">bin_val_desc</span> <span class="o">=</span> <span class="s1">&#39;set vox outside range to val (default is 0)&#39;</span>
-        <span class="n">bin_val_not_desc</span> <span class="o">=</span> <span class="s1">&#39;set vox outside range to val (default is 0)&#39;</span>
-        <span class="n">dilate_desc</span> <span class="o">=</span> <span class="s1">&#39;niters: dilate binarization in 3D&#39;</span>
-        <span class="n">erode_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;nerode: erode binarization in 3D &#39;</span>
-                      <span class="s1">&#39;(after any dilation)&#39;</span><span class="p">)</span>
-        <span class="n">erode2d_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;nerode2d: erode binarization in 2D &#39;</span>
-                        <span class="s1">&#39;(after any 3D erosion)&#39;</span><span class="p">)</span>
-        <span class="n">frame_no_desc</span> <span class="o">=</span> <span class="s1">&#39;use 0-based frame of input (default is 0)&#39;</span>
-        <span class="n">match_desc</span> <span class="o">=</span> <span class="s1">&#39;Match instead of threshold&#39;</span>
+        <span class="n">bin_val_desc</span> <span class="o">=</span> <span class="s2">&quot;set vox outside range to val (default is 0)&quot;</span>
+        <span class="n">bin_val_not_desc</span> <span class="o">=</span> <span class="s2">&quot;set vox outside range to val (default is 0)&quot;</span>
+        <span class="n">dilate_desc</span> <span class="o">=</span> <span class="s2">&quot;niters: dilate binarization in 3D&quot;</span>
+        <span class="n">erode_desc</span> <span class="o">=</span> <span class="s2">&quot;nerode: erode binarization in 3D &quot;</span> <span class="s2">&quot;(after any dilation)&quot;</span>
+        <span class="n">erode2d_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;nerode2d: erode binarization in 2D &quot;</span> <span class="s2">&quot;(after any 3D erosion)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">frame_no_desc</span> <span class="o">=</span> <span class="s2">&quot;use 0-based frame of input (default is 0)&quot;</span>
+        <span class="n">match_desc</span> <span class="o">=</span> <span class="s2">&quot;Match instead of threshold&quot;</span>
 
-        <span class="n">rmax_desc</span> <span class="o">=</span> <span class="s1">&#39;Compute max based on rmax*globalmean.&#39;</span>
-        <span class="n">rmin_desc</span> <span class="o">=</span> <span class="s1">&#39;Compute min based on rmin*globalmean.&#39;</span>
+        <span class="n">rmax_desc</span> <span class="o">=</span> <span class="s2">&quot;Compute max based on rmax*globalmean.&quot;</span>
+        <span class="n">rmin_desc</span> <span class="o">=</span> <span class="s2">&quot;Compute min based on rmin*globalmean.&quot;</span>
         <span class="c1"># Outputs description</span>
-        <span class="n">count_file_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;File that contains number of hits&#39;</span>
-                           <span class="s1">&#39;(hits, ntotvox, pct)&#39;</span><span class="p">)</span>
-        <span class="n">out_file_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;The binanized file (a pathlike object or a &#39;</span>
-                         <span class="s1">&#39;string representing a file).&#39;</span><span class="p">)</span>
+        <span class="n">count_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;File that contains number of hits&quot;</span> <span class="s2">&quot;(hits, ntotvox, pct)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">out_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;The binanized file (a pathlike object or a &quot;</span>
+            <span class="s2">&quot;string representing a file).&quot;</span>
+        <span class="p">)</span>
 
         <span class="c1"># Mandatory inputs traits</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;in_file&#39;</span><span class="p">,</span>
-                       <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                            <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                            <span class="n">desc</span><span class="o">=</span><span class="n">in_file_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;in_file&quot;</span><span class="p">,</span> <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">in_file_desc</span><span class="p">)</span>
+        <span class="p">)</span>
 
         <span class="c1"># Optional inputs with default value traits</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;abs&#39;</span><span class="p">,</span>
-                       <span class="n">Bool</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">desc</span><span class="o">=</span><span class="n">abs_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;abs&quot;</span><span class="p">,</span>
+            <span class="n">Bool</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">abs_desc</span><span class="p">),</span>
+        <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;bin_col_num&#39;</span><span class="p">,</span>
-                       <span class="n">Bool</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">desc</span><span class="o">=</span><span class="n">bin_col_num_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;bin_col_num&quot;</span><span class="p">,</span>
+            <span class="n">Bool</span><span class="p">(</span>
+                <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">bin_col_num_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;get_count_file&#39;</span><span class="p">,</span>
-                       <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span>
-                            <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">desc</span><span class="o">=</span><span class="n">get_count_file_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;get_count_file&quot;</span><span class="p">,</span>
+            <span class="n">Bool</span><span class="p">(</span>
+                <span class="kc">False</span><span class="p">,</span>
+                <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">get_count_file_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;invert&#39;</span><span class="p">,</span>
-                       <span class="n">Bool</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">desc</span><span class="o">=</span><span class="n">invert_desc</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;max&#39;</span><span class="p">,</span>
-                       <span class="n">Either</span><span class="p">(</span><span class="n">Float</span><span class="p">(),</span>
-                              <span class="n">Undefined</span><span class="p">,</span>
-                              <span class="n">default</span><span class="o">=</span><span class="mf">100.0</span><span class="p">,</span>
-                              <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                              <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                              <span class="n">desc</span><span class="o">=</span><span class="n">max_desc</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;min&#39;</span><span class="p">,</span>
-                       <span class="n">Either</span><span class="p">(</span><span class="n">Float</span><span class="p">(),</span>
-                              <span class="n">Undefined</span><span class="p">,</span>
-                              <span class="n">default</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-                              <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                              <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                              <span class="n">desc</span><span class="o">=</span><span class="n">min_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;invert&quot;</span><span class="p">,</span>
+            <span class="n">Bool</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">invert_desc</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;max&quot;</span><span class="p">,</span>
+            <span class="n">Either</span><span class="p">(</span>
+                <span class="n">Float</span><span class="p">(),</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">default</span><span class="o">=</span><span class="mf">100.0</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">max_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;min&quot;</span><span class="p">,</span>
+            <span class="n">Either</span><span class="p">(</span>
+                <span class="n">Float</span><span class="p">(),</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">default</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">min_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;output_type&#39;</span><span class="p">,</span>
-                       <span class="n">Enum</span><span class="p">(</span><span class="s1">&#39;NIFTI&#39;</span><span class="p">,</span>
-                            <span class="s1">&#39;NIFTI_GZ&#39;</span><span class="p">,</span>
-                            <span class="s1">&#39;MGZ&#39;</span><span class="p">,</span>
-                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">desc</span><span class="o">=</span><span class="n">output_type_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;output_type&quot;</span><span class="p">,</span>
+            <span class="n">Enum</span><span class="p">(</span>
+                <span class="s2">&quot;NIFTI&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;NIFTI_GZ&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;MGZ&quot;</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">output_type_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;out_suffix&#39;</span><span class="p">,</span>
-                       <span class="n">String</span><span class="p">(</span><span class="s1">&#39;_thresh&#39;</span><span class="p">,</span>
-                              <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                              <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                              <span class="n">desc</span><span class="o">=</span><span class="n">out_suffix_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;out_suffix&quot;</span><span class="p">,</span>
+            <span class="n">String</span><span class="p">(</span>
+                <span class="s2">&quot;_thresh&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">out_suffix_desc</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;zero_edges&#39;</span><span class="p">,</span>
-                       <span class="n">Bool</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">desc</span><span class="o">=</span><span class="n">zero_edges_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;zero_edges&quot;</span><span class="p">,</span>
+            <span class="n">Bool</span><span class="p">(</span>
+                <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">zero_edges_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;zero_slice_edge&#39;</span><span class="p">,</span>
-                       <span class="n">Bool</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">desc</span><span class="o">=</span><span class="n">zero_slice_edge_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;zero_slice_edge&quot;</span><span class="p">,</span>
+            <span class="n">Bool</span><span class="p">(</span>
+                <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">zero_slice_edge_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
 
         <span class="c1"># Optional inputs traits</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;bin_val&#39;</span><span class="p">,</span>
-                       <span class="n">Either</span><span class="p">(</span><span class="n">Undefined</span><span class="p">,</span>
-                              <span class="n">Int</span><span class="p">(),</span>
-                              <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
-                              <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                              <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                              <span class="n">desc</span><span class="o">=</span><span class="n">bin_val_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;bin_val&quot;</span><span class="p">,</span>
+            <span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">Int</span><span class="p">(),</span>
+                <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">bin_val_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;bin_val_not&#39;</span><span class="p">,</span>
-                       <span class="n">Either</span><span class="p">(</span><span class="n">Undefined</span><span class="p">,</span>
-                              <span class="n">Int</span><span class="p">(),</span>
-                              <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
-                              <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                              <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                              <span class="n">desc</span><span class="o">=</span><span class="n">bin_val_not_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;bin_val_not&quot;</span><span class="p">,</span>
+            <span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">Int</span><span class="p">(),</span>
+                <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">bin_val_not_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;dilate&#39;</span><span class="p">,</span>
-                       <span class="n">Either</span><span class="p">(</span><span class="n">Undefined</span><span class="p">,</span>
-                              <span class="n">Int</span><span class="p">(),</span>
-                              <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
-                              <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                              <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                              <span class="n">desc</span><span class="o">=</span><span class="n">dilate_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;dilate&quot;</span><span class="p">,</span>
+            <span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">Int</span><span class="p">(),</span>
+                <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">dilate_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;erode&#39;</span><span class="p">,</span>
-                       <span class="n">Either</span><span class="p">(</span><span class="n">Undefined</span><span class="p">,</span>
-                              <span class="n">Int</span><span class="p">(),</span>
-                              <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
-                              <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                              <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                              <span class="n">desc</span><span class="o">=</span><span class="n">erode_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;erode&quot;</span><span class="p">,</span>
+            <span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">Int</span><span class="p">(),</span>
+                <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">erode_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;erode2d&#39;</span><span class="p">,</span>
-                       <span class="n">Either</span><span class="p">(</span><span class="n">Undefined</span><span class="p">,</span>
-                              <span class="n">Int</span><span class="p">(),</span>
-                              <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
-                              <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                              <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                              <span class="n">desc</span><span class="o">=</span><span class="n">erode2d_desc</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;frame_no&#39;</span><span class="p">,</span>
-                       <span class="n">Either</span><span class="p">(</span><span class="n">Undefined</span><span class="p">,</span>
-                              <span class="n">Int</span><span class="p">(),</span>
-                              <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
-                              <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                              <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                              <span class="n">desc</span><span class="o">=</span><span class="n">frame_no_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;erode2d&quot;</span><span class="p">,</span>
+            <span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">Int</span><span class="p">(),</span>
+                <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">erode2d_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;frame_no&quot;</span><span class="p">,</span>
+            <span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">Int</span><span class="p">(),</span>
+                <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">frame_no_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;match&#39;</span><span class="p">,</span>
-                       <span class="n">Either</span><span class="p">(</span><span class="n">Undefined</span><span class="p">,</span>
-                              <span class="n">List</span><span class="p">(</span><span class="n">Int</span><span class="p">()),</span>
-                              <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
-                              <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                              <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                              <span class="n">desc</span><span class="o">=</span><span class="n">match_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;match&quot;</span><span class="p">,</span>
+            <span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">List</span><span class="p">(</span><span class="n">Int</span><span class="p">()),</span>
+                <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">match_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;rmax&#39;</span><span class="p">,</span>
-                       <span class="n">Either</span><span class="p">(</span><span class="n">Undefined</span><span class="p">,</span>
-                              <span class="n">Float</span><span class="p">(),</span>
-                              <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
-                              <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                              <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                              <span class="n">desc</span><span class="o">=</span><span class="n">rmax_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;rmax&quot;</span><span class="p">,</span>
+            <span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">Float</span><span class="p">(),</span>
+                <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">rmax_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;rmin&#39;</span><span class="p">,</span>
-                       <span class="n">Either</span><span class="p">(</span><span class="n">Undefined</span><span class="p">,</span>
-                              <span class="n">Float</span><span class="p">(),</span>
-                              <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
-                              <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                              <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                              <span class="n">desc</span><span class="o">=</span><span class="n">rmin_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;rmin&quot;</span><span class="p">,</span>
+            <span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">Float</span><span class="p">(),</span>
+                <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">rmin_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
         <span class="c1"># Outputs traits</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;count_file&#39;</span><span class="p">,</span>
-                       <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">desc</span><span class="o">=</span><span class="n">count_file_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;count_file&quot;</span><span class="p">,</span>
+            <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">count_file_desc</span><span class="p">),</span>
+        <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;out_file&#39;</span><span class="p">,</span>
-                       <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">desc</span><span class="o">=</span><span class="n">out_file_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;out_file&quot;</span><span class="p">,</span> <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">out_file_desc</span><span class="p">))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s1">&#39;nipype.interfaces.freesurfer.Binarize&#39;</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.freesurfer.Binarize&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Binarize.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.Binarize.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
@@ -312,43 +380,49 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">Binarize</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="c1"># Outputs definition and tags inheritance (optional)</span>
-        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">min</span> <span class="o">!=</span> <span class="n">Undefined</span> <span class="ow">or</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">max</span> <span class="o">!=</span> <span class="n">Undefined</span> <span class="ow">or</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">rmin</span> <span class="o">!=</span> <span class="n">Undefined</span> <span class="ow">or</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">rmax</span> <span class="o">!=</span> <span class="n">Undefined</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">match</span> <span class="o">!=</span> <span class="n">Undefined</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Initialisation failed. &quot;match&quot; parameter can not be used &#39;</span>
-                  <span class="s1">&#39;with &quot;min&quot; and/or &quot;max&quot; parameters&#39;</span>
-                  <span class="s1">&#39; Please, define only &quot;min&quot;/&quot;max&quot; paremeters or &quot;match&quot;&#39;</span>
-                  <span class="s1">&#39;parameters (set the other as Undefined) ...!&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">min</span> <span class="o">!=</span> <span class="n">Undefined</span>
+            <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">max</span> <span class="o">!=</span> <span class="n">Undefined</span>
+            <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">rmin</span> <span class="o">!=</span> <span class="n">Undefined</span>
+            <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">rmax</span> <span class="o">!=</span> <span class="n">Undefined</span>
+        <span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">match</span> <span class="o">!=</span> <span class="n">Undefined</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Initialisation failed. &quot;match&quot; parameter can not be used &#39;</span>
+                <span class="s1">&#39;with &quot;min&quot; and/or &quot;max&quot; parameters&#39;</span>
+                <span class="s1">&#39; Please, define only &quot;min&quot;/&quot;max&quot; paremeters or &quot;match&quot;&#39;</span>
+                <span class="s2">&quot;parameters (set the other as Undefined) ...!&quot;</span>
+            <span class="p">)</span>
             <span class="k">return</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">:</span>
-                <span class="n">valid_ext</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">fileName</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">,</span>
-                                                           <span class="n">EXT</span><span class="p">)</span>
+                <span class="n">valid_ext</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">fileName</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">,</span> <span class="n">EXT</span><span class="p">)</span>
 
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_ext</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">The input image format is&#39;</span>
-                          <span class="s1">&#39; not recognized...!&#39;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The input image format is&quot;</span> <span class="s2">&quot; not recognized...!&quot;</span><span class="p">)</span>
                     <span class="k">return</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">output_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_type</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;out_file&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;out_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
                         <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
-                            <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="n">in_ext</span><span class="p">,</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">out_suffix</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="n">EXT</span><span class="p">[</span><span class="n">output_type</span><span class="p">]))</span>
+                            <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">in_ext</span><span class="p">,</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">out_suffix</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">EXT</span><span class="p">[</span><span class="n">output_type</span><span class="p">],</span>
+                        <span class="p">),</span>
+                    <span class="p">)</span>
 
-                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;count_file&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;count_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
                         <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
-                            <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="n">in_ext</span><span class="p">,</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">out_suffix</span> <span class="o">+</span> <span class="s1">&#39;_count.txt&#39;</span><span class="p">))</span>
+                            <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">in_ext</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_suffix</span> <span class="o">+</span> <span class="s2">&quot;_count.txt&quot;</span>
+                        <span class="p">),</span>
+                    <span class="p">)</span>
 
-                    <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span>
-                        <span class="s1">&#39;out_file&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;out_file&quot;</span><span class="p">]</span>
+                    <span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;No output_directory was found...!</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No output_directory was found...!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
                 <span class="k">return</span>
 
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
@@ -407,55 +481,55 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">SynthStrip</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="c1"># Third party softwares required for the execution of the brick</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;freesurfer&#39;</span><span class="p">,</span> <span class="s1">&#39;nipype&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;freesurfer&quot;</span><span class="p">,</span> <span class="s2">&quot;nipype&quot;</span><span class="p">]</span>
 
         <span class="c1"># Mandatory inputs description</span>
-        <span class="n">in_file_desc</span> <span class="o">=</span> <span class="s1">&#39;Input image to be brain extracted&#39;</span>
+        <span class="n">in_file_desc</span> <span class="o">=</span> <span class="s2">&quot;Input image to be brain extracted&quot;</span>
         <span class="c1"># Optional inputs with default value description</span>
-        <span class="n">border_mm_desc</span> <span class="o">=</span> <span class="s1">&#39;Mask border threshold in mm&#39;</span>
-        <span class="n">no_csf_desc</span> <span class="o">=</span> <span class="s1">&#39;Exclude CSF from brain border&#39;</span>
-        <span class="n">output_type_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Typecodes of the output image formats (one &#39;</span>
-                            <span class="s1">&#39;of NIFTI, MGZ, NIFTI_GZ).&#39;</span><span class="p">)</span>
+        <span class="n">border_mm_desc</span> <span class="o">=</span> <span class="s2">&quot;Mask border threshold in mm&quot;</span>
+        <span class="n">no_csf_desc</span> <span class="o">=</span> <span class="s2">&quot;Exclude CSF from brain border&quot;</span>
+        <span class="n">output_type_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Typecodes of the output image formats (one &quot;</span>
+            <span class="s2">&quot;of NIFTI, MGZ, NIFTI_GZ).&quot;</span>
+        <span class="p">)</span>
         <span class="c1"># Outputs description</span>
-        <span class="n">out_file_desc</span> <span class="o">=</span> <span class="s1">&#39;Brain-extracted path&#39;</span>
-        <span class="n">out_mask_desc</span> <span class="o">=</span> <span class="s1">&#39;Brain mask path&#39;</span>
+        <span class="n">out_file_desc</span> <span class="o">=</span> <span class="s2">&quot;Brain-extracted path&quot;</span>
+        <span class="n">out_mask_desc</span> <span class="o">=</span> <span class="s2">&quot;Brain mask path&quot;</span>
 
         <span class="c1"># Mandatory inputs traits</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;in_file&#39;</span><span class="p">,</span>
-                       <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                            <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                            <span class="n">desc</span><span class="o">=</span><span class="n">in_file_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;in_file&quot;</span><span class="p">,</span> <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">in_file_desc</span><span class="p">)</span>
+        <span class="p">)</span>
 
         <span class="c1"># Optional inputs with default value traits</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;border_mm&#39;</span><span class="p">,</span>
-                       <span class="n">Int</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span>
-                           <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                           <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                           <span class="n">desc</span><span class="o">=</span><span class="n">border_mm_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;border_mm&quot;</span><span class="p">,</span>
+            <span class="n">Int</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">border_mm_desc</span><span class="p">),</span>
+        <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;no_csf&#39;</span><span class="p">,</span>
-                       <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span>
-                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">desc</span><span class="o">=</span><span class="n">no_csf_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;no_csf&quot;</span><span class="p">,</span>
+            <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">no_csf_desc</span><span class="p">),</span>
+        <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;output_type&#39;</span><span class="p">,</span>
-                       <span class="n">Enum</span><span class="p">(</span><span class="s1">&#39;NIFTI&#39;</span><span class="p">,</span>
-                            <span class="s1">&#39;NIFTI_GZ&#39;</span><span class="p">,</span>
-                            <span class="s1">&#39;MGZ&#39;</span><span class="p">,</span>
-                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">desc</span><span class="o">=</span><span class="n">output_type_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;output_type&quot;</span><span class="p">,</span>
+            <span class="n">Enum</span><span class="p">(</span>
+                <span class="s2">&quot;NIFTI&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;NIFTI_GZ&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;MGZ&quot;</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">output_type_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
 
         <span class="c1"># Outputs traits</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;out_file&#39;</span><span class="p">,</span>
-                       <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">desc</span><span class="o">=</span><span class="n">out_file_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;out_file&quot;</span><span class="p">,</span> <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">out_file_desc</span><span class="p">)</span>
+        <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;out_mask&#39;</span><span class="p">,</span>
-                       <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">desc</span><span class="o">=</span><span class="n">out_mask_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;out_mask&quot;</span><span class="p">,</span> <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">out_mask_desc</span><span class="p">))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
@@ -478,36 +552,35 @@
         <span class="c1"># Outputs definition and tags inheritance (optional)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">:</span>
-                <span class="n">valid_ext</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">fileName</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">,</span>
-                                                           <span class="n">EXT</span><span class="p">)</span>
+                <span class="n">valid_ext</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">fileName</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">,</span> <span class="n">EXT</span><span class="p">)</span>
 
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_ext</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">The input image format is&#39;</span>
-                          <span class="s1">&#39; not recognized...!&#39;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The input image format is&quot;</span> <span class="s2">&quot; not recognized...!&quot;</span><span class="p">)</span>
                     <span class="k">return</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">output_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_type</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;out_file&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;out_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
                         <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
-                            <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="n">in_ext</span><span class="p">,</span>
-                            <span class="s1">&#39;_desc-brain.&#39;</span> <span class="o">+</span> <span class="n">EXT</span><span class="p">[</span><span class="n">output_type</span><span class="p">]))</span>
+                            <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">in_ext</span><span class="p">,</span> <span class="s2">&quot;_desc-brain.&quot;</span> <span class="o">+</span> <span class="n">EXT</span><span class="p">[</span><span class="n">output_type</span><span class="p">]</span>
+                        <span class="p">),</span>
+                    <span class="p">)</span>
 
-                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;out_mask&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;out_mask&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
                         <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
-                            <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="n">in_ext</span><span class="p">,</span>
-                            <span class="s1">&#39;_desc-brain_mask.&#39;</span> <span class="o">+</span> <span class="n">EXT</span><span class="p">[</span><span class="n">output_type</span><span class="p">]))</span>
+                            <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">in_ext</span><span class="p">,</span>
+                            <span class="s2">&quot;_desc-brain_mask.&quot;</span> <span class="o">+</span> <span class="n">EXT</span><span class="p">[</span><span class="n">output_type</span><span class="p">],</span>
+                        <span class="p">),</span>
+                    <span class="p">)</span>
 
             <span class="k">else</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;No output_directory was found...!</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No output_directory was found...!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
                 <span class="k">return</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span>
-                <span class="s1">&#39;out_file&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span>
-                <span class="s1">&#39;out_mask&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;out_file&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;out_mask&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
 
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
@@ -518,16 +591,28 @@
 
         <span class="c1"># default input</span>
         <span class="n">fconf</span> <span class="o">=</span> <span class="n">capsul</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">configurations</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-            <span class="s1">&#39;capsul.engine.module.freesurfer&#39;</span><span class="p">)</span>
-        <span class="n">model_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">fconf</span><span class="p">[</span><span class="s1">&#39;setup&#39;</span><span class="p">]),</span> <span class="s1">&#39;models&#39;</span><span class="p">,</span>
-                                  <span class="s1">&#39;synthstrip.1.pt&#39;</span><span class="p">)</span>
+            <span class="s2">&quot;capsul.engine.module.freesurfer&quot;</span>
+        <span class="p">)</span>
+        <span class="n">model_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">fconf</span><span class="p">[</span><span class="s2">&quot;setup&quot;</span><span class="p">]),</span> <span class="s2">&quot;models&quot;</span><span class="p">,</span> <span class="s2">&quot;synthstrip.1.pt&quot;</span>
+        <span class="p">)</span>
 
-        <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;mri_synthstrip&#39;</span><span class="p">,</span> <span class="s1">&#39;-i&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">,</span> <span class="s1">&#39;-o&#39;</span><span class="p">,</span>
-               <span class="bp">self</span><span class="o">.</span><span class="n">out_file</span><span class="p">,</span> <span class="s1">&#39;-m&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_mask</span><span class="p">,</span> <span class="s1">&#39;-b&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">border_mm</span><span class="p">),</span>
-               <span class="s1">&#39;--model&#39;</span><span class="p">,</span> <span class="n">model_path</span><span class="p">]</span>
+        <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;mri_synthstrip&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;-i&quot;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">,</span>
+            <span class="s2">&quot;-o&quot;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">out_file</span><span class="p">,</span>
+            <span class="s2">&quot;-m&quot;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">out_mask</span><span class="p">,</span>
+            <span class="s2">&quot;-b&quot;</span><span class="p">,</span>
+            <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">border_mm</span><span class="p">),</span>
+            <span class="s2">&quot;--model&quot;</span><span class="p">,</span>
+            <span class="n">model_path</span><span class="p">,</span>
+        <span class="p">]</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">no_csf</span><span class="p">:</span>
-            <span class="n">cmd</span> <span class="o">+=</span> <span class="p">[</span><span class="s1">&#39;--no-csf&#39;</span><span class="p">]</span>
+            <span class="n">cmd</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;--no-csf&quot;</span><span class="p">]</span>
 
         <span class="k">return</span> <span class="n">freesurfer</span><span class="o">.</span><span class="n">freesurfer_call</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span></div></div>
 
@@ -551,14 +636,14 @@
         <span class="sd">&quot;&quot;&quot;blabla&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="SynthStripMriqc.StripModel.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStripMriqc.StripModel.__init__">[docs]</a>        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-                <span class="bp">self</span><span class="p">,</span>
-                <span class="n">nb_features</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
-                <span class="n">nb_levels</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span>
-                <span class="n">feat_mult</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-                <span class="n">max_features</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
-                <span class="n">nb_conv_per_level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-                <span class="n">max_pool</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-                <span class="n">return_mask</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">nb_features</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
+            <span class="n">nb_levels</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span>
+            <span class="n">feat_mult</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="n">max_features</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
+            <span class="n">nb_conv_per_level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="n">max_pool</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="n">return_mask</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;blabla&quot;&quot;&quot;</span>
             <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
@@ -567,15 +652,14 @@
 
             <span class="c1"># build feature list automatically</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">nb_features</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
-
                 <span class="k">if</span> <span class="n">nb_levels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                         <span class="s2">&quot;SynthStripMriqc brick: must provide unet nb_levels if &quot;</span>
                         <span class="s2">&quot;nb_features is an integer&quot;</span>
                     <span class="p">)</span>
-                <span class="n">feats</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">nb_features</span> <span class="o">*</span> <span class="n">feat_mult</span> <span class="o">**</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span>
-                                                                     <span class="n">nb_levels</span><span class="p">)</span>
-                                 <span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+                <span class="n">feats</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span>
+                    <span class="n">nb_features</span> <span class="o">*</span> <span class="n">feat_mult</span> <span class="o">**</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nb_levels</span><span class="p">)</span>
+                <span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
                 <span class="n">feats</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">feats</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">max_features</span><span class="p">)</span>
                 <span class="n">nb_features</span> <span class="o">=</span> <span class="p">[</span>
                     <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">feats</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">nb_conv_per_level</span><span class="p">),</span>
@@ -583,8 +667,10 @@
                 <span class="p">]</span>
 
             <span class="k">elif</span> <span class="n">nb_levels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;SynthStripMriqc brick: cannot use nb_levels if &quot;</span>
-                                 <span class="s2">&quot;nb_features is not an integer&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;SynthStripMriqc brick: cannot use nb_levels if &quot;</span>
+                    <span class="s2">&quot;nb_features is not an integer&quot;</span>
+                <span class="p">)</span>
 
             <span class="c1"># extract any surplus (full resolution) decoder convolutions</span>
             <span class="n">enc_nf</span><span class="p">,</span> <span class="n">dec_nf</span> <span class="o">=</span> <span class="n">nb_features</span>
@@ -599,9 +685,9 @@
             <span class="c1"># cache downsampling / upsampling operations</span>
             <span class="n">MaxPooling</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="p">,</span> <span class="s2">&quot;MaxPool</span><span class="si">%d</span><span class="s2">d&quot;</span> <span class="o">%</span> <span class="n">ndims</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">pooling</span> <span class="o">=</span> <span class="p">[</span><span class="n">MaxPooling</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">max_pool</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">upsampling</span> <span class="o">=</span> <span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Upsample</span><span class="p">(</span><span class="n">scale_factor</span><span class="o">=</span><span class="n">s</span><span class="p">,</span>
-                                                 <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;nearest&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span>
-                                                                       <span class="n">max_pool</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">upsampling</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Upsample</span><span class="p">(</span><span class="n">scale_factor</span><span class="o">=</span><span class="n">s</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;nearest&quot;</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">max_pool</span>
             <span class="p">]</span>
 
             <span class="c1"># configure encoder (down-sampling path)</span>
@@ -641,18 +727,26 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">remaining</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">ModuleList</span><span class="p">()</span>
 
             <span class="k">for</span> <span class="n">num</span><span class="p">,</span> <span class="n">nf</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">final_convs</span><span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">remaining</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">SynthStripMriqc</span><span class="o">.</span><span class="n">ConvBlock</span><span class="p">(</span><span class="n">ndims</span><span class="p">,</span> <span class="n">prev_nf</span><span class="p">,</span> <span class="n">nf</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">remaining</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">SynthStripMriqc</span><span class="o">.</span><span class="n">ConvBlock</span><span class="p">(</span><span class="n">ndims</span><span class="p">,</span> <span class="n">prev_nf</span><span class="p">,</span> <span class="n">nf</span><span class="p">)</span>
+                <span class="p">)</span>
                 <span class="n">prev_nf</span> <span class="o">=</span> <span class="n">nf</span>
 
             <span class="c1"># final convolutions</span>
             <span class="k">if</span> <span class="n">return_mask</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">remaining</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">SynthStripMriqc</span><span class="o">.</span><span class="n">ConvBlock</span><span class="p">(</span><span class="n">ndims</span><span class="p">,</span> <span class="n">prev_nf</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span>
-                                                <span class="n">activation</span><span class="o">=</span><span class="kc">None</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">remaining</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">SynthStripMriqc</span><span class="o">.</span><span class="n">ConvBlock</span><span class="p">(</span>
+                        <span class="n">ndims</span><span class="p">,</span> <span class="n">prev_nf</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="kc">None</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">remaining</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Softmax</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
 
             <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">remaining</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">SynthStripMriqc</span><span class="o">.</span><span class="n">ConvBlock</span><span class="p">(</span><span class="n">ndims</span><span class="p">,</span> <span class="n">prev_nf</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
-                                                <span class="n">activation</span><span class="o">=</span><span class="kc">None</span><span class="p">))</span></div>
+                <span class="bp">self</span><span class="o">.</span><span class="n">remaining</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="n">SynthStripMriqc</span><span class="o">.</span><span class="n">ConvBlock</span><span class="p">(</span>
+                        <span class="n">ndims</span><span class="p">,</span> <span class="n">prev_nf</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="kc">None</span>
+                    <span class="p">)</span>
+                <span class="p">)</span></div>
 
 <div class="viewcode-block" id="SynthStripMriqc.StripModel.forward"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStripMriqc.StripModel.forward">[docs]</a>        <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;blabla&quot;&quot;&quot;</span>
@@ -660,7 +754,6 @@
             <span class="n">x_history</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">]</span>
 
             <span class="k">for</span> <span class="n">level</span><span class="p">,</span> <span class="n">convs</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">encoder</span><span class="p">):</span>
-
                 <span class="k">for</span> <span class="n">conv</span> <span class="ow">in</span> <span class="n">convs</span><span class="p">:</span>
                     <span class="n">x</span> <span class="o">=</span> <span class="n">conv</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
@@ -669,7 +762,6 @@
 
             <span class="c1"># decoder forward pass with upsampling and concatenation</span>
             <span class="k">for</span> <span class="n">level</span><span class="p">,</span> <span class="n">convs</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">decoder</span><span class="p">):</span>
-
                 <span class="k">for</span> <span class="n">conv</span> <span class="ow">in</span> <span class="n">convs</span><span class="p">:</span>
                     <span class="n">x</span> <span class="o">=</span> <span class="n">conv</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
@@ -683,15 +775,20 @@
 
             <span class="k">return</span> <span class="n">x</span></div></div>
 
-
 <div class="viewcode-block" id="SynthStripMriqc.ConvBlock"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStripMriqc.ConvBlock">[docs]</a>    <span class="k">class</span> <span class="nc">ConvBlock</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        * Specific convolutional block followed by leakyrelu for unet.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="SynthStripMriqc.ConvBlock.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStripMriqc.ConvBlock.__init__">[docs]</a>        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span>
-                     <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s2">&quot;leaky&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="SynthStripMriqc.ConvBlock.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStripMriqc.ConvBlock.__init__">[docs]</a>        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">ndims</span><span class="p">,</span>
+            <span class="n">in_channels</span><span class="p">,</span>
+            <span class="n">out_channels</span><span class="p">,</span>
+            <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">activation</span><span class="o">=</span><span class="s2">&quot;leaky&quot;</span><span class="p">,</span>
+        <span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;blabla&quot;&quot;&quot;</span>
             <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
             <span class="n">Conv</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="p">,</span> <span class="s2">&quot;Conv</span><span class="si">%d</span><span class="s2">d&quot;</span> <span class="o">%</span> <span class="n">ndims</span><span class="p">)</span>
@@ -715,7 +812,6 @@
 
             <span class="k">return</span> <span class="n">out</span></div></div>
 
-
 <div class="viewcode-block" id="SynthStripMriqc.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStripMriqc.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
@@ -727,62 +823,64 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">SynthStripMriqc</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="c1"># Third party softwares required for the execution of the brick</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;freesurfer&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;freesurfer&quot;</span><span class="p">]</span>
 
         <span class="c1"># Mandatory inputs description</span>
-        <span class="n">in_file_desc</span> <span class="o">=</span> <span class="s1">&#39;Input image to be brain extracted (a path to a file)&#39;</span> <span class="c1">##</span>
+        <span class="n">in_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Input image to be brain extracted (a path to a file)&quot;</span>  <span class="c1">##</span>
+        <span class="p">)</span>
         <span class="c1"># Optional inputs with default value description</span>
-        <span class="n">model_desc</span> <span class="o">=</span> <span class="s1">&#39;Alternative model weights (a path to a file)&#39;</span>
-        <span class="n">border_mm_desc</span> <span class="o">=</span> <span class="s1">&#39;Mask border threshold in mm (integer, default: 1)&#39;</span> <span class="c1">##</span>
-        <span class="c1">#no_csf_desc = &#39;Exclude CSF from brain border&#39;</span>
-        <span class="n">output_type_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Typecodes of the output image formats (one &#39;</span>
-                            <span class="s1">&#39;of NIFTI, MGZ, NIFTI_GZ).&#39;</span><span class="p">)</span>
-        <span class="n">gpu_desc</span> <span class="o">=</span> <span class="s2">&quot;Use the GPU (bool, default: False)&quot;</span> <span class="c1">##</span>
+        <span class="n">model_desc</span> <span class="o">=</span> <span class="s2">&quot;Alternative model weights (a path to a file)&quot;</span>
+        <span class="n">border_mm_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Mask border threshold in mm (integer, default: 1)&quot;</span>  <span class="c1">##</span>
+        <span class="p">)</span>
+        <span class="c1"># no_csf_desc = &#39;Exclude CSF from brain border&#39;</span>
+        <span class="n">output_type_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Typecodes of the output image formats (one &quot;</span>
+            <span class="s2">&quot;of NIFTI, MGZ, NIFTI_GZ).&quot;</span>
+        <span class="p">)</span>
+        <span class="n">gpu_desc</span> <span class="o">=</span> <span class="s2">&quot;Use the GPU (bool, default: False)&quot;</span>  <span class="c1">##</span>
         <span class="c1"># Outputs description</span>
-        <span class="n">out_file_desc</span> <span class="o">=</span> <span class="s1">&#39;Brain-extracted path (a path to a file)&#39;</span> <span class="c1">##</span>
-        <span class="n">out_mask_desc</span> <span class="o">=</span> <span class="s1">&#39;Brain mask path (a path to a file)&#39;</span> <span class="c1">##</span>
+        <span class="n">out_file_desc</span> <span class="o">=</span> <span class="s2">&quot;Brain-extracted path (a path to a file)&quot;</span>  <span class="c1">##</span>
+        <span class="n">out_mask_desc</span> <span class="o">=</span> <span class="s2">&quot;Brain mask path (a path to a file)&quot;</span>  <span class="c1">##</span>
 
         <span class="c1"># Mandatory inputs traits</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;in_file&#39;</span><span class="p">,</span>
-                       <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                            <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                            <span class="n">desc</span><span class="o">=</span><span class="n">in_file_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;in_file&quot;</span><span class="p">,</span> <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">in_file_desc</span><span class="p">)</span>
+        <span class="p">)</span>
 
         <span class="c1"># Optional inputs with default value traits</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;model&#39;</span><span class="p">,</span>
-                       <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">desc</span><span class="o">=</span><span class="n">model_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;model&quot;</span><span class="p">,</span> <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">model_desc</span><span class="p">)</span>
+        <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;border_mm&#39;</span><span class="p">,</span>
-                       <span class="n">Int</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span>
-                           <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                           <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                           <span class="n">desc</span><span class="o">=</span><span class="n">border_mm_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;border_mm&quot;</span><span class="p">,</span>
+            <span class="n">Int</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">border_mm_desc</span><span class="p">),</span>
+        <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;output_type&#39;</span><span class="p">,</span>
-                       <span class="n">Enum</span><span class="p">(</span><span class="s1">&#39;NIFTI&#39;</span><span class="p">,</span>
-                            <span class="s1">&#39;NIFTI_GZ&#39;</span><span class="p">,</span>
-                            <span class="s1">&#39;MGZ&#39;</span><span class="p">,</span>
-                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">desc</span><span class="o">=</span><span class="n">output_type_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;output_type&quot;</span><span class="p">,</span>
+            <span class="n">Enum</span><span class="p">(</span>
+                <span class="s2">&quot;NIFTI&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;NIFTI_GZ&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;MGZ&quot;</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">output_type_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;gpu&#39;</span><span class="p">,</span>
-                       <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span>
-                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">desc</span><span class="o">=</span><span class="n">gpu_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;gpu&quot;</span><span class="p">,</span> <span class="n">Bool</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">gpu_desc</span><span class="p">)</span>
+        <span class="p">)</span>
 
         <span class="c1"># Outputs traits</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;out_file&#39;</span><span class="p">,</span>
-                       <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">desc</span><span class="o">=</span><span class="n">out_file_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;out_file&quot;</span><span class="p">,</span> <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">out_file_desc</span><span class="p">)</span>
+        <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s1">&#39;out_mask&#39;</span><span class="p">,</span>
-                       <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">desc</span><span class="o">=</span><span class="n">out_mask_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;out_mask&quot;</span><span class="p">,</span> <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">out_mask_desc</span><span class="p">))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
@@ -792,22 +890,24 @@
         <span class="n">affine</span> <span class="o">=</span> <span class="n">input_nii</span><span class="o">.</span><span class="n">affine</span>
 
         <span class="c1"># Get corner voxel centers in index coords</span>
-        <span class="n">corner_centers_ijk</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
-                                          <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
-                                          <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
-                                          <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
-                                       <span class="p">]</span>
-                                      <span class="p">)</span>
-                                       <span class="o">+</span> <span class="mf">0.5</span>
-                             <span class="p">)</span>
+        <span class="n">corner_centers_ijk</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+            <span class="o">+</span> <span class="mf">0.5</span>
+        <span class="p">)</span>
 
         <span class="c1"># Get corner voxel centers in mm</span>
         <span class="n">corners_xyz</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">affine</span>
-<div class="viewcode-block" id="SynthStripMriqc.resample_like"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStripMriqc.resample_like">[docs]</a>            <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">corner_centers_ijk</span><span class="p">,</span>
-                         <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">corner_centers_ijk</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
-                                <span class="p">)</span>
-                        <span class="p">))</span><span class="o">.</span><span class="n">T</span>
+<div class="viewcode-block" id="SynthStripMriqc.resample_like"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStripMriqc.resample_like">[docs]</a>            <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">corner_centers_ijk</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">corner_centers_ijk</span><span class="p">),</span> <span class="mi">1</span><span class="p">)))</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">T</span>
         <span class="p">)</span>
 
         <span class="c1"># Target affine is 1mm voxels in LIA orientation</span>
@@ -819,7 +919,7 @@
 
         <span class="c1"># SynthStrip likes dimensions be multiple of 64 (192, 256, or 320)</span>
         <span class="n">target_shape</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">target_shape</span><span class="p">)</span> <span class="o">/</span> <span class="mi">64</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="o">*</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">192</span><span class="p">,</span> <span class="mi">320</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">target_shape</span><span class="p">)</span> <span class="o">/</span> <span class="mi">64</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="o">*</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">192</span><span class="p">,</span> <span class="mi">320</span>
         <span class="p">)</span>
 
         <span class="c1"># Ensure shape ordering is LIA too</span>
@@ -833,17 +933,18 @@
         <span class="n">target_affine</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">-=</span> <span class="n">target_c</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="n">input_c</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
 
         <span class="n">nii</span> <span class="o">=</span> <span class="n">Affine</span><span class="p">(</span>
-            <span class="n">reference</span><span class="o">=</span><span class="n">nb</span><span class="o">.</span><span class="n">Nifti1Image</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">target_shape</span><span class="p">),</span>
-                                     <span class="n">target_affine</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="n">reference</span><span class="o">=</span><span class="n">nb</span><span class="o">.</span><span class="n">Nifti1Image</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">target_shape</span><span class="p">),</span> <span class="n">target_affine</span><span class="p">,</span> <span class="kc">None</span>
+            <span class="p">),</span>
         <span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">input_nii</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">nii</span></div>
 
     <span class="k">def</span> <span class="nf">resample_like</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">output_dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cval</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Resample the input image to be in the target&#39;s grid via identity</span>
 <span class="sd">        transform.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">Affine</span><span class="p">(</span><span class="n">reference</span><span class="o">=</span><span class="n">target</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">image</span><span class="p">,</span>
-                                              <span class="n">output_dtype</span><span class="o">=</span><span class="n">output_dtype</span><span class="p">,</span>
-                                              <span class="n">cval</span><span class="o">=</span><span class="n">cval</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">Affine</span><span class="p">(</span><span class="n">reference</span><span class="o">=</span><span class="n">target</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+            <span class="n">image</span><span class="p">,</span> <span class="n">output_dtype</span><span class="o">=</span><span class="n">output_dtype</span><span class="p">,</span> <span class="n">cval</span><span class="o">=</span><span class="n">cval</span>
+        <span class="p">)</span></div>
 
 <div class="viewcode-block" id="SynthStripMriqc.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStripMriqc.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
@@ -863,38 +964,37 @@
 
         <span class="c1"># Outputs definition and tags inheritance (optional)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">:</span>
-
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">:</span>
                 <span class="n">valid_ext</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">fileName</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">,</span> <span class="n">EXT</span><span class="p">)</span>
 
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_ext</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">The input image format is&#39;</span>
-                          <span class="s1">&#39; not recognized...!&#39;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The input image format is&quot;</span> <span class="s2">&quot; not recognized...!&quot;</span><span class="p">)</span>
                     <span class="k">return</span>
 
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">output_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_type</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;out_file&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;out_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
                         <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
-                            <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="n">in_ext</span><span class="p">,</span>
-                            <span class="s1">&#39;_desc-brain.&#39;</span> <span class="o">+</span> <span class="n">EXT</span><span class="p">[</span><span class="n">output_type</span><span class="p">]))</span>
+                            <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">in_ext</span><span class="p">,</span> <span class="s2">&quot;_desc-brain.&quot;</span> <span class="o">+</span> <span class="n">EXT</span><span class="p">[</span><span class="n">output_type</span><span class="p">]</span>
+                        <span class="p">),</span>
+                    <span class="p">)</span>
 
-                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;out_mask&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;out_mask&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
                         <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
-                            <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="n">in_ext</span><span class="p">,</span>
-                            <span class="s1">&#39;_desc-brain_mask.&#39;</span> <span class="o">+</span> <span class="n">EXT</span><span class="p">[</span><span class="n">output_type</span><span class="p">]))</span>
+                            <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">in_ext</span><span class="p">,</span>
+                            <span class="s2">&quot;_desc-brain_mask.&quot;</span> <span class="o">+</span> <span class="n">EXT</span><span class="p">[</span><span class="n">output_type</span><span class="p">],</span>
+                        <span class="p">),</span>
+                    <span class="p">)</span>
 
             <span class="k">else</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;No output_directory was found...!</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No output_directory was found...!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
                 <span class="k">return</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span>
-                <span class="s1">&#39;out_file&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span>
-                <span class="s1">&#39;out_mask&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;out_file&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;out_mask&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
 
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
@@ -926,20 +1026,25 @@
             <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
 
         <span class="c1"># load model weights</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="ow">in</span> <span class="p">[</span><span class="n">Undefined</span><span class="p">,</span> <span class="s1">&#39;&lt;undefined&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="ow">in</span> <span class="p">[</span><span class="n">Undefined</span><span class="p">,</span> <span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">]:</span>
             <span class="n">fconf</span> <span class="o">=</span> <span class="n">capsul</span><span class="o">.</span><span class="n">engine</span><span class="o">.</span><span class="n">configurations</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-            <span class="s1">&#39;capsul.engine.module.freesurfer&#39;</span><span class="p">)</span>
+                <span class="s2">&quot;capsul.engine.module.freesurfer&quot;</span>
+            <span class="p">)</span>
 
             <span class="k">if</span> <span class="n">fconf</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">modelfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">fconf</span><span class="p">[</span><span class="s1">&#39;setup&#39;</span><span class="p">]),</span>
-                                         <span class="s1">&#39;models&#39;</span><span class="p">,</span>
-                                         <span class="s1">&#39;synthstrip.1.pt&#39;</span><span class="p">)</span>
+                <span class="n">modelfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">fconf</span><span class="p">[</span><span class="s2">&quot;setup&quot;</span><span class="p">]),</span>
+                    <span class="s2">&quot;models&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;synthstrip.1.pt&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
 
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;SynthStripMriqc: No configuration for &quot;</span>
-                                   <span class="s2">&quot;freeSurfer was found, so the path for &quot;</span>
-                                   <span class="s2">&quot;the model cannot be defined. &quot;</span>
-                                   <span class="s2">&quot;See File &gt; MIA Preferences&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                    <span class="s2">&quot;SynthStripMriqc: No configuration for &quot;</span>
+                    <span class="s2">&quot;freeSurfer was found, so the path for &quot;</span>
+                    <span class="s2">&quot;the model cannot be defined. &quot;</span>
+                    <span class="s2">&quot;See File &gt; MIA Preferences&quot;</span>
+                <span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
             <span class="n">modelfile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span>
@@ -966,45 +1071,46 @@
             <span class="n">sdt</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">)</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
 
         <span class="c1"># unconform the sdt and extract mask</span>
-        <span class="n">sdt_target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resample_like</span><span class="p">(</span><span class="n">nb</span><span class="o">.</span><span class="n">Nifti1Image</span><span class="p">(</span><span class="n">sdt</span><span class="p">,</span>
-                                                       <span class="n">conformed</span><span class="o">.</span><span class="n">affine</span><span class="p">,</span>
-                                                       <span class="kc">None</span><span class="p">),</span>
-                                        <span class="n">image</span><span class="p">,</span>
-                                        <span class="n">output_dtype</span><span class="o">=</span><span class="s2">&quot;int16&quot;</span><span class="p">,</span>
-                                        <span class="n">cval</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+        <span class="n">sdt_target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resample_like</span><span class="p">(</span>
+            <span class="n">nb</span><span class="o">.</span><span class="n">Nifti1Image</span><span class="p">(</span><span class="n">sdt</span><span class="p">,</span> <span class="n">conformed</span><span class="o">.</span><span class="n">affine</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="n">image</span><span class="p">,</span>
+            <span class="n">output_dtype</span><span class="o">=</span><span class="s2">&quot;int16&quot;</span><span class="p">,</span>
+            <span class="n">cval</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">sdt_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asanyarray</span><span class="p">(</span><span class="n">sdt_target</span><span class="o">.</span><span class="n">dataobj</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;int16&quot;</span><span class="p">)</span>
 
         <span class="c1"># find largest CC (just do this to be safe for now)</span>
-        <span class="n">components</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">ndimage</span><span class="o">.</span><span class="n">label</span><span class="p">(</span>
-                                <span class="n">sdt_data</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">border_mm</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">components</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">ndimage</span><span class="o">.</span><span class="n">label</span><span class="p">(</span><span class="n">sdt_data</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">border_mm</span><span class="p">)[</span>
+            <span class="mi">0</span>
+        <span class="p">]</span>
         <span class="n">bincount</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">bincount</span><span class="p">(</span><span class="n">components</span><span class="o">.</span><span class="n">flatten</span><span class="p">())[</span><span class="mi">1</span><span class="p">:]</span>
         <span class="n">mask</span> <span class="o">=</span> <span class="n">components</span> <span class="o">==</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">bincount</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
         <span class="n">mask</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">ndimage</span><span class="o">.</span><span class="n">morphology</span><span class="o">.</span><span class="n">binary_fill_holes</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
 
         <span class="c1"># write the masked output</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_file</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="n">Undefined</span><span class="p">,</span> <span class="s1">&#39;&lt;undefined&gt;&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_file</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="n">Undefined</span><span class="p">,</span> <span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">]:</span>
             <span class="n">img_data</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">get_fdata</span><span class="p">()</span>
             <span class="n">bg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">img_data</span><span class="o">.</span><span class="n">min</span><span class="p">()])</span>
             <span class="n">img_data</span><span class="p">[</span><span class="n">mask</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">bg</span>
-            <span class="n">nb</span><span class="o">.</span><span class="n">Nifti1Image</span><span class="p">(</span><span class="n">img_data</span><span class="p">,</span>
-                           <span class="n">image</span><span class="o">.</span><span class="n">affine</span><span class="p">,</span>
-                           <span class="n">image</span><span class="o">.</span><span class="n">header</span><span class="p">)</span><span class="o">.</span><span class="n">to_filename</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out_file</span><span class="p">)</span>
+            <span class="n">nb</span><span class="o">.</span><span class="n">Nifti1Image</span><span class="p">(</span><span class="n">img_data</span><span class="p">,</span> <span class="n">image</span><span class="o">.</span><span class="n">affine</span><span class="p">,</span> <span class="n">image</span><span class="o">.</span><span class="n">header</span><span class="p">)</span><span class="o">.</span><span class="n">to_filename</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">out_file</span>
+            <span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Masked image saved to: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">out_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="c1"># write the brain mask</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_mask</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="n">Undefined</span><span class="p">,</span> <span class="s1">&#39;&lt;undefined&gt;&#39;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_mask</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="n">Undefined</span><span class="p">,</span> <span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">]:</span>
             <span class="n">hdr</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
             <span class="n">hdr</span><span class="o">.</span><span class="n">set_data_dtype</span><span class="p">(</span><span class="s2">&quot;uint8&quot;</span><span class="p">)</span>
             <span class="n">nb</span><span class="o">.</span><span class="n">Nifti1Image</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">image</span><span class="o">.</span><span class="n">affine</span><span class="p">,</span> <span class="n">hdr</span><span class="p">)</span><span class="o">.</span><span class="n">to_filename</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out_mask</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;SynthStripMriqc brick: &quot;</span>
-                  <span class="sa">f</span><span class="s2">&quot;Binary brain mask saved to: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">out_mask</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;SynthStripMriqc brick: &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Binary brain mask saved to: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">out_mask</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
 
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;If you use SynthStripMriqc in your analysis, please cite:&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;----------------------------------------------------&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;SynthStrip: Skull-Stripping for Any Brain Image.&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;A Hoopes, JS Mora, AV Dalca, B Fischl, M Hoffmann.&quot;</span><span class="p">)</span></div></div>
-
 </pre></div>
 
       </div>

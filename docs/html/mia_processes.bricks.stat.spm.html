@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.stat.spm package &#8212; mia_processes 2.2.1-dev+19aadc3 documentation</title>
+    <title>mia_processes.bricks.stat.spm package &#8212; mia_processes 2.2.1-dev+17d7d44 documentation</title>
     <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -13,11 +13,12 @@
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="index.html">
-          <span>mia_processes 2.2.1-dev+19aadc3 documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+17d7d44 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.stat.spm package</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -30,13 +31,262 @@
       <div class="content" role="main">
         
         
-  <div class="section" id="mia-processes-bricks-stat-spm-package">
-<h1>mia_processes.bricks.stat.spm package<a class="headerlink" href="#mia-processes-bricks-stat-spm-package" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-mia_processes.bricks.stat.spm">
+<span id="mia-processes-bricks-stat-spm-package"></span><h1>mia_processes.bricks.stat.spm package<a class="headerlink" href="#module-mia_processes.bricks.stat.spm" title="Permalink to this headline">¶</a></h1>
+<p>Statistical calculations from spm.</p>
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="mia-processes-bricks-stat-spm-model-module">
-<h2>mia_processes.bricks.stat.spm.model module<a class="headerlink" href="#mia-processes-bricks-stat-spm-model-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-mia_processes.bricks.stat.spm.model">
+<span id="mia-processes-bricks-stat-spm-model-module"></span><h2>mia_processes.bricks.stat.spm.model module<a class="headerlink" href="#module-mia_processes.bricks.stat.spm.model" title="Permalink to this headline">¶</a></h2>
+<p>The library for the SPM fMRI statistical analysis of the mia_processes
+package.</p>
+<p>The purpose of this module is to customise the main spm statistical analysis
+bricks provided by nipype and to correct some things that do not work directly
+in populse_mia.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Contains</dt>
+<dd class="field-odd"><dl class="field-list simple">
+<dt class="field-odd">Class</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>EstimateContrast</p></li>
+<li><p>EstimateModel</p></li>
+<li><p>Level1Design</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py class">
+<dt id="mia_processes.bricks.stat.spm.model.EstimateContrast">
+<em class="property">class </em><code class="sig-prename descclassname">mia_processes.bricks.stat.spm.model.</code><code class="sig-name descname">EstimateContrast</code><a class="reference internal" href="_modules/mia_processes/bricks/stat/spm/model.html#EstimateContrast"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.stat.spm.model.EstimateContrast" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
+<ul class="simple">
+<li><p>Estimate contrasts of interest.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Type ‘EstimateContrast.help()’ for a full description of this process parameters.</p></li>
+<li><p>Type ‘&lt;EstimateContrast&gt;.get_input_spec()’ for a full description of this process input trait types.</p></li>
+<li><p>Type ‘&lt;EstimateContrast&gt;.get_output_spec()’ for a full description of this process output trait types.</p></li>
+</ul>
+</div>
+<dl class="py method">
+<dt id="mia_processes.bricks.stat.spm.model.EstimateContrast.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/stat/spm/model.html#EstimateContrast.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.stat.spm.model.EstimateContrast.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the attributes initialisation / instantiation.</p>
+<p>The input and output plugs are defined here. The special
+‘self.requirement’ attribute (optional) is used to define the
+third-party products necessary for the running of the brick.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mia_processes.bricks.stat.spm.model.EstimateContrast.list_outputs">
+<code class="sig-name descname">list_outputs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">is_plugged</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/stat/spm/model.html#EstimateContrast.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.stat.spm.model.EstimateContrast.list_outputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>blabla</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mia_processes.bricks.stat.spm.model.EstimateContrast.run_process_mia">
+<code class="sig-name descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/stat/spm/model.html#EstimateContrast.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.stat.spm.model.EstimateContrast.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<dd><p>blabla</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="mia_processes.bricks.stat.spm.model.EstimateModel">
+<em class="property">class </em><code class="sig-prename descclassname">mia_processes.bricks.stat.spm.model.</code><code class="sig-name descname">EstimateModel</code><a class="reference internal" href="_modules/mia_processes/bricks/stat/spm/model.html#EstimateModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.stat.spm.model.EstimateModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>EstimateModel (User_processes.stats.spm.stats.EstimateModel) &lt;=&gt; Model estimation (SPM12 name).</p></li>
+</ul>
+</div></blockquote>
+<dl>
+<dt><strong>* Estimation of model parameters using classical (ReML - Restricted Maximum Likelihood) or Bayesian algorithms.*</strong></dt><dd><ul>
+<li><dl>
+<dt>Input parameters:</dt><dd><dl>
+<dt># spm_mat_file &lt;=&gt; spmmat: The SPM.mat file that contains the design specification (a file object).</dt><dd><p>&lt;ex. /home/ArthurBlair/data/raw_data/SPM.mat&gt;</p>
+</dd>
+<dt># estimation_method &lt;=&gt; method: Estimation  procedures for fMRI models (A dictionary with keys which are ‘Classical’ or ‘Bayesian’ or ‘Bayesian2’ and with values which are 1).</dt><dd><blockquote>
+<div><ul class="simple">
+<li><p>Classical: Restricted Maximum Likelihood (ReML) estimation of first or second level models</p></li>
+<li><p>Bayesian: Bayesian estimation of first level models (not yet fully implemented)</p></li>
+<li><p>Bayesian2: Bayesian estimation of second level models (not yet fully implemented)</p></li>
+</ul>
+</div></blockquote>
+<p>&lt;ex. {‘Classical’: 1}&gt;</p>
+</dd>
+<dt># write_residuals &lt;=&gt; write_residuals: Write images of residuals to disk. This is only implemented for classical inference (a boolean)</dt><dd><p>&lt;ex. True&gt;</p>
+</dd>
+<dt># flags: Additional arguments (a dictionary with keys which are any value and with values which are any value)</dt><dd><p>&lt;ex. {}&gt;</p>
+</dd>
+<dt># version: Version of spm (a string)</dt><dd><p>&lt;ex. spm12&gt;</p>
+</dd>
+<dt># tot_reg_num: The total number of estimated regression coefficients (an integer).</dt><dd><p>&lt;ex. 8&gt;</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>Output parameters:</dt><dd><dl>
+<dt># out_spm_mat_file: The SPM.mat file containing specification of the design and estimated model parameters (a pathlike object or string representing an existing file).</dt><dd><p>&lt;ex. /home/ArthurBlair/data/raw_data/SPM.mat&gt;</p>
+</dd>
+<dt># beta_images: Images of estimated regression coefficients beta_000k.img where k indexes the kth regression coefficient (a list of items which are a pathlike object or string representing an existing file).</dt><dd><dl class="simple">
+<dt>&lt;ex. [‘/home/ArthurBlair/data/raw_data/beta_0001.nii’,</dt><dd><p>‘/home/ArthurBlair/data/raw_data/beta_0002.nii’,
+‘/home/ArthurBlair/data/raw_data/beta_0003.nii’,
+‘/home/ArthurBlair/data/raw_data/beta_0004.nii’,
+‘/home/ArthurBlair/data/raw_data/beta_0005.nii’,
+‘/home/ArthurBlair/data/raw_data/beta_0006.nii’,
+‘/home/ArthurBlair/data/raw_data/beta_0007.nii’,
+‘/home/ArthurBlair/data/raw_data/beta_0008.nii’]&gt;</p>
+</dd>
+</dl>
+</dd>
+<dt># mask_image: The mask.img image indicating which voxels were included in the analysis (a pathlike object or string representing an existing file).</dt><dd><p>&lt;ex. /home/ArthurBlair/data/raw_data/mask.nii&gt;</p>
+</dd>
+<dt># residual_image: The ResMS.img image of the variance of the error (a pathlike object or string representing an existing file).</dt><dd><p>&lt;ex. /home/ArthurBlair/data/raw_data/ResMS.nii &gt;</p>
+</dd>
+<dt># residual_images: The individual error Res_000k.img images (a list of items which are a pathlike object or string representing an existing file) where k indexes the kth dynamic (fourth dimensional points of the fuctional). These images are generated only if write_residuals is True.</dt><dd><dl>
+<dt>&lt;ex. [‘/home/ArthurBlair/data/raw_data/Res_0001.nii’,</dt><dd><p>‘/home/ArthurBlair/data/raw_data/Res_0002.nii’,
+‘/home/ArthurBlair/data/raw_data/Res_0003.nii’,</p>
+<blockquote>
+<div><p>…,</p>
+</div></blockquote>
+<p>‘/home/ArthurBlair/data/raw_data/Res_0238.nii’,
+‘/home/ArthurBlair/data/raw_data/Res_0239.nii’,
+‘/home/ArthurBlair/data/raw_data/Res_0240.nii’]&gt;</p>
+</dd>
+</dl>
+</dd>
+<dt># RPVimage: The RPV.img image of the estimated resolution elements per voxel (a pathlike object or string representing an existing file).</dt><dd><p>&lt;ex. /home/ArthurBlair/data/raw_data/RPV.nii&gt;</p>
+</dd>
+<dt># labels:</dt><dd><p>&lt;ex. &gt;</p>
+</dd>
+<dt># SDerror:</dt><dd><p>&lt;ex. &gt;</p>
+</dd>
+<dt># ARcoef: Images of the autoregressive (AR) coefficient (a list of items which are a pathlike object or string representing an existing file).</dt><dd><p>&lt;ex. &gt;</p>
+</dd>
+<dt># Cbetas:</dt><dd><p>&lt;ex. &gt;</p>
+</dd>
+<dt># SDbetas:</dt><dd><p>&lt;ex. &gt;</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Type ‘EstimateModel.help()’ for a full description of this process parameters.</p></li>
+<li><p>Type ‘&lt;EstimateModel&gt;.get_input_spec()’ for a full description of this process input trait types.</p></li>
+<li><p>Type ‘&lt;EstimateModel&gt;.get_output_spec()’ for a full description of this process output trait types.</p></li>
+</ul>
+</div>
+<dl class="py method">
+<dt id="mia_processes.bricks.stat.spm.model.EstimateModel.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/stat/spm/model.html#EstimateModel.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.stat.spm.model.EstimateModel.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the attributes initialisation / instantiation.</p>
+<p>The input and output plugs are defined here. The special
+‘self.requirement’ attribute (optional) is used to define the
+third-party products necessary for the running of the brick.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mia_processes.bricks.stat.spm.model.EstimateModel.list_outputs">
+<code class="sig-name descname">list_outputs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">is_plugged</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/stat/spm/model.html#EstimateModel.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.stat.spm.model.EstimateModel.list_outputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the initialisation step of the brick.</p>
+<p>The main objective of this method is to produce the outputs of the
+bricks (self.outputs) and the associated tags (self.inheritance_dict),
+if defined here. In order not to include an output in the database,
+this output must be a value of the optional key ‘notInDb’ of the
+self.outputs dictionary. To work properly this method must return
+self.make_initResult() object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mia_processes.bricks.stat.spm.model.EstimateModel.run_process_mia">
+<code class="sig-name descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/stat/spm/model.html#EstimateModel.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.stat.spm.model.EstimateModel.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the process launch step of the brick.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="mia_processes.bricks.stat.spm.model.Level1Design">
+<em class="property">class </em><code class="sig-prename descclassname">mia_processes.bricks.stat.spm.model.</code><code class="sig-name descname">Level1Design</code><a class="reference internal" href="_modules/mia_processes/bricks/stat/spm/model.html#Level1Design"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.stat.spm.model.Level1Design" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
+<ul class="simple">
+<li><p>Specification of the GLM design matrix, fMRI data files and filtering.</p></li>
+</ul>
+<p>Please, see the complete documentation for the Level1Design brick in the
+<a class="reference external" href="https://gricad-gitlab.univ-grenoble-alpes.fr/condamie/ec_dev">https://gricad-gitlab.univ-grenoble-alpes.fr/condamie/ec_dev</a> web site</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Type ‘Level1Design.help()’ for a full description of this process parameters.</p></li>
+<li><p>Type ‘&lt;Level1Design&gt;.get_input_spec()’ for a full description of this process input trait types.</p></li>
+<li><p>Type ‘&lt;Level1Design&gt;.get_output_spec()’ for a full description of this process output trait types.</p></li>
+</ul>
+</div>
+<dl class="py method">
+<dt id="mia_processes.bricks.stat.spm.model.Level1Design.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/stat/spm/model.html#Level1Design.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.stat.spm.model.Level1Design.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the attributes initialisation / instantiation.</p>
+<p>The input and output plugs are defined here. The special
+‘self.requirement’ attribute (optional) is used to define the
+third-party products necessary for the running of the brick.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mia_processes.bricks.stat.spm.model.Level1Design.list_outputs">
+<code class="sig-name descname">list_outputs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">is_plugged</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/stat/spm/model.html#Level1Design.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.stat.spm.model.Level1Design.list_outputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the initialisation step of the brick.</p>
+<p>The main objective of this method is to produce the outputs of the
+bricks (self.outputs) and the associated tags (self.inheritance_dict),
+The optional self.inheritance_dict can have two structures. On the one
+hand it can be a dictionary whose keys are the documents to inherit
+metadata and the values the documents used for the inheritance of
+these metadata. On the other hand, it can be a dictionary whose keys
+are the documents to inherit metadata and the values are dictionary
+with two keys; parent (for usual inheritance) or own_tags (to add a
+new tag or modify an existing one). In order not to include an output
+in the database, the name of the plug related to this output must be
+an element of the list corresponding to the value of the optional key
+“notInDb” of the self.outputs dictionary. To work properly this method
+must return self.make_initResult() object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mia_processes.bricks.stat.spm.model.Level1Design.run_process_mia">
+<code class="sig-name descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/stat/spm/model.html#Level1Design.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.stat.spm.model.Level1Design.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the process launch step of the brick.</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 </div>
 

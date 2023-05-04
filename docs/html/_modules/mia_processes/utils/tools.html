@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.utils.tools &#8212; mia_processes 2.2.1-dev+19aadc3 documentation</title>
+    <title>mia_processes.utils.tools &#8212; mia_processes 2.2.1-dev+17d7d44 documentation</title>
     <link rel="stylesheet" href="../../../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
@@ -13,11 +13,12 @@
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
-          <span>mia_processes 2.2.1-dev+19aadc3 documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+17d7d44 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.utils.tools</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -31,7 +32,8 @@
         
         
   <h1>Source code for mia_processes.utils.tools</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Module that contains multiple functions used across mia_processes</span>
 
 <span class="sd">:Contains:</span>
@@ -42,6 +44,9 @@
 <span class="sd">        - checkFileExt</span>
 <span class="sd">        - dict4runtime_update</span>
 <span class="sd">        - get_dbFieldValue</span>
+<span class="sd">        - mriqc_get_all_run</span>
+<span class="sd">        - mriqc_group_iqms_tsv</span>
+<span class="sd">        - plot_boxplot_points</span>
 <span class="sd">        - plot_qi2</span>
 <span class="sd">        - slice_planes_plot</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -55,16 +60,21 @@
 <span class="c1">##########################################################################</span>
 
 <span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">nibabel</span> <span class="k">as</span> <span class="nn">nib</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">os</span>
-
-<span class="kn">from</span> <span class="nn">populse_mia.data_manager.project</span> <span class="kn">import</span> <span class="p">(</span><span class="n">COLLECTION_CURRENT</span><span class="p">,</span>
-                                              <span class="n">COLLECTION_INITIAL</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="kn">from</span> <span class="nn">matplotlib.cm</span> <span class="kn">import</span> <span class="n">get_cmap</span>
 <span class="kn">from</span> <span class="nn">mpl_toolkits.axes_grid1</span> <span class="kn">import</span> <span class="n">ImageGrid</span>
+<span class="kn">from</span> <span class="nn">populse_mia.data_manager.data_history_inspect</span> <span class="kn">import</span> <span class="n">data_history_pipeline</span>
+<span class="kn">from</span> <span class="nn">populse_mia.data_manager.project</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">COLLECTION_CURRENT</span><span class="p">,</span>
+    <span class="n">COLLECTION_INITIAL</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">reportlab.lib.styles</span> <span class="kn">import</span> <span class="n">getSampleStyleSheet</span>
 <span class="kn">from</span> <span class="nn">reportlab.lib.units</span> <span class="kn">import</span> <span class="n">mm</span>
 <span class="kn">from</span> <span class="nn">reportlab.pdfgen</span> <span class="kn">import</span> <span class="n">canvas</span>
@@ -104,7 +114,7 @@
 
 
 <div class="viewcode-block" id="ReportLine"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.ReportLine">[docs]</a><span class="k">class</span> <span class="nc">ReportLine</span><span class="p">(</span><span class="n">Flowable</span><span class="p">):</span>
-    <span class="s2">&quot;Line flowable --- draws a line in a flowable&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Line flowable --- draws a line in a flowable&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="ReportLine.__init__"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.ReportLine.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="n">Flowable</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
@@ -112,15 +122,19 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="n">height</span></div>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Customise the string representation of the ReportLine object</span>
+
+<span class="sd">        :returns: the string representation of the object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="s2">&quot;Line(w=</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span>
 
 <div class="viewcode-block" id="ReportLine.draw"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.ReportLine.draw">[docs]</a>    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="s2">&quot;draw the line&quot;</span>
+        <span class="s2">&quot;Draw the line&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">canv</span><span class="o">.</span><span class="n">line</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="checkFileExt"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.checkFileExt">[docs]</a><span class="k">def</span> <span class="nf">checkFileExt</span><span class="p">(</span><span class="n">in_file</span><span class="p">,</span> <span class="n">ext_dic</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Check file extension</span>
+    <span class="sd">&quot;&quot;&quot;Check file extension</span>
 
 <span class="sd">    :param in_file: file name (a string)</span>
 <span class="sd">    :param ext_dic: dictionary of the valid extensions for the file</span>
@@ -135,10 +149,10 @@
     <span class="c1"># Get file extension</span>
     <span class="n">valid_bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="n">ifile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">in_file</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-    <span class="n">file_name</span><span class="p">,</span> <span class="n">in_ext</span> <span class="o">=</span> <span class="n">ifile</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">in_ext</span> <span class="o">==</span> <span class="s1">&#39;gz&#39;</span><span class="p">:</span>
-        <span class="p">(</span><span class="n">file_name_2</span><span class="p">,</span> <span class="n">in_ext_2</span><span class="p">)</span> <span class="o">=</span> <span class="n">file_name</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="n">in_ext</span> <span class="o">=</span> <span class="n">in_ext_2</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="n">in_ext</span>
+    <span class="n">file_name</span><span class="p">,</span> <span class="n">in_ext</span> <span class="o">=</span> <span class="n">ifile</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">in_ext</span> <span class="o">==</span> <span class="s2">&quot;gz&quot;</span><span class="p">:</span>
+        <span class="p">(</span><span class="n">file_name_2</span><span class="p">,</span> <span class="n">in_ext_2</span><span class="p">)</span> <span class="o">=</span> <span class="n">file_name</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">in_ext</span> <span class="o">=</span> <span class="n">in_ext_2</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">in_ext</span>
         <span class="n">file_name</span> <span class="o">=</span> <span class="n">file_name_2</span>
 
     <span class="n">valid_ext</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">ext_dic</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
@@ -153,11 +167,10 @@
     <span class="sd">&quot;&quot;&quot;blabla&quot;&quot;&quot;</span>
 
     <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">args</span><span class="p">:</span>
-
         <span class="k">if</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">database</span><span class="o">.</span><span class="n">get_fields_names</span><span class="p">(</span><span class="n">COLLECTION_CURRENT</span><span class="p">):</span>
-            <span class="n">dict4runtime</span><span class="p">[</span><span class="n">tag</span><span class="p">]</span> <span class="o">=</span> <span class="n">database</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span><span class="n">COLLECTION_CURRENT</span><span class="p">,</span>
-                                                   <span class="n">db_filename</span><span class="p">,</span>
-                                                   <span class="n">tag</span><span class="p">)</span>
+            <span class="n">dict4runtime</span><span class="p">[</span><span class="n">tag</span><span class="p">]</span> <span class="o">=</span> <span class="n">database</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span>
+                <span class="n">COLLECTION_CURRENT</span><span class="p">,</span> <span class="n">db_filename</span><span class="p">,</span> <span class="n">tag</span>
+            <span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
             <span class="n">dict4runtime</span><span class="p">[</span><span class="n">tag</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Undefined&quot;</span>
@@ -170,22 +183,156 @@
 
 
 <div class="viewcode-block" id="get_dbFieldValue"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.get_dbFieldValue">[docs]</a><span class="k">def</span> <span class="nf">get_dbFieldValue</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">document</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;blabla&quot;&quot;&quot;</span>
-
     <span class="sd">&quot;&quot;&quot;Return, for a document, the field value from the database.</span>
 
-<span class="sd">     :param project: the project.</span>
-<span class="sd">     :param document: the absolute path of the document.</span>
-<span class="sd">     :param : the field name.</span>
-<span class="sd">     :returns: the value of the field for the document in the database.</span>
-<span class="sd">     &quot;&quot;&quot;</span>
-    <span class="n">file_position</span> <span class="o">=</span> <span class="p">(</span><span class="n">document</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">project</span><span class="o">.</span><span class="n">getName</span><span class="p">())</span> <span class="o">+</span>
-                     <span class="nb">len</span><span class="p">(</span><span class="n">project</span><span class="o">.</span><span class="n">getName</span><span class="p">())</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="sd">    :param project: the project.</span>
+<span class="sd">    :param document: the absolute path of the document.</span>
+<span class="sd">    :param : the field name.</span>
+<span class="sd">    :returns: the value of the field for the document in the database.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">file_position</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">document</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">project</span><span class="o">.</span><span class="n">getName</span><span class="p">())</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">project</span><span class="o">.</span><span class="n">getName</span><span class="p">())</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="p">)</span>
     <span class="n">database_filename</span> <span class="o">=</span> <span class="n">document</span><span class="p">[</span><span class="n">file_position</span><span class="p">:]</span>
 
-    <span class="k">return</span> <span class="n">project</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span><span class="n">COLLECTION_CURRENT</span><span class="p">,</span>
-                                     <span class="n">database_filename</span><span class="p">,</span>
-                                     <span class="n">field</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">project</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span>
+        <span class="n">COLLECTION_CURRENT</span><span class="p">,</span> <span class="n">database_filename</span><span class="p">,</span> <span class="n">field</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="mriqc_get_all_run"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.mriqc_get_all_run">[docs]</a><span class="k">def</span> <span class="nf">mriqc_get_all_run</span><span class="p">(</span><span class="n">modality</span><span class="p">,</span> <span class="n">project</span><span class="p">,</span> <span class="n">output_directory</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get all raw files name with a mriqc run for one project and</span>
+<span class="sd">    for one modality.</span>
+
+<span class="sd">    :param modality:  modality (a string, &#39;bold&#39; or &#39;anat&#39;)</span>
+<span class="sd">    :param project:  the project (Project Object)</span>
+<span class="sd">    :param output_directory: output directory where all json files are stored</span>
+<span class="sd">                             (a string that representing a path)</span>
+<span class="sd">    :returns:</span>
+<span class="sd">        - files_names (a list)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Get all json</span>
+    <span class="n">jsonfiles</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_directory</span><span class="p">,</span> <span class="s2">&quot;*&quot;</span> <span class="o">+</span> <span class="n">modality</span> <span class="o">+</span> <span class="s2">&quot;_qc.json&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">jsonfiles</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">files_name</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">jsonfile</span> <span class="ow">in</span> <span class="n">jsonfiles</span><span class="p">:</span>
+        <span class="n">file_position</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">jsonfile</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">project</span><span class="o">.</span><span class="n">getName</span><span class="p">())</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">project</span><span class="o">.</span><span class="n">getName</span><span class="p">())</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="p">)</span>
+        <span class="n">json_database_filename</span> <span class="o">=</span> <span class="n">jsonfile</span><span class="p">[</span><span class="n">file_position</span><span class="p">:]</span>
+        <span class="n">file_name</span> <span class="o">=</span> <span class="n">data_history_pipeline</span><span class="p">(</span>
+            <span class="n">json_database_filename</span><span class="p">,</span> <span class="n">project</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">in_file</span>
+        <span class="n">files_name</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">files_name</span></div>
+
+
+<div class="viewcode-block" id="mriqc_group_iqms_tsv"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.mriqc_group_iqms_tsv">[docs]</a><span class="k">def</span> <span class="nf">mriqc_group_iqms_tsv</span><span class="p">(</span><span class="n">modality</span><span class="p">,</span> <span class="n">output_directory</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get all IQMs from mriqc json report for one project</span>
+<span class="sd">    and for one modality and put them together in one tsv file.</span>
+
+<span class="sd">    :param modality:  modality (a string, &#39;bold&#39; or &#39;anat&#39;)</span>
+<span class="sd">    :param output_directory: output directory where all json files are stored</span>
+<span class="sd">                             (a sting that representing a path)</span>
+<span class="sd">    :returns:</span>
+<span class="sd">        - dataframe: all IQMs in a panda dataframe</span>
+<span class="sd">        - out_tsv: out tsv file (a string that representing a file)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;_%Y_%m_</span><span class="si">%d</span><span class="s2">_%H_%M_%S_</span><span class="si">%f</span><span class="s2">&quot;</span><span class="p">)[:</span><span class="mi">22</span><span class="p">]</span>
+    <span class="c1"># Get all json</span>
+    <span class="n">jsonfiles</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_directory</span><span class="p">,</span> <span class="s2">&quot;*&quot;</span> <span class="o">+</span> <span class="n">modality</span> <span class="o">+</span> <span class="s2">&quot;_qc.json&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">jsonfiles</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="n">tags_to_remove</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;histogram_qi2_x_grid&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;histogram_qi2_ref_pdf&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;histogram_qi2_fit_pdf&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;histogram_qi2_ref_data&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;histogram_qi2_cutoff_idx&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;vec_outliers&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;vec_fd&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;vec_dvars&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+    <span class="n">datalist</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">jsonfile</span> <span class="ow">in</span> <span class="n">jsonfiles</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">jsonfile</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">tags_to_remove</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">tag</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                    <span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                <span class="k">if</span> <span class="s2">&quot;vec_spikes&quot;</span> <span class="ow">in</span> <span class="n">tag</span><span class="p">:</span>
+                    <span class="n">data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">tag</span><span class="p">)</span>
+            <span class="n">data</span><span class="p">[</span><span class="s2">&quot;file_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">jsonfile</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;anat_qc.json&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;bold_qc.json&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;mean_reg_&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">datalist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="n">dataframe</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">datalist</span><span class="p">)</span>
+    <span class="n">cols</span> <span class="o">=</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+    <span class="n">dataframe</span> <span class="o">=</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;file_name&quot;</span><span class="p">])</span>
+
+    <span class="n">out_tsv</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+        <span class="n">output_directory</span><span class="p">,</span> <span class="s2">&quot;mriqc_group_report_&quot;</span> <span class="o">+</span> <span class="n">modality</span> <span class="o">+</span> <span class="n">date</span> <span class="o">+</span> <span class="s2">&quot;.tsv&quot;</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Set filename at front</span>
+    <span class="n">cols</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">cols</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">cols</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">&quot;file_name&quot;</span><span class="p">)))</span>
+    <span class="n">dataframe</span><span class="p">[</span><span class="n">cols</span><span class="p">]</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">out_tsv</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">dataframe</span><span class="p">,</span> <span class="n">out_tsv</span></div>
+
+
+<div class="viewcode-block" id="plot_boxplot_points"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.plot_boxplot_points">[docs]</a><span class="k">def</span> <span class="nf">plot_boxplot_points</span><span class="p">(</span><span class="n">dataframe</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">ylabel</span><span class="p">,</span> <span class="n">out_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plot boxplot with points data and save the figure in a png image</span>
+
+<span class="sd">    :param dataframe:  tabular data. (a pandas dataframe)</span>
+<span class="sd">    :param title: figure title (a string)</span>
+<span class="sd">    :param ylabel: y axis label (a string)</span>
+<span class="sd">    :param out_file: out figure path (a string)</span>
+
+<span class="sd">    :returns:</span>
+<span class="sd">        - out_file: out figure path (a string)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">vals</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">xs</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">dataframe</span><span class="o">.</span><span class="n">columns</span><span class="p">):</span>
+        <span class="n">vals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dataframe</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+        <span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+        <span class="n">xs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mf">1.3</span><span class="p">,</span> <span class="mf">0.04</span><span class="p">,</span> <span class="n">dataframe</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">vals</span><span class="p">,</span> <span class="n">sym</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">names</span><span class="p">)</span>
+
+    <span class="n">palette</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="s2">&quot;m&quot;</span><span class="p">]</span>
+    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">palette</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">vals</span><span class="p">):</span>
+        <span class="n">palette</span> <span class="o">+=</span> <span class="n">palette</span>
+
+    <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">vals</span><span class="p">,</span> <span class="n">palette</span><span class="p">):</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">c</span><span class="p">)</span>
+
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">axisbelow</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="n">ylabel</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">labelrotation</span><span class="o">=</span><span class="mi">45</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">out_file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">out_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">&quot;box_plot.png&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">out_file</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;png&quot;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">out_file</span></div>
 
 
 <div class="viewcode-block" id="plot_qi2"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.plot_qi2">[docs]</a><span class="k">def</span> <span class="nf">plot_qi2</span><span class="p">(</span><span class="n">x_grid</span><span class="p">,</span> <span class="n">ref_pdf</span><span class="p">,</span> <span class="n">fit_pdf</span><span class="p">,</span> <span class="n">ref_data</span><span class="p">,</span> <span class="n">cutoff_idx</span><span class="p">,</span> <span class="n">out_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -198,7 +345,8 @@
         <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
         <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
         <span class="n">label</span><span class="o">=</span><span class="s2">&quot;background&quot;</span><span class="p">,</span>
-        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;dodgerblue&quot;</span><span class="p">)</span>
+        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;dodgerblue&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
 
     <span class="n">refmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">ref_data</span><span class="p">,</span> <span class="mf">99.95</span><span class="p">)</span>
     <span class="n">x_max</span> <span class="o">=</span> <span class="n">x_grid</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
@@ -209,7 +357,8 @@
         <span class="n">fc</span><span class="o">=</span><span class="s2">&quot;dodgerblue&quot;</span><span class="p">,</span>
         <span class="n">histtype</span><span class="o">=</span><span class="s2">&quot;stepfilled&quot;</span><span class="p">,</span>
         <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
-        <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">density</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
 
     <span class="n">fit_pdf</span><span class="p">[</span><span class="n">fit_pdf</span> <span class="o">&gt;</span> <span class="mf">1.0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
 
@@ -219,14 +368,16 @@
         <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
         <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
         <span class="n">label</span><span class="o">=</span><span class="s2">&quot;chi2&quot;</span><span class="p">,</span>
-        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;darkorange&quot;</span><span class="p">)</span>
+        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;darkorange&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
 
     <span class="n">ylims</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()</span>
 
     <span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span>
         <span class="n">x_grid</span><span class="p">[</span><span class="o">-</span><span class="n">cutoff_idx</span><span class="p">],</span>
         <span class="n">ymax</span><span class="o">=</span><span class="n">ref_pdf</span><span class="p">[</span><span class="o">-</span><span class="n">cutoff_idx</span><span class="p">]</span> <span class="o">/</span> <span class="n">ylims</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;dodgerblue&quot;</span><span class="p">)</span>
+        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;dodgerblue&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
 
     <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Intensity within &quot;hat&quot; mask&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Frequency&quot;</span><span class="p">)</span>
@@ -241,34 +392,46 @@
 
 
 <div class="viewcode-block" id="set_dbFieldValue"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.set_dbFieldValue">[docs]</a><span class="k">def</span> <span class="nf">set_dbFieldValue</span><span class="p">(</span><span class="n">project</span><span class="p">,</span> <span class="n">document</span><span class="p">,</span> <span class="n">tag_to_add</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;blabla</span>
+    <span class="sd">&quot;&quot;&quot;Creates for a document, the field and the corresponding value in the db.</span>
+
+<span class="sd">    :param project: the project.</span>
+<span class="sd">    :param document: the absolute path of the document.</span>
+<span class="sd">    :param tag_to_add: a dictionary with &#39;default_value&#39;, &#39;description&#39;,</span>
+<span class="sd">                      &#39;field_type&#39;, &#39;name&#39;, &#39;origin&#39;, &#39;unit&#39;, &#39;value&#39;,</span>
+<span class="sd">                      &#39;visibility&#39; keys.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">file_position</span> <span class="o">=</span> <span class="p">(</span><span class="n">document</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">project</span><span class="o">.</span><span class="n">getName</span><span class="p">())</span> <span class="o">+</span>
-                     <span class="nb">len</span><span class="p">(</span><span class="n">project</span><span class="o">.</span><span class="n">getName</span><span class="p">())</span> <span class="o">+</span>
-                     <span class="mi">1</span><span class="p">)</span>
+    <span class="n">file_position</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">document</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">project</span><span class="o">.</span><span class="n">getName</span><span class="p">())</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">project</span><span class="o">.</span><span class="n">getName</span><span class="p">())</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="p">)</span>
     <span class="n">database_filename</span> <span class="o">=</span> <span class="n">document</span><span class="p">[</span><span class="n">file_position</span><span class="p">:]</span>
 
     <span class="k">if</span> <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">project</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get_fields_names</span><span class="p">(</span>
-                                                            <span class="n">COLLECTION_CURRENT</span><span class="p">):</span>
-        <span class="n">project</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">COLLECTION_CURRENT</span><span class="p">,</span>
-                                  <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
-                                  <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;field_type&quot;</span><span class="p">],</span>
-                                  <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">],</span>
-                                  <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;visibility&quot;</span><span class="p">],</span>
-                                  <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;origin&quot;</span><span class="p">],</span>
-                                  <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">],</span>
-                                  <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;default_value&quot;</span><span class="p">])</span>
+        <span class="n">COLLECTION_CURRENT</span>
+    <span class="p">):</span>
+        <span class="n">project</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span>
+            <span class="n">COLLECTION_CURRENT</span><span class="p">,</span>
+            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
+            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;field_type&quot;</span><span class="p">],</span>
+            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">],</span>
+            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;visibility&quot;</span><span class="p">],</span>
+            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;origin&quot;</span><span class="p">],</span>
+            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">],</span>
+            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;default_value&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">project</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get_fields_names</span><span class="p">(</span>
-                                                            <span class="n">COLLECTION_INITIAL</span><span class="p">):</span>
-        <span class="n">project</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">COLLECTION_INITIAL</span><span class="p">,</span>
-                                  <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
-                                  <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;field_type&quot;</span><span class="p">],</span>
-                                  <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">],</span>
-                                  <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;visibility&quot;</span><span class="p">],</span>
-                                  <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;origin&quot;</span><span class="p">],</span>
-                                  <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">],</span>
-                                  <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;default_value&quot;</span><span class="p">])</span>
+        <span class="n">COLLECTION_INITIAL</span>
+    <span class="p">):</span>
+        <span class="n">project</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span>
+            <span class="n">COLLECTION_INITIAL</span><span class="p">,</span>
+            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
+            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;field_type&quot;</span><span class="p">],</span>
+            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">],</span>
+            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;visibility&quot;</span><span class="p">],</span>
+            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;origin&quot;</span><span class="p">],</span>
+            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">],</span>
+            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;default_value&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">project</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get_document</span><span class="p">(</span><span class="n">COLLECTION_CURRENT</span><span class="p">,</span> <span class="n">database_filename</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Path </span><span class="si">{0}</span><span class="s2"> already in database.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">database_filename</span><span class="p">))</span>
@@ -277,14 +440,28 @@
         <span class="n">project</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add_document</span><span class="p">(</span><span class="n">COLLECTION_CURRENT</span><span class="p">,</span> <span class="n">database_filename</span><span class="p">)</span>
         <span class="n">project</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add_document</span><span class="p">(</span><span class="n">COLLECTION_INITIAL</span><span class="p">,</span> <span class="n">database_filename</span><span class="p">)</span>
 
-    <span class="n">project</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">set_values</span><span class="p">(</span><span class="n">COLLECTION_CURRENT</span><span class="p">,</span> <span class="n">database_filename</span><span class="p">,</span>
-                               <span class="p">{</span><span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]:</span> <span class="n">tag_to_add</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]})</span>
-    <span class="n">project</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">set_values</span><span class="p">(</span><span class="n">COLLECTION_INITIAL</span><span class="p">,</span> <span class="n">database_filename</span><span class="p">,</span>
-                               <span class="p">{</span><span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]:</span> <span class="n">tag_to_add</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]})</span></div>
+    <span class="n">project</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">set_values</span><span class="p">(</span>
+        <span class="n">COLLECTION_CURRENT</span><span class="p">,</span>
+        <span class="n">database_filename</span><span class="p">,</span>
+        <span class="p">{</span><span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]:</span> <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]},</span>
+    <span class="p">)</span>
+    <span class="n">project</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">set_values</span><span class="p">(</span>
+        <span class="n">COLLECTION_INITIAL</span><span class="p">,</span>
+        <span class="n">database_filename</span><span class="p">,</span>
+        <span class="p">{</span><span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]:</span> <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]},</span>
+    <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="slice_planes_plot"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.slice_planes_plot">[docs]</a><span class="k">def</span> <span class="nf">slice_planes_plot</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">fig_rows</span><span class="p">,</span> <span class="n">fig_cols</span><span class="p">,</span> <span class="n">inf_slice_start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                      <span class="n">slices_gap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dyn</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Greys_r&quot;</span><span class="p">,</span> <span class="n">out_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="slice_planes_plot"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.slice_planes_plot">[docs]</a><span class="k">def</span> <span class="nf">slice_planes_plot</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">,</span>
+    <span class="n">fig_rows</span><span class="p">,</span>
+    <span class="n">fig_cols</span><span class="p">,</span>
+    <span class="n">inf_slice_start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">slices_gap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">dyn</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Greys_r&quot;</span><span class="p">,</span>
+    <span class="n">out_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
     <span class="s2">&quot;blablabla&quot;</span>
 
     <span class="n">brain_img</span> <span class="o">=</span> <span class="n">nib</span><span class="o">.</span><span class="n">as_closest_canonical</span><span class="p">(</span><span class="n">nib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
@@ -302,70 +479,111 @@
     <span class="n">mask_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">brain_data</span><span class="p">)</span>
     <span class="n">mask_data</span><span class="p">[</span><span class="n">brain_data</span> <span class="o">&lt;=</span> <span class="n">min_thres</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">ind_non_zero</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">mask_data</span><span class="p">)</span>
-    <span class="p">(</span><span class="n">ystart</span><span class="p">,</span> <span class="n">xstart</span><span class="p">,</span> <span class="n">zstart</span><span class="p">),</span> <span class="p">(</span><span class="n">ystop</span><span class="p">,</span> <span class="n">xstop</span><span class="p">,</span> <span class="n">zstop</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">ind_non_zero</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
-                                                      <span class="n">ind_non_zero</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="p">(</span><span class="n">ystart</span><span class="p">,</span> <span class="n">xstart</span><span class="p">,</span> <span class="n">zstart</span><span class="p">),</span> <span class="p">(</span><span class="n">ystop</span><span class="p">,</span> <span class="n">xstop</span><span class="p">,</span> <span class="n">zstop</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">ind_non_zero</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
+        <span class="n">ind_non_zero</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="n">brain_data</span> <span class="o">=</span> <span class="n">brain_data</span><span class="p">[</span><span class="n">ystart</span><span class="p">:</span><span class="n">ystop</span><span class="p">,</span> <span class="n">xstart</span><span class="p">:</span><span class="n">xstop</span><span class="p">,</span> <span class="n">zstart</span><span class="p">:</span><span class="n">zstop</span><span class="p">]</span>
     <span class="n">disp_slices</span> <span class="o">=</span> <span class="n">fig_rows</span> <span class="o">*</span> <span class="n">fig_cols</span>
 
-    <span class="k">if</span> <span class="n">inf_slice_start</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">Undefined</span><span class="p">)</span> <span class="ow">and</span> <span class="n">slices_gap</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">Undefined</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">inf_slice_start</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">Undefined</span><span class="p">)</span> <span class="ow">and</span> <span class="n">slices_gap</span> <span class="ow">in</span> <span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="n">Undefined</span><span class="p">,</span>
+    <span class="p">):</span>
         <span class="n">slices_gap</span> <span class="o">=</span> <span class="n">brain_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">//</span> <span class="n">disp_slices</span>
         <span class="n">memory</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
         <span class="n">ind_slices</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="n">brain_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
-                            <span class="n">step</span><span class="o">=</span><span class="n">slices_gap</span><span class="p">))</span> <span class="o">!=</span> <span class="n">disp_slices</span><span class="p">:</span>
-
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="n">brain_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
-                             <span class="n">step</span><span class="o">=</span><span class="n">slices_gap</span><span class="p">))</span> <span class="ow">in</span> <span class="n">memory</span><span class="p">:</span>
-                <span class="n">ind_slices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="n">brain_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
-                                       <span class="n">step</span><span class="o">=</span><span class="n">slices_gap</span><span class="p">)</span>
+        <span class="k">while</span> <span class="p">(</span>
+            <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="n">brain_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">step</span><span class="o">=</span><span class="n">slices_gap</span><span class="p">))</span>
+            <span class="o">!=</span> <span class="n">disp_slices</span>
+        <span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="nb">len</span><span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span>
+                        <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="n">brain_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">step</span><span class="o">=</span><span class="n">slices_gap</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+                <span class="ow">in</span> <span class="n">memory</span>
+            <span class="p">):</span>
+                <span class="n">ind_slices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span>
+                    <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="n">brain_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">step</span><span class="o">=</span><span class="n">slices_gap</span>
+                <span class="p">)</span>
 
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ind_slices</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">disp_slices</span><span class="p">:</span>
-
                     <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">ind_slices</span><span class="p">)</span> <span class="o">!=</span> <span class="n">disp_slices</span><span class="p">:</span>
                         <span class="n">ind_slices</span> <span class="o">=</span> <span class="n">ind_slices</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
                     <span class="n">ind_slices</span> <span class="o">=</span> <span class="n">ind_slices</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
                     <span class="n">ind_slices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                                    <span class="n">ind_slices</span><span class="p">,</span>
-                                    <span class="n">ind_slices</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span>
-                                     <span class="n">brain_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">ind_slices</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span>
+                        <span class="n">ind_slices</span><span class="p">,</span>
+                        <span class="n">ind_slices</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                        <span class="o">+</span> <span class="p">(</span><span class="n">brain_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">ind_slices</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span>
+                    <span class="p">)</span>
                     <span class="k">break</span>
 
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ind_slices</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">disp_slices</span><span class="p">:</span>
                     <span class="n">slices_gap</span> <span class="o">-=</span> <span class="mi">1</span>
 
-            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="n">brain_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
-                               <span class="n">step</span><span class="o">=</span><span class="n">slices_gap</span><span class="p">))</span> <span class="o">&gt;</span> <span class="n">disp_slices</span><span class="p">:</span>
-                <span class="n">memory</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="n">brain_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
-                                         <span class="n">step</span><span class="o">=</span><span class="n">slices_gap</span><span class="p">)))</span>
+            <span class="k">elif</span> <span class="p">(</span>
+                <span class="nb">len</span><span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span>
+                        <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="n">brain_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">step</span><span class="o">=</span><span class="n">slices_gap</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+                <span class="o">&gt;</span> <span class="n">disp_slices</span>
+            <span class="p">):</span>
+                <span class="n">memory</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+                    <span class="nb">len</span><span class="p">(</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span>
+                            <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="n">brain_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">step</span><span class="o">=</span><span class="n">slices_gap</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
                 <span class="n">slices_gap</span> <span class="o">+=</span> <span class="mi">1</span>
 
-            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="n">brain_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
-                               <span class="n">step</span><span class="o">=</span><span class="n">slices_gap</span><span class="p">))</span> <span class="o">&lt;</span> <span class="n">disp_slices</span><span class="p">:</span>
-                <span class="n">memory</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="n">brain_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
-                                         <span class="n">step</span><span class="o">=</span><span class="n">slices_gap</span><span class="p">)))</span>
+            <span class="k">elif</span> <span class="p">(</span>
+                <span class="nb">len</span><span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span>
+                        <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="n">brain_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">step</span><span class="o">=</span><span class="n">slices_gap</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+                <span class="o">&lt;</span> <span class="n">disp_slices</span>
+            <span class="p">):</span>
+                <span class="n">memory</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+                    <span class="nb">len</span><span class="p">(</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span>
+                            <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="n">brain_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">step</span><span class="o">=</span><span class="n">slices_gap</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
                 <span class="n">slices_gap</span> <span class="o">-=</span> <span class="mi">1</span>
 
         <span class="k">if</span> <span class="n">ind_slices</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">inf_slice_start</span> <span class="o">=</span> <span class="p">(</span><span class="n">brain_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span>
-                      <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                                <span class="n">stop</span><span class="o">=</span><span class="n">brain_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
-                                <span class="n">step</span><span class="o">=</span><span class="n">slices_gap</span><span class="p">)[</span>
-                                      <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                                                    <span class="n">stop</span><span class="o">=</span><span class="n">brain_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
-                                                    <span class="n">step</span><span class="o">=</span><span class="n">slices_gap</span><span class="p">))</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> <span class="o">//</span> <span class="mi">2</span>
-            <span class="n">ind_slices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="n">inf_slice_start</span><span class="p">,</span>
-                                   <span class="n">stop</span><span class="o">=</span><span class="n">brain_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
-                                   <span class="n">step</span><span class="o">=</span><span class="n">slices_gap</span><span class="p">)</span>
+            <span class="n">inf_slice_start</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">brain_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span>
+                    <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="n">brain_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">step</span><span class="o">=</span><span class="n">slices_gap</span>
+                <span class="p">)[</span>
+                    <span class="nb">len</span><span class="p">(</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span>
+                            <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="n">brain_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">step</span><span class="o">=</span><span class="n">slices_gap</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+                    <span class="o">-</span> <span class="mi">1</span>
+                <span class="p">]</span>
+            <span class="p">)</span> <span class="o">//</span> <span class="mi">2</span>
+            <span class="n">ind_slices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span>
+                <span class="n">start</span><span class="o">=</span><span class="n">inf_slice_start</span><span class="p">,</span>
+                <span class="n">stop</span><span class="o">=</span><span class="n">brain_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="n">step</span><span class="o">=</span><span class="n">slices_gap</span><span class="p">,</span>
+            <span class="p">)</span>
 
     <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">brain_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]))))</span> <span class="o">&gt;</span> <span class="n">disp_slices</span><span class="p">:</span>
-        <span class="n">ind_slices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span>
-                        <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span>
-                        <span class="n">brain_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">])))[</span>
-                                   <span class="n">inf_slice_start</span><span class="p">:</span>
-                                   <span class="n">inf_slice_start</span> <span class="o">+</span> <span class="p">(</span><span class="n">slices_gap</span> <span class="o">*</span> <span class="n">disp_slices</span><span class="p">):</span>
-                                   <span class="n">slices_gap</span><span class="p">]</span>
+        <span class="n">ind_slices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">brain_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">])))[</span>
+            <span class="n">inf_slice_start</span> <span class="p">:</span> <span class="n">inf_slice_start</span>
+            <span class="o">+</span> <span class="p">(</span><span class="n">slices_gap</span> <span class="o">*</span> <span class="n">disp_slices</span><span class="p">)</span> <span class="p">:</span> <span class="n">slices_gap</span>
+        <span class="p">]</span>
 
     <span class="k">else</span><span class="p">:</span>
         <span class="n">ind_slices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">brain_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">])))</span>
@@ -405,13 +623,15 @@
     <span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">ind_slice</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">ind_slices</span><span class="p">):</span>
         <span class="n">phys_sp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">zooms</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span> <span class="o">*</span> <span class="n">brain_data</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ind_slice</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
 
-        <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="n">brain_data</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ind_slice</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-                  <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span>
-                  <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>
-                  <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span>
-                  <span class="n">interpolation</span><span class="o">=</span><span class="s2">&quot;nearest&quot;</span><span class="p">,</span>
-                  <span class="n">origin</span><span class="o">=</span><span class="s2">&quot;lower&quot;</span><span class="p">,</span>
-                  <span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">phys_sp</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="n">phys_sp</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="n">brain_data</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">ind_slice</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span>
+            <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>
+            <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span>
+            <span class="n">interpolation</span><span class="o">=</span><span class="s2">&quot;nearest&quot;</span><span class="p">,</span>
+            <span class="n">origin</span><span class="o">=</span><span class="s2">&quot;lower&quot;</span><span class="p">,</span>
+            <span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">phys_sp</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="n">phys_sp</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span>
+        <span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([])</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">([])</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
@@ -420,16 +640,19 @@
         <span class="n">bgcolor</span> <span class="o">=</span> <span class="n">cmap</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">vmin</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span>
         <span class="n">fgcolor</span> <span class="o">=</span> <span class="n">cmap</span><span class="p">(</span><span class="n">vmax</span><span class="p">)</span>
 
-        <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.98</span><span class="p">,</span>
-                <span class="mf">0.01</span><span class="p">,</span>
-                <span class="s2">&quot;</span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">ind_slice</span><span class="p">,</span>
-                <span class="n">color</span><span class="o">=</span><span class="n">fgcolor</span><span class="p">,</span>
-                <span class="n">transform</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span>
-                <span class="n">horizontalalignment</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span>
-                <span class="n">verticalalignment</span><span class="o">=</span><span class="s2">&quot;bottom&quot;</span><span class="p">,</span>
-                <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="p">,</span>
-                <span class="n">bbox</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">boxstyle</span><span class="o">=</span><span class="s2">&quot;square,pad=0&quot;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="n">bgcolor</span><span class="p">,</span>
-                          <span class="n">facecolor</span><span class="o">=</span><span class="n">bgcolor</span><span class="p">))</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+            <span class="mf">0.98</span><span class="p">,</span>
+            <span class="mf">0.01</span><span class="p">,</span>
+            <span class="s2">&quot;</span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">ind_slice</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="n">fgcolor</span><span class="p">,</span>
+            <span class="n">transform</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span>
+            <span class="n">horizontalalignment</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span>
+            <span class="n">verticalalignment</span><span class="o">=</span><span class="s2">&quot;bottom&quot;</span><span class="p">,</span>
+            <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="p">,</span>
+            <span class="n">bbox</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                <span class="n">boxstyle</span><span class="o">=</span><span class="s2">&quot;square,pad=0&quot;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="n">bgcolor</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="n">bgcolor</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
 
     <span class="n">fname</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
 
