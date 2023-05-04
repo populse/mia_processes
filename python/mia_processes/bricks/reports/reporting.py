@@ -1348,8 +1348,7 @@ class ReportGroupMriqc(ProcessMIA):
         super(ReportGroupMriqc, self).__init__()
 
         # Third party software required for the execution of the brick
-        # TODO: change requirement
-        self.requirement = ["fsl"]
+        self.requirement = []
 
         # Inputs description
         modality_desc = "Modality"
