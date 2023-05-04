@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.preprocess.fsl.processes &#8212; mia_processes 2.2.1-dev+19aadc3 documentation</title>
+    <title>mia_processes.bricks.preprocess.fsl.processes &#8212; mia_processes 2.2.1-dev+17d7d44 documentation</title>
     <link rel="stylesheet" href="../../../../../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
@@ -13,11 +13,12 @@
     <script src="../../../../../_static/underscore.js"></script>
     <script src="../../../../../_static/doctools.js"></script>
     <script src="../../../../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../../index.html">
-          <span>mia_processes 2.2.1-dev+19aadc3 documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+17d7d44 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.preprocess.fsl.processes</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -31,7 +32,7 @@
         
         
   <h1>Source code for mia_processes.bricks.preprocess.fsl.processes</h1><div class="highlight"><pre>
-<span></span><span class="c1"># -*- coding: utf-8 -*- #</span>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
 
 <span class="sd">&quot;&quot;&quot;The fsl preprocess library of the mia_processes package.</span>
 
@@ -55,18 +56,18 @@
 <span class="c1"># for details.</span>
 <span class="c1">##########################################################################</span>
 
+<span class="c1"># Other import</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
 <span class="kn">from</span> <span class="nn">nipype.interfaces.base</span> <span class="kn">import</span> <span class="n">File</span>
 
 <span class="c1"># populse_mia import</span>
 <span class="kn">from</span> <span class="nn">populse_mia.user_interface.pipeline_manager.process_mia</span> <span class="kn">import</span> <span class="n">ProcessMIA</span>
-<span class="kn">from</span> <span class="nn">mia_processes.utils</span> <span class="kn">import</span> <span class="n">checkFileExt</span>
-
-<span class="c1"># Other import</span>
-<span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="n">Bool</span><span class="p">,</span> <span class="n">Either</span><span class="p">,</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">Float</span><span class="p">,</span> <span class="n">Int</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">String</span><span class="p">,</span> <span class="n">Undefined</span>
 
-<span class="n">EXT</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;NIFTI_GZ&#39;</span><span class="p">:</span> <span class="s1">&#39;nii.gz&#39;</span><span class="p">,</span>
-       <span class="s1">&#39;NIFTI&#39;</span><span class="p">:</span> <span class="s1">&#39;nii&#39;</span><span class="p">}</span>
+<span class="kn">from</span> <span class="nn">mia_processes.utils</span> <span class="kn">import</span> <span class="n">checkFileExt</span>
+
+<span class="n">EXT</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;NIFTI_GZ&quot;</span><span class="p">:</span> <span class="s2">&quot;nii.gz&quot;</span><span class="p">,</span> <span class="s2">&quot;NIFTI&quot;</span><span class="p">:</span> <span class="s2">&quot;nii&quot;</span><span class="p">}</span>
 
 
 <div class="viewcode-block" id="BetSurfacesExtraction"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.BetSurfacesExtraction">[docs]</a><span class="k">class</span> <span class="nc">BetSurfacesExtraction</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
@@ -89,95 +90,117 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">BetSurfacesExtraction</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="c1"># Third party softwares required for the execution of the brick</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;fsl&#39;</span><span class="p">,</span> <span class="s1">&#39;nipype&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;fsl&quot;</span><span class="p">,</span> <span class="s2">&quot;nipype&quot;</span><span class="p">]</span>
 
         <span class="c1"># Mandatory inputs description</span>
-        <span class="n">in_file_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Input file to skull strip (a pathlike object&#39;</span>
-                        <span class="s1">&#39;string representing an existing file)&#39;</span><span class="p">)</span>
+        <span class="n">in_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Input file to skull strip (a pathlike object&quot;</span>
+            <span class="s2">&quot;string representing an existing file)&quot;</span>
+        <span class="p">)</span>
         <span class="c1"># Optional inputs with default value description</span>
-        <span class="n">output_type_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Typecodes of the output NIfTI image formats (one &#39;</span>
-                            <span class="s1">&#39;of NIFTI, NIFTI_GZ).&#39;</span><span class="p">)</span>
+        <span class="n">output_type_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Typecodes of the output NIfTI image formats (one &quot;</span>
+            <span class="s2">&quot;of NIFTI, NIFTI_GZ).&quot;</span>
+        <span class="p">)</span>
         <span class="c1"># Outputs description</span>
-        <span class="n">inskull_mask_file_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Inskull mask file (a pathlike object &#39;</span>
-                                  <span class="s1">&#39;or string representing a file)&#39;</span><span class="p">)</span>
-        <span class="n">inskull_mesh_file_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Inskull mesh file (a pathlike object &#39;</span>
-                                  <span class="s1">&#39;or string representing a file)&#39;</span><span class="p">)</span>
-        <span class="n">out_file_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Skull stripped image (a pathlike object &#39;</span>
-                         <span class="s1">&#39;or string representing a file)&#39;</span><span class="p">)</span>
-        <span class="n">outskin_mask_file_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Outskin mask file (a pathlike object &#39;</span>
-                                  <span class="s1">&#39;or string representing a file)&#39;</span><span class="p">)</span>
-        <span class="n">outskin_mesh_file_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Outskin mesh file (a pathlike object &#39;</span>
-                                  <span class="s1">&#39;or string representing a file)&#39;</span><span class="p">)</span>
-        <span class="n">outskull_mask_file_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Outskull mask file (a pathlike object &#39;</span>
-                                   <span class="s1">&#39;or string representing a file)&#39;</span><span class="p">)</span>
-        <span class="n">outskull_mesh_file_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Outskull mesh file (a pathlike object &#39;</span>
-                                   <span class="s1">&#39;or string representing a file)&#39;</span><span class="p">)</span>
-        <span class="n">skull_mask_file_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Skull mask file (a pathlike object &#39;</span>
-                                <span class="s1">&#39;or string representing a file)&#39;</span><span class="p">)</span>
+        <span class="n">inskull_mask_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Inskull mask file (a pathlike object &quot;</span>
+            <span class="s2">&quot;or string representing a file)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">inskull_mesh_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Inskull mesh file (a pathlike object &quot;</span>
+            <span class="s2">&quot;or string representing a file)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">out_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Skull stripped image (a pathlike object &quot;</span>
+            <span class="s2">&quot;or string representing a file)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">outskin_mask_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Outskin mask file (a pathlike object &quot;</span>
+            <span class="s2">&quot;or string representing a file)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">outskin_mesh_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Outskin mesh file (a pathlike object &quot;</span>
+            <span class="s2">&quot;or string representing a file)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">outskull_mask_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Outskull mask file (a pathlike object &quot;</span>
+            <span class="s2">&quot;or string representing a file)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">outskull_mesh_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Outskull mesh file (a pathlike object &quot;</span>
+            <span class="s2">&quot;or string representing a file)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">skull_mask_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Skull mask file (a pathlike object &quot;</span>
+            <span class="s2">&quot;or string representing a file)&quot;</span>
+        <span class="p">)</span>
 
         <span class="c1"># Mandatory inputs traits</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;in_file&quot;</span><span class="p">,</span>
-                       <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                            <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                            <span class="n">desc</span><span class="o">=</span><span class="n">in_file_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;in_file&quot;</span><span class="p">,</span> <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">in_file_desc</span><span class="p">)</span>
+        <span class="p">)</span>
 
         <span class="c1"># Optional inputs with default value traits</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;output_type&quot;</span><span class="p">,</span>
-                       <span class="n">Enum</span><span class="p">(</span><span class="s1">&#39;NIFTI&#39;</span><span class="p">,</span>
-                            <span class="s1">&#39;NIFTI_GZ&#39;</span><span class="p">,</span>
-                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">desc</span><span class="o">=</span><span class="n">output_type_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;output_type&quot;</span><span class="p">,</span>
+            <span class="n">Enum</span><span class="p">(</span>
+                <span class="s2">&quot;NIFTI&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;NIFTI_GZ&quot;</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">output_type_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
 
         <span class="c1"># Outputs traits</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;out_file&quot;</span><span class="p">,</span>
-                       <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">desc</span><span class="o">=</span><span class="n">out_file_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;out_file&quot;</span><span class="p">,</span> <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">out_file_desc</span><span class="p">)</span>
+        <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;inskull_mask_file&quot;</span><span class="p">,</span>
-                       <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">desc</span><span class="o">=</span><span class="n">inskull_mask_file_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;inskull_mask_file&quot;</span><span class="p">,</span>
+            <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">inskull_mask_file_desc</span><span class="p">),</span>
+        <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;inskull_mesh_file&quot;</span><span class="p">,</span>
-                       <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">desc</span><span class="o">=</span><span class="n">inskull_mesh_file_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;inskull_mesh_file&quot;</span><span class="p">,</span>
+            <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">inskull_mesh_file_desc</span><span class="p">),</span>
+        <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;outskin_mask_file&quot;</span><span class="p">,</span>
-                       <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">desc</span><span class="o">=</span><span class="n">outskin_mask_file_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;outskin_mask_file&quot;</span><span class="p">,</span>
+            <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">outskin_mask_file_desc</span><span class="p">),</span>
+        <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;outskin_mesh_file&quot;</span><span class="p">,</span>
-                       <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">desc</span><span class="o">=</span><span class="n">outskin_mesh_file_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;outskin_mesh_file&quot;</span><span class="p">,</span>
+            <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">outskin_mesh_file_desc</span><span class="p">),</span>
+        <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;outskull_mask_file&quot;</span><span class="p">,</span>
-                       <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">desc</span><span class="o">=</span><span class="n">outskull_mask_file_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;outskull_mask_file&quot;</span><span class="p">,</span>
+            <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">outskull_mask_file_desc</span><span class="p">),</span>
+        <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;outskull_mesh_file&quot;</span><span class="p">,</span>
-                       <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">desc</span><span class="o">=</span><span class="n">outskull_mesh_file_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;outskull_mesh_file&quot;</span><span class="p">,</span>
+            <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">outskull_mesh_file_desc</span><span class="p">),</span>
+        <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;skull_mask_file&quot;</span><span class="p">,</span>
-                       <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">desc</span><span class="o">=</span><span class="n">skull_mask_file_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;skull_mask_file&quot;</span><span class="p">,</span>
+            <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">skull_mask_file_desc</span><span class="p">),</span>
+        <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span>
 
         <span class="c1"># To suppress the &quot;FSLOUTPUTTYPE environment</span>
         <span class="c1"># variable is not set&quot; nipype warning:</span>
-        <span class="k">if</span> <span class="s1">&#39;FSLOUTPUTTYPE&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;FSLOUTPUTTYPE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_type</span>
+        <span class="k">if</span> <span class="s2">&quot;FSLOUTPUTTYPE&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;FSLOUTPUTTYPE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_type</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s1">&#39;nipype.interfaces.fsl.BET&#39;</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.fsl.BET&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="BetSurfacesExtraction.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.BetSurfacesExtraction.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
@@ -195,12 +218,10 @@
 
         <span class="c1"># Outputs definition and tags inheritance (optional)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">:</span>
-            <span class="n">valid_ext</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">fileName</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">,</span>
-                                                       <span class="n">EXT</span><span class="p">)</span>
+            <span class="n">valid_ext</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">fileName</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">,</span> <span class="n">EXT</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_ext</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">The input image format is&#39;</span>
-                      <span class="s1">&#39; not recognized...!&#39;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The input image format is&quot;</span> <span class="s2">&quot; not recognized...!&quot;</span><span class="p">)</span>
                 <span class="k">return</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">output_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_type</span>
@@ -208,47 +229,61 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">surfaces</span> <span class="o">=</span> <span class="kc">True</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;out_file&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">_out_file</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;outskin_mask_file&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">_outskin_mask_file</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;outskin_mesh_file&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">_outskin_mesh_file</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;outskull_mask_file&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">_outskull_mask_file</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;outskull_mesh_file&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">_outskull_mesh_file</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;inskull_mask_file&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">_inskull_mask_file</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;inskull_mesh_file&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">_inskull_mesh_file</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;skull_mask_file&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">_skull_mask_file</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;out_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">_out_file</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;outskin_mask_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">_outskin_mask_file</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;outskin_mesh_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">_outskin_mesh_file</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;outskull_mask_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">_outskull_mask_file</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;outskull_mesh_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">_outskull_mesh_file</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;inskull_mask_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">_inskull_mask_file</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;inskull_mesh_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">_inskull_mesh_file</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;skull_mask_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">_skull_mask_file</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span>
-                <span class="s1">&#39;out_file&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span>
-                <span class="s1">&#39;outskin_mask_file&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span>
-                <span class="s1">&#39;outskin_mesh_file&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span>
-                <span class="s1">&#39;outskull_mask_file&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span>
-                <span class="s1">&#39;outskull_mesh_file&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span>
-                <span class="s1">&#39;inskull_mask_file&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span>
-                <span class="s1">&#39;inskull_mesh_file&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span>
-                <span class="s1">&#39;skull_mask_file&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;out_file&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;outskin_mask_file&quot;</span><span class="p">]</span>
+            <span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;outskin_mesh_file&quot;</span><span class="p">]</span>
+            <span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;outskull_mask_file&quot;</span><span class="p">]</span>
+            <span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;outskull_mesh_file&quot;</span><span class="p">]</span>
+            <span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;inskull_mask_file&quot;</span><span class="p">]</span>
+            <span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;inskull_mesh_file&quot;</span><span class="p">]</span>
+            <span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;skull_mask_file&quot;</span><span class="p">]</span>
+            <span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
 
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
@@ -286,93 +321,110 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">FastSegment</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="c1"># Third party softwares required for the execution of the brick</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;fsl&#39;</span><span class="p">,</span> <span class="s1">&#39;nipype&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;fsl&quot;</span><span class="p">,</span> <span class="s2">&quot;nipype&quot;</span><span class="p">]</span>
 
         <span class="c1"># Mandatory inputs description</span>
-        <span class="n">in_file_desc</span> <span class="o">=</span> <span class="s1">&#39;File to Segment&#39;</span>
+        <span class="n">in_file_desc</span> <span class="o">=</span> <span class="s2">&quot;File to Segment&quot;</span>
         <span class="c1"># Optional inputs with default value description</span>
-        <span class="n">img_type_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Int specifying type of image:&#39;</span>
-                         <span class="s1">&#39;(1 = T1, 2 = T2, 3 = PD). &#39;</span><span class="p">)</span>
-        <span class="n">output_type_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Typecodes of the output NIfTI image formats (one &#39;</span>
-                            <span class="s1">&#39;of NIFTI, NIFTI_GZ).&#39;</span><span class="p">)</span>
-        <span class="n">segments_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Outputs a separate binary image for each tissue type &#39;</span>
-                         <span class="s1">&#39;(a boolean).&#39;</span><span class="p">)</span>
+        <span class="n">img_type_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Int specifying type of image:&quot;</span> <span class="s2">&quot;(1 = T1, 2 = T2, 3 = PD). &quot;</span>
+        <span class="p">)</span>
+        <span class="n">output_type_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Typecodes of the output NIfTI image formats (one &quot;</span>
+            <span class="s2">&quot;of NIFTI, NIFTI_GZ).&quot;</span>
+        <span class="p">)</span>
+        <span class="n">segments_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Outputs a separate binary image for each tissue type &quot;</span>
+            <span class="s2">&quot;(a boolean).&quot;</span>
+        <span class="p">)</span>
         <span class="c1"># Outputs description</span>
-        <span class="n">mixeltype_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Path/name of mixeltype volume file _mixeltype&#39;</span>
-                          <span class="s1">&#39;(a pathlike object or string representing&#39;</span>
-                          <span class="s1">&#39;a file)&#39;</span><span class="p">)</span>
-        <span class="n">partial_volume_map_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Partial volume map (_pveseg)&#39;</span>
-                                   <span class="s1">&#39;(a pathlike object or string representing&#39;</span>
-                                   <span class="s1">&#39;a file)&#39;</span><span class="p">)</span>
-        <span class="n">partial_volume_files_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Partial volume files (a list of items &#39;</span>
-                                     <span class="s1">&#39;which are file names.&#39;</span><span class="p">)</span>
-        <span class="n">tissue_class_files_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Binary segmented volume files, one image&#39;</span>
-                                   <span class="s1">&#39;per class (a list of items which are&#39;</span>
-                                   <span class="s1">&#39;file names.)&#39;</span><span class="p">)</span>
-        <span class="n">tissue_class_map_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Binary segmented volume file &#39;</span>
-                                 <span class="s1">&#39;(a pathlike object or string representing&#39;</span>
-                                 <span class="s1">&#39;a file)&#39;</span><span class="p">)</span>
+        <span class="n">mixeltype_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Path/name of mixeltype volume file _mixeltype&quot;</span>
+            <span class="s2">&quot;(a pathlike object or string representing&quot;</span>
+            <span class="s2">&quot;a file)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">partial_volume_map_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Partial volume map (_pveseg)&quot;</span>
+            <span class="s2">&quot;(a pathlike object or string representing&quot;</span>
+            <span class="s2">&quot;a file)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">partial_volume_files_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Partial volume files (a list of items &quot;</span> <span class="s2">&quot;which are file names.&quot;</span>
+        <span class="p">)</span>
+        <span class="n">tissue_class_files_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Binary segmented volume files, one image&quot;</span>
+            <span class="s2">&quot;per class (a list of items which are&quot;</span>
+            <span class="s2">&quot;file names.)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">tissue_class_map_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Binary segmented volume file &quot;</span>
+            <span class="s2">&quot;(a pathlike object or string representing&quot;</span>
+            <span class="s2">&quot;a file)&quot;</span>
+        <span class="p">)</span>
 
         <span class="c1"># Mandatory inputs traits</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;in_file&quot;</span><span class="p">,</span>
-                       <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                            <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                            <span class="n">desc</span><span class="o">=</span><span class="n">in_file_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;in_file&quot;</span><span class="p">,</span> <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">in_file_desc</span><span class="p">)</span>
+        <span class="p">)</span>
 
         <span class="c1"># Optional inputs with default value traits</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;img_type&quot;</span><span class="p">,</span>
-                       <span class="n">Int</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span>
-                           <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                           <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                           <span class="n">desc</span><span class="o">=</span><span class="n">img_type_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;img_type&quot;</span><span class="p">,</span> <span class="n">Int</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">img_type_desc</span><span class="p">)</span>
+        <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;output_type&quot;</span><span class="p">,</span>
-                       <span class="n">Enum</span><span class="p">(</span><span class="s1">&#39;NIFTI&#39;</span><span class="p">,</span>
-                            <span class="s1">&#39;NIFTI_GZ&#39;</span><span class="p">,</span>
-                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">desc</span><span class="o">=</span><span class="n">output_type_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;output_type&quot;</span><span class="p">,</span>
+            <span class="n">Enum</span><span class="p">(</span>
+                <span class="s2">&quot;NIFTI&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;NIFTI_GZ&quot;</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">output_type_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;segments&quot;</span><span class="p">,</span>
-                       <span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">desc</span><span class="o">=</span><span class="n">segments_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;segments&quot;</span><span class="p">,</span>
+            <span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">segments_desc</span><span class="p">),</span>
+        <span class="p">)</span>
 
         <span class="c1"># Outputs traits</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;mixeltype&quot;</span><span class="p">,</span>
-                       <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">desc</span><span class="o">=</span><span class="n">mixeltype_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;mixeltype&quot;</span><span class="p">,</span> <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">mixeltype_desc</span><span class="p">)</span>
+        <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;partial_volume_map&quot;</span><span class="p">,</span>
-                       <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">desc</span><span class="o">=</span><span class="n">partial_volume_map_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;partial_volume_map&quot;</span><span class="p">,</span>
+            <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">partial_volume_map_desc</span><span class="p">),</span>
+        <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;partial_volume_files&quot;</span><span class="p">,</span>
-                       <span class="n">List</span><span class="p">(</span><span class="n">File</span><span class="p">(),</span>
-                            <span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">desc</span><span class="o">=</span><span class="n">partial_volume_files_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;partial_volume_files&quot;</span><span class="p">,</span>
+            <span class="n">List</span><span class="p">(</span><span class="n">File</span><span class="p">(),</span> <span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">partial_volume_files_desc</span><span class="p">),</span>
+        <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;tissue_class_files&quot;</span><span class="p">,</span>
-                       <span class="n">List</span><span class="p">(</span><span class="n">File</span><span class="p">(),</span>
-                            <span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">desc</span><span class="o">=</span><span class="n">tissue_class_files_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;tissue_class_files&quot;</span><span class="p">,</span>
+            <span class="n">List</span><span class="p">(</span>
+                <span class="n">File</span><span class="p">(),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">tissue_class_files_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;tissue_class_map&quot;</span><span class="p">,</span>
-                       <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">desc</span><span class="o">=</span><span class="n">tissue_class_map_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;tissue_class_map&quot;</span><span class="p">,</span> <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">tissue_class_map_desc</span><span class="p">)</span>
+        <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span>
 
         <span class="c1"># To suppress the &quot;FSLOUTPUTTYPE environment</span>
         <span class="c1"># variable is not set&quot; nipype warning:</span>
-        <span class="k">if</span> <span class="s1">&#39;FSLOUTPUTTYPE&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;FSLOUTPUTTYPE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_type</span>
+        <span class="k">if</span> <span class="s2">&quot;FSLOUTPUTTYPE&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;FSLOUTPUTTYPE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_type</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s1">&#39;nipype.interfaces.fsl.FAST&#39;</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.fsl.FAST&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="FastSegment.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.FastSegment.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
@@ -392,12 +444,10 @@
 
         <span class="c1"># Outputs definition and tags inheritance (optional)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">:</span>
-            <span class="n">valid_ext</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">fileName</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">,</span>
-                                                       <span class="n">EXT</span><span class="p">)</span>
+            <span class="n">valid_ext</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">fileName</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">,</span> <span class="n">EXT</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_ext</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">The input image format is&#39;</span>
-                      <span class="s1">&#39; not recognized...!&#39;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The input image format is&quot;</span> <span class="s2">&quot; not recognized...!&quot;</span><span class="p">)</span>
                 <span class="k">return</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">output_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_type</span>
@@ -405,52 +455,59 @@
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">:</span>
                 <span class="n">_</span><span class="p">,</span> <span class="n">fileIval</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">out_basename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                                                         <span class="n">fileIval</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">out_basename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="n">fileIval</span>
+                <span class="p">)</span>
 
-                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;tissue_class_map&#39;</span><span class="p">]</span> <span class="o">=</span> \
-                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                                 <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span>
-                                     <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">_tissue_class_map</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;tissue_class_map&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">_tissue_class_map</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="p">)</span>
 
-                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;partial_volume_map&#39;</span><span class="p">]</span> <span class="o">=</span> \
-                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                                 <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span>
-                                     <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">_partial_volume_map</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;partial_volume_map&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">_partial_volume_map</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="p">)</span>
 
-                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;mixeltype&#39;</span><span class="p">]</span> <span class="o">=</span> \
-                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                                 <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span>
-                                     <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">_mixeltype</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;mixeltype&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">_mixeltype</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="p">)</span>
 
-                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;partial_volume_files&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;partial_volume_files&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
                 <span class="k">for</span> <span class="n">out_val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">_partial_volume_files</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;partial_volume_files&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                                     <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">out_val</span><span class="p">)[</span><span class="mi">1</span><span class="p">]))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;partial_volume_files&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">out_val</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
 
-                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;tissue_class_files&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;tissue_class_files&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">segments</span><span class="p">:</span>
                     <span class="k">for</span> <span class="n">out_val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">_tissue_class_files</span><span class="p">:</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;tissue_class_files&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                                         <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">out_val</span><span class="p">)[</span><span class="mi">1</span><span class="p">]))</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;tissue_class_files&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">out_val</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span>
+                            <span class="p">)</span>
+                        <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;No output_directory was found...!</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No output_directory was found...!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
                 <span class="k">return</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span>
-                <span class="s1">&#39;tissue_class_map&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span>
-                <span class="s1">&#39;partial_volume_map&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span>
-                <span class="s1">&#39;mixeltype&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;partial_volume_files&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]:</span>
-                <span class="k">for</span> <span class="n">out_val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;partial_volume_files&#39;</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;tissue_class_map&quot;</span><span class="p">]</span>
+            <span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;partial_volume_map&quot;</span><span class="p">]</span>
+            <span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;mixeltype&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;partial_volume_files&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="k">for</span> <span class="n">out_val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;partial_volume_files&quot;</span><span class="p">]:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="n">out_val</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;tissue_class_files&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]:</span>
-                <span class="k">for</span> <span class="n">out_val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;tissue_class_files&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;tissue_class_files&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="k">for</span> <span class="n">out_val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;tissue_class_files&quot;</span><span class="p">]:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="n">out_val</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
 
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
@@ -462,8 +519,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">img_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">img_type</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">fileIval</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">out_basename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                                                 <span class="n">fileIval</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">out_basename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="n">fileIval</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">output_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_type</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">segments</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">segments</span>
 
@@ -491,78 +549,98 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">Smooth</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="c1"># Third party softwares required for the execution of the brick</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;fsl&#39;</span><span class="p">,</span> <span class="s1">&#39;nipype&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;fsl&quot;</span><span class="p">,</span> <span class="s2">&quot;nipype&quot;</span><span class="p">]</span>
 
         <span class="c1"># Mandatory inputs description</span>
-        <span class="n">in_file_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;A file to smooth (a pathlike object or string &#39;</span>
-                        <span class="s1">&#39;representing a file).&#39;</span><span class="p">)</span>
+        <span class="n">in_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;A file to smooth (a pathlike object or string &quot;</span>
+            <span class="s2">&quot;representing a file).&quot;</span>
+        <span class="p">)</span>
         <span class="c1"># Optional inputs with default value description</span>
-        <span class="n">fwhm_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Gaussian kernel fwhm in mm (a float). &#39;</span>
-                     <span class="s1">&#39;Mutually exclusive with sigma. &#39;</span>
-                     <span class="s1">&#39;Basically, 2.3548 * sigma = fwhm. &#39;</span>
-                     <span class="s1">&#39;Default is 6&#39;</span><span class="p">)</span>
-        <span class="n">out_prefix_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Specify the string to be prepended to the &#39;</span>
-                           <span class="s1">&#39;filenames of the smoothed image file(s) &#39;</span>
-                           <span class="s1">&#39;(a string).&#39;</span><span class="p">)</span>
-        <span class="n">output_type_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Typecodes of the output NIfTI image formats (one &#39;</span>
-                            <span class="s1">&#39;of NIFTI, NIFTI_GZ).&#39;</span><span class="p">)</span>
+        <span class="n">fwhm_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Gaussian kernel fwhm in mm (a float). &quot;</span>
+            <span class="s2">&quot;Mutually exclusive with sigma. &quot;</span>
+            <span class="s2">&quot;Basically, 2.3548 * sigma = fwhm. &quot;</span>
+            <span class="s2">&quot;Default is 6&quot;</span>
+        <span class="p">)</span>
+        <span class="n">out_prefix_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Specify the string to be prepended to the &quot;</span>
+            <span class="s2">&quot;filenames of the smoothed image file(s) &quot;</span>
+            <span class="s2">&quot;(a string).&quot;</span>
+        <span class="p">)</span>
+        <span class="n">output_type_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Typecodes of the output NIfTI image formats (one &quot;</span>
+            <span class="s2">&quot;of NIFTI, NIFTI_GZ).&quot;</span>
+        <span class="p">)</span>
         <span class="c1"># Optional inputs description</span>
-        <span class="n">sigma_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Gaussian kernel sigma in mm (a float). Mutually &#39;</span>
-                      <span class="s1">&#39;exclusive with fwhm. Basically, 2.3548 * sigma = fwhm.&#39;</span><span class="p">)</span>
+        <span class="n">sigma_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Gaussian kernel sigma in mm (a float). Mutually &quot;</span>
+            <span class="s2">&quot;exclusive with fwhm. Basically, 2.3548 * sigma = fwhm.&quot;</span>
+        <span class="p">)</span>
         <span class="c1"># Outputs description</span>
-        <span class="n">out_file_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;The smoothed files (a pathlike object or a &#39;</span>
-                         <span class="s1">&#39;string representing a file).&#39;</span><span class="p">)</span>
+        <span class="n">out_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;The smoothed files (a pathlike object or a &quot;</span>
+            <span class="s2">&quot;string representing a file).&quot;</span>
+        <span class="p">)</span>
 
         <span class="c1"># Mandatory inputs traits</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;in_file&quot;</span><span class="p">,</span>
-                       <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                            <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                            <span class="n">desc</span><span class="o">=</span><span class="n">in_file_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;in_file&quot;</span><span class="p">,</span> <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">in_file_desc</span><span class="p">)</span>
+        <span class="p">)</span>
 
         <span class="c1"># Optional inputs with default value traits</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;fwhm&quot;</span><span class="p">,</span>
-                       <span class="n">Either</span><span class="p">(</span><span class="n">Undefined</span><span class="p">,</span>
-                              <span class="n">Float</span><span class="p">(),</span>
-                              <span class="n">default</span><span class="o">=</span><span class="mf">6.0</span><span class="p">,</span>
-                              <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                              <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                              <span class="n">desc</span><span class="o">=</span><span class="n">fwhm_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;fwhm&quot;</span><span class="p">,</span>
+            <span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">Float</span><span class="p">(),</span>
+                <span class="n">default</span><span class="o">=</span><span class="mf">6.0</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">fwhm_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;out_prefix&quot;</span><span class="p">,</span>
-                       <span class="n">String</span><span class="p">(</span><span class="s1">&#39;s_&#39;</span><span class="p">,</span>
-                              <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                              <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                              <span class="n">desc</span><span class="o">=</span><span class="n">out_prefix_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;out_prefix&quot;</span><span class="p">,</span>
+            <span class="n">String</span><span class="p">(</span><span class="s2">&quot;s_&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">out_prefix_desc</span><span class="p">),</span>
+        <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;output_type&quot;</span><span class="p">,</span>
-                       <span class="n">Enum</span><span class="p">(</span><span class="s1">&#39;NIFTI&#39;</span><span class="p">,</span>
-                            <span class="s1">&#39;NIFTI_GZ&#39;</span><span class="p">,</span>
-                            <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                            <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">desc</span><span class="o">=</span><span class="n">output_type_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;output_type&quot;</span><span class="p">,</span>
+            <span class="n">Enum</span><span class="p">(</span>
+                <span class="s2">&quot;NIFTI&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;NIFTI_GZ&quot;</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">output_type_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
 
         <span class="c1"># Optional inputs traits</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;sigma&quot;</span><span class="p">,</span>
-                       <span class="n">Either</span><span class="p">(</span><span class="n">Undefined</span><span class="p">,</span>
-                              <span class="n">Float</span><span class="p">(),</span>
-                              <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
-                              <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                              <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                              <span class="n">desc</span><span class="o">=</span><span class="n">sigma_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;sigma&quot;</span><span class="p">,</span>
+            <span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">Float</span><span class="p">(),</span>
+                <span class="n">default</span><span class="o">=</span><span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">sigma_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
 
         <span class="c1"># Outputs traits</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;out_file&quot;</span><span class="p">,</span>
-                       <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">desc</span><span class="o">=</span><span class="n">out_file_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;out_file&quot;</span><span class="p">,</span> <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">out_file_desc</span><span class="p">))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span>
 
         <span class="c1"># To suppress the &quot;FSLOUTPUTTYPE environment</span>
         <span class="c1"># variable is not set&quot; nipype warning:</span>
-        <span class="k">if</span> <span class="s1">&#39;FSLOUTPUTTYPE&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;FSLOUTPUTTYPE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_type</span>
+        <span class="k">if</span> <span class="s2">&quot;FSLOUTPUTTYPE&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;FSLOUTPUTTYPE&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_type</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s1">&#39;nipype.interfaces.fsl.Smooth&#39;</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.fsl.Smooth&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Smooth.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.fsl.html#mia_processes.bricks.preprocess.fsl.processes.Smooth.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
@@ -571,7 +649,7 @@
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
 <span class="sd">        if defined here. In order not to include an output in the database,</span>
 <span class="sd">        this output must be a value of the optional key &#39;notInDb&#39; of the</span>
-<span class="sd">        self.outputs dictionary. To work properly this method must return </span>
+<span class="sd">        self.outputs dictionary. To work properly this method must return</span>
 <span class="sd">        self.make_initResult() object.</span>
 
 <span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
@@ -582,42 +660,47 @@
 
         <span class="c1"># Outputs definition and tags inheritance (optional)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span> <span class="o">==</span> <span class="n">Undefined</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">fwhm</span> <span class="o">==</span> <span class="n">Undefined</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Initialisation failed. Please, set one of the two input &#39;</span>
-                  <span class="s1">&#39;parameters sigma or fwhm ...!&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Initialisation failed. Please, set one of the two input &quot;</span>
+                <span class="s2">&quot;parameters sigma or fwhm ...!&quot;</span>
+            <span class="p">)</span>
             <span class="k">return</span>
 
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span> <span class="o">!=</span> <span class="n">Undefined</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">fwhm</span> <span class="o">!=</span> <span class="n">Undefined</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Initialisation failed. Both input parameters &quot;sigma&quot; and &#39;</span>
-                  <span class="s1">&#39;&quot;fwhm&quot; are mutually exclusive. Please, define only one of &#39;</span>
-                  <span class="s1">&#39;these two parameters (set the other as Undefined) ...!&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Initialisation failed. Both input parameters &quot;sigma&quot; and &#39;</span>
+                <span class="s1">&#39;&quot;fwhm&quot; are mutually exclusive. Please, define only one of &#39;</span>
+                <span class="s2">&quot;these two parameters (set the other as Undefined) ...!&quot;</span>
+            <span class="p">)</span>
             <span class="k">return</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">:</span>
-
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span> <span class="o">==</span> <span class="n">Undefined</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span> <span class="o">=</span> <span class="s1">&#39;s_&#39;</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The out_prefix parameter is undefined. Automatically &#39;</span>
-                      <span class="s1">&#39;set to &quot;s&quot; ...&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span> <span class="o">=</span> <span class="s2">&quot;s_&quot;</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s2">&quot;The out_prefix parameter is undefined. Automatically &quot;</span>
+                    <span class="s1">&#39;set to &quot;s&quot; ...&#39;</span>
+                <span class="p">)</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">:</span>
                 <span class="n">output_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_type</span>
-                <span class="n">valid_ext</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">fileName</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">,</span>
-                                                           <span class="n">EXT</span><span class="p">)</span>
+                <span class="n">valid_ext</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">fileName</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">,</span> <span class="n">EXT</span><span class="p">)</span>
 
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_ext</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">The input image format is&#39;</span>
-                          <span class="s1">&#39; not recognized...!&#39;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The input image format is&quot;</span> <span class="s2">&quot; not recognized...!&quot;</span><span class="p">)</span>
                     <span class="k">return</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;out_file&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;out_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span> <span class="o">+</span> <span class="n">fileName</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="n">EXT</span><span class="p">[</span><span class="n">output_type</span><span class="p">])</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span> <span class="o">+</span> <span class="n">fileName</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">EXT</span><span class="p">[</span><span class="n">output_type</span><span class="p">],</span>
+                    <span class="p">)</span>
 
-                    <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span>
-                        <span class="s1">&#39;out_file&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;out_file&quot;</span><span class="p">]</span>
+                    <span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
 
             <span class="k">else</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;No output_directory was found...!</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No output_directory was found...!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
                 <span class="k">return</span>
 
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
@@ -630,11 +713,11 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fwhm</span> <span class="o">==</span> <span class="n">Undefined</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">sigma</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigma</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">trait</span><span class="p">(</span><span class="s1">&#39;fwhm&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">optional</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">trait</span><span class="p">(</span><span class="s2">&quot;fwhm&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">optional</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">fwhm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fwhm</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">trait</span><span class="p">(</span><span class="s1">&#39;sigma&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">optional</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">trait</span><span class="p">(</span><span class="s2">&quot;sigma&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">optional</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">output_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_type</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">smoothed_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_file</span>

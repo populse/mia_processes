@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.preprocess.fsl package &#8212; mia_processes 2.2.1-dev+19aadc3 documentation</title>
+    <title>mia_processes.bricks.preprocess.fsl package &#8212; mia_processes 2.2.1-dev+17d7d44 documentation</title>
     <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -13,11 +13,12 @@
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="index.html">
-          <span>mia_processes 2.2.1-dev+19aadc3 documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+17d7d44 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.preprocess.fsl package</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -30,13 +31,189 @@
       <div class="content" role="main">
         
         
-  <div class="section" id="mia-processes-bricks-preprocess-fsl-package">
-<h1>mia_processes.bricks.preprocess.fsl package<a class="headerlink" href="#mia-processes-bricks-preprocess-fsl-package" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-mia_processes.bricks.preprocess.fsl">
+<span id="mia-processes-bricks-preprocess-fsl-package"></span><h1>mia_processes.bricks.preprocess.fsl package<a class="headerlink" href="#module-mia_processes.bricks.preprocess.fsl" title="Permalink to this headline">¶</a></h1>
+<p>The atomic calculations from fsl.</p>
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="mia-processes-bricks-preprocess-fsl-processes-module">
-<h2>mia_processes.bricks.preprocess.fsl.processes module<a class="headerlink" href="#mia-processes-bricks-preprocess-fsl-processes-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-mia_processes.bricks.preprocess.fsl.processes">
+<span id="mia-processes-bricks-preprocess-fsl-processes-module"></span><h2>mia_processes.bricks.preprocess.fsl.processes module<a class="headerlink" href="#module-mia_processes.bricks.preprocess.fsl.processes" title="Permalink to this headline">¶</a></h2>
+<p>The fsl preprocess library of the mia_processes package.</p>
+<p>The purpose of this module is to customise the main fsl preprocessing bricks
+provided by nipype and to correct some things that do not work directly in
+populse_mia.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Contains</dt>
+<dd class="field-odd"><dl class="field-list simple">
+<dt class="field-odd">Class</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p>FastSegment</p></li>
+<li><p>Smooth</p></li>
+<li><p>BetSurfacesExtraction</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py class">
+<dt id="mia_processes.bricks.preprocess.fsl.processes.BetSurfacesExtraction">
+<em class="property">class </em><code class="sig-prename descclassname">mia_processes.bricks.preprocess.fsl.processes.</code><code class="sig-name descname">BetSurfacesExtraction</code><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/fsl/processes.html#BetSurfacesExtraction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.fsl.processes.BetSurfacesExtraction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
+<ul>
+<li><div class="line-block">
+<div class="line">Surfaces (skull, inskull, outskull, outskin) extraction and skull</div>
+<div class="line">stripping using BET (FSL) with option -A (bet2 and betsurf).</div>
+</div>
+</li>
+</ul>
+<p>Please, see the complete documention for the <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/fsl/SurfacesExtraction.html">SurfacesExtraction’ brick
+in the populse.mia_processes web site</a></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Type ‘BetSurfacesExtraction.help()’ for a full description of this process parameters.</p></li>
+<li><p>Type ‘&lt;BetSurfacesExtraction&gt;.get_input_spec()’ for a full description of this process input trait types.</p></li>
+<li><p>Type ‘&lt;BetSurfacesExtraction&gt;.get_output_spec()’ for a full description of this process output trait types.</p></li>
+</ul>
+</div>
+<dl class="py method">
+<dt id="mia_processes.bricks.preprocess.fsl.processes.BetSurfacesExtraction.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/fsl/processes.html#BetSurfacesExtraction.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.fsl.processes.BetSurfacesExtraction.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the attributes initialisation/instantiation.
+The input and output plugs are defined here. The special
+‘self.requirement’ attribute (optional) is used to define the
+third-party products necessary for the running of the brick.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mia_processes.bricks.preprocess.fsl.processes.BetSurfacesExtraction.list_outputs">
+<code class="sig-name descname">list_outputs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">is_plugged</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/fsl/processes.html#BetSurfacesExtraction.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.fsl.processes.BetSurfacesExtraction.list_outputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the initialisation step of the brick.
+The main objective of this method is to produce the outputs of the
+bricks (self.outputs) and the associated tags (self.inheritance_dic),
+if defined here. In order not to include an output in the database,
+this output must be a value of the optional key ‘notInDb’ of the
+self.outputs dictionary. To work properly this method must return
+self.make_initResult() object.
+:param is_plugged: the state, linked or not, of the plugs.
+:returns: a dictionary with requirement, outputs and inheritance_dict.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mia_processes.bricks.preprocess.fsl.processes.BetSurfacesExtraction.run_process_mia">
+<code class="sig-name descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/fsl/processes.html#BetSurfacesExtraction.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.fsl.processes.BetSurfacesExtraction.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the process launch step of the brick.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="mia_processes.bricks.preprocess.fsl.processes.FastSegment">
+<em class="property">class </em><code class="sig-prename descclassname">mia_processes.bricks.preprocess.fsl.processes.</code><code class="sig-name descname">FastSegment</code><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/fsl/processes.html#FastSegment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.fsl.processes.FastSegment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
+<ul class="simple">
+<li><p>Brain tissue segmentation using fsl.FAST.</p></li>
+</ul>
+<p>Please, see the complete documention for the <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/fsl/FastSegment.html">FastSegment’ brick
+in the populse.mia_processes web site</a></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Type ‘FastSegment.help()’ for a full description of this process parameters.</p></li>
+<li><p>Type ‘&lt;FastSegment&gt;.get_input_spec()’ for a full description of this process input trait types.</p></li>
+<li><p>Type ‘&lt;FastSegment&gt;.get_output_spec()’ for a full description of this process output trait types.</p></li>
+</ul>
+</div>
+<dl class="py method">
+<dt id="mia_processes.bricks.preprocess.fsl.processes.FastSegment.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/fsl/processes.html#FastSegment.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.fsl.processes.FastSegment.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the attributes initialisation/instantiation.</p>
+<p>The input and output plugs are defined here. The special
+‘self.requirement’ attribute (optional) is used to define the
+third-party products necessary for the running of the brick.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mia_processes.bricks.preprocess.fsl.processes.FastSegment.list_outputs">
+<code class="sig-name descname">list_outputs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">is_plugged</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/fsl/processes.html#FastSegment.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.fsl.processes.FastSegment.list_outputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the initialisation step of the brick.</p>
+<p>The main objective of this method is to produce the outputs of the
+bricks (self.outputs) and the associated tags (self.inheritance_dic),
+if defined here. In order not to include an output in the database,
+this output must be a value of the optional key ‘notInDb’ of the
+self.outputs dictionary. To work properly this method must return
+self.make_initResult() object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mia_processes.bricks.preprocess.fsl.processes.FastSegment.run_process_mia">
+<code class="sig-name descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/fsl/processes.html#FastSegment.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.fsl.processes.FastSegment.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the process launch step of the brick.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="mia_processes.bricks.preprocess.fsl.processes.Smooth">
+<em class="property">class </em><code class="sig-prename descclassname">mia_processes.bricks.preprocess.fsl.processes.</code><code class="sig-name descname">Smooth</code><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/fsl/processes.html#Smooth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.fsl.processes.Smooth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
+<p><a href="#id1"><span class="problematic" id="id2">*</span></a>3D Gaussian smoothing of image volumes.</p>
+<p>Please, see the complete documention for the <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/fsl/Smooth.html">Smooth’ brick in
+the populse.mia_processes web site</a></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Type ‘Smooth.help()’ for a full description of this process parameters.</p></li>
+<li><p>Type ‘&lt;Smooth&gt;.get_input_spec()’ for a full description of this process input trait types.</p></li>
+<li><p>Type ‘&lt;Smooth&gt;.get_output_spec()’ for a full description of this process output trait types.</p></li>
+</ul>
+</div>
+<dl class="py method">
+<dt id="mia_processes.bricks.preprocess.fsl.processes.Smooth.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/fsl/processes.html#Smooth.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.fsl.processes.Smooth.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the attributes initialisation/instantiation.</p>
+<p>The input and output plugs are defined here. The special
+‘self.requirement’ attribute (optional) is used to define the
+third-party products necessary for the running of the brick.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mia_processes.bricks.preprocess.fsl.processes.Smooth.list_outputs">
+<code class="sig-name descname">list_outputs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">is_plugged</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/fsl/processes.html#Smooth.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.fsl.processes.Smooth.list_outputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the initialisation step of the brick.</p>
+<p>The main objective of this method is to produce the outputs of the
+bricks (self.outputs) and the associated tags (self.inheritance_dic),
+if defined here. In order not to include an output in the database,
+this output must be a value of the optional key ‘notInDb’ of the
+self.outputs dictionary. To work properly this method must return
+self.make_initResult() object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mia_processes.bricks.preprocess.fsl.processes.Smooth.run_process_mia">
+<code class="sig-name descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/fsl/processes.html#Smooth.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.fsl.processes.Smooth.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the process launch step of the brick.</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 </div>
 
