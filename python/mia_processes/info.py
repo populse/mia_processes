@@ -52,7 +52,7 @@ def get_gitversion():
             )
         )
 
-    except:
+    except Exception:
         dir_mia_processes = os.getcwd()
 
     dir_mia_processesgit = os.path.join(dir_mia_processes, ".git")

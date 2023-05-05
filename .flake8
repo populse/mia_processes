@@ -12,8 +12,6 @@ ignore =
 	  E501,
 #	  x not in the_list rather than not x in the_list
 	  E713,
-#	  do not use bare 'except'
-	  E722,
 #	  imported but unused
 	  F401,
 #	  a module has been imported twice, and the original import is unused
