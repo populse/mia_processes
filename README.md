@@ -66,6 +66,25 @@
         cd ..
         rm -r [mia_install_dir]
 
+# Requirements
+
+In order to get all the bricks and pipelines proposed by mia_processes some third libraries are required: 
+* dipy
+* nibabel
+* nilearn
+* nipy
+* nipype
+* nitime
+* nitransforms
+* numpy
+* populse_db >=2.1.0
+* populse_mia >= 2.2.0
+* reportlab
+* scipy
+* statsmodels
+* templateflow
+* torch
+ 
 # License
 
 * The whole populse project is open source.
