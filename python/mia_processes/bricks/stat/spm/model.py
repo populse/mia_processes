@@ -68,7 +68,6 @@ from PyQt5.QtWidgets import (
     QHBoxLayout,
     QLabel,
     QLineEdit,
-    QMessageBox,
     QPushButton,
     QToolButton,
     QVBoxLayout,
@@ -1905,8 +1904,8 @@ class Level1Design(ProcessMIA):
             # self.sessions = sessions  # The session_info for nipype
             self.dict4runtime["sessions"] = sessions
 
-            ## Some tests to check that the definition of the parameters for
-            ## the self.sessions went well:
+            # Some tests to check that the definition of the parameters for
+            # the self.sessions went well:
             # - If self.sessions have no key in ['cond', 'multi', 'regress',
             #   'multi_reg'], or a condition is False, we can think there is
             #   an initialisation issue ...

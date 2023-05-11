@@ -438,7 +438,7 @@ class Report:
         line.hAlign = "CENTER"
         self.report.append(line)
         self.report.append(Spacer(0 * mm, 20 * mm))
-        ### Spatial and temporal resolution ###################################
+        # Spatial and temporal resolution ###################################
         self.report.append(
             Paragraph(
                 "<font size = 15 > <b>SPATIAL AND TEMPORAL RESOLUTION</b> </font>",
@@ -473,7 +473,7 @@ class Report:
         # spacing_tr
         self.report.append(self.get_iqms_data("spacing_tr"))
         self.report.append(Spacer(0 * mm, 20 * mm))
-        ### Measures for artifacts and other ##################################
+        # Measures for artifacts and other ##################################
         self.report.append(
             Paragraph(
                 "<font size = 15 > <b>MEASURES FOR "
@@ -539,7 +539,7 @@ class Report:
         line.hAlign = "CENTER"
         self.report.append(line)
         self.report.append(Spacer(0 * mm, 20 * mm))
-        ### Measures for the spatial information ##############################
+        # Measures for the spatial information ##############################
         self.report.append(
             Paragraph(
                 "<font size = 15 ><b>MEASURES FOR THE "
@@ -651,7 +651,7 @@ class Report:
         line.hAlign = "CENTER"
         self.report.append(line)
         self.report.append(Spacer(0 * mm, 20 * mm))
-        ### Measures for the temporal information #############################
+        # Measures for the temporal information #############################
         self.report.append(
             Paragraph(
                 "<font size = 15 ><b>MEASURES FOR THE "
@@ -851,7 +851,7 @@ class Report:
         line.hAlign = "CENTER"
         self.report.append(line)
         self.report.append(Spacer(0 * mm, 20 * mm))
-        ### Spatial resolution ################################################
+        # Spatial resolution ################################################
         self.report.append(
             Paragraph(
                 "<font size = 15 > <b>SPATIAL RESOLUTION</b> </font>",
@@ -880,7 +880,7 @@ class Report:
         # spacing_z
         self.report.append(self.get_iqms_data("spacing_z"))
         self.report.append(Spacer(0 * mm, 20 * mm))
-        ### Signal-to-noise ###################################################
+        # Signal-to-noise ###################################################
         self.report.append(
             Paragraph(
                 "<font size = 15 > <b>NOISE</b> </font>",
@@ -961,7 +961,7 @@ class Report:
         line.hAlign = "CENTER"
         self.report.append(line)
         self.report.append(Spacer(0 * mm, 20 * mm))
-        ### Spatial distribution ##############################################
+        # Spatial distribution ##############################################
         self.report.append(
             Paragraph(
                 "<font size = 15 ><b>SPATIAL DISTRIBUTION" "</b></font>",
@@ -983,7 +983,7 @@ class Report:
         # efc
         self.report.append(self.get_iqms_data("efc"))
         self.report.append(Spacer(0 * mm, 20 * mm))
-        ### Artifacts #########################################################
+        # Artifacts #########################################################
         self.report.append(
             Paragraph(
                 "<font size = 15 ><b>ARTIFACTS" "</b></font>",
@@ -1046,7 +1046,7 @@ class Report:
         line.hAlign = "CENTER"
         self.report.append(line)
         self.report.append(Spacer(0 * mm, 20 * mm))
-        ### Tissues Quality ###################################################
+        # Tissues Quality ###################################################
         self.report.append(
             Paragraph(
                 "<font size = 15 ><b>TISSUES QUALITY" "</b></font>",
@@ -1206,7 +1206,7 @@ class Report:
         line.hAlign = "CENTER"
         self.report.append(line)
         self.report.append(Spacer(0 * mm, 20 * mm))
-        ### Tissues Quality ###################################################
+        # Tissues Quality ###################################################
         self.report.append(
             Paragraph(
                 "<font size = 15 ><b>TISSUES QUALITY</b>" "</font>",

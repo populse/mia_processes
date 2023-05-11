@@ -3276,6 +3276,4 @@ def _robust_zscore(data):
 
 def _AR_est_YW(x, order, rxx=None):
     """Retrieve AR coefficients while dropping the sig_sq return value"""
-    from nitime.algorithms import AR_est_YW
-
     return AR_est_YW(x, order, rxx=rxx)[0]

@@ -792,23 +792,19 @@ class SynthStripMriqc(ProcessMIA):
         self.requirement = ["freesurfer"]
 
         # Mandatory inputs description
-        in_file_desc = (
-            "Input image to be brain extracted (a path to a file)"  ##
-        )
+        in_file_desc = "Input image to be brain extracted (a path to a file)"
         # Optional inputs with default value description
         model_desc = "Alternative model weights (a path to a file)"
-        border_mm_desc = (
-            "Mask border threshold in mm (integer, default: 1)"  ##
-        )
+        border_mm_desc = "Mask border threshold in mm (integer, default: 1)"
         # no_csf_desc = 'Exclude CSF from brain border'
         output_type_desc = (
             "Typecodes of the output image formats (one "
             "of NIFTI, MGZ, NIFTI_GZ)."
         )
-        gpu_desc = "Use the GPU (bool, default: False)"  ##
+        gpu_desc = "Use the GPU (bool, default: False)"
         # Outputs description
-        out_file_desc = "Brain-extracted path (a path to a file)"  ##
-        out_mask_desc = "Brain mask path (a path to a file)"  ##
+        out_file_desc = "Brain-extracted path (a path to a file)"
+        out_mask_desc = "Brain mask path (a path to a file)"
 
         # Mandatory inputs traits
         self.add_trait(
