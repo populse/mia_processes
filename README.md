@@ -68,7 +68,7 @@
 
 # Requirements
 
-In order to get all the bricks and pipelines proposed by mia_processes some third libraries are required: 
+In order to get all the bricks and pipelines proposed by mia_processes some third libraries are required:
 * dipy
 * nibabel
 * nilearn
@@ -84,7 +84,7 @@ In order to get all the bricks and pipelines proposed by mia_processes some thir
 * statsmodels
 * templateflow
 * torch
- 
+
 # License
 
 * The whole populse project is open source.
