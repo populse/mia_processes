@@ -806,7 +806,7 @@ class Make_A_List(ProcessMIA):
         if self.outputs:
             self.outputs = {}
 
-        if self.obj1 and not self.obj1 in ["<undefined>", traits.Undefined]:
+        if self.obj1 and self.obj1 not in ["<undefined>", traits.Undefined]:
             if (not self.obj2) or (
                 self.obj2 in ["<undefined>", traits.Undefined]
             ):

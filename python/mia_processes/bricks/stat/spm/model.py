@@ -1920,7 +1920,7 @@ class Level1Design(ProcessMIA):
                 if i.get("cond") is not None and i.get("cond") is False:
                     init_res.append(False)
 
-                if (not True in init_res or False in init_res) and (check):
+                if (True not in init_res or False in init_res) and (check):
                     check = False
                     self.outputs = {}
                     print(
