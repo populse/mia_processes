@@ -23,10 +23,9 @@ import tempfile
 
 # Other import
 from datetime import datetime
-from sys import exit, path, version
+from sys import version
 
 # nibabel import
-import nibabel as nib
 import numpy as np
 
 # capsul import
@@ -34,26 +33,13 @@ from capsul import info as capsul_info
 
 # nipype import
 from nipype import info as nipype_info
-from nipype.interfaces.base import (
-    DictStrStr,
-    File,
-    InputMultiPath,
-    OutputMultiPath,
-    Str,
-    TraitListObject,
-    Undefined,
-    traits,
-)
-from nipype.interfaces.spm.base import ImageFileSPM
 
 # populse_mia import
 from populse_mia import info as mia_info
 from populse_mia import sources_images
-from populse_mia.data_manager.project import COLLECTION_CURRENT
-from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY, TA_LEFT, TA_RIGHT
-from reportlab.lib.pagesizes import A4, landscape, portrait
+from reportlab.lib.pagesizes import A4, portrait
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import inch, mm
 from reportlab.platypus import (
@@ -66,24 +52,14 @@ from reportlab.platypus import (
     TableStyle,
 )
 
-# soma-base imports
-from soma.qt_gui.qt_backend.Qt import QMessageBox
-
 # mia_processes import:
 from mia_processes import info as mia_processes_info
 from mia_processes.utils import (
     PageNumCanvas,
     ReportLine,
-    dict4runtime_update,
     plot_qi2,
     slice_planes_plot,
 )
-
-# from nibabel.processing import resample_from_to
-
-
-# import matplotlib.pyplot as plt
-# import scipy.ndimage as ndi
 
 
 class Report:

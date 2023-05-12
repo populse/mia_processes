@@ -14,6 +14,7 @@ Module that contains multiple functions used across mia_processes
         - mriqc_group_iqms_tsv
         - plot_boxplot_points
         - plot_qi2
+        - set_dbFieldValue
         - slice_planes_plot
 """
 
@@ -41,10 +42,9 @@ from populse_mia.data_manager.project import (
     COLLECTION_CURRENT,
     COLLECTION_INITIAL,
 )
-from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import mm
 from reportlab.pdfgen import canvas
-from reportlab.platypus import Flowable, Paragraph
+from reportlab.platypus import Flowable
 from traits.api import Undefined
 
 

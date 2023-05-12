@@ -15,7 +15,7 @@ Contains:
 # for details.
 ###############################################################################
 
-from .tools import (
+from .tools import (  # noqa: F401
     PageNumCanvas,
     ReportLine,
     checkFileExt,
@@ -31,6 +31,6 @@ from .tools import (
 
 # Prevent circular import (PageNumCanvas)
 # isort: off
-from .report import Report
+from .report import Report  # noqa: F401
 
 # isort: on
