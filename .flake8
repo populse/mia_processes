@@ -6,8 +6,6 @@ ignore =
 	  E203,
 #	  line too long
 	  E501,
-#	  x not in the_list rather than not x in the_list
-	  E713,
 #	  imported but unused
 	  F401,
 #	  The variable name is not defined where it is used
