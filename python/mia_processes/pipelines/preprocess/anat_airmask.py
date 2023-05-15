@@ -14,7 +14,6 @@ The Anat_airmask pipeline.
 
 import os
 
-import traits.api as traits
 from capsul.api import Pipeline
 
 

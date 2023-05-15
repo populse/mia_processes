@@ -12,7 +12,6 @@ The Anat_mni_tpms pipeline.
 # for details.
 ##########################################################################
 
-import traits.api as traits
 from capsul.api import Pipeline
 
 

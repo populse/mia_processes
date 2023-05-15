@@ -49,7 +49,7 @@ import json
 import os
 import re
 import shutil
-from math import pi, sqrt
+from math import sqrt
 
 # nibabel import
 import nibabel as nb
@@ -59,16 +59,7 @@ from nilearn.signal import clean
 from nipy.algorithms.registration import aff2euler, to_matrix44
 
 # nipype import
-from nipype.interfaces.base import (
-    DictStrStr,
-    File,
-    InputMultiPath,
-    OutputMultiPath,
-    Str,
-    TraitListObject,
-    Undefined,
-    traits,
-)
+from nipype.interfaces.base import File, OutputMultiPath, Undefined, traits
 from nitime.algorithms import AR_est_YW
 from numpy.polynomial import Legendre
 
@@ -76,9 +67,6 @@ from numpy.polynomial import Legendre
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 from scipy.stats import kurtosis  # pylint: disable=E0611
 from skimage.transform import resize
-
-# soma-base imports
-from soma.qt_gui.qt_backend.Qt import QMessageBox
 
 # mia_processes import
 from mia_processes.utils import checkFileExt, get_dbFieldValue

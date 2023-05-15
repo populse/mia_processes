@@ -12,7 +12,7 @@ Atomic calculations that do not come from ants, fsl, spm, etc.
 # for details.
 ##########################################################################
 
-from .processing import (
+from .processing import (  # noqa: F401
     TSNR,
     ApplyBiasCorrection,
     ArtifactMask,

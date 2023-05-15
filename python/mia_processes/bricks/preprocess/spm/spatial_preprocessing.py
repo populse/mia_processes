@@ -36,19 +36,13 @@ from pathlib import Path
 import nibabel as nib
 import numpy as np
 
-# capsul import
-from capsul.api import capsul_engine
-
 # nipype imports
-from nipype.interfaces import spm
 from nipype.interfaces.base import (
     File,
-    InputMultiObject,
     InputMultiPath,
     OutputMultiPath,
     TraitListObject,
     traits,
-    traits_extension,
 )
 from nipype.interfaces.spm.base import ImageFileSPM
 
@@ -58,7 +52,6 @@ from populse_mia.software_properties import Config
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 
 # soma-base import
-from soma.controller.trait_utils import relax_exists_constraint
 from soma.qt_gui.qt_backend.Qt import QMessageBox
 from traits.api import (
     Bool,

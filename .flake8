@@ -6,8 +6,6 @@ ignore =
 	  E203,
 #	  line too long
 	  E501,
-#	  imported but unused
-	  F401,
 #	  The variable name is not defined where it is used
 	  F821,
 # 	  local variable is assigned but never used

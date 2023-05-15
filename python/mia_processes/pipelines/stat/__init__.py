@@ -12,4 +12,4 @@ The Bold_stat pipeline.
 # for details.
 ##########################################################################
 
-from .bold_stat import Bold_stat
+from .bold_stat import Bold_stat  # noqa: F401

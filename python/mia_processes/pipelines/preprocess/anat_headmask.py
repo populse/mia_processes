@@ -12,7 +12,6 @@ The Anat_headmask pipeline..
 # for details.
 ##########################################################################
 
-import traits.api as traits
 from capsul.api import Pipeline
 
 

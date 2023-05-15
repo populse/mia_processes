@@ -16,7 +16,6 @@ The info.py module is mainly used by the setup.py module.
 
 import os
 import subprocess
-import sys
 
 # Current version
 version_major = 2
@@ -156,6 +155,3 @@ EXTRA_REQUIRES = {
 }
 
 brainvisa_build_model = "pure_python"
-
-# tests to run
-# test_commands = ['%s -m mia_processes.test' % sys.executable]

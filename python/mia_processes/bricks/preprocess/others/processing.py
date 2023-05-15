@@ -54,11 +54,9 @@ import numpy as np
 
 # nipype import
 from nipype.interfaces.base import (
-    DictStrStr,
     File,
     InputMultiPath,
     OutputMultiPath,
-    Str,
     TraitListObject,
     Undefined,
     traits,

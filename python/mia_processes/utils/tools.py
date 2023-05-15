@@ -30,11 +30,11 @@ import datetime
 import glob
 import json
 import os
+
 import matplotlib.pyplot as plt
 import nibabel as nib
 import numpy as np
 import pandas as pd
-
 from matplotlib.cm import get_cmap
 from mpl_toolkits.axes_grid1 import ImageGrid
 from populse_mia.data_manager.data_history_inspect import data_history_pipeline

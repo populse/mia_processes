@@ -25,16 +25,11 @@ in populse_mia.
 
 # Other import
 import os
-from shutil import copy2
 
-# nibabel import
-import nibabel as nib
-import nibabel.processing as nibp
 import numpy as np
 import scipy.io
 
 # nipype import
-from nipype.interfaces import spm
 from nipype.interfaces.base import (
     File,
     InputMultiPath,
@@ -43,36 +38,13 @@ from nipype.interfaces.base import (
 )
 from nipype.interfaces.spm.base import ImageFileSPM
 from populse_db.database import FIELD_TYPE_INTEGER, FIELD_TYPE_STRING
-from populse_mia.data_manager.database_mia import (
-    TAG_ORIGIN_USER,
-    TAG_UNIT_DEGREE,
-)
+from populse_mia.data_manager.database_mia import TAG_ORIGIN_USER
 
 # populse_db and populse_mia import
-from populse_mia.data_manager.project import (
-    COLLECTION_CURRENT,
-    COLLECTION_INITIAL,
-)
+from populse_mia.data_manager.project import COLLECTION_CURRENT
 
 # populse_mia imports
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
-from PyQt5.QtCore import pyqtSignal
-
-# PyQt5 imports
-from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import (
-    QApplication,
-    QDialog,
-    QDialogButtonBox,
-    QGroupBox,
-    QHBoxLayout,
-    QLabel,
-    QLineEdit,
-    QPushButton,
-    QToolButton,
-    QVBoxLayout,
-    QWidget,
-)
 
 # soma-base imports
 from soma.qt_gui.qt_backend.Qt import QMessageBox
@@ -2210,15 +2182,3 @@ class Level1Design(ProcessMIA):
 
         # self.process.run()
         return self.process.run(configuration_dict={})
-
-        # Copying the generated SPM.mat file in the data directory
-        # if ((self.sess_scans) and
-        #        (self.sess_scans not in ['<undefined>', Undefined]) and
-        #        (self.sess_scans[0] not in ['<undefined>', Undefined])):
-        #    scan_image = os.path.abspath(self.sess_scans[0])
-        #    scan_folder, _ = os.path.split(scan_image)
-
-        # copy2(out_file, scan_folder)
-
-        # if os.path.isfile(out_file):
-        #    os.remove(out_file)
