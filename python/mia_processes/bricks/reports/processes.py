@@ -491,7 +491,7 @@ class AnatIQMs(ProcessMIA):
                 fwhm = []
                 for item in str_fwhm:
                     fwhm.append(float(item))
-            except (FileNotFoundError, TypeError):
+            except (FileNotFoundError, TypeError) as e:
                 print("\nError with fwhm file: ", e)
                 pass
             else:
@@ -846,7 +846,7 @@ class BoldIQMs(ProcessMIA):
         if self.in_outliers_file:
             try:
                 outliers = np.loadtxt(self.in_outliers_file, skiprows=0)
-            except (FileNotFoundError, TypeError):
+            except (FileNotFoundError, TypeError) as e:
                 print("\nError with aor file: ", e)
                 pass
             else:
@@ -858,7 +858,7 @@ class BoldIQMs(ProcessMIA):
             try:
                 with open(self.in_QI_file, "r") as fin:
                     lines = fin.readlines()
-            except (FileNotFoundError, TypeError):
+            except (FileNotFoundError, TypeError) as e:
                 print("\nError with aqi file: ", e)
                 pass
             else:
@@ -876,7 +876,7 @@ class BoldIQMs(ProcessMIA):
                 dvars = np.loadtxt(
                     self.in_dvars_file, skiprows=1, usecols=list(range(3))
                 )
-            except (FileNotFoundError, TypeError):
+            except (FileNotFoundError, TypeError) as e:
                 print("\nError with dvars file: ", e)
                 pass
             else:
@@ -895,7 +895,7 @@ class BoldIQMs(ProcessMIA):
         if self.in_fd_file:
             try:
                 fd_data = np.loadtxt(self.in_fd_file, skiprows=1)
-            except (FileNotFoundError, TypeError):
+            except (FileNotFoundError, TypeError) as e:
                 print("\nError with fd file: ", e)
                 pass
             else:
@@ -919,7 +919,7 @@ class BoldIQMs(ProcessMIA):
                 fwhm = []
                 for item in str_fwhm:
                     fwhm.append(float(item))
-            except (FileNotFoundError, TypeError):
+            except (FileNotFoundError, TypeError) as e:
                 print("\nError with fwhm file: ", e)
                 pass
             else:
@@ -977,7 +977,7 @@ class BoldIQMs(ProcessMIA):
         if self.in_spikes_file:
             try:
                 spikes_data = np.loadtxt(self.in_spikes_file, skiprows=0)
-            except (FileNotFoundError, TypeError):
+            except (FileNotFoundError, TypeError) as e:
                 print("\nError with fd file: ", e)
                 pass
             else:
