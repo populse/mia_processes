@@ -1656,7 +1656,7 @@ class Normalize12(ProcessMIA):
             "jobtype",
             Enum(
                 "write",
-                "est",
+                "estimate",
                 "estwrite",
                 output=False,
                 optional=True,
@@ -1795,6 +1795,13 @@ class Normalize12(ProcessMIA):
         )
 
         self.add_trait(
+            "normalized_image",
+            OutputMultiPath(
+                File(), output=True, optional=True, desc=normalized_image_desc
+            ),
+        )
+
+        self.add_trait(
             "normalized_files",
             OutputMultiPath(
                 File(), output=True, optional=True, desc=normalized_files_desc
@@ -1825,7 +1832,7 @@ class Normalize12(ProcessMIA):
 
         if (
             (self.apply_to_files)
-            and (self.apply_to_files != [Undefined])
+            and (self.apply_to_files != Undefined)
             and (self.deformation_file)
             and (self.jobtype == "write")
         ):
@@ -1835,7 +1842,8 @@ class Normalize12(ProcessMIA):
             _flag = True
 
             if self.image_to_align:
-                self.image_to_align = Undefined
+                #    self.image_to_align = Undefined
+                self.process.image_to_align = self.image_to_align
 
             if self.tpm:
                 self.tpm = Undefined
@@ -1844,15 +1852,16 @@ class Normalize12(ProcessMIA):
             (self.image_to_align)
             and (self.image_to_align != Undefined)
             and (self.tpm)
-            and (self.jobtype == "est")
+            and (self.jobtype == "estimate")
         ):
             self.process.image_to_align = self.image_to_align
             self.process.tpm = self.tpm
             self.process.jobtype = self.jobtype
             _flag = True
 
-            if self.apply_to_files and (self.apply_to_files != [Undefined]):
-                self.apply_to_files = [Undefined]
+            if self.apply_to_files and (self.apply_to_files != Undefined):
+                #    self.apply_to_files = [Undefined]
+                self.process.apply_to_files = self.apply_to_files
 
             if self.deformation_file:
                 self.deformation_file = Undefined
@@ -1868,7 +1877,7 @@ class Normalize12(ProcessMIA):
             self.process.jobtype = self.jobtype
             _flag = True
 
-            if (self.apply_to_files) and (self.apply_to_files != [Undefined]):
+            if (self.apply_to_files) and (self.apply_to_files != Undefined):
                 self.process.apply_to_files = self.apply_to_files
 
             if self.deformation_file:
@@ -1887,7 +1896,11 @@ class Normalize12(ProcessMIA):
             else:
                 print("No output_directory was found...!\n")
 
-            for k in ("deformation_field", "normalized_files"):
+            for k in (
+                "deformation_field",
+                "normalized_image",
+                "normalized_files",
+            ):
                 self.outputs[k] = getattr(self.process, "_" + k)
 
         # Tags inheritance (optional)
@@ -2035,6 +2048,19 @@ class Normalize12(ProcessMIA):
 
                     if fileOvalNoPref == fileIval:
                         self.inheritance_dict[val] = self.image_to_align
+
+                if (key == "normalized_image") and (val != Undefined):
+                    if not isinstance(val, list):
+                        val = [val]
+
+                    for in_val, out_val in zip(self.image_to_align, val):
+                        pathOval, fileOval = os.path.split(out_val)
+                        _, fileIval = os.path.split(in_val)
+                        # FIXME: I don't know exactly what is expected ... Need
+                        #         investigation ...
+                        # fileOvalNoPref = fileOval[1:]  ???
+                        # if fileOvalNoPref == fileIval:  ???
+                        #    self.inheritance_dict[out_val] = in_val ???
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()

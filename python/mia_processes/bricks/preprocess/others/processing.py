@@ -843,14 +843,14 @@ class ConformImage(ProcessMIA):
             ):
                 self.prefix = " "
 
-            valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
+            valid_ext, in_ext, file_name = checkFileExt(self.in_file, EXT)
 
             if not valid_ext:
-                print("\nThe input image format is" " not recognized...!")
+                print("\nThe input image format is not recognized...!")
                 return
 
-            file = ""
             path, _ = os.path.split(self.in_file)
+
             if (
                 self.suffix == " "
                 and self.prefix == " "
@@ -859,14 +859,14 @@ class ConformImage(ProcessMIA):
                 msg = QMessageBox()
                 msg.setIcon(QMessageBox.Warning)
                 msg.setWindowTitle(
-                    "mia_processes - " "ConformImage brick Warning!"
+                    "mia_processes - ConformImage brick Warning!"
                 )
                 msg.setText(
                     "Suffix and prefix input parameters are not "
                     "defined or consist only of one or more white "
                     "spaces.\nThe {0} input parameter will be "
                     "overwritten ...\n Yes or "
-                    "Abort?".format(fileName)
+                    "Abort?".format(file_name)
                 )
                 msg.setStandardButtons(QMessageBox.Yes | QMessageBox.Abort)
                 retval = msg.exec_()
@@ -876,10 +876,9 @@ class ConformImage(ProcessMIA):
                         "\nConformImage brick warning: the out_file output "
                         "parameter is the same as the in_files input "
                         "parameter (suffix and prefix are not defined):"
-                        "\n{0} will be overwrited ...".format(fileName)
+                        "\n{0} will be overwritten ...".format(file_name)
                     )
                 else:
-                    filename = ""
                     print("\nAborted. Please check your input parameters ...")
                     return
 
@@ -887,7 +886,7 @@ class ConformImage(ProcessMIA):
                 self.output_directory,
                 (
                     self.prefix.strip()
-                    + fileName
+                    + file_name
                     + self.suffix.strip()
                     + "."
                     + in_ext
@@ -1663,8 +1662,6 @@ class GradientThreshold(ProcessMIA):
             ):
                 self.prefix = " "
 
-            file = ""
-
             valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
 
             if not valid_ext:
@@ -1698,11 +1695,10 @@ class GradientThreshold(ProcessMIA):
                         "\nGradientThreshold brick warning: the out_file"
                         "output parameter is the same as the in_file input "
                         "parameter (suffix and prefix are not defined):"
-                        "\n{0} will be overwrited ...".format(fileName)
+                        "\n{0} will be overwritten ...".format(fileName)
                     )
 
                 else:
-                    filename = ""
                     print("\nAborted. Please check your input parameters ...")
                     return
 
@@ -1891,7 +1887,7 @@ class Harmonize(ProcessMIA):
 
         self.init_default_traits()
 
-    def list_outputs(self, is_plugged=None):
+    def list_outputs(self):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
@@ -1927,8 +1923,6 @@ class Harmonize(ProcessMIA):
             ):
                 self.prefix = " "
 
-            file = ""
-
             path, _ = os.path.split(self.in_file)
 
             if (
@@ -1960,7 +1954,6 @@ class Harmonize(ProcessMIA):
                     )
 
                 else:
-                    filename = ""
                     print("\nAborted. Please check your input parameters ...")
                     return
 
@@ -2326,8 +2319,6 @@ class Mask(ProcessMIA):
             ):
                 self.prefix = " "
 
-            file = ""
-
             path, _ = os.path.split(self.in_file)
 
             if (
@@ -2357,7 +2348,6 @@ class Mask(ProcessMIA):
                     )
 
                 else:
-                    filename = ""
                     print("\nAborted. Please check your input parameters ...")
                     return
 
@@ -3360,8 +3350,6 @@ class RotationMask(ProcessMIA):
             ):
                 self.prefix = " "
 
-            file = ""
-
             path, _ = os.path.split(self.in_file)
 
             if (
@@ -3393,7 +3381,6 @@ class RotationMask(ProcessMIA):
                     )
 
                 else:
-                    filename = ""
                     print("\nAborted. Please check your input parameters ...")
                     return
 
@@ -3609,8 +3596,6 @@ class Sanitize(ProcessMIA):
             ):
                 self.prefix = " "
 
-            file = ""
-
             path, _ = os.path.split(self.in_file)
 
             if (
@@ -3642,7 +3627,6 @@ class Sanitize(ProcessMIA):
                     )
 
                 else:
-                    filename = ""
                     print("\nAborted. Please check your input parameters ...")
                     return
 
@@ -3710,7 +3694,6 @@ class Sanitize(ProcessMIA):
             )
 
             save_file = False
-            warning_txt = ""
 
             # Both match, qform valid (implicit with match), codes okay -> do nothing, empty report
             if matching_affines and qform_code > 0 and sform_code > 0:
