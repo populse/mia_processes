@@ -23,7 +23,8 @@ class Anat_mni_tpms(Pipeline):
     From 'MNI152NLin2009cAsym' template
     (resolution 1 mm) and register them in subject space.
 
-    Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical workflow.
+    Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_
+    anatomical workflow.
     """
 
     def pipeline_definition(self):

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """The freesurfer preprocess library of the mia_processes package.
 
-The purpose of this module is to customise the main freesurfer preprocessing bricks
-provided by nipype and to correct some things that do not work directly in
-populse_mia.
+The purpose of this module is to customise the main freesurfer
+preprocessing bricks provided by nipype and to correct some things
+that do not work directly in populse_mia.
 
 :Contains:
     :Class:
@@ -589,9 +589,12 @@ class SynthStripMriqc(ProcessMIA):
 
     STATEMENT OF CHANGES: This class is derived from the work done by
     MRIQC 22.06 and  FreeSurfer 1.0. The original file for this work derives
-    from is found at https://github.com/nipreps/mriqc/blob/22.0.6/mriqc/synthstrip/cli.py
-    and https://github.com/nipreps/mriqc/blob/22.0.6/mriqc/synthstrip/model.py
-    and https://github.com/freesurfer/freesurfer/blob/2995ded957961a7f3704de57eee88eb6cc30d52d/mri_synthstrip/mri_synthstrip
+    from is found at
+    https://github.com/nipreps/mriqc/blob/22.0.6/mriqc/synthstrip/cli.py
+    and
+    https://github.com/nipreps/mriqc/blob/22.0.6/mriqc/synthstrip/model.py
+    and
+    https://github.com/freesurfer/freesurfer/blob/2995ded957961a7f3704de57eee88eb6cc30d52d/mri_synthstrip/mri_synthstrip
     Please, see the complete documention for the 'SynthStripMriqc' brick
     in the populse.mia_processes web site
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/freesurfer/SynthStripMriqc.html>`_
@@ -620,8 +623,8 @@ class SynthStripMriqc(ProcessMIA):
             if isinstance(nb_features, int):
                 if nb_levels is None:
                     raise ValueError(
-                        "SynthStripMriqc brick: must provide unet nb_levels if "
-                        "nb_features is an integer"
+                        "SynthStripMriqc brick: must provide unet nb_levels "
+                        "if nb_features is an integer"
                     )
                 feats = np.round(
                     nb_features * feat_mult ** np.arange(nb_levels)

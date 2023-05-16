@@ -138,7 +138,8 @@ class Files_To_List(ProcessMIA):
     """
     * From 2 file names, generating a list containing all these file names.
 
-    Please, see the complete documention for the `Files_To_List in the populse.mia_processes web site
+    Please, see the complete documention for the
+    `Files_To_List in the populse.mia_processes web site
     <https://populse.github.io/mia_processes/html/documentation/bricks/tools/Files_To_List.html>`_
 
     """
@@ -233,7 +234,8 @@ class Filter_Files_List(ProcessMIA):
     """
     * Selects one or more (slicing) element(s) from a list.
 
-    Please, see the complete documention for the `Filter_Files_List in the populse.mia_processes web site
+    Please, see the complete documention for the
+    `Filter_Files_List in the populse.mia_processes web site
     <https://populse.github.io/mia_processes/html/documentation/bricks/tools/Filter_Files_List.html>`_
 
     """
@@ -458,7 +460,8 @@ class Input_Filter(ProcessMIA):
     * | To filter the content of the Data Browser tab or the
       | output data of another brick.
 
-    Please, see the complete documention for the `Input_Filter in the populse.mia_processes web site
+    Please, see the complete documention for the
+    `Input_Filter in the populse.mia_processes web site
     <https://populse.github.io/mia_processes/html/documentation/bricks/tools/Input_Filter.html>`_
 
     """
@@ -526,11 +529,12 @@ class Input_Filter(ProcessMIA):
         # permissive. Indeed, it is possible to obtain the data from the output
         # of a previous brick or from the database (using Export to
         # database_scans, or not) and of course to perform a filtering from it.
-        # But also, if no data is sent in, we get all the data from the database
-        # (self.project.session.get_documents_names(COLLECTION_CURRENT), below).
-        # It can maybe lead to side effects (however it also allows for example
-        # not to connect the input to something and to have the whole database
-        # by default... Is it really desirable????
+        # But also, if no data is sent in, we get all the data from the
+        # database (self.project.session.get_documents_names(
+        # COLLECTION_CURRENT), below). It can maybe lead to side effects
+        # (however it also allows for example not to connect the input to
+        # something and to have the whole database by default...
+        # Is it really desirable????
         if self.input:
             self.scans_list = self.input
 
@@ -574,7 +578,8 @@ class List_Duplicate(ProcessMIA):
     * | From a file name, generating a list containing this file name
       | and the file name itself.
 
-    Please, see the complete documention for the `List_Duplicate in the populse.mia_processes web site
+    Please, see the complete documention for the
+    `List_Duplicate in the populse.mia_processes web site
     <https://populse.github.io/mia_processes/html/documentation/bricks/tools/List_Duplicate.html>`_
 
     """
@@ -650,7 +655,8 @@ class List_To_File(ProcessMIA):
     """
     * From several filenames, selects and generates a file.
 
-    Please, see the complete documention for the `List_To_File in the populse.mia_processes web site
+    Please, see the complete documention for the
+    `List_To_File in the populse.mia_processes web site
     <https://populse.github.io/mia_processes/html/documentation/bricks/tools/List_To_File.html>`_
 
     """
@@ -750,7 +756,8 @@ class Make_A_List(ProcessMIA):
     """
     * From 2 objects, generating a list containing all these objects.
 
-    Please, see the complete documention for the Make_A_List in the populse.mia_processes web site
+    Please, see the complete documention for the
+    `Make_A_List in the populse.mia_processes web site
     <https://populse.github.io/mia_processes/html/documentation/bricks/tools/Make_A_List.html>`_
 
     """

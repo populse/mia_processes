@@ -17,9 +17,9 @@ data using mriqc anatomical workflow (`mriqc v22.06 <https://mriqc.readthedocs.i
 the same result as when computing with the native MRIQC. The variation in results between multiple runs
 of the same inputs is the result of random sampling and floating point precision errors. These variations
 are usually small, but if an identical result is sought between multiple runs, the environment variable
-ANTS_RANDOM_SEED should be set (e.g. ANTS_RANDOM_SEED = 1). 
-If you want obtain the same results as with MIA by using a "Bare-metal" installation of the native MRIQC 
-on your computer, the environment variables ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS and OMP_NUM_THREADS 
+ANTS_RANDOM_SEED should be set (e.g. ANTS_RANDOM_SEED = 1).
+If you want obtain the same results as with MIA by using a "Bare-metal" installation of the native MRIQC
+on your computer, the environment variables ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS and OMP_NUM_THREADS
 shoul be set (e.g. ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS = 1 and OMP_NUM_THREADS = 1).
 Further discussion is available
 `in a mia_processes ticket <https://github.com/populse/mia_processes/issues/16>`_.

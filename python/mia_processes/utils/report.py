@@ -417,7 +417,8 @@ class Report:
         # Spatial and temporal resolution ###################################
         self.report.append(
             Paragraph(
-                "<font size = 15 > <b>SPATIAL AND TEMPORAL RESOLUTION</b> </font>",
+                "<font size = 15 > <b>SPATIAL AND "
+                "TEMPORAL RESOLUTION</b> </font>",
                 self.styles["Bullet1"],
             )
         )
@@ -866,7 +867,8 @@ class Report:
         self.report.append(Spacer(0 * mm, 2 * mm))
         self.report.append(
             Paragraph(
-                "Impact of noise and/or evaluation of the fitness of a noise model",
+                "Impact of noise and/or evaluation of "
+                "the fitness of a noise model",
                 self.styles["Left2"],
             )
         )
@@ -1192,9 +1194,10 @@ class Report:
         self.report.append(Spacer(0 * mm, 2 * mm))
         self.report.append(
             Paragraph(
-                "Metrics that do not fall into the above categories: statistical "
-                "properties of tissue distributions, volume overlap of "
-                "tissues, image harpness/blurriness, etc.",
+                "Metrics that do not fall into the above categories: "
+                "statistical properties of tissue distributions, "
+                "volume overlap of tissues, image harpness/blurriness, "
+                "etc.",
                 self.styles["Left2"],
             )
         )

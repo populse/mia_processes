@@ -23,7 +23,8 @@ class Anat_airmask(Pipeline):
       | structural data.
 
     following step 1 from
-    (`[Mortamet2009] <https://onlinelibrary.wiley.com/doi/10.1002/mrm.21992>`_).
+    (`[Mortamet2009]
+     <https://onlinelibrary.wiley.com/doi/10.1002/mrm.21992>`_).
 
     """
 

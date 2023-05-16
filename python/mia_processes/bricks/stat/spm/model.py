@@ -1458,12 +1458,15 @@ class Level1Design(ProcessMIA):
             ),
         )
         # TODO: 427.2 corresponds to the value used in Amigo
-        # Duration * TR * 3.56 = 427.2 if Duration == 40; TR = 3s; why 3.56 ?
-        # I was expecting rather to:
-        # (time between first block start - second block start) * TR *2 = 80 *3 *2 = 480
-        # Can we code an automatic recovery procedure for the hpf parameter ?
-        # (in this case, the user would have to declare additional tags in the
-        # database, like the block duration !)
+        #       Duration * TR * 3.56 = 427.2 if Duration == 40 and
+        #       TR == 3s; why 3.56 ?
+        #       I was expecting rather to:
+        #       (time between first block start
+        #        - second block start) * TR *2 = 80 *3 *2 = 480
+        #       Can we code an automatic recovery procedure for the
+        #       hpf parameter ?
+        #       (in this case, the user would have to declare additional
+        #       tags in the database, like the block duration !)
 
         self.add_trait(
             "factor_info",
@@ -1837,12 +1840,13 @@ class Level1Design(ProcessMIA):
             and (self.sess_scans not in ["<undefined>", Undefined])
             and (self.sess_scans[0] not in ["<undefined>", Undefined])
         ):
-            # The management of self.process.output_directory could be delegated
-            # to the populse_mia.user_interface.pipeline_manager.process_mia
+            # The management of self.process.output_directory could be
+            # delegated to the
+            # populse_mia.user_interface.pipeline_manager.process_mia
             # module. We can't do it at the moment because the
-            # sync_process_output_traits() of the capsul/process/nipype_process
-            # module raises an exception in nipype if the mandatory parameters
-            # are not yet defined!
+            # sync_process_output_traits() of the
+            # capsul/process/nipype_process module raises an exception
+            # in nipype if the mandatory parameter are not yet defined!
             if self.output_directory:
                 self.process.output_directory = self.output_directory
 
@@ -1970,13 +1974,15 @@ class Level1Design(ProcessMIA):
             self.inheritance_dict[self.outputs["spm_mat_file"]][
                 "own_tags"
             ].append(tag_to_add)
-            # FIXME: In the latest version of mia, indexing of the database with
-            #        particular tags defined in the processes is done only at
-            #        the end of the initialisation of the whole pipeline. So we
-            #        cannot use the value of these tags in other processes of
-            #        the pipeline at the time of initialisation
-            #        (see populse_mia #290). Until better we use a quick and
-            #        dirty hack with the set_dbFieldValue() method !
+            # FIXME: In the latest version of mia, indexing of the
+            #        database with particular tags defined in the
+            #        processes is done only at the end of the
+            #        initialisation of the whole pipeline. So we
+            #        cannot use the value of these tags in other
+            #        processes of the pipeline at the time of
+            #        initialisation (see populse_mia #290). Unti
+            #        better we use a quick and dirty hack with the
+            #        set_dbFieldValue() function !
             set_dbFieldValue(
                 self.project, self.outputs["spm_mat_file"], tag_to_add
             )
@@ -2000,13 +2006,15 @@ class Level1Design(ProcessMIA):
                     self.inheritance_dict[self.outputs["spm_mat_file"]][
                         "own_tags"
                     ].append(tag_to_add)
-                    # FIXME: In the latest version of mia, indexing of the database with
-                    #        particular tags defined in the processes is done only at
-                    #        the end of the initialisation of the whole pipeline. So we
-                    #        cannot use the value of these tags in other processes of
-                    #        the pipeline at the time of initialisation
-                    #        (see populse_mia #290). Until better we use a quick and
-                    #        dirty hack with the set_dbFieldValue() function !
+                    # FIXME: In the latest version of mia, indexing of the
+                    #        database with particular tags defined in the
+                    #        processes is done only at the end of the
+                    #        initialisation of the whole pipeline. So we
+                    #        cannot use the value of these tags in other
+                    #        processes of the pipeline at the time of
+                    #        initialisation (see populse_mia #290). Unti
+                    #        better we use a quick and dirty hack with the
+                    #        set_dbFieldValue() function !
                     set_dbFieldValue(
                         self.project, self.outputs["spm_mat_file"], tag_to_add
                     )
@@ -2077,13 +2085,15 @@ class Level1Design(ProcessMIA):
                     self.inheritance_dict[self.outputs["spm_mat_file"]][
                         "own_tags"
                     ].append(tag_to_add)
-                    # FIXME: In the latest version of mia, indexing of the database with
-                    #        particular tags defined in the processes is done only at
-                    #        the end of the initialisation of the whole pipeline. So we
-                    #        cannot use the value of these tags in other processes of
-                    #        the pipeline at the time of initialisation
-                    #        (see populse_mia #290). Until better we use a quick and
-                    #        dirty hack with the set_dbFieldValue() function !
+                    # FIXME: In the latest version of mia, indexing of the
+                    #        database with particular tags defined in the
+                    #        processes is done only at the end of the
+                    #        initialisation of the whole pipeline. So we
+                    #        cannot use the value of these tags in other
+                    #        processes of the pipeline at the time of
+                    #        initialisation (see populse_mia #290). Unti
+                    #        better we use a quick and dirty hack with the
+                    #        set_dbFieldValue() function !
                     set_dbFieldValue(
                         self.project, self.outputs["spm_mat_file"], tag_to_add
                     )
@@ -2100,10 +2110,10 @@ class Level1Design(ProcessMIA):
                 "RepetitionTime"
                 in self.project.session.get_fields_names(COLLECTION_CURRENT)
             ):
-                # FIXME: Currently, spm_mat_file will only inherit the first scan
-                #        if there are several scans in self.sess_scans. This
-                #        requires some thought on how to operate in a more general
-                #        framework
+                # FIXME: Currently, spm_mat_file will only inherit the first
+                #        scan if there are several scans in self.sess_scans.
+                #        This requires some thought on how to operate in a
+                #        more general framework
                 rep_time = get_dbFieldValue(
                     self.project, self.sess_scans[0], "RepetitionTime"
                 )
