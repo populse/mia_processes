@@ -87,7 +87,7 @@ from mia_processes.utils import get_dbFieldValue, set_dbFieldValue
 
 class EstimateContrast(ProcessMIA):
     """
-    * Estimate contrasts of interest.
+    * Estimate contrasts of interest.*
 
     """
 
@@ -118,8 +118,27 @@ class EstimateContrast(ProcessMIA):
             "Conditions information (a list of list of string)"
         )
         contrast_weight_desc = "Contrast weights (list of list of float)"
-        session_desc = "Session list (a list of list of float)"
-        multi_reg_desc = "The regressor files(a list of file)"
+        session_desc = ("Session list (a list of list of float). "
+                        "Length should be equal to the number of sessions, "
+                        "with 1. for sessions to include and 0. elsewhere")
+        multi_reg_desc = "The regressor files (a list of file)"
+        residual_image_desc = "Mean-squared image of the residuals"
+        beta_images_desc = "Parameter estimates of the design matrix"
+
+        # TODO : understand use_derivs and group_contrast 
+        # use_derivs_desc = ("Use derivatives for estimation. "
+        #                    "Mutually exclusive with inputs: group_contrast")
+        # group_contrast_desc = ("Higher level contrast. "
+        #                        "Mutually exclusive with inputs: use_derivs.")
+
+        # Outputs description
+        spmT_images_desc = "Stat images from a t-contrast"
+        con_images_desc = "Contrast images from a t-contrast"
+
+        # This bricks only works for T contrast
+        # ess_images_desc = "Contrast images from an F-contrast"
+        # spmF_images_desc = "Stat images from an F-contrast"
+        out_spm_mat_file_desc = "Updated SPM mat file."
 
         # Inputs
         self.add_trait(
@@ -139,9 +158,6 @@ class EstimateContrast(ProcessMIA):
             ),
         )
 
-        # self.add_trait("contrast_session_name",
-        #                traits.String(output=False,
-        #                              optional=False))
         self.add_trait(
             "contrast_name",
             traits.List(
@@ -189,16 +205,6 @@ class EstimateContrast(ProcessMIA):
         )
         self.session = Undefined
 
-        # self.add_trait("replicate",
-        #                traits.Enum("none",
-        #                            "repl",
-        #                            "replsc",
-        #                            "sess",
-        #                            "both",
-        #                            "bothsc",
-        #                            output=False,
-        #                            optional=True))
-
         self.add_trait(
             "multi_reg",
             traits.Either(
@@ -210,61 +216,87 @@ class EstimateContrast(ProcessMIA):
             ),
         )
 
-        # self.add_trait("multi_reg", traits.List(output=False, optional=True))
-        # self.add_trait("contrasts", traits.List([('+', 'T', ['R1_1'], [1])], output=False, optional=True))
-        self.add_trait(
-            "beta_images", InputMultiPath(File(), output=False, copyfile=False)
-        )
-        self.add_trait("residual_image", File(output=False, copyfile=False))
-        self.add_trait(
-            "use_derivs",
-            traits.Bool(output=False, optional=True, xor=["group_contrast"]),
-        )
-        self.add_trait(
-            "group_contrast",
-            traits.Bool(output=False, optional=True, xor=["use_derivs"]),
-        )
+        self.add_trait("beta_images",
+                       InputMultiPath(File(),
+                                      output=False,
+                                      copyfile=False,
+                                      desc=beta_images_desc)
+                       )
+
+        self.add_trait("residual_image",
+                       File(output=False,
+                            copyfile=False,
+                            desc=residual_image_desc)
+                       )
+
+        # self.add_trait("use_derivs",
+        #                traits.Bool(output=False,
+        #                            optional=True,
+        #                            xor=["group_contrast"],
+        #                            desc=use_derivs_desc),
+        #                )
+
+        # self.add_trait("group_contrast",
+        #                traits.Bool(output=False,
+        #                            optional=True,
+        #                            xor=["use_derivs"],
+        #                            desc=group_contrast_desc),
+        #                )
 
         # Outputs
-        self.add_trait(
-            "con_images", OutputMultiPath(File(), optional=True, output=True)
-        )
-        self.add_trait(
-            "spmT_images", OutputMultiPath(File(), optional=True, output=True)
-        )
-        self.add_trait(
-            "spmF_images", OutputMultiPath(File(), optional=True, output=True)
-        )
-        self.add_trait("out_spm_mat_file", File(output=True, copyfile=False))
+        self.add_trait("con_images",
+                       OutputMultiPath(File(),
+                                       optional=True,
+                                       output=True,
+                                       desc=con_images_desc)
+                       )
+
+        self.add_trait("spmT_images",
+                       OutputMultiPath(File(),
+                                       optional=True,
+                                       output=True,
+                                       desc=spmT_images_desc)
+                       )
+
+        # self.add_trait("ess_images",
+        #                OutputMultiPath(File(),
+        #                                optional=True,
+        #                                output=True,
+        #                                desc=ess_images_desc)
+        #                )
+
+        # self.add_trait("spmF_images",
+        #                OutputMultiPath(File(),
+        #                                optional=True,
+        #                                output=True,
+        #                                desc=spmF_images_desc)
+        #                )
+
+        self.add_trait("out_spm_mat_file",
+                       File(output=True,
+                            copyfile=False,
+                            desc=out_spm_mat_file_desc)
+                       )
 
         self.init_default_traits()
         self.init_process("nipype.interfaces.spm.EstimateContrast")
 
     def _get_contrasts(self, session_type):
-        """blabla"""
-        # contrast = tuple()
+        """
+        Get list of contrasts with each contrast being a list of the form:
+        [('contrast_name',
+          'stat',
+          [condition list],
+          [weight list],
+          [session list])]
+        """
+
         contrasts = [tuple()]
 
-        # if session_type == 'tcon':
-        #     contrast[0] = self.contrast_session_name
-        #     contrast[1] = 'T'
-        #     contrast[2] = self.contrast_weight
-        #     contrast[3] = self.replicate
-        #
-        # elif session_type == 'fcon':
-        #     contrast[0] = self.contrast_session_name
-        #     contrast[1] = 'F'
-        #     contrast[2] = self.contrast_weight
-        #     contrast[3] = self.replicate
-        #
-        # elif session_type == 'tconsess':
-        #     pass
         if session_type == "tcon":
             stat = "T"
-
-        elif session_type == "fcon":
-            stat = "F"
-
+        # elif session_type == "fcon":
+        #     stat = "F"
         else:
             stat = None
 
@@ -294,65 +326,31 @@ class EstimateContrast(ProcessMIA):
         return contrasts
 
     def list_outputs(self, is_plugged=None):
-        """blabla"""
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
         super(EstimateContrast, self).list_outputs()
 
-        # Old version calling Nipype's method
-        """process = spm.EstimateContrast()
-        if not self.spm_mat_file:
-            return {}, {}
-        else:
-            process.inputs.spm_mat_file = self.spm_mat_file
+        # TODO : add F contrast
 
-        if not self.contrasts:
-            return {}, {}
-        else:
-            process.inputs.contrasts = self.contrasts
-
-        if not self.beta_images:
-            return {}, {}
-        else:
-            process.inputs.beta_images = self.beta_images
-
-        if not self.residual_image:
-            return {}, {}
-        else:
-            process.inputs.residual_image = self.residual_image
-
-        outputs = process._list_outputs()
-        outputs["out_spm_mat_file"] = outputs.pop("spm_mat_file")
-        return outputs, {}"""
-
-        # Own list_outputs to avoid to read in the SPM.mat file
-        # if not self.spm_mat_file:
-        #     return {}, {}
-        #
-        # if not self.contrasts:
-        #     return {}, {}
-        #
-        # if not self.beta_images:
-        #     return {}, {}
-        #
-        # if not self.residual_image:
-        #     return {}, {}
-
-        # if self.outputs:
-        #    self.outputs = {}
-
-        # if self.inheritance_dict:
-        #    self.inheritance_dict = {}
+        # We cannot directly called Nipype's method to get all the output
+        # because we want to avoid to read in the SPM.mat file
+        # (potentially not created yet)
 
         if (
             (self.spm_mat_file)
             and (self.spm_mat_file not in ["<undefined>", Undefined])
-            and self.multi_reg not in [Undefined, "<undefined>", []]
         ):
-            # The management of self.process.output_directory could be delegated
-            # to the populse_mia.user_interface.pipeline_manager.process_mia
-            # module. We can't do it at the moment because the
-            # sync_process_output_traits() of the capsul/process/nipype_process
-            # module raises an exception in nipype if the mandatory parameters
-            # are not yet defined!
+
             if self.output_directory:
                 self.process.output_directory = self.output_directory
 
@@ -365,12 +363,14 @@ class EstimateContrast(ProcessMIA):
             )
 
             # Counting the number of spmT and con files to create
-            # if self.multi_reg not in [Undefined, '<undefined>', []]:
+            # TODO: understand how to know exactly number of spmT/spmF in all cases
             nb_spmT = 0
-
-            for reg_file in self.multi_reg:
-                if os.path.splitext(reg_file)[1] != ".txt":
-                    nb_spmT += 1
+            if self.multi_reg not in [Undefined, "<undefined>", []]:
+                for reg_file in self.multi_reg:
+                    if os.path.splitext(reg_file)[1] != ".txt":
+                        nb_spmT += 1
+            else:
+                nb_spmT = len(self.contrast_name)
 
             spmT_files = []
             con_files = []
@@ -387,8 +387,6 @@ class EstimateContrast(ProcessMIA):
                         self.output_directory, "con_{:04d}.nii".format(i)
                     )
                 )
-                # spmT_files.append(os.path.join(path, 'spmT_{:04d}.nii'.format(i)))
-                # con_files.append(os.path.join(path, 'con_{:04d}.nii'.format(i)))
 
             if spmT_files:
                 self.outputs["spmT_images"] = spmT_files
@@ -473,94 +471,39 @@ class EstimateContrast(ProcessMIA):
                     self.outputs["con_images"][0]
                 ] = self.spm_mat_file
 
-        # What about spmF images ?
-        # return outputs
-
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
 
     def run_process_mia(self):
-        """blabla"""
+        """Dedicated to the process launch step of the brick."""
 
         super(EstimateContrast, self).run_process_mia()
 
-        # self.process.spm_mat_file = os.path.abspath(self.spm_mat_file)
         self.process.spm_mat_file = self.spm_mat_file
         self.process.contrasts = self._get_contrasts(self.session_type)
         self.process.beta_images = self.beta_images
-        # self.process.residual_image = os.path.abspath(self.residual_image)
         self.process.residual_image = self.residual_image
 
-        if self.use_derivs is not None:
-            self.process.use_derivs = self.use_derivs
+        # if self.use_derivs is not None:
+        #     self.process.use_derivs = self.use_derivs
+        # else:
+        #     if self.group_contrast is not None:
+        #         self.process.group_contrast = self.group_contrast
 
-        else:
-            if self.group_contrast is not None:
-                self.process.group_contrast = self.group_contrast
-
-            else:
-                self.process.use_derivs = False
-        # self.process.run()
+        #     else:
+        #         self.process.use_derivs = False
 
         return self.process.run(configuration_dict={})
 
 
 class EstimateModel(ProcessMIA):
     """
-     - EstimateModel (User_processes.stats.spm.stats.EstimateModel) <=> Model estimation (SPM12 name).
-    *** Estimation of model parameters using classical (ReML - Restricted Maximum Likelihood) or Bayesian algorithms.***
-        * Input parameters:
-            # spm_mat_file <=> spmmat: The SPM.mat file that contains the design specification (a file object).
-                <ex. /home/ArthurBlair/data/raw_data/SPM.mat>
-            # estimation_method <=> method: Estimation  procedures for fMRI models (A dictionary with keys which are ‘Classical’ or ‘Bayesian’ or ‘Bayesian2’ and with values which are 1).
-                                            - Classical: Restricted Maximum Likelihood (ReML) estimation of first or second level models
-                                            - Bayesian: Bayesian estimation of first level models (not yet fully implemented)
-                                            - Bayesian2: Bayesian estimation of second level models (not yet fully implemented)
-                 <ex. {'Classical': 1}>
-            # write_residuals <=> write_residuals: Write images of residuals to disk. This is only implemented for classical inference (a boolean)
-                 <ex. True>
-            # flags: Additional arguments (a dictionary with keys which are any value and with values which are any value)
-                 <ex. {}>
-            # version: Version of spm (a string)
-                 <ex. spm12>
-            # tot_reg_num: The total number of estimated regression coefficients (an integer).
-                 <ex. 8>
-        * Output parameters:
-            # out_spm_mat_file: The SPM.mat file containing specification of the design and estimated model parameters (a pathlike object or string representing an existing file).
-                 <ex. /home/ArthurBlair/data/raw_data/SPM.mat>
-            # beta_images: Images of estimated regression coefficients beta_000k.img where k indexes the kth regression coefficient (a list of items which are a pathlike object or string representing an existing file).
-                 <ex. ['/home/ArthurBlair/data/raw_data/beta_0001.nii',
-                       '/home/ArthurBlair/data/raw_data/beta_0002.nii',
-                       '/home/ArthurBlair/data/raw_data/beta_0003.nii',
-                       '/home/ArthurBlair/data/raw_data/beta_0004.nii',
-                       '/home/ArthurBlair/data/raw_data/beta_0005.nii',
-                       '/home/ArthurBlair/data/raw_data/beta_0006.nii',
-                       '/home/ArthurBlair/data/raw_data/beta_0007.nii',
-                       '/home/ArthurBlair/data/raw_data/beta_0008.nii']>
-            # mask_image: The mask.img image indicating which voxels were included in the analysis (a pathlike object or string representing an existing file).
-                 <ex. /home/ArthurBlair/data/raw_data/mask.nii>
-            # residual_image: The ResMS.img image of the variance of the error (a pathlike object or string representing an existing file).
-                 <ex. /home/ArthurBlair/data/raw_data/ResMS.nii >
-            # residual_images: The individual error Res_000k.img images (a list of items which are a pathlike object or string representing an existing file) where k indexes the kth dynamic (fourth dimensional points of the fuctional). These images are generated only if write_residuals is True.
-                 <ex. ['/home/ArthurBlair/data/raw_data/Res_0001.nii',
-                       '/home/ArthurBlair/data/raw_data/Res_0002.nii',
-                       '/home/ArthurBlair/data/raw_data/Res_0003.nii',
-                        ...,
-                       '/home/ArthurBlair/data/raw_data/Res_0238.nii',
-                       '/home/ArthurBlair/data/raw_data/Res_0239.nii',
-                       '/home/ArthurBlair/data/raw_data/Res_0240.nii']>
-            # RPVimage: The RPV.img image of the estimated resolution elements per voxel (a pathlike object or string representing an existing file).
-                 <ex. /home/ArthurBlair/data/raw_data/RPV.nii>
-            # labels:
-                 <ex. >
-            # SDerror:
-                 <ex. >
-            # ARcoef: Images of the autoregressive (AR) coefficient (a list of items which are a pathlike object or string representing an existing file).
-                 <ex. >
-            # Cbetas:
-                 <ex. >
-            # SDbetas:
-                 <ex. >
+    * Estimation of model parameters using classical
+    (ReML - Restricted Maximum Likelihood)*
+
+    Please, see the complete documentation for the EstimateModel brick
+    in the populse.mia_processes web site
+    <https://populse.github.io/mia_processes/html/documentation/bricks/stats/spm/EstimateModel.html>`
 
     """
 
@@ -582,15 +525,19 @@ class EstimateModel(ProcessMIA):
             "The SPM.mat file that contains the design "
             "specification (a file object)"
         )
+        # EstimateModel brick only works for classical method
+        # estimation_method_desc = (
+        #     "A dictionary of either Classical: 1, "
+        #     "Bayesian: 1, or Bayesian2: 1"
+        # )
         estimation_method_desc = (
-            "A dictionary of either Classical: 1, "
-            "Bayesian: 1, or Bayesian2: 1"
+            "A dictionary : Classical: 1"
         )
         write_residuals_desc = "Write individual residual images (a boolean)"
-        flags_desc = (
-            "Additional arguments (a dictionary with keys which are "
-            "any value and with values which are any value)"
-        )
+        # flags_desc = (
+        #     "Additional arguments (a dictionary with keys which are "
+        #     "any value and with values which are any value)"
+        # )
         version_desc = "Version of spm (a string)"
         tot_reg_num_desc = (
             "The total number of estimated regression"
@@ -629,15 +576,21 @@ class EstimateModel(ProcessMIA):
             "voxel (a pathlike object or string representing an "
             "existing file)."
         )
-        labels_desc = "blabla"
-        SDerror_desc = "blabla"
-        ARcoef_desc = (
-            "Images of the autoregressive (AR) coefficient (a list "
-            "of items which are a pathlike object or string "
-            "representing an existing file)."
-        )
-        Cbetas_desc = "blabla"
-        SDbetas_desc = "blabla"
+
+        # EstimateModel brick only works for classical method
+        # Following outputs are generated by
+        # Bayesian 1st-level or Bayesian 2nd level methods
+        #
+        # labels_desc = "Label file"
+        # SDerror_desc = "Images of the standard deviation of the error"
+        # ARcoef_desc = (
+        #     "Images of the autoregressive (AR) coefficient (a list "
+        #     "of items which are a pathlike object or string "
+        #     "representing an existing file)."
+        # )
+        # Cbetas_desc = "Images of the parameter posteriors"
+        # SDbetas_desc = ("Images of the standard deviation of "
+        #                 "parameter posteriors")
 
         # Inputs traits
         self.add_trait(
@@ -645,10 +598,12 @@ class EstimateModel(ProcessMIA):
             File(output=False, optional=False, desc=spm_mat_file_desc),
         )
 
+        # EstimateModel brick only works for classical method
         self.add_trait(
             "estimation_method",
             traits.Dict(
-                traits.Enum("Classical", "Bayesian", "Bayesian2"),
+                # traits.Enum("Classical", "Bayesian", "Bayesian2"),
+                traits.Enum("Classical"),
                 traits.Enum(1),
                 usedefault=True,
                 output=False,
@@ -668,9 +623,9 @@ class EstimateModel(ProcessMIA):
             ),
         )
 
-        self.add_trait(
-            "flags", traits.Dict(output=False, optional=True, desc=flags_desc)
-        )
+        # self.add_trait(
+        #     "flags", traits.Dict(output=False, optional=True, desc=flags_desc)
+        # )
 
         self.add_trait(
             "version",
@@ -735,38 +690,42 @@ class EstimateModel(ProcessMIA):
             ImageFileSPM(output=True, optional=True, desc=RPVimage_desc),
         )
 
-        self.add_trait(
-            "labels",
-            ImageFileSPM(output=True, optional=True, desc=labels_desc),
-        )
+        # EstimateModel brick only works for classical method
+        # Following outputs are generated by
+        # Bayesian 1st-level or Bayesian 2nd level methods
 
-        self.add_trait(
-            "SDerror",
-            OutputMultiPath(
-                ImageFileSPM(), output=True, optional=True, desc=SDerror_desc
-            ),
-        )
+        # self.add_trait(
+        #     "labels",
+        #     ImageFileSPM(output=True, optional=True, desc=labels_desc),
+        # )
 
-        self.add_trait(
-            "ARcoef",
-            OutputMultiPath(
-                ImageFileSPM(), output=True, optional=True, desc=ARcoef_desc
-            ),
-        )
+        # self.add_trait(
+        #     "SDerror",
+        #     OutputMultiPath(
+        #         ImageFileSPM(), output=True, optional=True, desc=SDerror_desc
+        #     ),
+        # )
 
-        self.add_trait(
-            "Cbetas",
-            OutputMultiPath(
-                ImageFileSPM(), output=True, optional=True, desc=Cbetas_desc
-            ),
-        )
+        # self.add_trait(
+        #     "ARcoef",
+        #     OutputMultiPath(
+        #         ImageFileSPM(), output=True, optional=True, desc=ARcoef_desc
+        #     ),
+        # )
 
-        self.add_trait(
-            "SDbetas",
-            OutputMultiPath(
-                ImageFileSPM(), output=True, optional=True, desc=SDbetas_desc
-            ),
-        )
+        # self.add_trait(
+        #     "Cbetas",
+        #     OutputMultiPath(
+        #         ImageFileSPM(), output=True, optional=True, desc=Cbetas_desc
+        #     ),
+        # )
+
+        # self.add_trait(
+        #     "SDbetas",
+        #     OutputMultiPath(
+        #         ImageFileSPM(), output=True, optional=True, desc=SDbetas_desc
+        #     ),
+        # )
 
         self.init_default_traits()
         self.init_process("nipype.interfaces.spm.EstimateModel")
@@ -787,33 +746,9 @@ class EstimateModel(ProcessMIA):
         # Using the inheritance to ProcessMIA class, list_outputs method
         super(EstimateModel, self).list_outputs()
 
-        # Outputs definition and tags inheritance (optional)
-        # if self.outputs:
-        #    self.outputs = {}
-
-        # if self.inheritance_dict:
-        #    self.inheritance_dict = {}
-
-        # Old version calling Nipype's method
-        """
-        process = spm.EstimateModel()
-        if not self.spm_mat_file:
-            return {}, {}
-        else:
-            process.inputs.spm_mat_file = self.spm_mat_file
-        if not self.estimation_method:
-            return {}, {}
-        else:
-            process.inputs.estimation_method = self.estimation_method
-
-        process.inputs.write_residuals = self.write_residuals
-        process.inputs.flags = self.flags
-
-        outputs = process._list_outputs()
-        outputs["out_spm_mat_file"] = outputs.pop("spm_mat_file")
-        """
-
-        # Own list_outputs to avoid reading in the SPM.mat file
+        # We cannot directly called Nipype's method to get all the output
+        # because we want to avoid to read in the SPM.mat file
+        # (potentially not created yet)
         if (
             (self.spm_mat_file)
             and (self.spm_mat_file not in ["<undefined>", Undefined])
@@ -840,48 +775,6 @@ class EstimateModel(ProcessMIA):
             )
             # Detecting the number of beta files to create
             betas = []
-            # Those lines are false, we cannot read in the
-            # self.spm_mat_file because it is not created yet! (1)
-            """
-            try:
-                spm_matFile = scipy.io.loadmat(self.spm_mat_file)
-                nb_reg = spm_matFile['SPM'][0,0]['Sess'][0,0]['col'].shape[1]
-                print('\n EstimateModel brick: {} regressors found ...\n'.format(nb_reg))
-                nb_reg += 1  # Adding the constant value
-
-            except Exception as e:
-                print('\nEstimateModel brick exception; {0}: {1}\n'.format(e.__class__, e))
-            """
-            """
-            if (  (not nb_reg) and (self.multi_reg) and
-              (self.multi_reg not in ['<undefined>', Undefined])  ):
-
-                for reg_file in self.multi_reg:
-                    # Those lines are false, we cannot read in all files in
-                    # self.multi_reg because they are not created yet! (2)
-                    '''
-                    if os.path.splitext(reg_file)[1] == '.txt':
-
-                        with open(reg_file) as f:
-                            first_line = f.readline()
-                            print('FIRST LINE', first_line)
-                            nb_reg += len(first_line.split()) + 1  # Adding the constant value
-
-                    # and for other reg_file?
-                    '''
-
-                    # The current workaround to try to detect the number of
-                    # beta files to be created!
-                    # TODO: find a better way
-                    if os.path.basename(reg_file)[0:3] == 'rp_':
-                        nb_reg += 6
-
-                    if os.path.basename(reg_file)[0:22] == 'regressor_physio_EtCO2':
-                        nb_reg += 1
-
-                if nb_reg:
-                    nb_reg += 1 # Adding the constant value
-                """
 
             if self.tot_reg_num in ["<undefined>", Undefined]:
                 tot_reg_numb = get_dbFieldValue(
@@ -904,16 +797,17 @@ class EstimateModel(ProcessMIA):
                     return self.make_initResult()
 
             # Bayesian and Bayesian2 are not yet fully implemented
-            if ("Bayesian" in self.estimation_method.keys()) or (
-                "Bayesian2" in self.estimation_method.keys()
-            ):
-                self.outputs["labels"] = os.path.join(
-                    self.output_directory, "labels.{}".format(im_form)
-                )
-                """
-                outputs['SDerror'] = glob(os.path.join(path, 'Sess*_SDerror*'))
-                outputs['ARcoef'] = glob(os.path.join(path, 'Sess*_AR_*'))
-                """
+            # if ("Bayesian" in self.estimation_method.keys()) or (
+            #     "Bayesian2" in self.estimation_method.keys()
+            # ):
+            #     self.outputs["labels"] = os.path.join(
+            #         self.output_directory, "labels.{}".format(im_form)
+            #     )
+            #     """
+            #     outputs['SDerror'] = glob(
+            #                   os.path.join(path, 'Sess*_SDerror*'))
+            #     outputs['ARcoef'] = glob(os.path.join(path, 'Sess*_AR_*'))
+            #     """
 
             if "Classical" in self.estimation_method.keys():
                 self.outputs["residual_image"] = os.path.join(
@@ -1084,7 +978,7 @@ class EstimateModel(ProcessMIA):
         self.process.spm_mat_file = os.path.abspath(self.spm_mat_file)
         self.process.estimation_method = self.estimation_method
         self.process.write_residuals = self.write_residuals
-        self.process.flags = self.flags
+        # self.process.flags = self.flags
 
         # Removing the image files to avoid a bug
         # I do not observe the bug now, i comment the following lines:
@@ -1092,23 +986,17 @@ class EstimateModel(ProcessMIA):
         #       If necessary, we can use the dict4runtine object?
         #
         # for key, value in self.outputs.items():
-
         #   if key not in ["out_spm_mat_file"]:
-
         #        if value not in ["<undefined>", Undefined]:
-
-        #            if type(value) in [list, traits.TraitListObject, traits.List]:
-
+        #            if type(value) in [list,
+        #                               traits.TraitListObject,
+        #                               traits.List]:
         #                for element in value:
-
         #                    if os.path.isfile(element):
         #                        os.remove(element)
-
         #           else:
-
         #                if os.path.isfile(value):
         #                    os.remove(value)
-
         # self.process.run()
         return self.process.run(configuration_dict={})
 
@@ -1117,8 +1005,9 @@ class Level1Design(ProcessMIA):
     """
     * Specification of the GLM design matrix, fMRI data files and filtering.
 
-    Please, see the complete documentation for the Level1Design brick in the
-    https://gricad-gitlab.univ-grenoble-alpes.fr/condamie/ec_dev web site
+    Please, see the complete documentation for the Level1Design brick
+    in the populse.mia_processes web site
+    <https://populse.github.io/mia_processes/html/documentation/bricks/stats/spm/LevelDesign.html>
 
     """
 
@@ -1132,7 +1021,7 @@ class Level1Design(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(Level1Design, self).__init__()
 
-        # Third party pieces of software required for the execution of the brick
+        # Third party softwares required for the execution of the brick
         self.requirement = ["spm", "nipype"]
 
         # Inputs description
@@ -1643,7 +1532,7 @@ class Level1Design(ProcessMIA):
         else:
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Warning)
-            msg.setWindowTitle("User_processes_ECdev - Level1Design Error!")
+            msg.setWindowTitle("Level1Design Error!")
             msg.setText(
                 "Warning: The number of values in the "
                 "sess_cond_durations parameter does not correspond to "
@@ -1663,7 +1552,7 @@ class Level1Design(ProcessMIA):
         except IndexError:
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Warning)
-            msg.setWindowTitle("User_processes_ECdev - Level1Design Error!")
+            msg.setWindowTitle("Level1Design Error!")
             msg.setText(
                 "Warning: It seems that not all sess_cond_tmod "
                 "parameter values are defined for all conditions. "
@@ -1677,30 +1566,29 @@ class Level1Design(ProcessMIA):
             msg.exec()
             return False
 
-        if (self.sess_cond_pmod_names[idx_session]) and (
-            self.sess_cond_pmod_names[idx_session][idx_cond]
-        ):
-            pmods = []
+        if (self.sess_cond_pmod_names) != [[[]]]:
+            if self.sess_cond_pmod_names[idx_session][idx_cond]:
+                pmods = []
 
-            for i, val in enumerate(
-                self.sess_cond_pmod_names[idx_session][idx_cond]
-            ):
-                pmod = dict()
-                pmod["name"] = val
-                param = []
-
-                for j, val in enumerate(
-                    self.sess_cond_pmod_values[idx_session][idx_cond][i]
+                for i, val in enumerate(
+                    self.sess_cond_pmod_names[idx_session][idx_cond]
                 ):
-                    param.insert(j, np.float64(val))
+                    pmod = dict()
+                    pmod["name"] = val
+                    param = []
 
-                pmod["param"] = param
-                pmod["poly"] = self.sess_cond_pmod_polys[idx_session][
-                    idx_cond
-                ][i]
-                pmods.append(pmod)
+                    for j, val in enumerate(
+                        self.sess_cond_pmod_values[idx_session][idx_cond][i]
+                    ):
+                        param.insert(j, np.float64(val))
 
-            cond["pmod"] = pmods
+                    pmod["param"] = param
+                    pmod["poly"] = self.sess_cond_pmod_polys[idx_session][
+                        idx_cond
+                    ][i]
+                    pmods.append(pmod)
+
+                cond["pmod"] = pmods
 
         try:
             cond["orth"] = self.sess_cond_orth[idx_session][idx_cond]
@@ -1708,7 +1596,7 @@ class Level1Design(ProcessMIA):
         except IndexError:
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Warning)
-            msg.setWindowTitle("User_processes_ECdev - Level1Design Error!")
+            msg.setWindowTitle("Level1Design Error!")
             msg.setText(
                 "Warning: It seems that not all sess_cond_orth "
                 "parameter values are defined for all conditions. "
@@ -1905,8 +1793,8 @@ class Level1Design(ProcessMIA):
             # self.sessions = sessions  # The session_info for nipype
             self.dict4runtime["sessions"] = sessions
 
-            ## Some tests to check that the definition of the parameters for
-            ## the self.sessions went well:
+            # Some tests to check that the definition of the parameters for
+            # the self.sessions went well:
             # - If self.sessions have no key in ['cond', 'multi', 'regress',
             #   'multi_reg'], or a condition is False, we can think there is
             #   an initialisation issue ...
