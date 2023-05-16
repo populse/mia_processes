@@ -1592,7 +1592,7 @@ class GradientThreshold(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(GradientThreshold, self).__init__()
 
-        # Third party softwares required for the execution of the brick
+        # Third party softwares required python/mia_processes/bricks/preprocess/spm/spatial_preprocessing.pyfor the execution of the brick
         self.requirement = []
 
         # Inputs description
@@ -1887,7 +1887,7 @@ class Harmonize(ProcessMIA):
 
         self.init_default_traits()
 
-    def list_outputs(self):
+    def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the

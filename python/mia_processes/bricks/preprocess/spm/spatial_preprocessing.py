@@ -1598,12 +1598,12 @@ class Normalize12(ProcessMIA):
             "representing a file, or a list of pathlike "
             "objects or strings representing a file)"
         )
-        normalized_image_desc = (
-            "Normalised file that needed to be aligned (a "
-            "pathlike object or string representing a "
-            "file, or a list of pathlike objects or "
-            "strings representing a file)."
-        )
+        #        normalized_image_desc = (
+        #            "Normalised file that needed to be aligned (a "
+        #            "pathlike object or string representing a "
+        #            "file, or a list of pathlike objects or "
+        #            "strings representing a file)."
+        #        )
         normalized_files_desc = (
             "Normalised other files (a pathlike object or "
             "string representing a file, or a list of "
@@ -1656,7 +1656,8 @@ class Normalize12(ProcessMIA):
             "jobtype",
             Enum(
                 "write",
-                "estimate",
+                #                "estimate",
+                "est",
                 "estwrite",
                 output=False,
                 optional=True,
@@ -1794,12 +1795,12 @@ class Normalize12(ProcessMIA):
             ),
         )
 
-        self.add_trait(
-            "normalized_image",
-            OutputMultiPath(
-                File(), output=True, optional=True, desc=normalized_image_desc
-            ),
-        )
+        #        self.add_trait(
+        #            "normalized_image",
+        #            OutputMultiPath(
+        #                File(), output=True, optional=True, desc=normalized_image_desc
+        #            ),
+        #        )
 
         self.add_trait(
             "normalized_files",
@@ -1842,8 +1843,8 @@ class Normalize12(ProcessMIA):
             _flag = True
 
             if self.image_to_align:
-                #    self.image_to_align = Undefined
-                self.process.image_to_align = self.image_to_align
+                self.image_to_align = Undefined
+                # self.process.image_to_align = self.image_to_align
 
             if self.tpm:
                 self.tpm = Undefined
@@ -1852,7 +1853,8 @@ class Normalize12(ProcessMIA):
             (self.image_to_align)
             and (self.image_to_align != Undefined)
             and (self.tpm)
-            and (self.jobtype == "estimate")
+            # and (self.jobtype == "estimate")
+            and (self.jobtype == "est")
         ):
             self.process.image_to_align = self.image_to_align
             self.process.tpm = self.tpm
@@ -1879,6 +1881,7 @@ class Normalize12(ProcessMIA):
 
             if (self.apply_to_files) and (self.apply_to_files != Undefined):
                 self.process.apply_to_files = self.apply_to_files
+                # self.apply_to_files = Undefined
 
             if self.deformation_file:
                 self.deformation_file = Undefined
@@ -1898,7 +1901,7 @@ class Normalize12(ProcessMIA):
 
             for k in (
                 "deformation_field",
-                "normalized_image",
+                # "normalized_image",
                 "normalized_files",
             ):
                 self.outputs[k] = getattr(self.process, "_" + k)
@@ -2049,18 +2052,18 @@ class Normalize12(ProcessMIA):
                     if fileOvalNoPref == fileIval:
                         self.inheritance_dict[val] = self.image_to_align
 
-                if (key == "normalized_image") and (val != Undefined):
-                    if not isinstance(val, list):
-                        val = [val]
-
-                    for in_val, out_val in zip(self.image_to_align, val):
-                        pathOval, fileOval = os.path.split(out_val)
-                        _, fileIval = os.path.split(in_val)
-                        # FIXME: I don't know exactly what is expected ... Need
-                        #         investigation ...
-                        # fileOvalNoPref = fileOval[1:]  ???
-                        # if fileOvalNoPref == fileIval:  ???
-                        #    self.inheritance_dict[out_val] = in_val ???
+                # if (key == "normalized_image") and (val != Undefined):
+                #     if not isinstance(val, list):
+                #         val = [val]
+                #
+                #     for in_val, out_val in zip(self.image_to_align, val):
+                #         pathOval, fileOval = os.path.split(out_val)
+                #         _, fileIval = os.path.split(in_val)
+                #         # FIXME: I don't know exactly what is expected ...
+                #                  Need investigation ...
+                #         # fileOvalNoPref = fileOval[1:]  ???
+                #         # if fileOvalNoPref == fileIval:  ???
+                #         #    self.inheritance_dict[out_val] = in_val ???
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
