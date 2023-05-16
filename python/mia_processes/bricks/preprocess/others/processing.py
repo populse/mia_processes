@@ -1592,7 +1592,7 @@ class GradientThreshold(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(GradientThreshold, self).__init__()
 
-        # Third party softwares required python/mia_processes/bricks/preprocess/spm/spatial_preprocessing.pyfor the execution of the brick
+        # Third party softwares required for the execution of the brick
         self.requirement = []
 
         # Inputs description
