@@ -2568,7 +2568,7 @@ class Resample_1(ProcessMIA):
             "out_files (a string)."
         )
         suffix_desc = "The suffix for the out_files image (a string)."
-        prefix_desc = "The prefix for the  out_files image (a string)."
+        prefix_desc = "The prefix for the out_files image (a string)."
         interp_desc = (
             "The order of the spline interpolation (an integer "
             "between 0 and 5; trilinear == 3)."
@@ -3026,7 +3026,7 @@ class Resample_1(ProcessMIA):
             # Currently, resampling is only done for 3D images using 3D
             # or 4D images for reference. It would be interesting to widen the
             # possibilities to more cases (at least a 4D using a 3D, and why
-            # not, to larger dimensions?). Currently we use
+            # not, to larger dimensions?). Currently, we use
             # nibabel.processing.resample_from_to(), (see
             # https://mail.python.org/pipermail/neuroimaging/2019-January/001902.html).
             # It seems this method produces a little noise (can give non-zero

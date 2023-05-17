@@ -66,8 +66,8 @@ Mia_processes's documentation
       - `IntensityClip <bricks/preprocess/others/IntensityClip.html>`_
       - `Mask <bricks/preprocess/others/Mask.html>`_
       - `NonSteadyDetector <bricks/preprocess/others/NonSteadyDetector.html>`_
-      - `Resample_1 <bricks/preprocess/others/Resample_1.html>`_ (in progress)
-      - `Resample_2 <bricks/preprocess/others/Resample_2.html>`_ (in progress)
+      - `Resample_1 <bricks/preprocess/others/Resample_1.html>`_
+      - `Resample_2 <bricks/preprocess/others/Resample_2.html>`_
       - `RotationMask <bricks/preprocess/others/RotationMask.html>`_
       - `Sanitize <bricks/preprocess/others/Sanitize.html>`_
       - `TemplateFromTemplateFlow <bricks/preprocess/others/TemplateFromTemplateFlow.html>`_
