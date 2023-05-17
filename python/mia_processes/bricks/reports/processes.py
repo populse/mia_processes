@@ -1382,7 +1382,8 @@ class ComputeDVARS(ProcessMIA):
             1,
         )[:, 0]
 
-        # Compute (predicted) standard deviation of temporal difference time series
+        # Compute (predicted) standard deviation of temporal
+        # difference time series
         diff_sdhat = np.squeeze(np.sqrt(((1 - ar1) * 2).tolist())) * func_sd
         diff_sd_mean = diff_sdhat.mean()
 
@@ -2231,7 +2232,8 @@ class Result_collector(ProcessMIA):
 
         if not os.path.isdir(analysis_dir):
             print(
-                "No 'ROI_analysis' folder in the working directory {0}.".format(
+                "No 'ROI_analysis' folder in the working "
+                "directory {0}.".format(
                     os.path.dirname(self.parametric_maps[0])
                 )
             )
@@ -2457,7 +2459,8 @@ class Spikes(ProcessMIA):
     """
     * Computes the number of spikes.
 
-    Please, see the complete documentation for the `Spikes' brick in the populse.mia_processes website
+    Please, see the complete documentation for the `Spikes' brick in the
+    populse.mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/reports/Spikes.html>`_
 
     adapted from:
@@ -2678,7 +2681,8 @@ def art_qi2(img, airmask, min_voxels=int(1e3), max_voxels=int(3e5)):
     :math:`\chi^2` distribution onto the intensity distribution of
     non-artifactual background (within the "hat" mask):
     .. math ::
-        \chi^2_n = \frac{2}{(\sigma \sqrt{2})^{2n} \, (n - 1)!}x^{2n - 1}\, e^{-\frac{x}{2}}
+        \chi^2_n = \frac{2}{(\sigma \sqrt{2})^{2n} \,
+                            (n - 1)!}x^{2n - 1}\, e^{-\frac{x}{2}}
     where :math:`n` is the number of coil elements.
     :param numpy.ndarray img: input data
     :param numpy.ndarray airmask: input air mask without artifacts
@@ -2738,11 +2742,15 @@ def cjv(mu_wm, mu_gm, sigma_wm, sigma_gm):
     the :abbr:`INU (intensity non-uniformity)` artifact [Ganzetti2016]_.
     Lower is better.
     .. math::
-        \text{CJV} = \frac{\sigma_\text{WM} + \sigma_\text{GM}}{|\mu_\text{WM} - \mu_\text{GM}|}.
+        \text{CJV} = \frac{\sigma_\text{WM} +
+                           \sigma_\text{GM}}{|\mu_\text{WM} -
+                           \mu_\text{GM}|}.
     :param float mu_wm: mean of signal within white-matter mask.
     :param float mu_gm: mean of signal within gray-matter mask.
-    :param float sigma_wm: standard deviation of signal within white-matter mask.
-    :param float sigma_gm: standard deviation of signal within gray-matter mask.
+    :param float sigma_wm: standard deviation of signal within
+                           white-matter mask.
+    :param float sigma_gm: standard deviation of signal within
+                           gray-matter mask.
     :return: the computed CJV
     """
     return float((sigma_wm + sigma_gm) / abs(mu_wm - mu_gm))
@@ -2753,13 +2761,18 @@ def cnr(mu_wm, mu_gm, sigma_air):
     Calculate the :abbr:`CNR (Contrast-to-Noise Ratio)` [Magnota2006]_.
     Higher values are better.
     .. math::
-        \text{CNR} = \frac{|\mu_\text{GM} - \mu_\text{WM} |}{\sqrt{\sigma_B^2 +
-        \sigma_\text{WM}^2 + \sigma_\text{GM}^2}},
-    where :math:`\sigma_B` is the standard deviation of the noise distribution within
-    the air (background) mask.
+        \text{CNR} = \frac{|\mu_\text{GM} -
+                           \mu_\text{WM} |}{\sqrt{\sigma_B^2 +
+                           \sigma_\text{WM}^2 +
+                           \sigma_\text{GM}^2}},
+    where :math:`\sigma_B` is the standard deviation of the noise distribution
+    withinmthe air (background) mask.
+
     :param float mu_wm: mean of signal within white-matter mask.
     :param float mu_gm: mean of signal within gray-matter mask.
-    :param float sigma_air: standard deviation of the air surrounding the head ("hat" mask).
+    :param float sigma_air: standard deviation of the air surrounding the
+                            head ("hat" mask).
+
     :return: the computed CNR
     """
     return float(abs(mu_wm - mu_gm) / sigma_air)
@@ -2779,10 +2792,11 @@ def efc(img, framemask=None):
     :abbr:`EFC (Entropy Focus Criterion)` can be compared across images with
     different dimensions:
     .. math::
-        \text{EFC} = \left( \frac{N}{\sqrt{N}} \, \log{\sqrt{N}^{-1}} \right) \text{E}
+        \text{EFC} =
+        \left( \frac{N}{\sqrt{N}} \, \log{\sqrt{N}^{-1}} \right) \text{E}
     :param numpy.ndarray img: input data
-    :param numpy.ndarray framemask: a mask of empty voxels inserted after a rotation of
-      data
+    :param numpy.ndarray framemask: a mask of empty voxels inserted after
+                                    a rotation of data
     """
 
     if framemask is None:
@@ -2810,15 +2824,17 @@ def efc(img, framemask=None):
 
 def fber(img, headmask, rotmask=None):
     r"""
-    Calculate the :abbr:`FBER (Foreground-Background Energy Ratio)` [Shehzad2015]_,
+    Calculate the
+    :abbr:`FBER (Foreground-Background Energy Ratio)` [Shehzad2015]_,
     defined as the mean energy of image values within the head relative
     to outside the head. Higher values are better.
     .. math::
         \text{FBER} = \frac{E[|F|^2]}{E[|B|^2]}
     :param numpy.ndarray img: input data
-    :param numpy.ndarray headmask: a mask of the head (including skull, skin, etc.)
-    :param numpy.ndarray rotmask: a mask of empty voxels inserted after a rotation of
-      data
+    :param numpy.ndarray headmask: a mask of the head (including skull,
+                                   skin, etc.)
+    :param numpy.ndarray rotmask: a mask of empty voxels inserted after
+                                  a rotation of data
     """
 
     fg_mu = np.median(np.abs(img[headmask > 0]) ** 2)
@@ -2852,9 +2868,9 @@ def find_spikes(data, spike_thresh):
     t_z = _robust_zscore(slice_mean)
     spikes = np.abs(t_z) > spike_thresh
     spike_inds = np.transpose(spikes.nonzero())
-    # mask out the spikes and recompute z-scores using variance uncontaminated with spikes.
-    # This will catch smaller spikes that may have been swamped by big
-    # ones.
+    # mask out the spikes and recompute z-scores using variance uncontaminated
+    # with spikes. This will catch smaller spikes that may have been swamped
+    # by big ones.
     data.mask[:, :, spike_inds[:, 0], spike_inds[:, 1]] = True
     slice_mean2 = np.median(np.median(data, axis=0), axis=0)
     t_z = _robust_zscore(slice_mean2)
@@ -2881,7 +2897,8 @@ def gsr(epi_data, mask, direction="y", ref_file=None, out_file=None):
     """
     Compute the :abbr:`GSR (ghost to signal ratio)` [Giannelli2010]_.
     The procedure is as follows:
-      #. Create a Nyquist ghost mask by circle-shifting the original mask by :math:`N/2`.
+      #. Create a Nyquist ghost mask by circle-shifting the original
+         mask by :math:`N/2`.
       #. Rotate by :math:`N/2`
       #. Remove the intersection with the original mask
       #. Generate a non-ghost background
@@ -3021,7 +3038,8 @@ def rpve(pvms, seg):
 
     .. math ::
         \\text{rPVE}^k = \\frac{1}{N} \\left[ \\sum\\limits_{p^k_i \
-\\in [0.5, P_{98}]} p^k_i + \\sum\\limits_{p^k_i \\in [P_{2}, 0.5)} 1 - p^k_i \\right]
+        \\in [0.5, P_{98}]} p^k_i + \\sum\\limits_{p^k_i \
+        \\in [P_{2}, 0.5)} 1 - p^k_i \\right]
     """
 
     pvfs = {}
@@ -3063,18 +3081,18 @@ def snr_dietrich(mu_fg, mad_air=0.0, sigma_air=1.0):
     r"""
     Calculate the :abbr:`SNR (Signal-to-Noise Ratio)`.
 
-    This must be an air mask around the head, and it should not contain artifacts.
-    The computation is done following the eq. A.12 of [Dietrich2007]_, which
-    includes a correction factor in the estimation of the standard deviation of
-    air and its Rayleigh distribution:
+    This must be an air mask around the head, and it should not contain
+    artifacts. The computation is done following the eq. A.12 of
+    [Dietrich2007]_, which includes a correction factor in the estimation
+    of the standard deviation of air and its Rayleigh distribution:
 
     .. math::
-
-        \text{SNR} = \frac{\mu_F}{\sqrt{\frac{2}{4-\pi}}\,\sigma_\text{air}}.
-
+        \text{SNR} =
+        \frac{\mu_F}{\sqrt{\frac{2}{4-\pi}}\,\sigma_\text{air}}.
 
     :param float mu_fg: mean of foreground.
-    :param float sigma_air: standard deviation of the air surrounding the head ("hat" mask).
+    :param float sigma_air: standard deviation of the air surrounding
+                            the head ("hat" mask).
 
     :return: the computed SNR for the foreground segmentation
 
@@ -3169,10 +3187,11 @@ def summary_stats(img, pvms, airmask=None, erode=True):
 
 def volume_fraction(pvms):
     r"""
-    Computes the :abbr:`ICV (intracranial volume)` fractions
-    corresponding to the (partial volume maps).
+    Computes the :abbr:`ICV (intracranial volume)` fractions corresponding to
+    the (partial volume maps).
     .. math ::
-        \text{ICV}^k = \frac{\sum_i p^k_i}{\sum\limits_{x \in X_\text{brain}} 1}
+        \text{ICV}^k =
+        \frac{\sum_i p^k_i}{\sum\limits_{x \in X_\text{brain}} 1}
     :param list pvms: list of :code:`numpy.ndarray` of partial volume maps.
     """
     tissue_vfs = {}

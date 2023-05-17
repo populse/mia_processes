@@ -684,9 +684,10 @@ class Binarize(ProcessMIA):
                         if (self.prefix) and (
                             fileOval_no_ext.startswith(self.prefix)
                         ):
-                            fileOval_no_ext = fileOval_no_ext[
-                                len(self.prefix) :
-                            ]
+                            # fmt: off
+                            fileOval_no_ext = fileOval_no_ext[len(
+                                                              self.prefix):]
+                            # fmt: on
 
                         if (self.suffix) and (
                             fileOval_no_ext.endswith(self.suffix)
@@ -1384,10 +1385,10 @@ class Enhance(ProcessMIA):
                         if (self.prefix) and (
                             fileOval_no_ext.startswith(self.prefix)
                         ):
-                            fileOval_no_ext = fileOval_no_ext[
-                                len(self.prefix) :
-                            ]
-
+                            # fmt: off
+                            fileOval_no_ext = fileOval_no_ext[len(
+                                                              self.prefix):]
+                            # fmt: on
                         if (self.suffix) and (
                             fileOval_no_ext.endswith(self.suffix)
                         ):
@@ -2431,7 +2432,8 @@ class NonSteadyStateDetector(ProcessMIA):
     """
     * Detect non-steady-state at the beginning of a bold 4D image.
 
-    Please, see the complete documentation for the `NonSteadyStateDetector' brick in the populse.mia_processes website
+    Please, see the complete documentation for the
+    `NonSteadyStateDetector` brick in the populse.mia_processes website
     https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/NonSteadyStateDetector.html
 
     adapted from:
@@ -2525,7 +2527,8 @@ class Resample_1(ProcessMIA):
     """
     *Resamples an image to the resolution of a reference image.
 
-    Please, see the complete documentation for the `Resample_1 brick in the populse.mia_processes website
+    Please, see the complete documentation for the
+    `Resample_1` brick in the populse.mia_processes website
     https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/Resample_1.html
 
     """
@@ -2781,10 +2784,12 @@ class Resample_1(ProcessMIA):
                 path, file_name = os.path.split(file_name)
                 file_name_no_ext, file_extension = os.path.splitext(file_name)
 
+                # fmt: off
                 if (self.suffix_to_delete != " ") and (
-                    file_name_no_ext[-len(self.suffix_to_delete) :]
+                    file_name_no_ext[-len(self.suffix_to_delete):]
                     == self.suffix_to_delete
                 ):
+                    # fmt: on
                     file_name_no_ext = file_name_no_ext[
                         : -len(self.suffix_to_delete)
                     ]
@@ -2872,41 +2877,46 @@ class Resample_1(ProcessMIA):
                         _, fileOval = os.path.split(out_val)
                         fileOval_no_ext, _ = os.path.splitext(fileOval)
 
+                        # fmt: off
                         if (self.suffix != " ") and (
-                            fileOval_no_ext[-len(self.suffix) :] == self.suffix
+                                fileOval_no_ext[-len(
+                                                self.suffix):] == self.suffix
                         ):
-                            fileOval_no_ext = fileOval_no_ext[
-                                : -len(self.suffix)
-                            ]
+                            fileOval_no_ext = fileOval_no_ext[:-len(
+                                self.suffix)]
 
                         if (self.prefix != " ") and (
-                            fileOval_no_ext[0 : len(self.prefix)]
-                            == self.prefix
+                                fileOval_no_ext[0:len(
+                                    self.prefix)] == self.prefix
                         ):
-                            fileOval_no_ext = fileOval_no_ext[
-                                len(self.prefix) :
-                            ]
-
+                            fileOval_no_ext = fileOval_no_ext[len(
+                                self.prefix):]
+                        # fmt: on
                         _, fileIval = os.path.split(in_val)
                         fileIval_no_ext, _ = os.path.splitext(fileIval)
 
+                        # fmt: off
                         if (self.suffix_to_delete != " ") and (
-                            fileIval_no_ext[-len(self.suffix_to_delete) :]
+                            fileIval_no_ext[-len(self.suffix_to_delete):]
                             == self.suffix_to_delete
                         ):
+                            # fmt: on
                             fileOval_no_ext = (
                                 fileOval_no_ext + self.suffix_to_delete
                             )
 
                         if fileOval_no_ext == fileIval_no_ext:
                             self.inheritance_dict[out_val] = in_val
-                            # FIXME: In the latest version of mia, indexing of the database with
-                            #        particular tags defined in the processes is done only at
-                            #        the end of the initialisation of the whole pipeline. So we
-                            #        cannot use the value of these tags in other processes of
-                            #        the pipeline at the time of initialisation
-                            #        (see populse_mia #290). Until better we use a quick and
-                            #        dirty hack with the set_dbFieldValue() method !
+                            # FIXME: In the latest version of mia, indexing of
+                            #        the database with particular tags defined
+                            #        in the processes is done only at the end
+                            #        of the initialisation of the whole
+                            #        pipeline. So we cannot use the value of
+                            #        these tags in other processes of the
+                            #        pipeline at the time of initialisation
+                            #        (see populse_mia #290). Until better we
+                            #        use a quick and dirty hack with the
+                            #        set_dbFieldValue() function !
                             tag_to_add = dict()
                             tag_to_add["name"] = "PatientName"
                             tag_to_add["field_type"] = "string"
@@ -2951,7 +2961,8 @@ class Resample_1(ProcessMIA):
         #   itself.
         #
         # nibabel.processing.resample_from_to (seems to be a good solution, but
-        # can give non-zero intensity for the background -> needs thresolding ?)
+        # can give non-zero intensity for the background -> needs
+        # thresolding ?)
         #
         # nilearn.image.resample_to_img (seems to be a good solution, no
         # non-zero intensity for the background observed)
@@ -3052,10 +3063,12 @@ class Resample_1(ProcessMIA):
             path, file_name = os.path.split(file_name)
             file_name_no_ext, file_extension = os.path.splitext(file_name)
 
+            # fmt: off
             if (self.suffix_to_delete != " ") and (
-                file_name_no_ext[-len(self.suffix_to_delete) :]
+                file_name_no_ext[-len(self.suffix_to_delete):]
                 == self.suffix_to_delete
             ):
+                # fmt: on
                 file_name_no_ext = file_name_no_ext[
                     : -len(self.suffix_to_delete)
                 ]
@@ -3260,7 +3273,8 @@ class RotationMask(ProcessMIA):
     """
     * Compute the rotation mask image.
 
-    Please, see the complete documentation for the `RotationMask' brick in the populse.mia_processes website
+    Please, see the complete documentation for the
+    `RotationMask` brick in the populse.mia_processes website
     https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/RotationMask.html
 
     adapted from:
@@ -3489,7 +3503,8 @@ class Sanitize(ProcessMIA):
     """
     * Sanitize input bold image.
 
-    Please, see the complete documentation for the `Sanitize' brick in the populse.mia_processes website
+    Please, see the complete documentation for the
+    `Sanitize` brick in the populse.mia_processes website
     https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/Sanitize.html
 
     adapted from:
@@ -3695,7 +3710,8 @@ class Sanitize(ProcessMIA):
 
             save_file = False
 
-            # Both match, qform valid (implicit with match), codes okay -> do nothing, empty report
+            # Both match, qform valid (implicit with match), codes OK
+            # -> do nothing, empty report
             if matching_affines and qform_code > 0 and sform_code > 0:
                 save_file = True
 
@@ -3720,11 +3736,11 @@ class Sanitize(ProcessMIA):
 
                 if not valid_qform and qform_code > 0:
                     print(
-                        "\nWARNING - Invalid qform information."
-                        "\nThe qform matrix found in the file header is invalid."
-                        "The qform has been copied from sform."
-                        "Checking the original qform information from the data produced"
-                        "by the scanner is advised."
+                        "\nWARNING - Invalid qform information.\nThe qform "
+                        "matrix found in the file header is invalid. The qform"
+                        " has been copied from sform. Checking the original "
+                        "qform information from the data produced by the "
+                        "scanner is advised."
                     )
 
             # Rows 5-6:
@@ -3735,9 +3751,10 @@ class Sanitize(ProcessMIA):
                 save_file = True
                 print(
                     "\nWARNING - Missing orientation information."
-                    "\nOrientation information could not be retrieved from the image header."
-                    "The qform and sform matrices have been set to a default, LAS-oriented affine."
-                    "Analyses of this dataset MAY BE INVALID."
+                    "\nOrientation information could not be retrieved from "
+                    "the image header. The qform and sform matrices have been "
+                    "set to a default, LAS-oriented affine. Analyses of this "
+                    "dataset MAY BE INVALID."
                 )
 
             if (
@@ -3752,11 +3769,13 @@ class Sanitize(ProcessMIA):
                 else:
                     in_data = img.dataobj
 
+                # fmt: off
                 img = nib.Nifti1Image(
-                    in_data[:, :, :, self.n_volumes_to_discard :],
+                    in_data[:, :, :, self.n_volumes_to_discard:],
                     img.affine,
                     img.header,
                 )
+                # fmt: on
                 save_file = True
 
             if len(img.header.extensions) != 0:
@@ -3792,8 +3811,8 @@ class TemplateFromTemplateFlow(ProcessMIA):
     """
     * Get template image from templateflow.
 
-    Please, see the complete documentation for the `TemplateFromTemplateFlow' brick
-    in the populse.mia_processes website
+    Please, see the complete documentation for the
+    `TemplateFromTemplateFlow` brick in the populse.mia_processes website
     https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/TemplateFromTemplateFlow.html
 
     """
@@ -3911,19 +3930,18 @@ class TemplateFromTemplateFlow(ProcessMIA):
         tpl_target_path = get_template(self.in_template, **template_spec)
         if not tpl_target_path:
             print(
-                """\nCould not find template "{0}" with specs={1}. Please revise "
-                          "your template argument.""",
-                self.in_template,
-                template_spec,
+                "\nCould not find template '{0}' with specs={1}. Please "
+                "revise your template argument.".format(
+                    self.in_template, template_spec
+                )
             )
             return
 
         if isinstance(tpl_target_path, list):
             print(
-                """\nThe available template modifiers ({0}) did not select a unique "
-                          "template (got "{1}"). Please revise your template argument.""",
-                self.in_template,
-                template_spec,
+                "\nThe available template modifiers ({0}) did not select a "
+                "unique template (got '{1}'). Please revise your template "
+                "argument.".format(self.in_template, template_spec)
             )
             return
 
@@ -3941,7 +3959,8 @@ class Threshold(ProcessMIA):
     """
     * Image thresholding.
 
-    Please, see the complete documentation for the `Threshold` brick in the populse.mia_processes website
+    Please, see the complete documentation for the
+    `Threshold` brick in the populse.mia_processes website
     https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/Threshold.html
 
     """
@@ -4182,9 +4201,10 @@ class Threshold(ProcessMIA):
                         if (self.prefix) and (
                             fileOval_no_ext.startswith(self.prefix)
                         ):
+                            # fmt: off
                             fileOval_no_ext = fileOval_no_ext[
-                                len(self.prefix) :
-                            ]
+                                len(self.prefix):]
+                            # fmt: on
 
                         if (self.suffix) and (
                             fileOval_no_ext.endswith(self.suffix)
@@ -4195,13 +4215,16 @@ class Threshold(ProcessMIA):
 
                         if fileOval_no_ext == fileIval_no_ext:
                             self.inheritance_dict[out_val] = in_val
-                            # FIXME: In the latest version of mia, indexing of the database with
-                            #        particular tags defined in the processes is done only at
-                            #        the end of the initialisation of the whole pipeline. So we
-                            #        cannot use the value of these tags in other processes of
-                            #        the pipeline at the time of initialisation
-                            #        (see populse_mia #290). Until better we use a quick and
-                            #        dirty hack with the set_dbFieldValue() method !
+                            # FIXME: In the latest version of mia, indexing of
+                            #        the database with particular tags defined
+                            #        in the processes is done only at the end
+                            #        of the initialisation of the whole
+                            #        pipeline. So we cannot use the value of
+                            #        these tags in other processes of the
+                            #        pipeline at the time of initialisation
+                            #        (see populse_mia #290). Until better we
+                            #        use a quick and dirty hack with the
+                            #        set_dbFieldValue() function !
                             tag_to_add = dict()
                             tag_to_add["name"] = "PatientName"
                             tag_to_add["field_type"] = "string"
@@ -4264,7 +4287,8 @@ class TSNR(ProcessMIA):
     """
     * Computes the time-course SNR for a time series.
 
-    Please, see the complete documentation for the `TSNR' brick in the populse.mia_processes website
+    Please, see the complete documentation for the
+    `TSNR' brick in the populse.mia_processes website
     https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/TSNR.html
 
     adapted from:
@@ -4611,10 +4635,11 @@ def is_outlier(points, thresh=3.5):
     """
     Returns a boolean array with True if points are outliers and False
     otherwise.
-    :param nparray points: an numobservations by numdimensions numpy array of observations
-    :param float thresh: the modified z-score to use as a threshold. Observations with
-        a modified z-score (based on the median absolute deviation) greater
-        than this value will be classified as outliers.
+    :param nparray points: an numobservations by numdimensions numpy array
+        of observations
+    :param float thresh: the modified z-score to use as a threshold.
+        Observations with a modified z-score (based on the median absolute
+        deviation) greater than this value will be classified as outliers.
     :return: A bolean mask, of size numobservations-length array.
     .. note:: References
         Boris Iglewicz and David Hoaglin (1993), "Volume 16: How to Detect and

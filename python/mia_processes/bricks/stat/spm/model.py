@@ -182,7 +182,11 @@ class EstimateContrast(ProcessMIA):
         )
 
         # self.add_trait("multi_reg", traits.List(output=False, optional=True))
-        # self.add_trait("contrasts", traits.List([('+', 'T', ['R1_1'], [1])], output=False, optional=True))
+        # self.add_trait("contrasts",
+        #                traits.List([('+', 'T', ['R1_1'], [1])],
+        #                output=False,
+        #                optional=True))
+
         self.add_trait(
             "beta_images", InputMultiPath(File(), output=False, copyfile=False)
         )
@@ -318,12 +322,14 @@ class EstimateContrast(ProcessMIA):
             and (self.spm_mat_file not in ["<undefined>", Undefined])
             and self.multi_reg not in [Undefined, "<undefined>", []]
         ):
-            # The management of self.process.output_directory could be delegated
-            # to the populse_mia.user_interface.pipeline_manager.process_mia
+            # The management of self.process.output_directory could be
+            # delegated to the
+            # populse_mia.user_interface.pipeline_manager.process_mia
             # module. We can't do it at the moment because the
-            # sync_process_output_traits() of the capsul/process/nipype_process
-            # module raises an exception in nipype if the mandatory parameters
-            # are not yet defined!
+            # sync_process_output_traits() of the
+            # capsul/process/nipype_process module raises an exception
+            # in nipype if the mandatory parameter are not yet defined!
+
             if self.output_directory:
                 self.process.output_directory = self.output_directory
 
@@ -358,8 +364,10 @@ class EstimateContrast(ProcessMIA):
                         self.output_directory, "con_{:04d}.nii".format(i)
                     )
                 )
-                # spmT_files.append(os.path.join(path, 'spmT_{:04d}.nii'.format(i)))
-                # con_files.append(os.path.join(path, 'con_{:04d}.nii'.format(i)))
+                # spmT_files.append(os.path.join(path,
+                #                                'spmT_{:04d}.nii'.format(i)))
+                # con_files.append(os.path.join(path,
+                #                               'con_{:04d}.nii'.format(i)))
 
             if spmT_files:
                 self.outputs["spmT_images"] = spmT_files
@@ -371,21 +379,25 @@ class EstimateContrast(ProcessMIA):
             ] = self.spm_mat_file
 
             if spmT_files:
-                # FIXME: Quick and dirty. This brick was written quickly and will
-                #        need to be reworked to cover all cases. At that time,
-                #        inheritance will also need to be reviewed. Currently we
-                #        take the first element of the lists, but in the general
-                #        case there can be several elements in the lists
+                # FIXME: Quick and dirty. This brick was written quickly and
+                #        will need to be reworked to cover all cases. At that
+                #        time, inheritance will also need to be reviewed.
+                #        Currently we take the first element of the lists, but
+                #        in the general case there can be several elements in
+                #        the lists
                 self.inheritance_dict[
                     self.outputs["spmT_images"][0]
                 ] = self.spm_mat_file
-                # FIXME: In the latest version of mia, indexing of the database with
-                #        particular tags defined in the processes is done only at
-                #        the end of the initialisation of the whole pipeline. So we
-                #        cannot use the value of these tags in other processes of
-                #        the pipeline at the time of initialisation
-                #        (see populse_mia #290). Until better we use a quick and
-                #        dirty hack with the set_dbFieldValue() method !
+                # FIXME: In the latest version of mia, indexing of the
+                #        database with particular tags defined in the
+                #        processes is done only at the end of the
+                #        initialisation of the whole pipeline. So we
+                #        cannot use the value of these tags in other
+                #        processes of the pipeline at the time of
+                #        initialisation (see populse_mia #290). Unti
+                #        better we use a quick and dirty hack with the
+                #        set_dbFieldValue() function !
+
                 tag_to_add = dict()
                 tag_to_add["name"] = "PatientName"
                 tag_to_add["field_type"] = "string"
@@ -478,60 +490,98 @@ class EstimateContrast(ProcessMIA):
 
 class EstimateModel(ProcessMIA):
     """
-     - EstimateModel (User_processes.stats.spm.stats.EstimateModel) <=> Model estimation (SPM12 name).
-    *** Estimation of model parameters using classical (ReML - Restricted Maximum Likelihood) or Bayesian algorithms.***
+     - EstimateModel (User_processes.stats.spm.stats.EstimateModel) <=>
+       Model estimation (SPM12 name).
+    *** Estimation of model parameters using classical (ReML - Restricted
+        Maximum Likelihood) or Bayesian algorithms.***
         * Input parameters:
-            # spm_mat_file <=> spmmat: The SPM.mat file that contains the design specification (a file object).
-                <ex. /home/ArthurBlair/data/raw_data/SPM.mat>
-            # estimation_method <=> method: Estimation  procedures for fMRI models (A dictionary with keys which are ‘Classical’ or ‘Bayesian’ or ‘Bayesian2’ and with values which are 1).
-                                            - Classical: Restricted Maximum Likelihood (ReML) estimation of first or second level models
-                                            - Bayesian: Bayesian estimation of first level models (not yet fully implemented)
-                                            - Bayesian2: Bayesian estimation of second level models (not yet fully implemented)
-                 <ex. {'Classical': 1}>
-            # write_residuals <=> write_residuals: Write images of residuals to disk. This is only implemented for classical inference (a boolean)
-                 <ex. True>
-            # flags: Additional arguments (a dictionary with keys which are any value and with values which are any value)
-                 <ex. {}>
-            # version: Version of spm (a string)
-                 <ex. spm12>
-            # tot_reg_num: The total number of estimated regression coefficients (an integer).
-                 <ex. 8>
+            # spm_mat_file <=> spmmat:
+              The SPM.mat file that contains the design specification
+              (a file object).
+                  <ex. /home/ArthurBlair/data/raw_data/SPM.mat>
+            # estimation_method <=> method:
+              Estimation  procedures for fMRI models (A dictionary with keys
+              which are ‘Classical’ or ‘Bayesian’ or ‘Bayesian2’ and with
+              values which are 1).
+                 - Classical: Restricted Maximum Likelihood (ReML) estimation
+                              of first or second level models
+                 - Bayesian: Bayesian estimation of first level models
+                             (not yet fully implemented)
+                 - Bayesian2: Bayesian estimation of second level models
+                              (not yet fully implemented)
+                  <ex. {'Classical': 1}>
+            # write_residuals <=> write_residuals:
+              Write images of residuals to disk. This is only implemented for
+              classical inference (a boolean)
+                  <ex. True>
+            # flags:
+              Additional arguments (a dictionary with keys which are any value
+              and with values which are any value)
+                  <ex. {}>
+            # version:
+              Version of spm (a string)
+                  <ex. spm12>
+            # tot_reg_num:
+              The total number of estimated regression coefficients
+              (an integer).
+                  <ex. 8>
         * Output parameters:
-            # out_spm_mat_file: The SPM.mat file containing specification of the design and estimated model parameters (a pathlike object or string representing an existing file).
-                 <ex. /home/ArthurBlair/data/raw_data/SPM.mat>
-            # beta_images: Images of estimated regression coefficients beta_000k.img where k indexes the kth regression coefficient (a list of items which are a pathlike object or string representing an existing file).
-                 <ex. ['/home/ArthurBlair/data/raw_data/beta_0001.nii',
-                       '/home/ArthurBlair/data/raw_data/beta_0002.nii',
-                       '/home/ArthurBlair/data/raw_data/beta_0003.nii',
-                       '/home/ArthurBlair/data/raw_data/beta_0004.nii',
-                       '/home/ArthurBlair/data/raw_data/beta_0005.nii',
-                       '/home/ArthurBlair/data/raw_data/beta_0006.nii',
-                       '/home/ArthurBlair/data/raw_data/beta_0007.nii',
-                       '/home/ArthurBlair/data/raw_data/beta_0008.nii']>
-            # mask_image: The mask.img image indicating which voxels were included in the analysis (a pathlike object or string representing an existing file).
-                 <ex. /home/ArthurBlair/data/raw_data/mask.nii>
-            # residual_image: The ResMS.img image of the variance of the error (a pathlike object or string representing an existing file).
-                 <ex. /home/ArthurBlair/data/raw_data/ResMS.nii >
-            # residual_images: The individual error Res_000k.img images (a list of items which are a pathlike object or string representing an existing file) where k indexes the kth dynamic (fourth dimensional points of the fuctional). These images are generated only if write_residuals is True.
-                 <ex. ['/home/ArthurBlair/data/raw_data/Res_0001.nii',
-                       '/home/ArthurBlair/data/raw_data/Res_0002.nii',
-                       '/home/ArthurBlair/data/raw_data/Res_0003.nii',
+            # out_spm_mat_file:
+              The SPM.mat file containing specification of the design and
+              estimated model parameters (a pathlike object or string
+              representing an existing file).
+                  <ex. /home/ArthurBlair/data/raw_data/SPM.mat>
+            # beta_images:
+              Images of estimated regression coefficients beta_000k.img where
+              k indexes the kth regression coefficient (a list of items which
+              are a pathlike object or string representing an existing file).
+                  <ex. ['/home/ArthurBlair/data/raw_data/beta_0001.nii',
+                        '/home/ArthurBlair/data/raw_data/beta_0002.nii',
+                        '/home/ArthurBlair/data/raw_data/beta_0003.nii',
+                        '/home/ArthurBlair/data/raw_data/beta_0004.nii',
+                        '/home/ArthurBlair/data/raw_data/beta_0005.nii',
+                        '/home/ArthurBlair/data/raw_data/beta_0006.nii',
+                        '/home/ArthurBlair/data/raw_data/beta_0007.nii',
+                        '/home/ArthurBlair/data/raw_data/beta_0008.nii']>
+            # mask_image:
+              The mask.img image indicating which voxels were included in the
+              analysis (a pathlike object or string representing an
+              existing file).
+                  <ex. /home/ArthurBlair/data/raw_data/mask.nii>
+            # residual_image:
+              The ResMS.img image of the variance of the error (a pathlike
+              object or string representing an existing file).
+                  <ex. /home/ArthurBlair/data/raw_data/ResMS.nii >
+            # residual_images:
+              The individual error Res_000k.img images (a list of items which
+              are a pathlike object or string representing an existing file)
+              where k indexes the kth dynamic (fourth dimensional points of
+              the fuctional). These images are generated only if
+              write_residuals is True.
+                  <ex. ['/home/ArthurBlair/data/raw_data/Res_0001.nii',
+                        '/home/ArthurBlair/data/raw_data/Res_0002.nii',
+                        '/home/ArthurBlair/data/raw_data/Res_0003.nii',
                         ...,
-                       '/home/ArthurBlair/data/raw_data/Res_0238.nii',
-                       '/home/ArthurBlair/data/raw_data/Res_0239.nii',
-                       '/home/ArthurBlair/data/raw_data/Res_0240.nii']>
-            # RPVimage: The RPV.img image of the estimated resolution elements per voxel (a pathlike object or string representing an existing file).
-                 <ex. /home/ArthurBlair/data/raw_data/RPV.nii>
+                        '/home/ArthurBlair/data/raw_data/Res_0238.nii',
+                        '/home/ArthurBlair/data/raw_data/Res_0239.nii',
+                        '/home/ArthurBlair/data/raw_data/Res_0240.nii']>
+            # RPVimage:
+              The RPV.img image of the estimated resolution elements per voxel
+              (a pathlike object or string representing an existing file).
+                  <ex. /home/ArthurBlair/data/raw_data/RPV.nii>
             # labels:
-                 <ex. >
+                  <ex. >
             # SDerror:
-                 <ex. >
-            # ARcoef: Images of the autoregressive (AR) coefficient (a list of items which are a pathlike object or string representing an existing file).
-                 <ex. >
+                  <ex. >
+            # ARcoef:
+              Images of the autoregressive (AR) coefficient (a list of items
+              which are a pathlike object or string representing an
+              existing file).
+                  <ex. >
             # Cbetas:
-                 <ex. >
+                  <ex. >
             # SDbetas:
-                 <ex. >
+                  <ex. >
 
     """
 
@@ -792,13 +842,14 @@ class EstimateModel(ProcessMIA):
             and (self.estimation_method not in ["<undefined>", Undefined])
         ):
             im_form = "nii" if "12" in self.version else "img"
-
-            # The management of self.process.output_directory could be delegated
-            # to the populse_mia.user_interface.pipeline_manager.process_mia
+            # The management of self.process.output_directory could be
+            # delegated to the
+            # populse_mia.user_interface.pipeline_manager.process_mia
             # module. We can't do it at the moment because the
-            # sync_process_output_traits() of the capsul/process/nipype_process
-            # module raises an exception in nipype if the mandatory parameters
-            # are not yet defined!
+            # sync_process_output_traits() of the
+            # capsul/process/nipype_process module raises an exception
+            # in nipype if the mandatory parameter are not yet defined!
+
             if self.output_directory:
                 self.process.output_directory = self.output_directory
 
@@ -817,29 +868,29 @@ class EstimateModel(ProcessMIA):
             try:
                 spm_matFile = scipy.io.loadmat(self.spm_mat_file)
                 nb_reg = spm_matFile['SPM'][0,0]['Sess'][0,0]['col'].shape[1]
-                print('\n EstimateModel brick: {} regressors found ...\n'.format(nb_reg))
+                print("\n EstimateModel brick: {} regressors "
+                      "found ...\n".format(nb_reg))
                 nb_reg += 1  # Adding the constant value
 
             except Exception as e:
-                print('\nEstimateModel brick exception; {0}: {1}\n'.format(e.__class__, e))
-            """
-            """
+                print("\nEstimateModel brick exception; "
+                      "{0}: {1}\n".format(e.__class__, e))
             if (  (not nb_reg) and (self.multi_reg) and
               (self.multi_reg not in ['<undefined>', Undefined])  ):
 
                 for reg_file in self.multi_reg:
                     # Those lines are false, we cannot read in all files in
                     # self.multi_reg because they are not created yet! (2)
-                    '''
+
                     if os.path.splitext(reg_file)[1] == '.txt':
 
                         with open(reg_file) as f:
                             first_line = f.readline()
                             print('FIRST LINE', first_line)
-                            nb_reg += len(first_line.split()) + 1  # Adding the constant value
+                            # Adding the constant value
+                            nb_reg += len(first_line.split()) + 1
 
                     # and for other reg_file?
-                    '''
 
                     # The current workaround to try to detect the number of
                     # beta files to be created!
@@ -847,12 +898,13 @@ class EstimateModel(ProcessMIA):
                     if os.path.basename(reg_file)[0:3] == 'rp_':
                         nb_reg += 6
 
-                    if os.path.basename(reg_file)[0:22] == 'regressor_physio_EtCO2':
+                    if (os.path.basename(reg_file)[0:22] ==
+                            'regressor_physio_EtCO2'):
                         nb_reg += 1
 
                 if nb_reg:
                     nb_reg += 1 # Adding the constant value
-                """
+            """
 
             if self.tot_reg_num in ["<undefined>", Undefined]:
                 tot_reg_numb = get_dbFieldValue(
@@ -966,14 +1018,16 @@ class EstimateModel(ProcessMIA):
 
                     for fullname in value:
                         self.inheritance_dict[fullname] = self.spm_mat_file
+                        # FIXME: In the latest version of mia, indexing of the
+                        #        database with particular tags defined in the
+                        #        processes is done only at the end of the
+                        #        initialisation of the whole pipeline. So we
+                        #        cannot use the value of these tags in other
+                        #        processes of the pipeline at the time of
+                        #        initialisation (see populse_mia #290). Unti
+                        #        better we use a quick and dirty hack with the
+                        #        set_dbFieldValue() function !
 
-                        # FIXME: In the latest version of mia, indexing of the database with
-                        #        particular tags defined in the processes is done only at
-                        #        the end of the initialisation of the whole pipeline. So we
-                        #        cannot use the value of these tags in other processes of
-                        #        the pipeline at the time of initialisation
-                        #        (see populse_mia #290). Until better we use a quick and
-                        #        dirty hack with the set_dbFieldValue() method !
                         if patient_name is not None:
                             tag_to_add = dict()
                             tag_to_add["name"] = "PatientName"
@@ -1068,7 +1122,8 @@ class EstimateModel(ProcessMIA):
 
         #        if value not in ["<undefined>", Undefined]:
 
-        #            if type(value) in [list, traits.TraitListObject, traits.List]:
+        #            if type(value) in [list, traits.TraitListObject,
+        #                               traits.List]:
 
         #                for element in value:
 
@@ -1103,7 +1158,7 @@ class Level1Design(ProcessMIA):
         # Initialisation of the objects needed for the launch of the brick
         super(Level1Design, self).__init__()
 
-        # Third party pieces of software required for the execution of the brick
+        # Third party softwares required for the execution of the brick
         self.requirement = ["spm", "nipype"]
 
         # Inputs description
@@ -1276,7 +1331,8 @@ class Level1Design(ProcessMIA):
             ),
         )
 
-        # In study without slice-timing correction, as cevastoc32, it should be 8?
+        # In study without slice-timing correction, as cevastoc32,
+        # it should be 8?
         self.add_trait(
             "microtime_onset",
             traits.Int(

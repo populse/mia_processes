@@ -326,10 +326,11 @@ class Filter_Files_List(ProcessMIA):
                 if self.index_filter[0] < self.index_filter[1]:
                     if self.index_filter[0] <= len(self.in_list):
                         if self.index_filter[1] <= len(self.in_list):
+                            # fmt: off
                             self.outputs["filtered_list"] = self.in_list[
-                                self.index_filter[0] - 1 : self.index_filter[1]
+                                self.index_filter[0] - 1:self.index_filter[1]
                             ]
-
+                            # fmt: on
                         else:
                             print(
                                 "\nThe initialisation of the "

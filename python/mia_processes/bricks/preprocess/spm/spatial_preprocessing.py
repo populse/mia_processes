@@ -74,7 +74,8 @@ class Coregister(ProcessMIA):
     """
     *Align together scans of different modalities*
 
-    Please, see the complete documention for the `Coregister brick in the populse.mia_processes web site
+    Please, see the complete documention for the
+    `Coregister brick in the populse.mia_processes web site
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/spm/Coregister.html>`_
 
     """
@@ -352,12 +353,13 @@ class Coregister(ProcessMIA):
             if self.out_prefix:
                 self.process.out_prefix = self.out_prefix
 
-            # The management of self.process.output_directory could be delegated
-            # to the populse_mia.user_interface.pipeline_manager.process_mia
+            # The management of self.process.output_directory could be
+            # delegated to the
+            # populse_mia.user_interface.pipeline_manager.process_mia
             # module. We can't do it at the moment because the
-            # sync_process_output_traits() of the capsul/process/nipype_process
-            # module raises an exception in nipype if the mandatory parameters
-            # are not yet defined!
+            # sync_process_output_traits() of the
+            # capsul/process/nipype_process module raises an exception
+            # in nipype if the mandatory parameters are not yet defined!
             if self.output_directory:
                 self.process.output_directory = self.output_directory
 
@@ -386,12 +388,15 @@ class Coregister(ProcessMIA):
 
                         if not self.jobtype == "estimate":
                             if self.out_prefix:
-                                fileOvalNoPref = fileOval[
-                                    len(self.out_prefix) :
-                                ]
+                                # fmt: off
+                                fileOvalNoPref = fileOval[len(
+                                                          self.out_prefix):]
+                                # fmt: on
 
                             else:
-                                fileOvalNoPref = fileOval[len("r") :]
+                                # fmt: off
+                                fileOvalNoPref = fileOval[len("r"):]
+                                # fmt: on
 
                         else:
                             fileOvalNoPref = fileOval
@@ -418,12 +423,15 @@ class Coregister(ProcessMIA):
 
                         if not self.jobtype == "estimate":
                             if self.out_prefix:
+                                # fmt: off
                                 fileOvalNoPref = fileOval[
-                                    len(self.out_prefix) :
-                                ]
+                                    len(self.out_prefix):]
+                                # fmt: on
 
                             else:
-                                fileOvalNoPref = fileOval[len("r") :]
+                                # fmt: off
+                                fileOvalNoPref = fileOval[len("r"):]
+                                # fmt: on
 
                         else:
                             fileOvalNoPref = fileOval
@@ -449,13 +457,15 @@ class Coregister(ProcessMIA):
                 if not isinstance(out_coregfiles, list):
                     out_coregfiles = [out_coregfiles]
 
-                # FIXME: In the latest version of mia, indexing of the database with
-                #        particular tags defined in the processes is done only at
-                #        the end of the initialisation of the whole pipeline. So we
-                #        cannot use the value of these tags in other processes of
-                #        the pipeline at the time of initialisation
-                #        (see populse_mia #290). Until better we use a quick and
-                #        dirty hack with the set_dbFieldValue() method !
+                # FIXME: In the latest version of mia, indexing of the
+                #        database with particular tags defined in the
+                #        processes is done only at the end of the
+                #        initialisation of the whole pipeline. So we
+                #        cannot use the value of these tags in other
+                #        processes of the pipeline at the time of
+                #        initialisation (see populse_mia #290). Until
+                #        better we use a quick and dirty hack with the
+                #        set_dbFieldValue() function !
                 for in_val, out_val in zip(
                     self.apply_to_files, out_coregfiles
                 ):
@@ -604,7 +614,8 @@ class GM_WM_Normalize(ProcessMIA):
     """
     *Normalisation of the grey and/or white matter map(s)*
 
-    Please, see the complete documention for the `GM_WM_Normalize brick in the populse.mia_processes web site
+    Please, see the complete documention for the
+    `GM_WM_Normalize brick in the populse.mia_processes web site
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/spm/GM_WM_Normalize.html>`_
 
     """
@@ -905,12 +916,13 @@ class GM_WM_Normalize(ProcessMIA):
         if self.process.apply_to_files != Undefined and self.deformation_file:
             self.process.deformation_file = self.deformation_file
 
-            # The management of self.process.output_directory could be delegated
-            # to the populse_mia.user_interface.pipeline_manager.process_mia
+            # The management of self.process.output_directory could be
+            # delegated to the
+            # populse_mia.user_interface.pipeline_manager.process_mia
             # module. We can't do it at the moment because the
-            # sync_process_output_traits() of the capsul/process/nipype_process
-            # module raises an exception in nipype if the mandatory parameters
-            # are not yet defined!
+            # sync_process_output_traits() of the
+            # capsul/process/nipype_process module raises an exception
+            # in nipype if the mandatory parameters are not yet defined!
             if self.output_directory:
                 self.process.output_directory = self.output_directory
 
@@ -924,13 +936,15 @@ class GM_WM_Normalize(ProcessMIA):
                 if key == "normalized_files":
                     if self.in_filter == "GM + WM":
                         self.inheritance_dict[val] = self.apply_to_files[0]
-                        # FIXME: In the latest version of mia, indexing of the database with
-                        #        particular tags defined in the processes is done only at
-                        #        the end of the initialisation of the whole pipeline. So we
-                        #        cannot use the value of these tags in other processes of
-                        #        the pipeline at the time of initialisation
-                        #        (see populse_mia #290). Until better we use a quick and
-                        #        dirty hack with the set_dbFieldValue() method !
+                        # FIXME: In the latest version of mia, indexing of the
+                        #        database with particular tags defined in the
+                        #        processes is done only at the end of the
+                        #        initialisation of the whole pipeline. So we
+                        #        cannot use the value of these tags in other
+                        #        processes of the pipeline at the time of
+                        #        initialisation (see populse_mia #290). Until
+                        #        better we use a quick and dirty hack with the
+                        #        set_dbFieldValue() function !
                         tag_to_add = dict()
                         tag_to_add["name"] = "PatientName"
                         tag_to_add["field_type"] = "string"
@@ -970,13 +984,17 @@ class GM_WM_Normalize(ProcessMIA):
 
                             if fileOvalNoPref == fileIval:
                                 self.inheritance_dict[out_val] = in_val
-                                # FIXME: In the latest version of mia, indexing of the database with
-                                #        particular tags defined in the processes is done only at
-                                #        the end of the initialisation of the whole pipeline. So we
-                                #        cannot use the value of these tags in other processes of
-                                #        the pipeline at the time of initialisation
-                                #        (see populse_mia #290). Until better we use a quick and
-                                #        dirty hack with the set_dbFieldValue() method !
+                                # FIXME: In the latest version of mia, indexing
+                                #        of the database with particular tags
+                                #        defined in the processes is done only
+                                #        at the end of the initialisation of
+                                #        the whole pipeline. So we cannot use
+                                #        the value of these tags in other
+                                #        processes of the pipeline at the time
+                                #        of initialisation (see populse_mia
+                                #        #290). Until better we use a quick and
+                                #        dirty hack with the set_dbFieldValue()
+                                #        function !
                                 tag_to_add = dict()
                                 tag_to_add["name"] = "PatientName"
                                 tag_to_add["field_type"] = "string"
@@ -1018,18 +1036,20 @@ class GM_WM_Normalize(ProcessMIA):
         self.process.write_interp = self.write_interp
         self.process.trait("image_to_align").optional = True
 
-        # because the sync_process_output_traits() of the capsul/process/nipype_process
-        # module raises an exception in nipype if the mandatory parameters
-        # are not yet defined, the next line can't be write before!
+        # because the sync_process_output_traits() of the
+        # capsul/process/nipype_process module raises an exception in nipype
+        # if the mandatory parameters are not yet defined, the next line
+        # can't be write before!
         super(GM_WM_Normalize, self).run_process_mia()
         return self.process.run(configuration_dict={})
 
 
 class NewSegment(ProcessMIA):
     """
-    *Segmentation: Segments, bias corrects and spatially normalises - all in the same model*
+    *Segmentation: Segments, bias corrects and spatially normalises*
 
-    Please, see the complete documention for the `NewSegment brick in the populse.mia_processes web site
+    Please, see the complete documention for the
+    `NewSegment brick in the populse.mia_processes web site
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/spm/NewSegment.html>`_
 
     """
@@ -1390,12 +1410,13 @@ class NewSegment(ProcessMIA):
             ) = self.write_deformation_fields
             self.process.tissues = self.tissues
 
-            # The management of self.process.output_directory could be delegated
-            # to the populse_mia.user_interface.pipeline_manager.process_mia
+            # The management of self.process.output_directory could be
+            # delegated to the
+            # populse_mia.user_interface.pipeline_manager.process_mia
             # module. We can't do it at the moment because the
-            # sync_process_output_traits() of the capsul/process/nipype_process
-            # module raises an exception in nipype if the mandatory parameters
-            # are not yet defined!
+            # sync_process_output_traits() of the
+            # capsul/process/nipype_process module raises an exception
+            # in nipype if the mandatory parameters are not yet defined!
             if self.output_directory:
                 self.process.output_directory = self.output_directory
 
@@ -1435,13 +1456,17 @@ class NewSegment(ProcessMIA):
 
                             if fileOvalNoPref == fileIval:
                                 self.inheritance_dict[out_val] = in_val
-                                # FIXME: In the latest version of mia, indexing of the database with
-                                #        particular tags defined in the processes is done only at
-                                #        the end of the initialisation of the whole pipeline. So we
-                                #        cannot use the value of these tags in other processes of
-                                #        the pipeline at the time of initialisation
-                                #        (see populse_mia #290). Until better we use a quick and
-                                #        dirty hack with the set_dbFieldValue() method !
+                                # FIXME: In the latest version of mia, indexing
+                                #        of the database with particular tags
+                                #        defined in the processes is done only
+                                #        at the end of the initialisation of
+                                #        the whole pipeline. So we cannot use
+                                #        the value of these tags in other
+                                #        processes of the pipeline at the time
+                                #        of initialisation (see populse_mia
+                                #        #290). Until better we use a quick
+                                #        and dirty hack with the
+                                #        set_dbFieldValue() function !
                                 tag_to_add = dict()
                                 tag_to_add["name"] = "PatientName"
                                 tag_to_add["field_type"] = "string"
@@ -1461,10 +1486,11 @@ class NewSegment(ProcessMIA):
 
                                 else:
                                     print(
-                                        "\nNewSegment brick:\nThe 'PatientName'"
-                                        " tag could not be added to the "
-                                        "database for the '{}' parameter. This "
-                                        "can lead to a subsequent issue during "
+                                        "\nNewSegment brick:\nThe "
+                                        "'PatientName' tag could not be added "
+                                        "to the database for the '{}' "
+                                        "parameter. This can lead to a "
+                                        "subsequent issue during "
                                         "initialization!!\n".format(out_val)
                                     )
 
@@ -1498,9 +1524,10 @@ class NewSegment(ProcessMIA):
 
 class Normalize12(ProcessMIA):
     """
-    *Computes the warp that best aligns the template (atlas) to the individual’s image*
+    *Computes the warp that best aligns the template (atlas) to the image*
 
-    Please, see the complete documention for the `Normalize12 brick in the populse.mia_processes web site
+    Please, see the complete documention for the
+    `Normalize12 brick in the populse.mia_processes web site
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/spm/Normalize12.html>`_
 
     """
@@ -1798,7 +1825,8 @@ class Normalize12(ProcessMIA):
         #        self.add_trait(
         #            "normalized_image",
         #            OutputMultiPath(
-        #                File(), output=True, optional=True, desc=normalized_image_desc
+        #                File(), output=True,
+        #                optional=True, desc=normalized_image_desc
         #            ),
         #        )
 
@@ -1887,12 +1915,13 @@ class Normalize12(ProcessMIA):
                 self.deformation_file = Undefined
 
         if _flag:
-            # The management of self.process.output_directory could be delegated
-            # to the populse_mia.user_interface.pipeline_manager.process_mia
+            # The management of self.process.output_directory could be
+            # delegated to the
+            # populse_mia.user_interface.pipeline_manager.process_mia
             # module. We can't do it at the moment because the
-            # sync_process_output_traits() of the capsul/process/nipype_process
-            # module raises an exception in nipype if the mandatory parameters
-            # are not yet defined!
+            # sync_process_output_traits() of the
+            # capsul/process/nipype_process module raises an exception
+            # in nipype if the mandatory parameters are not yet defined!
             if self.output_directory:
                 self.process.output_directory = self.output_directory
 
@@ -1914,13 +1943,15 @@ class Normalize12(ProcessMIA):
                         val = [val]
 
                     for in_val, out_val in zip(self.apply_to_files, val):
-                        # FIXME: In the latest version of mia, indexing of the database with
-                        #        particular tags defined in the processes is done only at
-                        #        the end of the initialisation of the whole pipeline. So we
-                        #        cannot use the value of these tags in other processes of
-                        #        the pipeline at the time of initialisation
-                        #        (see populse_mia #290). Until better we use a quick and
-                        #        dirty hack with the set_dbFieldValue() method !
+                        # FIXME: In the latest version of mia, indexing of the
+                        #        database with particular tags defined in the
+                        #        processes is done only at the end of the
+                        #        initialisation of the whole pipeline. So we
+                        #        cannot use the value of these tags in other
+                        #        processes of the pipeline at the time of
+                        #        initialisation (see populse_mia #290). Until
+                        #        better we use a quick and dirty hack with the
+                        #        set_dbFieldValue() function !
                         tag_to_add = dict()
                         tag_to_add["name"] = "RepetitionTime"
                         tag_to_add["field_type"] = "float"
@@ -2000,8 +2031,8 @@ class Normalize12(ProcessMIA):
 
                         else:
                             print(
-                                "\nNormalize12:\nThe 'PatientName' tag could not "
-                                "be added to the database for the '{}' "
+                                "\nNormalize12:\nThe 'PatientName' tag could "
+                                "not be added to the database for the '{}' "
                                 "parameter. This can lead to a subsequent "
                                 "issue during "
                                 "initialization!!\n".format(out_val)
@@ -2098,9 +2129,10 @@ class Normalize12(ProcessMIA):
         self.process.write_voxel_sizes = self.write_voxel_sizes
         self.process.write_interp = self.write_interp
 
-        # because the sync_process_output_traits() of the capsul/process/nipype_process
-        # module raises an exception in nipype if the mandatory parameters
-        # are not yet defined, the next line can't be write before!
+        # because the sync_process_output_traits() of the
+        # capsul/process/nipype_process  module raises an exception in nipype
+        # if the mandatory parameters are not yet defined, the next line
+        # can't be write before!
         super(Normalize12, self).run_process_mia()
         return self.process.run(configuration_dict={})
 
@@ -2109,7 +2141,8 @@ class Realign(ProcessMIA):
     """
     *Realigns a time-series of images acquired from the same subject*
 
-    Please, see the complete documentation for the `Realign brick in the populse.mia_processes web site
+    Please, see the complete documentation for the
+    `Realign brick in the populse.mia_processes web site
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/spm/Realign.html>`_
 
     """
@@ -2446,12 +2479,13 @@ class Realign(ProcessMIA):
             if self.out_prefix:
                 self.process.out_prefix = self.out_prefix
 
-            # The management of self.process.output_directory could be delegated
-            # to the populse_mia.user_interface.pipeline_manager.process_mia
+            # The management of self.process.output_directory could be
+            # delegated to the
+            # populse_mia.user_interface.pipeline_manager.process_mia
             # module. We can't do it at the moment because the
-            # sync_process_output_traits() of the capsul/process/nipype_process
-            # module raises an exception in nipype if the mandatory parameters
-            # are not yet defined!
+            # sync_process_output_traits() of the
+            # capsul/process/nipype_process module raises an exception
+            # in nipype if the mandatory parameters are not yet defined!
             if self.output_directory:
                 self.process.output_directory = self.output_directory
 
@@ -2492,14 +2526,16 @@ class Realign(ProcessMIA):
 
                     self.outputs["realigned_files"].append(out_val)
                     self.inheritance_dict[out_val] = in_val
+                    # FIXME: In the latest version of mia, indexing of the
+                    #        database with particular tags defined in the
+                    #        processes is done only at the end of the
+                    #        initialisation of the whole pipeline. So we
+                    #        cannot use the value of these tags in other
+                    #        processes of the pipeline at the time of
+                    #        initialisation (see populse_mia #290). Until
+                    #        better we use a quick and dirty hack with the
+                    #        set_dbFieldValue() function !
 
-                    # FIXME: In the latest version of mia, indexing of the database with
-                    #        particular tags defined in the processes is done only at
-                    #        the end of the initialisation of the whole pipeline. So we
-                    #        cannot use the value of these tags in other processes of
-                    #        the pipeline at the time of initialisation
-                    #        (see populse_mia #290). Until better we use a quick and
-                    #        dirty hack with the set_dbFieldValue() method !
                     # Add RepetitionTime tag:
                     tag_to_add = dict()
                     tag_to_add["name"] = "RepetitionTime"
@@ -2691,7 +2727,8 @@ class SliceTiming(ProcessMIA):
     """
     *Temporal correction to get back every slice at the same acquisition time*
 
-    Please, see the complete documentation for the `SliceTiming brick in the populse.mia_processes web site
+    Please, see the complete documentation for the
+    `SliceTiming brick in the populse.mia_processes web site
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/spm/SliceTiming.html>`
 
     """
@@ -3162,13 +3199,14 @@ class SliceTiming(ProcessMIA):
             ):
                 if self.out_prefix:
                     self.process.out_prefix = self.out_prefix
-
-                # The management of self.process.output_directory could be delegated
-                # to the populse_mia.user_interface.pipeline_manager.process_mia
+                # The management of self.process.output_directory could be
+                # delegated to the
+                # populse_mia.user_interface.pipeline_manager.process_mia
                 # module. We can't do it at the moment because the
-                # sync_process_output_traits() of the capsul/process/nipype_process
-                # module raises an exception in nipype if the mandatory parameters
-                # are not yet defined!
+                # sync_process_output_traits() of the
+                # capsul/process/nipype_process module raises an exception
+                # in nipype if the mandatory parameters are not yet defined!
+
                 if self.output_directory:
                     self.process.output_directory = self.output_directory
 
@@ -3188,10 +3226,14 @@ class SliceTiming(ProcessMIA):
                         _, fileIval = os.path.split(in_val)
 
                         if self.out_prefix:
-                            fileOvalNoPref = fileOval[len(self.out_prefix) :]
+                            # fmt: off
+                            fileOvalNoPref = fileOval[len(self.out_prefix):]
+                            # fmt: on
 
                         else:
-                            fileOvalNoPref = fileOval[len("s") :]
+                            # fmt: off
+                            fileOvalNoPref = fileOval[len("s"):]
+                            # fmt: on
 
                         if fileOvalNoPref == fileIval:
                             self.inheritance_dict[out_val] = in_val
@@ -3226,7 +3268,8 @@ class Smooth(ProcessMIA):
     """
     *3D Gaussian smoothing of image volumes*
 
-    Please, see the complete documention for the `Smooth brick in the populse.mia_processes web site
+    Please, see the complete documention for the
+    `Smooth brick in the populse.mia_processes web site
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/spm/Smooth.html>`_
 
     """
@@ -3345,12 +3388,13 @@ class Smooth(ProcessMIA):
             if self.out_prefix:
                 self.process.out_prefix = self.out_prefix
 
-            # The management of self.process.output_directory could be delegated
-            # to the populse_mia.user_interface.pipeline_manager.process_mia
+            # The management of self.process.output_directory could be
+            # delegated to the
+            # populse_mia.user_interface.pipeline_manager.process_mia
             # module. We can't do it at the moment because the
-            # sync_process_output_traits() of the capsul/process/nipype_process
-            # module raises an exception in nipype if the mandatory parameters
-            # are not yet defined!
+            # sync_process_output_traits() of the
+            # capsul/process/nipype_process module raises an exception
+            # in nipype if the mandatory parameters are not yet defined!
             if self.output_directory:
                 self.process.output_directory = self.output_directory
 
@@ -3366,13 +3410,15 @@ class Smooth(ProcessMIA):
                         val = [val]
 
                     for in_val, out_val in zip(self.in_files, val):
-                        # FIXME: In the latest version of mia, indexing of the database with
-                        #        particular tags defined in the processes is done only at
-                        #        the end of the initialisation of the whole pipeline. So we
-                        #        cannot use the value of these tags in other processes of
-                        #        the pipeline at the time of initialisation
-                        #        (see populse_mia #290). Until better we use a quick and
-                        #        dirty hack with the set_dbFieldValue() method !
+                        # FIXME: In the latest version of mia, indexing of the
+                        #        database with particular tags defined in the
+                        #        processes is done only at the end of the
+                        #        initialisation of the whole pipeline. So we
+                        #        cannot use the value of these tags in other
+                        #        processes of the pipeline at the time of
+                        #        initialisation (see populse_mia #290). Until
+                        #        better we use a quick and dirty hack with the
+                        #        set_dbFieldValue() function !
                         tag_to_add = dict()
                         tag_to_add["name"] = "RepetitionTime"
                         tag_to_add["field_type"] = "float"
@@ -3493,10 +3539,14 @@ class Smooth(ProcessMIA):
                         _, fileIval = os.path.split(in_val)
 
                         if self.out_prefix:
-                            fileOvalNoPref = fileOval[len(self.out_prefix) :]
+                            # fmt: off
+                            fileOvalNoPref = fileOval[len(self.out_prefix):]
+                            # fmt: on
 
                         else:
-                            fileOvalNoPref = fileOval[len("s") :]
+                            # fmt: off
+                            fileOvalNoPref = fileOval[len("s"):]
+                            # fmt : on
 
                         if fileOvalNoPref == fileIval:
                             self.inheritance_dict[out_val] = in_val

@@ -546,10 +546,13 @@ def slice_planes_plot(
             )
 
     elif len(np.array(list(range(0, brain_data.shape[2])))) > disp_slices:
+        # fmt: off
         ind_slices = np.array(list(range(0, brain_data.shape[2])))[
-            inf_slice_start : inf_slice_start
-            + (slices_gap * disp_slices) : slices_gap
+            inf_slice_start:
+            inf_slice_start + (slices_gap * disp_slices):
+            slices_gap
         ]
+        # fmt: on
 
     else:
         ind_slices = np.array(list(range(0, brain_data.shape[2])))
