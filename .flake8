@@ -2,10 +2,6 @@
 ignore =
 #         is too complex
           C901,
-#         colons should not have any space before them
-	  E203,
-#	  line too long
-	  E501,
 #	  line break before binary operator
 	  W503
 exclude =
