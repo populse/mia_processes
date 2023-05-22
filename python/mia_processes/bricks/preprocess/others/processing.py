@@ -3205,11 +3205,25 @@ class Resample_2(ProcessMIA):
                         )
                     )
 
-                if os.path.isdir(tmp):
-                    shutil.rmtree(tmp)
+                    if os.path.isdir(tmp):
+                        shutil.rmtree(tmp)
+
+                if "convROI_BOLD" not in dirs:
+                    print(
+                        "\nResample_2 brick:\nNo {} folder detected ...\nThe "
+                        "initialization is "
+                        "aborted ...".format(
+                            os.path.join(roi_dir, "convROI_BOLD")
+                        )
+                    )
+                return self.make_initResult()
 
             else:
-                os.mkdir(roi_dir)
+                print(
+                    "\nResample_2 brick:\nNo {} folder detected ...\nThe "
+                    "initialization is aborted ...".format(roi_dir)
+                )
+                return self.make_initResult()
 
             # Creates roi_dir/'convROI_BOLD2' folder
             conv_dir = os.path.join(roi_dir, "convROI_BOLD2")

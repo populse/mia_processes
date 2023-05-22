@@ -1616,7 +1616,7 @@ class Mean_stdDev_calc(ProcessMIA):
       etc.
     - To work correctly, the database entry for the parametric_maps items must
       have the "PatientName" tag filled in
-    - To work correctly, the output_directory "/roi_"PatientName"/convROI_BOLD"
+    - To work correctly, the "/roi_"PatientName"/convROI_BOLD"
       must exist and contain a previous convolution results (normally using
       the ConvROI brick)
     """
