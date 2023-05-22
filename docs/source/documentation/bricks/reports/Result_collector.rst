@@ -10,14 +10,38 @@
 Result_collector brick
 ======================
 
+blablabla.
+----------
 
-/!/ Documentation in progress
 
 --------------------------------------
 
-**Mandatory inputs parameters:**
+**Inputs parameters:**
 
-TO DO
+- *parametric_maps* (a list of existing files)
+
+    ::
+
+      ex. ['/home/username/data/raw_data/spmT_0001.nii',
+           '/home/username/data/raw_data/beta_0001.nii']
+
+- *data" (a string)
+    Defines the data type.
+
+    ::
+      ex. 'BOLD'
+
+- *calculs* ((a list of strings)
+    Defines the type of calculation.
+
+    ::
+      ex. ["mean", "std", "IL_mean", "IL_std"]
+
+- *mean_in_files* (a list of files)
+    A list of .txt files containing the average "value of a parameter for a
+    given territory or region of interest.
+
+    ::
+      ex.
 
 **Outputs parameters:**
-TO DO
