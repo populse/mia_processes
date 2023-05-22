@@ -12,6 +12,7 @@ Resample_1 brick
 
 Resamples an image to the resolution of a reference image using nibabel.processing.resample_from_to().
 ------------------------------------------------------------------------------------------------------
+--------------------------------------
 
 **Mandatory inputs parameters:**
 

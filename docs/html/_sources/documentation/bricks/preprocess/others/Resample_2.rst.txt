@@ -17,8 +17,12 @@ Setting regions of interest to the resolution of the *reference_image* using ski
       doublet_list[0][0] + doublet_list[0][1] + '.nii',
       doublet_list[1][0] + doublet_list[1][1] + '.nii',
       etc.
-    - The "/roi\_/`PatientName`/convROI_BOLD2" directory is
-      created to receive the convolution results from the runtime.
+    - The "/roi\_ `PatientName`/convROI_BOLD2" directory is
+      created to receive the convolution results from the runtime (e.g.
+      "/roi\_ `PatientName`/convROI_BOLD2/conv"doublet_list[0][0] + doublet_list[0][1]+ "2.nii"
+    - To work correctly, the  ROIs must be in the  "/roi\_ `PatientName`/convROI_BOLD
+      directory (e.g.
+      "/roi\_ `PatientName`/convROI_BOLD/conv"doublet_list[0][0] + doublet_list[0][1]+ ".nii").
     - To work correctly, the database entry for the reference_image parameter
       must have the `PatientName` tag filled in.
 

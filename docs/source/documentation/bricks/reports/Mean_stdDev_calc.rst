@@ -10,21 +10,20 @@
 Mean_stdDev_calc brick
 ======================
 
-Makes the mean and standard deviation of the parametric_maps
+Makes the mean and standard deviation of the parametric_maps.
+-------------------------------------------------------------
 
-    - The parametric_maps are first convolved with the ROIs corresponding
-      to doublet_list.
-    - ROIs are defined from doublet_list parameter as
+    - The `parametric_maps` are first convolved with the ROIs corresponding
+      to `doublet_list`.
+    - ROIs are defined from `doublet_list` parameter as
       doublet_list[0][0] + doublet_list[0][1] + '.nii',
       doublet_list[1][0] + doublet_list[1][1] + '.nii',
       etc.
-    - To work correctly, the database entry for the parametric_maps items must
-      have the "PatientName" tag filled in
-    - To work correctly, the output_directory "/roi\_"PatientName"/convROI_BOLD"
-      must exist and contain a previous convolution results (normally using
-      the ConvROI brick)
-
-/!/ Documentation in progress
+    - To work correctly, the database entry for the `parametric_maps` items must
+      have the `PatientName` tag filled in.
+    - To work correctly, the "/roi\_/`PatientName`/convROI_BOLD2" directory
+      must exist and contain the results of a previous convolution (using for
+      example the `preprocess.others.ConvROI` brick).
 
 --------------------------------------
 
