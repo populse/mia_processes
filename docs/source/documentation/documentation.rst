@@ -92,7 +92,7 @@ Mia_processes's documentation
     - `CarpetParcellation <bricks/reports/CarpetParcellation.html>`_
     - `ComputeDVARS <bricks/reports/ComputeDVARS.html>`_
     - `FramewiseDisplacement <bricks/reports/FramewiseDisplacement.html>`_
-    - `Mean_stdDev_calc <bricks/reports/Mean_stdDev_calc.html>`_ (in progress)
+    - `Mean_stdDev_calc <bricks/reports/Mean_stdDev_calc.html>`_
     - `ReportAnatMriqc <bricks/reports/ReportAnatMriqc.html>`_
     - `ReportFuncMriqc <bricks/reports/ReportFuncMriqc.html>`_
     - `Result_collector <bricks/reports/Result_collector.html>`_ (in progress)

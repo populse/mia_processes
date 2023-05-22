@@ -1742,6 +1742,11 @@ class Mean_stdDev_calc(ProcessMIA):
             analysis_dir = os.path.join(roi_dir, "ROI_analysis")
 
             if os.path.isdir(analysis_dir):
+                print(
+                    '\nMean_stdDev_calc:\nA "{}" folder already exists, '
+                    "it will be overwritten by this new "
+                    "calculation...".format(analysis_dir)
+                )
                 shutil.rmtree(analysis_dir)
 
             os.mkdir(analysis_dir)
@@ -1780,24 +1785,7 @@ class Mean_stdDev_calc(ProcessMIA):
             self.output_directory, "roi_" + self.dict4runtime["patient_name"]
         )
         conv_dir = os.path.join(roi_dir, "convROI_BOLD")
-
-        if not os.path.isdir(conv_dir):
-            print(
-                "\nMean_stdDev_cal brick:\nNo {} folder detected ...".format(
-                    conv_dir
-                )
-            )
-            # return
-
         analysis_dir = os.path.join(roi_dir, "ROI_analysis")
-
-        if not os.path.isdir(analysis_dir):
-            print(
-                "\nMean_stdDev_cal brick:\nNo {} folder detected ...".format(
-                    analysis_dir
-                )
-            )
-            # return
 
         for parametric_map in self.parametric_maps:
             # Resampling, if necessary, the parametric_map to the size of the

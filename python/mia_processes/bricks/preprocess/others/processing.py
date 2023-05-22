@@ -3216,7 +3216,7 @@ class Resample_2(ProcessMIA):
                             os.path.join(roi_dir, "convROI_BOLD")
                         )
                     )
-                return self.make_initResult()
+                    return self.make_initResult()
 
             else:
                 print(
