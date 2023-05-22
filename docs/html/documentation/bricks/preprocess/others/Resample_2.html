@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Resample_2 brick &#8212; mia_processes 2.2.1-dev+4da966b documentation</title>
+    <title>Resample_2 brick &#8212; mia_processes 2.2.1-dev+3fa0783 documentation</title>
     <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
@@ -18,7 +18,7 @@
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.2.1-dev+4da966b documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+3fa0783 documentation</span></a></h1>
         <h2 class="heading"><span>Resample_2 brick</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -48,17 +48,18 @@
 </table>
 <div class="section" id="resample-2-brick">
 <h1>Resample_2 brick<a class="headerlink" href="#resample-2-brick" title="Permalink to this headline">¶</a></h1>
-<p>Setting regions of interest to the resolution of the <em>reference_image</em> using skimage.transform.resize().</p>
+<div class="section" id="setting-regions-of-interest-to-the-resolution-of-the-reference-image-using-skimage-transform-resize">
+<h2>Setting regions of interest to the resolution of the <em>reference_image</em> using skimage.transform.resize().<a class="headerlink" href="#setting-regions-of-interest-to-the-resolution-of-the-reference-image-using-skimage-transform-resize" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div><ul class="simple">
-<li><p>ROIs are defined from <em>doublet_list</em> parameter as
+<li><p>ROIs are defined from <cite>doublet_list</cite> parameter as
 doublet_list[0][0] + doublet_list[0][1] + ‘.nii’,
 doublet_list[1][0] + doublet_list[1][1] + ‘.nii’,
 etc.</p></li>
-<li><p>The output_directory”/roi_”PatientName”/convROI_BOLD2” directory is
+<li><p>The “/roi_/<cite>PatientName</cite>/convROI_BOLD2” directory is
 created to receive the convolution results from the runtime.</p></li>
 <li><p>To work correctly, the database entry for the reference_image parameter
-must have the “PatientName” tag filled in.</p></li>
+must have the <cite>PatientName</cite> tag filled in.</p></li>
 </ul>
 </div></blockquote>
 <hr class="docutils" />
@@ -100,6 +101,7 @@ must have the “PatientName” tag filled in.</p></li>
 <dt>Usefull links:</dt><dd><p><a class="reference external" href="https://scikit-image.org/docs/stable/api/skimage.transform.html#resize">skimage.transform.resize()</a></p>
 </dd>
 </dl>
+</div>
 </div>
 
 
