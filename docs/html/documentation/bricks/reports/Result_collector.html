@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Result_collector brick &#8212; mia_processes 2.2.1-dev+416c37b documentation</title>
+    <title>Result_collector brick &#8212; mia_processes 2.2.1-dev+af31b8e documentation</title>
     <link rel="stylesheet" href="../../../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
@@ -18,7 +18,7 @@
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
-          <span>mia_processes 2.2.1-dev+416c37b documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+af31b8e documentation</span></a></h1>
         <h2 class="heading"><span>Result_collector brick</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -48,12 +48,50 @@
 </table>
 <div class="section" id="result-collector-brick">
 <h1>Result_collector brick<a class="headerlink" href="#result-collector-brick" title="Permalink to this headline">¶</a></h1>
-<p>/!/ Documentation in progress</p>
+<div class="section" id="blablabla">
+<h2>blablabla.<a class="headerlink" href="#blablabla" title="Permalink to this headline">¶</a></h2>
 <hr class="docutils" />
-<p><strong>Mandatory inputs parameters:</strong></p>
-<p>TO DO</p>
-<p><strong>Outputs parameters:</strong>
-TO DO</p>
+<p><strong>Inputs parameters:</strong></p>
+<ul>
+<li><p><em>parametric_maps</em> (a list of existing files)</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/raw_data/spmT_0001.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/raw_data/beta_0001.nii&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><dl>
+<dt><a href="#id1"><span class="problematic" id="id2">*</span></a>data” (a string)</dt><dd><p>Defines the data type.</p>
+<dl class="simple">
+<dt>::</dt><dd><p>ex. ‘BOLD’</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>calculs</em> ((a list of strings)</dt><dd><p>Defines the type of calculation.</p>
+<dl class="simple">
+<dt>::</dt><dd><p>ex. [“mean”, “std”, “IL_mean”, “IL_std”]</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>mean_in_files</em> (a list of files)</dt><dd><p>A list of .txt files containing the average “value of a parameter for a
+given territory or region of interest.</p>
+<dl class="simple">
+<dt>::</dt><dd><p>ex.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Outputs parameters:</strong></p>
+</div>
 </div>
 
 

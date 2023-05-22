@@ -29,7 +29,6 @@ Makes the mean and standard deviation of parametric maps.
     - To work correctly, the database entry for the `parametric_maps` items must
       have the `PatientName` tag filled in.
 
-
 --------------------------------------
 
 **Mandatory inputs parameters:**
