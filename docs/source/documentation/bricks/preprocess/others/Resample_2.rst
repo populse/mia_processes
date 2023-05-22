@@ -11,15 +11,16 @@ Resample_2 brick
 ================
 
 Setting regions of interest to the resolution of the *reference_image* using skimage.transform.resize().
+--------------------------------------------------------------------------------------------------------
 
-    - ROIs are defined from *doublet_list* parameter as
+    - ROIs are defined from `doublet_list` parameter as
       doublet_list[0][0] + doublet_list[0][1] + '.nii',
       doublet_list[1][0] + doublet_list[1][1] + '.nii',
       etc.
-    - The output_directory"/roi\_"PatientName"/convROI_BOLD2" directory is
+    - The "/roi\_/`PatientName`/convROI_BOLD2" directory is
       created to receive the convolution results from the runtime.
     - To work correctly, the database entry for the reference_image parameter
-      must have the "PatientName" tag filled in.
+      must have the `PatientName` tag filled in.
 
 --------------------------------------
 
