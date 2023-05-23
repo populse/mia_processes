@@ -22,11 +22,11 @@ Makes the mean and standard deviation of parametric maps.
       etc.
     - The "/roi\_\ `PatientName`/ROI_analysis" directory is
       created to receive the results from the runtime (e.g.
-      "/roi\_\ `PatientName`/ROI_analysis/" + doublet_list[0][0] + doublet_list[0][1] + "_meanspmT_BOLD.txt").
+      "/roi\_\ `PatientName`/ROI_analysis/" + doublet_list[0][0] + doublet_list[0][1] + "_mean_spmT_BOLD.txt").
     - To work correctly, the "/roi\_/`PatientName`/convROI_BOLD" directory
       must exist and contain the ROI files (e.g.
       "/roi\_\ `PatientName`/convROI_BOLD/conv" + doublet_list[0][0] + doublet_list[0][1] + ".nii").
-    - To work correctly, the database entry for the `parametric_maps` items must
+    - To work correctly, the database entry for the first element of `parametric_maps` must
       have the `PatientName` tag filled in.
 
 --------------------------------------
@@ -56,25 +56,25 @@ Makes the mean and standard deviation of parametric maps.
 
     ::
 
-      ex. ['/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_L_meanspmT_BOLD.txt',
-           '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_R_meanspmT_BOLD.txt',
-	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_L_meanspmT_BOLD.txt',
-	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_R_meanspmT_BOLD.txt',
-	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_L_meanbeta_BOLD.txt',
-	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_R_meanbeta_BOLD.txt',
-	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_L_meanbeta_BOLD.txt',
-	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_R_meanbeta_BOLD.txt']
+      ex. ['/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_L_mean_spmT_BOLD.txt',
+           '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_R_mean_spmT_BOLD.txt',
+	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_L_mean_spmT_BOLD.txt',
+	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_R_mean_spmT_BOLD.txt',
+	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_L_mean_beta_BOLD.txt',
+	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_R_mean_beta_BOLD.txt',
+	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_L_mean_beta_BOLD.txt',
+	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_R_mean_beta_BOLD.txt']
 
 - *std_out_files* (a list of files)
     A list of .txt files with the standard deviation for each ROI determined after convolution.
 
     ::
 
-      ex. ['/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_L_stdspmT_BOLD.txt',
-           '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_R_stdspmT_BOLD.txt',
-	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_L_stdspmT_BOLD.txt',
-	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_R_stdspmT_BOLD.txt',
-	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_L_stdbeta_BOLD.txt',
-	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_R_stdbeta_BOLD.txt',
-	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_L_stdbeta_BOLD.txt',
-	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_R_stdbeta_BOLD.txt']
+      ex. ['/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_L_std_spmT_BOLD.txt',
+           '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_R_std_spmT_BOLD.txt',
+	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_L_std_spmT_BOLD.txt',
+	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_R_std_spmT_BOLD.txt',
+	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_L_std_beta_BOLD.txt',
+	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_R_std_beta_BOLD.txt',
+	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_L_std_beta_BOLD.txt',
+	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_R_std_beta_BOLD.txt']
