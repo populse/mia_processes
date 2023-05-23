@@ -1,3 +1,7 @@
+:orphan:
+
+.. toctree::
+
 mia_processes
 =============
 

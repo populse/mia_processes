@@ -89,7 +89,7 @@ EXT = {"NIFTI_GZ": "nii.gz", "NIFTI": "nii"}
 
 class ApplyBiasCorrection(ProcessMIA):
     """
-    *Apply bias field correction to an input file using the bias image.
+    *Apply bias field correction to an input file using the bias image.*
 
     Please, see the complete documentation for the 'ApplyBiasCorrection' brick
     in the populse.mia_processes website
@@ -193,7 +193,7 @@ class ApplyBiasCorrection(ProcessMIA):
 
 class ArtifactMask(ProcessMIA):
     """
-    * Computes the artifact mask using the method described in [Mortamet2009].
+    * Computes the artifact mask using the method described in [Mortamet2009].*
 
     Please, see the complete documentation for the `ArtifactMask' brick
     in the populse.mia_processes website
@@ -468,9 +468,9 @@ class ArtifactMask(ProcessMIA):
 
 class Binarize(ProcessMIA):
     """
-    *Image binarization.
+    *Image binarization.*
 
-    Please, see the complete documentation for the `Binarize' brick
+    Please, see the complete documentation for the `Binarize` brick
     in the populse.mia_processes website
     https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/Binarize.html
 
