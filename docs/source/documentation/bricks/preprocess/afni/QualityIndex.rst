@@ -1,3 +1,6 @@
+:orphan:
+
+.. toctree::
 
 +--------------------------------+----------------------------------------------+----------------------------------------------------+
 |`Home <../../../../index.html>`_|`Documentation <../../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
