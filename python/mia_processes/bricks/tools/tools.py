@@ -12,6 +12,7 @@ needed to run other higher-level bricks.
         - Filter_Files_List
         - Find_In_List
         - Input_Filter
+        - Import_Data
         - List_Duplicate
         - List_To_File
         - Make_A_List
@@ -28,15 +29,25 @@ needed to run other higher-level bricks.
 
 # Other imports
 import os
+import shutil
+import tempfile
 
 # nipype import
-from nipype.interfaces.base import File, InputMultiPath, traits
+from nipype.interfaces.base import (
+    File,
+    InputMultiPath,
+    OutputMultiPath,
+    traits,
+)
 from nipype.interfaces.spm.base import ImageFileSPM
 
 # populse_mia imports
 from populse_mia.data_manager.filter import Filter
 from populse_mia.data_manager.project import COLLECTION_CURRENT
+from populse_mia.software_properties import Config
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
+
+from mia_processes.utils import get_dbFieldValue
 
 
 class Concat_to_list_of_list(ProcessMIA):
@@ -45,9 +56,9 @@ class Concat_to_list_of_list(ProcessMIA):
       | the input list1 with each element of the input list2.
 
     Ex. ['a', 'b', 'c'] and ['_1', '_2'] gives
-        [['a', '_1'], ['a', '_2'],
-         ['b', '_1'], ['b', '_2'],
-         ['c', '_1'], ['c', '_2']
+        [['a', '1'], ['a', '2'],
+         ['b', '1'], ['b', '2'],
+         ['c', '1'], ['c', '2']
     """
 
     def __init__(self):
@@ -65,17 +76,17 @@ class Concat_to_list_of_list(ProcessMIA):
             "ACM",
             "ACP",
             "PICA",
-            "ROI_CING",
-            "ROI_FRON",
-            "ROI_INSULA",
-            "ROI_OCC",
-            "ROI_PAR",
-            "ROI_STR",
-            "ROI_TEMP",
-            "ROI_THA",
+            "ROI-CING",
+            "ROI-FRON",
+            "ROI-INSULA",
+            "ROI-OCC",
+            "ROI-PAR",
+            "ROI-STR",
+            "ROI-TEMP",
+            "ROI-THA",
             "SCA",
         ]
-        LIST2 = ["_L", "_R"]
+        LIST2 = ["L", "R"]
 
         # Inputs description
         list1_desc = "A list of string"
@@ -454,6 +465,200 @@ class Find_In_List(ProcessMIA):
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
         return
+
+
+class Import_Data(ProcessMIA):
+    """
+    * | Make an output list of list containing the iteration of
+      | the input list1 with each element of the input list2.
+
+    Ex. ['a', 'b', 'c'] and ['_1', '_2'] gives
+        [['a', '1'], ['a', '2'],
+         ['b', '1'], ['b', '2'],
+         ['c', '1'], ['c', '2']
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instantiation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # initialisation of the objects needed for the launch of the brick
+        super(Import_Data, self).__init__()
+
+        # Inputs description
+        rois_list_desc = "A list or list of list of strings"
+        lib_dir_desc = (
+            "The path to a data library (if not defined, it uses "
+            "the default path, miaresources)"
+        )
+        file_in_db_desc = (
+            "A file in database, only used to catch "
+            "the PatientName tag value"
+        )
+
+        # Outputs description
+        rois_files_desc = "The list of resulting available files"
+
+        # Inputs traits
+        self.add_trait(
+            "rois_list",
+            traits.Either(
+                traits.List(traits.String()),
+                traits.List(traits.List(traits.String())),
+                output=False,
+                optional=False,
+                desc=rois_list_desc,
+            ),
+        ),
+
+        self.add_trait(
+            "lib_dir",
+            traits.Directory(output=False, optional=True, desc=lib_dir_desc),
+        )
+        self.lib_dir = traits.Undefined
+
+        self.add_trait(
+            "file_in_db",
+            File(output=False, optional=False, desc=file_in_db_desc),
+        )
+
+        # Outputs traits
+        self.add_trait(
+            "rois_files",
+            OutputMultiPath(File(), output=True, desc=rois_files_desc),
+        )
+
+        # Special parameter used as a messenger for the run_process_mia method
+        self.add_trait(
+            "dict4runtime",
+            traits.Dict(output=False, optional=True, userlevel=1),
+        )
+
+        self.init_default_traits()
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(Import_Data, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if (
+            self.rois_list not in (traits.Undefined, [], [[]])
+            and self.file_in_db != traits.Undefined
+        ):
+            patient_name = get_dbFieldValue(
+                self.project, self.file_in_db, "PatientName"
+            )
+
+            if patient_name is None:
+                print(
+                    '\nImport_Data:\n The "PatientName" tag is not filled '
+                    "in the database for the {} file ...\n The calculation"
+                    "is aborted...".format(self.file_in_db)
+                )
+                return self.make_initResult()
+
+            self.dict4runtime["patient_name"] = patient_name
+            roi_raw_data_dir = os.path.join(
+                self.output_directory,
+                patient_name + "_data",
+                "ROI_data",
+                "raw_data",
+            )
+
+            if self.lib_dir in (traits.Undefined, ""):
+                config = Config()
+                self.lib_dir = os.path.join(
+                    config.get_resources_path(), "ROIs"
+                )
+
+            # list the content of self.lib_dir
+            elts = os.listdir(self.lib_dir)
+            # filtering only the files
+            all_ref_files = [
+                f
+                for f in elts
+                if os.path.isfile(os.path.join(self.lib_dir, f))
+            ]
+            list_out = []
+
+            for ref_file in all_ref_files:
+                for filter in [
+                    filters[0] + "_" + filters[1] for filters in self.rois_list
+                ]:
+                    if os.path.basename(ref_file).startswith(filter):
+                        list_out.append(
+                            os.path.join(roi_raw_data_dir, ref_file)
+                        )
+                        self.dict4runtime[
+                            os.path.join(self.lib_dir, ref_file)
+                        ] = os.path.join(roi_raw_data_dir, ref_file)
+
+            self.outputs["rois_files"] = sorted(list_out)
+
+            if self.outputs:
+                self.outputs["notInDb"] = ["rois_files"]
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        # No need the next line (we don't use self.process and SPM)
+        # super(Import_Data, self).run_process_mia()
+
+        patient_name = self.dict4runtime["patient_name"]
+
+        pat_name_dir = os.path.join(
+            self.output_directory, patient_name + "_data"
+        )
+
+        if not os.path.exists(pat_name_dir):
+            os.mkdir(pat_name_dir)
+
+        roi_data_dir = os.path.join(pat_name_dir, "ROI_data")
+
+        if not os.path.exists(roi_data_dir):
+            os.mkdir(roi_data_dir)
+
+        roi_raw_data_dir = os.path.join(roi_data_dir, "raw_data")
+
+        tmp = "None"
+
+        if os.path.exists(roi_raw_data_dir):
+            tmp = tempfile.mktemp(dir=os.path.dirname(roi_data_dir))
+            os.mkdir(tmp)
+            shutil.move(roi_raw_data_dir, os.path.join(tmp, "raw_data"))
+            print(
+                '\nImportData brick:\nA "{}" folder already exists, '
+                "it will be overwritten by this new "
+                "calculation...".format(roi_raw_data_dir)
+            )
+        os.mkdir(roi_raw_data_dir)
+
+        if os.path.isdir(tmp):
+            shutil.rmtree(tmp)
+
+        # Copying the selected ROIs from the selected resources folder
+        # to roi_raw_data_dir
+        for k in self.dict4runtime:
+            if k != "patient_name":
+                shutil.copyfile(k, self.dict4runtime[k])
 
 
 class Input_Filter(ProcessMIA):

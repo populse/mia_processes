@@ -1922,6 +1922,7 @@ class Result_collector(ProcessMIA):
             "Defines the type of calculation (a list of strings, "
             'e.g. ["mean", "std", "IL_mean", "IL_std"]'
         )
+        laterality_index_desc = "Calculates the laterality indexes (a boolean)"
         mean_in_files_desc = (
             "A list of .txt files containing the average "
             "value of a parameter for a given territory or "
@@ -1975,6 +1976,16 @@ class Result_collector(ProcessMIA):
                 output=False,
                 optional=True,
                 desc=calculs_desc,
+            ),
+        )
+
+        self.add_trait(
+            "laterality_index",
+            traits.Bool(
+                default_value=False,
+                output=False,
+                optional=True,
+                desc=laterality_index_desc,
             ),
         )
 
@@ -2239,63 +2250,48 @@ class Result_collector(ProcessMIA):
         res = dict()  # the summary of the data
         parametrics = []  # the parametric data
         calculs = []  # the calcul types
-        rois = []  # the ROIs under analysis
+        # rois = []  # the ROIs under analysis
+        contrast = []  # the contrast used
+        # Waiting for take in input the merged
+        # self.mean_in_files + self.std_in_files
+        all_data = self.mean_in_files + self.std_in_files
 
-        for mean in self.mean_in_files:
-            mean_file_name = os.path.basename(mean)
-            splited_name = os.path.splitext(mean_file_name)[0].split("_")
+        for data in all_data:
+            roi, hemi, calcul, param, contrast = os.path.splitext(
+                os.path.basename(data)
+            )[0].split("_")
 
-            if "_".join(splited_name[0:2]) not in rois:
-                rois.append("_".join(splited_name[0:2]))
+            if contrast not in res:
+                res[contrast] = {}
 
-            if splited_name[3] not in parametrics:
-                parametrics.append(splited_name[1])
+            if param not in res[contrast]:
+                res[contrast][param] = {}
 
-            if splited_name[2] not in calculs:
-                calculs.append(splited_name[0])
+            if calcul not in res[contrast][param]:
+                res[contrast][param][calcul] = {}
 
-            mean_key = "_".join(splited_name[2:0])
+            if roi not in res[contrast][param][calcul]:
+                res[contrast][param][calcul][roi] = {}
 
             try:
-                with open(mean, "r") as f_read:
-                    mean_val = float(f_read.read())
+                with open(data, "r") as f_read:
+                    data_val = float(f_read.read())
 
             except Exception:
                 print(
                     "\nResult_collector brick:\nNo result "
-                    "found in {} ...\n".format(mean)
+                    "found in {} ...\n".format(data)
                 )
-                mean_val = "Undefined"
+                data_val = "Undefined"
 
-            res[mean_key] = mean_val
-
-        for std in self.std_in_files:
-            std_file_name = os.path.basename(std)
-            splited_name = os.path.splitext(std_file_name)[0].split("_")
-
-            if "_".join(splited_name[0:2]) not in rois:
-                rois.append("_".join(splited_name[0:2]))
-
-            if splited_name[3] not in parametrics:
-                parametrics.append(splited_name[1])
-
-            if splited_name[2] not in calculs:
-                calculs.append(splited_name[0])
-
-            std_key = "_".join(splited_name[2:0])
-
-            try:
-                with open(std, "r") as f_read:
-                    std_val = float(f_read.read())
-
-            except Exception:
+            if hemi in res[contrast][param][calcul][roi]:
                 print(
-                    "\nResult_collector brick:\nNo result "
-                    "found in {} ...\n".format(std)
+                    "\nResult_collector brick:\nThe data in {} exist already "
+                    "in other files of toto. Overwriting with the "
+                    "new data ...\n".format(data)
                 )
-                std_val = "Undefined"
 
-            res[std_key] = std_val
+            res[contrast][param][calcul][roi][hemi] = data_val
 
         if self.laterality_index is True:
             calculs.extend(["IL_" + i for i in calculs])

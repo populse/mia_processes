@@ -1053,7 +1053,7 @@ class ConvROI(ProcessMIA):
                 self.output_directory, "roi_" + patient_name
             )
 
-            # if not existing, creates self.output_directory'/roi_'patient_name
+            # if not existing, creates self.output_directory'/roi_dir
             # folder. If already existing, remove old reference ROIs in roi_dir
             # and remove the old roi_dir'/convROI_BOLD'
             if os.path.exists(roi_dir):
@@ -1108,7 +1108,7 @@ class ConvROI(ProcessMIA):
                 os.mkdir(roi_dir)
 
             # Copying the ROIs from the resources folder
-            # to self.output_directory'cd /roi_'patient_name
+            # to self.output_directory'/roi_'patient_name
             config = Config()
             ref_dir = os.path.join(config.get_resources_path(), "ROIs")
             copy_tree(ref_dir, roi_dir)
