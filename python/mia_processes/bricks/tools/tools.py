@@ -52,7 +52,7 @@ from mia_processes.utils import get_dbFieldValue
 
 class Concat_to_list_of_list(ProcessMIA):
     """
-    * | Make an output list of list containing the iteration of
+    * | Make an output list of lists containing the iteration of
       | the input list1 with each element of the input list2.
 
     Ex. ['a', 'b', 'c'] and ['_1', '_2'] gives
@@ -379,7 +379,7 @@ class Filter_Files_List(ProcessMIA):
 
 class Find_In_List(ProcessMIA):
     """
-    * From a list of files, select the 1rst element that contains a pattern.
+    *From a list of files, select the 1rst element that contains a pattern*
 
     """
 
@@ -469,13 +469,20 @@ class Find_In_List(ProcessMIA):
 
 class Import_Data(ProcessMIA):
     """
-    * | Make an output list of list containing the iteration of
-      | the input list1 with each element of the input list2.
+    *Import reference data into the current pipeline*
 
-    Ex. ['a', 'b', 'c'] and ['_1', '_2'] gives
-        [['a', '1'], ['a', '2'],
-         ['b', '1'], ['b', '2'],
-         ['c', '1'], ['c', '2']
+    - This brick was originally written to select regions of interest.
+      The rois_list parameter is used to filter the data to be imported from
+      a library defined by lib_dir. If roi_list is a list, each element of
+      it will be a filename filter applied for retrieval. If roi_list is a
+      list of lists, the filters will result from concatenating the elements
+      of each internal list (e.g. [["foo", "1"], ["faa", "2"]] gives two
+      filters, "foo_1" and "faa_2".
+    - If lib_dir is not set, use the miaresources/ROIs/ file.
+    - The file_in_db file is used only to retrieve the value of the
+      associated PatientName tag.
+    - The reference data is imported into the
+      output_directory/PatientName_data/ROI_data/raw_data directory.
     """
 
     def __init__(self):
@@ -489,25 +496,38 @@ class Import_Data(ProcessMIA):
         super(Import_Data, self).__init__()
 
         # Inputs description
-        rois_list_desc = "A list or list of list of strings"
+        rois_list_desc = (
+            "A list or a list of lists of strings, defining the"
+            "data to import."
+        )
         lib_dir_desc = (
             "The path to a data library (if not defined, it uses "
-            "the default path, miaresources)"
+            "the default resources path, i.e. miaresources/ROIs/)."
         )
         file_in_db_desc = (
             "A file in database, only used to catch "
-            "the PatientName tag value"
+            "the PatientName tag value."
         )
-
+        starts_with_desc = (
+            "If True applies the file filter only to the "
+            "beginning of the names, otherwise to the whole "
+            "names (a boolean)."
+        )
         # Outputs description
-        rois_files_desc = "The list of resulting available files"
+        rois_files_desc = "The list of resulting available files."
 
         # Inputs traits
         self.add_trait(
             "rois_list",
             traits.Either(
                 traits.List(traits.String()),
-                traits.List(traits.List(traits.String())),
+                traits.List(
+                    traits.List(
+                        traits.String(),
+                        minlen=2,
+                        maxlen=2,
+                    )
+                ),
                 output=False,
                 optional=False,
                 desc=rois_list_desc,
@@ -523,6 +543,16 @@ class Import_Data(ProcessMIA):
         self.add_trait(
             "file_in_db",
             File(output=False, optional=False, desc=file_in_db_desc),
+        )
+
+        self.add_trait(
+            "starts_with",
+            traits.Bool(
+                default_value=True,
+                output=False,
+                optional=True,
+                desc=starts_with_desc,
+            ),
         )
 
         # Outputs traits
@@ -595,13 +625,29 @@ class Import_Data(ProcessMIA):
                 for f in elts
                 if os.path.isfile(os.path.join(self.lib_dir, f))
             ]
+
+            if isinstance(self.rois_list[0], list):
+                filters = [f[0] + "_" + f[1] for f in self.rois_list]
+
+            else:
+                filters = self.rois_list
+
             list_out = []
 
             for ref_file in all_ref_files:
-                for filter in [
-                    filters[0] + "_" + filters[1] for filters in self.rois_list
-                ]:
-                    if os.path.basename(ref_file).startswith(filter):
+                for _filter in filters:
+                    if self.starts_with is True and ref_file.startswith(
+                        _filter
+                    ):
+                        keep = True
+
+                    elif self.starts_with is False and _filter in ref_file:
+                        keep = True
+
+                    else:
+                        keep = False
+
+                    if keep is True:
                         list_out.append(
                             os.path.join(roi_raw_data_dir, ref_file)
                         )
