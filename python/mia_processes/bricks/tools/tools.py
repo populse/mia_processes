@@ -686,7 +686,7 @@ class Import_Data(ProcessMIA):
 
         tmp = "None"
 
-        if os.path.exists(roi_raw_data_dir):
+        if os.path.isdir(roi_raw_data_dir):
             tmp = tempfile.mktemp(dir=os.path.dirname(roi_data_dir))
             os.mkdir(tmp)
             shutil.move(roi_raw_data_dir, os.path.join(tmp, "raw_data"))
