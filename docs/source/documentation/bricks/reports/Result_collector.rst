@@ -10,14 +10,111 @@
 Result_collector brick
 ======================
 
+Generates files with data for each region of interest
+-----------------------------------------------------
 
-/!/ Documentation in progress
+    - The out_files will contain files with names corresponding to each `calculs` and `parametric_maps`
+      with the prefix `data` (e.g. BOLD_mean_spmT_0001.xls).
+    - The process look for input data corresponding to `mean_in_files` and `std_in_files`
+    - To work correctly, the "/roi\_\ `PatientName`/ROI_analysis" directory must exit to receive
+      the results from the runtime.
+    - To work correctly, the database entry for the first element of `parametric_maps` must
+      have the `PatientName` tag filled in.
 
---------------------------------------
 
-**Mandatory inputs parameters:**
+**Inputs parameters:**
 
-TO DO
+- *parametric_maps* (a list of existing files)
+
+    ::
+
+      ex. ['/home/username/data/raw_data/spmT_0001.nii',
+           '/home/username/data/raw_data/beta_0001.nii']
+
+- *data* (a string)
+    Defines the data type.
+
+    ::
+
+      ex. 'BOLD'
+
+- *calculs* ((a list of strings)
+    Defines the type of calculation.
+
+    ::
+
+      ex. ["mean", "std", "IL_mean", "IL_std"]
+
+- *mean_in_files* (a list of files)
+    A list of .txt files containing the average value of a parameter for a
+    given territory or region of interest.
+
+    ::
+
+      ex. ['/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_L_meanspmT_BOLD.txt',
+           '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_R_meanspmT_BOLD.txt',
+	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_L_meanspmT_BOLD.txt',
+	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_R_meanspmT_BOLD.txt',
+	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_L_meanbeta_BOLD.txt',
+	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_R_meanbeta_BOLD.txt',
+	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_L_meanbeta_BOLD.txt',
+	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_R_meanbeta_BOLD.txt']
+
+
+
+
+- *std_in_files* (a list of files)
+    A list of .txt files containing the standard deviation for a parameter
+    in a given territory or region of interest.
+
+    ::
+
+      ex. ['/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_L_stdspmT_BOLD.txt',
+           '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_R_stdspmT_BOLD.txt',
+	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_L_stdspmT_BOLD.txt',
+	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_R_stdspmT_BOLD.txt',
+	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_L_stdbeta_BOLD.txt',
+	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_R_stdbeta_BOLD.txt',
+	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_L_stdbeta_BOLD.txt',
+	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_R_stdbeta_BOLD.txt']
+
+- *doublet_list* (a list of lists)
+    A list of lists containing doublets of strings.
+
+    ::
+
+      ex. [["ROI_OCC", "_L"], ["ROI_OCC", "_R"], ["ROI_PAR", "_l"], ["ROI_PAR", "_R"]]
+
+- *patient_info* (a dictionary)
+    A dictionary whose keys/values correspond to information about the patient.
+
+    e.g. {
+          | 'PatientName': 'ablair',
+          | 'Pathology': 'ACMD',
+          | 'Age': 64,
+	  | 'Sex': 'M',
+	  | 'MR': '3T',
+	  | 'Gas': 'BACTAL',
+	  | 'GasAdmin': 'MASK'
+	 }
+
+    ::
+
+      ex. {'PatientName': <undefined>, 'Pathology': <undefined>, 'Age': <undefined>, 'Sex': <undefined>, 'MR': <undefined>, 'Gas': <undefined>, 'GasAdmin': <undefined>}
+
 
 **Outputs parameters:**
-TO DO
+
+- *out_files* (a list of files)
+    A list of .xml files containing a summary of the requested results.
+
+    ::
+
+      ex. ['/home/username/data/derived_data/roi_PatientName/ROI_analysis/BOLD_mean_spmT_0001.xls',
+           '/home/username/data/derived_data/roi_PatientName/ROI_analysis/BOLD_std_spmT_0001.xls',
+           '/home/username/data/derived_data/roi_PatientName/ROI_analysis/BOLD_IL_mean_spmT_0001.xls',
+           '/home/username/data/derived_data/roi_PatientName/ROI_analysis/BOLD_IL_std_spmT_0001.xls',
+           '/home/username/data/derived_data/roi_PatientName/ROI_analysis/BOLD_mean_beta_0001.xls',
+           '/home/username/data/derived_data/roi_PatientName/ROI_analysis/BOLD_std_beta_0001.xls',
+           '/home/username/data/derived_data/roi_PatientName/ROI_analysis/BOLD_IL_mean_beta_0001.xls',
+           '/home/username/data/derived_data/roi_PatientName/ROI_analysis/BOLD_IL_std_beta_0001.xls']

@@ -23,10 +23,6 @@ populse_mia.
 # Other import
 import os
 
-# nibabel import
-import nibabel as nib
-import numpy as np
-
 # nipype imports
 from nipype.interfaces.base import File
 

@@ -66,8 +66,8 @@ Mia_processes's documentation
       - `IntensityClip <bricks/preprocess/others/IntensityClip.html>`_
       - `Mask <bricks/preprocess/others/Mask.html>`_
       - `NonSteadyDetector <bricks/preprocess/others/NonSteadyDetector.html>`_
-      - `Resample_1 <bricks/preprocess/others/Resample_1.html>`_ (in progress)
-      - `Resample_2 <bricks/preprocess/others/Resample_2.html>`_ (in progress)
+      - `Resample_1 <bricks/preprocess/others/Resample_1.html>`_
+      - `Resample_2 <bricks/preprocess/others/Resample_2.html>`_
       - `RotationMask <bricks/preprocess/others/RotationMask.html>`_
       - `Sanitize <bricks/preprocess/others/Sanitize.html>`_
       - `TemplateFromTemplateFlow <bricks/preprocess/others/TemplateFromTemplateFlow.html>`_
@@ -92,10 +92,10 @@ Mia_processes's documentation
     - `CarpetParcellation <bricks/reports/CarpetParcellation.html>`_
     - `ComputeDVARS <bricks/reports/ComputeDVARS.html>`_
     - `FramewiseDisplacement <bricks/reports/FramewiseDisplacement.html>`_
-    - `Mean_stdDev_calc <bricks/reports/Mean_stdDev_calc.html>`_ (in progress)
+    - `Mean_stdDev_calc <bricks/reports/Mean_stdDev_calc.html>`_
     - `ReportAnatMriqc <bricks/reports/ReportAnatMriqc.html>`_
     - `ReportFuncMriqc <bricks/reports/ReportFuncMriqc.html>`_
-    - `Result_collector <bricks/reports/Result_collector.html>`_ (in progress)
+    - `Result_collector <bricks/reports/Result_collector.html>`_
     - `Spikes <bricks/reports/Spikes.html>`_
 
   - **stats**

@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.tools.tools &#8212; mia_processes 2.2.1-dev+17d7d44 documentation</title>
+    <title>mia_processes.bricks.tools.tools &#8212; mia_processes 2.2.1-dev+a9ea159 documentation</title>
     <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
@@ -18,7 +18,7 @@
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.2.1-dev+17d7d44 documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+a9ea159 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.tools.tools</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -172,7 +172,8 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    * From 2 file names, generating a list containing all these file names.</span>
 
-<span class="sd">    Please, see the complete documention for the `Files_To_List in the populse.mia_processes web site</span>
+<span class="sd">    Please, see the complete documention for the</span>
+<span class="sd">    `Files_To_List in the populse.mia_processes web site</span>
 <span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/tools/Files_To_List.html&gt;`_</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -267,7 +268,8 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    * Selects one or more (slicing) element(s) from a list.</span>
 
-<span class="sd">    Please, see the complete documention for the `Filter_Files_List in the populse.mia_processes web site</span>
+<span class="sd">    Please, see the complete documention for the</span>
+<span class="sd">    `Filter_Files_List in the populse.mia_processes web site</span>
 <span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/tools/Filter_Files_List.html&gt;`_</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -358,10 +360,11 @@
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">index_filter</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">index_filter</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
                     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">index_filter</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_list</span><span class="p">):</span>
                         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">index_filter</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_list</span><span class="p">):</span>
+                            <span class="c1"># fmt: off</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;filtered_list&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_list</span><span class="p">[</span>
-                                <span class="bp">self</span><span class="o">.</span><span class="n">index_filter</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">index_filter</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">index_filter</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">index_filter</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
                             <span class="p">]</span>
-
+                            <span class="c1"># fmt: on</span>
                         <span class="k">else</span><span class="p">:</span>
                             <span class="nb">print</span><span class="p">(</span>
                                 <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The initialisation of the &quot;</span>
@@ -492,7 +495,8 @@
 <span class="sd">    * | To filter the content of the Data Browser tab or the</span>
 <span class="sd">      | output data of another brick.</span>
 
-<span class="sd">    Please, see the complete documention for the `Input_Filter in the populse.mia_processes web site</span>
+<span class="sd">    Please, see the complete documention for the</span>
+<span class="sd">    `Input_Filter in the populse.mia_processes web site</span>
 <span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/tools/Input_Filter.html&gt;`_</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -560,11 +564,12 @@
         <span class="c1"># permissive. Indeed, it is possible to obtain the data from the output</span>
         <span class="c1"># of a previous brick or from the database (using Export to</span>
         <span class="c1"># database_scans, or not) and of course to perform a filtering from it.</span>
-        <span class="c1"># But also, if no data is sent in, we get all the data from the database</span>
-        <span class="c1"># (self.project.session.get_documents_names(COLLECTION_CURRENT), below).</span>
-        <span class="c1"># It can maybe lead to side effects (however it also allows for example</span>
-        <span class="c1"># not to connect the input to something and to have the whole database</span>
-        <span class="c1"># by default... Is it really desirable????</span>
+        <span class="c1"># But also, if no data is sent in, we get all the data from the</span>
+        <span class="c1"># database (self.project.session.get_documents_names(</span>
+        <span class="c1"># COLLECTION_CURRENT), below). It can maybe lead to side effects</span>
+        <span class="c1"># (however it also allows for example not to connect the input to</span>
+        <span class="c1"># something and to have the whole database by default...</span>
+        <span class="c1"># Is it really desirable????</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">input</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">scans_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">input</span>
 
@@ -608,7 +613,8 @@
 <span class="sd">    * | From a file name, generating a list containing this file name</span>
 <span class="sd">      | and the file name itself.</span>
 
-<span class="sd">    Please, see the complete documention for the `List_Duplicate in the populse.mia_processes web site</span>
+<span class="sd">    Please, see the complete documention for the</span>
+<span class="sd">    `List_Duplicate in the populse.mia_processes web site</span>
 <span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/tools/List_Duplicate.html&gt;`_</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -684,7 +690,8 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    * From several filenames, selects and generates a file.</span>
 
-<span class="sd">    Please, see the complete documention for the `List_To_File in the populse.mia_processes web site</span>
+<span class="sd">    Please, see the complete documention for the</span>
+<span class="sd">    `List_To_File in the populse.mia_processes web site</span>
 <span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/tools/List_To_File.html&gt;`_</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -784,7 +791,8 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    * From 2 objects, generating a list containing all these objects.</span>
 
-<span class="sd">    Please, see the complete documention for the Make_A_List in the populse.mia_processes web site</span>
+<span class="sd">    Please, see the complete documention for the</span>
+<span class="sd">    `Make_A_List in the populse.mia_processes web site</span>
 <span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/tools/Make_A_List.html&gt;`_</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -840,7 +848,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span> <span class="o">=</span> <span class="p">{}</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj1</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj1</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj1</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj1</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span><span class="p">]:</span>
             <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">obj2</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">obj2</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span><span class="p">]</span>
             <span class="p">):</span>

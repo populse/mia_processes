@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.reports.processes &#8212; mia_processes 2.2.1-dev+17d7d44 documentation</title>
+    <title>mia_processes.bricks.reports.processes &#8212; mia_processes 2.2.1-dev+a9ea159 documentation</title>
     <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
@@ -18,7 +18,7 @@
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.2.1-dev+17d7d44 documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+a9ea159 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.reports.processes</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -83,7 +83,7 @@
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
-<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">pi</span><span class="p">,</span> <span class="n">sqrt</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">sqrt</span>
 
 <span class="c1"># nibabel import</span>
 <span class="kn">import</span> <span class="nn">nibabel</span> <span class="k">as</span> <span class="nn">nb</span>
@@ -93,16 +93,7 @@
 <span class="kn">from</span> <span class="nn">nipy.algorithms.registration</span> <span class="kn">import</span> <span class="n">aff2euler</span><span class="p">,</span> <span class="n">to_matrix44</span>
 
 <span class="c1"># nipype import</span>
-<span class="kn">from</span> <span class="nn">nipype.interfaces.base</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">DictStrStr</span><span class="p">,</span>
-    <span class="n">File</span><span class="p">,</span>
-    <span class="n">InputMultiPath</span><span class="p">,</span>
-    <span class="n">OutputMultiPath</span><span class="p">,</span>
-    <span class="n">Str</span><span class="p">,</span>
-    <span class="n">TraitListObject</span><span class="p">,</span>
-    <span class="n">Undefined</span><span class="p">,</span>
-    <span class="n">traits</span><span class="p">,</span>
-<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">nipype.interfaces.base</span> <span class="kn">import</span> <span class="n">File</span><span class="p">,</span> <span class="n">OutputMultiPath</span><span class="p">,</span> <span class="n">Undefined</span><span class="p">,</span> <span class="n">traits</span>
 <span class="kn">from</span> <span class="nn">nitime.algorithms</span> <span class="kn">import</span> <span class="n">AR_est_YW</span>
 <span class="kn">from</span> <span class="nn">numpy.polynomial</span> <span class="kn">import</span> <span class="n">Legendre</span>
 
@@ -110,9 +101,6 @@
 <span class="kn">from</span> <span class="nn">populse_mia.user_interface.pipeline_manager.process_mia</span> <span class="kn">import</span> <span class="n">ProcessMIA</span>
 <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">kurtosis</span>  <span class="c1"># pylint: disable=E0611</span>
 <span class="kn">from</span> <span class="nn">skimage.transform</span> <span class="kn">import</span> <span class="n">resize</span>
-
-<span class="c1"># soma-base imports</span>
-<span class="kn">from</span> <span class="nn">soma.qt_gui.qt_backend.Qt</span> <span class="kn">import</span> <span class="n">QMessageBox</span>
 
 <span class="c1"># mia_processes import</span>
 <span class="kn">from</span> <span class="nn">mia_processes.utils</span> <span class="kn">import</span> <span class="n">checkFileExt</span><span class="p">,</span> <span class="n">get_dbFieldValue</span>
@@ -537,7 +525,7 @@
                 <span class="n">fwhm</span> <span class="o">=</span> <span class="p">[]</span>
                 <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">str_fwhm</span><span class="p">:</span>
                     <span class="n">fwhm</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
-            <span class="k">except</span> <span class="p">(</span><span class="ne">FileNotFoundError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">FileNotFoundError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Error with fwhm file: &quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
                 <span class="k">pass</span>
             <span class="k">else</span><span class="p">:</span>
@@ -892,7 +880,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_outliers_file</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">outliers</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_outliers_file</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-            <span class="k">except</span> <span class="p">(</span><span class="ne">FileNotFoundError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">FileNotFoundError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Error with aor file: &quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
                 <span class="k">pass</span>
             <span class="k">else</span><span class="p">:</span>
@@ -904,7 +892,7 @@
             <span class="k">try</span><span class="p">:</span>
                 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_QI_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fin</span><span class="p">:</span>
                     <span class="n">lines</span> <span class="o">=</span> <span class="n">fin</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
-            <span class="k">except</span> <span class="p">(</span><span class="ne">FileNotFoundError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">FileNotFoundError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Error with aqi file: &quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
                 <span class="k">pass</span>
             <span class="k">else</span><span class="p">:</span>
@@ -922,7 +910,7 @@
                 <span class="n">dvars</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">in_dvars_file</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
                 <span class="p">)</span>
-            <span class="k">except</span> <span class="p">(</span><span class="ne">FileNotFoundError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">FileNotFoundError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Error with dvars file: &quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
                 <span class="k">pass</span>
             <span class="k">else</span><span class="p">:</span>
@@ -941,7 +929,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_fd_file</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">fd_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_fd_file</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-            <span class="k">except</span> <span class="p">(</span><span class="ne">FileNotFoundError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">FileNotFoundError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Error with fd file: &quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
                 <span class="k">pass</span>
             <span class="k">else</span><span class="p">:</span>
@@ -965,7 +953,7 @@
                 <span class="n">fwhm</span> <span class="o">=</span> <span class="p">[]</span>
                 <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">str_fwhm</span><span class="p">:</span>
                     <span class="n">fwhm</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
-            <span class="k">except</span> <span class="p">(</span><span class="ne">FileNotFoundError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">FileNotFoundError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Error with fwhm file: &quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
                 <span class="k">pass</span>
             <span class="k">else</span><span class="p">:</span>
@@ -1023,7 +1011,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_spikes_file</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">spikes_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_spikes_file</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-            <span class="k">except</span> <span class="p">(</span><span class="ne">FileNotFoundError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">FileNotFoundError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Error with fd file: &quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
                 <span class="k">pass</span>
             <span class="k">else</span><span class="p">:</span>
@@ -1428,7 +1416,8 @@
             <span class="mi">1</span><span class="p">,</span>
         <span class="p">)[:,</span> <span class="mi">0</span><span class="p">]</span>
 
-        <span class="c1"># Compute (predicted) standard deviation of temporal difference time series</span>
+        <span class="c1"># Compute (predicted) standard deviation of temporal</span>
+        <span class="c1"># difference time series</span>
         <span class="n">diff_sdhat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">ar1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()))</span> <span class="o">*</span> <span class="n">func_sd</span>
         <span class="n">diff_sd_mean</span> <span class="o">=</span> <span class="n">diff_sdhat</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
 
@@ -1447,7 +1436,7 @@
                 <span class="n">func_diff</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">diff_sdhat</span><span class="p">]</span> <span class="o">*</span> <span class="n">func_diff</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
             <span class="p">)</span>
             <span class="n">dvars_vx_stdz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">diff_vx_stdz</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
-        <span class="k">except</span><span class="p">:</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Error calculating vx-wise std DVARS...!&quot;</span><span class="p">)</span>
             <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span>
                 <span class="n">file_out</span><span class="p">,</span>
@@ -1661,7 +1650,7 @@
 <span class="sd">      etc.</span>
 <span class="sd">    - To work correctly, the database entry for the parametric_maps items must</span>
 <span class="sd">      have the &quot;PatientName&quot; tag filled in</span>
-<span class="sd">    - To work correctly, the output_directory &quot;/roi_&quot;PatientName&quot;/convROI_BOLD&quot;</span>
+<span class="sd">    - To work correctly, the &quot;/roi_&quot;PatientName&quot;/convROI_BOLD&quot;</span>
 <span class="sd">      must exist and contain a previous convolution results (normally using</span>
 <span class="sd">      the ConvROI brick)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -1787,6 +1776,11 @@
             <span class="n">analysis_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">roi_dir</span><span class="p">,</span> <span class="s2">&quot;ROI_analysis&quot;</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">analysis_dir</span><span class="p">):</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Mean_stdDev_calc:</span><span class="se">\n</span><span class="s1">A &quot;</span><span class="si">{}</span><span class="s1">&quot; folder already exists, &#39;</span>
+                    <span class="s2">&quot;it will be overwritten by this new &quot;</span>
+                    <span class="s2">&quot;calculation...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">analysis_dir</span><span class="p">)</span>
+                <span class="p">)</span>
                 <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">analysis_dir</span><span class="p">)</span>
 
             <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">analysis_dir</span><span class="p">)</span>
@@ -1825,24 +1819,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="s2">&quot;roi_&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;patient_name&quot;</span><span class="p">]</span>
         <span class="p">)</span>
         <span class="n">conv_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">roi_dir</span><span class="p">,</span> <span class="s2">&quot;convROI_BOLD&quot;</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">conv_dir</span><span class="p">):</span>
-            <span class="nb">print</span><span class="p">(</span>
-                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Mean_stdDev_cal brick:</span><span class="se">\n</span><span class="s2">No </span><span class="si">{}</span><span class="s2"> folder detected ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                    <span class="n">conv_dir</span>
-                <span class="p">)</span>
-            <span class="p">)</span>
-            <span class="c1"># return</span>
-
         <span class="n">analysis_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">roi_dir</span><span class="p">,</span> <span class="s2">&quot;ROI_analysis&quot;</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">analysis_dir</span><span class="p">):</span>
-            <span class="nb">print</span><span class="p">(</span>
-                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Mean_stdDev_cal brick:</span><span class="se">\n</span><span class="s2">No </span><span class="si">{}</span><span class="s2"> folder detected ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                    <span class="n">analysis_dir</span>
-                <span class="p">)</span>
-            <span class="p">)</span>
-            <span class="c1"># return</span>
 
         <span class="k">for</span> <span class="n">parametric_map</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parametric_maps</span><span class="p">:</span>
             <span class="c1"># Resampling, if necessary, the parametric_map to the size of the</span>
@@ -2099,7 +2076,7 @@
             <span class="c1">#          element of parametric_maps. This is only fine if all the</span>
             <span class="c1">#          elements of parametric_maps correspond to the same</span>
             <span class="c1">#          patient.</span>
-            <span class="c1"># FIXME 2: The data should be anonymised and we should use</span>
+            <span class="c1"># FIXME 2: The data should be anonymized and we should use</span>
             <span class="c1">#          PatientRef instead of PatientName !</span>
             <span class="n">patient_name</span> <span class="o">=</span> <span class="n">get_dbFieldValue</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">parametric_maps</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;PatientName&quot;</span>
@@ -2277,7 +2254,8 @@
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">analysis_dir</span><span class="p">):</span>
             <span class="nb">print</span><span class="p">(</span>
-                <span class="s2">&quot;No &#39;ROI_analysis&#39; folder in the working directory </span><span class="si">{0}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="s2">&quot;No &#39;ROI_analysis&#39; folder in the working &quot;</span>
+                <span class="s2">&quot;directory </span><span class="si">{0}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                     <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parametric_maps</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
                 <span class="p">)</span>
             <span class="p">)</span>
@@ -2503,7 +2481,8 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    * Computes the number of spikes.</span>
 
-<span class="sd">    Please, see the complete documentation for the `Spikes&#39; brick in the populse.mia_processes website</span>
+<span class="sd">    Please, see the complete documentation for the `Spikes&#39; brick in the</span>
+<span class="sd">    populse.mia_processes website</span>
 <span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/reports/Spikes.html&gt;`_</span>
 
 <span class="sd">    adapted from:</span>
@@ -2724,7 +2703,8 @@
 <span class="sd">    :math:`\chi^2` distribution onto the intensity distribution of</span>
 <span class="sd">    non-artifactual background (within the &quot;hat&quot; mask):</span>
 <span class="sd">    .. math ::</span>
-<span class="sd">        \chi^2_n = \frac{2}{(\sigma \sqrt{2})^{2n} \, (n - 1)!}x^{2n - 1}\, e^{-\frac{x}{2}}</span>
+<span class="sd">        \chi^2_n = \frac{2}{(\sigma \sqrt{2})^{2n} \,</span>
+<span class="sd">                            (n - 1)!}x^{2n - 1}\, e^{-\frac{x}{2}}</span>
 <span class="sd">    where :math:`n` is the number of coil elements.</span>
 <span class="sd">    :param numpy.ndarray img: input data</span>
 <span class="sd">    :param numpy.ndarray airmask: input air mask without artifacts</span>
@@ -2784,11 +2764,15 @@
 <span class="sd">    the :abbr:`INU (intensity non-uniformity)` artifact [Ganzetti2016]_.</span>
 <span class="sd">    Lower is better.</span>
 <span class="sd">    .. math::</span>
-<span class="sd">        \text{CJV} = \frac{\sigma_\text{WM} + \sigma_\text{GM}}{|\mu_\text{WM} - \mu_\text{GM}|}.</span>
+<span class="sd">        \text{CJV} = \frac{\sigma_\text{WM} +</span>
+<span class="sd">                           \sigma_\text{GM}}{|\mu_\text{WM} -</span>
+<span class="sd">                           \mu_\text{GM}|}.</span>
 <span class="sd">    :param float mu_wm: mean of signal within white-matter mask.</span>
 <span class="sd">    :param float mu_gm: mean of signal within gray-matter mask.</span>
-<span class="sd">    :param float sigma_wm: standard deviation of signal within white-matter mask.</span>
-<span class="sd">    :param float sigma_gm: standard deviation of signal within gray-matter mask.</span>
+<span class="sd">    :param float sigma_wm: standard deviation of signal within</span>
+<span class="sd">                           white-matter mask.</span>
+<span class="sd">    :param float sigma_gm: standard deviation of signal within</span>
+<span class="sd">                           gray-matter mask.</span>
 <span class="sd">    :return: the computed CJV</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="nb">float</span><span class="p">((</span><span class="n">sigma_wm</span> <span class="o">+</span> <span class="n">sigma_gm</span><span class="p">)</span> <span class="o">/</span> <span class="nb">abs</span><span class="p">(</span><span class="n">mu_wm</span> <span class="o">-</span> <span class="n">mu_gm</span><span class="p">))</span></div>
@@ -2799,13 +2783,18 @@
 <span class="sd">    Calculate the :abbr:`CNR (Contrast-to-Noise Ratio)` [Magnota2006]_.</span>
 <span class="sd">    Higher values are better.</span>
 <span class="sd">    .. math::</span>
-<span class="sd">        \text{CNR} = \frac{|\mu_\text{GM} - \mu_\text{WM} |}{\sqrt{\sigma_B^2 +</span>
-<span class="sd">        \sigma_\text{WM}^2 + \sigma_\text{GM}^2}},</span>
-<span class="sd">    where :math:`\sigma_B` is the standard deviation of the noise distribution within</span>
-<span class="sd">    the air (background) mask.</span>
+<span class="sd">        \text{CNR} = \frac{|\mu_\text{GM} -</span>
+<span class="sd">                           \mu_\text{WM} |}{\sqrt{\sigma_B^2 +</span>
+<span class="sd">                           \sigma_\text{WM}^2 +</span>
+<span class="sd">                           \sigma_\text{GM}^2}},</span>
+<span class="sd">    where :math:`\sigma_B` is the standard deviation of the noise distribution</span>
+<span class="sd">    withinmthe air (background) mask.</span>
+
 <span class="sd">    :param float mu_wm: mean of signal within white-matter mask.</span>
 <span class="sd">    :param float mu_gm: mean of signal within gray-matter mask.</span>
-<span class="sd">    :param float sigma_air: standard deviation of the air surrounding the head (&quot;hat&quot; mask).</span>
+<span class="sd">    :param float sigma_air: standard deviation of the air surrounding the</span>
+<span class="sd">                            head (&quot;hat&quot; mask).</span>
+
 <span class="sd">    :return: the computed CNR</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">mu_wm</span> <span class="o">-</span> <span class="n">mu_gm</span><span class="p">)</span> <span class="o">/</span> <span class="n">sigma_air</span><span class="p">)</span></div>
@@ -2825,10 +2814,11 @@
 <span class="sd">    :abbr:`EFC (Entropy Focus Criterion)` can be compared across images with</span>
 <span class="sd">    different dimensions:</span>
 <span class="sd">    .. math::</span>
-<span class="sd">        \text{EFC} = \left( \frac{N}{\sqrt{N}} \, \log{\sqrt{N}^{-1}} \right) \text{E}</span>
+<span class="sd">        \text{EFC} =</span>
+<span class="sd">        \left( \frac{N}{\sqrt{N}} \, \log{\sqrt{N}^{-1}} \right) \text{E}</span>
 <span class="sd">    :param numpy.ndarray img: input data</span>
-<span class="sd">    :param numpy.ndarray framemask: a mask of empty voxels inserted after a rotation of</span>
-<span class="sd">      data</span>
+<span class="sd">    :param numpy.ndarray framemask: a mask of empty voxels inserted after</span>
+<span class="sd">                                    a rotation of data</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">framemask</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -2856,15 +2846,17 @@
 
 <div class="viewcode-block" id="fber"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.fber">[docs]</a><span class="k">def</span> <span class="nf">fber</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">headmask</span><span class="p">,</span> <span class="n">rotmask</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Calculate the :abbr:`FBER (Foreground-Background Energy Ratio)` [Shehzad2015]_,</span>
+<span class="sd">    Calculate the</span>
+<span class="sd">    :abbr:`FBER (Foreground-Background Energy Ratio)` [Shehzad2015]_,</span>
 <span class="sd">    defined as the mean energy of image values within the head relative</span>
 <span class="sd">    to outside the head. Higher values are better.</span>
 <span class="sd">    .. math::</span>
 <span class="sd">        \text{FBER} = \frac{E[|F|^2]}{E[|B|^2]}</span>
 <span class="sd">    :param numpy.ndarray img: input data</span>
-<span class="sd">    :param numpy.ndarray headmask: a mask of the head (including skull, skin, etc.)</span>
-<span class="sd">    :param numpy.ndarray rotmask: a mask of empty voxels inserted after a rotation of</span>
-<span class="sd">      data</span>
+<span class="sd">    :param numpy.ndarray headmask: a mask of the head (including skull,</span>
+<span class="sd">                                   skin, etc.)</span>
+<span class="sd">    :param numpy.ndarray rotmask: a mask of empty voxels inserted after</span>
+<span class="sd">                                  a rotation of data</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">fg_mu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">img</span><span class="p">[</span><span class="n">headmask</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
@@ -2898,9 +2890,9 @@
     <span class="n">t_z</span> <span class="o">=</span> <span class="n">_robust_zscore</span><span class="p">(</span><span class="n">slice_mean</span><span class="p">)</span>
     <span class="n">spikes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">t_z</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">spike_thresh</span>
     <span class="n">spike_inds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">spikes</span><span class="o">.</span><span class="n">nonzero</span><span class="p">())</span>
-    <span class="c1"># mask out the spikes and recompute z-scores using variance uncontaminated with spikes.</span>
-    <span class="c1"># This will catch smaller spikes that may have been swamped by big</span>
-    <span class="c1"># ones.</span>
+    <span class="c1"># mask out the spikes and recompute z-scores using variance uncontaminated</span>
+    <span class="c1"># with spikes. This will catch smaller spikes that may have been swamped</span>
+    <span class="c1"># by big ones.</span>
     <span class="n">data</span><span class="o">.</span><span class="n">mask</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">spike_inds</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">spike_inds</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="n">slice_mean2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="n">t_z</span> <span class="o">=</span> <span class="n">_robust_zscore</span><span class="p">(</span><span class="n">slice_mean2</span><span class="p">)</span>
@@ -2927,7 +2919,8 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the :abbr:`GSR (ghost to signal ratio)` [Giannelli2010]_.</span>
 <span class="sd">    The procedure is as follows:</span>
-<span class="sd">      #. Create a Nyquist ghost mask by circle-shifting the original mask by :math:`N/2`.</span>
+<span class="sd">      #. Create a Nyquist ghost mask by circle-shifting the original</span>
+<span class="sd">         mask by :math:`N/2`.</span>
 <span class="sd">      #. Rotate by :math:`N/2`</span>
 <span class="sd">      #. Remove the intersection with the original mask</span>
 <span class="sd">      #. Generate a non-ghost background</span>
@@ -3067,7 +3060,8 @@
 
 <span class="sd">    .. math ::</span>
 <span class="sd">        \\text{rPVE}^k = \\frac{1}{N} \\left[ \\sum\\limits_{p^k_i \</span>
-<span class="sd">\\in [0.5, P_{98}]} p^k_i + \\sum\\limits_{p^k_i \\in [P_{2}, 0.5)} 1 - p^k_i \\right]</span>
+<span class="sd">        \\in [0.5, P_{98}]} p^k_i + \\sum\\limits_{p^k_i \</span>
+<span class="sd">        \\in [P_{2}, 0.5)} 1 - p^k_i \\right]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">pvfs</span> <span class="o">=</span> <span class="p">{}</span>
@@ -3109,18 +3103,18 @@
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate the :abbr:`SNR (Signal-to-Noise Ratio)`.</span>
 
-<span class="sd">    This must be an air mask around the head, and it should not contain artifacts.</span>
-<span class="sd">    The computation is done following the eq. A.12 of [Dietrich2007]_, which</span>
-<span class="sd">    includes a correction factor in the estimation of the standard deviation of</span>
-<span class="sd">    air and its Rayleigh distribution:</span>
+<span class="sd">    This must be an air mask around the head, and it should not contain</span>
+<span class="sd">    artifacts. The computation is done following the eq. A.12 of</span>
+<span class="sd">    [Dietrich2007]_, which includes a correction factor in the estimation</span>
+<span class="sd">    of the standard deviation of air and its Rayleigh distribution:</span>
 
 <span class="sd">    .. math::</span>
-
-<span class="sd">        \text{SNR} = \frac{\mu_F}{\sqrt{\frac{2}{4-\pi}}\,\sigma_\text{air}}.</span>
-
+<span class="sd">        \text{SNR} =</span>
+<span class="sd">        \frac{\mu_F}{\sqrt{\frac{2}{4-\pi}}\,\sigma_\text{air}}.</span>
 
 <span class="sd">    :param float mu_fg: mean of foreground.</span>
-<span class="sd">    :param float sigma_air: standard deviation of the air surrounding the head (&quot;hat&quot; mask).</span>
+<span class="sd">    :param float sigma_air: standard deviation of the air surrounding</span>
+<span class="sd">                            the head (&quot;hat&quot; mask).</span>
 
 <span class="sd">    :return: the computed SNR for the foreground segmentation</span>
 
@@ -3215,10 +3209,11 @@
 
 <div class="viewcode-block" id="volume_fraction"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.volume_fraction">[docs]</a><span class="k">def</span> <span class="nf">volume_fraction</span><span class="p">(</span><span class="n">pvms</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Computes the :abbr:`ICV (intracranial volume)` fractions</span>
-<span class="sd">    corresponding to the (partial volume maps).</span>
+<span class="sd">    Computes the :abbr:`ICV (intracranial volume)` fractions corresponding to</span>
+<span class="sd">    the (partial volume maps).</span>
 <span class="sd">    .. math ::</span>
-<span class="sd">        \text{ICV}^k = \frac{\sum_i p^k_i}{\sum\limits_{x \in X_\text{brain}} 1}</span>
+<span class="sd">        \text{ICV}^k =</span>
+<span class="sd">        \frac{\sum_i p^k_i}{\sum\limits_{x \in X_\text{brain}} 1}</span>
 <span class="sd">    :param list pvms: list of :code:`numpy.ndarray` of partial volume maps.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">tissue_vfs</span> <span class="o">=</span> <span class="p">{}</span>
@@ -3310,8 +3305,6 @@
 
 <span class="k">def</span> <span class="nf">_AR_est_YW</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">rxx</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Retrieve AR coefficients while dropping the sig_sq return value&quot;&quot;&quot;</span>
-    <span class="kn">from</span> <span class="nn">nitime.algorithms</span> <span class="kn">import</span> <span class="n">AR_est_YW</span>
-
     <span class="k">return</span> <span class="n">AR_est_YW</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">rxx</span><span class="o">=</span><span class="n">rxx</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 

@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mean_stdDev_calc brick &#8212; mia_processes 2.2.1-dev+17d7d44 documentation</title>
+    <title>Mean_stdDev_calc brick &#8212; mia_processes 2.2.1-dev+a9ea159 documentation</title>
     <link rel="stylesheet" href="../../../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
@@ -18,7 +18,7 @@
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
-          <span>mia_processes 2.2.1-dev+17d7d44 documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+a9ea159 documentation</span></a></h1>
         <h2 class="heading"><span>Mean_stdDev_calc brick</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -48,66 +48,81 @@
 </table>
 <div class="section" id="mean-stddev-calc-brick">
 <h1>Mean_stdDev_calc brick<a class="headerlink" href="#mean-stddev-calc-brick" title="Permalink to this headline">¶</a></h1>
-<p>Makes the mean and standard deviation of the parametric_maps</p>
+<div class="section" id="makes-the-mean-and-standard-deviation-of-parametric-maps">
+<h2>Makes the mean and standard deviation of parametric maps.<a class="headerlink" href="#makes-the-mean-and-standard-deviation-of-parametric-maps" title="Permalink to this headline">¶</a></h2>
 <blockquote>
 <div><ul class="simple">
-<li><p>The parametric_maps are first convolved with the ROIs corresponding
-to doublet_list.</p></li>
-<li><p>ROIs are defined from doublet_list parameter as
+<li><p>The <cite>parametric_maps</cite> are first convolved with the ROIs corresponding
+to <cite>doublet_list</cite>. The mean and standard deviation are then calculated
+for the ROI in each parametric maps.</p></li>
+<li><p>ROIs are defined from <cite>doublet_list</cite> parameter as
 doublet_list[0][0] + doublet_list[0][1] + ‘.nii’,
 doublet_list[1][0] + doublet_list[1][1] + ‘.nii’,
 etc.</p></li>
-<li><p>To work correctly, the database entry for the parametric_maps items must
-have the “PatientName” tag filled in</p></li>
-<li><p>To work correctly, the output_directory “/roi_”PatientName”/convROI_BOLD”
-must exist and contain a previous convolution results (normally using
-the ConvROI brick)</p></li>
+<li><p>The “/roi_<cite>PatientName</cite>/ROI_analysis” directory is
+created to receive the results from the runtime (e.g.
+“/roi_<cite>PatientName</cite>/ROI_analysis/” + doublet_list[0][0] + doublet_list[0][1] + “_meanspmT_BOLD.txt”).</p></li>
+<li><p>To work correctly, the “/roi_/<cite>PatientName</cite>/convROI_BOLD” directory
+must exist and contain the ROI files (e.g.
+“/roi_<cite>PatientName</cite>/convROI_BOLD/conv” + doublet_list[0][0] + doublet_list[0][1] + “.nii”).</p></li>
+<li><p>To work correctly, the database entry for the <cite>parametric_maps</cite> items must
+have the <cite>PatientName</cite> tag filled in.</p></li>
 </ul>
 </div></blockquote>
-<p>/!/ Documentation in progress</p>
 <hr class="docutils" />
 <p><strong>Mandatory inputs parameters:</strong></p>
 <ul>
 <li><dl>
 <dt><em>doublet_list</em> (a list of lists)</dt><dd><p>A list of lists containing doublets of strings.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[[</span><span class="s2">&quot;ROI_OCC&quot;</span><span class="p">,</span> <span class="s2">&quot;_L&quot;</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;ROI_OCC&quot;</span><span class="p">,</span> <span class="s2">&quot;_R&quot;</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;ROI_PAR&quot;</span><span class="p">,</span> <span class="s2">&quot;_l&quot;</span><span class="p">]]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[[</span><span class="s2">&quot;ROI_OCC&quot;</span><span class="p">,</span> <span class="s2">&quot;_L&quot;</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;ROI_OCC&quot;</span><span class="p">,</span> <span class="s2">&quot;_R&quot;</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;ROI_PAR&quot;</span><span class="p">,</span> <span class="s2">&quot;_l&quot;</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;ROI_PAR&quot;</span><span class="p">,</span> <span class="s2">&quot;_R&quot;</span><span class="p">]]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><p><em>parametric_maps</em> (a list of existing files)</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/raw_data/spmT_0001.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/raw_data/beta_0001.nii&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+<p><strong>Outputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>mean_out_files</em> (a list of files)</dt><dd><p>A list of .txt files with the calculated average for each ROI determined after convolution.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_L_meanspmT_BOLD.txt&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_R_meanspmT_BOLD.txt&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_L_meanspmT_BOLD.txt&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_R_meanspmT_BOLD.txt&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_L_meanbeta_BOLD.txt&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_R_meanbeta_BOLD.txt&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_L_meanbeta_BOLD.txt&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_R_meanbeta_BOLD.txt&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 </dd>
 </dl>
 </li>
 <li><dl>
-<dt><em>parametric_maps</em> (a list of existing files)</dt><dd><p>A list of files .</p>
-<blockquote>
-<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[]</span>
+<dt><em>std_out_files</em> (a list of files)</dt><dd><p>A list of .txt files with the standard deviation for each ROI determined after convolution.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_L_stdspmT_BOLD.txt&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_R_stdspmT_BOLD.txt&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_L_stdspmT_BOLD.txt&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_R_stdspmT_BOLD.txt&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_L_stdbeta_BOLD.txt&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_R_stdbeta_BOLD.txt&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_L_stdbeta_BOLD.txt&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_R_stdbeta_BOLD.txt&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
-</div></blockquote>
 </dd>
 </dl>
 </li>
 </ul>
-<p><strong>Outputs parameters:</strong></p>
-<ul>
-<li><ul>
-<li><p>mean_out_files* (a list of files)
-A list of .txt files with the calculated average for each ROI determined after convolution.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[]</span>
-</pre></div>
 </div>
-</li>
-</ul>
-</li>
-<li><ul>
-<li><p>std_out_files* (a list of files)
-A list of .txt files with the standard deviation for each ROI determined after convolution.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[]</span>
-</pre></div>
-</div>
-</li>
-</ul>
-</li>
-</ul>
 </div>
 
 

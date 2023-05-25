@@ -12,4 +12,4 @@ The atomic calculations from dipy.
 # for details.
 ##########################################################################
 
-from .processes import Denoise
+from .processes import Denoise  # noqa: F401

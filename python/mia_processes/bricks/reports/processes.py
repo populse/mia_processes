@@ -49,7 +49,7 @@ import json
 import os
 import re
 import shutil
-from math import pi, sqrt
+from math import sqrt
 
 # nibabel import
 import nibabel as nb
@@ -59,16 +59,7 @@ from nilearn.signal import clean
 from nipy.algorithms.registration import aff2euler, to_matrix44
 
 # nipype import
-from nipype.interfaces.base import (
-    DictStrStr,
-    File,
-    InputMultiPath,
-    OutputMultiPath,
-    Str,
-    TraitListObject,
-    Undefined,
-    traits,
-)
+from nipype.interfaces.base import File, OutputMultiPath, Undefined, traits
 from nitime.algorithms import AR_est_YW
 from numpy.polynomial import Legendre
 
@@ -76,9 +67,6 @@ from numpy.polynomial import Legendre
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 from scipy.stats import kurtosis  # pylint: disable=E0611
 from skimage.transform import resize
-
-# soma-base imports
-from soma.qt_gui.qt_backend.Qt import QMessageBox
 
 # mia_processes import
 from mia_processes.utils import checkFileExt, get_dbFieldValue
@@ -503,7 +491,7 @@ class AnatIQMs(ProcessMIA):
                 fwhm = []
                 for item in str_fwhm:
                     fwhm.append(float(item))
-            except (FileNotFoundError, TypeError):
+            except (FileNotFoundError, TypeError) as e:
                 print("\nError with fwhm file: ", e)
                 pass
             else:
@@ -858,7 +846,7 @@ class BoldIQMs(ProcessMIA):
         if self.in_outliers_file:
             try:
                 outliers = np.loadtxt(self.in_outliers_file, skiprows=0)
-            except (FileNotFoundError, TypeError):
+            except (FileNotFoundError, TypeError) as e:
                 print("\nError with aor file: ", e)
                 pass
             else:
@@ -870,7 +858,7 @@ class BoldIQMs(ProcessMIA):
             try:
                 with open(self.in_QI_file, "r") as fin:
                     lines = fin.readlines()
-            except (FileNotFoundError, TypeError):
+            except (FileNotFoundError, TypeError) as e:
                 print("\nError with aqi file: ", e)
                 pass
             else:
@@ -888,7 +876,7 @@ class BoldIQMs(ProcessMIA):
                 dvars = np.loadtxt(
                     self.in_dvars_file, skiprows=1, usecols=list(range(3))
                 )
-            except (FileNotFoundError, TypeError):
+            except (FileNotFoundError, TypeError) as e:
                 print("\nError with dvars file: ", e)
                 pass
             else:
@@ -907,7 +895,7 @@ class BoldIQMs(ProcessMIA):
         if self.in_fd_file:
             try:
                 fd_data = np.loadtxt(self.in_fd_file, skiprows=1)
-            except (FileNotFoundError, TypeError):
+            except (FileNotFoundError, TypeError) as e:
                 print("\nError with fd file: ", e)
                 pass
             else:
@@ -931,7 +919,7 @@ class BoldIQMs(ProcessMIA):
                 fwhm = []
                 for item in str_fwhm:
                     fwhm.append(float(item))
-            except (FileNotFoundError, TypeError):
+            except (FileNotFoundError, TypeError) as e:
                 print("\nError with fwhm file: ", e)
                 pass
             else:
@@ -989,7 +977,7 @@ class BoldIQMs(ProcessMIA):
         if self.in_spikes_file:
             try:
                 spikes_data = np.loadtxt(self.in_spikes_file, skiprows=0)
-            except (FileNotFoundError, TypeError):
+            except (FileNotFoundError, TypeError) as e:
                 print("\nError with fd file: ", e)
                 pass
             else:
@@ -1394,7 +1382,8 @@ class ComputeDVARS(ProcessMIA):
             1,
         )[:, 0]
 
-        # Compute (predicted) standard deviation of temporal difference time series
+        # Compute (predicted) standard deviation of temporal
+        # difference time series
         diff_sdhat = np.squeeze(np.sqrt(((1 - ar1) * 2).tolist())) * func_sd
         diff_sd_mean = diff_sdhat.mean()
 
@@ -1627,7 +1616,7 @@ class Mean_stdDev_calc(ProcessMIA):
       etc.
     - To work correctly, the database entry for the parametric_maps items must
       have the "PatientName" tag filled in
-    - To work correctly, the output_directory "/roi_"PatientName"/convROI_BOLD"
+    - To work correctly, the "/roi_"PatientName"/convROI_BOLD"
       must exist and contain a previous convolution results (normally using
       the ConvROI brick)
     """
@@ -1753,6 +1742,11 @@ class Mean_stdDev_calc(ProcessMIA):
             analysis_dir = os.path.join(roi_dir, "ROI_analysis")
 
             if os.path.isdir(analysis_dir):
+                print(
+                    '\nMean_stdDev_calc:\nA "{}" folder already exists, '
+                    "it will be overwritten by this new "
+                    "calculation...".format(analysis_dir)
+                )
                 shutil.rmtree(analysis_dir)
 
             os.mkdir(analysis_dir)
@@ -1766,13 +1760,13 @@ class Mean_stdDev_calc(ProcessMIA):
                     mean_out_files.append(
                         os.path.join(
                             analysis_dir,
-                            roi[0] + roi[1] + "_mean" + map_name + ".txt",
+                            roi[0] + roi[1] + "_mean_" + map_name + ".txt",
                         )
                     )
                     std_out_files.append(
                         os.path.join(
                             analysis_dir,
-                            roi[0] + roi[1] + "_std" + map_name + ".txt",
+                            roi[0] + roi[1] + "_std_" + map_name + ".txt",
                         )
                     )
 
@@ -1791,24 +1785,7 @@ class Mean_stdDev_calc(ProcessMIA):
             self.output_directory, "roi_" + self.dict4runtime["patient_name"]
         )
         conv_dir = os.path.join(roi_dir, "convROI_BOLD")
-
-        if not os.path.isdir(conv_dir):
-            print(
-                "\nMean_stdDev_cal brick:\nNo {} folder detected ...".format(
-                    conv_dir
-                )
-            )
-            # return
-
         analysis_dir = os.path.join(roi_dir, "ROI_analysis")
-
-        if not os.path.isdir(analysis_dir):
-            print(
-                "\nMean_stdDev_cal brick:\nNo {} folder detected ...".format(
-                    analysis_dir
-                )
-            )
-            # return
 
         for parametric_map in self.parametric_maps:
             # Resampling, if necessary, the parametric_map to the size of the
@@ -1905,7 +1882,8 @@ class Mean_stdDev_calc(ProcessMIA):
                 # Writing the value in the corresponding file:
                 # analysis_dir'/'roi[0]roi[1]'_mean'map_name'.txt')
                 mean_out_file = os.path.join(
-                    analysis_dir, roi[0] + roi[1] + "_mean" + map_name + ".txt"
+                    analysis_dir,
+                    roi[0] + roi[1] + "_mean_" + map_name + ".txt",
                 )
 
                 with open(mean_out_file, "w") as f:
@@ -1914,7 +1892,7 @@ class Mean_stdDev_calc(ProcessMIA):
                 # Writing the value in the corresponding file:
                 # analysis_dir'/'roi[0]roi[1]'_std'map_name'.txt')
                 std_out_file = os.path.join(
-                    analysis_dir, roi[0] + roi[1] + "_std" + map_name + ".txt"
+                    analysis_dir, roi[0] + roi[1] + "_std_" + map_name + ".txt"
                 )
 
                 with open(std_out_file, "w") as f:
@@ -1944,6 +1922,7 @@ class Result_collector(ProcessMIA):
             "Defines the type of calculation (a list of strings, "
             'e.g. ["mean", "std", "IL_mean", "IL_std"]'
         )
+        laterality_index_desc = "Calculates the laterality indexes (a boolean)"
         mean_in_files_desc = (
             "A list of .txt files containing the average "
             "value of a parameter for a given territory or "
@@ -1997,6 +1976,16 @@ class Result_collector(ProcessMIA):
                 output=False,
                 optional=True,
                 desc=calculs_desc,
+            ),
+        )
+
+        self.add_trait(
+            "laterality_index",
+            traits.Bool(
+                default_value=False,
+                output=False,
+                optional=True,
+                desc=laterality_index_desc,
             ),
         )
 
@@ -2060,12 +2049,18 @@ class Result_collector(ProcessMIA):
         super(Result_collector, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
-        if self.calculs != Undefined and self.parametric_maps != Undefined:
+        if (
+            self.parametric_maps != Undefined
+            and self.calculs != Undefined
+            and self.mean_in_files != Undefined
+            and self.std_in_files != Undefined
+            and self.doublet_list != Undefined
+        ):
             # FIXME 1: We retrieve the name of the patient from the first
             #          element of parametric_maps. This is only fine if all the
             #          elements of parametric_maps correspond to the same
             #          patient.
-            # FIXME 2: The data should be anonymised and we should use
+            # FIXME 2: The data should be anonymized and we should use
             #          PatientRef instead of PatientName !
             patient_name = get_dbFieldValue(
                 self.project, self.parametric_maps[0], "PatientName"
@@ -2120,7 +2115,7 @@ class Result_collector(ProcessMIA):
 
             self.outputs["out_files"] = out_files
 
-            # FIXME: the data should be anonymised and we should use PatientRef
+            # FIXME: the data should be anonymized and we should use PatientRef
             #        instead of PatientName !
             if (
                 self.patient_info.get("PatientName") is None
@@ -2226,9 +2221,9 @@ class Result_collector(ProcessMIA):
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
         # No need the next line (we don't use self.process and SPM)
-        # super(Mean_stdDev_calc, self).run_process_mia()
+        # super(Result_collector, self).run_process_mia()
 
-        # Getting the list of all positions (doublet_list without hemisphere)
+        # Getting the list of all ROI (doublet_list without hemisphere)
         roi_list = []  # list of all ROIs
 
         for roi in self.doublet_list:
@@ -2241,22 +2236,71 @@ class Result_collector(ProcessMIA):
         )
         analysis_dir = os.path.join(roi_dir, "ROI_analysis")
 
+        # FIXME: The following check is already performed at initialisation
+        #        time. We could remove the check here.
         if not os.path.isdir(analysis_dir):
             print(
-                "No 'ROI_analysis' folder in the working directory {0}.".format(
+                "No 'ROI_analysis' folder in the working "
+                "directory {0}.".format(
                     os.path.dirname(self.parametric_maps[0])
                 )
             )
-            return {}  # FIXME: Test what exactly happens in this case
+            return {}
 
-        for parametric_map in self.parametric_maps:
-            map_name_file = os.path.basename(parametric_map)[0:9]
-            map_name = map_name_file[0:4]
+        res = dict()  # the summary of the data
+        parametrics = []  # the parametric data
+        calculs = []  # the calcul types
+        # rois = []  # the ROIs under analysis
+        contrast = []  # the contrast used
+        # Waiting for take in input the merged
+        # self.mean_in_files + self.std_in_files
+        all_data = self.mean_in_files + self.std_in_files
 
-            for calcul in self.calculs:
+        for data in all_data:
+            roi, hemi, calcul, param, contrast = os.path.splitext(
+                os.path.basename(data)
+            )[0].split("_")
+
+            if contrast not in res:
+                res[contrast] = {}
+
+            if param not in res[contrast]:
+                res[contrast][param] = {}
+
+            if calcul not in res[contrast][param]:
+                res[contrast][param][calcul] = {}
+
+            if roi not in res[contrast][param][calcul]:
+                res[contrast][param][calcul][roi] = {}
+
+            try:
+                with open(data, "r") as f_read:
+                    data_val = float(f_read.read())
+
+            except Exception:
+                print(
+                    "\nResult_collector brick:\nNo result "
+                    "found in {} ...\n".format(data)
+                )
+                data_val = "Undefined"
+
+            if hemi in res[contrast][param][calcul][roi]:
+                print(
+                    "\nResult_collector brick:\nThe data in {} exist already "
+                    "in other files of toto. Overwriting with the "
+                    "new data ...\n".format(data)
+                )
+
+            res[contrast][param][calcul][roi][hemi] = data_val
+
+        if self.laterality_index is True:
+            calculs.extend(["IL_" + i for i in calculs])
+
+        for parametric_map in parametrics:
+            for calcul in calculs:
                 out_file = os.path.join(
                     analysis_dir,
-                    "{0}_{1}_{2}.xls".format(self.data, calcul, map_name_file),
+                    "{0}_{1}.xls".format(calcul, parametric_map),
                 )
 
                 with open(out_file, "w") as f:
@@ -2268,208 +2312,230 @@ class Result_collector(ProcessMIA):
                     f.write("{0}\t".format("Gaz"))
                     f.write("{0}\t".format("Admin"))
 
-                    if calcul not in ["IL_mean", "IL_std"]:
-                        for roi in self.doublet_list:
-                            f.write(
-                                "{0}_{1}\t".format(map_name, roi[0] + roi[1])
-                            )
-
-                    else:
-                        for pos in roi_list:
-                            f.write("{0}_{1}\t".format(map_name, pos))
-
-                    # FIXME: We should iterate on each patient here ?
-                    f.write("\n{0}\t".format(self.patient_info["PatientName"]))
-                    f.write("{0}\t".format(self.patient_info["Pathology"]))
-                    # f.write("%3.1f\t" % self.patient_info["Age"])
-                    f.write("{0}\t".format(self.patient_info["Age"]))
-                    f.write("{0}\t".format(self.patient_info["Sex"]))
-                    f.write("{0}\t".format(self.patient_info["MR"]))
-                    f.write("{0}\t".format(self.patient_info["Gas"]))
-                    f.write("{0}\t".format(self.patient_info["GasAdmin"]))
-
-                    if calcul == "mean":
-                        for roi in self.doublet_list:
-                            roi_file = os.path.join(
-                                analysis_dir,
-                                "{0}_mean{1}_{2}.txt".format(
-                                    roi[0] + roi[1], map_name, self.data
-                                ),
-                            )
-                            try:
-                                with open(roi_file, "r") as f_read:
-                                    final_res = float(f_read.read())
-
-                                f.write("{0}\t".format(final_res))
-
-                            except FileNotFoundError:
-                                print(
-                                    "\nResult_collector brick:\n {} not "
-                                    "found ...\n".format(roi_file)
-                                )
-                                f.write("Undefined\t")
-
-                    elif calcul == "IL_mean":
-                        roi_checked = []
-
-                        for roi in self.doublet_list:
-                            if roi[0] in roi_checked:
-                                continue
-
-                            roi_file = os.path.join(
-                                analysis_dir,
-                                "{0}_mean{1}_{2}.txt".format(
-                                    roi[0] + roi[1], map_name, self.data
-                                ),
-                            )
-                            try:
-                                with open(roi_file, "r") as f_read:
-                                    roi_value = float(f_read.read())
-
-                            except FileNotFoundError:
-                                print(
-                                    "\nResult_collector brick:\n {} not "
-                                    "found ...\n".format(roi_file)
-                                )
-                                roi_value = None
-
-                            # Searching the ROI that has the same first element
-                            roi_2 = [
-                                s
-                                for s in self.doublet_list
-                                if roi[0] in s[0] and roi[1] != s[1]
-                            ][0]
-                            roi_file_2 = os.path.join(
-                                analysis_dir,
-                                "{0}_mean{1}_{2}."
-                                "txt".format(
-                                    roi_2[0] + roi_2[1], map_name, self.data
-                                ),
-                            )
-                            try:
-                                with open(roi_file_2, "r") as f_read:
-                                    roi_value_2 = float(f_read.read())
-
-                            except FileNotFoundError:
-                                print(
-                                    "\nResult_collector brick:\n {} not "
-                                    "found ...\n".format(roi_file_2)
-                                )
-                                roi_value_2 = None
-
-                            # IL = (Left - Right) / ((Left + Right)
-                            if roi[1] == "_L":
-                                sub_1 = roi_value
-                                sub_2 = roi_value_2
-
-                            else:
-                                sub_1 = roi_value_2
-                                sub_2 = roi_value
-
-                            if sub_1 is not None and sub_2 is not None:
-                                final_res = (sub_1 - sub_2) / (sub_1 + sub_2)
-                                f.write("{0}\t".format(final_res))
-
-                            else:
-                                f.write("Undefined\t")
-
-                            roi_checked.append(roi[0])
-
-                    elif calcul == "std":
-                        for roi in self.doublet_list:
-                            roi_file = os.path.join(
-                                analysis_dir,
-                                "{0}_std{1}_{2}.txt".format(
-                                    roi[0] + roi[1], map_name, self.data
-                                ),
-                            )
-
-                            try:
-                                with open(roi_file, "r") as f_read:
-                                    final_res = float(f_read.read())
-
-                                f.write("{0}\t".format(final_res))
-
-                            except FileNotFoundError:
-                                print(
-                                    "\nResult_collector brick:\n {} not "
-                                    "found ...\n".format(roi_file)
-                                )
-                                f.write("Undefined\t")
-
-                    elif calcul == "IL_std":
-                        roi_checked = []
-
-                        for roi in self.doublet_list:
-                            if roi[0] in roi_checked:
-                                continue
-
-                            roi_file = os.path.join(
-                                analysis_dir,
-                                "{0}_std{1}_{2}.txt".format(
-                                    roi[0] + roi[1], map_name, self.data
-                                ),
-                            )
-
-                            try:
-                                with open(roi_file, "r") as f_read:
-                                    roi_value = float(f_read.read())
-
-                            except FileNotFoundError:
-                                print(
-                                    "\nResult_collector brick:\n {} not "
-                                    "found ...\n".format(roi_file)
-                                )
-                                roi_value = None
-
-                            # Searching the roi that has the same first element
-                            roi_2 = [
-                                s
-                                for s in self.doublet_list
-                                if roi[0] in s[0] and roi[1] != s[1]
-                            ][0]
-
-                            roi_file_2 = os.path.join(
-                                analysis_dir,
-                                "{0}_std{1}_{2}.txt".format(
-                                    roi_2[0] + roi_2[1], map_name, self.data
-                                ),
-                            )
-
-                            try:
-                                with open(roi_file_2, "r") as f_read:
-                                    roi_value_2 = float(f_read.read())
-
-                            except FileNotFoundError:
-                                print(
-                                    "\nResult_collector brick:\n {} not "
-                                    "found ...\n".format(roi_file_2)
-                                )
-                                roi_value_2 = None
-
-                            # IL = (Left - Right) / ((Left + Right)
-                            if roi[1] == "_L":
-                                sub_1 = roi_value
-                                sub_2 = roi_value_2
-                            else:
-                                sub_1 = roi_value_2
-                                sub_2 = roi_value
-
-                            if sub_1 is not None and sub_2 is not None:
-                                final_res = (sub_1 - sub_2) / (sub_1 + sub_2)
-                                f.write("{0}\t".format(final_res))
-
-                            else:
-                                f.write("Undefined\t")
-
-                            roi_checked.append(roi[0])
+        # for parametric_map in self.parametric_maps:
+        #     map_name_file = os.path.basename(parametric_map)[0:9]
+        #     map_name = map_name_file[0:4]
+        #
+        #     for calcul in self.calculs:
+        #         out_file = os.path.join(
+        #             analysis_dir,
+        #             "{0}_{1}_{2}.xls".format(self.data, calcul,
+        #                                      map_name_file),
+        #         )
+        #
+        #         with open(out_file, "w") as f:
+        #             f.write("{0}\t".format("subjects"))
+        #             f.write("{0}\t".format("patho"))
+        #             f.write("{0}\t".format("age"))
+        #             f.write("{0}\t".format("sex"))
+        #             f.write("{0}\t".format("MR"))
+        #             f.write("{0}\t".format("Gaz"))
+        #             f.write("{0}\t".format("Admin"))
+        #
+        #             if calcul not in ["IL_mean", "IL_std"]:
+        #                 for roi in self.doublet_list:
+        #                     f.write(
+        #                         "{0}_{1}\t".format(map_name, roi[0] + roi[1])
+        #                     )
+        #
+        #             else:
+        #                 for pos in roi_list:
+        #                     f.write("{0}_{1}\t".format(map_name, pos))
+        #
+        #             # FIXME: We should iterate on each patient here ?
+        #             f.write("\n{0}\t".format(self.patient_info["PatientName"]))
+        #             f.write("{0}\t".format(self.patient_info["Pathology"]))
+        #             f.write("{0}\t".format(self.patient_info["Age"]))
+        #             f.write("{0}\t".format(self.patient_info["Sex"]))
+        #             f.write("{0}\t".format(self.patient_info["MR"]))
+        #             f.write("{0}\t".format(self.patient_info["Gas"]))
+        #             f.write("{0}\t".format(self.patient_info["GasAdmin"]))
+        #
+        #             if calcul == "mean":
+        #                 for roi in self.doublet_list:
+        #                     roi_file = os.path.join(
+        #                         analysis_dir,
+        #                         "{0}_mean_{1}_{2}.txt".format(
+        #                             roi[0] + roi[1], map_name, self.data
+        #                         ),
+        #                     )
+        #                     try:
+        #                         with open(roi_file, "r") as f_read:
+        #                             final_res = float(f_read.read())
+        #
+        #                         f.write("{0}\t".format(final_res))
+        #
+        #                     except FileNotFoundError:
+        #                         print(
+        #                             "\nResult_collector brick:\n {} not "
+        #                             "found ...\n".format(roi_file)
+        #                         )
+        #                         f.write("Undefined\t")
+        #
+        #             elif calcul == "IL_mean":
+        #                 roi_checked = []
+        #
+        #                 for roi in self.doublet_list:
+        #                     if roi[0] in roi_checked:
+        #                         continue
+        #
+        #                     roi_file = os.path.join(
+        #                         analysis_dir,
+        #                         "{0}_mean_{1}_{2}.txt".format(
+        #                             roi[0] + roi[1], map_name, self.data
+        #                         ),
+        #                     )
+        #                     try:
+        #                         with open(roi_file, "r") as f_read:
+        #                             roi_value = float(f_read.read())
+        #
+        #                     except FileNotFoundError:
+        #                         print(
+        #                             "\nResult_collector brick:\n {} not "
+        #                             "found ...\n".format(roi_file)
+        #                         )
+        #                         roi_value = None
+        #
+        #                     # Searching the ROI that has the same first
+        #                     # element
+        #                     roi_2 = [
+        #                         s
+        #                         for s in self.doublet_list
+        #                         if roi[0] in s[0] and roi[1] != s[1]
+        #                     ][0]
+        #                     roi_file_2 = os.path.join(
+        #                         analysis_dir,
+        #                         "{0}_mean_{1}_{2}."
+        #                         "txt".format(
+        #                             roi_2[0] + roi_2[1], map_name, self.data
+        #                         ),
+        #                     )
+        #                     try:
+        #                         with open(roi_file_2, "r") as f_read:
+        #                             roi_value_2 = float(f_read.read())
+        #
+        #                     except FileNotFoundError:
+        #                         print(
+        #                             "\nResult_collector brick:\n {} not "
+        #                             "found ...\n".format(roi_file_2)
+        #                         )
+        #                         roi_value_2 = None
+        #
+        #                     # IL = (Left - Right) / ((Left + Right)
+        #                     if roi[1] == "_L":
+        #                         sub_1 = roi_value
+        #                         sub_2 = roi_value_2
+        #
+        #                     else:
+        #                         sub_1 = roi_value_2
+        #                         sub_2 = roi_value
+        #
+        #                     if sub_1 is not None and sub_2 is not None:
+        #                         final_res = (sub_1 - sub_2) / (sub_1 + sub_2)
+        #                         f.write("{0}\t".format(final_res))
+        #
+        #                     else:
+        #                         f.write("Undefined\t")
+        #
+        #                     roi_checked.append(roi[0])
+        #
+        #             elif calcul == "std":
+        #                 for roi in self.doublet_list:
+        #                     roi_file = os.path.join(
+        #                         analysis_dir,
+        #                         "{0}_std_{1}_{2}.txt".format(
+        #                             roi[0] + roi[1], map_name, self.data
+        #                         ),
+        #                     )
+        #
+        #                     try:
+        #                         with open(roi_file, "r") as f_read:
+        #                             final_res = float(f_read.read())
+        #
+        #                         f.write("{0}\t".format(final_res))
+        #
+        #                     except FileNotFoundError:
+        #                         print(
+        #                             "\nResult_collector brick:\n {} not "
+        #                             "found ...\n".format(roi_file)
+        #                         )
+        #                         f.write("Undefined\t")
+        #
+        #             elif calcul == "IL_std":
+        #                 roi_checked = []
+        #
+        #                 for roi in self.doublet_list:
+        #                     if roi[0] in roi_checked:
+        #                         continue
+        #
+        #                     roi_file = os.path.join(
+        #                         analysis_dir,
+        #                         "{0}_std_{1}_{2}.txt".format(
+        #                             roi[0] + roi[1], map_name, self.data
+        #                         ),
+        #                     )
+        #
+        #                     try:
+        #                         with open(roi_file, "r") as f_read:
+        #                             roi_value = float(f_read.read())
+        #
+        #                     except FileNotFoundError:
+        #                         print(
+        #                             "\nResult_collector brick:\n {} not "
+        #                             "found ...\n".format(roi_file)
+        #                         )
+        #                         roi_value = None
+        #
+        #                     # Searching the roi that has the same first
+        #                     # element
+        #                     roi_2 = [
+        #                         s
+        #                         for s in self.doublet_list
+        #                         if roi[0] in s[0] and roi[1] != s[1]
+        #                     ][0]
+        #
+        #                     roi_file_2 = os.path.join(
+        #                         analysis_dir,
+        #                         "{0}_std_{1}_{2}.txt".format(
+        #                             roi_2[0] + roi_2[1], map_name, self.data
+        #                         ),
+        #                     )
+        #
+        #                     try:
+        #                         with open(roi_file_2, "r") as f_read:
+        #                             roi_value_2 = float(f_read.read())
+        #
+        #                     except FileNotFoundError:
+        #                         print(
+        #                             "\nResult_collector brick:\n {} not "
+        #                             "found ...\n".format(roi_file_2)
+        #                         )
+        #                         roi_value_2 = None
+        #
+        #                     # IL = (Left - Right) / ((Left + Right)
+        #                     if roi[1] == "_L":
+        #                         sub_1 = roi_value
+        #                         sub_2 = roi_value_2
+        #                     else:
+        #                         sub_1 = roi_value_2
+        #                         sub_2 = roi_value
+        #
+        #                     if sub_1 is not None and sub_2 is not None:
+        #                         final_res = (sub_1 - sub_2) / (sub_1 + sub_2)
+        #                         f.write("{0}\t".format(final_res))
+        #
+        #                     else:
+        #                         f.write("Undefined\t")
+        #
+        #                     roi_checked.append(roi[0])
 
 
 class Spikes(ProcessMIA):
     """
     * Computes the number of spikes.
 
-    Please, see the complete documentation for the `Spikes' brick in the populse.mia_processes website
+    Please, see the complete documentation for the `Spikes' brick in the
+    populse.mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/reports/Spikes.html>`_
 
     adapted from:
@@ -2690,7 +2756,8 @@ def art_qi2(img, airmask, min_voxels=int(1e3), max_voxels=int(3e5)):
     :math:`\chi^2` distribution onto the intensity distribution of
     non-artifactual background (within the "hat" mask):
     .. math ::
-        \chi^2_n = \frac{2}{(\sigma \sqrt{2})^{2n} \, (n - 1)!}x^{2n - 1}\, e^{-\frac{x}{2}}
+        \chi^2_n = \frac{2}{(\sigma \sqrt{2})^{2n} \,
+                            (n - 1)!}x^{2n - 1}\, e^{-\frac{x}{2}}
     where :math:`n` is the number of coil elements.
     :param numpy.ndarray img: input data
     :param numpy.ndarray airmask: input air mask without artifacts
@@ -2750,11 +2817,15 @@ def cjv(mu_wm, mu_gm, sigma_wm, sigma_gm):
     the :abbr:`INU (intensity non-uniformity)` artifact [Ganzetti2016]_.
     Lower is better.
     .. math::
-        \text{CJV} = \frac{\sigma_\text{WM} + \sigma_\text{GM}}{|\mu_\text{WM} - \mu_\text{GM}|}.
+        \text{CJV} = \frac{\sigma_\text{WM} +
+                           \sigma_\text{GM}}{|\mu_\text{WM} -
+                           \mu_\text{GM}|}.
     :param float mu_wm: mean of signal within white-matter mask.
     :param float mu_gm: mean of signal within gray-matter mask.
-    :param float sigma_wm: standard deviation of signal within white-matter mask.
-    :param float sigma_gm: standard deviation of signal within gray-matter mask.
+    :param float sigma_wm: standard deviation of signal within
+                           white-matter mask.
+    :param float sigma_gm: standard deviation of signal within
+                           gray-matter mask.
     :return: the computed CJV
     """
     return float((sigma_wm + sigma_gm) / abs(mu_wm - mu_gm))
@@ -2765,13 +2836,18 @@ def cnr(mu_wm, mu_gm, sigma_air):
     Calculate the :abbr:`CNR (Contrast-to-Noise Ratio)` [Magnota2006]_.
     Higher values are better.
     .. math::
-        \text{CNR} = \frac{|\mu_\text{GM} - \mu_\text{WM} |}{\sqrt{\sigma_B^2 +
-        \sigma_\text{WM}^2 + \sigma_\text{GM}^2}},
-    where :math:`\sigma_B` is the standard deviation of the noise distribution within
-    the air (background) mask.
+        \text{CNR} = \frac{|\mu_\text{GM} -
+                           \mu_\text{WM} |}{\sqrt{\sigma_B^2 +
+                           \sigma_\text{WM}^2 +
+                           \sigma_\text{GM}^2}},
+    where :math:`\sigma_B` is the standard deviation of the noise distribution
+    withinmthe air (background) mask.
+
     :param float mu_wm: mean of signal within white-matter mask.
     :param float mu_gm: mean of signal within gray-matter mask.
-    :param float sigma_air: standard deviation of the air surrounding the head ("hat" mask).
+    :param float sigma_air: standard deviation of the air surrounding the
+                            head ("hat" mask).
+
     :return: the computed CNR
     """
     return float(abs(mu_wm - mu_gm) / sigma_air)
@@ -2791,10 +2867,11 @@ def efc(img, framemask=None):
     :abbr:`EFC (Entropy Focus Criterion)` can be compared across images with
     different dimensions:
     .. math::
-        \text{EFC} = \left( \frac{N}{\sqrt{N}} \, \log{\sqrt{N}^{-1}} \right) \text{E}
+        \text{EFC} =
+        \left( \frac{N}{\sqrt{N}} \, \log{\sqrt{N}^{-1}} \right) \text{E}
     :param numpy.ndarray img: input data
-    :param numpy.ndarray framemask: a mask of empty voxels inserted after a rotation of
-      data
+    :param numpy.ndarray framemask: a mask of empty voxels inserted after
+                                    a rotation of data
     """
 
     if framemask is None:
@@ -2822,15 +2899,17 @@ def efc(img, framemask=None):
 
 def fber(img, headmask, rotmask=None):
     r"""
-    Calculate the :abbr:`FBER (Foreground-Background Energy Ratio)` [Shehzad2015]_,
+    Calculate the
+    :abbr:`FBER (Foreground-Background Energy Ratio)` [Shehzad2015]_,
     defined as the mean energy of image values within the head relative
     to outside the head. Higher values are better.
     .. math::
         \text{FBER} = \frac{E[|F|^2]}{E[|B|^2]}
     :param numpy.ndarray img: input data
-    :param numpy.ndarray headmask: a mask of the head (including skull, skin, etc.)
-    :param numpy.ndarray rotmask: a mask of empty voxels inserted after a rotation of
-      data
+    :param numpy.ndarray headmask: a mask of the head (including skull,
+                                   skin, etc.)
+    :param numpy.ndarray rotmask: a mask of empty voxels inserted after
+                                  a rotation of data
     """
 
     fg_mu = np.median(np.abs(img[headmask > 0]) ** 2)
@@ -2864,9 +2943,9 @@ def find_spikes(data, spike_thresh):
     t_z = _robust_zscore(slice_mean)
     spikes = np.abs(t_z) > spike_thresh
     spike_inds = np.transpose(spikes.nonzero())
-    # mask out the spikes and recompute z-scores using variance uncontaminated with spikes.
-    # This will catch smaller spikes that may have been swamped by big
-    # ones.
+    # mask out the spikes and recompute z-scores using variance uncontaminated
+    # with spikes. This will catch smaller spikes that may have been swamped
+    # by big ones.
     data.mask[:, :, spike_inds[:, 0], spike_inds[:, 1]] = True
     slice_mean2 = np.median(np.median(data, axis=0), axis=0)
     t_z = _robust_zscore(slice_mean2)
@@ -2893,7 +2972,8 @@ def gsr(epi_data, mask, direction="y", ref_file=None, out_file=None):
     """
     Compute the :abbr:`GSR (ghost to signal ratio)` [Giannelli2010]_.
     The procedure is as follows:
-      #. Create a Nyquist ghost mask by circle-shifting the original mask by :math:`N/2`.
+      #. Create a Nyquist ghost mask by circle-shifting the original
+         mask by :math:`N/2`.
       #. Rotate by :math:`N/2`
       #. Remove the intersection with the original mask
       #. Generate a non-ghost background
@@ -3033,7 +3113,8 @@ def rpve(pvms, seg):
 
     .. math ::
         \\text{rPVE}^k = \\frac{1}{N} \\left[ \\sum\\limits_{p^k_i \
-\\in [0.5, P_{98}]} p^k_i + \\sum\\limits_{p^k_i \\in [P_{2}, 0.5)} 1 - p^k_i \\right]
+        \\in [0.5, P_{98}]} p^k_i + \\sum\\limits_{p^k_i \
+        \\in [P_{2}, 0.5)} 1 - p^k_i \\right]
     """
 
     pvfs = {}
@@ -3075,18 +3156,18 @@ def snr_dietrich(mu_fg, mad_air=0.0, sigma_air=1.0):
     r"""
     Calculate the :abbr:`SNR (Signal-to-Noise Ratio)`.
 
-    This must be an air mask around the head, and it should not contain artifacts.
-    The computation is done following the eq. A.12 of [Dietrich2007]_, which
-    includes a correction factor in the estimation of the standard deviation of
-    air and its Rayleigh distribution:
+    This must be an air mask around the head, and it should not contain
+    artifacts. The computation is done following the eq. A.12 of
+    [Dietrich2007]_, which includes a correction factor in the estimation
+    of the standard deviation of air and its Rayleigh distribution:
 
     .. math::
-
-        \text{SNR} = \frac{\mu_F}{\sqrt{\frac{2}{4-\pi}}\,\sigma_\text{air}}.
-
+        \text{SNR} =
+        \frac{\mu_F}{\sqrt{\frac{2}{4-\pi}}\,\sigma_\text{air}}.
 
     :param float mu_fg: mean of foreground.
-    :param float sigma_air: standard deviation of the air surrounding the head ("hat" mask).
+    :param float sigma_air: standard deviation of the air surrounding
+                            the head ("hat" mask).
 
     :return: the computed SNR for the foreground segmentation
 
@@ -3181,10 +3262,11 @@ def summary_stats(img, pvms, airmask=None, erode=True):
 
 def volume_fraction(pvms):
     r"""
-    Computes the :abbr:`ICV (intracranial volume)` fractions
-    corresponding to the (partial volume maps).
+    Computes the :abbr:`ICV (intracranial volume)` fractions corresponding to
+    the (partial volume maps).
     .. math ::
-        \text{ICV}^k = \frac{\sum_i p^k_i}{\sum\limits_{x \in X_\text{brain}} 1}
+        \text{ICV}^k =
+        \frac{\sum_i p^k_i}{\sum\limits_{x \in X_\text{brain}} 1}
     :param list pvms: list of :code:`numpy.ndarray` of partial volume maps.
     """
     tissue_vfs = {}
@@ -3276,6 +3358,4 @@ def _robust_zscore(data):
 
 def _AR_est_YW(x, order, rxx=None):
     """Retrieve AR coefficients while dropping the sig_sq return value"""
-    from nitime.algorithms import AR_est_YW
-
     return AR_est_YW(x, order, rxx=rxx)[0]

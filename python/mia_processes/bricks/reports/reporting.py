@@ -24,26 +24,18 @@ generate automatic report at the end of a pipeline calculation.
 
 # Other import
 import os
-from datetime import datetime
-from sys import path
 import tempfile
+from datetime import datetime
 
 # nipype import
-from nipype.interfaces.base import (
-    File,
-    OutputMultiPath,
-    Str,
-    Undefined,
-    traits,
-)
+from nipype.interfaces.base import File, OutputMultiPath, Undefined, traits
 from nipype.interfaces.spm.base import ImageFileSPM
+
+# populse_mia import
+from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 
 # traits import
 from traits.api import Enum
-
-# populse_mia import
-from populse_mia.data_manager.project import COLLECTION_CURRENT
-from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 
 # mia_processes import:
 from mia_processes.utils import (
@@ -770,7 +762,8 @@ class ReportFuncMriqc(ProcessMIA):
     """
     * Generates the report for functional data in MRIQC pipeline.
 
-    Please, see the complete documentation for the `MRIQC_report brick in the populse.mia_processes website
+    Please, see the complete documentation for the
+    MRIQC_report brick in the populse.mia_processes website
     https://populse.github.io/mia_processes/html/documentation/bricks/reports/MRIQC_report.html
 
     """

@@ -12,4 +12,4 @@ The atomic calculations from freesurfer.
 # for details.
 ##########################################################################
 
-from .processes import Binarize, SynthStrip, SynthStripMriqc
+from .processes import Binarize, SynthStrip, SynthStripMriqc  # noqa: F401

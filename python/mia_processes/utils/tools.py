@@ -14,6 +14,7 @@ Module that contains multiple functions used across mia_processes
         - mriqc_group_iqms_tsv
         - plot_boxplot_points
         - plot_qi2
+        - set_dbFieldValue
         - slice_planes_plot
 """
 
@@ -29,11 +30,11 @@ import datetime
 import glob
 import json
 import os
+
 import matplotlib.pyplot as plt
 import nibabel as nib
 import numpy as np
 import pandas as pd
-
 from matplotlib.cm import get_cmap
 from mpl_toolkits.axes_grid1 import ImageGrid
 from populse_mia.data_manager.data_history_inspect import data_history_pipeline
@@ -41,10 +42,9 @@ from populse_mia.data_manager.project import (
     COLLECTION_CURRENT,
     COLLECTION_INITIAL,
 )
-from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import mm
 from reportlab.pdfgen import canvas
-from reportlab.platypus import Flowable, Paragraph
+from reportlab.platypus import Flowable
 from traits.api import Undefined
 
 
@@ -546,10 +546,13 @@ def slice_planes_plot(
             )
 
     elif len(np.array(list(range(0, brain_data.shape[2])))) > disp_slices:
+        # fmt: off
         ind_slices = np.array(list(range(0, brain_data.shape[2])))[
-            inf_slice_start : inf_slice_start
-            + (slices_gap * disp_slices) : slices_gap
+            inf_slice_start:
+            inf_slice_start + (slices_gap * disp_slices):
+            slices_gap
         ]
+        # fmt: on
 
     else:
         ind_slices = np.array(list(range(0, brain_data.shape[2])))

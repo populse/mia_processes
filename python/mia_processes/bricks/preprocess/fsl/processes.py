@@ -496,7 +496,7 @@ class FastSegment(ProcessMIA):
 
 class Smooth(ProcessMIA):
     """
-    *3D Gaussian smoothing of image volumes.
+    *3D Gaussian smoothing of image volumes.*
 
     Please, see the complete documention for the `Smooth' brick in
     the populse.mia_processes web site

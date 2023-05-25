@@ -11,7 +11,7 @@ The Bold_hmc pipeline.
 # http://www.cecill.info/licences/Licence_CeCILL_V2.1-en.html
 # for details.
 ##########################################################################
-import traits.api as traits
+
 from capsul.api import Pipeline
 
 

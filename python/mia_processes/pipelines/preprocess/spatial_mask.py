@@ -32,7 +32,8 @@ class Spatial_mask(Pipeline):
 
     User_processes_ECdev.studies.spatial_mask_1.Spatial_mask_1()
 
-    Please, see the complete documentation for the Spatial_mask_1 pipeline in the
+    Please, see the complete documentation for the Spatial_mask_1
+    pipeline in the
     https://gricad-gitlab.univ-grenoble-alpes.fr/condamie/ec_dev web site
 
     """

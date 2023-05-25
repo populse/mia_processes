@@ -30,7 +30,8 @@ class Spatial_preprocessing(Pipeline):
     """
     * Data pre-processing for cerebrovascular reserve analysis (CVRa).
 
-    Please, see the complete documention for the `Spatial_preprocessing_1 brick in the populse.mia_processes web site:
+    Please, see the complete documention for the
+    `Spatial_preprocessing_1 brick in the populse.mia_processes web site:
     <https://populse.github.io/mia_processes/html/documentation/pipelines/preprocess/Spatial_preprocessing_1.html>`_
     """
 
@@ -39,13 +40,15 @@ class Spatial_preprocessing(Pipeline):
         # nodes
         self.add_process(
             "newsegment1",
-            "mia_processes.bricks.preprocess.spm.spatial_preprocessing.NewSegment",
+            "mia_processes.bricks.preprocess.spm."
+            "spatial_preprocessing.NewSegment",
         )
         self.nodes["newsegment1"].process.channel_files = traits.Undefined
 
         self.add_process(
             "realign1",
-            "mia_processes.bricks.preprocess.spm.spatial_preprocessing.Realign",
+            "mia_processes.bricks.preprocess.spm.spatial_preprocessing."
+            "Realign",
         )
 
         self.add_process(
@@ -55,13 +58,15 @@ class Spatial_preprocessing(Pipeline):
 
         self.add_process(
             "normalize12_1",
-            "mia_processes.bricks.preprocess.spm.spatial_preprocessing.Normalize12",
+            "mia_processes.bricks.preprocess.spm.spatial_preprocessing."
+            "Normalize12",
         )
         self.nodes["normalize12_1"].process.apply_to_files = traits.Undefined
 
         self.add_process(
             "normalize12_2",
-            "mia_processes.bricks.preprocess.spm.spatial_preprocessing.Normalize12",
+            "mia_processes.bricks.preprocess.spm.spatial_preprocessing."
+            "Normalize12",
         )
         self.nodes["normalize12_2"].process.apply_to_files = traits.Undefined
         self.nodes["normalize12_2"].process.write_voxel_sizes = [2.0, 2.0, 2.0]
@@ -74,7 +79,8 @@ class Spatial_preprocessing(Pipeline):
 
         self.add_process(
             "coregister1",
-            "mia_processes.bricks.preprocess.spm.spatial_preprocessing.Coregister",
+            "mia_processes.bricks.preprocess.spm.spatial_preprocessing."
+            "Coregister",
         )
         self.nodes["coregister1"].process.source = traits.Undefined
         self.nodes["coregister1"].process.apply_to_files = traits.Undefined
@@ -87,10 +93,12 @@ class Spatial_preprocessing(Pipeline):
         self.export_parameter("newsegment1", "native_class_images")
         self.export_parameter("newsegment1", "forward_deformation_field")
         self.add_link(
-            "newsegment1.forward_deformation_field->normalize12_2.deformation_file"
+            "newsegment1.forward_deformation_field->"
+            "normalize12_2.deformation_file"
         )
         self.add_link(
-            "newsegment1.forward_deformation_field->normalize12_1.deformation_file"
+            "newsegment1.forward_deformation_field->"
+            "normalize12_1.deformation_file"
         )
         self.add_link("realign1.realigned_files->coregister1.apply_to_files")
         self.add_link("realign1.mean_image->coregister1.source")

@@ -12,7 +12,6 @@ The pipeline dedicated to the IQMs extraction for functional IRM data.
 # for details.
 ##########################################################################
 
-import traits.api as traits
 from capsul.api import Pipeline
 
 

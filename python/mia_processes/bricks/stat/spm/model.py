@@ -25,16 +25,11 @@ in populse_mia.
 
 # Other import
 import os
-from shutil import copy2
 
-# nibabel import
-import nibabel as nib
-import nibabel.processing as nibp
 import numpy as np
 import scipy.io
 
 # nipype import
-from nipype.interfaces import spm
 from nipype.interfaces.base import (
     File,
     InputMultiPath,
@@ -43,37 +38,13 @@ from nipype.interfaces.base import (
 )
 from nipype.interfaces.spm.base import ImageFileSPM
 from populse_db.database import FIELD_TYPE_INTEGER, FIELD_TYPE_STRING
-from populse_mia.data_manager.database_mia import (
-    TAG_ORIGIN_USER,
-    TAG_UNIT_DEGREE,
-)
+from populse_mia.data_manager.database_mia import TAG_ORIGIN_USER
 
 # populse_db and populse_mia import
-from populse_mia.data_manager.project import (
-    COLLECTION_CURRENT,
-    COLLECTION_INITIAL,
-)
+from populse_mia.data_manager.project import COLLECTION_CURRENT
 
 # populse_mia imports
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
-from PyQt5.QtCore import pyqtSignal
-
-# PyQt5 imports
-from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import (
-    QApplication,
-    QDialog,
-    QDialogButtonBox,
-    QGroupBox,
-    QHBoxLayout,
-    QLabel,
-    QLineEdit,
-    QMessageBox,
-    QPushButton,
-    QToolButton,
-    QVBoxLayout,
-    QWidget,
-)
 
 # soma-base imports
 from soma.qt_gui.qt_backend.Qt import QMessageBox
@@ -217,43 +188,18 @@ class EstimateContrast(ProcessMIA):
             ),
         )
 
-        self.add_trait("beta_images",
-                       InputMultiPath(File(),
-                                      output=False,
-                                      copyfile=False,
-                                      desc=beta_images_desc)
-                       )
-
-        self.add_trait("residual_image",
-                       File(output=False,
-                            copyfile=False,
-                            desc=residual_image_desc)
-                       )
-
+        self.add_trait(
+            "beta_images", InputMultiPath(File(), output=False, copyfile=False)
+        )
+        self.add_trait("residual_image", File(output=False, copyfile=False))
         # self.add_trait(
-        #     "out_dir_name",
-        #     traits.Either(
-        #         (traits.String(), Undefined),
-        #         output=False,
-        #         optional=True,
-        #         desc=out_dir_name_desc,
-        #     ),
+        #     "use_derivs",
+        #     traits.Bool(output=False, optional=True, xor=["group_contrast"]),
         # )
-        # self.out_dir_name = Undefined
-
-        # self.add_trait("use_derivs",
-        #                traits.Bool(output=False,
-        #                            optional=True,
-        #                            xor=["group_contrast"],
-        #                            desc=use_derivs_desc),
-        #                )
-
-        # self.add_trait("group_contrast",
-        #                traits.Bool(output=False,
-        #                            optional=True,
-        #                            xor=["use_derivs"],
-        #                            desc=group_contrast_desc),
-        #                )
+        # self.add_trait(
+        #     "group_contrast",
+        #     traits.Bool(output=False, optional=True, xor=["use_derivs"]),
+        # )
 
         # Outputs
         self.add_trait("con_images",
@@ -362,13 +308,20 @@ class EstimateContrast(ProcessMIA):
             (self.spm_mat_file)
             and (self.spm_mat_file not in ["<undefined>", Undefined])
         ):
+            # The management of self.process.output_directory could be
+            # delegated to the
+            # populse_mia.user_interface.pipeline_manager.process_mia
+            # module. We can't do it at the moment because the
+            # sync_process_output_traits() of the
+            # capsul/process/nipype_process module raises an exception
+            # in nipype if the mandatory parameter are not yet defined!
+
             spm_mat_dir, spm_mat_file = os.path.split(self.spm_mat_file)
+
             if self.output_directory:
-                # self.process.output_directory = self.output_directory
                 # Change output_directory for this process in order to
                 # use a specific directory for each analysis
 
-                # if self.out_dir_name in ["<undefined>", Undefined]:
                 if (os.path.dirname(spm_mat_dir) == self.output_directory
                         and 'data' in os.path.basename(spm_mat_dir)):
                     # if spm_mat already in a subfolder for a analysis
@@ -425,6 +378,10 @@ class EstimateContrast(ProcessMIA):
                         self.output_directory, "con_{:04d}.nii".format(i)
                     )
                 )
+                # spmT_files.append(os.path.join(path,
+                #                                'spmT_{:04d}.nii'.format(i)))
+                # con_files.append(os.path.join(path,
+                #                               'con_{:04d}.nii'.format(i)))
 
             if spmT_files:
                 self.outputs["spmT_images"] = spmT_files
@@ -436,21 +393,25 @@ class EstimateContrast(ProcessMIA):
             ] = self.spm_mat_file
 
             if spmT_files:
-                # FIXME: Quick and dirty. This brick was written quickly and will
-                #        need to be reworked to cover all cases. At that time,
-                #        inheritance will also need to be reviewed. Currently we
-                #        take the first element of the lists, but in the general
-                #        case there can be several elements in the lists
+                # FIXME: Quick and dirty. This brick was written quickly and
+                #        will need to be reworked to cover all cases. At that
+                #        time, inheritance will also need to be reviewed.
+                #        Currently we take the first element of the lists, but
+                #        in the general case there can be several elements in
+                #        the lists
                 self.inheritance_dict[
                     self.outputs["spmT_images"][0]
                 ] = self.spm_mat_file
-                # FIXME: In the latest version of mia, indexing of the database with
-                #        particular tags defined in the processes is done only at
-                #        the end of the initialisation of the whole pipeline. So we
-                #        cannot use the value of these tags in other processes of
-                #        the pipeline at the time of initialisation
-                #        (see populse_mia #290). Until better we use a quick and
-                #        dirty hack with the set_dbFieldValue() method !
+                # FIXME: In the latest version of mia, indexing of the
+                #        database with particular tags defined in the
+                #        processes is done only at the end of the
+                #        initialisation of the whole pipeline. So we
+                #        cannot use the value of these tags in other
+                #        processes of the pipeline at the time of
+                #        initialisation (see populse_mia #290). Unti
+                #        better we use a quick and dirty hack with the
+                #        set_dbFieldValue() function !
+
                 tag_to_add = dict()
                 tag_to_add["name"] = "PatientName"
                 tag_to_add["field_type"] = "string"
@@ -795,12 +756,14 @@ class EstimateModel(ProcessMIA):
         ):
             im_form = "nii" if "12" in self.version else "img"
             spm_mat_dir, spm_mat_file = os.path.split(self.spm_mat_file)
-            # The management of self.process.output_directory could be delegated
-            # to the populse_mia.user_interface.pipeline_manager.process_mia
+            # The management of self.process.output_directory could be
+            # delegated to the
+            # populse_mia.user_interface.pipeline_manager.process_mia
             # module. We can't do it at the moment because the
-            # sync_process_output_traits() of the capsul/process/nipype_process
-            # module raises an exception in nipype if the mandatory parameters
-            # are not yet defined!
+            # sync_process_output_traits() of the
+            # capsul/process/nipype_process module raises an exception
+            # in nipype if the mandatory parameter are not yet defined!
+
             if self.output_directory:
                 # Change output_directory for this process in order to
                 # use a specific directory for each analysis
@@ -951,14 +914,16 @@ class EstimateModel(ProcessMIA):
 
                     for fullname in value:
                         self.inheritance_dict[fullname] = self.spm_mat_file
+                        # FIXME: In the latest version of mia, indexing of the
+                        #        database with particular tags defined in the
+                        #        processes is done only at the end of the
+                        #        initialisation of the whole pipeline. So we
+                        #        cannot use the value of these tags in other
+                        #        processes of the pipeline at the time of
+                        #        initialisation (see populse_mia #290). Unti
+                        #        better we use a quick and dirty hack with the
+                        #        set_dbFieldValue() function !
 
-                        # FIXME: In the latest version of mia, indexing of the database with
-                        #        particular tags defined in the processes is done only at
-                        #        the end of the initialisation of the whole pipeline. So we
-                        #        cannot use the value of these tags in other processes of
-                        #        the pipeline at the time of initialisation
-                        #        (see populse_mia #290). Until better we use a quick and
-                        #        dirty hack with the set_dbFieldValue() method !
                         if patient_name is not None:
                             tag_to_add = dict()
                             tag_to_add["name"] = "PatientName"
@@ -1050,9 +1015,10 @@ class EstimateModel(ProcessMIA):
         # for key, value in self.outputs.items():
         #   if key not in ["out_spm_mat_file"]:
         #        if value not in ["<undefined>", Undefined]:
-        #            if type(value) in [list,
-        #                               traits.TraitListObject,
+
+        #            if type(value) in [list, traits.TraitListObject,
         #                               traits.List]:
+
         #                for element in value:
         #                    if os.path.isfile(element):
         #                        os.remove(element)
@@ -1256,7 +1222,8 @@ class Level1Design(ProcessMIA):
             ),
         )
 
-        # In study without slice-timing correction, as cevastoc32, it should be 8?
+        # In study without slice-timing correction, as cevastoc32,
+        # it should be 8?
         self.add_trait(
             "microtime_onset",
             traits.Int(
@@ -1438,12 +1405,15 @@ class Level1Design(ProcessMIA):
             ),
         )
         # TODO: 427.2 corresponds to the value used in Amigo
-        # Duration * TR * 3.56 = 427.2 if Duration == 40; TR = 3s; why 3.56 ?
-        # I was expecting rather to:
-        # (time between first block start - second block start) * TR *2 = 80 *3 *2 = 480
-        # Can we code an automatic recovery procedure for the hpf parameter ?
-        # (in this case, the user would have to declare additional tags in the
-        # database, like the block duration !)
+        #       Duration * TR * 3.56 = 427.2 if Duration == 40 and
+        #       TR == 3s; why 3.56 ?
+        #       I was expecting rather to:
+        #       (time between first block start
+        #        - second block start) * TR *2 = 80 *3 *2 = 480
+        #       Can we code an automatic recovery procedure for the
+        #       hpf parameter ?
+        #       (in this case, the user would have to declare additional
+        #       tags in the database, like the block duration !)
 
         self.add_trait(
             "factor_info",
@@ -1816,6 +1786,14 @@ class Level1Design(ProcessMIA):
             and (self.sess_scans not in ["<undefined>", Undefined])
             and (self.sess_scans[0] not in ["<undefined>", Undefined])
         ):
+            # The management of self.process.output_directory could be
+            # delegated to the
+            # populse_mia.user_interface.pipeline_manager.process_mia
+            # module. We can't do it at the moment because the
+            # sync_process_output_traits() of the
+            # capsul/process/nipype_process module raises an exception
+            # in nipype if the mandatory parameter are not yet defined!
+            
             dir_name = ''
             subjects_names = []
             for idx_session in range(len(self.sess_scans)):
@@ -1887,7 +1865,7 @@ class Level1Design(ProcessMIA):
                 if i.get("cond") is not None and i.get("cond") is False:
                     init_res.append(False)
 
-                if (not True in init_res or False in init_res) and (check):
+                if (True not in init_res or False in init_res) and (check):
                     check = False
                     self.outputs = {}
                     print(
@@ -1965,13 +1943,15 @@ class Level1Design(ProcessMIA):
             self.inheritance_dict[self.outputs["spm_mat_file"]][
                 "own_tags"
             ].append(tag_to_add)
-            # FIXME: In the latest version of mia, indexing of the database with
-            #        particular tags defined in the processes is done only at
-            #        the end of the initialisation of the whole pipeline. So we
-            #        cannot use the value of these tags in other processes of
-            #        the pipeline at the time of initialisation
-            #        (see populse_mia #290). Until better we use a quick and
-            #        dirty hack with the set_dbFieldValue() method !
+            # FIXME: In the latest version of mia, indexing of the
+            #        database with particular tags defined in the
+            #        processes is done only at the end of the
+            #        initialisation of the whole pipeline. So we
+            #        cannot use the value of these tags in other
+            #        processes of the pipeline at the time of
+            #        initialisation (see populse_mia #290). Unti
+            #        better we use a quick and dirty hack with the
+            #        set_dbFieldValue() function !
             set_dbFieldValue(
                 self.project, self.outputs["spm_mat_file"], tag_to_add
             )
@@ -1995,13 +1975,15 @@ class Level1Design(ProcessMIA):
                     self.inheritance_dict[self.outputs["spm_mat_file"]][
                         "own_tags"
                     ].append(tag_to_add)
-                    # FIXME: In the latest version of mia, indexing of the database with
-                    #        particular tags defined in the processes is done only at
-                    #        the end of the initialisation of the whole pipeline. So we
-                    #        cannot use the value of these tags in other processes of
-                    #        the pipeline at the time of initialisation
-                    #        (see populse_mia #290). Until better we use a quick and
-                    #        dirty hack with the set_dbFieldValue() function !
+                    # FIXME: In the latest version of mia, indexing of the
+                    #        database with particular tags defined in the
+                    #        processes is done only at the end of the
+                    #        initialisation of the whole pipeline. So we
+                    #        cannot use the value of these tags in other
+                    #        processes of the pipeline at the time of
+                    #        initialisation (see populse_mia #290). Unti
+                    #        better we use a quick and dirty hack with the
+                    #        set_dbFieldValue() function !
                     set_dbFieldValue(
                         self.project, self.outputs["spm_mat_file"], tag_to_add
                     )
@@ -2072,13 +2054,15 @@ class Level1Design(ProcessMIA):
                     self.inheritance_dict[self.outputs["spm_mat_file"]][
                         "own_tags"
                     ].append(tag_to_add)
-                    # FIXME: In the latest version of mia, indexing of the database with
-                    #        particular tags defined in the processes is done only at
-                    #        the end of the initialisation of the whole pipeline. So we
-                    #        cannot use the value of these tags in other processes of
-                    #        the pipeline at the time of initialisation
-                    #        (see populse_mia #290). Until better we use a quick and
-                    #        dirty hack with the set_dbFieldValue() function !
+                    # FIXME: In the latest version of mia, indexing of the
+                    #        database with particular tags defined in the
+                    #        processes is done only at the end of the
+                    #        initialisation of the whole pipeline. So we
+                    #        cannot use the value of these tags in other
+                    #        processes of the pipeline at the time of
+                    #        initialisation (see populse_mia #290). Unti
+                    #        better we use a quick and dirty hack with the
+                    #        set_dbFieldValue() function !
                     set_dbFieldValue(
                         self.project, self.outputs["spm_mat_file"], tag_to_add
                     )
@@ -2095,10 +2079,10 @@ class Level1Design(ProcessMIA):
                 "RepetitionTime"
                 in self.project.session.get_fields_names(COLLECTION_CURRENT)
             ):
-                # FIXME: Currently, spm_mat_file will only inherit the first scan
-                #        if there are several scans in self.sess_scans. This
-                #        requires some thought on how to operate in a more general
-                #        framework
+                # FIXME: Currently, spm_mat_file will only inherit the first
+                #        scan if there are several scans in self.sess_scans.
+                #        This requires some thought on how to operate in a
+                #        more general framework
                 rep_time = get_dbFieldValue(
                     self.project, self.sess_scans[0], "RepetitionTime"
                 )

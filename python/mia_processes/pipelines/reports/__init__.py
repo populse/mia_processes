@@ -11,5 +11,5 @@ Pipelines used in the reports generation.
 # for details.
 ##########################################################################
 
-from .bold_iqms import Bold_iqms
-from .rois_1 import Rois_1
+from .bold_iqms import Bold_iqms  # noqa: F401
+from .rois_1 import Rois_1  # noqa: F401

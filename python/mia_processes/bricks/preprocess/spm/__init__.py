@@ -12,7 +12,7 @@ The atomic calculations from spm.
 # for details.
 ##########################################################################
 
-from .spatial_preprocessing import (
+from .spatial_preprocessing import (  # noqa: F401
     Coregister,
     GM_WM_Normalize,
     NewSegment,

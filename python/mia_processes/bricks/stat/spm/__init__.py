@@ -12,4 +12,4 @@ Statistical calculations from spm.
 # for details.
 ##########################################################################
 
-from .model import EstimateContrast, EstimateModel, Level1Design
+from .model import EstimateContrast, EstimateModel, Level1Design  # noqa: F401

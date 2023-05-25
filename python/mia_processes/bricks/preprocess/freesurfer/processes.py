@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """The freesurfer preprocess library of the mia_processes package.
 
-The purpose of this module is to customise the main freesurfer preprocessing bricks
-provided by nipype and to correct some things that do not work directly in
-populse_mia.
+The purpose of this module is to customise the main freesurfer
+preprocessing bricks provided by nipype and to correct some things
+that do not work directly in populse_mia.
 
 :Contains:
     :Class:
@@ -589,9 +589,12 @@ class SynthStripMriqc(ProcessMIA):
 
     STATEMENT OF CHANGES: This class is derived from the work done by
     MRIQC 22.06 and  FreeSurfer 1.0. The original file for this work derives
-    from is found at https://github.com/nipreps/mriqc/blob/22.0.6/mriqc/synthstrip/cli.py
-    and https://github.com/nipreps/mriqc/blob/22.0.6/mriqc/synthstrip/model.py
-    and https://github.com/freesurfer/freesurfer/blob/2995ded957961a7f3704de57eee88eb6cc30d52d/mri_synthstrip/mri_synthstrip
+    from is found at
+    https://github.com/nipreps/mriqc/blob/22.0.6/mriqc/synthstrip/cli.py
+    and
+    https://github.com/nipreps/mriqc/blob/22.0.6/mriqc/synthstrip/model.py
+    and
+    https://github.com/freesurfer/freesurfer/blob/2995ded957961a7f3704de57eee88eb6cc30d52d/mri_synthstrip/mri_synthstrip
     Please, see the complete documention for the 'SynthStripMriqc' brick
     in the populse.mia_processes web site
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/freesurfer/SynthStripMriqc.html>`_
@@ -620,8 +623,8 @@ class SynthStripMriqc(ProcessMIA):
             if isinstance(nb_features, int):
                 if nb_levels is None:
                     raise ValueError(
-                        "SynthStripMriqc brick: must provide unet nb_levels if "
-                        "nb_features is an integer"
+                        "SynthStripMriqc brick: must provide unet nb_levels "
+                        "if nb_features is an integer"
                     )
                 feats = np.round(
                     nb_features * feat_mult ** np.arange(nb_levels)
@@ -792,23 +795,19 @@ class SynthStripMriqc(ProcessMIA):
         self.requirement = ["freesurfer"]
 
         # Mandatory inputs description
-        in_file_desc = (
-            "Input image to be brain extracted (a path to a file)"  ##
-        )
+        in_file_desc = "Input image to be brain extracted (a path to a file)"
         # Optional inputs with default value description
         model_desc = "Alternative model weights (a path to a file)"
-        border_mm_desc = (
-            "Mask border threshold in mm (integer, default: 1)"  ##
-        )
+        border_mm_desc = "Mask border threshold in mm (integer, default: 1)"
         # no_csf_desc = 'Exclude CSF from brain border'
         output_type_desc = (
             "Typecodes of the output image formats (one "
             "of NIFTI, MGZ, NIFTI_GZ)."
         )
-        gpu_desc = "Use the GPU (bool, default: False)"  ##
+        gpu_desc = "Use the GPU (bool, default: False)"
         # Outputs description
-        out_file_desc = "Brain-extracted path (a path to a file)"  ##
-        out_mask_desc = "Brain mask path (a path to a file)"  ##
+        out_file_desc = "Brain-extracted path (a path to a file)"
+        out_mask_desc = "Brain mask path (a path to a file)"
 
         # Mandatory inputs traits
         self.add_trait(

@@ -23,10 +23,9 @@ import tempfile
 
 # Other import
 from datetime import datetime
-from sys import exit, path, version
+from sys import version
 
 # nibabel import
-import nibabel as nib
 import numpy as np
 
 # capsul import
@@ -34,26 +33,13 @@ from capsul import info as capsul_info
 
 # nipype import
 from nipype import info as nipype_info
-from nipype.interfaces.base import (
-    DictStrStr,
-    File,
-    InputMultiPath,
-    OutputMultiPath,
-    Str,
-    TraitListObject,
-    Undefined,
-    traits,
-)
-from nipype.interfaces.spm.base import ImageFileSPM
 
 # populse_mia import
 from populse_mia import info as mia_info
 from populse_mia import sources_images
-from populse_mia.data_manager.project import COLLECTION_CURRENT
-from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY, TA_LEFT, TA_RIGHT
-from reportlab.lib.pagesizes import A4, landscape, portrait
+from reportlab.lib.pagesizes import A4, portrait
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import inch, mm
 from reportlab.platypus import (
@@ -66,24 +52,14 @@ from reportlab.platypus import (
     TableStyle,
 )
 
-# soma-base imports
-from soma.qt_gui.qt_backend.Qt import QMessageBox
-
 # mia_processes import:
 from mia_processes import info as mia_processes_info
 from mia_processes.utils import (
     PageNumCanvas,
     ReportLine,
-    dict4runtime_update,
     plot_qi2,
     slice_planes_plot,
 )
-
-# from nibabel.processing import resample_from_to
-
-
-# import matplotlib.pyplot as plt
-# import scipy.ndimage as ndi
 
 
 class Report:
@@ -438,10 +414,11 @@ class Report:
         line.hAlign = "CENTER"
         self.report.append(line)
         self.report.append(Spacer(0 * mm, 20 * mm))
-        ### Spatial and temporal resolution ###################################
+        # Spatial and temporal resolution ###################################
         self.report.append(
             Paragraph(
-                "<font size = 15 > <b>SPATIAL AND TEMPORAL RESOLUTION</b> </font>",
+                "<font size = 15 > <b>SPATIAL AND "
+                "TEMPORAL RESOLUTION</b> </font>",
                 self.styles["Bullet1"],
             )
         )
@@ -473,7 +450,7 @@ class Report:
         # spacing_tr
         self.report.append(self.get_iqms_data("spacing_tr"))
         self.report.append(Spacer(0 * mm, 20 * mm))
-        ### Measures for artifacts and other ##################################
+        # Measures for artifacts and other ##################################
         self.report.append(
             Paragraph(
                 "<font size = 15 > <b>MEASURES FOR "
@@ -539,7 +516,7 @@ class Report:
         line.hAlign = "CENTER"
         self.report.append(line)
         self.report.append(Spacer(0 * mm, 20 * mm))
-        ### Measures for the spatial information ##############################
+        # Measures for the spatial information ##############################
         self.report.append(
             Paragraph(
                 "<font size = 15 ><b>MEASURES FOR THE "
@@ -651,7 +628,7 @@ class Report:
         line.hAlign = "CENTER"
         self.report.append(line)
         self.report.append(Spacer(0 * mm, 20 * mm))
-        ### Measures for the temporal information #############################
+        # Measures for the temporal information #############################
         self.report.append(
             Paragraph(
                 "<font size = 15 ><b>MEASURES FOR THE "
@@ -851,7 +828,7 @@ class Report:
         line.hAlign = "CENTER"
         self.report.append(line)
         self.report.append(Spacer(0 * mm, 20 * mm))
-        ### Spatial resolution ################################################
+        # Spatial resolution ################################################
         self.report.append(
             Paragraph(
                 "<font size = 15 > <b>SPATIAL RESOLUTION</b> </font>",
@@ -880,7 +857,7 @@ class Report:
         # spacing_z
         self.report.append(self.get_iqms_data("spacing_z"))
         self.report.append(Spacer(0 * mm, 20 * mm))
-        ### Signal-to-noise ###################################################
+        # Signal-to-noise ###################################################
         self.report.append(
             Paragraph(
                 "<font size = 15 > <b>NOISE</b> </font>",
@@ -890,7 +867,8 @@ class Report:
         self.report.append(Spacer(0 * mm, 2 * mm))
         self.report.append(
             Paragraph(
-                "Impact of noise and/or evaluation of the fitness of a noise model",
+                "Impact of noise and/or evaluation of "
+                "the fitness of a noise model",
                 self.styles["Left2"],
             )
         )
@@ -961,7 +939,7 @@ class Report:
         line.hAlign = "CENTER"
         self.report.append(line)
         self.report.append(Spacer(0 * mm, 20 * mm))
-        ### Spatial distribution ##############################################
+        # Spatial distribution ##############################################
         self.report.append(
             Paragraph(
                 "<font size = 15 ><b>SPATIAL DISTRIBUTION" "</b></font>",
@@ -983,7 +961,7 @@ class Report:
         # efc
         self.report.append(self.get_iqms_data("efc"))
         self.report.append(Spacer(0 * mm, 20 * mm))
-        ### Artifacts #########################################################
+        # Artifacts #########################################################
         self.report.append(
             Paragraph(
                 "<font size = 15 ><b>ARTIFACTS" "</b></font>",
@@ -1046,7 +1024,7 @@ class Report:
         line.hAlign = "CENTER"
         self.report.append(line)
         self.report.append(Spacer(0 * mm, 20 * mm))
-        ### Tissues Quality ###################################################
+        # Tissues Quality ###################################################
         self.report.append(
             Paragraph(
                 "<font size = 15 ><b>TISSUES QUALITY" "</b></font>",
@@ -1206,7 +1184,7 @@ class Report:
         line.hAlign = "CENTER"
         self.report.append(line)
         self.report.append(Spacer(0 * mm, 20 * mm))
-        ### Tissues Quality ###################################################
+        # Tissues Quality ###################################################
         self.report.append(
             Paragraph(
                 "<font size = 15 ><b>TISSUES QUALITY</b>" "</font>",
@@ -1216,9 +1194,10 @@ class Report:
         self.report.append(Spacer(0 * mm, 2 * mm))
         self.report.append(
             Paragraph(
-                "Metrics that do not fall into the above categories: statistical "
-                "properties of tissue distributions, volume overlap of "
-                "tissues, image harpness/blurriness, etc.",
+                "Metrics that do not fall into the above categories: "
+                "statistical properties of tissue distributions, "
+                "volume overlap of tissues, image harpness/blurriness, "
+                "etc.",
                 self.styles["Left2"],
             )
         )

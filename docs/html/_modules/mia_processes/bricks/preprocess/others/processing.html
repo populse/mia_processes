@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.preprocess.others.processing &#8212; mia_processes 2.2.1-dev+17d7d44 documentation</title>
+    <title>mia_processes.bricks.preprocess.others.processing &#8212; mia_processes 2.2.1-dev+a9ea159 documentation</title>
     <link rel="stylesheet" href="../../../../../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
@@ -18,7 +18,7 @@
     <link rel="search" title="Search" href="../../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../../index.html">
-          <span>mia_processes 2.2.1-dev+17d7d44 documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+a9ea159 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.preprocess.others.processing</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -88,11 +88,9 @@
 
 <span class="c1"># nipype import</span>
 <span class="kn">from</span> <span class="nn">nipype.interfaces.base</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">DictStrStr</span><span class="p">,</span>
     <span class="n">File</span><span class="p">,</span>
     <span class="n">InputMultiPath</span><span class="p">,</span>
     <span class="n">OutputMultiPath</span><span class="p">,</span>
-    <span class="n">Str</span><span class="p">,</span>
     <span class="n">TraitListObject</span><span class="p">,</span>
     <span class="n">Undefined</span><span class="p">,</span>
     <span class="n">traits</span><span class="p">,</span>
@@ -125,7 +123,7 @@
 
 <div class="viewcode-block" id="ApplyBiasCorrection"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.ApplyBiasCorrection">[docs]</a><span class="k">class</span> <span class="nc">ApplyBiasCorrection</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    *Apply bias field correction to an input file using the bias image.</span>
+<span class="sd">    *Apply bias field correction to an input file using the bias image.*</span>
 
 <span class="sd">    Please, see the complete documentation for the &#39;ApplyBiasCorrection&#39; brick</span>
 <span class="sd">    in the populse.mia_processes website</span>
@@ -229,7 +227,7 @@
 
 <div class="viewcode-block" id="ArtifactMask"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.ArtifactMask">[docs]</a><span class="k">class</span> <span class="nc">ArtifactMask</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    * Computes the artifact mask using the method described in [Mortamet2009].</span>
+<span class="sd">    * Computes the artifact mask using the method described in [Mortamet2009].*</span>
 
 <span class="sd">    Please, see the complete documentation for the `ArtifactMask&#39; brick</span>
 <span class="sd">    in the populse.mia_processes website</span>
@@ -504,9 +502,9 @@
 
 <div class="viewcode-block" id="Binarize"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.Binarize">[docs]</a><span class="k">class</span> <span class="nc">Binarize</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    *Image binarization.</span>
+<span class="sd">    *Image binarization.*</span>
 
-<span class="sd">    Please, see the complete documentation for the `Binarize&#39; brick</span>
+<span class="sd">    Please, see the complete documentation for the `Binarize` brick</span>
 <span class="sd">    in the populse.mia_processes website</span>
 <span class="sd">    https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/Binarize.html</span>
 
@@ -720,9 +718,10 @@
                         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
                             <span class="n">fileOval_no_ext</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">)</span>
                         <span class="p">):</span>
-                            <span class="n">fileOval_no_ext</span> <span class="o">=</span> <span class="n">fileOval_no_ext</span><span class="p">[</span>
-                                <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">)</span> <span class="p">:</span>
-                            <span class="p">]</span>
+                            <span class="c1"># fmt: off</span>
+                            <span class="n">fileOval_no_ext</span> <span class="o">=</span> <span class="n">fileOval_no_ext</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span>
+                                                              <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">):]</span>
+                            <span class="c1"># fmt: on</span>
 
                         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">suffix</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
                             <span class="n">fileOval_no_ext</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">suffix</span><span class="p">)</span>
@@ -879,14 +878,14 @@
             <span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span>
 
-            <span class="n">valid_ext</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">fileName</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">,</span> <span class="n">EXT</span><span class="p">)</span>
+            <span class="n">valid_ext</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">file_name</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">,</span> <span class="n">EXT</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_ext</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The input image format is&quot;</span> <span class="s2">&quot; not recognized...!&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The input image format is not recognized...!&quot;</span><span class="p">)</span>
                 <span class="k">return</span>
 
-            <span class="n">file</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
             <span class="n">path</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">)</span>
+
             <span class="k">if</span> <span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">suffix</span> <span class="o">==</span> <span class="s2">&quot; &quot;</span>
                 <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">==</span> <span class="s2">&quot; &quot;</span>
@@ -895,14 +894,14 @@
                 <span class="n">msg</span> <span class="o">=</span> <span class="n">QMessageBox</span><span class="p">()</span>
                 <span class="n">msg</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">Warning</span><span class="p">)</span>
                 <span class="n">msg</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span>
-                    <span class="s2">&quot;mia_processes - &quot;</span> <span class="s2">&quot;ConformImage brick Warning!&quot;</span>
+                    <span class="s2">&quot;mia_processes - ConformImage brick Warning!&quot;</span>
                 <span class="p">)</span>
                 <span class="n">msg</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span>
                     <span class="s2">&quot;Suffix and prefix input parameters are not &quot;</span>
                     <span class="s2">&quot;defined or consist only of one or more white &quot;</span>
                     <span class="s2">&quot;spaces.</span><span class="se">\n</span><span class="s2">The </span><span class="si">{0}</span><span class="s2"> input parameter will be &quot;</span>
                     <span class="s2">&quot;overwritten ...</span><span class="se">\n</span><span class="s2"> Yes or &quot;</span>
-                    <span class="s2">&quot;Abort?&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fileName</span><span class="p">)</span>
+                    <span class="s2">&quot;Abort?&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
                 <span class="p">)</span>
                 <span class="n">msg</span><span class="o">.</span><span class="n">setStandardButtons</span><span class="p">(</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">Yes</span> <span class="o">|</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">Abort</span><span class="p">)</span>
                 <span class="n">retval</span> <span class="o">=</span> <span class="n">msg</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
@@ -912,10 +911,9 @@
                         <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">ConformImage brick warning: the out_file output &quot;</span>
                         <span class="s2">&quot;parameter is the same as the in_files input &quot;</span>
                         <span class="s2">&quot;parameter (suffix and prefix are not defined):&quot;</span>
-                        <span class="s2">&quot;</span><span class="se">\n</span><span class="si">{0}</span><span class="s2"> will be overwrited ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fileName</span><span class="p">)</span>
+                        <span class="s2">&quot;</span><span class="se">\n</span><span class="si">{0}</span><span class="s2"> will be overwritten ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
                     <span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
                     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Aborted. Please check your input parameters ...&quot;</span><span class="p">)</span>
                     <span class="k">return</span>
 
@@ -923,7 +921,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
                 <span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-                    <span class="o">+</span> <span class="n">fileName</span>
+                    <span class="o">+</span> <span class="n">file_name</span>
                     <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">suffix</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
                     <span class="o">+</span> <span class="s2">&quot;.&quot;</span>
                     <span class="o">+</span> <span class="n">in_ext</span>
@@ -1421,10 +1419,10 @@
                         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
                             <span class="n">fileOval_no_ext</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">)</span>
                         <span class="p">):</span>
-                            <span class="n">fileOval_no_ext</span> <span class="o">=</span> <span class="n">fileOval_no_ext</span><span class="p">[</span>
-                                <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">)</span> <span class="p">:</span>
-                            <span class="p">]</span>
-
+                            <span class="c1"># fmt: off</span>
+                            <span class="n">fileOval_no_ext</span> <span class="o">=</span> <span class="n">fileOval_no_ext</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span>
+                                                              <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">):]</span>
+                            <span class="c1"># fmt: on</span>
                         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">suffix</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
                             <span class="n">fileOval_no_ext</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">suffix</span><span class="p">)</span>
                         <span class="p">):</span>
@@ -1699,8 +1697,6 @@
             <span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span>
 
-            <span class="n">file</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-
             <span class="n">valid_ext</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">fileName</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">,</span> <span class="n">EXT</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_ext</span><span class="p">:</span>
@@ -1734,11 +1730,10 @@
                         <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">GradientThreshold brick warning: the out_file&quot;</span>
                         <span class="s2">&quot;output parameter is the same as the in_file input &quot;</span>
                         <span class="s2">&quot;parameter (suffix and prefix are not defined):&quot;</span>
-                        <span class="s2">&quot;</span><span class="se">\n</span><span class="si">{0}</span><span class="s2"> will be overwrited ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fileName</span><span class="p">)</span>
+                        <span class="s2">&quot;</span><span class="se">\n</span><span class="si">{0}</span><span class="s2"> will be overwritten ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fileName</span><span class="p">)</span>
                     <span class="p">)</span>
 
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
                     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Aborted. Please check your input parameters ...&quot;</span><span class="p">)</span>
                     <span class="k">return</span>
 
@@ -1963,8 +1958,6 @@
             <span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span>
 
-            <span class="n">file</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-
             <span class="n">path</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="p">(</span>
@@ -1996,7 +1989,6 @@
                     <span class="p">)</span>
 
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
                     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Aborted. Please check your input parameters ...&quot;</span><span class="p">)</span>
                     <span class="k">return</span>
 
@@ -2362,8 +2354,6 @@
             <span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span>
 
-            <span class="n">file</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-
             <span class="n">path</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="p">(</span>
@@ -2393,7 +2383,6 @@
                     <span class="p">)</span>
 
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
                     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Aborted. Please check your input parameters ...&quot;</span><span class="p">)</span>
                     <span class="k">return</span>
 
@@ -2477,7 +2466,8 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    * Detect non-steady-state at the beginning of a bold 4D image.</span>
 
-<span class="sd">    Please, see the complete documentation for the `NonSteadyStateDetector&#39; brick in the populse.mia_processes website</span>
+<span class="sd">    Please, see the complete documentation for the</span>
+<span class="sd">    `NonSteadyStateDetector` brick in the populse.mia_processes website</span>
 <span class="sd">    https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/NonSteadyStateDetector.html</span>
 
 <span class="sd">    adapted from:</span>
@@ -2571,7 +2561,8 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Resamples an image to the resolution of a reference image.</span>
 
-<span class="sd">    Please, see the complete documentation for the `Resample_1 brick in the populse.mia_processes website</span>
+<span class="sd">    Please, see the complete documentation for the</span>
+<span class="sd">    `Resample_1` brick in the populse.mia_processes website</span>
 <span class="sd">    https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/Resample_1.html</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -2611,7 +2602,7 @@
             <span class="s2">&quot;out_files (a string).&quot;</span>
         <span class="p">)</span>
         <span class="n">suffix_desc</span> <span class="o">=</span> <span class="s2">&quot;The suffix for the out_files image (a string).&quot;</span>
-        <span class="n">prefix_desc</span> <span class="o">=</span> <span class="s2">&quot;The prefix for the  out_files image (a string).&quot;</span>
+        <span class="n">prefix_desc</span> <span class="o">=</span> <span class="s2">&quot;The prefix for the out_files image (a string).&quot;</span>
         <span class="n">interp_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;The order of the spline interpolation (an integer &quot;</span>
             <span class="s2">&quot;between 0 and 5; trilinear == 3).&quot;</span>
@@ -2827,10 +2818,12 @@
                 <span class="n">path</span><span class="p">,</span> <span class="n">file_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
                 <span class="n">file_name_no_ext</span><span class="p">,</span> <span class="n">file_extension</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
 
+                <span class="c1"># fmt: off</span>
                 <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">suffix_to_delete</span> <span class="o">!=</span> <span class="s2">&quot; &quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
-                    <span class="n">file_name_no_ext</span><span class="p">[</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">suffix_to_delete</span><span class="p">)</span> <span class="p">:]</span>
+                    <span class="n">file_name_no_ext</span><span class="p">[</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">suffix_to_delete</span><span class="p">):]</span>
                     <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">suffix_to_delete</span>
                 <span class="p">):</span>
+                    <span class="c1"># fmt: on</span>
                     <span class="n">file_name_no_ext</span> <span class="o">=</span> <span class="n">file_name_no_ext</span><span class="p">[</span>
                         <span class="p">:</span> <span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">suffix_to_delete</span><span class="p">)</span>
                     <span class="p">]</span>
@@ -2918,41 +2911,46 @@
                         <span class="n">_</span><span class="p">,</span> <span class="n">fileOval</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">out_val</span><span class="p">)</span>
                         <span class="n">fileOval_no_ext</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">fileOval</span><span class="p">)</span>
 
+                        <span class="c1"># fmt: off</span>
                         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">suffix</span> <span class="o">!=</span> <span class="s2">&quot; &quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
-                            <span class="n">fileOval_no_ext</span><span class="p">[</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">suffix</span><span class="p">)</span> <span class="p">:]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">suffix</span>
+                                <span class="n">fileOval_no_ext</span><span class="p">[</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span>
+                                                <span class="bp">self</span><span class="o">.</span><span class="n">suffix</span><span class="p">):]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">suffix</span>
                         <span class="p">):</span>
-                            <span class="n">fileOval_no_ext</span> <span class="o">=</span> <span class="n">fileOval_no_ext</span><span class="p">[</span>
-                                <span class="p">:</span> <span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">suffix</span><span class="p">)</span>
-                            <span class="p">]</span>
+                            <span class="n">fileOval_no_ext</span> <span class="o">=</span> <span class="n">fileOval_no_ext</span><span class="p">[:</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">suffix</span><span class="p">)]</span>
 
                         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">!=</span> <span class="s2">&quot; &quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
-                            <span class="n">fileOval_no_ext</span><span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">)]</span>
-                            <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span>
+                                <span class="n">fileOval_no_ext</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">)]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span>
                         <span class="p">):</span>
-                            <span class="n">fileOval_no_ext</span> <span class="o">=</span> <span class="n">fileOval_no_ext</span><span class="p">[</span>
-                                <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">)</span> <span class="p">:</span>
-                            <span class="p">]</span>
-
+                            <span class="n">fileOval_no_ext</span> <span class="o">=</span> <span class="n">fileOval_no_ext</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">):]</span>
+                        <span class="c1"># fmt: on</span>
                         <span class="n">_</span><span class="p">,</span> <span class="n">fileIval</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">in_val</span><span class="p">)</span>
                         <span class="n">fileIval_no_ext</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">fileIval</span><span class="p">)</span>
 
+                        <span class="c1"># fmt: off</span>
                         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">suffix_to_delete</span> <span class="o">!=</span> <span class="s2">&quot; &quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
-                            <span class="n">fileIval_no_ext</span><span class="p">[</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">suffix_to_delete</span><span class="p">)</span> <span class="p">:]</span>
+                            <span class="n">fileIval_no_ext</span><span class="p">[</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">suffix_to_delete</span><span class="p">):]</span>
                             <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">suffix_to_delete</span>
                         <span class="p">):</span>
+                            <span class="c1"># fmt: on</span>
                             <span class="n">fileOval_no_ext</span> <span class="o">=</span> <span class="p">(</span>
                                 <span class="n">fileOval_no_ext</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">suffix_to_delete</span>
                             <span class="p">)</span>
 
                         <span class="k">if</span> <span class="n">fileOval_no_ext</span> <span class="o">==</span> <span class="n">fileIval_no_ext</span><span class="p">:</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="n">out_val</span><span class="p">]</span> <span class="o">=</span> <span class="n">in_val</span>
-                            <span class="c1"># FIXME: In the latest version of mia, indexing of the database with</span>
-                            <span class="c1">#        particular tags defined in the processes is done only at</span>
-                            <span class="c1">#        the end of the initialisation of the whole pipeline. So we</span>
-                            <span class="c1">#        cannot use the value of these tags in other processes of</span>
-                            <span class="c1">#        the pipeline at the time of initialisation</span>
-                            <span class="c1">#        (see populse_mia #290). Until better we use a quick and</span>
-                            <span class="c1">#        dirty hack with the set_dbFieldValue() method !</span>
+                            <span class="c1"># FIXME: In the latest version of mia, indexing of</span>
+                            <span class="c1">#        the database with particular tags defined</span>
+                            <span class="c1">#        in the processes is done only at the end</span>
+                            <span class="c1">#        of the initialisation of the whole</span>
+                            <span class="c1">#        pipeline. So we cannot use the value of</span>
+                            <span class="c1">#        these tags in other processes of the</span>
+                            <span class="c1">#        pipeline at the time of initialisation</span>
+                            <span class="c1">#        (see populse_mia #290). Until better we</span>
+                            <span class="c1">#        use a quick and dirty hack with the</span>
+                            <span class="c1">#        set_dbFieldValue() function !</span>
                             <span class="n">tag_to_add</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
                             <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;PatientName&quot;</span>
                             <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;field_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;string&quot;</span>
@@ -2997,7 +2995,8 @@
         <span class="c1">#   itself.</span>
         <span class="c1">#</span>
         <span class="c1"># nibabel.processing.resample_from_to (seems to be a good solution, but</span>
-        <span class="c1"># can give non-zero intensity for the background -&gt; needs thresolding ?)</span>
+        <span class="c1"># can give non-zero intensity for the background -&gt; needs</span>
+        <span class="c1"># thresolding ?)</span>
         <span class="c1">#</span>
         <span class="c1"># nilearn.image.resample_to_img (seems to be a good solution, no</span>
         <span class="c1"># non-zero intensity for the background observed)</span>
@@ -3061,7 +3060,7 @@
             <span class="c1"># Currently, resampling is only done for 3D images using 3D</span>
             <span class="c1"># or 4D images for reference. It would be interesting to widen the</span>
             <span class="c1"># possibilities to more cases (at least a 4D using a 3D, and why</span>
-            <span class="c1"># not, to larger dimensions?). Currently we use</span>
+            <span class="c1"># not, to larger dimensions?). Currently, we use</span>
             <span class="c1"># nibabel.processing.resample_from_to(), (see</span>
             <span class="c1"># https://mail.python.org/pipermail/neuroimaging/2019-January/001902.html).</span>
             <span class="c1"># It seems this method produces a little noise (can give non-zero</span>
@@ -3098,10 +3097,12 @@
             <span class="n">path</span><span class="p">,</span> <span class="n">file_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
             <span class="n">file_name_no_ext</span><span class="p">,</span> <span class="n">file_extension</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
 
+            <span class="c1"># fmt: off</span>
             <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">suffix_to_delete</span> <span class="o">!=</span> <span class="s2">&quot; &quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
-                <span class="n">file_name_no_ext</span><span class="p">[</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">suffix_to_delete</span><span class="p">)</span> <span class="p">:]</span>
+                <span class="n">file_name_no_ext</span><span class="p">[</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">suffix_to_delete</span><span class="p">):]</span>
                 <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">suffix_to_delete</span>
             <span class="p">):</span>
+                <span class="c1"># fmt: on</span>
                 <span class="n">file_name_no_ext</span> <span class="o">=</span> <span class="n">file_name_no_ext</span><span class="p">[</span>
                     <span class="p">:</span> <span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">suffix_to_delete</span><span class="p">)</span>
                 <span class="p">]</span>
@@ -3238,11 +3239,25 @@
                         <span class="p">)</span>
                     <span class="p">)</span>
 
-                <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">tmp</span><span class="p">):</span>
-                    <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">tmp</span><span class="p">):</span>
+                        <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="s2">&quot;convROI_BOLD&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dirs</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span>
+                        <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Resample_2 brick:</span><span class="se">\n</span><span class="s2">No </span><span class="si">{}</span><span class="s2"> folder detected ...</span><span class="se">\n</span><span class="s2">The &quot;</span>
+                        <span class="s2">&quot;initialization is &quot;</span>
+                        <span class="s2">&quot;aborted ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">roi_dir</span><span class="p">,</span> <span class="s2">&quot;convROI_BOLD&quot;</span><span class="p">)</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
 
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">roi_dir</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Resample_2 brick:</span><span class="se">\n</span><span class="s2">No </span><span class="si">{}</span><span class="s2"> folder detected ...</span><span class="se">\n</span><span class="s2">The &quot;</span>
+                    <span class="s2">&quot;initialization is aborted ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">roi_dir</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
 
             <span class="c1"># Creates roi_dir/&#39;convROI_BOLD2&#39; folder</span>
             <span class="n">conv_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">roi_dir</span><span class="p">,</span> <span class="s2">&quot;convROI_BOLD2&quot;</span><span class="p">)</span>
@@ -3306,7 +3321,8 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    * Compute the rotation mask image.</span>
 
-<span class="sd">    Please, see the complete documentation for the `RotationMask&#39; brick in the populse.mia_processes website</span>
+<span class="sd">    Please, see the complete documentation for the</span>
+<span class="sd">    `RotationMask` brick in the populse.mia_processes website</span>
 <span class="sd">    https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/RotationMask.html</span>
 
 <span class="sd">    adapted from:</span>
@@ -3396,8 +3412,6 @@
             <span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span>
 
-            <span class="n">file</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-
             <span class="n">path</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="p">(</span>
@@ -3429,7 +3443,6 @@
                     <span class="p">)</span>
 
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
                     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Aborted. Please check your input parameters ...&quot;</span><span class="p">)</span>
                     <span class="k">return</span>
 
@@ -3538,7 +3551,8 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    * Sanitize input bold image.</span>
 
-<span class="sd">    Please, see the complete documentation for the `Sanitize&#39; brick in the populse.mia_processes website</span>
+<span class="sd">    Please, see the complete documentation for the</span>
+<span class="sd">    `Sanitize` brick in the populse.mia_processes website</span>
 <span class="sd">    https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/Sanitize.html</span>
 
 <span class="sd">    adapted from:</span>
@@ -3645,8 +3659,6 @@
             <span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span>
 
-            <span class="n">file</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-
             <span class="n">path</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="p">(</span>
@@ -3678,7 +3690,6 @@
                     <span class="p">)</span>
 
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
                     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Aborted. Please check your input parameters ...&quot;</span><span class="p">)</span>
                     <span class="k">return</span>
 
@@ -3746,9 +3757,9 @@
             <span class="p">)</span>
 
             <span class="n">save_file</span> <span class="o">=</span> <span class="kc">False</span>
-            <span class="n">warning_txt</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
-            <span class="c1"># Both match, qform valid (implicit with match), codes okay -&gt; do nothing, empty report</span>
+            <span class="c1"># Both match, qform valid (implicit with match), codes OK</span>
+            <span class="c1"># -&gt; do nothing, empty report</span>
             <span class="k">if</span> <span class="n">matching_affines</span> <span class="ow">and</span> <span class="n">qform_code</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">sform_code</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">save_file</span> <span class="o">=</span> <span class="kc">True</span>
 
@@ -3773,11 +3784,11 @@
 
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_qform</span> <span class="ow">and</span> <span class="n">qform_code</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                     <span class="nb">print</span><span class="p">(</span>
-                        <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">WARNING - Invalid qform information.&quot;</span>
-                        <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The qform matrix found in the file header is invalid.&quot;</span>
-                        <span class="s2">&quot;The qform has been copied from sform.&quot;</span>
-                        <span class="s2">&quot;Checking the original qform information from the data produced&quot;</span>
-                        <span class="s2">&quot;by the scanner is advised.&quot;</span>
+                        <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">WARNING - Invalid qform information.</span><span class="se">\n</span><span class="s2">The qform &quot;</span>
+                        <span class="s2">&quot;matrix found in the file header is invalid. The qform&quot;</span>
+                        <span class="s2">&quot; has been copied from sform. Checking the original &quot;</span>
+                        <span class="s2">&quot;qform information from the data produced by the &quot;</span>
+                        <span class="s2">&quot;scanner is advised.&quot;</span>
                     <span class="p">)</span>
 
             <span class="c1"># Rows 5-6:</span>
@@ -3788,9 +3799,10 @@
                 <span class="n">save_file</span> <span class="o">=</span> <span class="kc">True</span>
                 <span class="nb">print</span><span class="p">(</span>
                     <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">WARNING - Missing orientation information.&quot;</span>
-                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Orientation information could not be retrieved from the image header.&quot;</span>
-                    <span class="s2">&quot;The qform and sform matrices have been set to a default, LAS-oriented affine.&quot;</span>
-                    <span class="s2">&quot;Analyses of this dataset MAY BE INVALID.&quot;</span>
+                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Orientation information could not be retrieved from &quot;</span>
+                    <span class="s2">&quot;the image header. The qform and sform matrices have been &quot;</span>
+                    <span class="s2">&quot;set to a default, LAS-oriented affine. Analyses of this &quot;</span>
+                    <span class="s2">&quot;dataset MAY BE INVALID.&quot;</span>
                 <span class="p">)</span>
 
             <span class="k">if</span> <span class="p">(</span>
@@ -3805,11 +3817,13 @@
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">in_data</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">dataobj</span>
 
+                <span class="c1"># fmt: off</span>
                 <span class="n">img</span> <span class="o">=</span> <span class="n">nib</span><span class="o">.</span><span class="n">Nifti1Image</span><span class="p">(</span>
-                    <span class="n">in_data</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_volumes_to_discard</span> <span class="p">:],</span>
+                    <span class="n">in_data</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_volumes_to_discard</span><span class="p">:],</span>
                     <span class="n">img</span><span class="o">.</span><span class="n">affine</span><span class="p">,</span>
                     <span class="n">img</span><span class="o">.</span><span class="n">header</span><span class="p">,</span>
                 <span class="p">)</span>
+                <span class="c1"># fmt: on</span>
                 <span class="n">save_file</span> <span class="o">=</span> <span class="kc">True</span>
 
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">extensions</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
@@ -3845,8 +3859,8 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    * Get template image from templateflow.</span>
 
-<span class="sd">    Please, see the complete documentation for the `TemplateFromTemplateFlow&#39; brick</span>
-<span class="sd">    in the populse.mia_processes website</span>
+<span class="sd">    Please, see the complete documentation for the</span>
+<span class="sd">    `TemplateFromTemplateFlow` brick in the populse.mia_processes website</span>
 <span class="sd">    https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/TemplateFromTemplateFlow.html</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -3964,19 +3978,18 @@
         <span class="n">tpl_target_path</span> <span class="o">=</span> <span class="n">get_template</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_template</span><span class="p">,</span> <span class="o">**</span><span class="n">template_spec</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">tpl_target_path</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span>
-                <span class="sd">&quot;&quot;&quot;\nCould not find template &quot;{0}&quot; with specs={1}. Please revise &quot;</span>
-<span class="sd">                          &quot;your template argument.&quot;&quot;&quot;</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">in_template</span><span class="p">,</span>
-                <span class="n">template_spec</span><span class="p">,</span>
+                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Could not find template &#39;</span><span class="si">{0}</span><span class="s2">&#39; with specs=</span><span class="si">{1}</span><span class="s2">. Please &quot;</span>
+                <span class="s2">&quot;revise your template argument.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">in_template</span><span class="p">,</span> <span class="n">template_spec</span>
+                <span class="p">)</span>
             <span class="p">)</span>
             <span class="k">return</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tpl_target_path</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="nb">print</span><span class="p">(</span>
-                <span class="sd">&quot;&quot;&quot;\nThe available template modifiers ({0}) did not select a unique &quot;</span>
-<span class="sd">                          &quot;template (got &quot;{1}&quot;). Please revise your template argument.&quot;&quot;&quot;</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">in_template</span><span class="p">,</span>
-                <span class="n">template_spec</span><span class="p">,</span>
+                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The available template modifiers (</span><span class="si">{0}</span><span class="s2">) did not select a &quot;</span>
+                <span class="s2">&quot;unique template (got &#39;</span><span class="si">{1}</span><span class="s2">&#39;). Please revise your template &quot;</span>
+                <span class="s2">&quot;argument.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_template</span><span class="p">,</span> <span class="n">template_spec</span><span class="p">)</span>
             <span class="p">)</span>
             <span class="k">return</span>
 
@@ -3994,7 +4007,8 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    * Image thresholding.</span>
 
-<span class="sd">    Please, see the complete documentation for the `Threshold` brick in the populse.mia_processes website</span>
+<span class="sd">    Please, see the complete documentation for the</span>
+<span class="sd">    `Threshold` brick in the populse.mia_processes website</span>
 <span class="sd">    https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/Threshold.html</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -4235,9 +4249,10 @@
                         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
                             <span class="n">fileOval_no_ext</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">)</span>
                         <span class="p">):</span>
+                            <span class="c1"># fmt: off</span>
                             <span class="n">fileOval_no_ext</span> <span class="o">=</span> <span class="n">fileOval_no_ext</span><span class="p">[</span>
-                                <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">)</span> <span class="p">:</span>
-                            <span class="p">]</span>
+                                <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="p">):]</span>
+                            <span class="c1"># fmt: on</span>
 
                         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">suffix</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
                             <span class="n">fileOval_no_ext</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">suffix</span><span class="p">)</span>
@@ -4248,13 +4263,16 @@
 
                         <span class="k">if</span> <span class="n">fileOval_no_ext</span> <span class="o">==</span> <span class="n">fileIval_no_ext</span><span class="p">:</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="n">out_val</span><span class="p">]</span> <span class="o">=</span> <span class="n">in_val</span>
-                            <span class="c1"># FIXME: In the latest version of mia, indexing of the database with</span>
-                            <span class="c1">#        particular tags defined in the processes is done only at</span>
-                            <span class="c1">#        the end of the initialisation of the whole pipeline. So we</span>
-                            <span class="c1">#        cannot use the value of these tags in other processes of</span>
-                            <span class="c1">#        the pipeline at the time of initialisation</span>
-                            <span class="c1">#        (see populse_mia #290). Until better we use a quick and</span>
-                            <span class="c1">#        dirty hack with the set_dbFieldValue() method !</span>
+                            <span class="c1"># FIXME: In the latest version of mia, indexing of</span>
+                            <span class="c1">#        the database with particular tags defined</span>
+                            <span class="c1">#        in the processes is done only at the end</span>
+                            <span class="c1">#        of the initialisation of the whole</span>
+                            <span class="c1">#        pipeline. So we cannot use the value of</span>
+                            <span class="c1">#        these tags in other processes of the</span>
+                            <span class="c1">#        pipeline at the time of initialisation</span>
+                            <span class="c1">#        (see populse_mia #290). Until better we</span>
+                            <span class="c1">#        use a quick and dirty hack with the</span>
+                            <span class="c1">#        set_dbFieldValue() function !</span>
                             <span class="n">tag_to_add</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
                             <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;PatientName&quot;</span>
                             <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;field_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;string&quot;</span>
@@ -4317,7 +4335,8 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    * Computes the time-course SNR for a time series.</span>
 
-<span class="sd">    Please, see the complete documentation for the `TSNR&#39; brick in the populse.mia_processes website</span>
+<span class="sd">    Please, see the complete documentation for the</span>
+<span class="sd">    `TSNR&#39; brick in the populse.mia_processes website</span>
 <span class="sd">    https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/TSNR.html</span>
 
 <span class="sd">    adapted from:</span>
@@ -4664,10 +4683,11 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns a boolean array with True if points are outliers and False</span>
 <span class="sd">    otherwise.</span>
-<span class="sd">    :param nparray points: an numobservations by numdimensions numpy array of observations</span>
-<span class="sd">    :param float thresh: the modified z-score to use as a threshold. Observations with</span>
-<span class="sd">        a modified z-score (based on the median absolute deviation) greater</span>
-<span class="sd">        than this value will be classified as outliers.</span>
+<span class="sd">    :param nparray points: an numobservations by numdimensions numpy array</span>
+<span class="sd">        of observations</span>
+<span class="sd">    :param float thresh: the modified z-score to use as a threshold.</span>
+<span class="sd">        Observations with a modified z-score (based on the median absolute</span>
+<span class="sd">        deviation) greater than this value will be classified as outliers.</span>
 <span class="sd">    :return: A bolean mask, of size numobservations-length array.</span>
 <span class="sd">    .. note:: References</span>
 <span class="sd">        Boris Iglewicz and David Hoaglin (1993), &quot;Volume 16: How to Detect and</span>

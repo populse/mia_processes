@@ -20,4 +20,4 @@ calculations).
 # for details.
 ##########################################################################
 
-from .info import __version__
+from .info import __version__  # noqa: F401

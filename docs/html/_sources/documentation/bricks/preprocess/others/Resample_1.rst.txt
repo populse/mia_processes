@@ -10,11 +10,8 @@
 Resample_1 brick
 ================
 
-Resamples an image to the resolution of a reference image.
-
-/!\ Documentation in progress
-
---------------------------------------
+Resamples an image to the resolution of a reference image using nibabel.processing.resample_from_to().
+------------------------------------------------------------------------------------------------------
 
 **Mandatory inputs parameters:**
 
@@ -68,8 +65,13 @@ Resamples an image to the resolution of a reference image.
 **Outputs parameters:**
 
 - *out_files* (list of pathlike object or string reprsenting  a file or a list of items which are a pathlike object or string representing a file)
-    TThe resulting image after resampling ( extensions: [.nii, .nii.gz]).
+    The resulting image after resampling ( extensions: [.nii, .nii.gz]).
 
     ::
 
       ex. ['/home/username/data/raw_data/T1w_003.nii']
+
+-------------
+
+Usefull links:
+ `nibabel.processing.resample_from_to() <https://nipy.org/nibabel/reference/nibabel.processing.html#resample-from-to>`_

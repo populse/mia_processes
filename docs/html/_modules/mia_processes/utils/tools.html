@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.utils.tools &#8212; mia_processes 2.2.1-dev+17d7d44 documentation</title>
+    <title>mia_processes.utils.tools &#8212; mia_processes 2.2.1-dev+a9ea159 documentation</title>
     <link rel="stylesheet" href="../../../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
@@ -18,7 +18,7 @@
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
-          <span>mia_processes 2.2.1-dev+17d7d44 documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+a9ea159 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.utils.tools</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -48,6 +48,7 @@
 <span class="sd">        - mriqc_group_iqms_tsv</span>
 <span class="sd">        - plot_boxplot_points</span>
 <span class="sd">        - plot_qi2</span>
+<span class="sd">        - set_dbFieldValue</span>
 <span class="sd">        - slice_planes_plot</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
@@ -63,11 +64,11 @@
 <span class="kn">import</span> <span class="nn">glob</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">os</span>
+
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">nibabel</span> <span class="k">as</span> <span class="nn">nib</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-
 <span class="kn">from</span> <span class="nn">matplotlib.cm</span> <span class="kn">import</span> <span class="n">get_cmap</span>
 <span class="kn">from</span> <span class="nn">mpl_toolkits.axes_grid1</span> <span class="kn">import</span> <span class="n">ImageGrid</span>
 <span class="kn">from</span> <span class="nn">populse_mia.data_manager.data_history_inspect</span> <span class="kn">import</span> <span class="n">data_history_pipeline</span>
@@ -75,10 +76,9 @@
     <span class="n">COLLECTION_CURRENT</span><span class="p">,</span>
     <span class="n">COLLECTION_INITIAL</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">reportlab.lib.styles</span> <span class="kn">import</span> <span class="n">getSampleStyleSheet</span>
 <span class="kn">from</span> <span class="nn">reportlab.lib.units</span> <span class="kn">import</span> <span class="n">mm</span>
 <span class="kn">from</span> <span class="nn">reportlab.pdfgen</span> <span class="kn">import</span> <span class="n">canvas</span>
-<span class="kn">from</span> <span class="nn">reportlab.platypus</span> <span class="kn">import</span> <span class="n">Flowable</span><span class="p">,</span> <span class="n">Paragraph</span>
+<span class="kn">from</span> <span class="nn">reportlab.platypus</span> <span class="kn">import</span> <span class="n">Flowable</span>
 <span class="kn">from</span> <span class="nn">traits.api</span> <span class="kn">import</span> <span class="n">Undefined</span>
 
 
@@ -580,10 +580,13 @@
             <span class="p">)</span>
 
     <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">brain_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]))))</span> <span class="o">&gt;</span> <span class="n">disp_slices</span><span class="p">:</span>
+        <span class="c1"># fmt: off</span>
         <span class="n">ind_slices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">brain_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">])))[</span>
-            <span class="n">inf_slice_start</span> <span class="p">:</span> <span class="n">inf_slice_start</span>
-            <span class="o">+</span> <span class="p">(</span><span class="n">slices_gap</span> <span class="o">*</span> <span class="n">disp_slices</span><span class="p">)</span> <span class="p">:</span> <span class="n">slices_gap</span>
+            <span class="n">inf_slice_start</span><span class="p">:</span>
+            <span class="n">inf_slice_start</span> <span class="o">+</span> <span class="p">(</span><span class="n">slices_gap</span> <span class="o">*</span> <span class="n">disp_slices</span><span class="p">):</span>
+            <span class="n">slices_gap</span>
         <span class="p">]</span>
+        <span class="c1"># fmt: on</span>
 
     <span class="k">else</span><span class="p">:</span>
         <span class="n">ind_slices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">brain_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">])))</span>

@@ -12,4 +12,4 @@ The atomic calculations from fsl.
 # for details.
 ##########################################################################
 
-from .processes import BetSurfacesExtraction, FastSegment, Smooth
+from .processes import BetSurfacesExtraction, FastSegment, Smooth  # noqa: F401

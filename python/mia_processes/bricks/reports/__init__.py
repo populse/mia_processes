@@ -13,7 +13,7 @@ and to create the report itself.
 # for details.
 ##########################################################################
 
-from .processes import (
+from .processes import (  # noqa: F401
     AnatIQMs,
     BoldIQMs,
     CarpetParcellation,
@@ -23,4 +23,8 @@ from .processes import (
     Result_collector,
     Spikes,
 )
-from .reporting import ReportAnatMriqc, ReportFuncMriqc, ReportGroupMriqc
+from .reporting import (  # noqa: F401
+    ReportAnatMriqc,
+    ReportFuncMriqc,
+    ReportGroupMriqc,
+)
