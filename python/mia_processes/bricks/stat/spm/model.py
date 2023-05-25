@@ -124,8 +124,9 @@ class EstimateContrast(ProcessMIA):
         multi_reg_desc = "The regressor files (a list of file)"
         residual_image_desc = "Mean-squared image of the residuals"
         beta_images_desc = "Parameter estimates of the design matrix"
+        # out_dir_name_desc = 'Out directory name'
 
-        # TODO : understand use_derivs and group_contrast 
+        # TODO : understand use_derivs and group_contrast
         # use_derivs_desc = ("Use derivatives for estimation. "
         #                    "Mutually exclusive with inputs: group_contrast")
         # group_contrast_desc = ("Higher level contrast. "
@@ -228,6 +229,17 @@ class EstimateContrast(ProcessMIA):
                             copyfile=False,
                             desc=residual_image_desc)
                        )
+
+        # self.add_trait(
+        #     "out_dir_name",
+        #     traits.Either(
+        #         (traits.String(), Undefined),
+        #         output=False,
+        #         optional=True,
+        #         desc=out_dir_name_desc,
+        #     ),
+        # )
+        # self.out_dir_name = Undefined
 
         # self.add_trait("use_derivs",
         #                traits.Bool(output=False,
@@ -350,14 +362,40 @@ class EstimateContrast(ProcessMIA):
             (self.spm_mat_file)
             and (self.spm_mat_file not in ["<undefined>", Undefined])
         ):
-
+            spm_mat_dir, spm_mat_file = os.path.split(self.spm_mat_file)
             if self.output_directory:
-                self.process.output_directory = self.output_directory
+                # self.process.output_directory = self.output_directory
+                # Change output_directory for this process in order to
+                # use a specific directory for each analysis
 
+                # if self.out_dir_name in ["<undefined>", Undefined]:
+                if (os.path.dirname(spm_mat_dir) == self.output_directory
+                        and 'data' in os.path.basename(spm_mat_dir)):
+                    # if spm_mat already in a subfolder for a analysis
+                    out_directory = spm_mat_dir
+                else:
+                    # if spm_mat file not in a subfolder(for e.g spm_mat
+                    # file in download data)
+                    sub_name = get_dbFieldValue(
+                        self.project,
+                        self.spm_mat_file,
+                        "PatientName"
+                    )
+                    if sub_name is None:
+                        print("Please, fill 'PatientName' tag "
+                              "in the database for SPM file")
+                        return self.make_initResult()
+
+                    out_directory = os.path.join(self.output_directory,
+                                                 sub_name + 'data')
+
+                    if not os.path.exists(out_directory):
+                        os.mkdir(out_directory)
+                self.output_directory = out_directory
             else:
                 print("No output_directory was found...!\n")
+                return self.make_initResult()
 
-            _, spm_mat_file = os.path.split(self.spm_mat_file)
             self.outputs["out_spm_mat_file"] = os.path.join(
                 self.output_directory, spm_mat_file
             )
@@ -756,7 +794,7 @@ class EstimateModel(ProcessMIA):
             and (self.estimation_method not in ["<undefined>", Undefined])
         ):
             im_form = "nii" if "12" in self.version else "img"
-
+            spm_mat_dir, spm_mat_file = os.path.split(self.spm_mat_file)
             # The management of self.process.output_directory could be delegated
             # to the populse_mia.user_interface.pipeline_manager.process_mia
             # module. We can't do it at the moment because the
@@ -764,12 +802,36 @@ class EstimateModel(ProcessMIA):
             # module raises an exception in nipype if the mandatory parameters
             # are not yet defined!
             if self.output_directory:
-                self.process.output_directory = self.output_directory
+                # Change output_directory for this process in order to
+                # use a specific directory for each analysis
 
+                if (os.path.dirname(spm_mat_dir) == self.output_directory
+                        and 'data' in os.path.basename(spm_mat_dir)):
+                    # if spm_mat already in a subfolder for a analysis
+                    out_directory = spm_mat_dir
+                else:
+                    # if spm_mat file not in a subfolder(for e.g spm_mat
+                    # file in download data)
+                    sub_name = get_dbFieldValue(
+                        self.project,
+                        self.spm_mat_file,
+                        "PatientName"
+                    )
+                    if sub_name is None:
+                        print("Please, fill 'PatientName' tag "
+                              "in the database for SPM file")
+                        return self.make_initResult()
+
+                    out_directory = os.path.join(self.output_directory,
+                                                 sub_name + 'data')
+
+                    if not os.path.exists(out_directory):
+                        os.mkdir(out_directory)
+                self.output_directory = out_directory
             else:
                 print("No output_directory was found...!\n")
+                return self.make_initResult()
 
-            _, spm_mat_file = os.path.split(self.spm_mat_file)
             self.outputs["out_spm_mat_file"] = os.path.join(
                 self.output_directory, spm_mat_file
             )
@@ -978,8 +1040,8 @@ class EstimateModel(ProcessMIA):
         self.process.spm_mat_file = os.path.abspath(self.spm_mat_file)
         self.process.estimation_method = self.estimation_method
         self.process.write_residuals = self.write_residuals
-        # self.process.flags = self.flags
 
+        # self.process.flags = self.flags
         # Removing the image files to avoid a bug
         # I do not observe the bug now, i comment the following lines:
         # TODO: In fact, self.outputs is == {} at this point(see issue #272).
@@ -1754,20 +1816,36 @@ class Level1Design(ProcessMIA):
             and (self.sess_scans not in ["<undefined>", Undefined])
             and (self.sess_scans[0] not in ["<undefined>", Undefined])
         ):
-            # The management of self.process.output_directory could be delegated
-            # to the populse_mia.user_interface.pipeline_manager.process_mia
-            # module. We can't do it at the moment because the
-            # sync_process_output_traits() of the capsul/process/nipype_process
-            # module raises an exception in nipype if the mandatory parameters
-            # are not yet defined!
-            if self.output_directory:
-                self.process.output_directory = self.output_directory
+            dir_name = ''
+            subjects_names = []
+            for idx_session in range(len(self.sess_scans)):
+                sub_name = get_dbFieldValue(
+                    self.project,
+                    self.sess_scans[idx_session],
+                    "PatientName"
+                )
+                if sub_name is None:
+                    print("Please, fill 'PatientName' tag "
+                          "in the database")
+                    return self.make_initResult()
+                if sub_name not in subjects_names:
+                    subjects_names.append(sub_name)
+                    dir_name += sub_name + '_'
 
+            if self.output_directory:
+                # Create a directory for this analysis
+                out_directory = os.path.join(self.output_directory,
+                                             dir_name + 'data')
+                if not os.path.exists(out_directory):
+                    os.mkdir(out_directory)
+                self.process.output_directory = out_directory
+                self.dict4runtime["out_directory"] = out_directory
             else:
                 print("No output_directory was found...!\n")
+                return self.make_initResult()
 
             self.outputs["spm_mat_file"] = os.path.join(
-                self.output_directory, "SPM.mat"
+                out_directory, "SPM.mat"
             )
 
             sessions = []  # The total session_info parameter for nipype
@@ -2053,26 +2131,19 @@ class Level1Design(ProcessMIA):
         """Dedicated to the process launch step of the brick."""
         super(Level1Design, self).run_process_mia()
         # Removing the spm_mat_file to avoid a bug (nipy/nipype Issues #2612)
-        # cur_dir = os.getcwd()
-        # out_file = os.path.join(cur_dir, 'SPM.mat')
-
         if self.output_directory:
-            out_file = os.path.join(self.output_directory, "SPM.mat")
+            out_file = os.path.join(self.dict4runtime["out_directory"],
+                                    "SPM.mat")
 
             if os.path.isfile(out_file):
                 os.remove(out_file)
-
         else:
             print("No output_directory was found...!\n")
-
-        # if os.path.isfile(out_file):
-        #    os.remove(out_file)
-
+        self.process.spm_mat_dir = self.dict4runtime["out_directory"]
         self.process.timing_units = self.timing_units
         self.process.interscan_interval = self.interscan_interval
         self.process.microtime_resolution = self.microtime_resolution
         self.process.microtime_onset = self.microtime_onset
-        # self.process.session_info = self.sessions
         self.process.session_info = self.dict4runtime["sessions"]
         self.process.factor_info = self.factor_info
         self.process.bases = self.bases
@@ -2097,17 +2168,4 @@ class Level1Design(ProcessMIA):
 
         self.process.model_serial_correlations = self.model_serial_correlations
 
-        # self.process.run()
         return self.process.run(configuration_dict={})
-
-        # Copying the generated SPM.mat file in the data directory
-        # if ((self.sess_scans) and
-        #        (self.sess_scans not in ['<undefined>', Undefined]) and
-        #        (self.sess_scans[0] not in ['<undefined>', Undefined])):
-        #    scan_image = os.path.abspath(self.sess_scans[0])
-        #    scan_folder, _ = os.path.split(scan_image)
-
-        # copy2(out_file, scan_folder)
-
-        # if os.path.isfile(out_file):
-        #    os.remove(out_file)
