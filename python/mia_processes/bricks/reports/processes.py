@@ -49,9 +49,9 @@ import json
 import os
 import re
 import shutil
+import tempfile
 from math import sqrt
 
-# nibabel import
 import nibabel as nb
 import numpy as np
 import scipy.ndimage as nd
@@ -59,7 +59,14 @@ from nilearn.signal import clean
 from nipy.algorithms.registration import aff2euler, to_matrix44
 
 # nipype import
-from nipype.interfaces.base import File, OutputMultiPath, Undefined, traits
+from nipype.interfaces.base import (
+    File,
+    InputMultiPath,
+    OutputMultiPath,
+    Undefined,
+    traits,
+)
+from nipype.interfaces.spm.base import ImageFileSPM
 from nitime.algorithms import AR_est_YW
 from numpy.polynomial import Legendre
 
@@ -1633,12 +1640,16 @@ class Mean_stdDev_calc(ProcessMIA):
 
         # Inputs description
         parametric_maps_desc = "A list of files (existing, uncompressed file)"
-        doublet_list_desc = (
-            "A list of lists containing doublets of strings "
-            '(e.g. [["ROI_OCC", "_L"], ["ROI_OCC", "_R"], '
-            '["ROI_PAR", "_l"], ...]'
+        # doublet_list_desc = (
+        #     "A list of lists containing doublets of strings "
+        #     '(e.g. [["ROI_OCC", "_L"], ["ROI_OCC", "_R"], '
+        #     '["ROI_PAR", "_l"], ...]'
+        # )
+        rois_files_desc = (
+            "A list of regions of interest applied to the "
+            "parametric maps to calculate their mean and "
+            "standard deviation"
         )
-
         # Outputs description
         mean_out_files_desc = (
             "A list of .txt files with the calculated "
@@ -1661,8 +1672,18 @@ class Mean_stdDev_calc(ProcessMIA):
             ),
         )
 
+        # self.add_trait(
+        #     "doublet_list", traits.List(output=False, desc=doublet_list_desc)
+        # )
+
         self.add_trait(
-            "doublet_list", traits.List(output=False, desc=doublet_list_desc)
+            "rois_files",
+            InputMultiPath(
+                ImageFileSPM(),
+                output=False,
+                optional=False,
+                desc=rois_files_desc,
+            ),
         )
 
         # Output traits
@@ -1781,11 +1802,41 @@ class Mean_stdDev_calc(ProcessMIA):
         # No need the next line (we don't use self.process and SPM)
         # super(Mean_stdDev_calc, self).run_process_mia()
 
-        roi_dir = os.path.join(
-            self.output_directory, "roi_" + self.dict4runtime["patient_name"]
+        # roi_dir = os.path.join(
+        #     self.output_directory, "roi_" + self.dict4runtime["patient_name"]
+        # )
+        # conv_dir = os.path.join(roi_dir, "convROI_BOLD")
+        # analysis_dir = os.path.join(roi_dir, "ROI_analysis")
+
+        pat_name_dir = os.path.join(
+            self.output_directory, self.dict4runtime["patient_name"] + "_data"
         )
-        conv_dir = os.path.join(roi_dir, "convROI_BOLD")
-        analysis_dir = os.path.join(roi_dir, "ROI_analysis")
+
+        if not os.path.exists(pat_name_dir):
+            os.mkdir(pat_name_dir)
+
+        roi_data_dir = os.path.join(pat_name_dir, "ROI_data")
+
+        if not os.path.exists(roi_data_dir):
+            os.mkdir(roi_data_dir)
+
+        analysis_dir = os.path.join(roi_data_dir, "ROI_analysis")
+
+        tmp = "None"
+
+        if os.path.isdir(analysis_dir):
+            tmp = tempfile.mktemp(dir=os.path.dirname(roi_data_dir))
+            os.mkdir(tmp)
+            shutil.move(analysis_dir, os.path.join(tmp, "ROI_analysis"))
+            print(
+                '\nMean_stdDev_calc brick:\nA "{}" folder already exists, '
+                "it will be overwritten by this new "
+                "calculation...".format(analysis_dir)
+            )
+        os.mkdir(analysis_dir)
+
+        if os.path.isdir(tmp):
+            shutil.rmtree(tmp)
 
         for parametric_map in self.parametric_maps:
             # Resampling, if necessary, the parametric_map to the size of the
