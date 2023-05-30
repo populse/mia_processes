@@ -1613,16 +1613,12 @@ class FramewiseDisplacement(ProcessMIA):
 
 class Mean_stdDev_calc(ProcessMIA):
     """
-    * Makes the mean and standard deviation of the parametric_maps.
+    * Makes the mean and standard deviation of parametric_maps.
 
     - The parametric_maps are first convolved with the ROIs corresponding
-      to doublet_list.
-    - ROIs are defined from doublet_list parameter as
-      doublet_list[0][0] + doublet_list[0][1] + '.nii',
-      doublet_list[1][0] + doublet_list[1][1] + '.nii',
-      etc.
-    - To work correctly, the database entry for the parametric_maps items must
-      have the "PatientName" tag filled in
+      to rois_files.
+    - To work correctly, the database entry for the first element of
+      parametric_maps must have the "PatientName" tag filled in.
     - To work correctly, the "/roi_"PatientName"/convROI_BOLD"
       must exist and contain a previous convolution results (normally using
       the ConvROI brick)
@@ -1646,20 +1642,17 @@ class Mean_stdDev_calc(ProcessMIA):
         #     '["ROI_PAR", "_l"], ...]'
         # )
         rois_files_desc = (
-            "A list of regions of interest applied to the "
-            "parametric maps to calculate their mean and "
-            "standard deviation"
+            "A list of regions of interest applied to the parametric maps to "
+            "calculate their mean and standard deviation"
         )
         # Outputs description
         mean_out_files_desc = (
-            "A list of .txt files with the calculated "
-            "average for each ROI determined after "
-            "convolution"
+            "A list of .txt files with the calculated average for each "
+            "ROI after convolution with parametric_maps_desc"
         )
         std_out_files_desc = (
-            "A list of .txt files with the standard "
-            "deviation for each ROI determined "
-            "after convolution"
+            "A list of .txt files with the standard deviation for each ROI "
+            "after convolution with parametric_maps_desc"
         )
 
         # Inputs traits
@@ -1668,6 +1661,7 @@ class Mean_stdDev_calc(ProcessMIA):
             traits.List(
                 traits.File(exists=True),
                 output=False,
+                optional=False,
                 desc=parametric_maps_desc,
             ),
         )
@@ -1722,7 +1716,8 @@ class Mean_stdDev_calc(ProcessMIA):
         super(Mean_stdDev_calc, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
-        if self.doublet_list != [] and self.parametric_maps != []:
+        # if self.doublet_list != [] and self.parametric_maps != []:
+        if self.parametric_maps != Undefined and self.rois_files != Undefined:
             # FIXME: We retrieve the name of the patient from the first element
             #        of parametric_maps. This is only fine if all the elements
             #        of parametric_maps correspond to the same patient.
@@ -1740,54 +1735,70 @@ class Mean_stdDev_calc(ProcessMIA):
                 return self.make_initResult()
 
             self.dict4runtime["patient_name"] = patient_name
-            roi_dir = os.path.join(
-                self.output_directory, "roi_" + patient_name
+            # roi_dir = os.path.join(
+            #     self.output_directory, "roi_" + patient_name
+            # )
+            analysis_dir = os.path.join(
+                self.output_directory,
+                patient_name + "_data",
+                "ROI_data",
+                "ROI_analysis",
             )
 
-            if not os.path.isdir(roi_dir):
-                print(
-                    "\nMean_stdDev_cal brick:\nNo {} folder detected ...\nThe "
-                    "initialization is aborted ...".format(roi_dir)
-                )
-                return self.make_initResult()
-
-            conv_dir = os.path.join(roi_dir, "convROI_BOLD")
-
-            if not os.path.isdir(conv_dir):
-                print(
-                    "\nMean_stdDev_cal brick:\nNo {} folder detected ...\nThe "
-                    "initialization is aborted ...".format(conv_dir)
-                )
-                return self.make_initResult()
-
-            analysis_dir = os.path.join(roi_dir, "ROI_analysis")
-
-            if os.path.isdir(analysis_dir):
-                print(
-                    '\nMean_stdDev_calc:\nA "{}" folder already exists, '
-                    "it will be overwritten by this new "
-                    "calculation...".format(analysis_dir)
-                )
-                shutil.rmtree(analysis_dir)
-
-            os.mkdir(analysis_dir)
+            # if not os.path.isdir(roi_dir):
+            #     print(
+            #         "\nMean_stdDev_cal brick:\nNo {} folder detected ..."
+            #         "\nThe initialization is aborted ...".format(roi_dir)
+            #     )
+            #     return self.make_initResult()
+            #
+            # conv_dir = os.path.join(roi_dir, "convROI_BOLD")
+            #
+            # if not os.path.isdir(conv_dir):
+            #     print(
+            #         "\nMean_stdDev_cal brick:\nNo {} folder detected ...\n"
+            #         "The initialization is aborted ...".format(conv_dir)
+            #     )
+            #     return self.make_initResult()
+            #
+            # analysis_dir = os.path.join(roi_dir, "ROI_analysis")
+            #
+            # if os.path.isdir(analysis_dir):
+            #     print(
+            #         '\nMean_stdDev_calc:\nA "{}" folder already exists, '
+            #         "it will be overwritten by this new "
+            #         "calculation...".format(analysis_dir)
+            #     )
+            #     shutil.rmtree(analysis_dir)
+            #
+            # os.mkdir(analysis_dir)
             mean_out_files = []
             std_out_files = []
 
             for parametric_map in self.parametric_maps:
-                for roi in self.doublet_list:
+                # for roi in self.doublet_list:
+                for roi in self.rois_files:
                     # spmT_BOLD or beta_BOLD
+                    # FIXME: I think it's a bad idea to hard-code the effect
+                    #        (BOLD).
                     map_name = os.path.basename(parametric_map)[0:4] + "_BOLD"
+                    roi_name, _ = os.path.splitext(os.path.basename(roi))
                     mean_out_files.append(
                         os.path.join(
                             analysis_dir,
-                            roi[0] + roi[1] + "_mean_" + map_name + ".txt",
+                            roi_name + "_mean_" + map_name + ".txt",
                         )
                     )
+                    # std_out_files.append(
+                    #     os.path.join(
+                    #         analysis_dir,
+                    #         roi[0] + roi[1] + "_std_" + map_name + ".txt",
+                    #     )
+                    # )
                     std_out_files.append(
                         os.path.join(
                             analysis_dir,
-                            roi[0] + roi[1] + "_std_" + map_name + ".txt",
+                            roi_name + "_std_" + map_name + ".txt",
                         )
                     )
 
@@ -1847,9 +1858,11 @@ class Mean_stdDev_calc(ProcessMIA):
             # conv_dir'/conv'roi_1[0]roi_1[1]'.nii and
             # roi_dir'/'roi_1[0]roi_1[1]'.nii' should be the same given the
             # pipeline used for the CVR
-            roi_1 = self.doublet_list[0]
-            roi_file = os.path.join(roi_dir, roi_1[0] + roi_1[1] + ".nii")
-            roi_img = nb.load(roi_file)
+            # roi_1 = self.doublet_list[0]
+            roi_1 = self.rois_files[0]
+            # roi_file = os.path.join(roi_dir, roi_1[0] + roi_1[1] + ".nii")
+            # roi_img = nb.load(roi_file)
+            roi_img = nb.load(roi_1)
             roi_data = roi_img.get_fdata()
             roi_size = roi_data.shape[:3]
 
@@ -1861,6 +1874,7 @@ class Mean_stdDev_calc(ProcessMIA):
             map_data = np.nan_to_num(map_data)
 
             # Give name with spmT_BOLD or beta_BOLD
+            # FIXME: I think it's a bad idea to hard-code the effect (BOLD).
             map_name = os.path.basename(parametric_map)[0:4] + "_BOLD"
 
             # Making sure that the ROI and parametric images
@@ -1871,42 +1885,43 @@ class Mean_stdDev_calc(ProcessMIA):
                     resize(map_data / map_data_max, roi_size) * map_data_max
                 )
 
-            for roi in self.doublet_list:
+            # for roi in self.doublet_list:
+            for roi_file in self.rois_files:
                 # Reading ROI file
-                roi_file = os.path.join(
-                    conv_dir, "conv" + roi[0] + roi[1] + ".nii"
-                )
+                # roi_file = os.path.join(
+                #     conv_dir, "conv" + roi[0] + roi[1] + ".nii"
+                # )
 
                 # it seems that it is necessary to leave a little time so that
                 # the data calculated previously are well recorded on the disc!
                 # In order not to be stuck indefinitely, the maximum waiting
                 # time is set to 15s.
-                wait_time = 0
-
-                while True:
-                    if wait_time > 15:
-                        print(
-                            "Mean_stdDev_calc:\nThe {} file has not been "
-                            "found ...\n".format(roi_file)
-                        )
-                        roi_img = None
-                        break
-
-                    try:
-                        roi_img = nb.load(roi_file)
-                        break
-
-                    except FileNotFoundError:
-                        print(
-                            "Mean_stdDev_calc:\n{} does not exist yet ... "
-                            "waiting 1s ...".format(roi_file)
-                        )
-                        import time
-
-                        time.sleep(1)
-                        wait_time += 1
-                        continue
-
+                # wait_time = 0
+                #
+                # while True:
+                #     if wait_time > 15:
+                #         print(
+                #             "Mean_stdDev_calc:\nThe {} file has not been "
+                #             "found ...\n".format(roi_file)
+                #         )
+                #         roi_img = None
+                #         break
+                #
+                #     try:
+                #         roi_img = nb.load(roi_file)
+                #         break
+                #
+                #     except FileNotFoundError:
+                #         print(
+                #             "Mean_stdDev_calc:\n{} does not exist yet ... "
+                #             "waiting 1s ...".format(roi_file)
+                #         )
+                #         import time
+                #
+                #         time.sleep(1)
+                #         wait_time += 1
+                #         continue
+                roi_img = nb.load(roi_file)
                 roi_data = roi_img.get_fdata()
 
                 # Setting the NaN to 0 in ROI images
@@ -1921,7 +1936,7 @@ class Mean_stdDev_calc(ProcessMIA):
                     print(
                         "\nMean_stdDev_cal brick:\nWarning: No result found "
                         "after convolution of the {0} ROI and the {1} "
-                        "data".format(roi[0] + roi[1], parametric_map)
+                        "data".format(roi_file, parametric_map)
                     )
                     mean_result = 0
                     std_result = 0
@@ -1932,9 +1947,14 @@ class Mean_stdDev_calc(ProcessMIA):
 
                 # Writing the value in the corresponding file:
                 # analysis_dir'/'roi[0]roi[1]'_mean'map_name'.txt')
+                # mean_out_file = os.path.join(
+                #     analysis_dir,
+                #     roi[0] + roi[1] + "_mean_" + map_name + ".txt",
+                # )
+
+                roi_name = os.path.splitext(os.path.basename(roi_file))
                 mean_out_file = os.path.join(
-                    analysis_dir,
-                    roi[0] + roi[1] + "_mean_" + map_name + ".txt",
+                    analysis_dir, roi_name + "_mean_" + map_name + ".txt"
                 )
 
                 with open(mean_out_file, "w") as f:
@@ -1942,8 +1962,12 @@ class Mean_stdDev_calc(ProcessMIA):
 
                 # Writing the value in the corresponding file:
                 # analysis_dir'/'roi[0]roi[1]'_std'map_name'.txt')
+                # std_out_file = os.path.join(
+                #     analysis_dir,
+                #     roi[0] + roi[1] + "_std_" + map_name + ".txt"
+                # )
                 std_out_file = os.path.join(
-                    analysis_dir, roi[0] + roi[1] + "_std_" + map_name + ".txt"
+                    analysis_dir, roi_name + "_std_" + map_name + ".txt"
                 )
 
                 with open(std_out_file, "w") as f:
