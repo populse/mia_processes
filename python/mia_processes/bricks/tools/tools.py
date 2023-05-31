@@ -7,6 +7,7 @@ needed to run other higher-level bricks.
 
 :Contains:
     :Class:
+        - Concat_to_list
         - Concat_to_list_of_list
         - Files_To_List
         - Filter_Files_List
@@ -48,6 +49,82 @@ from populse_mia.software_properties import Config
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 
 from mia_processes.utils import get_dbFieldValue
+
+class Concat_to_list(ProcessMIA):
+    """
+    *Make an output list corresponding to the concatenation of list1 and list2*
+
+    Ex. ['a', 'b', 'c'] and ['d', 'e'] gives
+        ['a', 'b', 'c', 'd', 'e']
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instantiation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # initialisation of the objects needed for the launch of the brick
+        super(Concat_to_list, self).__init__()
+
+        # Inputs description
+        list1_desc = "A list"
+        list2_desc = "A list"
+
+        # Outputs description
+        out_list_desc = ("A list corresponding to the concatenation of list1 "
+                         "and list2")
+
+        # Inputs traits
+        self.add_trait(
+            "list1",
+            traits.List(output=False, optional=False, desc=list1_desc),
+        )
+        self.list1 = traits.Undefined
+
+        self.add_trait(
+            "list2",
+            traits.List(output=False, optional=False, desc=list2_desc),
+        )
+        self.list2 = traits.Undefined
+
+        # Outputs traits
+        self.add_trait(
+            "out_list", traits.List(output=True, desc=out_list_desc)
+        )
+        self.out_list = traits.Undefined
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(Concat_to_list, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.list1 != [] and self.list2 != []:
+            self.outputs["out_list"] = self.list1 + self.list2
+
+            if self.outputs:
+                self.outputs["notInDb"] = ["out_list"]
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        return
+
 
 
 class Concat_to_list_of_list(ProcessMIA):
