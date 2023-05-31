@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.reports.processes &#8212; mia_processes 2.2.1-dev+a9ea159 documentation</title>
+    <title>mia_processes.bricks.reports.processes &#8212; mia_processes 2.2.1-dev+b6fbfd4 documentation</title>
     <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
@@ -18,7 +18,7 @@
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.2.1-dev+a9ea159 documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+b6fbfd4 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.reports.processes</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -83,9 +83,9 @@
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
 <span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">sqrt</span>
 
-<span class="c1"># nibabel import</span>
 <span class="kn">import</span> <span class="nn">nibabel</span> <span class="k">as</span> <span class="nn">nb</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">scipy.ndimage</span> <span class="k">as</span> <span class="nn">nd</span>
@@ -93,7 +93,14 @@
 <span class="kn">from</span> <span class="nn">nipy.algorithms.registration</span> <span class="kn">import</span> <span class="n">aff2euler</span><span class="p">,</span> <span class="n">to_matrix44</span>
 
 <span class="c1"># nipype import</span>
-<span class="kn">from</span> <span class="nn">nipype.interfaces.base</span> <span class="kn">import</span> <span class="n">File</span><span class="p">,</span> <span class="n">OutputMultiPath</span><span class="p">,</span> <span class="n">Undefined</span><span class="p">,</span> <span class="n">traits</span>
+<span class="kn">from</span> <span class="nn">nipype.interfaces.base</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">File</span><span class="p">,</span>
+    <span class="n">InputMultiPath</span><span class="p">,</span>
+    <span class="n">OutputMultiPath</span><span class="p">,</span>
+    <span class="n">Undefined</span><span class="p">,</span>
+    <span class="n">traits</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">nipype.interfaces.spm.base</span> <span class="kn">import</span> <span class="n">ImageFileSPM</span>
 <span class="kn">from</span> <span class="nn">nitime.algorithms</span> <span class="kn">import</span> <span class="n">AR_est_YW</span>
 <span class="kn">from</span> <span class="nn">numpy.polynomial</span> <span class="kn">import</span> <span class="n">Legendre</span>
 
@@ -1640,16 +1647,12 @@
 
 <div class="viewcode-block" id="Mean_stdDev_calc"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.Mean_stdDev_calc">[docs]</a><span class="k">class</span> <span class="nc">Mean_stdDev_calc</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    * Makes the mean and standard deviation of the parametric_maps.</span>
+<span class="sd">    * Makes the mean and standard deviation of parametric_maps.</span>
 
 <span class="sd">    - The parametric_maps are first convolved with the ROIs corresponding</span>
-<span class="sd">      to doublet_list.</span>
-<span class="sd">    - ROIs are defined from doublet_list parameter as</span>
-<span class="sd">      doublet_list[0][0] + doublet_list[0][1] + &#39;.nii&#39;,</span>
-<span class="sd">      doublet_list[1][0] + doublet_list[1][1] + &#39;.nii&#39;,</span>
-<span class="sd">      etc.</span>
-<span class="sd">    - To work correctly, the database entry for the parametric_maps items must</span>
-<span class="sd">      have the &quot;PatientName&quot; tag filled in</span>
+<span class="sd">      to rois_files.</span>
+<span class="sd">    - To work correctly, the database entry for the first element of</span>
+<span class="sd">      parametric_maps must have the &quot;PatientName&quot; tag filled in.</span>
 <span class="sd">    - To work correctly, the &quot;/roi_&quot;PatientName&quot;/convROI_BOLD&quot;</span>
 <span class="sd">      must exist and contain a previous convolution results (normally using</span>
 <span class="sd">      the ConvROI brick)</span>
@@ -1667,22 +1670,23 @@
 
         <span class="c1"># Inputs description</span>
         <span class="n">parametric_maps_desc</span> <span class="o">=</span> <span class="s2">&quot;A list of files (existing, uncompressed file)&quot;</span>
-        <span class="n">doublet_list_desc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;A list of lists containing doublets of strings &quot;</span>
-            <span class="s1">&#39;(e.g. [[&quot;ROI_OCC&quot;, &quot;_L&quot;], [&quot;ROI_OCC&quot;, &quot;_R&quot;], &#39;</span>
-            <span class="s1">&#39;[&quot;ROI_PAR&quot;, &quot;_l&quot;], ...]&#39;</span>
+        <span class="c1"># doublet_list_desc = (</span>
+        <span class="c1">#     &quot;A list of lists containing doublets of strings &quot;</span>
+        <span class="c1">#     &#39;(e.g. [[&quot;ROI_OCC&quot;, &quot;_L&quot;], [&quot;ROI_OCC&quot;, &quot;_R&quot;], &#39;</span>
+        <span class="c1">#     &#39;[&quot;ROI_PAR&quot;, &quot;_l&quot;], ...]&#39;</span>
+        <span class="c1"># )</span>
+        <span class="n">rois_files_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;A list of regions of interest applied to the parametric maps to &quot;</span>
+            <span class="s2">&quot;calculate their mean and standard deviation&quot;</span>
         <span class="p">)</span>
-
         <span class="c1"># Outputs description</span>
         <span class="n">mean_out_files_desc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;A list of .txt files with the calculated &quot;</span>
-            <span class="s2">&quot;average for each ROI determined after &quot;</span>
-            <span class="s2">&quot;convolution&quot;</span>
+            <span class="s2">&quot;A list of .txt files with the calculated average for each &quot;</span>
+            <span class="s2">&quot;ROI after convolution with parametric_maps_desc&quot;</span>
         <span class="p">)</span>
         <span class="n">std_out_files_desc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;A list of .txt files with the standard &quot;</span>
-            <span class="s2">&quot;deviation for each ROI determined &quot;</span>
-            <span class="s2">&quot;after convolution&quot;</span>
+            <span class="s2">&quot;A list of .txt files with the standard deviation for each ROI &quot;</span>
+            <span class="s2">&quot;after convolution with parametric_maps_desc&quot;</span>
         <span class="p">)</span>
 
         <span class="c1"># Inputs traits</span>
@@ -1691,12 +1695,23 @@
             <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span>
                 <span class="n">traits</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">exists</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
                 <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                 <span class="n">desc</span><span class="o">=</span><span class="n">parametric_maps_desc</span><span class="p">,</span>
             <span class="p">),</span>
         <span class="p">)</span>
 
+        <span class="c1"># self.add_trait(</span>
+        <span class="c1">#     &quot;doublet_list&quot;, traits.List(output=False, desc=doublet_list_desc)</span>
+        <span class="c1"># )</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
-            <span class="s2">&quot;doublet_list&quot;</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">doublet_list_desc</span><span class="p">)</span>
+            <span class="s2">&quot;rois_files&quot;</span><span class="p">,</span>
+            <span class="n">InputMultiPath</span><span class="p">(</span>
+                <span class="n">ImageFileSPM</span><span class="p">(),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">rois_files_desc</span><span class="p">,</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
         <span class="c1"># Output traits</span>
@@ -1735,7 +1750,8 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">Mean_stdDev_calc</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="c1"># Outputs definition and tags inheritance (optional)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">doublet_list</span> <span class="o">!=</span> <span class="p">[]</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">parametric_maps</span> <span class="o">!=</span> <span class="p">[]:</span>
+        <span class="c1"># if self.doublet_list != [] and self.parametric_maps != []:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parametric_maps</span> <span class="o">!=</span> <span class="n">Undefined</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">rois_files</span> <span class="o">!=</span> <span class="n">Undefined</span><span class="p">:</span>
             <span class="c1"># FIXME: We retrieve the name of the patient from the first element</span>
             <span class="c1">#        of parametric_maps. This is only fine if all the elements</span>
             <span class="c1">#        of parametric_maps correspond to the same patient.</span>
@@ -1753,59 +1769,78 @@
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;patient_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">patient_name</span>
-            <span class="n">roi_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="s2">&quot;roi_&quot;</span> <span class="o">+</span> <span class="n">patient_name</span>
+            <span class="c1"># roi_dir = os.path.join(</span>
+            <span class="c1">#     self.output_directory, &quot;roi_&quot; + patient_name</span>
+            <span class="c1"># )</span>
+            <span class="n">analysis_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                <span class="n">patient_name</span> <span class="o">+</span> <span class="s2">&quot;_data&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;ROI_data&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;ROI_analysis&quot;</span><span class="p">,</span>
             <span class="p">)</span>
 
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">roi_dir</span><span class="p">):</span>
-                <span class="nb">print</span><span class="p">(</span>
-                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Mean_stdDev_cal brick:</span><span class="se">\n</span><span class="s2">No </span><span class="si">{}</span><span class="s2"> folder detected ...</span><span class="se">\n</span><span class="s2">The &quot;</span>
-                    <span class="s2">&quot;initialization is aborted ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">roi_dir</span><span class="p">)</span>
-                <span class="p">)</span>
-                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
-
-            <span class="n">conv_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">roi_dir</span><span class="p">,</span> <span class="s2">&quot;convROI_BOLD&quot;</span><span class="p">)</span>
-
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">conv_dir</span><span class="p">):</span>
-                <span class="nb">print</span><span class="p">(</span>
-                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Mean_stdDev_cal brick:</span><span class="se">\n</span><span class="s2">No </span><span class="si">{}</span><span class="s2"> folder detected ...</span><span class="se">\n</span><span class="s2">The &quot;</span>
-                    <span class="s2">&quot;initialization is aborted ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">conv_dir</span><span class="p">)</span>
-                <span class="p">)</span>
-                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
-
-            <span class="n">analysis_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">roi_dir</span><span class="p">,</span> <span class="s2">&quot;ROI_analysis&quot;</span><span class="p">)</span>
-
-            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">analysis_dir</span><span class="p">):</span>
-                <span class="nb">print</span><span class="p">(</span>
-                    <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Mean_stdDev_calc:</span><span class="se">\n</span><span class="s1">A &quot;</span><span class="si">{}</span><span class="s1">&quot; folder already exists, &#39;</span>
-                    <span class="s2">&quot;it will be overwritten by this new &quot;</span>
-                    <span class="s2">&quot;calculation...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">analysis_dir</span><span class="p">)</span>
-                <span class="p">)</span>
-                <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">analysis_dir</span><span class="p">)</span>
-
-            <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">analysis_dir</span><span class="p">)</span>
+            <span class="c1"># if not os.path.isdir(roi_dir):</span>
+            <span class="c1">#     print(</span>
+            <span class="c1">#         &quot;\nMean_stdDev_cal brick:\nNo {} folder detected ...&quot;</span>
+            <span class="c1">#         &quot;\nThe initialization is aborted ...&quot;.format(roi_dir)</span>
+            <span class="c1">#     )</span>
+            <span class="c1">#     return self.make_initResult()</span>
+            <span class="c1">#</span>
+            <span class="c1"># conv_dir = os.path.join(roi_dir, &quot;convROI_BOLD&quot;)</span>
+            <span class="c1">#</span>
+            <span class="c1"># if not os.path.isdir(conv_dir):</span>
+            <span class="c1">#     print(</span>
+            <span class="c1">#         &quot;\nMean_stdDev_cal brick:\nNo {} folder detected ...\n&quot;</span>
+            <span class="c1">#         &quot;The initialization is aborted ...&quot;.format(conv_dir)</span>
+            <span class="c1">#     )</span>
+            <span class="c1">#     return self.make_initResult()</span>
+            <span class="c1">#</span>
+            <span class="c1"># analysis_dir = os.path.join(roi_dir, &quot;ROI_analysis&quot;)</span>
+            <span class="c1">#</span>
+            <span class="c1"># if os.path.isdir(analysis_dir):</span>
+            <span class="c1">#     print(</span>
+            <span class="c1">#         &#39;\nMean_stdDev_calc:\nA &quot;{}&quot; folder already exists, &#39;</span>
+            <span class="c1">#         &quot;it will be overwritten by this new &quot;</span>
+            <span class="c1">#         &quot;calculation...&quot;.format(analysis_dir)</span>
+            <span class="c1">#     )</span>
+            <span class="c1">#     shutil.rmtree(analysis_dir)</span>
+            <span class="c1">#</span>
+            <span class="c1"># os.mkdir(analysis_dir)</span>
             <span class="n">mean_out_files</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="n">std_out_files</span> <span class="o">=</span> <span class="p">[]</span>
 
             <span class="k">for</span> <span class="n">parametric_map</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parametric_maps</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">roi</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">doublet_list</span><span class="p">:</span>
+                <span class="c1"># for roi in self.doublet_list:</span>
+                <span class="k">for</span> <span class="n">roi</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rois_files</span><span class="p">:</span>
                     <span class="c1"># spmT_BOLD or beta_BOLD</span>
+                    <span class="c1"># FIXME: I think it&#39;s a bad idea to hard-code the effect</span>
+                    <span class="c1">#        (BOLD).</span>
                     <span class="n">map_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">parametric_map</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;_BOLD&quot;</span>
-                    <span class="n">mean_out_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="n">roi_name</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">roi</span><span class="p">))</span>
+                    <span class="n">mean_out_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
                             <span class="n">analysis_dir</span><span class="p">,</span>
-                            <span class="n">roi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">roi</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;_mean&quot;</span> <span class="o">+</span> <span class="n">map_name</span> <span class="o">+</span> <span class="s2">&quot;.txt&quot;</span><span class="p">,</span>
-                        <span class="p">)</span>
+                            <span class="n">roi_name</span> <span class="o">+</span> <span class="s2">&quot;_mean_&quot;</span> <span class="o">+</span> <span class="n">map_name</span> <span class="o">+</span> <span class="s2">&quot;.txt&quot;</span>
                     <span class="p">)</span>
-                    <span class="n">std_out_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="n">mean_out_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mean_out_file</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="n">mean_out_file</span><span class="p">]</span> <span class="o">=</span> <span class="n">parametric_map</span>
+                    <span class="c1"># std_out_files.append(</span>
+                    <span class="c1">#     os.path.join(</span>
+                    <span class="c1">#         analysis_dir,</span>
+                    <span class="c1">#         roi[0] + roi[1] + &quot;_std_&quot; + map_name + &quot;.txt&quot;,</span>
+                    <span class="c1">#     )</span>
+                    <span class="c1"># )</span>
+                    <span class="n">std_out_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
                             <span class="n">analysis_dir</span><span class="p">,</span>
-                            <span class="n">roi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">roi</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;_std&quot;</span> <span class="o">+</span> <span class="n">map_name</span> <span class="o">+</span> <span class="s2">&quot;.txt&quot;</span><span class="p">,</span>
-                        <span class="p">)</span>
+                            <span class="n">roi_name</span> <span class="o">+</span> <span class="s2">&quot;_std_&quot;</span> <span class="o">+</span> <span class="n">map_name</span> <span class="o">+</span> <span class="s2">&quot;.txt&quot;</span>
                     <span class="p">)</span>
+                    <span class="n">std_out_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">std_out_file</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="n">std_out_file</span><span class="p">]</span> <span class="o">=</span> <span class="n">parametric_map</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;mean_out_files&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mean_out_files</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;std_out_files&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">std_out_files</span>
+            <span class="k">if</span> <span class="n">mean_out_files</span> <span class="o">!=</span> <span class="p">[]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;mean_out_files&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mean_out_files</span>
+
+            <span class="k">if</span> <span class="n">std_out_files</span> <span class="o">!=</span> <span class="p">[]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;std_out_files&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">std_out_files</span>
 
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
@@ -1815,11 +1850,41 @@
         <span class="c1"># No need the next line (we don&#39;t use self.process and SPM)</span>
         <span class="c1"># super(Mean_stdDev_calc, self).run_process_mia()</span>
 
-        <span class="n">roi_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="s2">&quot;roi_&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;patient_name&quot;</span><span class="p">]</span>
+        <span class="c1"># roi_dir = os.path.join(</span>
+        <span class="c1">#     self.output_directory, &quot;roi_&quot; + self.dict4runtime[&quot;patient_name&quot;]</span>
+        <span class="c1"># )</span>
+        <span class="c1"># conv_dir = os.path.join(roi_dir, &quot;convROI_BOLD&quot;)</span>
+        <span class="c1"># analysis_dir = os.path.join(roi_dir, &quot;ROI_analysis&quot;)</span>
+
+        <span class="n">pat_name_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;patient_name&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;_data&quot;</span>
         <span class="p">)</span>
-        <span class="n">conv_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">roi_dir</span><span class="p">,</span> <span class="s2">&quot;convROI_BOLD&quot;</span><span class="p">)</span>
-        <span class="n">analysis_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">roi_dir</span><span class="p">,</span> <span class="s2">&quot;ROI_analysis&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">pat_name_dir</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">pat_name_dir</span><span class="p">)</span>
+
+        <span class="n">roi_data_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pat_name_dir</span><span class="p">,</span> <span class="s2">&quot;ROI_data&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">roi_data_dir</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">roi_data_dir</span><span class="p">)</span>
+
+        <span class="n">analysis_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">roi_data_dir</span><span class="p">,</span> <span class="s2">&quot;ROI_analysis&quot;</span><span class="p">)</span>
+
+        <span class="n">tmp</span> <span class="o">=</span> <span class="s2">&quot;None&quot;</span>
+
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">analysis_dir</span><span class="p">):</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mktemp</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">roi_data_dir</span><span class="p">))</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">analysis_dir</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="s2">&quot;ROI_analysis&quot;</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Mean_stdDev_calc brick:</span><span class="se">\n</span><span class="s1">A &quot;</span><span class="si">{}</span><span class="s1">&quot; folder already exists, &#39;</span>
+                <span class="s2">&quot;it will be overwritten by this new &quot;</span>
+                <span class="s2">&quot;calculation...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">analysis_dir</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">analysis_dir</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">tmp</span><span class="p">):</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">parametric_map</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parametric_maps</span><span class="p">:</span>
             <span class="c1"># Resampling, if necessary, the parametric_map to the size of the</span>
@@ -1830,9 +1895,11 @@
             <span class="c1"># conv_dir&#39;/conv&#39;roi_1[0]roi_1[1]&#39;.nii and</span>
             <span class="c1"># roi_dir&#39;/&#39;roi_1[0]roi_1[1]&#39;.nii&#39; should be the same given the</span>
             <span class="c1"># pipeline used for the CVR</span>
-            <span class="n">roi_1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">doublet_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">roi_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">roi_dir</span><span class="p">,</span> <span class="n">roi_1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">roi_1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;.nii&quot;</span><span class="p">)</span>
-            <span class="n">roi_img</span> <span class="o">=</span> <span class="n">nb</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">roi_file</span><span class="p">)</span>
+            <span class="c1"># roi_1 = self.doublet_list[0]</span>
+            <span class="n">roi_1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rois_files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="c1"># roi_file = os.path.join(roi_dir, roi_1[0] + roi_1[1] + &quot;.nii&quot;)</span>
+            <span class="c1"># roi_img = nb.load(roi_file)</span>
+            <span class="n">roi_img</span> <span class="o">=</span> <span class="n">nb</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">roi_1</span><span class="p">)</span>
             <span class="n">roi_data</span> <span class="o">=</span> <span class="n">roi_img</span><span class="o">.</span><span class="n">get_fdata</span><span class="p">()</span>
             <span class="n">roi_size</span> <span class="o">=</span> <span class="n">roi_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
 
@@ -1844,6 +1911,7 @@
             <span class="n">map_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">map_data</span><span class="p">)</span>
 
             <span class="c1"># Give name with spmT_BOLD or beta_BOLD</span>
+            <span class="c1"># FIXME: I think it&#39;s a bad idea to hard-code the effect (BOLD).</span>
             <span class="n">map_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">parametric_map</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;_BOLD&quot;</span>
 
             <span class="c1"># Making sure that the ROI and parametric images</span>
@@ -1854,42 +1922,43 @@
                     <span class="n">resize</span><span class="p">(</span><span class="n">map_data</span> <span class="o">/</span> <span class="n">map_data_max</span><span class="p">,</span> <span class="n">roi_size</span><span class="p">)</span> <span class="o">*</span> <span class="n">map_data_max</span>
                 <span class="p">)</span>
 
-            <span class="k">for</span> <span class="n">roi</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">doublet_list</span><span class="p">:</span>
+            <span class="c1"># for roi in self.doublet_list:</span>
+            <span class="k">for</span> <span class="n">roi_file</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rois_files</span><span class="p">:</span>
                 <span class="c1"># Reading ROI file</span>
-                <span class="n">roi_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                    <span class="n">conv_dir</span><span class="p">,</span> <span class="s2">&quot;conv&quot;</span> <span class="o">+</span> <span class="n">roi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">roi</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;.nii&quot;</span>
-                <span class="p">)</span>
+                <span class="c1"># roi_file = os.path.join(</span>
+                <span class="c1">#     conv_dir, &quot;conv&quot; + roi[0] + roi[1] + &quot;.nii&quot;</span>
+                <span class="c1"># )</span>
 
                 <span class="c1"># it seems that it is necessary to leave a little time so that</span>
                 <span class="c1"># the data calculated previously are well recorded on the disc!</span>
                 <span class="c1"># In order not to be stuck indefinitely, the maximum waiting</span>
                 <span class="c1"># time is set to 15s.</span>
-                <span class="n">wait_time</span> <span class="o">=</span> <span class="mi">0</span>
-
-                <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">wait_time</span> <span class="o">&gt;</span> <span class="mi">15</span><span class="p">:</span>
-                        <span class="nb">print</span><span class="p">(</span>
-                            <span class="s2">&quot;Mean_stdDev_calc:</span><span class="se">\n</span><span class="s2">The </span><span class="si">{}</span><span class="s2"> file has not been &quot;</span>
-                            <span class="s2">&quot;found ...</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">roi_file</span><span class="p">)</span>
-                        <span class="p">)</span>
-                        <span class="n">roi_img</span> <span class="o">=</span> <span class="kc">None</span>
-                        <span class="k">break</span>
-
-                    <span class="k">try</span><span class="p">:</span>
-                        <span class="n">roi_img</span> <span class="o">=</span> <span class="n">nb</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">roi_file</span><span class="p">)</span>
-                        <span class="k">break</span>
-
-                    <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
-                        <span class="nb">print</span><span class="p">(</span>
-                            <span class="s2">&quot;Mean_stdDev_calc:</span><span class="se">\n</span><span class="si">{}</span><span class="s2"> does not exist yet ... &quot;</span>
-                            <span class="s2">&quot;waiting 1s ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">roi_file</span><span class="p">)</span>
-                        <span class="p">)</span>
-                        <span class="kn">import</span> <span class="nn">time</span>
-
-                        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-                        <span class="n">wait_time</span> <span class="o">+=</span> <span class="mi">1</span>
-                        <span class="k">continue</span>
-
+                <span class="c1"># wait_time = 0</span>
+                <span class="c1">#</span>
+                <span class="c1"># while True:</span>
+                <span class="c1">#     if wait_time &gt; 15:</span>
+                <span class="c1">#         print(</span>
+                <span class="c1">#             &quot;Mean_stdDev_calc:\nThe {} file has not been &quot;</span>
+                <span class="c1">#             &quot;found ...\n&quot;.format(roi_file)</span>
+                <span class="c1">#         )</span>
+                <span class="c1">#         roi_img = None</span>
+                <span class="c1">#         break</span>
+                <span class="c1">#</span>
+                <span class="c1">#     try:</span>
+                <span class="c1">#         roi_img = nb.load(roi_file)</span>
+                <span class="c1">#         break</span>
+                <span class="c1">#</span>
+                <span class="c1">#     except FileNotFoundError:</span>
+                <span class="c1">#         print(</span>
+                <span class="c1">#             &quot;Mean_stdDev_calc:\n{} does not exist yet ... &quot;</span>
+                <span class="c1">#             &quot;waiting 1s ...&quot;.format(roi_file)</span>
+                <span class="c1">#         )</span>
+                <span class="c1">#         import time</span>
+                <span class="c1">#</span>
+                <span class="c1">#         time.sleep(1)</span>
+                <span class="c1">#         wait_time += 1</span>
+                <span class="c1">#         continue</span>
+                <span class="n">roi_img</span> <span class="o">=</span> <span class="n">nb</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">roi_file</span><span class="p">)</span>
                 <span class="n">roi_data</span> <span class="o">=</span> <span class="n">roi_img</span><span class="o">.</span><span class="n">get_fdata</span><span class="p">()</span>
 
                 <span class="c1"># Setting the NaN to 0 in ROI images</span>
@@ -1904,7 +1973,7 @@
                     <span class="nb">print</span><span class="p">(</span>
                         <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Mean_stdDev_cal brick:</span><span class="se">\n</span><span class="s2">Warning: No result found &quot;</span>
                         <span class="s2">&quot;after convolution of the </span><span class="si">{0}</span><span class="s2"> ROI and the </span><span class="si">{1}</span><span class="s2"> &quot;</span>
-                        <span class="s2">&quot;data&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">roi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">roi</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">parametric_map</span><span class="p">)</span>
+                        <span class="s2">&quot;data&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">roi_file</span><span class="p">,</span> <span class="n">parametric_map</span><span class="p">)</span>
                     <span class="p">)</span>
                     <span class="n">mean_result</span> <span class="o">=</span> <span class="mi">0</span>
                     <span class="n">std_result</span> <span class="o">=</span> <span class="mi">0</span>
@@ -1915,8 +1984,14 @@
 
                 <span class="c1"># Writing the value in the corresponding file:</span>
                 <span class="c1"># analysis_dir&#39;/&#39;roi[0]roi[1]&#39;_mean&#39;map_name&#39;.txt&#39;)</span>
+                <span class="c1"># mean_out_file = os.path.join(</span>
+                <span class="c1">#     analysis_dir,</span>
+                <span class="c1">#     roi[0] + roi[1] + &quot;_mean_&quot; + map_name + &quot;.txt&quot;,</span>
+                <span class="c1"># )</span>
+
+                <span class="n">roi_name</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">roi_file</span><span class="p">))</span>
                 <span class="n">mean_out_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                    <span class="n">analysis_dir</span><span class="p">,</span> <span class="n">roi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">roi</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;_mean&quot;</span> <span class="o">+</span> <span class="n">map_name</span> <span class="o">+</span> <span class="s2">&quot;.txt&quot;</span>
+                    <span class="n">analysis_dir</span><span class="p">,</span> <span class="n">roi_name</span> <span class="o">+</span> <span class="s2">&quot;_mean_&quot;</span> <span class="o">+</span> <span class="n">map_name</span> <span class="o">+</span> <span class="s2">&quot;.txt&quot;</span>
                 <span class="p">)</span>
 
                 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">mean_out_file</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
@@ -1924,8 +1999,12 @@
 
                 <span class="c1"># Writing the value in the corresponding file:</span>
                 <span class="c1"># analysis_dir&#39;/&#39;roi[0]roi[1]&#39;_std&#39;map_name&#39;.txt&#39;)</span>
+                <span class="c1"># std_out_file = os.path.join(</span>
+                <span class="c1">#     analysis_dir,</span>
+                <span class="c1">#     roi[0] + roi[1] + &quot;_std_&quot; + map_name + &quot;.txt&quot;</span>
+                <span class="c1"># )</span>
                 <span class="n">std_out_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                    <span class="n">analysis_dir</span><span class="p">,</span> <span class="n">roi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">roi</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;_std&quot;</span> <span class="o">+</span> <span class="n">map_name</span> <span class="o">+</span> <span class="s2">&quot;.txt&quot;</span>
+                    <span class="n">analysis_dir</span><span class="p">,</span> <span class="n">roi_name</span> <span class="o">+</span> <span class="s2">&quot;_std_&quot;</span> <span class="o">+</span> <span class="n">map_name</span> <span class="o">+</span> <span class="s2">&quot;.txt&quot;</span>
                 <span class="p">)</span>
 
                 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">std_out_file</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
@@ -1955,6 +2034,7 @@
             <span class="s2">&quot;Defines the type of calculation (a list of strings, &quot;</span>
             <span class="s1">&#39;e.g. [&quot;mean&quot;, &quot;std&quot;, &quot;IL_mean&quot;, &quot;IL_std&quot;]&#39;</span>
         <span class="p">)</span>
+        <span class="n">laterality_index_desc</span> <span class="o">=</span> <span class="s2">&quot;Calculates the laterality indexes (a boolean)&quot;</span>
         <span class="n">mean_in_files_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;A list of .txt files containing the average &quot;</span>
             <span class="s2">&quot;value of a parameter for a given territory or &quot;</span>
@@ -2008,6 +2088,16 @@
                 <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                 <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                 <span class="n">desc</span><span class="o">=</span><span class="n">calculs_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;laterality_index&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span>
+                <span class="n">default_value</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">laterality_index_desc</span><span class="p">,</span>
             <span class="p">),</span>
         <span class="p">)</span>
 
@@ -2071,7 +2161,13 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">Result_collector</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="c1"># Outputs definition and tags inheritance (optional)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculs</span> <span class="o">!=</span> <span class="n">Undefined</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">parametric_maps</span> <span class="o">!=</span> <span class="n">Undefined</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parametric_maps</span> <span class="o">!=</span> <span class="n">Undefined</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculs</span> <span class="o">!=</span> <span class="n">Undefined</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean_in_files</span> <span class="o">!=</span> <span class="n">Undefined</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">std_in_files</span> <span class="o">!=</span> <span class="n">Undefined</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">doublet_list</span> <span class="o">!=</span> <span class="n">Undefined</span>
+        <span class="p">):</span>
             <span class="c1"># FIXME 1: We retrieve the name of the patient from the first</span>
             <span class="c1">#          element of parametric_maps. This is only fine if all the</span>
             <span class="c1">#          elements of parametric_maps correspond to the same</span>
@@ -2131,7 +2227,7 @@
 
             <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;out_files&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">out_files</span>
 
-            <span class="c1"># FIXME: the data should be anonymised and we should use PatientRef</span>
+            <span class="c1"># FIXME: the data should be anonymized and we should use PatientRef</span>
             <span class="c1">#        instead of PatientName !</span>
             <span class="k">if</span> <span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PatientName&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
@@ -2237,9 +2333,9 @@
 <div class="viewcode-block" id="Result_collector.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.Result_collector.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="c1"># No need the next line (we don&#39;t use self.process and SPM)</span>
-        <span class="c1"># super(Mean_stdDev_calc, self).run_process_mia()</span>
+        <span class="c1"># super(Result_collector, self).run_process_mia()</span>
 
-        <span class="c1"># Getting the list of all positions (doublet_list without hemisphere)</span>
+        <span class="c1"># Getting the list of all ROI (doublet_list without hemisphere)</span>
         <span class="n">roi_list</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># list of all ROIs</span>
 
         <span class="k">for</span> <span class="n">roi</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">doublet_list</span><span class="p">:</span>
@@ -2252,6 +2348,8 @@
         <span class="p">)</span>
         <span class="n">analysis_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">roi_dir</span><span class="p">,</span> <span class="s2">&quot;ROI_analysis&quot;</span><span class="p">)</span>
 
+        <span class="c1"># FIXME: The following check is already performed at initialisation</span>
+        <span class="c1">#        time. We could remove the check here.</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">analysis_dir</span><span class="p">):</span>
             <span class="nb">print</span><span class="p">(</span>
                 <span class="s2">&quot;No &#39;ROI_analysis&#39; folder in the working &quot;</span>
@@ -2259,16 +2357,62 @@
                     <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parametric_maps</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
                 <span class="p">)</span>
             <span class="p">)</span>
-            <span class="k">return</span> <span class="p">{}</span>  <span class="c1"># FIXME: Test what exactly happens in this case</span>
+            <span class="k">return</span> <span class="p">{}</span>
 
-        <span class="k">for</span> <span class="n">parametric_map</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parametric_maps</span><span class="p">:</span>
-            <span class="n">map_name_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">parametric_map</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="mi">9</span><span class="p">]</span>
-            <span class="n">map_name</span> <span class="o">=</span> <span class="n">map_name_file</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>  <span class="c1"># the summary of the data</span>
+        <span class="n">parametrics</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># the parametric data</span>
+        <span class="n">calculs</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># the calcul types</span>
+        <span class="c1"># rois = []  # the ROIs under analysis</span>
+        <span class="n">contrast</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># the contrast used</span>
+        <span class="c1"># Waiting for take in input the merged</span>
+        <span class="c1"># self.mean_in_files + self.std_in_files</span>
+        <span class="n">all_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean_in_files</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">std_in_files</span>
 
-            <span class="k">for</span> <span class="n">calcul</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">calculs</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">all_data</span><span class="p">:</span>
+            <span class="n">roi</span><span class="p">,</span> <span class="n">hemi</span><span class="p">,</span> <span class="n">calcul</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="n">contrast</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">contrast</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">res</span><span class="p">:</span>
+                <span class="n">res</span><span class="p">[</span><span class="n">contrast</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+            <span class="k">if</span> <span class="n">param</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">res</span><span class="p">[</span><span class="n">contrast</span><span class="p">]:</span>
+                <span class="n">res</span><span class="p">[</span><span class="n">contrast</span><span class="p">][</span><span class="n">param</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+            <span class="k">if</span> <span class="n">calcul</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">res</span><span class="p">[</span><span class="n">contrast</span><span class="p">][</span><span class="n">param</span><span class="p">]:</span>
+                <span class="n">res</span><span class="p">[</span><span class="n">contrast</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="n">calcul</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+            <span class="k">if</span> <span class="n">roi</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">res</span><span class="p">[</span><span class="n">contrast</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="n">calcul</span><span class="p">]:</span>
+                <span class="n">res</span><span class="p">[</span><span class="n">contrast</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="n">calcul</span><span class="p">][</span><span class="n">roi</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f_read</span><span class="p">:</span>
+                    <span class="n">data_val</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">f_read</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Result_collector brick:</span><span class="se">\n</span><span class="s2">No result &quot;</span>
+                    <span class="s2">&quot;found in </span><span class="si">{}</span><span class="s2"> ...</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="n">data_val</span> <span class="o">=</span> <span class="s2">&quot;Undefined&quot;</span>
+
+            <span class="k">if</span> <span class="n">hemi</span> <span class="ow">in</span> <span class="n">res</span><span class="p">[</span><span class="n">contrast</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="n">calcul</span><span class="p">][</span><span class="n">roi</span><span class="p">]:</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Result_collector brick:</span><span class="se">\n</span><span class="s2">The data in </span><span class="si">{}</span><span class="s2"> exist already &quot;</span>
+                    <span class="s2">&quot;in other files of toto. Overwriting with the &quot;</span>
+                    <span class="s2">&quot;new data ...</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+                <span class="p">)</span>
+
+            <span class="n">res</span><span class="p">[</span><span class="n">contrast</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="n">calcul</span><span class="p">][</span><span class="n">roi</span><span class="p">][</span><span class="n">hemi</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_val</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">laterality_index</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">calculs</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;IL_&quot;</span> <span class="o">+</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">calculs</span><span class="p">])</span>
+
+        <span class="k">for</span> <span class="n">parametric_map</span> <span class="ow">in</span> <span class="n">parametrics</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">calcul</span> <span class="ow">in</span> <span class="n">calculs</span><span class="p">:</span>
                 <span class="n">out_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
                     <span class="n">analysis_dir</span><span class="p">,</span>
-                    <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">_</span><span class="si">{1}</span><span class="s2">_</span><span class="si">{2}</span><span class="s2">.xls&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">calcul</span><span class="p">,</span> <span class="n">map_name_file</span><span class="p">),</span>
+                    <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">_</span><span class="si">{1}</span><span class="s2">.xls&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">calcul</span><span class="p">,</span> <span class="n">parametric_map</span><span class="p">),</span>
                 <span class="p">)</span>
 
                 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">out_file</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
@@ -2278,203 +2422,224 @@
                     <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="se">\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;sex&quot;</span><span class="p">))</span>
                     <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="se">\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;MR&quot;</span><span class="p">))</span>
                     <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="se">\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;Gaz&quot;</span><span class="p">))</span>
-                    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="se">\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;Admin&quot;</span><span class="p">))</span>
+                    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="se">\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;Admin&quot;</span><span class="p">))</span></div></div>
 
-                    <span class="k">if</span> <span class="n">calcul</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;IL_mean&quot;</span><span class="p">,</span> <span class="s2">&quot;IL_std&quot;</span><span class="p">]:</span>
-                        <span class="k">for</span> <span class="n">roi</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">doublet_list</span><span class="p">:</span>
-                            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
-                                <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">_</span><span class="si">{1}</span><span class="se">\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">map_name</span><span class="p">,</span> <span class="n">roi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">roi</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-                            <span class="p">)</span>
-
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="k">for</span> <span class="n">pos</span> <span class="ow">in</span> <span class="n">roi_list</span><span class="p">:</span>
-                            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">_</span><span class="si">{1}</span><span class="se">\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">map_name</span><span class="p">,</span> <span class="n">pos</span><span class="p">))</span>
-
-                    <span class="c1"># FIXME: We should iterate on each patient here ?</span>
-                    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="si">{0}</span><span class="se">\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;PatientName&quot;</span><span class="p">]))</span>
-                    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="se">\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;Pathology&quot;</span><span class="p">]))</span>
-                    <span class="c1"># f.write(&quot;%3.1f\t&quot; % self.patient_info[&quot;Age&quot;])</span>
-                    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="se">\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;Age&quot;</span><span class="p">]))</span>
-                    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="se">\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;Sex&quot;</span><span class="p">]))</span>
-                    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="se">\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;MR&quot;</span><span class="p">]))</span>
-                    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="se">\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;Gas&quot;</span><span class="p">]))</span>
-                    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="se">\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;GasAdmin&quot;</span><span class="p">]))</span>
-
-                    <span class="k">if</span> <span class="n">calcul</span> <span class="o">==</span> <span class="s2">&quot;mean&quot;</span><span class="p">:</span>
-                        <span class="k">for</span> <span class="n">roi</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">doublet_list</span><span class="p">:</span>
-                            <span class="n">roi_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                                <span class="n">analysis_dir</span><span class="p">,</span>
-                                <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">_mean</span><span class="si">{1}</span><span class="s2">_</span><span class="si">{2}</span><span class="s2">.txt&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                                    <span class="n">roi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">roi</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">map_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span>
-                                <span class="p">),</span>
-                            <span class="p">)</span>
-                            <span class="k">try</span><span class="p">:</span>
-                                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">roi_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f_read</span><span class="p">:</span>
-                                    <span class="n">final_res</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">f_read</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
-
-                                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="se">\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">final_res</span><span class="p">))</span>
-
-                            <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
-                                <span class="nb">print</span><span class="p">(</span>
-                                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Result_collector brick:</span><span class="se">\n</span><span class="s2"> </span><span class="si">{}</span><span class="s2"> not &quot;</span>
-                                    <span class="s2">&quot;found ...</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">roi_file</span><span class="p">)</span>
-                                <span class="p">)</span>
-                                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Undefined</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">)</span>
-
-                    <span class="k">elif</span> <span class="n">calcul</span> <span class="o">==</span> <span class="s2">&quot;IL_mean&quot;</span><span class="p">:</span>
-                        <span class="n">roi_checked</span> <span class="o">=</span> <span class="p">[]</span>
-
-                        <span class="k">for</span> <span class="n">roi</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">doublet_list</span><span class="p">:</span>
-                            <span class="k">if</span> <span class="n">roi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">roi_checked</span><span class="p">:</span>
-                                <span class="k">continue</span>
-
-                            <span class="n">roi_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                                <span class="n">analysis_dir</span><span class="p">,</span>
-                                <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">_mean</span><span class="si">{1}</span><span class="s2">_</span><span class="si">{2}</span><span class="s2">.txt&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                                    <span class="n">roi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">roi</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">map_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span>
-                                <span class="p">),</span>
-                            <span class="p">)</span>
-                            <span class="k">try</span><span class="p">:</span>
-                                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">roi_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f_read</span><span class="p">:</span>
-                                    <span class="n">roi_value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">f_read</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
-
-                            <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
-                                <span class="nb">print</span><span class="p">(</span>
-                                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Result_collector brick:</span><span class="se">\n</span><span class="s2"> </span><span class="si">{}</span><span class="s2"> not &quot;</span>
-                                    <span class="s2">&quot;found ...</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">roi_file</span><span class="p">)</span>
-                                <span class="p">)</span>
-                                <span class="n">roi_value</span> <span class="o">=</span> <span class="kc">None</span>
-
-                            <span class="c1"># Searching the ROI that has the same first element</span>
-                            <span class="n">roi_2</span> <span class="o">=</span> <span class="p">[</span>
-                                <span class="n">s</span>
-                                <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">doublet_list</span>
-                                <span class="k">if</span> <span class="n">roi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">roi</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-                            <span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-                            <span class="n">roi_file_2</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                                <span class="n">analysis_dir</span><span class="p">,</span>
-                                <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">_mean</span><span class="si">{1}</span><span class="s2">_</span><span class="si">{2}</span><span class="s2">.&quot;</span>
-                                <span class="s2">&quot;txt&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                                    <span class="n">roi_2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">roi_2</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">map_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span>
-                                <span class="p">),</span>
-                            <span class="p">)</span>
-                            <span class="k">try</span><span class="p">:</span>
-                                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">roi_file_2</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f_read</span><span class="p">:</span>
-                                    <span class="n">roi_value_2</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">f_read</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
-
-                            <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
-                                <span class="nb">print</span><span class="p">(</span>
-                                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Result_collector brick:</span><span class="se">\n</span><span class="s2"> </span><span class="si">{}</span><span class="s2"> not &quot;</span>
-                                    <span class="s2">&quot;found ...</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">roi_file_2</span><span class="p">)</span>
-                                <span class="p">)</span>
-                                <span class="n">roi_value_2</span> <span class="o">=</span> <span class="kc">None</span>
-
-                            <span class="c1"># IL = (Left - Right) / ((Left + Right)</span>
-                            <span class="k">if</span> <span class="n">roi</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;_L&quot;</span><span class="p">:</span>
-                                <span class="n">sub_1</span> <span class="o">=</span> <span class="n">roi_value</span>
-                                <span class="n">sub_2</span> <span class="o">=</span> <span class="n">roi_value_2</span>
-
-                            <span class="k">else</span><span class="p">:</span>
-                                <span class="n">sub_1</span> <span class="o">=</span> <span class="n">roi_value_2</span>
-                                <span class="n">sub_2</span> <span class="o">=</span> <span class="n">roi_value</span>
-
-                            <span class="k">if</span> <span class="n">sub_1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">sub_2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                                <span class="n">final_res</span> <span class="o">=</span> <span class="p">(</span><span class="n">sub_1</span> <span class="o">-</span> <span class="n">sub_2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">sub_1</span> <span class="o">+</span> <span class="n">sub_2</span><span class="p">)</span>
-                                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="se">\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">final_res</span><span class="p">))</span>
-
-                            <span class="k">else</span><span class="p">:</span>
-                                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Undefined</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">)</span>
-
-                            <span class="n">roi_checked</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">roi</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-
-                    <span class="k">elif</span> <span class="n">calcul</span> <span class="o">==</span> <span class="s2">&quot;std&quot;</span><span class="p">:</span>
-                        <span class="k">for</span> <span class="n">roi</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">doublet_list</span><span class="p">:</span>
-                            <span class="n">roi_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                                <span class="n">analysis_dir</span><span class="p">,</span>
-                                <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">_std</span><span class="si">{1}</span><span class="s2">_</span><span class="si">{2}</span><span class="s2">.txt&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                                    <span class="n">roi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">roi</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">map_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span>
-                                <span class="p">),</span>
-                            <span class="p">)</span>
-
-                            <span class="k">try</span><span class="p">:</span>
-                                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">roi_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f_read</span><span class="p">:</span>
-                                    <span class="n">final_res</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">f_read</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
-
-                                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="se">\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">final_res</span><span class="p">))</span>
-
-                            <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
-                                <span class="nb">print</span><span class="p">(</span>
-                                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Result_collector brick:</span><span class="se">\n</span><span class="s2"> </span><span class="si">{}</span><span class="s2"> not &quot;</span>
-                                    <span class="s2">&quot;found ...</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">roi_file</span><span class="p">)</span>
-                                <span class="p">)</span>
-                                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Undefined</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">)</span>
-
-                    <span class="k">elif</span> <span class="n">calcul</span> <span class="o">==</span> <span class="s2">&quot;IL_std&quot;</span><span class="p">:</span>
-                        <span class="n">roi_checked</span> <span class="o">=</span> <span class="p">[]</span>
-
-                        <span class="k">for</span> <span class="n">roi</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">doublet_list</span><span class="p">:</span>
-                            <span class="k">if</span> <span class="n">roi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">roi_checked</span><span class="p">:</span>
-                                <span class="k">continue</span>
-
-                            <span class="n">roi_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                                <span class="n">analysis_dir</span><span class="p">,</span>
-                                <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">_std</span><span class="si">{1}</span><span class="s2">_</span><span class="si">{2}</span><span class="s2">.txt&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                                    <span class="n">roi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">roi</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">map_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span>
-                                <span class="p">),</span>
-                            <span class="p">)</span>
-
-                            <span class="k">try</span><span class="p">:</span>
-                                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">roi_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f_read</span><span class="p">:</span>
-                                    <span class="n">roi_value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">f_read</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
-
-                            <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
-                                <span class="nb">print</span><span class="p">(</span>
-                                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Result_collector brick:</span><span class="se">\n</span><span class="s2"> </span><span class="si">{}</span><span class="s2"> not &quot;</span>
-                                    <span class="s2">&quot;found ...</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">roi_file</span><span class="p">)</span>
-                                <span class="p">)</span>
-                                <span class="n">roi_value</span> <span class="o">=</span> <span class="kc">None</span>
-
-                            <span class="c1"># Searching the roi that has the same first element</span>
-                            <span class="n">roi_2</span> <span class="o">=</span> <span class="p">[</span>
-                                <span class="n">s</span>
-                                <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">doublet_list</span>
-                                <span class="k">if</span> <span class="n">roi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">roi</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-                            <span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-
-                            <span class="n">roi_file_2</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                                <span class="n">analysis_dir</span><span class="p">,</span>
-                                <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">_std</span><span class="si">{1}</span><span class="s2">_</span><span class="si">{2}</span><span class="s2">.txt&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                                    <span class="n">roi_2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">roi_2</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">map_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span>
-                                <span class="p">),</span>
-                            <span class="p">)</span>
-
-                            <span class="k">try</span><span class="p">:</span>
-                                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">roi_file_2</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f_read</span><span class="p">:</span>
-                                    <span class="n">roi_value_2</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">f_read</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
-
-                            <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
-                                <span class="nb">print</span><span class="p">(</span>
-                                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Result_collector brick:</span><span class="se">\n</span><span class="s2"> </span><span class="si">{}</span><span class="s2"> not &quot;</span>
-                                    <span class="s2">&quot;found ...</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">roi_file_2</span><span class="p">)</span>
-                                <span class="p">)</span>
-                                <span class="n">roi_value_2</span> <span class="o">=</span> <span class="kc">None</span>
-
-                            <span class="c1"># IL = (Left - Right) / ((Left + Right)</span>
-                            <span class="k">if</span> <span class="n">roi</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;_L&quot;</span><span class="p">:</span>
-                                <span class="n">sub_1</span> <span class="o">=</span> <span class="n">roi_value</span>
-                                <span class="n">sub_2</span> <span class="o">=</span> <span class="n">roi_value_2</span>
-                            <span class="k">else</span><span class="p">:</span>
-                                <span class="n">sub_1</span> <span class="o">=</span> <span class="n">roi_value_2</span>
-                                <span class="n">sub_2</span> <span class="o">=</span> <span class="n">roi_value</span>
-
-                            <span class="k">if</span> <span class="n">sub_1</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">sub_2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                                <span class="n">final_res</span> <span class="o">=</span> <span class="p">(</span><span class="n">sub_1</span> <span class="o">-</span> <span class="n">sub_2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">sub_1</span> <span class="o">+</span> <span class="n">sub_2</span><span class="p">)</span>
-                                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="se">\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">final_res</span><span class="p">))</span>
-
-                            <span class="k">else</span><span class="p">:</span>
-                                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Undefined</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">)</span>
-
-                            <span class="n">roi_checked</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">roi</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></div></div>
+        <span class="c1"># for parametric_map in self.parametric_maps:</span>
+        <span class="c1">#     map_name_file = os.path.basename(parametric_map)[0:9]</span>
+        <span class="c1">#     map_name = map_name_file[0:4]</span>
+        <span class="c1">#</span>
+        <span class="c1">#     for calcul in self.calculs:</span>
+        <span class="c1">#         out_file = os.path.join(</span>
+        <span class="c1">#             analysis_dir,</span>
+        <span class="c1">#             &quot;{0}_{1}_{2}.xls&quot;.format(self.data, calcul,</span>
+        <span class="c1">#                                      map_name_file),</span>
+        <span class="c1">#         )</span>
+        <span class="c1">#</span>
+        <span class="c1">#         with open(out_file, &quot;w&quot;) as f:</span>
+        <span class="c1">#             f.write(&quot;{0}\t&quot;.format(&quot;subjects&quot;))</span>
+        <span class="c1">#             f.write(&quot;{0}\t&quot;.format(&quot;patho&quot;))</span>
+        <span class="c1">#             f.write(&quot;{0}\t&quot;.format(&quot;age&quot;))</span>
+        <span class="c1">#             f.write(&quot;{0}\t&quot;.format(&quot;sex&quot;))</span>
+        <span class="c1">#             f.write(&quot;{0}\t&quot;.format(&quot;MR&quot;))</span>
+        <span class="c1">#             f.write(&quot;{0}\t&quot;.format(&quot;Gaz&quot;))</span>
+        <span class="c1">#             f.write(&quot;{0}\t&quot;.format(&quot;Admin&quot;))</span>
+        <span class="c1">#</span>
+        <span class="c1">#             if calcul not in [&quot;IL_mean&quot;, &quot;IL_std&quot;]:</span>
+        <span class="c1">#                 for roi in self.doublet_list:</span>
+        <span class="c1">#                     f.write(</span>
+        <span class="c1">#                         &quot;{0}_{1}\t&quot;.format(map_name, roi[0] + roi[1])</span>
+        <span class="c1">#                     )</span>
+        <span class="c1">#</span>
+        <span class="c1">#             else:</span>
+        <span class="c1">#                 for pos in roi_list:</span>
+        <span class="c1">#                     f.write(&quot;{0}_{1}\t&quot;.format(map_name, pos))</span>
+        <span class="c1">#</span>
+        <span class="c1">#             # FIXME: We should iterate on each patient here ?</span>
+        <span class="c1">#             f.write(&quot;\n{0}\t&quot;.format(self.patient_info[&quot;PatientName&quot;]))</span>
+        <span class="c1">#             f.write(&quot;{0}\t&quot;.format(self.patient_info[&quot;Pathology&quot;]))</span>
+        <span class="c1">#             f.write(&quot;{0}\t&quot;.format(self.patient_info[&quot;Age&quot;]))</span>
+        <span class="c1">#             f.write(&quot;{0}\t&quot;.format(self.patient_info[&quot;Sex&quot;]))</span>
+        <span class="c1">#             f.write(&quot;{0}\t&quot;.format(self.patient_info[&quot;MR&quot;]))</span>
+        <span class="c1">#             f.write(&quot;{0}\t&quot;.format(self.patient_info[&quot;Gas&quot;]))</span>
+        <span class="c1">#             f.write(&quot;{0}\t&quot;.format(self.patient_info[&quot;GasAdmin&quot;]))</span>
+        <span class="c1">#</span>
+        <span class="c1">#             if calcul == &quot;mean&quot;:</span>
+        <span class="c1">#                 for roi in self.doublet_list:</span>
+        <span class="c1">#                     roi_file = os.path.join(</span>
+        <span class="c1">#                         analysis_dir,</span>
+        <span class="c1">#                         &quot;{0}_mean_{1}_{2}.txt&quot;.format(</span>
+        <span class="c1">#                             roi[0] + roi[1], map_name, self.data</span>
+        <span class="c1">#                         ),</span>
+        <span class="c1">#                     )</span>
+        <span class="c1">#                     try:</span>
+        <span class="c1">#                         with open(roi_file, &quot;r&quot;) as f_read:</span>
+        <span class="c1">#                             final_res = float(f_read.read())</span>
+        <span class="c1">#</span>
+        <span class="c1">#                         f.write(&quot;{0}\t&quot;.format(final_res))</span>
+        <span class="c1">#</span>
+        <span class="c1">#                     except FileNotFoundError:</span>
+        <span class="c1">#                         print(</span>
+        <span class="c1">#                             &quot;\nResult_collector brick:\n {} not &quot;</span>
+        <span class="c1">#                             &quot;found ...\n&quot;.format(roi_file)</span>
+        <span class="c1">#                         )</span>
+        <span class="c1">#                         f.write(&quot;Undefined\t&quot;)</span>
+        <span class="c1">#</span>
+        <span class="c1">#             elif calcul == &quot;IL_mean&quot;:</span>
+        <span class="c1">#                 roi_checked = []</span>
+        <span class="c1">#</span>
+        <span class="c1">#                 for roi in self.doublet_list:</span>
+        <span class="c1">#                     if roi[0] in roi_checked:</span>
+        <span class="c1">#                         continue</span>
+        <span class="c1">#</span>
+        <span class="c1">#                     roi_file = os.path.join(</span>
+        <span class="c1">#                         analysis_dir,</span>
+        <span class="c1">#                         &quot;{0}_mean_{1}_{2}.txt&quot;.format(</span>
+        <span class="c1">#                             roi[0] + roi[1], map_name, self.data</span>
+        <span class="c1">#                         ),</span>
+        <span class="c1">#                     )</span>
+        <span class="c1">#                     try:</span>
+        <span class="c1">#                         with open(roi_file, &quot;r&quot;) as f_read:</span>
+        <span class="c1">#                             roi_value = float(f_read.read())</span>
+        <span class="c1">#</span>
+        <span class="c1">#                     except FileNotFoundError:</span>
+        <span class="c1">#                         print(</span>
+        <span class="c1">#                             &quot;\nResult_collector brick:\n {} not &quot;</span>
+        <span class="c1">#                             &quot;found ...\n&quot;.format(roi_file)</span>
+        <span class="c1">#                         )</span>
+        <span class="c1">#                         roi_value = None</span>
+        <span class="c1">#</span>
+        <span class="c1">#                     # Searching the ROI that has the same first</span>
+        <span class="c1">#                     # element</span>
+        <span class="c1">#                     roi_2 = [</span>
+        <span class="c1">#                         s</span>
+        <span class="c1">#                         for s in self.doublet_list</span>
+        <span class="c1">#                         if roi[0] in s[0] and roi[1] != s[1]</span>
+        <span class="c1">#                     ][0]</span>
+        <span class="c1">#                     roi_file_2 = os.path.join(</span>
+        <span class="c1">#                         analysis_dir,</span>
+        <span class="c1">#                         &quot;{0}_mean_{1}_{2}.&quot;</span>
+        <span class="c1">#                         &quot;txt&quot;.format(</span>
+        <span class="c1">#                             roi_2[0] + roi_2[1], map_name, self.data</span>
+        <span class="c1">#                         ),</span>
+        <span class="c1">#                     )</span>
+        <span class="c1">#                     try:</span>
+        <span class="c1">#                         with open(roi_file_2, &quot;r&quot;) as f_read:</span>
+        <span class="c1">#                             roi_value_2 = float(f_read.read())</span>
+        <span class="c1">#</span>
+        <span class="c1">#                     except FileNotFoundError:</span>
+        <span class="c1">#                         print(</span>
+        <span class="c1">#                             &quot;\nResult_collector brick:\n {} not &quot;</span>
+        <span class="c1">#                             &quot;found ...\n&quot;.format(roi_file_2)</span>
+        <span class="c1">#                         )</span>
+        <span class="c1">#                         roi_value_2 = None</span>
+        <span class="c1">#</span>
+        <span class="c1">#                     # IL = (Left - Right) / ((Left + Right)</span>
+        <span class="c1">#                     if roi[1] == &quot;_L&quot;:</span>
+        <span class="c1">#                         sub_1 = roi_value</span>
+        <span class="c1">#                         sub_2 = roi_value_2</span>
+        <span class="c1">#</span>
+        <span class="c1">#                     else:</span>
+        <span class="c1">#                         sub_1 = roi_value_2</span>
+        <span class="c1">#                         sub_2 = roi_value</span>
+        <span class="c1">#</span>
+        <span class="c1">#                     if sub_1 is not None and sub_2 is not None:</span>
+        <span class="c1">#                         final_res = (sub_1 - sub_2) / (sub_1 + sub_2)</span>
+        <span class="c1">#                         f.write(&quot;{0}\t&quot;.format(final_res))</span>
+        <span class="c1">#</span>
+        <span class="c1">#                     else:</span>
+        <span class="c1">#                         f.write(&quot;Undefined\t&quot;)</span>
+        <span class="c1">#</span>
+        <span class="c1">#                     roi_checked.append(roi[0])</span>
+        <span class="c1">#</span>
+        <span class="c1">#             elif calcul == &quot;std&quot;:</span>
+        <span class="c1">#                 for roi in self.doublet_list:</span>
+        <span class="c1">#                     roi_file = os.path.join(</span>
+        <span class="c1">#                         analysis_dir,</span>
+        <span class="c1">#                         &quot;{0}_std_{1}_{2}.txt&quot;.format(</span>
+        <span class="c1">#                             roi[0] + roi[1], map_name, self.data</span>
+        <span class="c1">#                         ),</span>
+        <span class="c1">#                     )</span>
+        <span class="c1">#</span>
+        <span class="c1">#                     try:</span>
+        <span class="c1">#                         with open(roi_file, &quot;r&quot;) as f_read:</span>
+        <span class="c1">#                             final_res = float(f_read.read())</span>
+        <span class="c1">#</span>
+        <span class="c1">#                         f.write(&quot;{0}\t&quot;.format(final_res))</span>
+        <span class="c1">#</span>
+        <span class="c1">#                     except FileNotFoundError:</span>
+        <span class="c1">#                         print(</span>
+        <span class="c1">#                             &quot;\nResult_collector brick:\n {} not &quot;</span>
+        <span class="c1">#                             &quot;found ...\n&quot;.format(roi_file)</span>
+        <span class="c1">#                         )</span>
+        <span class="c1">#                         f.write(&quot;Undefined\t&quot;)</span>
+        <span class="c1">#</span>
+        <span class="c1">#             elif calcul == &quot;IL_std&quot;:</span>
+        <span class="c1">#                 roi_checked = []</span>
+        <span class="c1">#</span>
+        <span class="c1">#                 for roi in self.doublet_list:</span>
+        <span class="c1">#                     if roi[0] in roi_checked:</span>
+        <span class="c1">#                         continue</span>
+        <span class="c1">#</span>
+        <span class="c1">#                     roi_file = os.path.join(</span>
+        <span class="c1">#                         analysis_dir,</span>
+        <span class="c1">#                         &quot;{0}_std_{1}_{2}.txt&quot;.format(</span>
+        <span class="c1">#                             roi[0] + roi[1], map_name, self.data</span>
+        <span class="c1">#                         ),</span>
+        <span class="c1">#                     )</span>
+        <span class="c1">#</span>
+        <span class="c1">#                     try:</span>
+        <span class="c1">#                         with open(roi_file, &quot;r&quot;) as f_read:</span>
+        <span class="c1">#                             roi_value = float(f_read.read())</span>
+        <span class="c1">#</span>
+        <span class="c1">#                     except FileNotFoundError:</span>
+        <span class="c1">#                         print(</span>
+        <span class="c1">#                             &quot;\nResult_collector brick:\n {} not &quot;</span>
+        <span class="c1">#                             &quot;found ...\n&quot;.format(roi_file)</span>
+        <span class="c1">#                         )</span>
+        <span class="c1">#                         roi_value = None</span>
+        <span class="c1">#</span>
+        <span class="c1">#                     # Searching the roi that has the same first</span>
+        <span class="c1">#                     # element</span>
+        <span class="c1">#                     roi_2 = [</span>
+        <span class="c1">#                         s</span>
+        <span class="c1">#                         for s in self.doublet_list</span>
+        <span class="c1">#                         if roi[0] in s[0] and roi[1] != s[1]</span>
+        <span class="c1">#                     ][0]</span>
+        <span class="c1">#</span>
+        <span class="c1">#                     roi_file_2 = os.path.join(</span>
+        <span class="c1">#                         analysis_dir,</span>
+        <span class="c1">#                         &quot;{0}_std_{1}_{2}.txt&quot;.format(</span>
+        <span class="c1">#                             roi_2[0] + roi_2[1], map_name, self.data</span>
+        <span class="c1">#                         ),</span>
+        <span class="c1">#                     )</span>
+        <span class="c1">#</span>
+        <span class="c1">#                     try:</span>
+        <span class="c1">#                         with open(roi_file_2, &quot;r&quot;) as f_read:</span>
+        <span class="c1">#                             roi_value_2 = float(f_read.read())</span>
+        <span class="c1">#</span>
+        <span class="c1">#                     except FileNotFoundError:</span>
+        <span class="c1">#                         print(</span>
+        <span class="c1">#                             &quot;\nResult_collector brick:\n {} not &quot;</span>
+        <span class="c1">#                             &quot;found ...\n&quot;.format(roi_file_2)</span>
+        <span class="c1">#                         )</span>
+        <span class="c1">#                         roi_value_2 = None</span>
+        <span class="c1">#</span>
+        <span class="c1">#                     # IL = (Left - Right) / ((Left + Right)</span>
+        <span class="c1">#                     if roi[1] == &quot;_L&quot;:</span>
+        <span class="c1">#                         sub_1 = roi_value</span>
+        <span class="c1">#                         sub_2 = roi_value_2</span>
+        <span class="c1">#                     else:</span>
+        <span class="c1">#                         sub_1 = roi_value_2</span>
+        <span class="c1">#                         sub_2 = roi_value</span>
+        <span class="c1">#</span>
+        <span class="c1">#                     if sub_1 is not None and sub_2 is not None:</span>
+        <span class="c1">#                         final_res = (sub_1 - sub_2) / (sub_1 + sub_2)</span>
+        <span class="c1">#                         f.write(&quot;{0}\t&quot;.format(final_res))</span>
+        <span class="c1">#</span>
+        <span class="c1">#                     else:</span>
+        <span class="c1">#                         f.write(&quot;Undefined\t&quot;)</span>
+        <span class="c1">#</span>
+        <span class="c1">#                     roi_checked.append(roi[0])</span>
 
 
 <div class="viewcode-block" id="Spikes"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.Spikes">[docs]</a><span class="k">class</span> <span class="nc">Spikes</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
