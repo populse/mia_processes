@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.preprocess.others.processing &#8212; mia_processes 2.2.1-dev+a9ea159 documentation</title>
+    <title>mia_processes.bricks.preprocess.others.processing &#8212; mia_processes 2.2.1-dev+b6fbfd4 documentation</title>
     <link rel="stylesheet" href="../../../../../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
@@ -18,7 +18,7 @@
     <link rel="search" title="Search" href="../../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../../index.html">
-          <span>mia_processes 2.2.1-dev+a9ea159 documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+b6fbfd4 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.preprocess.others.processing</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -78,9 +78,6 @@
 <span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">import</span> <span class="nn">tempfile</span>
 
-<span class="c1"># Other import</span>
-<span class="kn">from</span> <span class="nn">distutils.dir_util</span> <span class="kn">import</span> <span class="n">copy_tree</span>
-
 <span class="c1"># nibabel import</span>
 <span class="kn">import</span> <span class="nn">nibabel</span> <span class="k">as</span> <span class="nn">nib</span>
 <span class="kn">import</span> <span class="nn">nibabel.processing</span> <span class="k">as</span> <span class="nn">nibp</span>
@@ -96,7 +93,6 @@
     <span class="n">traits</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">nipype.interfaces.spm.base</span> <span class="kn">import</span> <span class="n">ImageFileSPM</span>
-<span class="kn">from</span> <span class="nn">populse_mia.software_properties</span> <span class="kn">import</span> <span class="n">Config</span>
 
 <span class="c1"># populse_mia import</span>
 <span class="kn">from</span> <span class="nn">populse_mia.user_interface.pipeline_manager.process_mia</span> <span class="kn">import</span> <span class="n">ProcessMIA</span>
@@ -117,6 +113,13 @@
     <span class="n">get_dbFieldValue</span><span class="p">,</span>
     <span class="n">set_dbFieldValue</span><span class="p">,</span>
 <span class="p">)</span>
+
+<span class="c1"># Other import</span>
+<span class="c1"># from distutils.dir_util import copy_tree</span>
+
+
+<span class="c1"># from populse_mia.software_properties import Config</span>
+
 
 <span class="n">EXT</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;NIFTI_GZ&quot;</span><span class="p">:</span> <span class="s2">&quot;nii.gz&quot;</span><span class="p">,</span> <span class="s2">&quot;NIFTI&quot;</span><span class="p">:</span> <span class="s2">&quot;nii&quot;</span><span class="p">}</span>
 
@@ -992,20 +995,17 @@
 
 <div class="viewcode-block" id="ConvROI"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.ConvROI">[docs]</a><span class="k">class</span> <span class="nc">ConvROI</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    * Convolve regions of interest with a mask.</span>
+<span class="sd">    * Convolve images with an image.</span>
 
-<span class="sd">    - Resampling the mask to the size of the ROIs, using the first ROI.</span>
-<span class="sd">    - Then convolve each ROI with resized mask.</span>
-<span class="sd">    - ROIs are defined from doublet_list parameter as</span>
-<span class="sd">      doublet_list[0][0] + doublet_list[0][1] + &#39;.nii&#39;,</span>
-<span class="sd">      doublet_list[1][0] + doublet_list[1][1] + &#39;.nii&#39;,</span>
-<span class="sd">      etc.</span>
-<span class="sd">    - The output_directory&quot;/roi_&quot;PatientName directory is created with the</span>
-<span class="sd">      corresponding ROI files (the miaresources package must be installed).</span>
-<span class="sd">    - The output_directory&quot;/roi_&quot;PatientName&quot;/convROI_BOLD&quot; directory is</span>
-<span class="sd">      created to receive the convolution results from the runtime.</span>
-<span class="sd">    - To work correctly, the database entry for the in_image parameter must</span>
-<span class="sd">      have the &quot;PatientName&quot; tag filled in.</span>
+<span class="sd">    - Resampling the convolve_with to the size of images_to_convolve,</span>
+<span class="sd">      using the first element of images_to_convolve.</span>
+<span class="sd">    - Then convolve each element of images_to_convolve with resized</span>
+<span class="sd">      convolve_with.</span>
+<span class="sd">    - The output_directory/PatientName_data/ROI_data/convROI_BOLD directory is</span>
+<span class="sd">      created to receive the convolved images. If this directory exists at</span>
+<span class="sd">      runtime it is deleted.</span>
+<span class="sd">    - To work correctly, the database entry for the convolve_with</span>
+<span class="sd">      parameter must have the &quot;PatientName&quot; tag filled in.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="ConvROI.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.ConvROI.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -1019,23 +1019,53 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">ConvROI</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="c1"># Inputs description</span>
-        <span class="n">doublet_list_desc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;A list of lists containing doublets of strings &quot;</span>
-            <span class="s1">&#39;(e.g. [[&quot;ROI_OCC&quot;, &quot;_L&quot;], [&quot;ROI_OCC&quot;, &quot;_R&quot;], &#39;</span>
-            <span class="s1">&#39;[&quot;ROI_PAR&quot;, &quot;_l&quot;], ...]&#39;</span>
+        <span class="c1"># doublet_list_desc = (</span>
+        <span class="c1">#     &quot;A list of lists containing doublets of strings &quot;</span>
+        <span class="c1">#     &#39;(e.g. [[&quot;ROI_OCC&quot;, &quot;_L&quot;], [&quot;ROI_OCC&quot;, &quot;_R&quot;], &#39;</span>
+        <span class="c1">#     &#39;[&quot;ROI_PAR&quot;, &quot;_l&quot;], ...]&#39;</span>
+        <span class="c1"># )</span>
+        <span class="c1"># rois_list_desc = &quot;A list of ROIs&quot;</span>
+
+        <span class="n">images_to_convolve_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;A list of images to convolve with &quot;</span> <span class="s2">&quot;convolve_with image&quot;</span>
         <span class="p">)</span>
-        <span class="n">in_image_desc</span> <span class="o">=</span> <span class="s2">&quot;An image (an existing, uncompressed file)&quot;</span>
+
+        <span class="c1"># in_image_desc = &quot;An image (an existing, uncompressed file)&quot;</span>
+
+        <span class="n">convolve_with_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;An image used to convolve with &quot;</span> <span class="s2">&quot;images_to_convolve&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">prefix_desc</span> <span class="o">=</span> <span class="s2">&quot;The prefix for the out_images (a string)&quot;</span>
 
         <span class="c1"># Outputs description</span>
-        <span class="n">out_images_desc</span> <span class="o">=</span> <span class="s2">&quot;The convoluted  images&quot;</span>
+        <span class="n">out_images_desc</span> <span class="o">=</span> <span class="s2">&quot;The convoluted images&quot;</span>
 
         <span class="c1"># Inputs traits</span>
+        <span class="c1"># self.add_trait(</span>
+        <span class="c1">#     &quot;doublet_list&quot;, traits.List(output=False, desc=doublet_list_desc)</span>
+        <span class="c1"># )</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
-            <span class="s2">&quot;doublet_list&quot;</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">doublet_list_desc</span><span class="p">)</span>
+            <span class="s2">&quot;images_to_convolve&quot;</span><span class="p">,</span>
+            <span class="n">InputMultiPath</span><span class="p">(</span>
+                <span class="n">ImageFileSPM</span><span class="p">(),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">images_to_convolve_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;convolve_with&quot;</span><span class="p">,</span>
+            <span class="n">ImageFileSPM</span><span class="p">(</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">convolve_with_desc</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
-            <span class="s2">&quot;in_image&quot;</span><span class="p">,</span> <span class="n">ImageFileSPM</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">in_image_desc</span><span class="p">)</span>
+            <span class="s2">&quot;prefix&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">String</span><span class="p">(</span>
+                <span class="s2">&quot;conv&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">prefix_desc</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
         <span class="c1"># Outputs traits</span>
@@ -1069,94 +1099,122 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">ConvROI</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="c1"># Outputs definition and tags inheritance (optional)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">doublet_list</span> <span class="o">!=</span> <span class="p">[]</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_image</span><span class="p">:</span>
+        <span class="c1"># if self.doublet_list != [] and self.in_image:</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">images_to_convolve</span> <span class="o">!=</span> <span class="n">Undefined</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">convolve_with</span> <span class="o">!=</span> <span class="n">Undefined</span>
+        <span class="p">):</span>
             <span class="n">patient_name</span> <span class="o">=</span> <span class="n">get_dbFieldValue</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_image</span><span class="p">,</span> <span class="s2">&quot;PatientName&quot;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">convolve_with</span><span class="p">,</span> <span class="s2">&quot;PatientName&quot;</span>
             <span class="p">)</span>
 
             <span class="k">if</span> <span class="n">patient_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span>
                     <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">ConvROI:</span><span class="se">\n</span><span class="s1"> The &quot;PatientName&quot; tag is not filled &#39;</span>
                     <span class="s2">&quot;in the database for the </span><span class="si">{}</span><span class="s2"> file ...</span><span class="se">\n</span><span class="s2"> The calculation&quot;</span>
-                    <span class="s2">&quot;is aborted...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_image</span><span class="p">)</span>
+                    <span class="s2">&quot;is aborted...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">convolve_with</span><span class="p">)</span>
                 <span class="p">)</span>
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;patient_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">patient_name</span>
-            <span class="n">roi_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="s2">&quot;roi_&quot;</span> <span class="o">+</span> <span class="n">patient_name</span>
+            <span class="c1"># roi_dir = os.path.join(</span>
+            <span class="c1">#     self.output_directory, &quot;roi_&quot; + patient_name</span>
+            <span class="c1"># )</span>
+            <span class="n">conv_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                <span class="n">patient_name</span> <span class="o">+</span> <span class="s2">&quot;_data&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;ROI_data&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;convROI_BOLD&quot;</span><span class="p">,</span>
             <span class="p">)</span>
 
-            <span class="c1"># if not existing, creates self.output_directory&#39;/roi_&#39;patient_name</span>
+            <span class="c1"># if not existing, creates self.output_directory&#39;/roi_dir</span>
             <span class="c1"># folder. If already existing, remove old reference ROIs in roi_dir</span>
             <span class="c1"># and remove the old roi_dir&#39;/convROI_BOLD&#39;</span>
-            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">roi_dir</span><span class="p">):</span>
-                <span class="n">elts</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">roi_dir</span><span class="p">)</span>
-                <span class="c1"># filtering only the files</span>
-                <span class="n">files</span> <span class="o">=</span> <span class="p">[</span>
-                    <span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">elts</span> <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">roi_dir</span><span class="p">,</span> <span class="n">f</span><span class="p">))</span>
-                <span class="p">]</span>
-                <span class="c1"># filtering only the directories</span>
-                <span class="n">dirs</span> <span class="o">=</span> <span class="p">[</span>
-                    <span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">elts</span> <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">roi_dir</span><span class="p">,</span> <span class="n">d</span><span class="p">))</span>
-                <span class="p">]</span>
-                <span class="n">tmp</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="c1"># if os.path.exists(roi_dir):</span>
+            <span class="c1">#     elts = os.listdir(roi_dir)</span>
+            <span class="c1">#     # filtering only the files</span>
+            <span class="c1">#     files = [</span>
+            <span class="c1">#         f for f in elts</span>
+            <span class="c1">#         if os.path.isfile(os.path.join(roi_dir, f))</span>
+            <span class="c1">#     ]</span>
+            <span class="c1">#     # filtering only the directories</span>
+            <span class="c1">#     dirs = [</span>
+            <span class="c1">#         d for d in elts</span>
+            <span class="c1">#         if os.path.isdir(os.path.join(roi_dir, d))</span>
+            <span class="c1">#     ]</span>
+            <span class="c1">#     tmp = False</span>
+            <span class="c1">#</span>
+            <span class="c1">#     if &quot;convROI_BOLD&quot; in dirs:</span>
+            <span class="c1">#         tmp = tempfile.mktemp(dir=os.path.dirname(roi_dir))</span>
+            <span class="c1">#         os.mkdir(tmp)</span>
+            <span class="c1">#         shutil.move(</span>
+            <span class="c1">#             os.path.join(roi_dir, &quot;convROI_BOLD&quot;),</span>
+            <span class="c1">#             os.path.join(tmp, &quot;convROI_BOLD&quot;),</span>
+            <span class="c1">#         )</span>
+            <span class="c1">#         print(</span>
+            <span class="c1">#             &#39;\nConvROI brick:\nA &quot;{}&quot; folder already exists, &#39;</span>
+            <span class="c1">#             &quot;it will be overwritten by this new &quot;</span>
+            <span class="c1">#             &quot;calculation...&quot;.format(</span>
+            <span class="c1">#                 os.path.join(roi_dir, &quot;convROI_BOLD&quot;)</span>
+            <span class="c1">#             )</span>
+            <span class="c1">#         )</span>
+            <span class="c1">#</span>
+            <span class="c1">#     for start_fil in [i[0] + i[1] for i in self.doublet_list]:</span>
+            <span class="c1">#         for fil in files:</span>
+            <span class="c1">#             if fil.startswith(start_fil):</span>
+            <span class="c1">#                 if not os.path.isdir(tmp):</span>
+            <span class="c1">#                     tmp = tempfile.mktemp(</span>
+            <span class="c1">#                         dir=os.path.dirname(roi_dir)</span>
+            <span class="c1">#                     )</span>
+            <span class="c1">#                     os.mkdir(tmp)</span>
+            <span class="c1">#</span>
+            <span class="c1">#                 shutil.move(os.path.join(roi_dir, fil), tmp)</span>
+            <span class="c1">#                 print(</span>
+            <span class="c1">#                     &#39;\nConvROI brick:\nA &quot;{}&quot; file already &#39;</span>
+            <span class="c1">#                     &quot;exists, it will be overwritten by this new &quot;</span>
+            <span class="c1">#                     &quot;calculation...&quot;.format(</span>
+            <span class="c1">#                         os.path.join(roi_dir, fil)</span>
+            <span class="c1">#                     )</span>
+            <span class="c1">#                 )</span>
+            <span class="c1">#</span>
+            <span class="c1">#     if os.path.isdir(tmp):</span>
+            <span class="c1">#         shutil.rmtree(tmp)</span>
+            <span class="c1">#</span>
+            <span class="c1"># else:</span>
+            <span class="c1">#     os.mkdir(roi_dir)</span>
 
-                <span class="k">if</span> <span class="s2">&quot;convROI_BOLD&quot;</span> <span class="ow">in</span> <span class="n">dirs</span><span class="p">:</span>
-                    <span class="n">tmp</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mktemp</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">roi_dir</span><span class="p">))</span>
-                    <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
-                    <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span>
-                        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">roi_dir</span><span class="p">,</span> <span class="s2">&quot;convROI_BOLD&quot;</span><span class="p">),</span>
-                        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="s2">&quot;convROI_BOLD&quot;</span><span class="p">),</span>
-                    <span class="p">)</span>
-                    <span class="nb">print</span><span class="p">(</span>
-                        <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">ConvROI brick:</span><span class="se">\n</span><span class="s1">A &quot;</span><span class="si">{}</span><span class="s1">&quot; folder already exists, &#39;</span>
-                        <span class="s2">&quot;it will be overwritten by this new &quot;</span>
-                        <span class="s2">&quot;calculation...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">roi_dir</span><span class="p">,</span> <span class="s2">&quot;convROI_BOLD&quot;</span><span class="p">)</span>
-                        <span class="p">)</span>
-                    <span class="p">)</span>
-
-                <span class="k">for</span> <span class="n">start_fil</span> <span class="ow">in</span> <span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">doublet_list</span><span class="p">]:</span>
-                    <span class="k">for</span> <span class="n">fil</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
-                        <span class="k">if</span> <span class="n">fil</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">start_fil</span><span class="p">):</span>
-                            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">tmp</span><span class="p">):</span>
-                                <span class="n">tmp</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mktemp</span><span class="p">(</span>
-                                    <span class="nb">dir</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">roi_dir</span><span class="p">)</span>
-                                <span class="p">)</span>
-                                <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
-
-                            <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">roi_dir</span><span class="p">,</span> <span class="n">fil</span><span class="p">),</span> <span class="n">tmp</span><span class="p">)</span>
-                            <span class="nb">print</span><span class="p">(</span>
-                                <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">ConvROI brick:</span><span class="se">\n</span><span class="s1">A &quot;</span><span class="si">{}</span><span class="s1">&quot; file already &#39;</span>
-                                <span class="s2">&quot;exists, it will be overwritten by this new &quot;</span>
-                                <span class="s2">&quot;calculation...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">roi_dir</span><span class="p">,</span> <span class="n">fil</span><span class="p">)</span>
-                                <span class="p">)</span>
-                            <span class="p">)</span>
-
-                <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">tmp</span><span class="p">):</span>
-                    <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
-
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">roi_dir</span><span class="p">)</span>
-
-            <span class="c1"># Copying the ROIs from the resources folder</span>
-            <span class="c1"># to self.output_directory&#39;cd /roi_&#39;patient_name</span>
-            <span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">()</span>
-            <span class="n">ref_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get_resources_path</span><span class="p">(),</span> <span class="s2">&quot;ROIs&quot;</span><span class="p">)</span>
-            <span class="n">copy_tree</span><span class="p">(</span><span class="n">ref_dir</span><span class="p">,</span> <span class="n">roi_dir</span><span class="p">)</span>
-
-            <span class="c1"># Creates roi_dir/&#39;convROI_BOLD&#39; folder</span>
-            <span class="n">conv_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">roi_dir</span><span class="p">,</span> <span class="s2">&quot;convROI_BOLD&quot;</span><span class="p">)</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">conv_dir</span><span class="p">)</span>
+            <span class="c1"># # Copying the ROIs from the resources folder</span>
+            <span class="c1"># # to self.output_directory&#39;/roi_&#39;patient_name</span>
+            <span class="c1"># config = Config()</span>
+            <span class="c1"># ref_dir = os.path.join(config.get_resources_path(), &quot;ROIs&quot;)</span>
+            <span class="c1"># copy_tree(ref_dir, roi_dir)</span>
+            <span class="c1">#</span>
+            <span class="c1"># # Creates roi_dir/&#39;convROI_BOLD&#39; folder</span>
+            <span class="c1"># conv_dir = os.path.join(roi_dir, &quot;convROI_BOLD&quot;)</span>
+            <span class="c1"># os.mkdir(conv_dir)</span>
 
             <span class="n">list_out</span> <span class="o">=</span> <span class="p">[]</span>
 
-            <span class="k">for</span> <span class="n">roi</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">doublet_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span><span class="o">.</span><span class="n">isspace</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+            <span class="c1"># for roi_file in self.images_to_convolve:</span>
+            <span class="c1">#     list_out.append(</span>
+            <span class="c1">#         os.path.join(conv_dir,</span>
+            <span class="c1">#                      &quot;conv&quot; + os.path.basename(roi_file))</span>
+            <span class="c1">#     )</span>
+
+            <span class="k">for</span> <span class="n">roi_file</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">images_to_convolve</span><span class="p">:</span>
                 <span class="n">list_out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">conv_dir</span><span class="p">,</span> <span class="s2">&quot;conv&quot;</span> <span class="o">+</span> <span class="n">roi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">roi</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;.nii&quot;</span><span class="p">)</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                        <span class="n">conv_dir</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">roi_file</span><span class="p">)</span>
+                    <span class="p">)</span>
                 <span class="p">)</span>
+
+            <span class="c1"># for roi in self.doublet_list:</span>
+            <span class="c1"># list_out.append(</span>
+            <span class="c1">#     os.path.join(conv_dir, &quot;conv&quot; + roi[0] + roi[1] + &quot;.nii&quot;)</span>
+            <span class="c1"># )</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;out_images&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">list_out</span>
 
@@ -1169,24 +1227,54 @@
         <span class="c1"># No need the next line (we don&#39;t use self.process et SPM)</span>
         <span class="c1"># super(ConvROI, self).run_process_mia()</span>
 
-        <span class="n">roi_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="s2">&quot;roi_&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;patient_name&quot;</span><span class="p">]</span>
+        <span class="c1"># roi_dir = os.path.join(</span>
+        <span class="c1">#     self.output_directory, &quot;roi_&quot; + self.dict4runtime[&quot;patient_name&quot;]</span>
+        <span class="c1"># )</span>
+        <span class="n">pat_name_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;patient_name&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;_data&quot;</span>
         <span class="p">)</span>
-        <span class="n">conv_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">roi_dir</span><span class="p">,</span> <span class="s2">&quot;convROI_BOLD&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">pat_name_dir</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">pat_name_dir</span><span class="p">)</span>
+
+        <span class="n">roi_data_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pat_name_dir</span><span class="p">,</span> <span class="s2">&quot;ROI_data&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">roi_data_dir</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">roi_data_dir</span><span class="p">)</span>
+
+        <span class="c1"># conv_dir = os.path.join(roi_dir, &quot;convROI_BOLD&quot;)</span>
+        <span class="n">conv_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">roi_data_dir</span><span class="p">,</span> <span class="s2">&quot;convROI_BOLD&quot;</span><span class="p">)</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="s2">&quot;None&quot;</span>
+
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">conv_dir</span><span class="p">):</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mktemp</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">roi_data_dir</span><span class="p">))</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">conv_dir</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="s2">&quot;convROI_BOLD&quot;</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">ConvROI brick:</span><span class="se">\n</span><span class="s1">A &quot;</span><span class="si">{}</span><span class="s1">&quot; folder already exists, &#39;</span>
+                <span class="s2">&quot;it will be overwritten by this new &quot;</span>
+                <span class="s2">&quot;calculation...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">conv_dir</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">conv_dir</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">tmp</span><span class="p">):</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
 
         <span class="c1"># Resampling the self.in_image to the size of the ROIs, using the</span>
-        <span class="c1"># first ROI in self.doublet_list</span>
-        <span class="n">roi_1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">doublet_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">roi_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">roi_dir</span><span class="p">,</span> <span class="n">roi_1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">roi_1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;.nii&quot;</span><span class="p">)</span>
-        <span class="n">roi_img</span> <span class="o">=</span> <span class="n">nib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">roi_file</span><span class="p">)</span>
+        <span class="c1"># first ROI in rois_list</span>
+        <span class="c1"># roi_1 = self.doublet_list[0]</span>
+        <span class="c1"># roi_file = os.path.join(roi_dir, roi_1[0] + roi_1[1] + &quot;.nii&quot;)</span>
+        <span class="c1"># roi_img = nib.load(roi_file)</span>
+        <span class="n">roi_img</span> <span class="o">=</span> <span class="n">nib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">images_to_convolve</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="n">roi_data</span> <span class="o">=</span> <span class="n">roi_img</span><span class="o">.</span><span class="n">get_fdata</span><span class="p">()</span>
         <span class="n">roi_size</span> <span class="o">=</span> <span class="n">roi_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
-        <span class="n">mask_thresh</span> <span class="o">=</span> <span class="n">threshold</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_image</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">get_fdata</span><span class="p">()</span>
+        <span class="n">mask_thresh</span> <span class="o">=</span> <span class="n">threshold</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">convolve_with</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">get_fdata</span><span class="p">()</span>
         <span class="n">resized_mask</span> <span class="o">=</span> <span class="n">resize</span><span class="p">(</span><span class="n">mask_thresh</span><span class="p">,</span> <span class="n">roi_size</span><span class="p">)</span>
 
-        <span class="c1"># Convolve each ROI with resized self.in_image</span>
-        <span class="k">for</span> <span class="n">roi</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">doublet_list</span><span class="p">:</span>
-            <span class="n">roi_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">roi_dir</span><span class="p">,</span> <span class="n">roi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">roi</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;.nii&quot;</span><span class="p">)</span>
+        <span class="c1"># Convolve each ROI with resized in_image</span>
+        <span class="c1"># for roi in self.doublet_list:</span>
+        <span class="k">for</span> <span class="n">roi_file</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">images_to_convolve</span><span class="p">:</span>
+            <span class="c1"># roi_file = os.path.join(roi_dir, roi[0] + roi[1] + &quot;.nii&quot;)</span>
             <span class="n">roi_img</span> <span class="o">=</span> <span class="n">nib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">roi_file</span><span class="p">)</span>
             <span class="n">roi_data</span> <span class="o">=</span> <span class="n">roi_img</span><span class="o">.</span><span class="n">get_fdata</span><span class="p">()</span>
             <span class="n">mult</span> <span class="o">=</span> <span class="p">(</span><span class="n">roi_data</span> <span class="o">*</span> <span class="n">resized_mask</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
@@ -1194,14 +1282,19 @@
             <span class="c1">#       Currently we take from ROI images</span>
             <span class="n">mult_img</span> <span class="o">=</span> <span class="n">nib</span><span class="o">.</span><span class="n">Nifti1Image</span><span class="p">(</span><span class="n">mult</span><span class="p">,</span> <span class="n">roi_img</span><span class="o">.</span><span class="n">affine</span><span class="p">,</span> <span class="n">roi_img</span><span class="o">.</span><span class="n">header</span><span class="p">)</span>
 
-            <span class="c1"># Image save in</span>
-            <span class="c1"># self.output_directory/&#39;roi&#39;/&#39;convROI_BOLD&#39;/</span>
+            <span class="c1"># Image save in conv_dir/</span>
             <span class="c1"># &#39;conv&#39;self.doublet_list[0]self.doublet_list[1]&#39;.nii&#39;</span>
+            <span class="c1"># out_file = os.path.join(</span>
+            <span class="c1">#    conv_dir, &quot;conv&quot; + roi[0] + roi[1] + &quot;.nii&quot;</span>
+            <span class="c1"># )</span>
+            <span class="c1"># out_file = os.path.join(</span>
+            <span class="c1">#     conv_dir, &quot;conv&quot; + os.path.basename(roi_file)</span>
+            <span class="c1"># )</span>
             <span class="n">out_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                <span class="n">conv_dir</span><span class="p">,</span> <span class="s2">&quot;conv&quot;</span> <span class="o">+</span> <span class="n">roi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">roi</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;.nii&quot;</span>
+                <span class="n">conv_dir</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">roi_file</span><span class="p">)</span>
             <span class="p">)</span>
             <span class="n">nib</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">mult_img</span><span class="p">,</span> <span class="n">out_file</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2"> saved&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">out_file</span><span class="p">)))</span></div></div>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2"> saved&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">out_file</span><span class="p">))</span></div></div>
 
 
 <div class="viewcode-block" id="Enhance"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.Enhance">[docs]</a><span class="k">class</span> <span class="nc">Enhance</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
@@ -2559,7 +2652,9 @@
 
 <div class="viewcode-block" id="Resample_1"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.Resample_1">[docs]</a><span class="k">class</span> <span class="nc">Resample_1</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    *Resamples an image to the resolution of a reference image.</span>
+<span class="sd">    *Resamples an image to the resolution of a reference image*</span>
+
+<span class="sd">    - Uses nibabel.processing.resample_from_to().</span>
 
 <span class="sd">    Please, see the complete documentation for the</span>
 <span class="sd">    `Resample_1` brick in the populse.mia_processes website</span>
@@ -3120,14 +3215,13 @@
 
 
 <div class="viewcode-block" id="Resample_2"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.Resample_2">[docs]</a><span class="k">class</span> <span class="nc">Resample_2</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Setting regions of interest to the resolution of the reference_image.</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    *Resamples an image to the resolution of a reference image*</span>
 
-<span class="sd">    - ROIs are defined from doublet_list parameter as</span>
-<span class="sd">      doublet_list[0][0] + doublet_list[0][1] + &#39;.nii&#39;,</span>
-<span class="sd">      doublet_list[1][0] + doublet_list[1][1] + &#39;.nii&#39;,</span>
-<span class="sd">      etc.</span>
-<span class="sd">    - The output_directory&quot;/roi_&quot;PatientName&quot;/convROI_BOLD2&quot; directory is</span>
-<span class="sd">      created to receive the convolution results from the runtime.</span>
+<span class="sd">    - Uses skimage.transform.resize()</span>
+<span class="sd">    - The output_directory/PatientName_data/ROI_data/convROI_BOLD2 directory is</span>
+<span class="sd">      created to receive the resampled images. If this directory exists at</span>
+<span class="sd">      runtime it is deleted.</span>
 <span class="sd">    - To work correctly, the database entry for the reference_image parameter</span>
 <span class="sd">      must have the &quot;PatientName&quot; tag filled in.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -3142,27 +3236,52 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">Resample_2</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="c1"># Inputs description</span>
-        <span class="n">doublet_list_desc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;A list of lists containing doublets of strings &quot;</span>
-            <span class="s1">&#39;(e.g. [[&quot;ROI_OCC&quot;, &quot;_L&quot;], [&quot;ROI_OCC&quot;, &quot;_R&quot;], &#39;</span>
-            <span class="s1">&#39;[&quot;ROI_PAR&quot;, &quot;_l&quot;], ...]&#39;</span>
+        <span class="c1"># doublet_list_desc = (</span>
+        <span class="c1">#     &quot;A list of lists containing doublets of strings &quot;</span>
+        <span class="c1">#     &#39;(e.g. [[&quot;ROI_OCC&quot;, &quot;_L&quot;], [&quot;ROI_OCC&quot;, &quot;_R&quot;], &#39;</span>
+        <span class="c1">#     &#39;[&quot;ROI_PAR&quot;, &quot;_l&quot;], ...]&#39;</span>
+        <span class="c1"># )</span>
+
+        <span class="n">files_to_resample_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;The images that will be resampled (a &quot;</span>
+            <span class="s2">&quot;list of pathlike object or string &quot;</span>
+            <span class="s2">&quot;representing a file or a list of items &quot;</span>
+            <span class="s2">&quot;which are a pathlike object or string &quot;</span>
+            <span class="s2">&quot;representing a file, valid extensions: &quot;</span>
+            <span class="s2">&quot;[.img, .nii, .hdr]).&quot;</span>
         <span class="p">)</span>
+
         <span class="n">reference_image_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;The reference image for resampling (an &quot;</span>
             <span class="s2">&quot;existing, uncompressed file)&quot;</span>
         <span class="p">)</span>
 
+        <span class="n">suffix_desc</span> <span class="o">=</span> <span class="s2">&quot;The suffix for the out_images (a string).&quot;</span>
+
         <span class="c1"># Outputs description</span>
-        <span class="n">out_images_desc</span> <span class="o">=</span> <span class="s2">&quot;The resampled  images&quot;</span>
+        <span class="n">out_images_desc</span> <span class="o">=</span> <span class="s2">&quot;The resampled images&quot;</span>
 
         <span class="c1"># Inputs traits</span>
+
+        <span class="c1"># self.add_trait(</span>
+        <span class="c1">#     &quot;doublet_list&quot;, traits.List(output=False, desc=doublet_list_desc)</span>
+        <span class="c1"># )</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
-            <span class="s2">&quot;doublet_list&quot;</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">doublet_list_desc</span><span class="p">)</span>
+            <span class="s2">&quot;files_to_resample&quot;</span><span class="p">,</span>
+            <span class="n">InputMultiPath</span><span class="p">(</span>
+                <span class="n">ImageFileSPM</span><span class="p">(),</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">files_to_resample_desc</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;reference_image&quot;</span><span class="p">,</span>
             <span class="n">ImageFileSPM</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">reference_image_desc</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;suffix&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="s2">&quot;_2&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">suffix_desc</span><span class="p">),</span>
         <span class="p">)</span>
 
         <span class="c1"># Outputs traits</span>
@@ -3196,7 +3315,10 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">Resample_2</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="c1"># Outputs definition and tags inheritance (optional)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">doublet_list</span> <span class="o">!=</span> <span class="p">[]</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference_image</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">files_to_resample</span> <span class="o">!=</span> <span class="n">Undefined</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference_image</span> <span class="o">!=</span> <span class="n">Undefined</span>
+        <span class="p">):</span>
             <span class="n">patient_name</span> <span class="o">=</span> <span class="n">get_dbFieldValue</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference_image</span><span class="p">,</span> <span class="s2">&quot;PatientName&quot;</span>
             <span class="p">)</span>
@@ -3210,65 +3332,20 @@
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;patient_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">patient_name</span>
-            <span class="n">roi_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="s2">&quot;roi_&quot;</span> <span class="o">+</span> <span class="n">patient_name</span>
+            <span class="n">conv_dir2</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                <span class="n">patient_name</span> <span class="o">+</span> <span class="s2">&quot;_data&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;ROI_data&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;convROI_BOLD2&quot;</span><span class="p">,</span>
             <span class="p">)</span>
-
-            <span class="c1"># if not existing, creates self.output_directory&#39;/roi_&#39;patient_name</span>
-            <span class="c1"># folder. If already existing, remove the roi_dir&#39;/convROI_BOLD2&#39;</span>
-            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">roi_dir</span><span class="p">):</span>
-                <span class="n">elts</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">roi_dir</span><span class="p">)</span>
-                <span class="c1"># filtering only the directories</span>
-                <span class="n">dirs</span> <span class="o">=</span> <span class="p">[</span>
-                    <span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">elts</span> <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">roi_dir</span><span class="p">,</span> <span class="n">d</span><span class="p">))</span>
-                <span class="p">]</span>
-                <span class="n">tmp</span> <span class="o">=</span> <span class="kc">False</span>
-
-                <span class="k">if</span> <span class="s2">&quot;convROI_BOLD2&quot;</span> <span class="ow">in</span> <span class="n">dirs</span><span class="p">:</span>
-                    <span class="n">tmp</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mktemp</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">roi_dir</span><span class="p">))</span>
-                    <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
-                    <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span>
-                        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">roi_dir</span><span class="p">,</span> <span class="s2">&quot;convROI_BOLD2&quot;</span><span class="p">),</span>
-                        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="s2">&quot;convROI_BOLD2&quot;</span><span class="p">),</span>
-                    <span class="p">)</span>
-                    <span class="nb">print</span><span class="p">(</span>
-                        <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Resample_2 brick:</span><span class="se">\n</span><span class="s1">A &quot;</span><span class="si">{}</span><span class="s1">&quot; folder already exists, &#39;</span>
-                        <span class="s2">&quot;it will be overwritten by this new &quot;</span>
-                        <span class="s2">&quot;calculation...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">roi_dir</span><span class="p">,</span> <span class="s2">&quot;convROI_BOLD2&quot;</span><span class="p">)</span>
-                        <span class="p">)</span>
-                    <span class="p">)</span>
-
-                    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">tmp</span><span class="p">):</span>
-                        <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
-
-                <span class="k">if</span> <span class="s2">&quot;convROI_BOLD&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dirs</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span>
-                        <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Resample_2 brick:</span><span class="se">\n</span><span class="s2">No </span><span class="si">{}</span><span class="s2"> folder detected ...</span><span class="se">\n</span><span class="s2">The &quot;</span>
-                        <span class="s2">&quot;initialization is &quot;</span>
-                        <span class="s2">&quot;aborted ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                            <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">roi_dir</span><span class="p">,</span> <span class="s2">&quot;convROI_BOLD&quot;</span><span class="p">)</span>
-                        <span class="p">)</span>
-                    <span class="p">)</span>
-                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
-
-            <span class="k">else</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span>
-                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Resample_2 brick:</span><span class="se">\n</span><span class="s2">No </span><span class="si">{}</span><span class="s2"> folder detected ...</span><span class="se">\n</span><span class="s2">The &quot;</span>
-                    <span class="s2">&quot;initialization is aborted ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">roi_dir</span><span class="p">)</span>
-                <span class="p">)</span>
-                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
-
-            <span class="c1"># Creates roi_dir/&#39;convROI_BOLD2&#39; folder</span>
-            <span class="n">conv_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">roi_dir</span><span class="p">,</span> <span class="s2">&quot;convROI_BOLD2&quot;</span><span class="p">)</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">conv_dir</span><span class="p">)</span>
-
             <span class="n">list_out</span> <span class="o">=</span> <span class="p">[]</span>
 
-            <span class="k">for</span> <span class="n">roi</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">doublet_list</span><span class="p">:</span>
-                <span class="n">list_out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">conv_dir</span><span class="p">,</span> <span class="s2">&quot;conv&quot;</span> <span class="o">+</span> <span class="n">roi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">roi</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;2.nii&quot;</span><span class="p">)</span>
-                <span class="p">)</span>
+            <span class="k">for</span> <span class="n">roi_file</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">files_to_resample</span><span class="p">:</span>
+                <span class="n">out_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">roi_file</span><span class="p">)</span>
+                <span class="n">out_file_no_ext</span><span class="p">,</span> <span class="n">file_extension</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">out_file</span><span class="p">)</span>
+                <span class="n">out_file</span> <span class="o">=</span> <span class="n">out_file_no_ext</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">suffix</span> <span class="o">+</span> <span class="n">file_extension</span>
+                <span class="n">out_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">conv_dir2</span><span class="p">,</span> <span class="n">out_file</span><span class="p">)</span>
+                <span class="n">list_out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">out_file</span><span class="p">)</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;out_images&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">list_out</span>
 
@@ -3281,20 +3358,52 @@
         <span class="c1"># No need the next line (we don&#39;t use self.process et SPM)</span>
         <span class="c1"># super(Resample_2, self).run_process_mia()</span>
 
-        <span class="n">roi_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="s2">&quot;roi_&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;patient_name&quot;</span><span class="p">]</span>
+        <span class="n">pat_name_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;patient_name&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;_data&quot;</span>
         <span class="p">)</span>
-        <span class="n">conv_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">roi_dir</span><span class="p">,</span> <span class="s2">&quot;convROI_BOLD&quot;</span><span class="p">)</span>
-        <span class="n">conv_dir2</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">roi_dir</span><span class="p">,</span> <span class="s2">&quot;convROI_BOLD2&quot;</span><span class="p">)</span>
 
-        <span class="c1"># Setting ROIs to the resolution of the reference_image</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">pat_name_dir</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">pat_name_dir</span><span class="p">)</span>
+
+        <span class="n">roi_data_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pat_name_dir</span><span class="p">,</span> <span class="s2">&quot;ROI_data&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">roi_data_dir</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">roi_data_dir</span><span class="p">)</span>
+
+        <span class="c1"># conv_dir = os.path.join(roi_dir, &quot;convROI_BOLD&quot;)</span>
+        <span class="n">conv_dir2</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">roi_data_dir</span><span class="p">,</span> <span class="s2">&quot;convROI_BOLD2&quot;</span><span class="p">)</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="s2">&quot;None&quot;</span>
+
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">conv_dir2</span><span class="p">):</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mktemp</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">roi_data_dir</span><span class="p">))</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">conv_dir2</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="s2">&quot;convROI_BOLD2&quot;</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Resample_2 brick:</span><span class="se">\n</span><span class="s1">A &quot;</span><span class="si">{}</span><span class="s1">&quot; folder already exists, &#39;</span>
+                <span class="s2">&quot;it will be overwritten by this new &quot;</span>
+                <span class="s2">&quot;calculation...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">conv_dir2</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">conv_dir2</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">tmp</span><span class="p">):</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+
+        <span class="c1"># roi_dir = os.path.join(</span>
+        <span class="c1">#     self.output_directory,</span>
+        <span class="c1">#     self.dict4runtime[&quot;patient_name&quot;] + &quot;_data&quot;</span>
+        <span class="c1"># )</span>
+        <span class="c1"># conv_dir = os.path.join(roi_dir, &quot;convROI_BOLD&quot;)</span>
+        <span class="c1"># conv_dir2 = os.path.join(roi_dir, &quot;convROI_BOLD2&quot;)</span>
+
+        <span class="c1"># Setting files_to_resample to the resolution of the reference_image</span>
         <span class="n">mask</span> <span class="o">=</span> <span class="n">nib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reference_image</span><span class="p">)</span><span class="o">.</span><span class="n">get_fdata</span><span class="p">()</span>
         <span class="n">mask_size</span> <span class="o">=</span> <span class="n">mask</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
 
-        <span class="k">for</span> <span class="n">roi</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">doublet_list</span><span class="p">:</span>
-            <span class="n">roi_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                <span class="n">conv_dir</span><span class="p">,</span> <span class="s2">&quot;conv&quot;</span> <span class="o">+</span> <span class="n">roi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">roi</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;.nii&quot;</span>
-            <span class="p">)</span>
+        <span class="c1"># for roi in self.doublet_list:</span>
+        <span class="c1">#     roi_file = os.path.join(</span>
+        <span class="c1">#         conv_dir, &quot;conv&quot; + roi[0] + roi[1] + &quot;.nii&quot;</span>
+        <span class="c1">#     )</span>
+        <span class="k">for</span> <span class="n">roi_file</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">files_to_resample</span><span class="p">:</span>
             <span class="n">roi_img</span> <span class="o">=</span> <span class="n">nib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">roi_file</span><span class="p">)</span>
             <span class="n">roi_data</span> <span class="o">=</span> <span class="n">roi_img</span><span class="o">.</span><span class="n">get_fdata</span><span class="p">()</span>
             <span class="n">resized_roi</span> <span class="o">=</span> <span class="n">resize</span><span class="p">(</span><span class="n">roi_data</span><span class="p">,</span> <span class="n">mask_size</span><span class="p">)</span>
@@ -3305,11 +3414,11 @@
             <span class="p">)</span>
 
             <span class="c1"># Image save</span>
-            <span class="n">out_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                <span class="n">conv_dir2</span><span class="p">,</span> <span class="s2">&quot;conv&quot;</span> <span class="o">+</span> <span class="n">roi</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">roi</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;2.nii&quot;</span>
-            <span class="p">)</span>
+            <span class="n">out_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">roi_file</span><span class="p">)</span>
+            <span class="n">out_file_no_ext</span><span class="p">,</span> <span class="n">file_extension</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">out_file</span><span class="p">)</span>
+            <span class="n">out_file</span> <span class="o">=</span> <span class="n">out_file_no_ext</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">suffix</span> <span class="o">+</span> <span class="n">file_extension</span>
+            <span class="n">out_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">conv_dir2</span><span class="p">,</span> <span class="n">out_file</span><span class="p">)</span>
             <span class="n">nib</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">resized_img</span><span class="p">,</span> <span class="n">out_file</span><span class="p">)</span>
-
             <span class="nb">print</span><span class="p">(</span>
                 <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Resample_2 brick:</span><span class="si">{0}</span><span class="s2"> saved&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                     <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">out_file</span><span class="p">)</span>
