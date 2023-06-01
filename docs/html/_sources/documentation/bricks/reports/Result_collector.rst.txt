@@ -10,8 +10,16 @@
 Result_collector brick
 ======================
 
+Generates files with data for each region of interest
+-----------------------------------------------------
 
-----------
+    - The out_files will contain files with names corresponding to each `calculs` and `parametric_maps`
+      with the prefix `data` (e.g. BOLD_mean_spmT_0001.xls).
+    - The process look for input data corresponding to `mean_in_files` and `std_in_files`
+    - To work correctly, the "/roi\_\ `PatientName`/ROI_analysis" directory must exit to receive
+      the results from the runtime.
+    - To work correctly, the database entry for the first element of `parametric_maps` must
+      have the `PatientName` tag filled in.
 
 
 **Inputs parameters:**
@@ -54,7 +62,7 @@ Result_collector brick
 
 
 
-      
+
 - *std_in_files* (a list of files)
     A list of .txt files containing the standard deviation for a parameter
     in a given territory or region of interest.
@@ -79,7 +87,7 @@ Result_collector brick
 
 - *patient_info* (a dictionary)
     A dictionary whose keys/values correspond to information about the patient.
-    
+
     e.g. {
           | 'PatientName': 'ablair',
           | 'Pathology': 'ACMD',
@@ -94,7 +102,7 @@ Result_collector brick
 
       ex. {'PatientName': <undefined>, 'Pathology': <undefined>, 'Age': <undefined>, 'Sex': <undefined>, 'MR': <undefined>, 'Gas': <undefined>, 'GasAdmin': <undefined>}
 
-      
+
 **Outputs parameters:**
 
 - *out_files* (a list of files)

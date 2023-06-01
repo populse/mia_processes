@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.preprocess.others package &#8212; mia_processes 2.2.1-dev+a9ea159 documentation</title>
+    <title>mia_processes.bricks.preprocess.others package &#8212; mia_processes 2.2.1-dev+b6fbfd4 documentation</title>
     <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -18,7 +18,7 @@
     <link rel="search" title="Search" href="search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="index.html">
-          <span>mia_processes 2.2.1-dev+a9ea159 documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+b6fbfd4 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.preprocess.others package</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -297,21 +297,18 @@ self.make_initResult() object.</p>
 <em class="property">class </em><code class="sig-prename descclassname">mia_processes.bricks.preprocess.others.processing.</code><code class="sig-name descname">ConvROI</code><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#ConvROI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.ConvROI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
 <ul class="simple">
-<li><p>Convolve regions of interest with a mask.</p></li>
+<li><p>Convolve images with an image.</p></li>
 </ul>
 <ul class="simple">
-<li><p>Resampling the mask to the size of the ROIs, using the first ROI.</p></li>
-<li><p>Then convolve each ROI with resized mask.</p></li>
-<li><p>ROIs are defined from doublet_list parameter as
-doublet_list[0][0] + doublet_list[0][1] + ‘.nii’,
-doublet_list[1][0] + doublet_list[1][1] + ‘.nii’,
-etc.</p></li>
-<li><p>The output_directory”/<a href="#id25"><span class="problematic" id="id26">roi_</span></a>”PatientName directory is created with the
-corresponding ROI files (the miaresources package must be installed).</p></li>
-<li><p>The output_directory”/<a href="#id27"><span class="problematic" id="id28">roi_</span></a>”PatientName”/convROI_BOLD” directory is
-created to receive the convolution results from the runtime.</p></li>
-<li><p>To work correctly, the database entry for the in_image parameter must
-have the “PatientName” tag filled in.</p></li>
+<li><p>Resampling the convolve_with to the size of images_to_convolve,
+using the first element of images_to_convolve.</p></li>
+<li><p>Then convolve each element of images_to_convolve with resized
+convolve_with.</p></li>
+<li><p>The output_directory/PatientName_data/ROI_data/convROI_BOLD directory is
+created to receive the convolved images. If this directory exists at
+runtime it is deleted.</p></li>
+<li><p>To work correctly, the database entry for the convolve_with
+parameter must have the “PatientName” tag filled in.</p></li>
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -741,7 +738,10 @@ self.make_initResult() object.</p>
 <dt id="mia_processes.bricks.preprocess.others.processing.Resample_1">
 <em class="property">class </em><code class="sig-prename descclassname">mia_processes.bricks.preprocess.others.processing.</code><code class="sig-name descname">Resample_1</code><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Resample_1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Resample_1" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
-<p><a href="#id21"><span class="problematic" id="id22">*</span></a>Resamples an image to the resolution of a reference image.</p>
+<p><em>Resamples an image to the resolution of a reference image</em></p>
+<ul class="simple">
+<li><p>Uses nibabel.processing.resample_from_to().</p></li>
+</ul>
 <p>Please, see the complete documentation for the
 <cite>Resample_1</cite> brick in the populse.mia_processes website
 <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/Resample_1.html">https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/Resample_1.html</a></p>
@@ -792,14 +792,12 @@ self.make_initResult() object.</p>
 <dt id="mia_processes.bricks.preprocess.others.processing.Resample_2">
 <em class="property">class </em><code class="sig-prename descclassname">mia_processes.bricks.preprocess.others.processing.</code><code class="sig-name descname">Resample_2</code><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Resample_2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Resample_2" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
-<p>Setting regions of interest to the resolution of the reference_image.</p>
+<p><em>Resamples an image to the resolution of a reference image</em></p>
 <ul class="simple">
-<li><p>ROIs are defined from doublet_list parameter as
-doublet_list[0][0] + doublet_list[0][1] + ‘.nii’,
-doublet_list[1][0] + doublet_list[1][1] + ‘.nii’,
-etc.</p></li>
-<li><p>The output_directory”/<a href="#id29"><span class="problematic" id="id30">roi_</span></a>”PatientName”/convROI_BOLD2” directory is
-created to receive the convolution results from the runtime.</p></li>
+<li><p>Uses skimage.transform.resize()</p></li>
+<li><p>The output_directory/PatientName_data/ROI_data/convROI_BOLD2 directory is
+created to receive the resampled images. If this directory exists at
+runtime it is deleted.</p></li>
 <li><p>To work correctly, the database entry for the reference_image parameter
 must have the “PatientName” tag filled in.</p></li>
 </ul>
@@ -966,7 +964,7 @@ self.make_initResult() object.</p>
 <li><p>Computes the time-course SNR for a time series.</p></li>
 </ul>
 <p>Please, see the complete documentation for the
-<a href="#id23"><span class="problematic" id="id24">`</span></a>TSNR’ brick in the populse.mia_processes website
+<a href="#id21"><span class="problematic" id="id22">`</span></a>TSNR’ brick in the populse.mia_processes website
 <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/TSNR.html">https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/TSNR.html</a></p>
 <p>adapted from:
 <a class="reference external" href="https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5de5913b31/nipype/algorithms/confounds.py#L899">https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5de5913b31/nipype/algorithms/confounds.py#L899</a></p>
