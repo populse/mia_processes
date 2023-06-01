@@ -190,9 +190,13 @@ def mriqc_get_all_run(modality, project, output_directory):
             jsonfile.find(project.getName()) + len(project.getName()) + 1
         )
         json_database_filename = jsonfile[file_position:]
-        file_name = data_history_pipeline(
-            json_database_filename, project
-        ).in_file
+        try:
+            file_name = data_history_pipeline(
+                json_database_filename, project
+            ).in_file
+        except:
+            # if we removed all mriqc data execpt json and pdf
+            file_name = json_database_filename
         files_name.append(file_name)
     return files_name
 
