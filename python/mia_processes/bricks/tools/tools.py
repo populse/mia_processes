@@ -46,8 +46,8 @@ from nipype.interfaces.spm.base import ImageFileSPM
 
 # populse_mia imports
 from populse_mia.data_manager.data_history_inspect import (
-        get_data_history_processes,
-        get_filenames_in_value
+    get_data_history_processes,
+    get_filenames_in_value,
 )
 from populse_mia.data_manager.filter import Filter
 from populse_mia.data_manager.project import BRICK_OUTPUTS, COLLECTION_CURRENT
@@ -55,6 +55,7 @@ from populse_mia.software_properties import Config
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 
 from mia_processes.utils import get_dbFieldValue
+
 
 class Concat_to_list(ProcessMIA):
     """
@@ -79,8 +80,9 @@ class Concat_to_list(ProcessMIA):
         list2_desc = "A list"
 
         # Outputs description
-        out_list_desc = ("A list corresponding to the concatenation of list1 "
-                         "and list2")
+        out_list_desc = (
+            "A list corresponding to the concatenation of list1 " "and list2"
+        )
 
         # Inputs traits
         self.add_trait(
@@ -130,7 +132,6 @@ class Concat_to_list(ProcessMIA):
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
         return
-
 
 
 class Concat_to_list_of_list(ProcessMIA):
@@ -247,39 +248,49 @@ class Delete_data(ProcessMIA):
         self.requirement = []  # no need of third party software!
 
         # Inputs description
-        in_file_desc = ("Output file from a brick or a pipeline. "
-                        "The outputs from the history of this file "
-                        "will be removed.")
-        to_keep_filters_desc = ("A list of regex. Files that match those "
-                                "regex will be kept and the others files "
-                                "will be deleted. "
-                                "Mutually exclusif with to_remove_filters")
-        to_remove_filters_desc = ("A list of regex.  Files that match those "
-                                  "regex will be deleted and the others files "
-                                  "will be kept. "
-                                  "Mutually exclusif with to_keep_filters")
+        in_file_desc = (
+            "Output file from a brick or a pipeline. "
+            "The outputs from the history of this file "
+            "will be removed."
+        )
+        to_keep_filters_desc = (
+            "A list of regex. Files that match those "
+            "regex will be kept and the others files "
+            "will be deleted. "
+            "Mutually exclusif with to_remove_filters"
+        )
+        to_remove_filters_desc = (
+            "A list of regex.  Files that match those "
+            "regex will be deleted and the others files "
+            "will be kept. "
+            "Mutually exclusif with to_keep_filters"
+        )
 
         # Outputs description
-        files_removed_desc = 'List of files removed from database'
+        files_removed_desc = "List of files removed from database"
 
         # Inputs traits
-        self.add_trait("in_file",
-                       traits.File(output=False, desc=in_file_desc))
+        self.add_trait("in_file", traits.File(output=False, desc=in_file_desc))
 
-        self.add_trait("to_keep_filters",
-                       traits.List(output=False,
-                                   desc=to_keep_filters_desc))
+        self.add_trait(
+            "to_keep_filters",
+            traits.List(output=False, desc=to_keep_filters_desc),
+        )
         # default for mriqc pipeline
-        self.to_keep_filters = ["(.)*pdf",
-                                "(.)*_qc.json",
-                                "(.)*desc-carpet(.)*"]
+        self.to_keep_filters = [
+            "(.)*pdf",
+            "(.)*_qc.json",
+            "(.)*desc-carpet(.)*",
+        ]
 
-        self.add_trait("to_remove_filters",
-                       traits.List(output=False,
-                                   desc=to_remove_filters_desc))
+        self.add_trait(
+            "to_remove_filters",
+            traits.List(output=False, desc=to_remove_filters_desc),
+        )
         # Outputs traits
-        self.add_trait("files_removed",
-                       traits.List(output=True, desc=files_removed_desc))
+        self.add_trait(
+            "files_removed", traits.List(output=True, desc=files_removed_desc)
+        )
 
         self.init_default_traits()
 
@@ -297,10 +308,7 @@ class Delete_data(ProcessMIA):
 
         super(Delete_data, self).list_outputs()
 
-        if (
-            self.to_keep_filters
-            and self.to_remove_filters
-        ):
+        if self.to_keep_filters and self.to_remove_filters:
             print(
                 "\nInitialisation failed. to_keep_filters and "
                 "to_remove_filter parameters are mutually exclusif...!"
@@ -311,12 +319,12 @@ class Delete_data(ProcessMIA):
         # to get all the outputfile of the pipeline/brick
         file_position = (
             self.in_file.find(self.project.getName())
-            + len(self.project.getName()) + 1
+            + len(self.project.getName())
+            + 1
         )
         file_database_name = self.in_file[file_position:]
 
-        procs, _ = get_data_history_processes(file_database_name,
-                                              self.project)
+        procs, _ = get_data_history_processes(file_database_name, self.project)
         outputs_filename = set()
         if procs:
             for proc in procs.values():
@@ -343,8 +351,7 @@ class Delete_data(ProcessMIA):
         self.files_removed = outputs_filename
         for doc in outputs_filename:
             # Remove document from database
-            self.project.session.remove_document(COLLECTION_CURRENT,
-                                                 doc)
+            self.project.session.remove_document(COLLECTION_CURRENT, doc)
             full_doc_path = os.path.join(self.project.folder, doc)
             # Remove from project
             if os.path.isfile(full_doc_path):
