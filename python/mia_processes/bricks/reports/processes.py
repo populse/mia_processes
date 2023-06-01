@@ -1784,8 +1784,7 @@ class Mean_stdDev_calc(ProcessMIA):
                     map_name = os.path.basename(parametric_map)[0:4] + "_BOLD"
                     roi_name, _ = os.path.splitext(os.path.basename(roi))
                     mean_out_file = os.path.join(
-                            analysis_dir,
-                            roi_name + "_mean_" + map_name + ".txt"
+                        analysis_dir, roi_name + "_mean_" + map_name + ".txt"
                     )
                     mean_out_files.append(mean_out_file)
                     self.inheritance_dict[mean_out_file] = parametric_map
@@ -1796,8 +1795,7 @@ class Mean_stdDev_calc(ProcessMIA):
                     #     )
                     # )
                     std_out_file = os.path.join(
-                            analysis_dir,
-                            roi_name + "_std_" + map_name + ".txt"
+                        analysis_dir, roi_name + "_std_" + map_name + ".txt"
                     )
                     std_out_files.append(std_out_file)
                     self.inheritance_dict[std_out_file] = parametric_map
@@ -2015,17 +2013,20 @@ class Result_collector(ProcessMIA):
         super(Result_collector, self).__init__()
 
         # Inputs description
-        # parametric_maps_desc = "A list of files (existing, uncompressed file)"
+        # parametric_maps_desc = "A list of files (existing, uncompressed "
+        #                        "file)"
         # data_desc = "Defines the data type (a string, e.g. BOLD)"
         # calculs_desc = (
         #     "Defines the type of calculation (a list of strings, "
         #     'e.g. ["mean", "std", "IL_mean", "IL_std"]'
         # )
         laterality_index_desc = "Calculates the laterality indexes (a boolean)"
-        parameter_files_desc = ("A list of .txt files. Each file contains one (and "
-                           "only one) value. The name of each file is used to "
-                           "define this value. The name must exactly be like "
-                           "this: roi_hemi_calcul_param_contrast")
+        parameter_files_desc = (
+            "A list of .txt files. Each file contains one (and "
+            "only one) value. The name of each file is used to "
+            "define this value. The name must exactly be like "
+            "this: roi_hemi_calcul_param_contrast"
+        )
         # mean_in_files_desc = (
         #     "A list of .txt files containing the average "
         #     "value of a parameter for a given territory or "
@@ -2063,7 +2064,7 @@ class Result_collector(ProcessMIA):
                 output=False,
                 optional=False,
                 desc=parameter_files_desc,
-                 )
+            ),
         )
         # self.add_trait(
         #     "parametric_maps",
@@ -2076,7 +2077,8 @@ class Result_collector(ProcessMIA):
         #
         # self.add_trait(
         #     "data",
-        #     traits.String("BOLD", output=False, optional=True, desc=data_desc),
+        #     traits.String("BOLD", output=False, optional=True,
+        #                   desc=data_desc),
         # )
         #
         # self.add_trait(
@@ -2102,7 +2104,8 @@ class Result_collector(ProcessMIA):
 
         # self.add_trait(
         #     "mean_in_files",
-        #     traits.List(traits.File(), output=False, desc=mean_in_files_desc),
+        #     traits.List(traits.File(), output=False,
+        #                 desc=mean_in_files_desc),
         # )
         #
         # self.add_trait(
@@ -2177,7 +2180,6 @@ class Result_collector(ProcessMIA):
             patient_name = get_dbFieldValue(
                 self.project, self.parameter_files[0], "PatientName"
             )
-
             if patient_name is None:
                 print(
                     "\nResult_collector brick:\nThe PatientName tag is not "
@@ -2190,10 +2192,13 @@ class Result_collector(ProcessMIA):
 
             self.dict4runtime["patient_name"] = patient_name
 
-            aggreg_results_dir = os.path.join(self.output_directory,
-                                              patient_name + "_data",
-                                              "results_aggregation")
+            aggreg_results_dir = os.path.join(
+                self.output_directory,
+                patient_name + "_data",
+                "results_aggregation",
+            )
             out_files = set()
+            res = dict()
 
             for data in self.parameter_files:
                 # FIXME 1: We need to protect the following command line. Case
@@ -2209,20 +2214,68 @@ class Result_collector(ProcessMIA):
                 roi, hemi, calcul, param, contrast = os.path.splitext(
                     os.path.basename(data)
                 )[0].split("_")
-                out_files.add(os.path.join(
-                    aggreg_results_dir,
-                    "{0}_{1}_{2}.xls".format(contrast, calcul, param))
+                out_files.add(
+                    os.path.join(
+                        aggreg_results_dir,
+                        "{0}_{1}_{2}.xls".format(contrast, calcul, param),
+                    )
                 )
-                if (self.laterality_index is True and
-                    'L' in res[contrast][param][calcul][roi] and
-                    'R' in res[contrast][param][calcul][roi]):
 
+                if contrast not in res:
+                    res[contrast] = {}
 
+                if param not in res[contrast]:
+                    res[contrast][param] = {}
 
+                # if param not in parametrics:
+                #     parametrics.append(param)
 
+                if calcul not in res[contrast][param]:
+                    res[contrast][param][calcul] = {}
 
+                if (
+                    self.laterality_index is True
+                    and "IL_" + calcul not in res[contrast][param]
+                ):
+                    res[contrast][param]["IL_" + calcul] = {}
 
+                # if calcul not in calculs:
+                #     calculs.append(calcul)
 
+                if roi not in res[contrast][param][calcul]:
+                    res[contrast][param][calcul][roi] = {}
+
+                if (
+                    self.laterality_index is True
+                    and roi not in res[contrast][param]["IL_" + calcul]
+                ):
+                    res[contrast][param]["IL_" + calcul][roi] = {}
+
+                if hemi in res[contrast][param][calcul][roi]:
+                    print(
+                        "\nResult_collector brick:\nThe data for "
+                        "{0}-{1}-{2}-{3}-{4} in {5} already exists "
+                        "in the final result. Overwriting with the new "
+                        "data ...\n".format(
+                            contrast, param, calcul, roi, hemi, data
+                        )
+                    )
+
+                res[contrast][param][calcul][roi][hemi] = True
+
+                if (
+                    self.laterality_index is True
+                    and "L" in res[contrast][param][calcul][roi]
+                    and "R" in res[contrast][param][calcul][roi]
+                ):
+                    out_files.add(
+                        os.path.join(
+                            aggreg_results_dir,
+                            "{0}_{1}_{2}.xls".format(
+                                contrast, "IL_" + calcul, param
+                            ),
+                        )
+                    )
 
             # roi_dir = os.path.join(
             #     self.output_directory, "roi_" + patient_name
@@ -2264,12 +2317,13 @@ class Result_collector(ProcessMIA):
 
             # FIXME: the data should be anonymized and we should use PatientRef
             #        instead of PatientName !
+
             if (
                 self.patient_info.get("PatientName") is None
                 or self.patient_info["PatientName"] == Undefined
             ):
                 patient_ref = get_dbFieldValue(
-                    self.project, self.parametric_maps[0], "PatientRef"
+                    self.project, self.parameter_files[0], "PatientRef"
                 )
 
                 if patient_ref is None:
@@ -2388,18 +2442,19 @@ class Result_collector(ProcessMIA):
         if not os.path.exists(pat_name_dir):
             os.mkdir(pat_name_dir)
 
-        aggreg_results_dir = os.path.join(pat_name_dir,
-                                          "results_aggregation")
+        aggreg_results_dir = os.path.join(pat_name_dir, "results_aggregation")
 
         if not os.path.exists(aggreg_results_dir):
             os.mkdir(aggreg_results_dir)
 
         else:
-            print("Result_collector brick warning: The {} directory exists "
-                  "before the start of the calculation. Its contents can be "
-                  "overwritten by the result of the current "
-                  "calculation ...!".format(aggreg_results_dir))
-        #analysis_dir = os.path.join(roi_dir, "ROI_analysis")
+            print(
+                "Result_collector brick warning: The {} directory exists "
+                "before the start of the calculation. Its contents can be "
+                "overwritten by the result of the current "
+                "calculation ...!".format(aggreg_results_dir)
+            )
+        # analysis_dir = os.path.join(roi_dir, "ROI_analysis")
 
         # FIXME: The following check is already performed at initialisation
         #        time. We could remove the check here.
@@ -2414,13 +2469,13 @@ class Result_collector(ProcessMIA):
         # the summary of the data:
         # res[contrast][param][calcul][roi][hemi] = data_val
         res = dict()
-#        parametrics = []  # the parametric data
-#        calculs = []  # the calcul types
+        #        parametrics = []  # the parametric data
+        #        calculs = []  # the calcul types
         # rois = []  # the ROIs under analysis
-#        contrast = []  # the contrast used
+        #        contrast = []  # the contrast used
         # Waiting for take in input the merged
         # self.mean_in_files + self.std_in_files
-        #all_data = self.mean_in_files + self.std_in_files ###########################
+        # all_data = self.mean_in_files + self.std_in_files
 
         for data in self.parameter_files:
             # FIXME 1: We need to protect the following command line. Case
@@ -2450,8 +2505,10 @@ class Result_collector(ProcessMIA):
             if calcul not in res[contrast][param]:
                 res[contrast][param][calcul] = {}
 
-            if (self.laterality_index is True and
-                    "IL_" + calcul not in res[contrast][param]):
+            if (
+                self.laterality_index is True
+                and "IL_" + calcul not in res[contrast][param]
+            ):
                 res[contrast][param]["IL_" + calcul] = {}
 
             # if calcul not in calculs:
@@ -2460,8 +2517,10 @@ class Result_collector(ProcessMIA):
             if roi not in res[contrast][param][calcul]:
                 res[contrast][param][calcul][roi] = {}
 
-            if (self.laterality_index is True and
-                    roi not in res[contrast][param]["IL_" + calcul]):
+            if (
+                self.laterality_index is True
+                and roi not in res[contrast][param]["IL_" + calcul]
+            ):
                 res[contrast][param]["IL_" + calcul][roi] = {}
 
             try:
@@ -2479,28 +2538,26 @@ class Result_collector(ProcessMIA):
                 print(
                     "\nResult_collector brick:\nThe data for {0}-{1}-{2}-{3}"
                     "-{4} in {5} already exists in the final result. "
-                    "Overwriting with the new data ...\n".format(contrast,
-                                                                 param,
-                                                                 calcul,
-                                                                 roi,
-                                                                 hemi,
-                                                                 data)
+                    "Overwriting with the new data ...\n".format(
+                        contrast, param, calcul, roi, hemi, data
+                    )
                 )
 
             res[contrast][param][calcul][roi][hemi] = data_val
 
-            if (self.laterality_index is True and
-                    'L' in res[contrast][param][calcul][roi] and
-                    'R' in res[contrast][param][calcul][roi]):
-                left = res[contrast][param][calcul][roi]['L']
-                right = res[contrast][param][calcul][roi]['R']
-                res[contrast][param]["IL_" + calcul][roi] = ((left - right)
-                                                             / (left + right))
+            if (
+                self.laterality_index is True
+                and "L" in res[contrast][param][calcul][roi]
+                and "R" in res[contrast][param][calcul][roi]
+            ):
+                left = res[contrast][param][calcul][roi]["L"]
+                right = res[contrast][param][calcul][roi]["R"]
+                res[contrast][param]["IL_" + calcul][roi] = (left - right) / (
+                    left + right
+                )
 
         for contrast in res:
-
             for param in res[contrast]:
-
                 for calcul in res[contrast][param]:
                     out_file = os.path.join(
                         aggreg_results_dir,
@@ -2517,24 +2574,21 @@ class Result_collector(ProcessMIA):
                         f.write("{0}\t".format("Admin"))
 
                         if not calcul.startswith("IL_"):
-
-                                 for roi in res[contrast][param][calcul]:
-
-                                     for hemi in res[contrast][param][calcul][
-                                                     roi]:
-                                         f.write(
-                                         "{0}_{1}_{2}\t".format(param,
-                                                                roi,
-                                                                hemi)
+                            for roi in res[contrast][param][calcul]:
+                                for hemi in res[contrast][param][calcul][roi]:
+                                    f.write(
+                                        "{0}_{1}_{2}\t".format(
+                                            param, roi, hemi
                                         )
+                                    )
 
                         else:
-
                             for roi in res[contrast][param][calcul]:
                                 f.write("{0}_{1}\t".format(param, roi))
 
                         f.write(
-                            "\n{0}\t".format(self.patient_info["PatientName"]))
+                            "\n{0}\t".format(self.patient_info["PatientName"])
+                        )
                         f.write("{0}\t".format(self.patient_info["Pathology"]))
                         f.write("{0}\t".format(self.patient_info["Age"]))
                         f.write("{0}\t".format(self.patient_info["Sex"]))
@@ -2543,24 +2597,23 @@ class Result_collector(ProcessMIA):
                         f.write("{0}\t".format(self.patient_info["GasAdmin"]))
 
                         if not calcul.startswith("IL_"):
-
                             for roi in res[contrast][param][calcul]:
-
                                 for hemi in res[contrast][param][calcul][roi]:
                                     f.write(
                                         "{0}\t".format(
-                                    res[contrast][param][calcul][roi][hemi])
+                                            res[contrast][param][calcul][roi][
+                                                hemi
+                                            ]
+                                        )
                                     )
 
                         else:
-
                             for roi in res[contrast][param][calcul]:
                                 f.write(
                                     "{0}\t".format(
-                                        res[contrast][param][calcul][roi])
+                                        res[contrast][param][calcul][roi]
+                                    )
                                 )
-
-
 
         # for parametric_map in self.parametric_maps:
         #     map_name_file = os.path.basename(parametric_map)[0:9]

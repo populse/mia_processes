@@ -50,6 +50,7 @@ from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 
 from mia_processes.utils import get_dbFieldValue
 
+
 class Concat_to_list(ProcessMIA):
     """
     *Make an output list corresponding to the concatenation of list1 and list2*
@@ -73,8 +74,9 @@ class Concat_to_list(ProcessMIA):
         list2_desc = "A list"
 
         # Outputs description
-        out_list_desc = ("A list corresponding to the concatenation of list1 "
-                         "and list2")
+        out_list_desc = (
+            "A list corresponding to the concatenation of list1 " "and list2"
+        )
 
         # Inputs traits
         self.add_trait(
@@ -124,7 +126,6 @@ class Concat_to_list(ProcessMIA):
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
         return
-
 
 
 class Concat_to_list_of_list(ProcessMIA):
