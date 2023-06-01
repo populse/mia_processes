@@ -110,6 +110,7 @@ Mia_processes's documentation
 
     - `Concat_to_list <bricks/tools/Concat_to_list.html>`_
     - `Concat_to_list_of_list <bricks/tools/Concat_to_list_of_list.html>`_
+    - `Delete_Data <bricks/tools/Delete_data.html>`_
     - `Files_To_List <bricks/tools/Files_To_List.html>`_
     - `Filter_Files_List <bricks/tools/Filter_Files_List.html>`_
     - `Input_Filter <bricks/tools/Input_Filter.html>`_
