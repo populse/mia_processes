@@ -9,6 +9,7 @@ needed to run other higher-level bricks.
     :Class:
         - Concat_to_list
         - Concat_to_list_of_list
+        - Delete_data
         - Files_To_List
         - Filter_Files_List
         - Find_In_List
@@ -30,6 +31,7 @@ needed to run other higher-level bricks.
 
 # Other imports
 import os
+import re
 import shutil
 import tempfile
 
@@ -43,8 +45,12 @@ from nipype.interfaces.base import (
 from nipype.interfaces.spm.base import ImageFileSPM
 
 # populse_mia imports
+from populse_mia.data_manager.data_history_inspect import (
+    get_data_history_processes,
+    get_filenames_in_value,
+)
 from populse_mia.data_manager.filter import Filter
-from populse_mia.data_manager.project import COLLECTION_CURRENT
+from populse_mia.data_manager.project import BRICK_OUTPUTS, COLLECTION_CURRENT
 from populse_mia.software_properties import Config
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 
@@ -214,6 +220,142 @@ class Concat_to_list_of_list(ProcessMIA):
 
             if self.outputs:
                 self.outputs["notInDb"] = ["listOflist"]
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        return
+
+
+class Delete_data(ProcessMIA):
+    """
+    Delete from database data
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation / instantiation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # initialisation of the objects needed for the launch of the brick
+        super(Delete_data, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = []  # no need of third party software!
+
+        # Inputs description
+        in_file_desc = (
+            "Output file from a brick or a pipeline. "
+            "The outputs from the history of this file "
+            "will be removed."
+        )
+        to_keep_filters_desc = (
+            "A list of regex. Files that match those "
+            "regex will be kept and the others files "
+            "will be deleted. "
+            "Mutually exclusif with to_remove_filters"
+        )
+        to_remove_filters_desc = (
+            "A list of regex.  Files that match those "
+            "regex will be deleted and the others files "
+            "will be kept. "
+            "Mutually exclusif with to_keep_filters"
+        )
+
+        # Outputs description
+        files_removed_desc = "List of files removed from database"
+
+        # Inputs traits
+        self.add_trait("in_file", traits.File(output=False, desc=in_file_desc))
+
+        self.add_trait(
+            "to_keep_filters",
+            traits.List(output=False, desc=to_keep_filters_desc),
+        )
+        # default for mriqc pipeline
+        self.to_keep_filters = [
+            "(.)*pdf",
+            "(.)*_qc.json",
+            "(.)*desc-carpet(.)*",
+        ]
+
+        self.add_trait(
+            "to_remove_filters",
+            traits.List(output=False, desc=to_remove_filters_desc),
+        )
+        # Outputs traits
+        self.add_trait(
+            "files_removed", traits.List(output=True, desc=files_removed_desc)
+        )
+
+        self.init_default_traits()
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+
+        super(Delete_data, self).list_outputs()
+
+        if self.to_keep_filters and self.to_remove_filters:
+            print(
+                "\nInitialisation failed. to_keep_filters and "
+                "to_remove_filter parameters are mutually exclusif...!"
+            )
+            return
+
+        # Get history of the file
+        # to get all the outputfile of the pipeline/brick
+        file_position = (
+            self.in_file.find(self.project.getName())
+            + len(self.project.getName())
+            + 1
+        )
+        file_database_name = self.in_file[file_position:]
+
+        procs, _ = get_data_history_processes(file_database_name, self.project)
+        outputs_filename = set()
+        if procs:
+            for proc in procs.values():
+                if proc.used:
+                    for value in proc.brick[BRICK_OUTPUTS].values():
+                        filenames = get_filenames_in_value(
+                            value, self.project, allow_temp=False
+                        )
+                        outputs_filename.update(filenames)
+
+        outputs_filename = list(outputs_filename)
+        for file in outputs_filename:
+            # remove file to keep using to_keep_filter
+            if self.to_keep_filters:
+                for filter in self.to_keep_filters:
+                    if re.match(r"" + filter, file):
+                        outputs_filename.remove(file)
+            # get file to remove using to_remove_filter
+            if self.to_remove_filters:
+                for filter in self.to_remove_filters:
+                    if not re.match(r"" + filter, file):
+                        outputs_filename.remove(file)
+
+        self.files_removed = outputs_filename
+        for doc in outputs_filename:
+            # Remove document from database
+            self.project.session.remove_document(COLLECTION_CURRENT, doc)
+            full_doc_path = os.path.join(self.project.folder, doc)
+            # Remove from project
+            if os.path.isfile(full_doc_path):
+                os.remove(full_doc_path)
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
