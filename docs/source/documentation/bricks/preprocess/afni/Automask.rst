@@ -28,7 +28,7 @@ Be carreful this program by itself does NOT do 'skull-stripping'.
 
       ex. '/home/username/data/raw_data/func.nii'
 
-**Optional inputs with default value  is parameters:**
+**Optional inputs with default value parameters:**
 
 - *clfrac* (a float, optional, default value is 0.5)
     Sets the clip level fraction (must be 0.1-0.9). A small value will tend to make the mask larger.

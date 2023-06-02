@@ -5,20 +5,18 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.preprocess.others.processing &#8212; mia_processes 2.2.1-dev+b6fbfd4 documentation</title>
-    <link rel="stylesheet" href="../../../../../_static/haiku.css" type="text/css" />
-    <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
+    <title>mia_processes.bricks.preprocess.others.processing &#8212; mia_processes 2.2.1-dev+0d9bec3 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/haiku.css" />
+    <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
     <script src="../../../../../_static/jquery.js"></script>
     <script src="../../../../../_static/underscore.js"></script>
     <script src="../../../../../_static/doctools.js"></script>
-    <script src="../../../../../_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../../index.html">
-          <span>mia_processes 2.2.1-dev+b6fbfd4 documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+0d9bec3 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.preprocess.others.processing</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -125,7 +123,7 @@
 
 
 <div class="viewcode-block" id="ApplyBiasCorrection"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.ApplyBiasCorrection">[docs]</a><span class="k">class</span> <span class="nc">ApplyBiasCorrection</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Apply bias field correction to an input file using the bias image.*</span>
 
 <span class="sd">    Please, see the complete documentation for the &#39;ApplyBiasCorrection&#39; brick</span>
@@ -135,7 +133,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="ApplyBiasCorrection.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.ApplyBiasCorrection.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -170,7 +168,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="ApplyBiasCorrection.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.ApplyBiasCorrection.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -205,7 +203,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="ApplyBiasCorrection.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.ApplyBiasCorrection.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
 
         <span class="nb">super</span><span class="p">(</span><span class="n">ApplyBiasCorrection</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
@@ -229,7 +227,7 @@
 
 
 <div class="viewcode-block" id="ArtifactMask"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.ArtifactMask">[docs]</a><span class="k">class</span> <span class="nc">ArtifactMask</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    * Computes the artifact mask using the method described in [Mortamet2009].*</span>
 
 <span class="sd">    Please, see the complete documentation for the `ArtifactMask&#39; brick</span>
@@ -241,7 +239,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="ArtifactMask.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.ArtifactMask.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -322,7 +320,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="ArtifactMask.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.ArtifactMask.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -389,7 +387,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="ArtifactMask.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.ArtifactMask.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ArtifactMask</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
         <span class="n">file_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
@@ -504,7 +502,7 @@
 
 
 <div class="viewcode-block" id="Binarize"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.Binarize">[docs]</a><span class="k">class</span> <span class="nc">Binarize</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Image binarization.*</span>
 
 <span class="sd">    Please, see the complete documentation for the `Binarize` brick</span>
@@ -517,7 +515,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Binarize.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.Binarize.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -583,7 +581,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Binarize.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.Binarize.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -740,7 +738,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Binarize.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.Binarize.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Binarize</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
         <span class="n">files_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_files</span>
@@ -795,7 +793,7 @@
 
 
 <div class="viewcode-block" id="ConformImage"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.ConformImage">[docs]</a><span class="k">class</span> <span class="nc">ConformImage</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    * Conform T1w image to standard.</span>
 
 <span class="sd">    Please, see the complete documentation for the `ConformImage&#39; brick</span>
@@ -808,7 +806,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="ConformImage.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.ConformImage.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -852,7 +850,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="ConformImage.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.ConformImage.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -947,7 +945,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="ConformImage.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.ConformImage.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ConformImage</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
         <span class="n">file_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
@@ -994,7 +992,7 @@
 
 
 <div class="viewcode-block" id="ConvROI"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.ConvROI">[docs]</a><span class="k">class</span> <span class="nc">ConvROI</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    * Convolve images with an image.</span>
 
 <span class="sd">    - Resampling the convolve_with to the size of images_to_convolve,</span>
@@ -1009,7 +1007,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="ConvROI.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.ConvROI.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -1083,7 +1081,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="ConvROI.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.ConvROI.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -1222,7 +1220,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="ConvROI.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.ConvROI.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
 
         <span class="c1"># No need the next line (we don&#39;t use self.process et SPM)</span>
         <span class="c1"># super(ConvROI, self).run_process_mia()</span>
@@ -1298,7 +1296,7 @@
 
 
 <div class="viewcode-block" id="Enhance"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.Enhance">[docs]</a><span class="k">class</span> <span class="nc">Enhance</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Image enhancing.</span>
 
 <span class="sd">    Please, see the complete documentation for the `Enhance&#39; brick</span>
@@ -1311,7 +1309,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Enhance.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.Enhance.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -1370,7 +1368,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Enhance.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.Enhance.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -1530,7 +1528,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Enhance.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.Enhance.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Enhance</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
         <span class="n">files_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_files</span>
@@ -1589,7 +1587,7 @@
 
 
 <div class="viewcode-block" id="EstimateSNR"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.EstimateSNR">[docs]</a><span class="k">class</span> <span class="nc">EstimateSNR</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Estimate SNR using a segmentation file.</span>
 
 <span class="sd">    Please, see the complete documentation for the `EstimateSNR&#39; brick</span>
@@ -1602,7 +1600,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="EstimateSNR.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.EstimateSNR.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -1642,7 +1640,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="EstimateSNR.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.EstimateSNR.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -1672,7 +1670,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="EstimateSNR.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.EstimateSNR.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">EstimateSNR</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
         <span class="n">file_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
@@ -1698,7 +1696,7 @@
 
 
 <div class="viewcode-block" id="GradientThreshold"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.GradientThreshold">[docs]</a><span class="k">class</span> <span class="nc">GradientThreshold</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    * Computes a threshold from the histogram of the magnitude gradient image.</span>
 
 <span class="sd">    Please, see the complete documentation for the `GradientThreshold&#39; brick</span>
@@ -1711,7 +1709,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="GradientThreshold.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.GradientThreshold.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -1761,7 +1759,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="GradientThreshold.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.GradientThreshold.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -1858,7 +1856,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="GradientThreshold.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.GradientThreshold.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">GradientThreshold</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
         <span class="n">file_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
@@ -1946,7 +1944,7 @@
 
 
 <div class="viewcode-block" id="Harmonize"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.Harmonize">[docs]</a><span class="k">class</span> <span class="nc">Harmonize</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    * Harmonize.</span>
 
 <span class="sd">    Please, see the complete documentation for the `Harmonize&#39; brick</span>
@@ -1959,7 +1957,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Harmonize.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.Harmonize.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -2016,7 +2014,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Harmonize.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.Harmonize.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -2113,7 +2111,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Harmonize.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.Harmonize.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Harmonize</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
         <span class="k">try</span><span class="p">:</span>
@@ -2173,7 +2171,7 @@
 
 
 <div class="viewcode-block" id="IntensityClip"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.IntensityClip">[docs]</a><span class="k">class</span> <span class="nc">IntensityClip</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    * Clip the intensity range as prescribed by the percentiles.</span>
 
 <span class="sd">    Please, see the complete documentation for the `Threshold brick in</span>
@@ -2183,7 +2181,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="IntensityClip.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.IntensityClip.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -2270,7 +2268,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="IntensityClip.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.IntensityClip.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -2302,7 +2300,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="IntensityClip.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.IntensityClip.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
 
         <span class="nb">super</span><span class="p">(</span><span class="n">IntensityClip</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
@@ -2347,7 +2345,7 @@
 
 
 <div class="viewcode-block" id="Mask"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.Mask">[docs]</a><span class="k">class</span> <span class="nc">Mask</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    * Mask image.</span>
 
 <span class="sd">    Please, see the complete documentation for the `Mask&#39; brick</span>
@@ -2360,7 +2358,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Mask.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.Mask.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -2412,7 +2410,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Mask.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.Mask.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -2507,7 +2505,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Mask.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.Mask.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Mask</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
         <span class="n">file_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
@@ -2556,7 +2554,7 @@
 
 
 <div class="viewcode-block" id="NonSteadyStateDetector"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.NonSteadyStateDetector">[docs]</a><span class="k">class</span> <span class="nc">NonSteadyStateDetector</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    * Detect non-steady-state at the beginning of a bold 4D image.</span>
 
 <span class="sd">    Please, see the complete documentation for the</span>
@@ -2569,7 +2567,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="NonSteadyStateDetector.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.NonSteadyStateDetector.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -2601,7 +2599,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="NonSteadyStateDetector.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.NonSteadyStateDetector.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -2622,7 +2620,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="NonSteadyStateDetector.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.NonSteadyStateDetector.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">NonSteadyStateDetector</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
         <span class="n">file_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
@@ -2651,7 +2649,7 @@
 
 
 <div class="viewcode-block" id="Resample_1"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.Resample_1">[docs]</a><span class="k">class</span> <span class="nc">Resample_1</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Resamples an image to the resolution of a reference image*</span>
 
 <span class="sd">    - Uses nibabel.processing.resample_from_to().</span>
@@ -2663,7 +2661,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Resample_1.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.Resample_1.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -2763,7 +2761,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Resample_1.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.Resample_1.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -3076,7 +3074,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="nf">_check_interp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Checks the order of the splines interpolation.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks the order of the splines interpolation.</span>
 
 <span class="sd">        :returns: a message according to the selected order</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -3138,7 +3136,7 @@
             <span class="k">return</span> <span class="s2">&quot;spline interpolation of order 5&quot;</span>
 
 <div class="viewcode-block" id="Resample_1.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.Resample_1.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Resample_1</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="n">files_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">files_to_resample</span>
         <span class="n">refName</span> <span class="o">=</span> <span class="n">nib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reference_image</span><span class="p">)</span>
@@ -3215,7 +3213,7 @@
 
 
 <div class="viewcode-block" id="Resample_2"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.Resample_2">[docs]</a><span class="k">class</span> <span class="nc">Resample_2</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Resamples an image to the resolution of a reference image*</span>
 
 <span class="sd">    - Uses skimage.transform.resize()</span>
@@ -3227,7 +3225,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Resample_2.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.Resample_2.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -3299,7 +3297,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Resample_2.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.Resample_2.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -3353,7 +3351,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Resample_2.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.Resample_2.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
 
         <span class="c1"># No need the next line (we don&#39;t use self.process et SPM)</span>
         <span class="c1"># super(Resample_2, self).run_process_mia()</span>
@@ -3427,7 +3425,7 @@
 
 
 <div class="viewcode-block" id="RotationMask"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.RotationMask">[docs]</a><span class="k">class</span> <span class="nc">RotationMask</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    * Compute the rotation mask image.</span>
 
 <span class="sd">    Please, see the complete documentation for the</span>
@@ -3440,7 +3438,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="RotationMask.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.RotationMask.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -3486,7 +3484,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="RotationMask.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.RotationMask.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -3583,7 +3581,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="RotationMask.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.RotationMask.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">RotationMask</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
         <span class="n">file_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
@@ -3657,7 +3655,7 @@
 
 
 <div class="viewcode-block" id="Sanitize"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.Sanitize">[docs]</a><span class="k">class</span> <span class="nc">Sanitize</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    * Sanitize input bold image.</span>
 
 <span class="sd">    Please, see the complete documentation for the</span>
@@ -3670,7 +3668,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Sanitize.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.Sanitize.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -3733,7 +3731,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Sanitize.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.Sanitize.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -3830,7 +3828,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Sanitize.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.Sanitize.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Sanitize</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
         <span class="n">file_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
@@ -3965,7 +3963,7 @@
 
 
 <div class="viewcode-block" id="TemplateFromTemplateFlow"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.TemplateFromTemplateFlow">[docs]</a><span class="k">class</span> <span class="nc">TemplateFromTemplateFlow</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    * Get template image from templateflow.</span>
 
 <span class="sd">    Please, see the complete documentation for the</span>
@@ -3975,7 +3973,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="TemplateFromTemplateFlow.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.TemplateFromTemplateFlow.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -4043,7 +4041,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="TemplateFromTemplateFlow.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.TemplateFromTemplateFlow.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -4108,12 +4106,12 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="TemplateFromTemplateFlow.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.TemplateFromTemplateFlow.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">TemplateFromTemplateFlow</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span></div></div>
 
 
 <div class="viewcode-block" id="Threshold"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.Threshold">[docs]</a><span class="k">class</span> <span class="nc">Threshold</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    * Image thresholding.</span>
 
 <span class="sd">    Please, see the complete documentation for the</span>
@@ -4123,7 +4121,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Threshold.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.Threshold.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -4211,7 +4209,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="nf">_namesFilter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Filtering of in_files input parameter in order to keep only GM.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Filtering of in_files input parameter in order to keep only GM.</span>
 
 <span class="sd">        :returns: GM images (containing &quot;c1&quot; in the first 5 characters)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -4231,7 +4229,7 @@
         <span class="k">return</span> <span class="n">files</span>
 
 <div class="viewcode-block" id="Threshold.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.Threshold.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -4412,7 +4410,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Threshold.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.Threshold.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Threshold</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">GM_filtering</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
@@ -4441,7 +4439,7 @@
 
 
 <div class="viewcode-block" id="TSNR"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.TSNR">[docs]</a><span class="k">class</span> <span class="nc">TSNR</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    * Computes the time-course SNR for a time series.</span>
 
 <span class="sd">    Please, see the complete documentation for the</span>
@@ -4454,7 +4452,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="TSNR.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.TSNR.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -4530,7 +4528,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="TSNR.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.TSNR.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -4685,7 +4683,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="TSNR.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.TSNR.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">TSNR</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
         <span class="n">file_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
@@ -4756,7 +4754,7 @@
 
 
 <div class="viewcode-block" id="artifact_mask"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.artifact_mask">[docs]</a><span class="k">def</span> <span class="nf">artifact_mask</span><span class="p">(</span><span class="n">imdata</span><span class="p">,</span> <span class="n">airdata</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">zscore</span><span class="o">=</span><span class="mf">10.0</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Computes a mask of artifacts found in the air region&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Computes a mask of artifacts found in the air region&quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">airdata</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">):</span>
         <span class="n">airdata</span><span class="p">[</span><span class="n">airdata</span> <span class="o">&lt;</span> <span class="mf">0.95</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
@@ -4789,7 +4787,7 @@
 
 
 <div class="viewcode-block" id="is_outlier"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.is_outlier">[docs]</a><span class="k">def</span> <span class="nf">is_outlier</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">thresh</span><span class="o">=</span><span class="mf">3.5</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns a boolean array with True if points are outliers and False</span>
 <span class="sd">    otherwise.</span>
 <span class="sd">    :param nparray points: an numobservations by numdimensions numpy array</span>
@@ -4823,7 +4821,7 @@
 
 
 <div class="viewcode-block" id="threshold"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.threshold">[docs]</a><span class="k">def</span> <span class="nf">threshold</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="n">thresh</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Basic method for image thresholding</span>
 
 <span class="sd">    :param file_name: Image to be thresholded</span>
@@ -4849,7 +4847,7 @@
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.3.2.
     </div>
   </body>
 </html>
