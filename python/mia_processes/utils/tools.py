@@ -194,7 +194,7 @@ def mriqc_get_all_run(modality, project, output_directory):
             file_name = data_history_pipeline(
                 json_database_filename, project
             ).in_file
-        except:
+        except Exception:
             # if we removed all mriqc data execpt json and pdf
             file_name = json_database_filename
         files_name.append(file_name)
