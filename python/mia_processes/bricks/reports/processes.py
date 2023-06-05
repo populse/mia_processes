@@ -76,7 +76,11 @@ from scipy.stats import kurtosis  # pylint: disable=E0611
 from skimage.transform import resize
 
 # mia_processes import
-from mia_processes.utils import checkFileExt, get_dbFieldValue
+from mia_processes.utils import (
+    checkFileExt,
+    get_dbFieldValue,
+    set_dbFieldValue,
+)
 
 DIETRICH_FACTOR = 0.6551364  # 1.0 / sqrt(2 / (4 - pi))
 FSL_FAST_LABELS = {"csf": 1, "gm": 2, "wm": 3, "bg": 0}
@@ -1645,6 +1649,7 @@ class Mean_stdDev_calc(ProcessMIA):
             "A list of regions of interest applied to the parametric maps to "
             "calculate their mean and standard deviation"
         )
+        contrast_type_desc = "The Contrast used (a string, ex. BOLD)"
         # Outputs description
         mean_out_files_desc = (
             "A list of .txt files with the calculated average for each "
@@ -1665,6 +1670,7 @@ class Mean_stdDev_calc(ProcessMIA):
                 desc=parametric_maps_desc,
             ),
         )
+        self.parametric_maps = Undefined
 
         # self.add_trait(
         #     "doublet_list", traits.List(output=False, desc=doublet_list_desc)
@@ -1677,6 +1683,13 @@ class Mean_stdDev_calc(ProcessMIA):
                 output=False,
                 optional=False,
                 desc=rois_files_desc,
+            ),
+        )
+
+        self.add_trait(
+            "contrast_type",
+            traits.String(
+                "BOLD", output=False, optional=True, desc=contrast_type_desc
             ),
         )
 
@@ -1776,16 +1789,40 @@ class Mean_stdDev_calc(ProcessMIA):
             std_out_files = []
 
             for parametric_map in self.parametric_maps:
+                if self.contrast_type.isspace() or not self.contrast_type:
+                    self.contrast_type = "UnknownContrast"
+
+                map_name = (
+                    os.path.basename(parametric_map)[0:4]
+                    + "_"
+                    + self.contrast_type
+                )
+
                 # for roi in self.doublet_list:
                 for roi in self.rois_files:
-                    # spmT_BOLD or beta_BOLD
-                    # FIXME: I think it's a bad idea to hard-code the effect
-                    #        (BOLD).
-                    map_name = os.path.basename(parametric_map)[0:4] + "_BOLD"
                     roi_name, _ = os.path.splitext(os.path.basename(roi))
                     mean_out_file = os.path.join(
                         analysis_dir, roi_name + "_mean_" + map_name + ".txt"
                     )
+                    # FIXME: In the latest version of mia, indexing of the
+                    #        database with particular tags defined in the
+                    #        processes is done only at the end of the
+                    #        initialisation of the whole pipeline. So we
+                    #        cannot use the value of these tags in other
+                    #        processes of the pipeline at the time of
+                    #        initialisation (see populse_mia #290). Until
+                    #        better we use a quick and dirty hack with the
+                    #        set_dbFieldValue() function !
+                    tag_to_add = dict()
+                    tag_to_add["name"] = "PatientName"
+                    tag_to_add["field_type"] = "string"
+                    tag_to_add["description"] = ""
+                    tag_to_add["visibility"] = True
+                    tag_to_add["origin"] = "user"
+                    tag_to_add["unit"] = None
+                    tag_to_add["default_value"] = None
+                    tag_to_add["value"] = patient_name
+                    set_dbFieldValue(self.project, mean_out_file, tag_to_add)
                     mean_out_files.append(mean_out_file)
                     self.inheritance_dict[mean_out_file] = parametric_map
                     # std_out_files.append(
@@ -1797,6 +1834,16 @@ class Mean_stdDev_calc(ProcessMIA):
                     std_out_file = os.path.join(
                         analysis_dir, roi_name + "_std_" + map_name + ".txt"
                     )
+                    tag_to_add = dict()
+                    tag_to_add["name"] = "PatientName"
+                    tag_to_add["field_type"] = "string"
+                    tag_to_add["description"] = ""
+                    tag_to_add["visibility"] = True
+                    tag_to_add["origin"] = "user"
+                    tag_to_add["unit"] = None
+                    tag_to_add["default_value"] = None
+                    tag_to_add["value"] = patient_name
+                    set_dbFieldValue(self.project, std_out_file, tag_to_add)
                     std_out_files.append(std_out_file)
                     self.inheritance_dict[std_out_file] = parametric_map
 
@@ -1991,8 +2038,9 @@ class Result_collector(ProcessMIA):
       - contrast: the type of contrast/effect used (ex. BOLD)
 
     - Currently, to function correctly, this brick requires the doublet made
-      up of the two hemispheres to be present in the list and each hemisphere
-      to be represented by the letters L (left) and R (right). For example
+      up of the two hemispheres to be present in the parameter_files list and
+      each hemisphere to be represented by the letters L (left) and R (right).
+      For example:
       [/aPath/ACM_R_moyenne_spmT_BOLD.txt,
       /aPat/ACM_L_moyenne_spmT_BOLD.txt, etc.].
       It would be desirable to develop this brick so that it could also be
@@ -2066,6 +2114,8 @@ class Result_collector(ProcessMIA):
                 desc=parameter_files_desc,
             ),
         )
+        self.parameter_files = Undefined
+
         # self.add_trait(
         #     "parametric_maps",
         #     traits.List(
@@ -2137,6 +2187,7 @@ class Result_collector(ProcessMIA):
             "out_files",
             traits.List(traits.File(), output=True, desc=out_files_desc),
         )
+        self.out_files = Undefined
 
         # Special parameter used as a messenger for the run_process_mia method
         self.add_trait(
@@ -2337,7 +2388,7 @@ class Result_collector(ProcessMIA):
                 or self.patient_info["Pathology"] == Undefined
             ):
                 pathology = get_dbFieldValue(
-                    self.project, self.parametric_maps[0], "Pathology"
+                    self.project, self.parameter_files[0], "Pathology"
                 )
 
                 if pathology is None:
@@ -2351,7 +2402,7 @@ class Result_collector(ProcessMIA):
                 or self.patient_info["Age"] == Undefined
             ):
                 age = get_dbFieldValue(
-                    self.project, self.parametric_maps[0], "Age"
+                    self.project, self.parameter_files[0], "Age"
                 )
 
                 if age is None:
@@ -2365,7 +2416,7 @@ class Result_collector(ProcessMIA):
                 or self.patient_info["Sex"] == Undefined
             ):
                 sex = get_dbFieldValue(
-                    self.project, self.parametric_maps[0], "Sex"
+                    self.project, self.parameter_files[0], "Sex"
                 )
 
                 if sex is None:
@@ -2379,7 +2430,7 @@ class Result_collector(ProcessMIA):
                 or self.patient_info["MR"] == Undefined
             ):
                 mr = get_dbFieldValue(
-                    self.project, self.parametric_maps[0], "MR"
+                    self.project, self.parameter_files[0], "MR"
                 )
 
                 if mr is None:
@@ -2393,7 +2444,7 @@ class Result_collector(ProcessMIA):
                 or self.patient_info["Gas"] == Undefined
             ):
                 gas = get_dbFieldValue(
-                    self.project, self.parametric_maps[0], "Gas"
+                    self.project, self.parameter_files[0], "Gas"
                 )
 
                 if gas is None:
@@ -2407,7 +2458,7 @@ class Result_collector(ProcessMIA):
                 or self.patient_info["GasAdmin"] == Undefined
             ):
                 gas_admin = get_dbFieldValue(
-                    self.project, self.parametric_maps[0], "GasAdmin"
+                    self.project, self.parameter_files[0], "GasAdmin"
                 )
 
                 if gas_admin is None:
