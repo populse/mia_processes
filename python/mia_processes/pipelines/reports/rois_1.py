@@ -35,91 +35,156 @@ class Rois_1(Pipeline):
         """Building the pipeline"""
         # nodes
         self.add_process(
-            "find_in_list1", "mia_processes.bricks.tools.Find_In_List"
+            "concat_to_list_of_list_1",
+            "mia_processes.bricks.tools.tools.Concat_to_list_of_list",
         )
         self.add_process(
-            "resample1", "mia_processes.bricks.preprocess.others.Resample_1"
-        )
-        self.nodes["resample1"].process.reference_image = traits.Undefined
-        self.nodes["resample1"].process.files_to_resample = traits.Undefined
-        self.add_process(
-            "roi_list_generator1",
-            "mia_processes.bricks.tools.Concat_to_list_of_list",
+            "import_data_1", "mia_processes.bricks.tools.tools.Import_Data"
         )
         self.add_process(
-            "conv_roi1", "mia_processes.bricks.preprocess.others.ConvROI"
-        )
-        self.nodes["conv_roi1"].process.in_image = traits.Undefined
-        self.add_process(
-            "resample2", "mia_processes.bricks.preprocess.others.Resample_2"
+            "find_in_list_1", "mia_processes.bricks.tools.tools.Find_In_List"
         )
         self.add_process(
-            "files_to_list1", "mia_processes.bricks.tools.tools.Files_To_List"
+            "find_in_list_2", "mia_processes.bricks.tools.tools.Find_In_List"
         )
         self.add_process(
-            "find_in_list2", "mia_processes.bricks.tools.Find_In_List"
+            "files_to_list_1", "mia_processes.bricks.tools.tools.Files_To_List"
+        )
+        self.nodes["files_to_list_1"].set_plug_value("file1", traits.Undefined)
+        self.nodes["files_to_list_1"].set_plug_value("file2", traits.Undefined)
+        self.add_process(
+            "convroi_1",
+            "mia_processes.bricks.preprocess.others.processing.ConvROI",
         )
         self.add_process(
-            "result_collector1",
-            "mia_processes.bricks.reports.Result_collector",
+            "resample_1_1",
+            "mia_processes.bricks.preprocess.others.processing.Resample_1",
         )
         self.add_process(
-            "mean_&_stdDev_calc1",
-            "mia_processes.bricks.reports.Mean_stdDev_calc",
+            "resample_2_1",
+            "mia_processes.bricks.preprocess.others.processing.Resample_2",
         )
+        self.add_process(
+            "mean_stddev_calc_1",
+            "mia_processes.bricks.reports.processes.Mean_stdDev_calc",
+        )
+        self.nodes["mean_stddev_calc_1"].set_plug_value(
+            "parametric_maps", traits.Undefined
+        )
+        self.nodes[
+            "mean_stddev_calc_1"
+        ].process.parametric_maps = traits.Undefined
+        self.add_process(
+            "concat_to_list_1",
+            "mia_processes.bricks.tools.tools.Concat_to_list",
+        )
+        self.add_process(
+            "result_collector_1",
+            "mia_processes.bricks.reports.processes.Result_collector",
+        )
+        self.nodes["result_collector_1"].set_plug_value(
+            "parameter_files", traits.Undefined
+        )
+        self.nodes[
+            "result_collector_1"
+        ].process.parameter_files = traits.Undefined
 
         # links
-        self.export_parameter("find_in_list1", "in_list", "spmT_images")
-        self.export_parameter("resample1", "files_to_resample", "mask_002")
-        self.add_link("mask_002->conv_roi1.in_image")
-        self.export_parameter("find_in_list2", "in_list", "beta_images")
-        self.add_link("find_in_list1.out_file->resample1.reference_image")
-        self.add_link("find_in_list1.out_file->files_to_list1.file1")
-        self.add_link("resample1.out_files->resample2.reference_image")
-        self.add_link("roi_list_generator1.listOflist->resample2.doublet_list")
-        self.add_link("roi_list_generator1.listOflist->conv_roi1.doublet_list")
-        self.add_link(
-            "roi_list_generator1.listOflist->" "result_collector1.doublet_list"
+        self.export_parameter(
+            "find_in_list_1", "in_list", "spmT_images", is_optional=False
         )
-        self.add_link(
-            "roi_list_generator1.listOflist->"
-            "mean_&_stdDev_calc1.doublet_list"
-        )
-        self.export_parameter("conv_roi1", "out_images", "conv_roi_masks")
-        self.export_parameter("resample2", "out_images", "resample2_masks")
-        self.add_link(
-            "files_to_list1.file_list->" "mean_&_stdDev_calc1.parametric_maps"
-        )
-        self.add_link(
-            "files_to_list1.file_list->result_collector1.parametric_maps"
-        )
-        self.add_link("find_in_list2.out_file->files_to_list1.file2")
-        self.export_parameter("result_collector1", "out_files", "xls_files")
-        self.add_link(
-            "mean_&_stdDev_calc1.mean_out_files->"
-            "result_collector1.mean_in_files"
-        )
-        self.add_link(
-            "mean_&_stdDev_calc1.std_out_files->"
-            "result_collector1.std_in_files"
+        self.add_link("spmT_images->import_data_1.file_in_db")
+        self.export_parameter(
+            "find_in_list_2", "in_list", "beta_images", is_optional=False
         )
         self.export_parameter(
-            "result_collector1", "patient_info", is_optional=True
+            "convroi_1", "convolve_with", "mask_002", is_optional=False
+        )
+        self.add_link("mask_002->resample_1_1.files_to_resample")
+        self.add_link(
+            "concat_to_list_of_list_1.listOflist->import_data_1.rois_list"
+        )
+        self.add_link("import_data_1.rois_files->convroi_1.images_to_convolve")
+        self.add_link("find_in_list_1.out_file->files_to_list_1.file1")
+        self.add_link("find_in_list_1.out_file->resample_1_1.reference_image")
+        self.add_link("find_in_list_2.out_file->files_to_list_1.file2")
+        self.add_link(
+            "files_to_list_1.file_list->mean_stddev_calc_1.parametric_maps"
+        )
+        self.add_link("convroi_1.out_images->mean_stddev_calc_1.rois_files")
+        self.add_link("convroi_1.out_images->resample_2_1.files_to_resample")
+        self.export_parameter(
+            "convroi_1", "out_images", "conv_roi_masks", is_optional=False
+        )
+        self.add_link("resample_1_1.out_files->resample_2_1.reference_image")
+        self.export_parameter(
+            "resample_2_1", "out_images", "resample2_masks", is_optional=False
+        )
+        self.add_link(
+            "mean_stddev_calc_1.mean_out_files->concat_to_list_1.list1"
+        )
+        self.add_link(
+            "mean_stddev_calc_1.std_out_files->concat_to_list_1.list2"
+        )
+        self.add_link(
+            "concat_to_list_1.out_list->result_collector_1.parameter_files"
+        )
+        self.export_parameter(
+            "result_collector_1", "out_files", "xls_files", is_optional=False
+        )
+        self.export_parameter(
+            "result_collector_1", "patient_info", is_optional=True
+        )
+
+        # parameters order
+
+        self.reorder_traits(
+            (
+                "spmT_images",
+                "beta_images",
+                "mask_002",
+                "patient_info",
+                "resample2_masks",
+                "xls_files",
+                "conv_roi_masks",
+            )
         )
 
         # nodes positions
         self.node_position = {
-            "conv_roi1": (352.35910249999995, 425.5439),
-            "find_in_list1": (187.4372275, 102.63739999999996),
-            "inputs": (0.0, 164.05629999999996),
-            "resample1": (341.58566499999995, 0.0),
-            "find_in_list2": (187.4372275, 224.54389999999995),
-            "result_collector1": (681.214865, 256.02479999999997),
-            "resample2": (518.45744, 177.0811),
-            "mean_&_stdDev_calc1": (506.1527525, 389.375),
-            "outputs": (852.45024, 318.52479999999997),
-            "roi_list_generator1": (162.710665, 346.4437),
-            "files_to_list1": (356.53878999999995, 196.625),
+            "concat_to_list_of_list_1": (
+                -626.7365627381539,
+                655.1783812050373,
+            ),
+            "import_data_1": (-359.6572976506295, 715.6133821215734),
+            "find_in_list_1": (-508.4657057744808, 134.84299088223963),
+            "find_in_list_2": (-361.3432851561171, 431.0012168458302),
+            "files_to_list_1": (-151.78323445420767, 347.27763061397314),
+            "convroi_1": (-180.2234309904108, 523.195153022265),
+            "resample_1_1": (-218.19904973701512, 70.29956616326433),
+            "resample_2_1": (264.02963177482127, 39.46765963517973),
+            "inputs": (-623.9590860471251, 440.277979255905),
+            "mean_stddev_calc_1": (39.318714641281616, 237.85728764977785),
+            "concat_to_list_1": (312.67056990213575, 254.65280031900323),
+            "result_collector_1": (203.0050153882558, 670.0575258538529),
+            "outputs": (500.615875306018, 441.4937568209974),
+        }
+
+        # nodes dimensions
+        self.node_dimension = {
+            "concat_to_list_of_list_1": (157.21875, 110.0),
+            "import_data_1": (147.703125, 180.0),
+            "find_in_list_1": (118.84375, 110.0),
+            "find_in_list_2": (118.84375, 110.0),
+            "files_to_list_1": (97.640625, 145.0),
+            "convroi_1": (208.0625, 145.0),
+            "resample_1_1": (176.84375, 250.0),
+            "resample_2_1": (193.921875, 145.0),
+            "inputs": (119.17251223929541, 136.0),
+            "mean_stddev_calc_1": (214.171875, 145.0),
+            "concat_to_list_1": (110.71875, 110.0),
+            "result_collector_1": (171.640625, 145.0),
+            "outputs": (126.07117003946317, 111.0),
         }
 
         self.do_autoexport_nodes_parameters = False
