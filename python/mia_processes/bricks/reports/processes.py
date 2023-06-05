@@ -2262,9 +2262,20 @@ class Result_collector(ProcessMIA):
                 # calcul: type of calcul (ex. mean)
                 # param: the parameter studied (ex. spmT)
                 # contrast: The type of contrast/effect used (ex. BOLD)
-                roi, hemi, calcul, param, contrast = os.path.splitext(
-                    os.path.basename(data)
-                )[0].split("_")
+
+                try:
+                    roi, hemi, calcul, param, contrast = os.path.splitext(
+                        os.path.basename(data)
+                    )[0].split("_")
+
+                except Exception as e:
+                    print(
+                        "\nResult_collector brick: initialization stopped "
+                        "due to the following problem:\n"
+                        " {}\n".format(e)
+                    )
+                    return self.make_initResult()
+
                 out_files.add(
                     os.path.join(
                         aggreg_results_dir,
@@ -2365,6 +2376,9 @@ class Result_collector(ProcessMIA):
             #         )
             #
             # self.outputs["out_files"] = out_files
+
+            if out_files:
+                self.outputs["out_files"] = list(out_files)
 
             # FIXME: the data should be anonymized and we should use PatientRef
             #        instead of PatientName !
