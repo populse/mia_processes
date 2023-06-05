@@ -136,8 +136,7 @@ class Concat_to_list(ProcessMIA):
 
 class Concat_to_list_of_list(ProcessMIA):
     """
-    * | Make an output list of lists containing the iteration of
-      | the input list1 with each element of the input list2.
+    *Iteration the input list1 with each element of the input list2*
 
     Ex. ['a', 'b', 'c'] and ['_1', '_2'] gives
         [['a', '1'], ['a', '2'],

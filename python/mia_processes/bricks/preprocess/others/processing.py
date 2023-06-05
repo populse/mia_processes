@@ -985,32 +985,18 @@ class ConvROI(ProcessMIA):
         super(ConvROI, self).__init__()
 
         # Inputs description
-        # doublet_list_desc = (
-        #     "A list of lists containing doublets of strings "
-        #     '(e.g. [["ROI_OCC", "_L"], ["ROI_OCC", "_R"], '
-        #     '["ROI_PAR", "_l"], ...]'
-        # )
-        # rois_list_desc = "A list of ROIs"
-
         images_to_convolve_desc = (
             "A list of images to convolve with " "convolve_with image"
         )
-
-        # in_image_desc = "An image (an existing, uncompressed file)"
-
         convolve_with_desc = (
             "An image used to convolve with " "images_to_convolve"
         )
-
         prefix_desc = "The prefix for the out_images (a string)"
 
         # Outputs description
         out_images_desc = "The convoluted images"
 
         # Inputs traits
-        # self.add_trait(
-        #     "doublet_list", traits.List(output=False, desc=doublet_list_desc)
-        # )
         self.add_trait(
             "images_to_convolve",
             InputMultiPath(
@@ -1065,7 +1051,6 @@ class ConvROI(ProcessMIA):
         super(ConvROI, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
-        # if self.doublet_list != [] and self.in_image:
         if (
             self.images_to_convolve != Undefined
             and self.convolve_with != Undefined
@@ -1083,92 +1068,16 @@ class ConvROI(ProcessMIA):
                 return self.make_initResult()
 
             self.dict4runtime["patient_name"] = patient_name
-            # roi_dir = os.path.join(
-            #     self.output_directory, "roi_" + patient_name
-            # )
             conv_dir = os.path.join(
                 self.output_directory,
                 patient_name + "_data",
                 "ROI_data",
                 "convROI_BOLD",
             )
-
-            # if not existing, creates self.output_directory'/roi_dir
-            # folder. If already existing, remove old reference ROIs in roi_dir
-            # and remove the old roi_dir'/convROI_BOLD'
-            # if os.path.exists(roi_dir):
-            #     elts = os.listdir(roi_dir)
-            #     # filtering only the files
-            #     files = [
-            #         f for f in elts
-            #         if os.path.isfile(os.path.join(roi_dir, f))
-            #     ]
-            #     # filtering only the directories
-            #     dirs = [
-            #         d for d in elts
-            #         if os.path.isdir(os.path.join(roi_dir, d))
-            #     ]
-            #     tmp = False
-            #
-            #     if "convROI_BOLD" in dirs:
-            #         tmp = tempfile.mktemp(dir=os.path.dirname(roi_dir))
-            #         os.mkdir(tmp)
-            #         shutil.move(
-            #             os.path.join(roi_dir, "convROI_BOLD"),
-            #             os.path.join(tmp, "convROI_BOLD"),
-            #         )
-            #         print(
-            #             '\nConvROI brick:\nA "{}" folder already exists, '
-            #             "it will be overwritten by this new "
-            #             "calculation...".format(
-            #                 os.path.join(roi_dir, "convROI_BOLD")
-            #             )
-            #         )
-            #
-            #     for start_fil in [i[0] + i[1] for i in self.doublet_list]:
-            #         for fil in files:
-            #             if fil.startswith(start_fil):
-            #                 if not os.path.isdir(tmp):
-            #                     tmp = tempfile.mktemp(
-            #                         dir=os.path.dirname(roi_dir)
-            #                     )
-            #                     os.mkdir(tmp)
-            #
-            #                 shutil.move(os.path.join(roi_dir, fil), tmp)
-            #                 print(
-            #                     '\nConvROI brick:\nA "{}" file already '
-            #                     "exists, it will be overwritten by this new "
-            #                     "calculation...".format(
-            #                         os.path.join(roi_dir, fil)
-            #                     )
-            #                 )
-            #
-            #     if os.path.isdir(tmp):
-            #         shutil.rmtree(tmp)
-            #
-            # else:
-            #     os.mkdir(roi_dir)
-
-            # # Copying the ROIs from the resources folder
-            # # to self.output_directory'/roi_'patient_name
-            # config = Config()
-            # ref_dir = os.path.join(config.get_resources_path(), "ROIs")
-            # copy_tree(ref_dir, roi_dir)
-            #
-            # # Creates roi_dir/'convROI_BOLD' folder
-            # conv_dir = os.path.join(roi_dir, "convROI_BOLD")
-            # os.mkdir(conv_dir)
-
             list_out = []
 
             if self.prefix.isspace():
                 self.prefix = ""
-
-            # for roi_file in self.images_to_convolve:
-            #     list_out.append(
-            #         os.path.join(conv_dir,
-            #                      "conv" + os.path.basename(roi_file))
-            #     )
 
             for roi_file in self.images_to_convolve:
                 list_out.append(
@@ -1176,11 +1085,6 @@ class ConvROI(ProcessMIA):
                         conv_dir, self.prefix + os.path.basename(roi_file)
                     )
                 )
-
-            # for roi in self.doublet_list:
-            # list_out.append(
-            #     os.path.join(conv_dir, "conv" + roi[0] + roi[1] + ".nii")
-            # )
 
             self.outputs["out_images"] = list_out
 
@@ -1193,9 +1097,6 @@ class ConvROI(ProcessMIA):
         # No need the next line (we don't use self.process et SPM)
         # super(ConvROI, self).run_process_mia()
 
-        # roi_dir = os.path.join(
-        #     self.output_directory, "roi_" + self.dict4runtime["patient_name"]
-        # )
         pat_name_dir = os.path.join(
             self.output_directory, self.dict4runtime["patient_name"] + "_data"
         )
@@ -1208,7 +1109,6 @@ class ConvROI(ProcessMIA):
         if not os.path.exists(roi_data_dir):
             os.mkdir(roi_data_dir)
 
-        # conv_dir = os.path.join(roi_dir, "convROI_BOLD")
         conv_dir = os.path.join(roi_data_dir, "convROI_BOLD")
         tmp = "None"
 
@@ -1226,21 +1126,16 @@ class ConvROI(ProcessMIA):
         if os.path.isdir(tmp):
             shutil.rmtree(tmp)
 
-        # Resampling the self.in_image to the size of the ROIs, using the
-        # first ROI in rois_list
-        # roi_1 = self.doublet_list[0]
-        # roi_file = os.path.join(roi_dir, roi_1[0] + roi_1[1] + ".nii")
-        # roi_img = nib.load(roi_file)
+        # Resampling the convolve_with to the size of the ROIs, using the
+        # first ROI in images_to_convolve
         roi_img = nib.load(self.images_to_convolve[0])
         roi_data = roi_img.get_fdata()
         roi_size = roi_data.shape[:3]
         mask_thresh = threshold(self.convolve_with, 0.5).get_fdata()
         resized_mask = resize(mask_thresh, roi_size)
 
-        # Convolve each ROI with resized in_image
-        # for roi in self.doublet_list:
+        # Convolve each ROI with resized convolve_with
         for roi_file in self.images_to_convolve:
-            # roi_file = os.path.join(roi_dir, roi[0] + roi[1] + ".nii")
             roi_img = nib.load(roi_file)
             roi_data = roi_img.get_fdata()
             mult = (roi_data * resized_mask).astype(float)
@@ -1248,14 +1143,7 @@ class ConvROI(ProcessMIA):
             #       Currently we take from ROI images
             mult_img = nib.Nifti1Image(mult, roi_img.affine, roi_img.header)
 
-            # Image save in conv_dir/
-            # 'conv'self.doublet_list[0]self.doublet_list[1]'.nii'
-            # out_file = os.path.join(
-            #    conv_dir, "conv" + roi[0] + roi[1] + ".nii"
-            # )
-            # out_file = os.path.join(
-            #     conv_dir, "conv" + os.path.basename(roi_file)
-            # )
+            # Image save in conv_dir
             out_file = os.path.join(
                 conv_dir, self.prefix + os.path.basename(roi_file)
             )
@@ -3202,12 +3090,6 @@ class Resample_2(ProcessMIA):
         super(Resample_2, self).__init__()
 
         # Inputs description
-        # doublet_list_desc = (
-        #     "A list of lists containing doublets of strings "
-        #     '(e.g. [["ROI_OCC", "_L"], ["ROI_OCC", "_R"], '
-        #     '["ROI_PAR", "_l"], ...]'
-        # )
-
         files_to_resample_desc = (
             "The images that will be resampled (a "
             "list of pathlike object or string "
@@ -3228,11 +3110,6 @@ class Resample_2(ProcessMIA):
         out_images_desc = "The resampled images"
 
         # Inputs traits
-
-        # self.add_trait(
-        #     "doublet_list", traits.List(output=False, desc=doublet_list_desc)
-        # )
-
         self.add_trait(
             "files_to_resample",
             InputMultiPath(
@@ -3336,7 +3213,6 @@ class Resample_2(ProcessMIA):
         if not os.path.exists(roi_data_dir):
             os.mkdir(roi_data_dir)
 
-        # conv_dir = os.path.join(roi_dir, "convROI_BOLD")
         conv_dir2 = os.path.join(roi_data_dir, "convROI_BOLD2")
         tmp = "None"
 
@@ -3354,21 +3230,10 @@ class Resample_2(ProcessMIA):
         if os.path.isdir(tmp):
             shutil.rmtree(tmp)
 
-        # roi_dir = os.path.join(
-        #     self.output_directory,
-        #     self.dict4runtime["patient_name"] + "_data"
-        # )
-        # conv_dir = os.path.join(roi_dir, "convROI_BOLD")
-        # conv_dir2 = os.path.join(roi_dir, "convROI_BOLD2")
-
         # Setting files_to_resample to the resolution of the reference_image
         mask = nib.load(self.reference_image).get_fdata()
         mask_size = mask.shape[:3]
 
-        # for roi in self.doublet_list:
-        #     roi_file = os.path.join(
-        #         conv_dir, "conv" + roi[0] + roi[1] + ".nii"
-        #     )
         for roi_file in self.files_to_resample:
             roi_img = nib.load(roi_file)
             roi_data = roi_img.get_fdata()
