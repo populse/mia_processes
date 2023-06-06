@@ -88,6 +88,7 @@ class Rois(Pipeline):
         self.nodes[
             "result_collector"
         ].process.parameter_files = traits.Undefined
+        self.nodes["result_collector"].set_plug_value("laterality_index", True)
 
         # links
         self.export_parameter(
