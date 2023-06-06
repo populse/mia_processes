@@ -18,8 +18,8 @@ pre-processing steps, which are not found in nipype.
         - IntensityClip
         - Mask
         - NonSteadyStateDetector
-        - Resample_1
-        - Resample_2
+        - Resample1
+        - Resample2
         - RotationMask
         - Sanitize
         - TemplateFromTemplateFlow
@@ -2504,15 +2504,15 @@ class NonSteadyStateDetector(ProcessMIA):
         self.n_volumes_to_discard = is_outlier(global_signal)
 
 
-class Resample_1(ProcessMIA):
+class Resample1(ProcessMIA):
     """
     *Resamples an image to the resolution of a reference image*
 
     - Uses nibabel.processing.resample_from_to().
 
     Please, see the complete documentation for the
-    `Resample_1` brick in the populse.mia_processes website
-    https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/Resample_1.html
+    `Resample1` brick in the populse.mia_processes website
+    https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/Resample1.html
 
     """
 
@@ -2524,7 +2524,7 @@ class Resample_1(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(Resample_1, self).__init__()
+        super(Resample1, self).__init__()
 
         # Third party softwares required for the execution of the brick
         self.requirement = []
@@ -2628,7 +2628,7 @@ class Resample_1(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Resample_1, self).list_outputs()
+        super(Resample1, self).list_outputs()
 
         # Outputs definition
         if (
@@ -2696,10 +2696,10 @@ class Resample_1(ProcessMIA):
                         msg = QMessageBox()
                         msg.setIcon(QMessageBox.Warning)
                         msg.setWindowTitle(
-                            "mia_processes - " "Resample_1 brick Warning!"
+                            "mia_processes - Resample1 brick Warning!"
                         )
                         msg.setText(
-                            "Currently, the Resample_1 brick only "
+                            "Currently, the Resample1 brick only "
                             "allows to resample 3D images from 3D or "
                             "4D reference images.\n\n However the "
                             "'{0}' reference image is a {1}D and the "
@@ -2716,7 +2716,7 @@ class Resample_1(ProcessMIA):
                         msg.buttonClicked.connect(msg.close)
                         msg.exec()
                         print(
-                            "\nResample_1 brick: Initialisation failed ... "
+                            "\nResample1 brick: Initialisation failed ... "
                             "Please check the input parameters!"
                         )
                         files_name = None
@@ -2726,7 +2726,7 @@ class Resample_1(ProcessMIA):
                     msg = QMessageBox()
                     msg.setIcon(QMessageBox.Warning)
                     msg.setWindowTitle(
-                        "mia_processes - " "Resample_1 brick Warning!"
+                        "mia_processes - Resample1 brick Warning!"
                     )
                     msg.setText(
                         "files_to_resample '{0}' or/and "
@@ -2734,7 +2734,7 @@ class Resample_1(ProcessMIA):
                         "you want to continue? \n\n"
                         "- To correct the input parameters "
                         "click 'Abort'.\n\n"
-                        "- If the Resample_1 brick is located in a "
+                        "- If the Resample1 brick is located in a "
                         "pipeline, it may be usual that this(these) "
                         "parameter(s) is(are) empty at the "
                         "initialisation time. In this case, if the "
@@ -2749,7 +2749,7 @@ class Resample_1(ProcessMIA):
 
                     if retval == QMessageBox.Yes:
                         print(
-                            "\nResample_1 brick Warning!: Empty input "
+                            "\nResample1 brick Warning!: Empty input "
                             "file(s). No check of the dimensions of the "
                             "input images is done ... (files_to_resample "
                             "must be a 3D and reference_image must be a 3D "
@@ -2758,7 +2758,7 @@ class Resample_1(ProcessMIA):
 
                     else:
                         print(
-                            "\nResample_1 brick: Initialisation failed ... "
+                            "\nResample1 brick: Initialisation failed ... "
                             "Please check the input parameters!"
                         )
                         files_name = None
@@ -2793,9 +2793,7 @@ class Resample_1(ProcessMIA):
             if (self.suffix == " ") and (self.prefix == " ") and (files_name):
                 msg = QMessageBox()
                 msg.setIcon(QMessageBox.Warning)
-                msg.setWindowTitle(
-                    "mia_processes - " "Resample_1 brick Warning!"
-                )
+                msg.setWindowTitle("mia_processes - Resample1 brick Warning!")
                 msg.setText(
                     "Suffix and prefix input parameters are not "
                     "defined or consist only of one or more white "
@@ -2812,7 +2810,7 @@ class Resample_1(ProcessMIA):
 
                 if retval == QMessageBox.Yes:
                     print(
-                        "\nResample_1 brick warning: suffix and prefix input "
+                        "\nResample1 brick warning: suffix and prefix input "
                         "parameters are not defined, the following files "
                         "could be overwrite!:\n{0} ...\n".format(set(files))
                     )
@@ -2833,9 +2831,7 @@ class Resample_1(ProcessMIA):
 
                 msg = QMessageBox()
                 msg.setIcon(QMessageBox.Warning)
-                msg.setWindowTitle(
-                    "mia_processes - " "Resample_1 brick Warning!"
-                )
+                msg.setWindowTitle("mia_processes - Resample1 brick Warning!")
                 msg.setText(
                     "The suffix, prefix and suffix_to_delete input "
                     "parameters combination seems to create for at "
@@ -2919,7 +2915,7 @@ class Resample_1(ProcessMIA):
 
                             else:
                                 print(
-                                    "\nResample_1 brick:\nThe 'PatientName' "
+                                    "\nResample1 brick:\nThe 'PatientName' "
                                     "tag could not be added to the database "
                                     "for the '{}' parameter. This can lead to "
                                     "a subsequent issue during "
@@ -2993,11 +2989,11 @@ class Resample_1(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(Resample_1, self).run_process_mia()
+        super(Resample1, self).run_process_mia()
         files_name = self.files_to_resample
         refName = nib.load(self.reference_image)
         print(
-            "\nResample_1 process from mia_processes: \n",
+            "\nResample1 process from mia_processes: \n",
             self._check_interp(),
             " \n",
         )
@@ -3068,7 +3064,7 @@ class Resample_1(ProcessMIA):
             nib.save(fileFinal, file_out)
 
 
-class Resample_2(ProcessMIA):
+class Resample2(ProcessMIA):
     """
     *Resamples an image to the resolution of a reference image*
 
@@ -3087,7 +3083,7 @@ class Resample_2(ProcessMIA):
         'self.requirement' attribute (optional) is used to define the
         third-party products necessary for the running of the brick.
         """
-        super(Resample_2, self).__init__()
+        super(Resample2, self).__init__()
 
         # Inputs description
         files_to_resample_desc = (
@@ -3155,7 +3151,7 @@ class Resample_2(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Resample_2, self).list_outputs()
+        super(Resample2, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if (
@@ -3168,7 +3164,7 @@ class Resample_2(ProcessMIA):
 
             if patient_name is None:
                 print(
-                    "\nResample_2:\n The PatientName tag is not filled "
+                    "\nResample2:\n The PatientName tag is not filled "
                     "in the database for the {} file ...\n The calculation"
                     "is aborted...".format(self.reference_image)
                 )
@@ -3199,7 +3195,7 @@ class Resample_2(ProcessMIA):
         """Dedicated to the process launch step of the brick."""
 
         # No need the next line (we don't use self.process et SPM)
-        # super(Resample_2, self).run_process_mia()
+        # super(Resample2, self).run_process_mia()
 
         pat_name_dir = os.path.join(
             self.output_directory, self.dict4runtime["patient_name"] + "_data"
@@ -3221,7 +3217,7 @@ class Resample_2(ProcessMIA):
             os.mkdir(tmp)
             shutil.move(conv_dir2, os.path.join(tmp, "convROI_BOLD2"))
             print(
-                '\nResample_2 brick:\nA "{}" folder already exists, '
+                '\nResample2 brick:\nA "{}" folder already exists, '
                 "it will be overwritten by this new "
                 "calculation...".format(conv_dir2)
             )
@@ -3251,7 +3247,7 @@ class Resample_2(ProcessMIA):
             out_file = os.path.join(conv_dir2, out_file)
             nib.save(resized_img, out_file)
             print(
-                "\nResample_2 brick:{0} saved".format(
+                "\nResample2 brick:{0} saved".format(
                     os.path.basename(out_file)
                 )
             )
