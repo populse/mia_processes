@@ -18,8 +18,8 @@ pre-processing steps, which are not found in nipype.
         - IntensityClip
         - Mask
         - NonSteadyStateDetector
-        - Resample_1
-        - Resample_2
+        - Resample1
+        - Resample2
         - RotationMask
         - Sanitize
         - TemplateFromTemplateFlow
@@ -44,9 +44,6 @@ import os
 import shutil
 import tempfile
 
-# Other import
-from distutils.dir_util import copy_tree
-
 # nibabel import
 import nibabel as nib
 import nibabel.processing as nibp
@@ -62,7 +59,6 @@ from nipype.interfaces.base import (
     traits,
 )
 from nipype.interfaces.spm.base import ImageFileSPM
-from populse_mia.software_properties import Config
 
 # populse_mia import
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
@@ -83,6 +79,13 @@ from mia_processes.utils import (
     get_dbFieldValue,
     set_dbFieldValue,
 )
+
+# Other import
+# from distutils.dir_util import copy_tree
+
+
+# from populse_mia.software_properties import Config
+
 
 EXT = {"NIFTI_GZ": "nii.gz", "NIFTI": "nii"}
 
@@ -151,14 +154,20 @@ class ApplyBiasCorrection(ProcessMIA):
                 valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
 
                 if not valid_ext:
-                    print("\nThe input image format is" " not recognized...!")
+                    print(
+                        "\nApplyBiasCorrection brick: The input image "
+                        "format is not recognized...!"
+                    )
                     return
 
                 self.outputs["out_file"] = os.path.join(
                     self.output_directory, fileName + "_inu." + in_ext
                 )
             else:
-                print("No output_directory was found...!\n")
+                print(
+                    "ApplyBiasCorrection brick: No output_directory was "
+                    "found...!\n"
+                )
                 return
 
         if self.outputs:
@@ -314,7 +323,10 @@ class ArtifactMask(ProcessMIA):
             valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
 
             if not valid_ext:
-                print("\nThe input image format is" " not recognized...!")
+                print(
+                    "\nArtifactMask brick: The input image format is not "
+                    "recognized...!"
+                )
                 return
 
             file_hat = os.path.join(
@@ -372,7 +384,11 @@ class ArtifactMask(ProcessMIA):
             FileNotFoundError,
             TypeError,
         ) as e:
-            print("\nError with files to mask, during " "initialisation: ", e)
+            print(
+                "\nArtifactMask brick: Error with files to mask, during "
+                "initialisation: ",
+                e,
+            )
             imnii = None
             hmnii = None
             rmnii = None
@@ -583,7 +599,10 @@ class Binarize(ProcessMIA):
             for file_name1 in files_name:
                 valid_ext, in_ext, fileName = checkFileExt(file_name1, EXT)
                 if not valid_ext:
-                    print("\nThe input image format is" " not recognized...!")
+                    print(
+                        "\nBinarize brick: The input image format is not "
+                        "recognized...!"
+                    )
                     return
 
                 if self.suffix == " " and self.prefix == " " and flag is True:
@@ -617,14 +636,14 @@ class Binarize(ProcessMIA):
                         if retval == QMessageBox.YesToAll:
                             flag = False
                             print(
-                                "\nYesToAll selected: end of overwrite "
-                                "checks on input images ..."
+                                "\nBinarize brick: YesToAll selected ; end of "
+                                "overwrite checks on input images ..."
                             )
                     else:
                         files_name = []
                         print(
-                            "\nAborted."
-                            "Please check your input parameters ..."
+                            "\nBinarize brick: Initialization Aborted. Please "
+                            "check your input parameters ..."
                         )
                         return
 
@@ -646,8 +665,9 @@ class Binarize(ProcessMIA):
 
             else:
                 print(
-                    "- There was no output file deducted during "
-                    "initialisation. Please check the input parameters...!"
+                    "- Binarize brick: There was no output file deducted "
+                    "during initialization. Please check the "
+                    "input parameters...!"
                 )
 
         # tags inheritance (optional)
@@ -719,8 +739,8 @@ class Binarize(ProcessMIA):
                 TypeError,
             ) as e:
                 print(
-                    "\nError with files to binarize, during "
-                    "initialisation: ",
+                    "\nBinarize brick: Error with files to binarize, during "
+                    "the run: ",
                     e,
                 )
                 img = None
@@ -847,7 +867,10 @@ class ConformImage(ProcessMIA):
             valid_ext, in_ext, file_name = checkFileExt(self.in_file, EXT)
 
             if not valid_ext:
-                print("\nThe input image format is not recognized...!")
+                print(
+                    "\nConformImage brick: The input image format is not "
+                    "recognized...!"
+                )
                 return
 
             path, _ = os.path.split(self.in_file)
@@ -898,8 +921,9 @@ class ConformImage(ProcessMIA):
 
             else:
                 print(
-                    "- There was no output file deducted during "
-                    "initialisation. Please check the input parameters...!"
+                    "- ConformImage brick: There was no output file deducted "
+                    "during initialization. Please check the input "
+                    "parameters...!"
                 )
 
             # tags inheritance (optional)
@@ -925,7 +949,9 @@ class ConformImage(ProcessMIA):
             TypeError,
         ) as e:
             print(
-                "\nError with file to conform, during " "initialisation: ", e
+                "\nConformImage brick: Error with file to conform, during the "
+                "run: ",
+                e,
             )
             img = None
 
@@ -958,20 +984,17 @@ class ConformImage(ProcessMIA):
 
 class ConvROI(ProcessMIA):
     """
-    * Convolve regions of interest with a mask.
+    * Convolve images with an image.
 
-    - Resampling the mask to the size of the ROIs, using the first ROI.
-    - Then convolve each ROI with resized mask.
-    - ROIs are defined from doublet_list parameter as
-      doublet_list[0][0] + doublet_list[0][1] + '.nii',
-      doublet_list[1][0] + doublet_list[1][1] + '.nii',
-      etc.
-    - The output_directory"/roi_"PatientName directory is created with the
-      corresponding ROI files (the miaresources package must be installed).
-    - The output_directory"/roi_"PatientName"/convROI_BOLD" directory is
-      created to receive the convolution results from the runtime.
-    - To work correctly, the database entry for the in_image parameter must
-      have the "PatientName" tag filled in.
+    - Resampling the convolve_with to the size of images_to_convolve,
+      using the first element of images_to_convolve.
+    - Then convolve each element of images_to_convolve with resized
+      convolve_with.
+    - The output_directory/PatientName_data/ROI_data/convROI_BOLD directory is
+      created to receive the convolved images. If this directory exists at
+      runtime it is deleted.
+    - To work correctly, the database entry for the convolve_with
+      parameter must have the "PatientName" tag filled in.
     """
 
     def __init__(self):
@@ -985,23 +1008,39 @@ class ConvROI(ProcessMIA):
         super(ConvROI, self).__init__()
 
         # Inputs description
-        doublet_list_desc = (
-            "A list of lists containing doublets of strings "
-            '(e.g. [["ROI_OCC", "_L"], ["ROI_OCC", "_R"], '
-            '["ROI_PAR", "_l"], ...]'
+        images_to_convolve_desc = (
+            "A list of images to convolve with " "convolve_with image"
         )
-        in_image_desc = "An image (an existing, uncompressed file)"
+        convolve_with_desc = (
+            "An image used to convolve with " "images_to_convolve"
+        )
+        prefix_desc = "The prefix for the out_images (a string)"
 
         # Outputs description
-        out_images_desc = "The convoluted  images"
+        out_images_desc = "The convoluted images"
 
         # Inputs traits
         self.add_trait(
-            "doublet_list", traits.List(output=False, desc=doublet_list_desc)
+            "images_to_convolve",
+            InputMultiPath(
+                ImageFileSPM(),
+                output=False,
+                optional=False,
+                desc=images_to_convolve_desc,
+            ),
+        )
+        self.add_trait(
+            "convolve_with",
+            ImageFileSPM(
+                output=False, optional=False, desc=convolve_with_desc
+            ),
         )
 
         self.add_trait(
-            "in_image", ImageFileSPM(output=False, desc=in_image_desc)
+            "prefix",
+            traits.String(
+                "conv", output=False, optional=True, desc=prefix_desc
+            ),
         )
 
         # Outputs traits
@@ -1035,93 +1074,39 @@ class ConvROI(ProcessMIA):
         super(ConvROI, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
-        if self.doublet_list != [] and self.in_image:
+        if (
+            self.images_to_convolve != Undefined
+            and self.convolve_with != Undefined
+        ):
             patient_name = get_dbFieldValue(
-                self.project, self.in_image, "PatientName"
+                self.project, self.convolve_with, "PatientName"
             )
 
             if patient_name is None:
                 print(
                     '\nConvROI:\n The "PatientName" tag is not filled '
                     "in the database for the {} file ...\n The calculation"
-                    "is aborted...".format(self.in_image)
+                    "is aborted...".format(self.convolve_with)
                 )
                 return self.make_initResult()
 
             self.dict4runtime["patient_name"] = patient_name
-            roi_dir = os.path.join(
-                self.output_directory, "roi_" + patient_name
+            conv_dir = os.path.join(
+                self.output_directory,
+                patient_name + "_data",
+                "ROI_data",
+                "convROI_BOLD",
             )
-
-            # if not existing, creates self.output_directory'/roi_dir
-            # folder. If already existing, remove old reference ROIs in roi_dir
-            # and remove the old roi_dir'/convROI_BOLD'
-            if os.path.exists(roi_dir):
-                elts = os.listdir(roi_dir)
-                # filtering only the files
-                files = [
-                    f for f in elts if os.path.isfile(os.path.join(roi_dir, f))
-                ]
-                # filtering only the directories
-                dirs = [
-                    d for d in elts if os.path.isdir(os.path.join(roi_dir, d))
-                ]
-                tmp = False
-
-                if "convROI_BOLD" in dirs:
-                    tmp = tempfile.mktemp(dir=os.path.dirname(roi_dir))
-                    os.mkdir(tmp)
-                    shutil.move(
-                        os.path.join(roi_dir, "convROI_BOLD"),
-                        os.path.join(tmp, "convROI_BOLD"),
-                    )
-                    print(
-                        '\nConvROI brick:\nA "{}" folder already exists, '
-                        "it will be overwritten by this new "
-                        "calculation...".format(
-                            os.path.join(roi_dir, "convROI_BOLD")
-                        )
-                    )
-
-                for start_fil in [i[0] + i[1] for i in self.doublet_list]:
-                    for fil in files:
-                        if fil.startswith(start_fil):
-                            if not os.path.isdir(tmp):
-                                tmp = tempfile.mktemp(
-                                    dir=os.path.dirname(roi_dir)
-                                )
-                                os.mkdir(tmp)
-
-                            shutil.move(os.path.join(roi_dir, fil), tmp)
-                            print(
-                                '\nConvROI brick:\nA "{}" file already '
-                                "exists, it will be overwritten by this new "
-                                "calculation...".format(
-                                    os.path.join(roi_dir, fil)
-                                )
-                            )
-
-                if os.path.isdir(tmp):
-                    shutil.rmtree(tmp)
-
-            else:
-                os.mkdir(roi_dir)
-
-            # Copying the ROIs from the resources folder
-            # to self.output_directory'/roi_'patient_name
-            config = Config()
-            ref_dir = os.path.join(config.get_resources_path(), "ROIs")
-            copy_tree(ref_dir, roi_dir)
-
-            # Creates roi_dir/'convROI_BOLD' folder
-            conv_dir = os.path.join(roi_dir, "convROI_BOLD")
-            os.mkdir(conv_dir)
-
             list_out = []
 
-            for roi in self.doublet_list:
+            if self.prefix.isspace():
+                self.prefix = ""
+
+            for roi_file in self.images_to_convolve:
                 list_out.append(
-                    os.path.join(conv_dir, "conv" + roi[0] + roi[1] + ".nii")
+                    os.path.join(
+                        conv_dir, self.prefix + os.path.basename(roi_file)
+                    )
                 )
 
             self.outputs["out_images"] = list_out
@@ -1135,24 +1120,45 @@ class ConvROI(ProcessMIA):
         # No need the next line (we don't use self.process et SPM)
         # super(ConvROI, self).run_process_mia()
 
-        roi_dir = os.path.join(
-            self.output_directory, "roi_" + self.dict4runtime["patient_name"]
+        pat_name_dir = os.path.join(
+            self.output_directory, self.dict4runtime["patient_name"] + "_data"
         )
-        conv_dir = os.path.join(roi_dir, "convROI_BOLD")
 
-        # Resampling the self.in_image to the size of the ROIs, using the
-        # first ROI in self.doublet_list
-        roi_1 = self.doublet_list[0]
-        roi_file = os.path.join(roi_dir, roi_1[0] + roi_1[1] + ".nii")
-        roi_img = nib.load(roi_file)
+        if not os.path.exists(pat_name_dir):
+            os.mkdir(pat_name_dir)
+
+        roi_data_dir = os.path.join(pat_name_dir, "ROI_data")
+
+        if not os.path.exists(roi_data_dir):
+            os.mkdir(roi_data_dir)
+
+        conv_dir = os.path.join(roi_data_dir, "convROI_BOLD")
+        tmp = "None"
+
+        if os.path.isdir(conv_dir):
+            tmp = tempfile.mktemp(dir=os.path.dirname(roi_data_dir))
+            os.mkdir(tmp)
+            shutil.move(conv_dir, os.path.join(tmp, "convROI_BOLD"))
+            print(
+                '\nConvROI brick:\nA "{}" folder already exists, '
+                "it will be overwritten by this new "
+                "calculation...".format(conv_dir)
+            )
+        os.mkdir(conv_dir)
+
+        if os.path.isdir(tmp):
+            shutil.rmtree(tmp)
+
+        # Resampling the convolve_with to the size of the ROIs, using the
+        # first ROI in images_to_convolve
+        roi_img = nib.load(self.images_to_convolve[0])
         roi_data = roi_img.get_fdata()
         roi_size = roi_data.shape[:3]
-        mask_thresh = threshold(self.in_image, 0.5).get_fdata()
+        mask_thresh = threshold(self.convolve_with, 0.5).get_fdata()
         resized_mask = resize(mask_thresh, roi_size)
 
-        # Convolve each ROI with resized self.in_image
-        for roi in self.doublet_list:
-            roi_file = os.path.join(roi_dir, roi[0] + roi[1] + ".nii")
+        # Convolve each ROI with resized convolve_with
+        for roi_file in self.images_to_convolve:
             roi_img = nib.load(roi_file)
             roi_data = roi_img.get_fdata()
             mult = (roi_data * resized_mask).astype(float)
@@ -1160,14 +1166,12 @@ class ConvROI(ProcessMIA):
             #       Currently we take from ROI images
             mult_img = nib.Nifti1Image(mult, roi_img.affine, roi_img.header)
 
-            # Image save in
-            # self.output_directory/'roi'/'convROI_BOLD'/
-            # 'conv'self.doublet_list[0]self.doublet_list[1]'.nii'
+            # Image save in conv_dir
             out_file = os.path.join(
-                conv_dir, "conv" + roi[0] + roi[1] + ".nii"
+                conv_dir, self.prefix + os.path.basename(roi_file)
             )
             nib.save(mult_img, out_file)
-            print("{0} saved".format(os.path.basename(out_file)))
+            print("{0} saved".format(out_file))
 
 
 class Enhance(ProcessMIA):
@@ -1281,7 +1285,10 @@ class Enhance(ProcessMIA):
                 valid_ext, in_ext, fileName = checkFileExt(file_name1, EXT)
 
                 if not valid_ext:
-                    print("\nThe input image format is" " not recognized...!")
+                    print(
+                        "\nEnhance brick: The input image format is not "
+                        "recognized...!"
+                    )
                     return
                 path, _ = os.path.split(file_name1)
 
@@ -1294,7 +1301,7 @@ class Enhance(ProcessMIA):
                     msg = QMessageBox()
                     msg.setIcon(QMessageBox.Warning)
                     msg.setWindowTitle(
-                        "mia_processes - " "Enhance brick Warning!"
+                        "mia_processes - Enhance brick Warning!"
                     )
                     msg.setText(
                         "Suffix and prefix input parameters are not "
@@ -1321,13 +1328,14 @@ class Enhance(ProcessMIA):
                         if retval == QMessageBox.YesToAll:
                             flag = False
                             print(
-                                "\nYesToAll selected: end of overwrite "
-                                "checks on input images ..."
+                                "\nEnhance brick brick: YesToAll selected ; "
+                                "end of overwrite checks on input images ..."
                             )
                     else:
                         files_name = []
                         print(
-                            "\nAborted. Please check your input parameters ..."
+                            "\nEnhance brick brick: Aborted ; Please check "
+                            "your input parameters ..."
                         )
                         return
 
@@ -1349,8 +1357,9 @@ class Enhance(ProcessMIA):
 
             else:
                 print(
-                    "- There was no output file deducted during "
-                    "initialisation. Please check the input parameters...!"
+                    "- Enhance brick: There was no output file deducted "
+                    "during initialisation. Please check the input "
+                    "parameters...!"
                 )
 
         # tags inheritance (optional)
@@ -1419,7 +1428,8 @@ class Enhance(ProcessMIA):
                 TypeError,
             ) as e:
                 print(
-                    "\nError with file to enhance, during " "initialisation: ",
+                    "\nEnhance brick: Error with file to enhance, during the "
+                    "run: ",
                     e,
                 )
                 img = None
@@ -1534,11 +1544,14 @@ class EstimateSNR(ProcessMIA):
                 valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
 
                 if not valid_ext:
-                    print("\nThe input image format is" " not recognized...!")
+                    print(
+                        "\nEstimateSNR brick: The input image format is not "
+                        "recognized...!"
+                    )
                     return
 
             else:
-                print("No output_directory was found...!\n")
+                print("EstimateSNR brick: No output_directory was found...!\n")
                 return
 
         # Return the requirement, outputs and inheritance_dict
@@ -1559,7 +1572,7 @@ class EstimateSNR(ProcessMIA):
             FileNotFoundError,
             TypeError,
         ) as e:
-            print("\nError with files, during " "initialisation: ", e)
+            print("\nEstimateSNR brick: Error with files, during the run: ", e)
             return
 
         data = img.get_fdata()
@@ -1666,7 +1679,10 @@ class GradientThreshold(ProcessMIA):
             valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
 
             if not valid_ext:
-                print("\nThe input image format is" " not recognized...!")
+                print(
+                    "\nGradientThreshold brick: The input image format is "
+                    "not recognized...!"
+                )
                 return
 
             path, _ = os.path.split(self.in_file)
@@ -1700,7 +1716,10 @@ class GradientThreshold(ProcessMIA):
                     )
 
                 else:
-                    print("\nAborted. Please check your input parameters ...")
+                    print(
+                        "\nGradientThreshold brick Aborted. Please check "
+                        "your input parameters ..."
+                    )
                     return
 
             file = os.path.join(
@@ -1719,8 +1738,9 @@ class GradientThreshold(ProcessMIA):
 
             else:
                 print(
-                    "- There was no output file deducted during "
-                    "initialisation. Please check the input parameters...!"
+                    "- GradientThreshold brick: There was no output file "
+                    "deducted during initialization. Please check the input "
+                    "parameters...!"
                 )
 
             # tags inheritance (optional)
@@ -1748,7 +1768,9 @@ class GradientThreshold(ProcessMIA):
             TypeError,
         ) as e:
             print(
-                "\nError with file to enhance, during " "initialisation: ", e
+                "\nGradientThreshold brick: Error with file to enhance, "
+                "during the run: ",
+                e,
             )
             img = None
             seg_img = None
@@ -1907,7 +1929,10 @@ class Harmonize(ProcessMIA):
             valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
 
             if not valid_ext:
-                print("\nThe input image format is" " not recognized...!")
+                print(
+                    "\nHarmonize brick: The input image format is "
+                    "not recognized...!"
+                )
                 return
 
             if (
@@ -1955,7 +1980,10 @@ class Harmonize(ProcessMIA):
                     )
 
                 else:
-                    print("\nAborted. Please check your input parameters ...")
+                    print(
+                        "\nHarmonize brick: Aborted. Please check your "
+                        "input parameters ..."
+                    )
                     return
 
             file = os.path.join(
@@ -1974,8 +2002,9 @@ class Harmonize(ProcessMIA):
 
             else:
                 print(
-                    "- There was no output file deducted during "
-                    "initialisation. Please check the input parameters...!"
+                    "- Harmonize brick: There was no output file deducted "
+                    "during initialization. Please check the input "
+                    "parameters...!"
                 )
 
             # tags inheritance (optional)
@@ -1998,7 +2027,9 @@ class Harmonize(ProcessMIA):
             TypeError,
         ) as e:
             print(
-                "\nError with file to enhance, during " "initialisation: ", e
+                "\nHarmonize brick: Error with file to enhance, during the "
+                "run: ",
+                e,
             )
             img = None
             wm_img = None
@@ -2165,7 +2196,10 @@ class IntensityClip(ProcessMIA):
                     ),
                 )
             else:
-                print("No output_directory was found...!\n")
+                print(
+                    "IntensityClip brick: No output_directory was "
+                    "found...!\n"
+                )
                 return
 
         if self.outputs:
@@ -2303,7 +2337,10 @@ class Mask(ProcessMIA):
             valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
 
             if not valid_ext:
-                print("\nThe input image format is" " not recognized...!")
+                print(
+                    "\nMask brick: The input image format is not "
+                    "recognized...!"
+                )
                 return
 
             if (
@@ -2349,7 +2386,10 @@ class Mask(ProcessMIA):
                     )
 
                 else:
-                    print("\nAborted. Please check your input parameters ...")
+                    print(
+                        "\nMask brick: Aborted. Please check your input "
+                        "parameters ..."
+                    )
                     return
 
             file = os.path.join(
@@ -2368,8 +2408,8 @@ class Mask(ProcessMIA):
 
             else:
                 print(
-                    "- There was no output file deducted during "
-                    "initialisation. Please check the input parameters...!"
+                    "- Mask brick: There was no output file deducted during "
+                    "initialization. Please check the input parameters...!"
                 )
 
         # tags inheritance (optional)
@@ -2396,7 +2436,10 @@ class Mask(ProcessMIA):
             FileNotFoundError,
             TypeError,
         ) as e:
-            print("\nError with files to mask, during " "initialisation: ", e)
+            print(
+                "\nMask brick: Error with files to mask, during " "the run: ",
+                e,
+            )
             img = None
 
         if (img is not None) and (mask_img is not None):
@@ -2508,7 +2551,9 @@ class NonSteadyStateDetector(ProcessMIA):
             TypeError,
         ) as e:
             print(
-                "\nError with file to enhance, during " "initialisation: ", e
+                "\nNonSteadyStateDetector brick: Error with file to enhance, "
+                "during the run: ",
+                e,
             )
             in_nii = None
 
@@ -2523,13 +2568,15 @@ class NonSteadyStateDetector(ProcessMIA):
         self.n_volumes_to_discard = is_outlier(global_signal)
 
 
-class Resample_1(ProcessMIA):
+class Resample1(ProcessMIA):
     """
-    *Resamples an image to the resolution of a reference image.
+    *Resamples an image to the resolution of a reference image*
+
+    - Uses nibabel.processing.resample_from_to().
 
     Please, see the complete documentation for the
-    `Resample_1` brick in the populse.mia_processes website
-    https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/Resample_1.html
+    `Resample1` brick in the populse.mia_processes website
+    https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/Resample1.html
 
     """
 
@@ -2541,7 +2588,7 @@ class Resample_1(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(Resample_1, self).__init__()
+        super(Resample1, self).__init__()
 
         # Third party softwares required for the execution of the brick
         self.requirement = []
@@ -2645,7 +2692,7 @@ class Resample_1(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Resample_1, self).list_outputs()
+        super(Resample1, self).list_outputs()
 
         # Outputs definition
         if (
@@ -2665,7 +2712,9 @@ class Resample_1(ProcessMIA):
                 TypeError,
             ) as e:
                 print(
-                    "\nError with reference_image, during initialisation: ", e
+                    "\nResample1 brick: Error with reference_image, during "
+                    "initialisation: ",
+                    e,
                 )
                 refName = None
 
@@ -2700,8 +2749,8 @@ class Resample_1(ProcessMIA):
                     TypeError,
                 ) as e:
                     print(
-                        "\nError with files_to_resample, during "
-                        "initialisation: ",
+                        "\nResample1 brick: Error with files_to_resample, "
+                        "during initialisation: ",
                         e,
                     )
                     fileName = None
@@ -2713,10 +2762,10 @@ class Resample_1(ProcessMIA):
                         msg = QMessageBox()
                         msg.setIcon(QMessageBox.Warning)
                         msg.setWindowTitle(
-                            "mia_processes - " "Resample_1 brick Warning!"
+                            "mia_processes - Resample1 brick Warning!"
                         )
                         msg.setText(
-                            "Currently, the Resample_1 brick only "
+                            "Currently, the Resample1 brick only "
                             "allows to resample 3D images from 3D or "
                             "4D reference images.\n\n However the "
                             "'{0}' reference image is a {1}D and the "
@@ -2733,7 +2782,7 @@ class Resample_1(ProcessMIA):
                         msg.buttonClicked.connect(msg.close)
                         msg.exec()
                         print(
-                            "\nResample_1 brick: Initialisation failed ... "
+                            "\nResample1 brick: Initialisation failed ... "
                             "Please check the input parameters!"
                         )
                         files_name = None
@@ -2743,7 +2792,7 @@ class Resample_1(ProcessMIA):
                     msg = QMessageBox()
                     msg.setIcon(QMessageBox.Warning)
                     msg.setWindowTitle(
-                        "mia_processes - " "Resample_1 brick Warning!"
+                        "mia_processes - Resample1 brick Warning!"
                     )
                     msg.setText(
                         "files_to_resample '{0}' or/and "
@@ -2751,7 +2800,7 @@ class Resample_1(ProcessMIA):
                         "you want to continue? \n\n"
                         "- To correct the input parameters "
                         "click 'Abort'.\n\n"
-                        "- If the Resample_1 brick is located in a "
+                        "- If the Resample1 brick is located in a "
                         "pipeline, it may be usual that this(these) "
                         "parameter(s) is(are) empty at the "
                         "initialisation time. In this case, if the "
@@ -2766,7 +2815,7 @@ class Resample_1(ProcessMIA):
 
                     if retval == QMessageBox.Yes:
                         print(
-                            "\nResample_1 brick Warning!: Empty input "
+                            "\nResample1 brick Warning!: Empty input "
                             "file(s). No check of the dimensions of the "
                             "input images is done ... (files_to_resample "
                             "must be a 3D and reference_image must be a 3D "
@@ -2775,7 +2824,7 @@ class Resample_1(ProcessMIA):
 
                     else:
                         print(
-                            "\nResample_1 brick: Initialisation failed ... "
+                            "\nResample1 brick: Initialisation failed ... "
                             "Please check the input parameters!"
                         )
                         files_name = None
@@ -2810,9 +2859,7 @@ class Resample_1(ProcessMIA):
             if (self.suffix == " ") and (self.prefix == " ") and (files_name):
                 msg = QMessageBox()
                 msg.setIcon(QMessageBox.Warning)
-                msg.setWindowTitle(
-                    "mia_processes - " "Resample_1 brick Warning!"
-                )
+                msg.setWindowTitle("mia_processes - Resample1 brick Warning!")
                 msg.setText(
                     "Suffix and prefix input parameters are not "
                     "defined or consist only of one or more white "
@@ -2829,7 +2876,7 @@ class Resample_1(ProcessMIA):
 
                 if retval == QMessageBox.Yes:
                     print(
-                        "\nResample_1 brick warning: suffix and prefix input "
+                        "\nResample1 brick warning: suffix and prefix input "
                         "parameters are not defined, the following files "
                         "could be overwrite!:\n{0} ...\n".format(set(files))
                     )
@@ -2850,9 +2897,7 @@ class Resample_1(ProcessMIA):
 
                 msg = QMessageBox()
                 msg.setIcon(QMessageBox.Warning)
-                msg.setWindowTitle(
-                    "mia_processes - " "Resample_1 brick Warning!"
-                )
+                msg.setWindowTitle("mia_processes - Resample1 brick Warning!")
                 msg.setText(
                     "The suffix, prefix and suffix_to_delete input "
                     "parameters combination seems to create for at "
@@ -2936,7 +2981,7 @@ class Resample_1(ProcessMIA):
 
                             else:
                                 print(
-                                    "\nResample_1 brick:\nThe 'PatientName' "
+                                    "\nResample1 brick:\nThe 'PatientName' "
                                     "tag could not be added to the database "
                                     "for the '{}' parameter. This can lead to "
                                     "a subsequent issue during "
@@ -3010,11 +3055,11 @@ class Resample_1(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(Resample_1, self).run_process_mia()
+        super(Resample1, self).run_process_mia()
         files_name = self.files_to_resample
         refName = nib.load(self.reference_image)
         print(
-            "\nResample_1 process from mia_processes: \n",
+            "\nResample1 process from mia_processes: \n",
             self._check_interp(),
             " \n",
         )
@@ -3085,15 +3130,14 @@ class Resample_1(ProcessMIA):
             nib.save(fileFinal, file_out)
 
 
-class Resample_2(ProcessMIA):
-    """Setting regions of interest to the resolution of the reference_image.
+class Resample2(ProcessMIA):
+    """
+    *Resamples an image to the resolution of a reference image*
 
-    - ROIs are defined from doublet_list parameter as
-      doublet_list[0][0] + doublet_list[0][1] + '.nii',
-      doublet_list[1][0] + doublet_list[1][1] + '.nii',
-      etc.
-    - The output_directory"/roi_"PatientName"/convROI_BOLD2" directory is
-      created to receive the convolution results from the runtime.
+    - Uses skimage.transform.resize()
+    - The output_directory/PatientName_data/ROI_data/convROI_BOLD2 directory is
+      created to receive the resampled images. If this directory exists at
+      runtime it is deleted.
     - To work correctly, the database entry for the reference_image parameter
       must have the "PatientName" tag filled in.
     """
@@ -3105,30 +3149,44 @@ class Resample_2(ProcessMIA):
         'self.requirement' attribute (optional) is used to define the
         third-party products necessary for the running of the brick.
         """
-        super(Resample_2, self).__init__()
+        super(Resample2, self).__init__()
 
         # Inputs description
-        doublet_list_desc = (
-            "A list of lists containing doublets of strings "
-            '(e.g. [["ROI_OCC", "_L"], ["ROI_OCC", "_R"], '
-            '["ROI_PAR", "_l"], ...]'
+        files_to_resample_desc = (
+            "The images that will be resampled (a "
+            "list of pathlike object or string "
+            "representing a file or a list of items "
+            "which are a pathlike object or string "
+            "representing a file, valid extensions: "
+            "[.img, .nii, .hdr])."
         )
+
         reference_image_desc = (
             "The reference image for resampling (an "
             "existing, uncompressed file)"
         )
 
+        suffix_desc = "The suffix for the out_images (a string)."
+
         # Outputs description
-        out_images_desc = "The resampled  images"
+        out_images_desc = "The resampled images"
 
         # Inputs traits
         self.add_trait(
-            "doublet_list", traits.List(output=False, desc=doublet_list_desc)
+            "files_to_resample",
+            InputMultiPath(
+                ImageFileSPM(), output=False, desc=files_to_resample_desc
+            ),
         )
 
         self.add_trait(
             "reference_image",
             ImageFileSPM(output=False, desc=reference_image_desc),
+        )
+
+        self.add_trait(
+            "suffix",
+            traits.String("_2", output=False, optional=True, desc=suffix_desc),
         )
 
         # Outputs traits
@@ -3159,82 +3217,40 @@ class Resample_2(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Resample_2, self).list_outputs()
+        super(Resample2, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
-        if self.doublet_list != [] and self.reference_image:
+        if (
+            self.files_to_resample != Undefined
+            and self.reference_image != Undefined
+        ):
             patient_name = get_dbFieldValue(
                 self.project, self.reference_image, "PatientName"
             )
 
             if patient_name is None:
                 print(
-                    "\nResample_2:\n The PatientName tag is not filled "
+                    "\nResample2:\n The PatientName tag is not filled "
                     "in the database for the {} file ...\n The calculation"
                     "is aborted...".format(self.reference_image)
                 )
                 return self.make_initResult()
 
             self.dict4runtime["patient_name"] = patient_name
-            roi_dir = os.path.join(
-                self.output_directory, "roi_" + patient_name
+            conv_dir2 = os.path.join(
+                self.output_directory,
+                patient_name + "_data",
+                "ROI_data",
+                "convROI_BOLD2",
             )
-
-            # if not existing, creates self.output_directory'/roi_'patient_name
-            # folder. If already existing, remove the roi_dir'/convROI_BOLD2'
-            if os.path.exists(roi_dir):
-                elts = os.listdir(roi_dir)
-                # filtering only the directories
-                dirs = [
-                    d for d in elts if os.path.isdir(os.path.join(roi_dir, d))
-                ]
-                tmp = False
-
-                if "convROI_BOLD2" in dirs:
-                    tmp = tempfile.mktemp(dir=os.path.dirname(roi_dir))
-                    os.mkdir(tmp)
-                    shutil.move(
-                        os.path.join(roi_dir, "convROI_BOLD2"),
-                        os.path.join(tmp, "convROI_BOLD2"),
-                    )
-                    print(
-                        '\nResample_2 brick:\nA "{}" folder already exists, '
-                        "it will be overwritten by this new "
-                        "calculation...".format(
-                            os.path.join(roi_dir, "convROI_BOLD2")
-                        )
-                    )
-
-                    if os.path.isdir(tmp):
-                        shutil.rmtree(tmp)
-
-                if "convROI_BOLD" not in dirs:
-                    print(
-                        "\nResample_2 brick:\nNo {} folder detected ...\nThe "
-                        "initialization is "
-                        "aborted ...".format(
-                            os.path.join(roi_dir, "convROI_BOLD")
-                        )
-                    )
-                    return self.make_initResult()
-
-            else:
-                print(
-                    "\nResample_2 brick:\nNo {} folder detected ...\nThe "
-                    "initialization is aborted ...".format(roi_dir)
-                )
-                return self.make_initResult()
-
-            # Creates roi_dir/'convROI_BOLD2' folder
-            conv_dir = os.path.join(roi_dir, "convROI_BOLD2")
-            os.mkdir(conv_dir)
-
             list_out = []
 
-            for roi in self.doublet_list:
-                list_out.append(
-                    os.path.join(conv_dir, "conv" + roi[0] + roi[1] + "2.nii")
-                )
+            for roi_file in self.files_to_resample:
+                out_file = os.path.basename(roi_file)
+                out_file_no_ext, file_extension = os.path.splitext(out_file)
+                out_file = out_file_no_ext + self.suffix + file_extension
+                out_file = os.path.join(conv_dir2, out_file)
+                list_out.append(out_file)
 
             self.outputs["out_images"] = list_out
 
@@ -3245,22 +3261,42 @@ class Resample_2(ProcessMIA):
         """Dedicated to the process launch step of the brick."""
 
         # No need the next line (we don't use self.process et SPM)
-        # super(Resample_2, self).run_process_mia()
+        # super(Resample2, self).run_process_mia()
 
-        roi_dir = os.path.join(
-            self.output_directory, "roi_" + self.dict4runtime["patient_name"]
+        pat_name_dir = os.path.join(
+            self.output_directory, self.dict4runtime["patient_name"] + "_data"
         )
-        conv_dir = os.path.join(roi_dir, "convROI_BOLD")
-        conv_dir2 = os.path.join(roi_dir, "convROI_BOLD2")
 
-        # Setting ROIs to the resolution of the reference_image
+        if not os.path.exists(pat_name_dir):
+            os.mkdir(pat_name_dir)
+
+        roi_data_dir = os.path.join(pat_name_dir, "ROI_data")
+
+        if not os.path.exists(roi_data_dir):
+            os.mkdir(roi_data_dir)
+
+        conv_dir2 = os.path.join(roi_data_dir, "convROI_BOLD2")
+        tmp = "None"
+
+        if os.path.isdir(conv_dir2):
+            tmp = tempfile.mktemp(dir=os.path.dirname(roi_data_dir))
+            os.mkdir(tmp)
+            shutil.move(conv_dir2, os.path.join(tmp, "convROI_BOLD2"))
+            print(
+                '\nResample2 brick:\nA "{}" folder already exists, '
+                "it will be overwritten by this new "
+                "calculation...".format(conv_dir2)
+            )
+        os.mkdir(conv_dir2)
+
+        if os.path.isdir(tmp):
+            shutil.rmtree(tmp)
+
+        # Setting files_to_resample to the resolution of the reference_image
         mask = nib.load(self.reference_image).get_fdata()
         mask_size = mask.shape[:3]
 
-        for roi in self.doublet_list:
-            roi_file = os.path.join(
-                conv_dir, "conv" + roi[0] + roi[1] + ".nii"
-            )
+        for roi_file in self.files_to_resample:
             roi_img = nib.load(roi_file)
             roi_data = roi_img.get_fdata()
             resized_roi = resize(roi_data, mask_size)
@@ -3271,13 +3307,13 @@ class Resample_2(ProcessMIA):
             )
 
             # Image save
-            out_file = os.path.join(
-                conv_dir2, "conv" + roi[0] + roi[1] + "2.nii"
-            )
+            out_file = os.path.basename(roi_file)
+            out_file_no_ext, file_extension = os.path.splitext(out_file)
+            out_file = out_file_no_ext + self.suffix + file_extension
+            out_file = os.path.join(conv_dir2, out_file)
             nib.save(resized_img, out_file)
-
             print(
-                "\nResample_2 brick:{0} saved".format(
+                "\nResample2 brick:{0} saved".format(
                     os.path.basename(out_file)
                 )
             )
@@ -3361,7 +3397,10 @@ class RotationMask(ProcessMIA):
             valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
 
             if not valid_ext:
-                print("\nThe input image format is" " not recognized...!")
+                print(
+                    "\nRotationMask brick: The input image format is not "
+                    "recognized...!"
+                )
                 return
 
             if (
@@ -3388,7 +3427,7 @@ class RotationMask(ProcessMIA):
                 msg = QMessageBox()
                 msg.setIcon(QMessageBox.Warning)
                 msg.setWindowTitle(
-                    "mia_processes - " "RotationMask brick Warning!"
+                    "mia_processes - RotationMask brick Warning!"
                 )
                 msg.setText(
                     "Suffix and prefix input parameters are not "
@@ -3409,7 +3448,10 @@ class RotationMask(ProcessMIA):
                     )
 
                 else:
-                    print("\nAborted. Please check your input parameters ...")
+                    print(
+                        "\nRotationMask brick Aborted. Please check your "
+                        "input parameters ..."
+                    )
                     return
 
             file = os.path.join(
@@ -3428,8 +3470,9 @@ class RotationMask(ProcessMIA):
 
             else:
                 print(
-                    "- There was no output file deducted during "
-                    "initialisation. Please check the input parameters...!"
+                    "- RotationMask brick: There was no output file deducted "
+                    "during initialization. Please check the input "
+                    "parameters...!"
                 )
 
             # tags inheritance (optional)
@@ -3454,7 +3497,11 @@ class RotationMask(ProcessMIA):
             FileNotFoundError,
             TypeError,
         ) as e:
-            print("\nError with files to mask, during " "initialisation: ", e)
+            print(
+                "\nRotationMask brick: Error with files to mask, during the "
+                "run: ",
+                e,
+            )
             img = None
 
         if img is not None:
@@ -3608,7 +3655,10 @@ class Sanitize(ProcessMIA):
             valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
 
             if not valid_ext:
-                print("\nThe input image format is" " not recognized...!")
+                print(
+                    "\nSanitize brick: The input image format is not "
+                    "recognized...!"
+                )
                 return
 
             if (
@@ -3656,7 +3706,10 @@ class Sanitize(ProcessMIA):
                     )
 
                 else:
-                    print("\nAborted. Please check your input parameters ...")
+                    print(
+                        "\nSanitize brick: Aborted. Please check your input "
+                        "parameters ..."
+                    )
                     return
 
             file = os.path.join(
@@ -3675,8 +3728,9 @@ class Sanitize(ProcessMIA):
 
             else:
                 print(
-                    "- There was no output file deducted during "
-                    "initialisation. Please check the input parameters...!"
+                    "- Sanitize brick: There was no output file deducted "
+                    "during initialisation. Please check the input "
+                    "parameters...!"
                 )
 
             # tags inheritance (optional)
@@ -3701,7 +3755,11 @@ class Sanitize(ProcessMIA):
             FileNotFoundError,
             TypeError,
         ) as e:
-            print("\nError with files to mask, during " "initialisation: ", e)
+            print(
+                "\nSanitize brick: Error with files to mask, during the "
+                "run: ",
+                e,
+            )
             img = None
 
         if img is not None:
@@ -3734,7 +3792,7 @@ class Sanitize(ProcessMIA):
                 img.set_sform(img.get_qform(), qform_code)
                 save_file = True
                 print(
-                    "\nNote on orientation: sform matrix set"
+                    "\nSanitize brick: Note on orientation:"
                     "\nThe sform has been copied from qform."
                 )
 
@@ -3744,17 +3802,17 @@ class Sanitize(ProcessMIA):
                 img.set_qform(img.get_sform(), sform_code)
                 save_file = True
                 print(
-                    "\nNote on orientation: qform matrix overwritten"
+                    "\nSanitize brick: Note on orientation:"
                     "\nThe qform has been copied from sform."
                 )
 
                 if not valid_qform and qform_code > 0:
                     print(
-                        "\nWARNING - Invalid qform information.\nThe qform "
-                        "matrix found in the file header is invalid. The qform"
-                        " has been copied from sform. Checking the original "
-                        "qform information from the data produced by the "
-                        "scanner is advised."
+                        "\nSanitize brick WARNING: Invalid qform "
+                        "information.\nThe qform matrix found in the file "
+                        "header is invalid. The qform has been copied from "
+                        "sform. Checking the original qform information from "
+                        "the data produced by the scanner is advised."
                     )
 
             # Rows 5-6:
@@ -3764,11 +3822,11 @@ class Sanitize(ProcessMIA):
                 img.set_qform(affine, nib.nifti1.xform_codes["scanner"])
                 save_file = True
                 print(
-                    "\nWARNING - Missing orientation information."
-                    "\nOrientation information could not be retrieved from "
-                    "the image header. The qform and sform matrices have been "
-                    "set to a default, LAS-oriented affine. Analyses of this "
-                    "dataset MAY BE INVALID."
+                    "\nSanitize brick WARNING: Missing orientation "
+                    "information.\nOrientation information could not be "
+                    "retrieved from the image header. The qform and sform "
+                    "matrices have been set to a default LAS-oriented "
+                    "affine. Analyses of this dataset MAY BE INVALID!"
                 )
 
             if (
@@ -3944,17 +4002,17 @@ class TemplateFromTemplateFlow(ProcessMIA):
         tpl_target_path = get_template(self.in_template, **template_spec)
         if not tpl_target_path:
             print(
-                "\nCould not find template '{0}' with specs={1}. Please "
-                "revise your template argument.".format(
-                    self.in_template, template_spec
-                )
+                "\nTemplateFromTemplateFlow brick: Could not find template "
+                "'{0}' with specs={1}. Please revise your template "
+                "argument.".format(self.in_template, template_spec)
             )
             return
 
         if isinstance(tpl_target_path, list):
             print(
-                "\nThe available template modifiers ({0}) did not select a "
-                "unique template (got '{1}'). Please revise your template "
+                "\nTemplateFromTemplateFlow brick: The available template "
+                "modifiers ({0}) did not select a unique template (got "
+                "'{1}'). Please revise your template "
                 "argument.".format(self.in_template, template_spec)
             )
             return
@@ -4131,7 +4189,10 @@ class Threshold(ProcessMIA):
                 valid_ext, in_ext, fileName = checkFileExt(file_name1, EXT)
 
                 if not valid_ext:
-                    print("\nThe input image format is" " not recognized...!")
+                    print(
+                        "\nThreshold brick: The input image format is not "
+                        "recognized...!"
+                    )
                     return
                 path, _ = os.path.split(file_name1)
 
@@ -4171,13 +4232,14 @@ class Threshold(ProcessMIA):
                         if retval == QMessageBox.YesToAll:
                             flag = False
                             print(
-                                "\nYesToAll selected: end of overwrite "
-                                "checks on input images ..."
+                                "\nThreshold brick: YesToAll selected: end of "
+                                "overwrite checks on input images ..."
                             )
                     else:
                         files_name = []
                         print(
-                            "\nAborted. Please check your input parameters ..."
+                            "\nThreshold brick Aborted. Please check your "
+                            "input parameters ..."
                         )
                         return
 
@@ -4198,8 +4260,9 @@ class Threshold(ProcessMIA):
                 self.outputs["out_files"] = files
             else:
                 print(
-                    "- There was no output file deducted during "
-                    "initialisation. Please check the input parameters...!"
+                    "- Threshold brick: There was no output file deducted "
+                    "during initialisation. Please check the input "
+                    "parameters...!"
                 )
 
         # tags inheritance (optional)
@@ -4405,7 +4468,10 @@ class TSNR(ProcessMIA):
             valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
 
             if not valid_ext:
-                print("\nThe input image format is" " not recognized...!")
+                print(
+                    "\nTSNR brick: The input image format is not "
+                    "recognized...!"
+                )
                 return
 
             if (
@@ -4433,7 +4499,7 @@ class TSNR(ProcessMIA):
             ):
                 msg = QMessageBox()
                 msg.setIcon(QMessageBox.Warning)
-                msg.setWindowTitle("mia_processes - " "TSNR brick Warning!")
+                msg.setWindowTitle("mia_processes - TSNR brick Warning!")
                 msg.setText(
                     "suffix_tsnr and prefix_tsnr input parameters are not "
                     "defined or consist only of one or more white "
@@ -4453,7 +4519,10 @@ class TSNR(ProcessMIA):
                     )
 
                 else:
-                    print("\nAborted. Please check your input parameters ...")
+                    print(
+                        "\nTSNR brick: Aborted. Please check your input "
+                        "parameters ..."
+                    )
                     return
 
             else:
@@ -4491,7 +4560,7 @@ class TSNR(ProcessMIA):
             ):
                 msg = QMessageBox()
                 msg.setIcon(QMessageBox.Warning)
-                msg.setWindowTitle("mia_processes - " "TSNR brick Warning!")
+                msg.setWindowTitle("mia_processes - TSNR brick Warning!")
                 msg.setText(
                     "suffix_stddev and prefix_stddev input parameters are not "
                     "defined or consist only of one or more white "
@@ -4510,7 +4579,10 @@ class TSNR(ProcessMIA):
                         "\n{0} will be overwrited ...".format(fileName)
                     )
                 else:
-                    print("\nAborted. Please check your input parameters ...")
+                    print(
+                        "\nTSNR brick Aborted. Please check your input "
+                        "parameters ..."
+                    )
                     return
 
             else:
@@ -4554,7 +4626,10 @@ class TSNR(ProcessMIA):
             FileNotFoundError,
             TypeError,
         ) as e:
-            print("\nError with files to mask, during " "initialisation: ", e)
+            print(
+                "\nTSNR brick: Error with files to mask, during the " "run: ",
+                e,
+            )
             img = None
 
         if img is not None:

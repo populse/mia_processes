@@ -49,9 +49,9 @@ import json
 import os
 import re
 import shutil
+import tempfile
 from math import sqrt
 
-# nibabel import
 import nibabel as nb
 import numpy as np
 import scipy.ndimage as nd
@@ -59,7 +59,14 @@ from nilearn.signal import clean
 from nipy.algorithms.registration import aff2euler, to_matrix44
 
 # nipype import
-from nipype.interfaces.base import File, OutputMultiPath, Undefined, traits
+from nipype.interfaces.base import (
+    File,
+    InputMultiPath,
+    OutputMultiPath,
+    Undefined,
+    traits,
+)
+from nipype.interfaces.spm.base import ImageFileSPM
 from nitime.algorithms import AR_est_YW
 from numpy.polynomial import Legendre
 
@@ -69,7 +76,11 @@ from scipy.stats import kurtosis  # pylint: disable=E0611
 from skimage.transform import resize
 
 # mia_processes import
-from mia_processes.utils import checkFileExt, get_dbFieldValue
+from mia_processes.utils import (
+    checkFileExt,
+    get_dbFieldValue,
+    set_dbFieldValue,
+)
 
 DIETRICH_FACTOR = 0.6551364  # 1.0 / sqrt(2 / (4 - pi))
 FSL_FAST_LABELS = {"csf": 1, "gm": 2, "wm": 3, "bg": 0}
@@ -1606,16 +1617,12 @@ class FramewiseDisplacement(ProcessMIA):
 
 class Mean_stdDev_calc(ProcessMIA):
     """
-    * Makes the mean and standard deviation of the parametric_maps.
+    * Makes the mean and standard deviation of parametric_maps.
 
     - The parametric_maps are first convolved with the ROIs corresponding
-      to doublet_list.
-    - ROIs are defined from doublet_list parameter as
-      doublet_list[0][0] + doublet_list[0][1] + '.nii',
-      doublet_list[1][0] + doublet_list[1][1] + '.nii',
-      etc.
-    - To work correctly, the database entry for the parametric_maps items must
-      have the "PatientName" tag filled in
+      to rois_files.
+    - To work correctly, the database entry for the first element of
+      parametric_maps must have the "PatientName" tag filled in.
     - To work correctly, the "/roi_"PatientName"/convROI_BOLD"
       must exist and contain a previous convolution results (normally using
       the ConvROI brick)
@@ -1633,22 +1640,19 @@ class Mean_stdDev_calc(ProcessMIA):
 
         # Inputs description
         parametric_maps_desc = "A list of files (existing, uncompressed file)"
-        doublet_list_desc = (
-            "A list of lists containing doublets of strings "
-            '(e.g. [["ROI_OCC", "_L"], ["ROI_OCC", "_R"], '
-            '["ROI_PAR", "_l"], ...]'
+        rois_files_desc = (
+            "A list of regions of interest applied to the parametric maps to "
+            "calculate their mean and standard deviation"
         )
-
+        contrast_type_desc = "The Contrast used (a string, ex. BOLD)"
         # Outputs description
         mean_out_files_desc = (
-            "A list of .txt files with the calculated "
-            "average for each ROI determined after "
-            "convolution"
+            "A list of .txt files with the calculated average for each "
+            "ROI after convolution with parametric_maps_desc"
         )
         std_out_files_desc = (
-            "A list of .txt files with the standard "
-            "deviation for each ROI determined "
-            "after convolution"
+            "A list of .txt files with the standard deviation for each ROI "
+            "after convolution with parametric_maps_desc"
         )
 
         # Inputs traits
@@ -1657,12 +1661,27 @@ class Mean_stdDev_calc(ProcessMIA):
             traits.List(
                 traits.File(exists=True),
                 output=False,
+                optional=False,
                 desc=parametric_maps_desc,
+            ),
+        )
+        self.parametric_maps = Undefined
+
+        self.add_trait(
+            "rois_files",
+            InputMultiPath(
+                ImageFileSPM(),
+                output=False,
+                optional=False,
+                desc=rois_files_desc,
             ),
         )
 
         self.add_trait(
-            "doublet_list", traits.List(output=False, desc=doublet_list_desc)
+            "contrast_type",
+            traits.String(
+                "BOLD", output=False, optional=True, desc=contrast_type_desc
+            ),
         )
 
         # Output traits
@@ -1701,7 +1720,7 @@ class Mean_stdDev_calc(ProcessMIA):
         super(Mean_stdDev_calc, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
-        if self.doublet_list != [] and self.parametric_maps != []:
+        if self.parametric_maps != Undefined and self.rois_files != Undefined:
             # FIXME: We retrieve the name of the patient from the first element
             #        of parametric_maps. This is only fine if all the elements
             #        of parametric_maps correspond to the same patient.
@@ -1719,59 +1738,75 @@ class Mean_stdDev_calc(ProcessMIA):
                 return self.make_initResult()
 
             self.dict4runtime["patient_name"] = patient_name
-            roi_dir = os.path.join(
-                self.output_directory, "roi_" + patient_name
+            analysis_dir = os.path.join(
+                self.output_directory,
+                patient_name + "_data",
+                "ROI_data",
+                "ROI_analysis",
             )
-
-            if not os.path.isdir(roi_dir):
-                print(
-                    "\nMean_stdDev_cal brick:\nNo {} folder detected ...\nThe "
-                    "initialization is aborted ...".format(roi_dir)
-                )
-                return self.make_initResult()
-
-            conv_dir = os.path.join(roi_dir, "convROI_BOLD")
-
-            if not os.path.isdir(conv_dir):
-                print(
-                    "\nMean_stdDev_cal brick:\nNo {} folder detected ...\nThe "
-                    "initialization is aborted ...".format(conv_dir)
-                )
-                return self.make_initResult()
-
-            analysis_dir = os.path.join(roi_dir, "ROI_analysis")
-
-            if os.path.isdir(analysis_dir):
-                print(
-                    '\nMean_stdDev_calc:\nA "{}" folder already exists, '
-                    "it will be overwritten by this new "
-                    "calculation...".format(analysis_dir)
-                )
-                shutil.rmtree(analysis_dir)
-
-            os.mkdir(analysis_dir)
             mean_out_files = []
             std_out_files = []
 
-            for parametric_map in self.parametric_maps:
-                for roi in self.doublet_list:
-                    # spmT_BOLD or beta_BOLD
-                    map_name = os.path.basename(parametric_map)[0:4] + "_BOLD"
-                    mean_out_files.append(
-                        os.path.join(
-                            analysis_dir,
-                            roi[0] + roi[1] + "_mean_" + map_name + ".txt",
-                        )
-                    )
-                    std_out_files.append(
-                        os.path.join(
-                            analysis_dir,
-                            roi[0] + roi[1] + "_std_" + map_name + ".txt",
-                        )
-                    )
+            if self.contrast_type.isspace() or not self.contrast_type:
+                self.contrast_type = "UnknownContrast"
 
-            self.outputs["mean_out_files"] = mean_out_files
-            self.outputs["std_out_files"] = std_out_files
+            for parametric_map in self.parametric_maps:
+                map_name = (
+                    os.path.basename(parametric_map)[0:4]
+                    + "_"
+                    + self.contrast_type
+                )
+
+                # for roi in self.doublet_list:
+                for roi in self.rois_files:
+                    roi_name, _ = os.path.splitext(os.path.basename(roi))
+
+                    mean_out_file = os.path.join(
+                        analysis_dir, roi_name + "_mean_" + map_name + ".txt"
+                    )
+                    # FIXME: In the latest version of mia, indexing of the
+                    #        database with particular tags defined in the
+                    #        processes is done only at the end of the
+                    #        initialisation of the whole pipeline. So we
+                    #        cannot use the value of these tags in other
+                    #        processes of the pipeline at the time of
+                    #        initialisation (see populse_mia #290). Until
+                    #        better we use a quick and dirty hack with the
+                    #        set_dbFieldValue() function !
+                    tag_to_add = dict()
+                    tag_to_add["name"] = "PatientName"
+                    tag_to_add["field_type"] = "string"
+                    tag_to_add["description"] = ""
+                    tag_to_add["visibility"] = True
+                    tag_to_add["origin"] = "user"
+                    tag_to_add["unit"] = None
+                    tag_to_add["default_value"] = None
+                    tag_to_add["value"] = patient_name
+                    set_dbFieldValue(self.project, mean_out_file, tag_to_add)
+                    mean_out_files.append(mean_out_file)
+                    self.inheritance_dict[mean_out_file] = parametric_map
+
+                    std_out_file = os.path.join(
+                        analysis_dir, roi_name + "_std_" + map_name + ".txt"
+                    )
+                    tag_to_add = dict()
+                    tag_to_add["name"] = "PatientName"
+                    tag_to_add["field_type"] = "string"
+                    tag_to_add["description"] = ""
+                    tag_to_add["visibility"] = True
+                    tag_to_add["origin"] = "user"
+                    tag_to_add["unit"] = None
+                    tag_to_add["default_value"] = None
+                    tag_to_add["value"] = patient_name
+                    set_dbFieldValue(self.project, std_out_file, tag_to_add)
+                    std_out_files.append(std_out_file)
+                    self.inheritance_dict[std_out_file] = parametric_map
+
+            if mean_out_files != []:
+                self.outputs["mean_out_files"] = mean_out_files
+
+            if std_out_files != []:
+                self.outputs["std_out_files"] = std_out_files
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -1781,24 +1816,44 @@ class Mean_stdDev_calc(ProcessMIA):
         # No need the next line (we don't use self.process and SPM)
         # super(Mean_stdDev_calc, self).run_process_mia()
 
-        roi_dir = os.path.join(
-            self.output_directory, "roi_" + self.dict4runtime["patient_name"]
+        pat_name_dir = os.path.join(
+            self.output_directory, self.dict4runtime["patient_name"] + "_data"
         )
-        conv_dir = os.path.join(roi_dir, "convROI_BOLD")
-        analysis_dir = os.path.join(roi_dir, "ROI_analysis")
+
+        if not os.path.exists(pat_name_dir):
+            os.mkdir(pat_name_dir)
+
+        roi_data_dir = os.path.join(pat_name_dir, "ROI_data")
+
+        if not os.path.exists(roi_data_dir):
+            os.mkdir(roi_data_dir)
+
+        analysis_dir = os.path.join(roi_data_dir, "ROI_analysis")
+
+        tmp = "None"
+
+        if os.path.isdir(analysis_dir):
+            tmp = tempfile.mktemp(dir=os.path.dirname(roi_data_dir))
+            os.mkdir(tmp)
+            shutil.move(analysis_dir, os.path.join(tmp, "ROI_analysis"))
+            print(
+                '\nMean_stdDev_calc brick:\nA "{}" folder already exists, '
+                "it will be overwritten by this new "
+                "calculation...".format(analysis_dir)
+            )
+        os.mkdir(analysis_dir)
+
+        if os.path.isdir(tmp):
+            shutil.rmtree(tmp)
+
+        if self.contrast_type.isspace() or not self.contrast_type:
+            self.contrast_type = "UnknownContrast"
 
         for parametric_map in self.parametric_maps:
             # Resampling, if necessary, the parametric_map to the size of the
-            # ROIs, using the first ROI in doublet_list. The
-            # roi_1[0]roi_1[1]'.nii' file must exist in roi_dir.
-            # I think it would make more sense to take
-            # conv_dir'/conv'roi_1[0]roi_1[1]'.nii, as the size of
-            # conv_dir'/conv'roi_1[0]roi_1[1]'.nii and
-            # roi_dir'/'roi_1[0]roi_1[1]'.nii' should be the same given the
-            # pipeline used for the CVR
-            roi_1 = self.doublet_list[0]
-            roi_file = os.path.join(roi_dir, roi_1[0] + roi_1[1] + ".nii")
-            roi_img = nb.load(roi_file)
+            # ROIs, using the first ROI in rois_files.
+            roi_1 = self.rois_files[0]
+            roi_img = nb.load(roi_1)
             roi_data = roi_img.get_fdata()
             roi_size = roi_data.shape[:3]
 
@@ -1810,7 +1865,11 @@ class Mean_stdDev_calc(ProcessMIA):
             map_data = np.nan_to_num(map_data)
 
             # Give name with spmT_BOLD or beta_BOLD
-            map_name = os.path.basename(parametric_map)[0:4] + "_BOLD"
+            map_name = (
+                os.path.basename(parametric_map)[0:4]
+                + "_"
+                + self.contrast_type
+            )
 
             # Making sure that the ROI and parametric images
             # are at the same size
@@ -1820,42 +1879,8 @@ class Mean_stdDev_calc(ProcessMIA):
                     resize(map_data / map_data_max, roi_size) * map_data_max
                 )
 
-            for roi in self.doublet_list:
-                # Reading ROI file
-                roi_file = os.path.join(
-                    conv_dir, "conv" + roi[0] + roi[1] + ".nii"
-                )
-
-                # it seems that it is necessary to leave a little time so that
-                # the data calculated previously are well recorded on the disc!
-                # In order not to be stuck indefinitely, the maximum waiting
-                # time is set to 15s.
-                wait_time = 0
-
-                while True:
-                    if wait_time > 15:
-                        print(
-                            "Mean_stdDev_calc:\nThe {} file has not been "
-                            "found ...\n".format(roi_file)
-                        )
-                        roi_img = None
-                        break
-
-                    try:
-                        roi_img = nb.load(roi_file)
-                        break
-
-                    except FileNotFoundError:
-                        print(
-                            "Mean_stdDev_calc:\n{} does not exist yet ... "
-                            "waiting 1s ...".format(roi_file)
-                        )
-                        import time
-
-                        time.sleep(1)
-                        wait_time += 1
-                        continue
-
+            for roi_file in self.rois_files:
+                roi_img = nb.load(roi_file)
                 roi_data = roi_img.get_fdata()
 
                 # Setting the NaN to 0 in ROI images
@@ -1870,7 +1895,7 @@ class Mean_stdDev_calc(ProcessMIA):
                     print(
                         "\nMean_stdDev_cal brick:\nWarning: No result found "
                         "after convolution of the {0} ROI and the {1} "
-                        "data".format(roi[0] + roi[1], parametric_map)
+                        "data".format(roi_file, parametric_map)
                     )
                     mean_result = 0
                     std_result = 0
@@ -1879,20 +1904,16 @@ class Mean_stdDev_calc(ProcessMIA):
                     mean_result = result[result.nonzero()].mean()
                     std_result = result[result.nonzero()].std()
 
-                # Writing the value in the corresponding file:
-                # analysis_dir'/'roi[0]roi[1]'_mean'map_name'.txt')
+                roi_name, _ = os.path.splitext(os.path.basename(roi_file))
                 mean_out_file = os.path.join(
-                    analysis_dir,
-                    roi[0] + roi[1] + "_mean_" + map_name + ".txt",
+                    analysis_dir, roi_name + "_mean_" + map_name + ".txt"
                 )
 
                 with open(mean_out_file, "w") as f:
                     f.write("%.3f" % mean_result)
 
-                # Writing the value in the corresponding file:
-                # analysis_dir'/'roi[0]roi[1]'_std'map_name'.txt')
                 std_out_file = os.path.join(
-                    analysis_dir, roi[0] + roi[1] + "_std_" + map_name + ".txt"
+                    analysis_dir, roi_name + "_std_" + map_name + ".txt"
                 )
 
                 with open(std_out_file, "w") as f:
@@ -1901,7 +1922,29 @@ class Mean_stdDev_calc(ProcessMIA):
 
 class Result_collector(ProcessMIA):
     """
-    * Save a file with the data collection for a patient.
+    *Save a file.xlm with the data collection for a patient*
+
+    - To work correctly, the database entry for the first element of
+      parameter_files must have the "PatientName" tag filled in.
+
+    - To work correctly, the name of each file in parameter_files must be
+      exactly like this: roi_hemi_calcul_param_contrast, where
+      - roi: region of interest (ex. ACA)
+      - hemi: hemisphere (ex. L)
+      - calcul: type of calcul (ex. mean)
+      - param: the parameter studied (ex. spmT)
+      - contrast: the type of contrast/effect used (ex. BOLD)
+
+    - Currently, to function correctly, this brick requires the doublet made
+      up of the two hemispheres to be present in the parameter_files list and
+      each hemisphere to be represented by the letters L (left) and R (right).
+      For example:
+      [/aPath/ACM_R_moyenne_spmT_BOLD.txt,
+      /aPat/ACM_L_moyenne_spmT_BOLD.txt, etc.].
+      It would be desirable to develop this brick so that it could also be
+      used to collect a single territory without any notion of hemisphere (in
+      this case, of course, the brick would not generate any laterality
+      indices) => TODO ASAP
 
     """
 
@@ -1916,27 +1959,12 @@ class Result_collector(ProcessMIA):
         super(Result_collector, self).__init__()
 
         # Inputs description
-        parametric_maps_desc = "A list of files (existing, uncompressed file)"
-        data_desc = "Defines the data type (a string, e.g. BOLD)"
-        calculs_desc = (
-            "Defines the type of calculation (a list of strings, "
-            'e.g. ["mean", "std", "IL_mean", "IL_std"]'
-        )
         laterality_index_desc = "Calculates the laterality indexes (a boolean)"
-        mean_in_files_desc = (
-            "A list of .txt files containing the average "
-            "value of a parameter for a given territory or "
-            "region of interest (a list of files)"
-        )
-        std_in_files_desc = (
-            "A list of .txt files containing the standard "
-            "deviation for a parameter in a given territory "
-            "or region of interest (a list of files)"
-        )
-        doublet_list_desc = (
-            "A list of lists containing doublets of strings "
-            '(e.g. [["ROI_OCC", "_L"], ["ROI_OCC", "_R"], '
-            '["ROI_PAR", "_l"], ...]'
+        parameter_files_desc = (
+            "A list of .txt files. Each file contains one (and "
+            "only one) value. The name of each file is used to "
+            "define this value. The name must exactly be like "
+            "this: roi_hemi_calcul_param_contrast"
         )
         patient_info_desc = (
             "A dictionary whose keys/values correspond to "
@@ -1949,35 +1977,20 @@ class Result_collector(ProcessMIA):
 
         # Outputs description
         out_files_desc = (
-            "A list of .xml files containing a summary of the "
-            "requested results"
+            "A list of .xml files containing a summary of the input parameters"
         )
 
         # Inputs traits
         self.add_trait(
-            "parametric_maps",
+            "parameter_files",
             traits.List(
                 traits.File(exists=True),
                 output=False,
-                desc=parametric_maps_desc,
+                optional=False,
+                desc=parameter_files_desc,
             ),
         )
-
-        self.add_trait(
-            "data",
-            traits.String("BOLD", output=False, optional=True, desc=data_desc),
-        )
-
-        self.add_trait(
-            "calculs",
-            traits.List(
-                traits.String(),
-                value=["mean", "std", "IL_mean", "IL_std"],
-                output=False,
-                optional=True,
-                desc=calculs_desc,
-            ),
-        )
+        self.parameter_files = Undefined
 
         self.add_trait(
             "laterality_index",
@@ -1990,22 +2003,7 @@ class Result_collector(ProcessMIA):
         )
 
         self.add_trait(
-            "mean_in_files",
-            traits.List(traits.File(), output=False, desc=mean_in_files_desc),
-        )
-
-        self.add_trait(
-            "std_in_files",
-            traits.List(traits.File(), output=False, desc=std_in_files_desc),
-        )
-
-        self.add_trait(
-            "doublet_list", traits.List(output=False, desc=doublet_list_desc)
-        )
-
-        self.add_trait(
             "patient_info",
-            # traits.Dict(patient_info_dict,
             traits.Dict(output=False, optional=True, desc=patient_info_desc),
         )
         self.patient_info = dict(
@@ -2023,6 +2021,7 @@ class Result_collector(ProcessMIA):
             "out_files",
             traits.List(traits.File(), output=True, desc=out_files_desc),
         )
+        self.out_files = Undefined
 
         # Special parameter used as a messenger for the run_process_mia method
         self.add_trait(
@@ -2049,80 +2048,130 @@ class Result_collector(ProcessMIA):
         super(Result_collector, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
-        if (
-            self.parametric_maps != Undefined
-            and self.calculs != Undefined
-            and self.mean_in_files != Undefined
-            and self.std_in_files != Undefined
-            and self.doublet_list != Undefined
-        ):
+        if self.parameter_files != Undefined:
             # FIXME 1: We retrieve the name of the patient from the first
-            #          element of parametric_maps. This is only fine if all the
-            #          elements of parametric_maps correspond to the same
+            #          element of parameter_files. This is only fine if all the
+            #          elements of parameter_files correspond to the same
             #          patient.
             # FIXME 2: The data should be anonymized and we should use
             #          PatientRef instead of PatientName !
             patient_name = get_dbFieldValue(
-                self.project, self.parametric_maps[0], "PatientName"
+                self.project, self.parameter_files[0], "PatientName"
             )
-
             if patient_name is None:
                 print(
                     "\nResult_collector brick:\nThe PatientName tag is not "
                     "filled in the database for the {} file ...\n The "
                     "initialization is "
-                    "aborted...".format(self.parametric_maps[0])
+                    "aborted...".format(self.parameter_files[0])
                 )
 
                 return self.make_initResult()
 
             self.dict4runtime["patient_name"] = patient_name
-            roi_dir = os.path.join(
-                self.output_directory, "roi_" + patient_name
+
+            aggreg_results_dir = os.path.join(
+                self.output_directory,
+                patient_name + "_data",
+                "results_aggregation",
             )
+            out_files = set()
+            res = dict()
 
-            if not os.path.isdir(roi_dir):
-                print(
-                    "\nResult_collector brick:\nNo {} folder detected ..."
-                    "\nThe initialization is aborted ...".format(roi_dir)
+            for data in self.parameter_files:
+                # FIXME 1: We need to protect the following command line. Case
+                #          where there are not 5 objects returned.
+                # FIXME 2: Ideally, we should also make sure that they are well
+                #          roi, hemi, etc ... This is difficult to achieve for
+                #          the last point ...
+                # roi: region of interest (ex. ACA)
+                # hemi: hemisphere (ex. L)
+                # calcul: type of calcul (ex. mean)
+                # param: the parameter studied (ex. spmT)
+                # contrast: The type of contrast/effect used (ex. BOLD)
+
+                try:
+                    roi, hemi, calcul, param, contrast = os.path.splitext(
+                        os.path.basename(data)
+                    )[0].split("_")
+
+                except Exception as e:
+                    print(
+                        "\nResult_collector brick: initialization stopped "
+                        "due to the following problem:\n"
+                        " {}\n".format(e)
+                    )
+                    return self.make_initResult()
+
+                out_files.add(
+                    os.path.join(
+                        aggreg_results_dir,
+                        "{0}_{1}_{2}.xls".format(contrast, calcul, param),
+                    )
                 )
-                return self.make_initResult()
 
-            analysis_dir = os.path.join(roi_dir, "ROI_analysis")
+                if contrast not in res:
+                    res[contrast] = {}
 
-            if not os.path.isdir(analysis_dir):
-                print(
-                    "\nMean_stdDev_cal brick:\nNo {} folder detected ..."
-                    "\nThe initialization is "
-                    "aborted ...".format(analysis_dir)
-                )
-                return self.make_initResult()
+                if param not in res[contrast]:
+                    res[contrast][param] = {}
 
-            out_files = []
+                if calcul not in res[contrast][param]:
+                    res[contrast][param][calcul] = {}
 
-            for parametric_map in self.parametric_maps:
-                for calcul in self.calculs:
-                    out_files.append(
+                if (
+                    self.laterality_index is True
+                    and "IL_" + calcul not in res[contrast][param]
+                ):
+                    res[contrast][param]["IL_" + calcul] = {}
+
+                if roi not in res[contrast][param][calcul]:
+                    res[contrast][param][calcul][roi] = {}
+
+                if (
+                    self.laterality_index is True
+                    and roi not in res[contrast][param]["IL_" + calcul]
+                ):
+                    res[contrast][param]["IL_" + calcul][roi] = {}
+
+                if hemi in res[contrast][param][calcul][roi]:
+                    print(
+                        "\nResult_collector brick:\nThe data for "
+                        "{0}-{1}-{2}-{3}-{4} in {5} already exists "
+                        "in the final result. Overwriting with the new "
+                        "data ...\n".format(
+                            contrast, param, calcul, roi, hemi, data
+                        )
+                    )
+
+                res[contrast][param][calcul][roi][hemi] = True
+
+                if (
+                    self.laterality_index is True
+                    and "L" in res[contrast][param][calcul][roi]
+                    and "R" in res[contrast][param][calcul][roi]
+                ):
+                    out_files.add(
                         os.path.join(
-                            analysis_dir,
+                            aggreg_results_dir,
                             "{0}_{1}_{2}.xls".format(
-                                self.data,
-                                calcul,
-                                os.path.basename(parametric_map)[0:9],
+                                contrast, "IL_" + calcul, param
                             ),
                         )
                     )
 
-            self.outputs["out_files"] = out_files
+            if out_files:
+                self.outputs["out_files"] = list(out_files)
 
             # FIXME: the data should be anonymized and we should use PatientRef
             #        instead of PatientName !
+
             if (
                 self.patient_info.get("PatientName") is None
                 or self.patient_info["PatientName"] == Undefined
             ):
                 patient_ref = get_dbFieldValue(
-                    self.project, self.parametric_maps[0], "PatientRef"
+                    self.project, self.parameter_files[0], "PatientRef"
                 )
 
                 if patient_ref is None:
@@ -2136,7 +2185,7 @@ class Result_collector(ProcessMIA):
                 or self.patient_info["Pathology"] == Undefined
             ):
                 pathology = get_dbFieldValue(
-                    self.project, self.parametric_maps[0], "Pathology"
+                    self.project, self.parameter_files[0], "Pathology"
                 )
 
                 if pathology is None:
@@ -2150,7 +2199,7 @@ class Result_collector(ProcessMIA):
                 or self.patient_info["Age"] == Undefined
             ):
                 age = get_dbFieldValue(
-                    self.project, self.parametric_maps[0], "Age"
+                    self.project, self.parameter_files[0], "Age"
                 )
 
                 if age is None:
@@ -2164,7 +2213,7 @@ class Result_collector(ProcessMIA):
                 or self.patient_info["Sex"] == Undefined
             ):
                 sex = get_dbFieldValue(
-                    self.project, self.parametric_maps[0], "Sex"
+                    self.project, self.parameter_files[0], "Sex"
                 )
 
                 if sex is None:
@@ -2178,7 +2227,7 @@ class Result_collector(ProcessMIA):
                 or self.patient_info["MR"] == Undefined
             ):
                 mr = get_dbFieldValue(
-                    self.project, self.parametric_maps[0], "MR"
+                    self.project, self.parameter_files[0], "MR"
                 )
 
                 if mr is None:
@@ -2192,7 +2241,7 @@ class Result_collector(ProcessMIA):
                 or self.patient_info["Gas"] == Undefined
             ):
                 gas = get_dbFieldValue(
-                    self.project, self.parametric_maps[0], "Gas"
+                    self.project, self.parameter_files[0], "Gas"
                 )
 
                 if gas is None:
@@ -2206,7 +2255,7 @@ class Result_collector(ProcessMIA):
                 or self.patient_info["GasAdmin"] == Undefined
             ):
                 gas_admin = get_dbFieldValue(
-                    self.project, self.parametric_maps[0], "GasAdmin"
+                    self.project, self.parameter_files[0], "GasAdmin"
                 )
 
                 if gas_admin is None:
@@ -2223,40 +2272,40 @@ class Result_collector(ProcessMIA):
         # No need the next line (we don't use self.process and SPM)
         # super(Result_collector, self).run_process_mia()
 
-        # Getting the list of all ROI (doublet_list without hemisphere)
-        roi_list = []  # list of all ROIs
-
-        for roi in self.doublet_list:
-            pos = roi[0]
-            if pos not in roi_list:
-                roi_list.append(pos)
-
-        roi_dir = os.path.join(
-            self.output_directory, "roi_" + self.dict4runtime["patient_name"]
+        pat_name_dir = os.path.join(
+            self.output_directory, self.dict4runtime["patient_name"] + "_data"
         )
-        analysis_dir = os.path.join(roi_dir, "ROI_analysis")
 
-        # FIXME: The following check is already performed at initialisation
-        #        time. We could remove the check here.
-        if not os.path.isdir(analysis_dir):
+        if not os.path.exists(pat_name_dir):
+            os.mkdir(pat_name_dir)
+
+        aggreg_results_dir = os.path.join(pat_name_dir, "results_aggregation")
+
+        if not os.path.exists(aggreg_results_dir):
+            os.mkdir(aggreg_results_dir)
+
+        else:
             print(
-                "No 'ROI_analysis' folder in the working "
-                "directory {0}.".format(
-                    os.path.dirname(self.parametric_maps[0])
-                )
+                "Result_collector brick warning: The {} directory exists "
+                "before the start of the calculation. Its contents can be "
+                "overwritten by the result of the current "
+                "calculation ...!".format(aggreg_results_dir)
             )
-            return {}
 
-        res = dict()  # the summary of the data
-        parametrics = []  # the parametric data
-        calculs = []  # the calcul types
-        # rois = []  # the ROIs under analysis
-        contrast = []  # the contrast used
-        # Waiting for take in input the merged
-        # self.mean_in_files + self.std_in_files
-        all_data = self.mean_in_files + self.std_in_files
+        res = dict()
 
-        for data in all_data:
+        for data in self.parameter_files:
+            # FIXME 1: We need to protect the following command line. Case
+            #          where there are not 5 objects returned.
+            # FIXME 2: Ideally, we should also make sure that they are well
+            #          roi, hemi, etc ... This is difficult to achieve for
+            #          the last point ...
+
+            # roi: region of interest (ex. ACA)
+            # hemi: hemisphere (ex. L)
+            # calcul: type of calcul (ex. mean)
+            # param: the parameter studied (ex. spmT)
+            # contrast: The type of contrast/effect used (ex. BOLD)
             roi, hemi, calcul, param, contrast = os.path.splitext(
                 os.path.basename(data)
             )[0].split("_")
@@ -2270,8 +2319,20 @@ class Result_collector(ProcessMIA):
             if calcul not in res[contrast][param]:
                 res[contrast][param][calcul] = {}
 
+            if (
+                self.laterality_index is True
+                and "IL_" + calcul not in res[contrast][param]
+            ):
+                res[contrast][param]["IL_" + calcul] = {}
+
             if roi not in res[contrast][param][calcul]:
                 res[contrast][param][calcul][roi] = {}
+
+            if (
+                self.laterality_index is True
+                and roi not in res[contrast][param]["IL_" + calcul]
+            ):
+                res[contrast][param]["IL_" + calcul][roi] = {}
 
             try:
                 with open(data, "r") as f_read:
@@ -2286,248 +2347,84 @@ class Result_collector(ProcessMIA):
 
             if hemi in res[contrast][param][calcul][roi]:
                 print(
-                    "\nResult_collector brick:\nThe data in {} exist already "
-                    "in other files of toto. Overwriting with the "
-                    "new data ...\n".format(data)
+                    "\nResult_collector brick:\nThe data for {0}-{1}-{2}-{3}"
+                    "-{4} in {5} already exists in the final result. "
+                    "Overwriting with the new data ...\n".format(
+                        contrast, param, calcul, roi, hemi, data
+                    )
                 )
 
             res[contrast][param][calcul][roi][hemi] = data_val
 
-        if self.laterality_index is True:
-            calculs.extend(["IL_" + i for i in calculs])
-
-        for parametric_map in parametrics:
-            for calcul in calculs:
-                out_file = os.path.join(
-                    analysis_dir,
-                    "{0}_{1}.xls".format(calcul, parametric_map),
+            if (
+                self.laterality_index is True
+                and "L" in res[contrast][param][calcul][roi]
+                and "R" in res[contrast][param][calcul][roi]
+            ):
+                left = res[contrast][param][calcul][roi]["L"]
+                right = res[contrast][param][calcul][roi]["R"]
+                res[contrast][param]["IL_" + calcul][roi] = (left - right) / (
+                    left + right
                 )
 
-                with open(out_file, "w") as f:
-                    f.write("{0}\t".format("subjects"))
-                    f.write("{0}\t".format("patho"))
-                    f.write("{0}\t".format("age"))
-                    f.write("{0}\t".format("sex"))
-                    f.write("{0}\t".format("MR"))
-                    f.write("{0}\t".format("Gaz"))
-                    f.write("{0}\t".format("Admin"))
+        for contrast in res:
+            for param in res[contrast]:
+                for calcul in res[contrast][param]:
+                    out_file = os.path.join(
+                        aggreg_results_dir,
+                        "{0}_{1}_{2}.xls".format(contrast, calcul, param),
+                    )
 
-        # for parametric_map in self.parametric_maps:
-        #     map_name_file = os.path.basename(parametric_map)[0:9]
-        #     map_name = map_name_file[0:4]
-        #
-        #     for calcul in self.calculs:
-        #         out_file = os.path.join(
-        #             analysis_dir,
-        #             "{0}_{1}_{2}.xls".format(self.data, calcul,
-        #                                      map_name_file),
-        #         )
-        #
-        #         with open(out_file, "w") as f:
-        #             f.write("{0}\t".format("subjects"))
-        #             f.write("{0}\t".format("patho"))
-        #             f.write("{0}\t".format("age"))
-        #             f.write("{0}\t".format("sex"))
-        #             f.write("{0}\t".format("MR"))
-        #             f.write("{0}\t".format("Gaz"))
-        #             f.write("{0}\t".format("Admin"))
-        #
-        #             if calcul not in ["IL_mean", "IL_std"]:
-        #                 for roi in self.doublet_list:
-        #                     f.write(
-        #                         "{0}_{1}\t".format(map_name, roi[0] + roi[1])
-        #                     )
-        #
-        #             else:
-        #                 for pos in roi_list:
-        #                     f.write("{0}_{1}\t".format(map_name, pos))
-        #
-        #             # FIXME: We should iterate on each patient here ?
-        #             f.write("\n{0}\t".format(self.patient_info["PatientName"]))
-        #             f.write("{0}\t".format(self.patient_info["Pathology"]))
-        #             f.write("{0}\t".format(self.patient_info["Age"]))
-        #             f.write("{0}\t".format(self.patient_info["Sex"]))
-        #             f.write("{0}\t".format(self.patient_info["MR"]))
-        #             f.write("{0}\t".format(self.patient_info["Gas"]))
-        #             f.write("{0}\t".format(self.patient_info["GasAdmin"]))
-        #
-        #             if calcul == "mean":
-        #                 for roi in self.doublet_list:
-        #                     roi_file = os.path.join(
-        #                         analysis_dir,
-        #                         "{0}_mean_{1}_{2}.txt".format(
-        #                             roi[0] + roi[1], map_name, self.data
-        #                         ),
-        #                     )
-        #                     try:
-        #                         with open(roi_file, "r") as f_read:
-        #                             final_res = float(f_read.read())
-        #
-        #                         f.write("{0}\t".format(final_res))
-        #
-        #                     except FileNotFoundError:
-        #                         print(
-        #                             "\nResult_collector brick:\n {} not "
-        #                             "found ...\n".format(roi_file)
-        #                         )
-        #                         f.write("Undefined\t")
-        #
-        #             elif calcul == "IL_mean":
-        #                 roi_checked = []
-        #
-        #                 for roi in self.doublet_list:
-        #                     if roi[0] in roi_checked:
-        #                         continue
-        #
-        #                     roi_file = os.path.join(
-        #                         analysis_dir,
-        #                         "{0}_mean_{1}_{2}.txt".format(
-        #                             roi[0] + roi[1], map_name, self.data
-        #                         ),
-        #                     )
-        #                     try:
-        #                         with open(roi_file, "r") as f_read:
-        #                             roi_value = float(f_read.read())
-        #
-        #                     except FileNotFoundError:
-        #                         print(
-        #                             "\nResult_collector brick:\n {} not "
-        #                             "found ...\n".format(roi_file)
-        #                         )
-        #                         roi_value = None
-        #
-        #                     # Searching the ROI that has the same first
-        #                     # element
-        #                     roi_2 = [
-        #                         s
-        #                         for s in self.doublet_list
-        #                         if roi[0] in s[0] and roi[1] != s[1]
-        #                     ][0]
-        #                     roi_file_2 = os.path.join(
-        #                         analysis_dir,
-        #                         "{0}_mean_{1}_{2}."
-        #                         "txt".format(
-        #                             roi_2[0] + roi_2[1], map_name, self.data
-        #                         ),
-        #                     )
-        #                     try:
-        #                         with open(roi_file_2, "r") as f_read:
-        #                             roi_value_2 = float(f_read.read())
-        #
-        #                     except FileNotFoundError:
-        #                         print(
-        #                             "\nResult_collector brick:\n {} not "
-        #                             "found ...\n".format(roi_file_2)
-        #                         )
-        #                         roi_value_2 = None
-        #
-        #                     # IL = (Left - Right) / ((Left + Right)
-        #                     if roi[1] == "_L":
-        #                         sub_1 = roi_value
-        #                         sub_2 = roi_value_2
-        #
-        #                     else:
-        #                         sub_1 = roi_value_2
-        #                         sub_2 = roi_value
-        #
-        #                     if sub_1 is not None and sub_2 is not None:
-        #                         final_res = (sub_1 - sub_2) / (sub_1 + sub_2)
-        #                         f.write("{0}\t".format(final_res))
-        #
-        #                     else:
-        #                         f.write("Undefined\t")
-        #
-        #                     roi_checked.append(roi[0])
-        #
-        #             elif calcul == "std":
-        #                 for roi in self.doublet_list:
-        #                     roi_file = os.path.join(
-        #                         analysis_dir,
-        #                         "{0}_std_{1}_{2}.txt".format(
-        #                             roi[0] + roi[1], map_name, self.data
-        #                         ),
-        #                     )
-        #
-        #                     try:
-        #                         with open(roi_file, "r") as f_read:
-        #                             final_res = float(f_read.read())
-        #
-        #                         f.write("{0}\t".format(final_res))
-        #
-        #                     except FileNotFoundError:
-        #                         print(
-        #                             "\nResult_collector brick:\n {} not "
-        #                             "found ...\n".format(roi_file)
-        #                         )
-        #                         f.write("Undefined\t")
-        #
-        #             elif calcul == "IL_std":
-        #                 roi_checked = []
-        #
-        #                 for roi in self.doublet_list:
-        #                     if roi[0] in roi_checked:
-        #                         continue
-        #
-        #                     roi_file = os.path.join(
-        #                         analysis_dir,
-        #                         "{0}_std_{1}_{2}.txt".format(
-        #                             roi[0] + roi[1], map_name, self.data
-        #                         ),
-        #                     )
-        #
-        #                     try:
-        #                         with open(roi_file, "r") as f_read:
-        #                             roi_value = float(f_read.read())
-        #
-        #                     except FileNotFoundError:
-        #                         print(
-        #                             "\nResult_collector brick:\n {} not "
-        #                             "found ...\n".format(roi_file)
-        #                         )
-        #                         roi_value = None
-        #
-        #                     # Searching the roi that has the same first
-        #                     # element
-        #                     roi_2 = [
-        #                         s
-        #                         for s in self.doublet_list
-        #                         if roi[0] in s[0] and roi[1] != s[1]
-        #                     ][0]
-        #
-        #                     roi_file_2 = os.path.join(
-        #                         analysis_dir,
-        #                         "{0}_std_{1}_{2}.txt".format(
-        #                             roi_2[0] + roi_2[1], map_name, self.data
-        #                         ),
-        #                     )
-        #
-        #                     try:
-        #                         with open(roi_file_2, "r") as f_read:
-        #                             roi_value_2 = float(f_read.read())
-        #
-        #                     except FileNotFoundError:
-        #                         print(
-        #                             "\nResult_collector brick:\n {} not "
-        #                             "found ...\n".format(roi_file_2)
-        #                         )
-        #                         roi_value_2 = None
-        #
-        #                     # IL = (Left - Right) / ((Left + Right)
-        #                     if roi[1] == "_L":
-        #                         sub_1 = roi_value
-        #                         sub_2 = roi_value_2
-        #                     else:
-        #                         sub_1 = roi_value_2
-        #                         sub_2 = roi_value
-        #
-        #                     if sub_1 is not None and sub_2 is not None:
-        #                         final_res = (sub_1 - sub_2) / (sub_1 + sub_2)
-        #                         f.write("{0}\t".format(final_res))
-        #
-        #                     else:
-        #                         f.write("Undefined\t")
-        #
-        #                     roi_checked.append(roi[0])
+                    with open(out_file, "w") as f:
+                        f.write("{0}\t".format("subjects"))
+                        f.write("{0}\t".format("patho"))
+                        f.write("{0}\t".format("age"))
+                        f.write("{0}\t".format("sex"))
+                        f.write("{0}\t".format("MR"))
+                        f.write("{0}\t".format("Gaz"))
+                        f.write("{0}\t".format("Admin"))
+
+                        if not calcul.startswith("IL_"):
+                            for roi in res[contrast][param][calcul]:
+                                for hemi in res[contrast][param][calcul][roi]:
+                                    f.write(
+                                        "{0}_{1}_{2}\t".format(
+                                            param, roi, hemi
+                                        )
+                                    )
+
+                        else:
+                            for roi in res[contrast][param][calcul]:
+                                f.write("{0}_{1}\t".format(param, roi))
+
+                        f.write(
+                            "\n{0}\t".format(self.patient_info["PatientName"])
+                        )
+                        f.write("{0}\t".format(self.patient_info["Pathology"]))
+                        f.write("{0}\t".format(self.patient_info["Age"]))
+                        f.write("{0}\t".format(self.patient_info["Sex"]))
+                        f.write("{0}\t".format(self.patient_info["MR"]))
+                        f.write("{0}\t".format(self.patient_info["Gas"]))
+                        f.write("{0}\t".format(self.patient_info["GasAdmin"]))
+
+                        if not calcul.startswith("IL_"):
+                            for roi in res[contrast][param][calcul]:
+                                for hemi in res[contrast][param][calcul][roi]:
+                                    f.write(
+                                        "{0}\t".format(
+                                            res[contrast][param][calcul][roi][
+                                                hemi
+                                            ]
+                                        )
+                                    )
+
+                        else:
+                            for roi in res[contrast][param][calcul]:
+                                f.write(
+                                    "{0}\t".format(
+                                        res[contrast][param][calcul][roi]
+                                    )
+                                )
 
 
 class Spikes(ProcessMIA):

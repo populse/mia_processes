@@ -42,67 +42,67 @@ class Spatial_mask(Pipeline):
         """Building the pipeline"""
         # nodes
         self.add_process(
-            "gm_wm_normalize1",
+            "gm_wm_normalize",
             "mia_processes.bricks.preprocess.spm.GM_WM_Normalize",
         )
 
         self.add_process(
-            "threshold1", "mia_processes.bricks.preprocess.others.Threshold"
+            "threshold_1", "mia_processes.bricks.preprocess.others.Threshold"
         )
-        self.nodes["threshold1"].process.in_files = traits.Undefined
-        self.nodes["threshold1"].process.prefix = traits.Undefined
+        self.nodes["threshold_1"].process.in_files = traits.Undefined
+        self.nodes["threshold_1"].process.prefix = traits.Undefined
 
         self.add_process(
-            "smooth1", "mia_processes.bricks.preprocess.spm.Smooth"
+            "smooth", "mia_processes.bricks.preprocess.spm.Smooth"
         )
-        self.nodes["smooth1"].process.in_files = traits.Undefined
+        self.nodes["smooth"].process.in_files = traits.Undefined
 
         self.add_process(
-            "threshold2", "mia_processes.bricks.preprocess.others.Threshold"
+            "threshold_2", "mia_processes.bricks.preprocess.others.Threshold"
         )
-        self.nodes["threshold2"].process.in_files = traits.Undefined
-        self.nodes["threshold2"].process.suffix = traits.Undefined
-        self.nodes["threshold2"].process.prefix = "mask_"
+        self.nodes["threshold_2"].process.in_files = traits.Undefined
+        self.nodes["threshold_2"].process.suffix = traits.Undefined
+        self.nodes["threshold_2"].process.prefix = "mask_"
 
         self.add_process(
-            "resample1", "mia_processes.bricks.preprocess.others.Resample_1"
+            "resample1", "mia_processes.bricks.preprocess.others.Resample1"
         )
         self.nodes["resample1"].process.files_to_resample = traits.Undefined
         self.nodes["resample1"].process.prefix = traits.Undefined
 
         # links
         self.export_parameter(
-            "gm_wm_normalize1", "apply_to_files", "native_class_images"
+            "gm_wm_normalize", "apply_to_files", "native_class_images"
         )
-        self.export_parameter("gm_wm_normalize1", "deformation_file")
-        self.add_link("gm_wm_normalize1.normalized_files->threshold1.in_files")
-        self.add_link("threshold1.out_files->smooth1.in_files")
-        self.add_link("smooth1.smoothed_files->threshold2.in_files")
-        self.add_link("threshold2.out_files->resample1.files_to_resample")
-        self.export_parameter("threshold2", "out_files", "mask_002")
+        self.export_parameter("gm_wm_normalize", "deformation_file")
+        self.add_link("gm_wm_normalize.normalized_files->threshold_1.in_files")
+        self.add_link("threshold_1.out_files->smooth.in_files")
+        self.add_link("smooth.smoothed_files->threshold_2.in_files")
+        self.add_link("threshold_2.out_files->resample1.files_to_resample")
+        self.export_parameter("threshold_2", "out_files", "mask_002")
         self.export_parameter("resample1", "out_files", "mask_003")
         self.export_parameter("resample1", "reference_image", "smoothed_func")
 
         # nodes positions
         self.node_position = {
-            "resample1": (660.8743625, 314.2747999999999),
-            "gm_wm_normalize1": (121.68129999999996, -140.0),
-            "threshold2": (402.93549225419565, 203.88756771783517),
-            "smooth1": (742.5339029207395, -156.09480055247312),
-            "outputs": (827.6561125000001, 151.5811),
-            "inputs": (-40.80193413672403, 164.24180575139843),
-            "threshold1": (440.7735314209599, -168.49913686833992),
+            "resample1": (1098.1930830538756, 358.70082875467926),
+            "gm_wm_normalize": (148.0592545730909, 241.78618461052582),
+            "threshold_2": (859.6906003882427, 166.4031059560745),
+            "smooth": (589.819429076529, 60.48208962658873),
+            "outputs": (1253.8683258652045, 204.33700914618174),
+            "inputs": (-108.82929066732682, 268.3653106451782),
+            "threshold_1": (383.85268207902703, -53.26912478589021),
         }
 
         # nodes dimensions
         self.node_dimension = {
-            "inputs": (155.453125, 145.0),
-            "normalize_spatial_mask1": (244.0625, 215.0),
-            "threshold1": (152.609375, 215.0),
-            "smooth1": (218.046875, 215.0),
-            "threshold2": (152.609375, 215.0),
+            "inputs": (157.4068872392954, 111.0),
+            "threshold_1": (152.609375, 215.0),
+            "smooth": (218.046875, 215.0),
+            "threshold_2": (152.609375, 215.0),
             "resample1": (176.84375, 250.0),
-            "outputs": (81.11804503946317, 110.0),
+            "outputs": (81.11804503946317, 86.0),
+            "gm_wm_normalize": (244.0625, 250.0),
         }
 
         self.do_autoexport_nodes_parameters = False

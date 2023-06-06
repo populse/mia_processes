@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.pipelines.preprocess.spatial_preprocessing &#8212; mia_processes 2.2.1-dev+a9ea159 documentation</title>
+    <title>mia_processes.pipelines.preprocess.spatial_preprocessing &#8212; mia_processes 2.2.1-dev+1685da4 documentation</title>
     <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
@@ -18,7 +18,7 @@
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.2.1-dev+a9ea159 documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+1685da4 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.pipelines.preprocess.spatial_preprocessing</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -73,20 +73,20 @@
         <span class="sd">&quot;&quot;&quot;Building the pipeline&quot;&quot;&quot;</span>
         <span class="c1"># nodes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
-            <span class="s2">&quot;newsegment1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;newsegment&quot;</span><span class="p">,</span>
             <span class="s2">&quot;mia_processes.bricks.preprocess.spm.&quot;</span>
             <span class="s2">&quot;spatial_preprocessing.NewSegment&quot;</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;newsegment1&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">channel_files</span> <span class="o">=</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;newsegment&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">channel_files</span> <span class="o">=</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
-            <span class="s2">&quot;realign1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;realign&quot;</span><span class="p">,</span>
             <span class="s2">&quot;mia_processes.bricks.preprocess.spm.spatial_preprocessing.&quot;</span>
             <span class="s2">&quot;Realign&quot;</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
-            <span class="s2">&quot;list_duplicate1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;list_duplicate&quot;</span><span class="p">,</span>
             <span class="s2">&quot;mia_processes.bricks.tools.tools.List_Duplicate&quot;</span><span class="p">,</span>
         <span class="p">)</span>
 
@@ -106,48 +106,48 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;normalize12_2&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">write_voxel_sizes</span> <span class="o">=</span> <span class="p">[</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
-            <span class="s2">&quot;smooth1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;smooth&quot;</span><span class="p">,</span>
             <span class="s2">&quot;mia_processes.bricks.preprocess.spm.spatial_preprocessing.Smooth&quot;</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;smooth1&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_files</span> <span class="o">=</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;smooth&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_files</span> <span class="o">=</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
-            <span class="s2">&quot;coregister1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;coregister&quot;</span><span class="p">,</span>
             <span class="s2">&quot;mia_processes.bricks.preprocess.spm.spatial_preprocessing.&quot;</span>
             <span class="s2">&quot;Coregister&quot;</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;coregister1&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;coregister1&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">apply_to_files</span> <span class="o">=</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;coregister&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;coregister&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">apply_to_files</span> <span class="o">=</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span>
 
         <span class="c1"># links</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;list_duplicate1&quot;</span><span class="p">,</span> <span class="s2">&quot;file_name&quot;</span><span class="p">,</span> <span class="s2">&quot;anat_file&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;realign1&quot;</span><span class="p">,</span> <span class="s2">&quot;in_files&quot;</span><span class="p">,</span> <span class="s2">&quot;func_files&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;newsegment1&quot;</span><span class="p">,</span> <span class="s2">&quot;bias_corrected_images&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;newsegment1&quot;</span><span class="p">,</span> <span class="s2">&quot;bias_field_images&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;newsegment1&quot;</span><span class="p">,</span> <span class="s2">&quot;native_class_images&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;newsegment1&quot;</span><span class="p">,</span> <span class="s2">&quot;forward_deformation_field&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;list_duplicate&quot;</span><span class="p">,</span> <span class="s2">&quot;file_name&quot;</span><span class="p">,</span> <span class="s2">&quot;anat_file&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;realign&quot;</span><span class="p">,</span> <span class="s2">&quot;in_files&quot;</span><span class="p">,</span> <span class="s2">&quot;func_files&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;newsegment&quot;</span><span class="p">,</span> <span class="s2">&quot;bias_corrected_images&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;newsegment&quot;</span><span class="p">,</span> <span class="s2">&quot;bias_field_images&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;newsegment&quot;</span><span class="p">,</span> <span class="s2">&quot;native_class_images&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;newsegment&quot;</span><span class="p">,</span> <span class="s2">&quot;forward_deformation_field&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span>
-            <span class="s2">&quot;newsegment1.forward_deformation_field-&gt;&quot;</span>
+            <span class="s2">&quot;newsegment.forward_deformation_field-&gt;&quot;</span>
             <span class="s2">&quot;normalize12_2.deformation_file&quot;</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span>
-            <span class="s2">&quot;newsegment1.forward_deformation_field-&gt;&quot;</span>
+            <span class="s2">&quot;newsegment.forward_deformation_field-&gt;&quot;</span>
             <span class="s2">&quot;normalize12_1.deformation_file&quot;</span>
         <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;realign1.realigned_files-&gt;coregister1.apply_to_files&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;realign1.mean_image-&gt;coregister1.source&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;realign1&quot;</span><span class="p">,</span> <span class="s2">&quot;realignment_parameters&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;list_duplicate1.out_file-&gt;coregister1.target&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;list_duplicate1.out_list-&gt;normalize12_1.apply_to_files&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;list_duplicate1.out_list-&gt;newsegment1.channel_files&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;realign.realigned_files-&gt;coregister.apply_to_files&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;realign.mean_image-&gt;coregister.source&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;realign&quot;</span><span class="p">,</span> <span class="s2">&quot;realignment_parameters&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;list_duplicate.out_file-&gt;coregister.target&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;list_duplicate.out_list-&gt;normalize12_1.apply_to_files&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;list_duplicate.out_list-&gt;newsegment.channel_files&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
             <span class="s2">&quot;normalize12_1&quot;</span><span class="p">,</span> <span class="s2">&quot;normalized_files&quot;</span><span class="p">,</span> <span class="s2">&quot;normalized_anat&quot;</span>
         <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;normalize12_2.normalized_files-&gt;smooth1.in_files&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;smooth1&quot;</span><span class="p">,</span> <span class="s2">&quot;smoothed_files&quot;</span><span class="p">,</span> <span class="s2">&quot;smoothed_func&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;coregister1&quot;</span><span class="p">,</span> <span class="s2">&quot;coregistered_source&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;normalize12_2.normalized_files-&gt;smooth.in_files&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;smooth&quot;</span><span class="p">,</span> <span class="s2">&quot;smoothed_files&quot;</span><span class="p">,</span> <span class="s2">&quot;smoothed_func&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;coregister&quot;</span><span class="p">,</span> <span class="s2">&quot;coregistered_source&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span>
-            <span class="s2">&quot;coregister1.coregistered_files-&gt;normalize12_2.apply_to_files&quot;</span>
+            <span class="s2">&quot;coregister.coregistered_files-&gt;normalize12_2.apply_to_files&quot;</span>
         <span class="p">)</span>
 
         <span class="c1"># nodes positions</span>
@@ -155,24 +155,24 @@
             <span class="s2">&quot;outputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">431.5335139107567</span><span class="p">,</span> <span class="mf">281.77678807649437</span><span class="p">),</span>
             <span class="s2">&quot;inputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">703.3088243130337</span><span class="p">,</span> <span class="mf">598.5753496196925</span><span class="p">),</span>
             <span class="s2">&quot;normalize12_1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">20.32584777973804</span><span class="p">,</span> <span class="mf">161.56490940865137</span><span class="p">),</span>
-            <span class="s2">&quot;list_duplicate1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">698.5690125000001</span><span class="p">,</span> <span class="mf">322.7524000000001</span><span class="p">),</span>
+            <span class="s2">&quot;list_duplicate&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">698.5690125000001</span><span class="p">,</span> <span class="mf">322.7524000000001</span><span class="p">),</span>
             <span class="s2">&quot;normalize12_2&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">177.31686589800802</span><span class="p">,</span> <span class="mf">797.8843555814453</span><span class="p">),</span>
-            <span class="s2">&quot;newsegment1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">453.77452133215724</span><span class="p">,</span> <span class="mf">199.26358188173032</span><span class="p">),</span>
-            <span class="s2">&quot;realign1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">501.21102890085405</span><span class="p">,</span> <span class="mf">716.821495792487</span><span class="p">),</span>
-            <span class="s2">&quot;coregister1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">115.59829201417193</span><span class="p">,</span> <span class="mf">792.8120786678431</span><span class="p">),</span>
-            <span class="s2">&quot;smooth1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">508.92506000990295</span><span class="p">,</span> <span class="mf">860.8153736997155</span><span class="p">),</span>
+            <span class="s2">&quot;newsegment&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">453.77452133215724</span><span class="p">,</span> <span class="mf">199.26358188173032</span><span class="p">),</span>
+            <span class="s2">&quot;realign&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">501.21102890085405</span><span class="p">,</span> <span class="mf">716.821495792487</span><span class="p">),</span>
+            <span class="s2">&quot;coregister&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">115.59829201417193</span><span class="p">,</span> <span class="mf">792.8120786678431</span><span class="p">),</span>
+            <span class="s2">&quot;smooth&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">508.92506000990295</span><span class="p">,</span> <span class="mf">860.8153736997155</span><span class="p">),</span>
         <span class="p">}</span>
 
         <span class="c1"># nodes dimensions</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_dimension</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;inputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">279.359375</span><span class="p">,</span> <span class="mf">90.0</span><span class="p">),</span>
-            <span class="s2">&quot;newsegment1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">332.46875</span><span class="p">,</span> <span class="mf">355.0</span><span class="p">),</span>
-            <span class="s2">&quot;realign1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">275.21875</span><span class="p">,</span> <span class="mf">530.0</span><span class="p">),</span>
-            <span class="s2">&quot;list_duplicate1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">129.84375</span><span class="p">,</span> <span class="mf">110.0</span><span class="p">),</span>
+            <span class="s2">&quot;newsegment&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">332.46875</span><span class="p">,</span> <span class="mf">355.0</span><span class="p">),</span>
+            <span class="s2">&quot;realign&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">275.21875</span><span class="p">,</span> <span class="mf">530.0</span><span class="p">),</span>
+            <span class="s2">&quot;list_duplicate&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">129.84375</span><span class="p">,</span> <span class="mf">110.0</span><span class="p">),</span>
             <span class="s2">&quot;normalize12_1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">291.421875</span><span class="p">,</span> <span class="mf">530.0</span><span class="p">),</span>
             <span class="s2">&quot;normalize12_2&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">291.421875</span><span class="p">,</span> <span class="mf">530.0</span><span class="p">),</span>
-            <span class="s2">&quot;smooth1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">218.046875</span><span class="p">,</span> <span class="mf">215.0</span><span class="p">),</span>
-            <span class="s2">&quot;coregister1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">224.171875</span><span class="p">,</span> <span class="mf">460.0</span><span class="p">),</span>
+            <span class="s2">&quot;smooth&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">218.046875</span><span class="p">,</span> <span class="mf">215.0</span><span class="p">),</span>
+            <span class="s2">&quot;coregister&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">224.171875</span><span class="p">,</span> <span class="mf">460.0</span><span class="p">),</span>
             <span class="s2">&quot;outputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">239.515625</span><span class="p">,</span> <span class="mf">320.0</span><span class="p">),</span>
         <span class="p">}</span>
 
