@@ -10,8 +10,8 @@
 Delete_data brick
 =================
 
-Delete data from database. 
-The input of this brick should be an output file from a brick or a pipeline. 
+Delete data from database.
+The input of this brick should be an output file from a brick or a pipeline.
 All the outputs from this file history will be removed.
 
 If "to_keep_filters" is used, the files macthing the regex of the filter will be kept.
@@ -35,7 +35,7 @@ You can check that your regex `here <https://regex101.com/>`_.
 **Optional inputs with default value parameters:**
 
 - *to_keep_filters* (a list of regex, optional, default value is ["(.)*pdf", "(.)*_qc.json", "(.)*desc-carpet(.)*"])
-    A list of regex. 
+    A list of regex.
     Files that match those regex will be kept and the others files will be deleted. Mutually exclusif with to_remove_filters.
 
     ::
@@ -43,7 +43,7 @@ You can check that your regex `here <https://regex101.com/>`_.
       ex. ["(.)*pdf", "(.)*_qc.json", "(.)*desc-carpet(.)*"]
 
 - *to_remove_filters* (a list of regex, optional, default value is [])
-    A list of regex. 
+    A list of regex.
     Files that match those regex will be deleted and the others files will be kept. Mutually exclusif with to_remove_filters.
 
     ::
