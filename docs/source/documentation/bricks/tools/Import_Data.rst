@@ -65,7 +65,7 @@ Import reference data into the current pipeline
       ex. [['ACA', 'L'], ['ACA', 'R'], ['ACM', 'L'], ['ACM', 'R']]
 
 - *lib_dir*
-    The path to a data library (if not defined, the default resources path is used, i.e. miaresources/ROIs/)."
+    The path to a data library (if not defined, the default resources path is used, i.e. miaresources/ROIs/).
 
     ::
 
