@@ -113,6 +113,7 @@ Mia_processes's documentation
     - `Delete_Data <bricks/tools/Delete_data.html>`_
     - `Files_To_List <bricks/tools/Files_To_List.html>`_
     - `Filter_Files_List <bricks/tools/Filter_Files_List.html>`_
+    - `Find_In_List <bricks/tools/Find_In_List.html>`_
     - `Input_Filter <bricks/tools/Input_Filter.html>`_
     - `List_Duplicate <bricks/tools/List_Duplicate.html>`_
     - `List_To_File <bricks/tools/List_To_File.html>`_
