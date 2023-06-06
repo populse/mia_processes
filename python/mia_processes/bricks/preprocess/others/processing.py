@@ -154,14 +154,20 @@ class ApplyBiasCorrection(ProcessMIA):
                 valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
 
                 if not valid_ext:
-                    print("\nThe input image format is" " not recognized...!")
+                    print(
+                        "\nApplyBiasCorrection brick: The input image "
+                        "format is not recognized...!"
+                    )
                     return
 
                 self.outputs["out_file"] = os.path.join(
                     self.output_directory, fileName + "_inu." + in_ext
                 )
             else:
-                print("No output_directory was found...!\n")
+                print(
+                    "ApplyBiasCorrection brick: No output_directory was "
+                    "found...!\n"
+                )
                 return
 
         if self.outputs:
@@ -317,7 +323,10 @@ class ArtifactMask(ProcessMIA):
             valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
 
             if not valid_ext:
-                print("\nThe input image format is" " not recognized...!")
+                print(
+                    "\nArtifactMask brick: The input image format is not "
+                    "recognized...!"
+                )
                 return
 
             file_hat = os.path.join(
@@ -375,7 +384,11 @@ class ArtifactMask(ProcessMIA):
             FileNotFoundError,
             TypeError,
         ) as e:
-            print("\nError with files to mask, during " "initialisation: ", e)
+            print(
+                "\nArtifactMask brick: Error with files to mask, during "
+                "initialisation: ",
+                e,
+            )
             imnii = None
             hmnii = None
             rmnii = None
@@ -586,7 +599,10 @@ class Binarize(ProcessMIA):
             for file_name1 in files_name:
                 valid_ext, in_ext, fileName = checkFileExt(file_name1, EXT)
                 if not valid_ext:
-                    print("\nThe input image format is" " not recognized...!")
+                    print(
+                        "\nBinarize brick: The input image format is not "
+                        "recognized...!"
+                    )
                     return
 
                 if self.suffix == " " and self.prefix == " " and flag is True:
@@ -620,14 +636,14 @@ class Binarize(ProcessMIA):
                         if retval == QMessageBox.YesToAll:
                             flag = False
                             print(
-                                "\nYesToAll selected: end of overwrite "
-                                "checks on input images ..."
+                                "\nBinarize brick: YesToAll selected ; end of "
+                                "overwrite checks on input images ..."
                             )
                     else:
                         files_name = []
                         print(
-                            "\nAborted."
-                            "Please check your input parameters ..."
+                            "\nBinarize brick: Initialization Aborted. Please "
+                            "check your input parameters ..."
                         )
                         return
 
@@ -649,8 +665,9 @@ class Binarize(ProcessMIA):
 
             else:
                 print(
-                    "- There was no output file deducted during "
-                    "initialisation. Please check the input parameters...!"
+                    "- Binarize brick: There was no output file deducted "
+                    "during initialization. Please check the "
+                    "input parameters...!"
                 )
 
         # tags inheritance (optional)
@@ -722,8 +739,8 @@ class Binarize(ProcessMIA):
                 TypeError,
             ) as e:
                 print(
-                    "\nError with files to binarize, during "
-                    "initialisation: ",
+                    "\nBinarize brick: Error with files to binarize, during "
+                    "the run: ",
                     e,
                 )
                 img = None
@@ -850,7 +867,10 @@ class ConformImage(ProcessMIA):
             valid_ext, in_ext, file_name = checkFileExt(self.in_file, EXT)
 
             if not valid_ext:
-                print("\nThe input image format is not recognized...!")
+                print(
+                    "\nConformImage brick: The input image format is not "
+                    "recognized...!"
+                )
                 return
 
             path, _ = os.path.split(self.in_file)
@@ -901,8 +921,9 @@ class ConformImage(ProcessMIA):
 
             else:
                 print(
-                    "- There was no output file deducted during "
-                    "initialisation. Please check the input parameters...!"
+                    "- ConformImage brick: There was no output file deducted "
+                    "during initialization. Please check the input "
+                    "parameters...!"
                 )
 
             # tags inheritance (optional)
@@ -928,7 +949,9 @@ class ConformImage(ProcessMIA):
             TypeError,
         ) as e:
             print(
-                "\nError with file to conform, during " "initialisation: ", e
+                "\nConformImage brick: Error with file to conform, during the "
+                "run: ",
+                e,
             )
             img = None
 
@@ -1262,7 +1285,10 @@ class Enhance(ProcessMIA):
                 valid_ext, in_ext, fileName = checkFileExt(file_name1, EXT)
 
                 if not valid_ext:
-                    print("\nThe input image format is" " not recognized...!")
+                    print(
+                        "\nEnhance brick: The input image format is not "
+                        "recognized...!"
+                    )
                     return
                 path, _ = os.path.split(file_name1)
 
@@ -1275,7 +1301,7 @@ class Enhance(ProcessMIA):
                     msg = QMessageBox()
                     msg.setIcon(QMessageBox.Warning)
                     msg.setWindowTitle(
-                        "mia_processes - " "Enhance brick Warning!"
+                        "mia_processes - Enhance brick Warning!"
                     )
                     msg.setText(
                         "Suffix and prefix input parameters are not "
@@ -1302,13 +1328,14 @@ class Enhance(ProcessMIA):
                         if retval == QMessageBox.YesToAll:
                             flag = False
                             print(
-                                "\nYesToAll selected: end of overwrite "
-                                "checks on input images ..."
+                                "\nEnhance brick brick: YesToAll selected ; "
+                                "end of overwrite checks on input images ..."
                             )
                     else:
                         files_name = []
                         print(
-                            "\nAborted. Please check your input parameters ..."
+                            "\nEnhance brick brick: Aborted ; Please check "
+                            "your input parameters ..."
                         )
                         return
 
@@ -1330,8 +1357,9 @@ class Enhance(ProcessMIA):
 
             else:
                 print(
-                    "- There was no output file deducted during "
-                    "initialisation. Please check the input parameters...!"
+                    "- Enhance brick: There was no output file deducted "
+                    "during initialisation. Please check the input "
+                    "parameters...!"
                 )
 
         # tags inheritance (optional)
@@ -1400,7 +1428,8 @@ class Enhance(ProcessMIA):
                 TypeError,
             ) as e:
                 print(
-                    "\nError with file to enhance, during " "initialisation: ",
+                    "\nEnhance brick: Error with file to enhance, during the "
+                    "run: ",
                     e,
                 )
                 img = None
@@ -1515,11 +1544,14 @@ class EstimateSNR(ProcessMIA):
                 valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
 
                 if not valid_ext:
-                    print("\nThe input image format is" " not recognized...!")
+                    print(
+                        "\nEstimateSNR brick: The input image format is not "
+                        "recognized...!"
+                    )
                     return
 
             else:
-                print("No output_directory was found...!\n")
+                print("EstimateSNR brick: No output_directory was found...!\n")
                 return
 
         # Return the requirement, outputs and inheritance_dict
@@ -1540,7 +1572,7 @@ class EstimateSNR(ProcessMIA):
             FileNotFoundError,
             TypeError,
         ) as e:
-            print("\nError with files, during " "initialisation: ", e)
+            print("\nEstimateSNR brick: Error with files, during the run: ", e)
             return
 
         data = img.get_fdata()
@@ -1647,7 +1679,10 @@ class GradientThreshold(ProcessMIA):
             valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
 
             if not valid_ext:
-                print("\nThe input image format is" " not recognized...!")
+                print(
+                    "\nGradientThreshold brick: The input image format is "
+                    "not recognized...!"
+                )
                 return
 
             path, _ = os.path.split(self.in_file)
@@ -1681,7 +1716,10 @@ class GradientThreshold(ProcessMIA):
                     )
 
                 else:
-                    print("\nAborted. Please check your input parameters ...")
+                    print(
+                        "\nGradientThreshold brick Aborted. Please check "
+                        "your input parameters ..."
+                    )
                     return
 
             file = os.path.join(
@@ -1700,8 +1738,9 @@ class GradientThreshold(ProcessMIA):
 
             else:
                 print(
-                    "- There was no output file deducted during "
-                    "initialisation. Please check the input parameters...!"
+                    "- GradientThreshold brick: There was no output file "
+                    "deducted during initialization. Please check the input "
+                    "parameters...!"
                 )
 
             # tags inheritance (optional)
@@ -1729,7 +1768,9 @@ class GradientThreshold(ProcessMIA):
             TypeError,
         ) as e:
             print(
-                "\nError with file to enhance, during " "initialisation: ", e
+                "\nGradientThreshold brick: Error with file to enhance, "
+                "during the run: ",
+                e,
             )
             img = None
             seg_img = None
@@ -1888,7 +1929,10 @@ class Harmonize(ProcessMIA):
             valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
 
             if not valid_ext:
-                print("\nThe input image format is" " not recognized...!")
+                print(
+                    "\nHarmonize brick: The input image format is "
+                    "not recognized...!"
+                )
                 return
 
             if (
@@ -1936,7 +1980,10 @@ class Harmonize(ProcessMIA):
                     )
 
                 else:
-                    print("\nAborted. Please check your input parameters ...")
+                    print(
+                        "\nHarmonize brick: Aborted. Please check your "
+                        "input parameters ..."
+                    )
                     return
 
             file = os.path.join(
@@ -1955,8 +2002,9 @@ class Harmonize(ProcessMIA):
 
             else:
                 print(
-                    "- There was no output file deducted during "
-                    "initialisation. Please check the input parameters...!"
+                    "- Harmonize brick: There was no output file deducted "
+                    "during initialization. Please check the input "
+                    "parameters...!"
                 )
 
             # tags inheritance (optional)
@@ -1979,7 +2027,9 @@ class Harmonize(ProcessMIA):
             TypeError,
         ) as e:
             print(
-                "\nError with file to enhance, during " "initialisation: ", e
+                "\nHarmonize brick: Error with file to enhance, during the "
+                "run: ",
+                e,
             )
             img = None
             wm_img = None
@@ -2146,7 +2196,10 @@ class IntensityClip(ProcessMIA):
                     ),
                 )
             else:
-                print("No output_directory was found...!\n")
+                print(
+                    "IntensityClip brick: No output_directory was "
+                    "found...!\n"
+                )
                 return
 
         if self.outputs:
@@ -2284,7 +2337,10 @@ class Mask(ProcessMIA):
             valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
 
             if not valid_ext:
-                print("\nThe input image format is" " not recognized...!")
+                print(
+                    "\nMask brick: The input image format is not "
+                    "recognized...!"
+                )
                 return
 
             if (
@@ -2330,7 +2386,10 @@ class Mask(ProcessMIA):
                     )
 
                 else:
-                    print("\nAborted. Please check your input parameters ...")
+                    print(
+                        "\nMask brick: Aborted. Please check your input "
+                        "parameters ..."
+                    )
                     return
 
             file = os.path.join(
@@ -2349,8 +2408,8 @@ class Mask(ProcessMIA):
 
             else:
                 print(
-                    "- There was no output file deducted during "
-                    "initialisation. Please check the input parameters...!"
+                    "- Mask brick: There was no output file deducted during "
+                    "initialization. Please check the input parameters...!"
                 )
 
         # tags inheritance (optional)
@@ -2377,7 +2436,10 @@ class Mask(ProcessMIA):
             FileNotFoundError,
             TypeError,
         ) as e:
-            print("\nError with files to mask, during " "initialisation: ", e)
+            print(
+                "\nMask brick: Error with files to mask, during " "the run: ",
+                e,
+            )
             img = None
 
         if (img is not None) and (mask_img is not None):
@@ -2489,7 +2551,9 @@ class NonSteadyStateDetector(ProcessMIA):
             TypeError,
         ) as e:
             print(
-                "\nError with file to enhance, during " "initialisation: ", e
+                "\nNonSteadyStateDetector brick: Error with file to enhance, "
+                "during the run: ",
+                e,
             )
             in_nii = None
 
@@ -2648,7 +2712,9 @@ class Resample1(ProcessMIA):
                 TypeError,
             ) as e:
                 print(
-                    "\nError with reference_image, during initialisation: ", e
+                    "\nResample1 brick: Error with reference_image, during "
+                    "initialisation: ",
+                    e,
                 )
                 refName = None
 
@@ -2683,8 +2749,8 @@ class Resample1(ProcessMIA):
                     TypeError,
                 ) as e:
                     print(
-                        "\nError with files_to_resample, during "
-                        "initialisation: ",
+                        "\nResample1 brick: Error with files_to_resample, "
+                        "during initialisation: ",
                         e,
                     )
                     fileName = None
@@ -3331,7 +3397,10 @@ class RotationMask(ProcessMIA):
             valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
 
             if not valid_ext:
-                print("\nThe input image format is" " not recognized...!")
+                print(
+                    "\nRotationMask brick: The input image format is not "
+                    "recognized...!"
+                )
                 return
 
             if (
@@ -3358,7 +3427,7 @@ class RotationMask(ProcessMIA):
                 msg = QMessageBox()
                 msg.setIcon(QMessageBox.Warning)
                 msg.setWindowTitle(
-                    "mia_processes - " "RotationMask brick Warning!"
+                    "mia_processes - RotationMask brick Warning!"
                 )
                 msg.setText(
                     "Suffix and prefix input parameters are not "
@@ -3379,7 +3448,10 @@ class RotationMask(ProcessMIA):
                     )
 
                 else:
-                    print("\nAborted. Please check your input parameters ...")
+                    print(
+                        "\nRotationMask brick Aborted. Please check your "
+                        "input parameters ..."
+                    )
                     return
 
             file = os.path.join(
@@ -3398,8 +3470,9 @@ class RotationMask(ProcessMIA):
 
             else:
                 print(
-                    "- There was no output file deducted during "
-                    "initialisation. Please check the input parameters...!"
+                    "- RotationMask brick: There was no output file deducted "
+                    "during initialization. Please check the input "
+                    "parameters...!"
                 )
 
             # tags inheritance (optional)
@@ -3424,7 +3497,11 @@ class RotationMask(ProcessMIA):
             FileNotFoundError,
             TypeError,
         ) as e:
-            print("\nError with files to mask, during " "initialisation: ", e)
+            print(
+                "\nRotationMask brick: Error with files to mask, during the "
+                "run: ",
+                e,
+            )
             img = None
 
         if img is not None:
@@ -3578,7 +3655,10 @@ class Sanitize(ProcessMIA):
             valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
 
             if not valid_ext:
-                print("\nThe input image format is" " not recognized...!")
+                print(
+                    "\nSanitize brick: The input image format is not "
+                    "recognized...!"
+                )
                 return
 
             if (
@@ -3626,7 +3706,10 @@ class Sanitize(ProcessMIA):
                     )
 
                 else:
-                    print("\nAborted. Please check your input parameters ...")
+                    print(
+                        "\nSanitize brick: Aborted. Please check your input "
+                        "parameters ..."
+                    )
                     return
 
             file = os.path.join(
@@ -3645,8 +3728,9 @@ class Sanitize(ProcessMIA):
 
             else:
                 print(
-                    "- There was no output file deducted during "
-                    "initialisation. Please check the input parameters...!"
+                    "- Sanitize brick: There was no output file deducted "
+                    "during initialisation. Please check the input "
+                    "parameters...!"
                 )
 
             # tags inheritance (optional)
@@ -3671,7 +3755,11 @@ class Sanitize(ProcessMIA):
             FileNotFoundError,
             TypeError,
         ) as e:
-            print("\nError with files to mask, during " "initialisation: ", e)
+            print(
+                "\nSanitize brick: Error with files to mask, during the "
+                "run: ",
+                e,
+            )
             img = None
 
         if img is not None:
@@ -3704,7 +3792,7 @@ class Sanitize(ProcessMIA):
                 img.set_sform(img.get_qform(), qform_code)
                 save_file = True
                 print(
-                    "\nNote on orientation: sform matrix set"
+                    "\nSanitize brick: Note on orientation:"
                     "\nThe sform has been copied from qform."
                 )
 
@@ -3714,17 +3802,17 @@ class Sanitize(ProcessMIA):
                 img.set_qform(img.get_sform(), sform_code)
                 save_file = True
                 print(
-                    "\nNote on orientation: qform matrix overwritten"
+                    "\nSanitize brick: Note on orientation:"
                     "\nThe qform has been copied from sform."
                 )
 
                 if not valid_qform and qform_code > 0:
                     print(
-                        "\nWARNING - Invalid qform information.\nThe qform "
-                        "matrix found in the file header is invalid. The qform"
-                        " has been copied from sform. Checking the original "
-                        "qform information from the data produced by the "
-                        "scanner is advised."
+                        "\nSanitize brick WARNING: Invalid qform "
+                        "information.\nThe qform matrix found in the file "
+                        "header is invalid. The qform has been copied from "
+                        "sform. Checking the original qform information from "
+                        "the data produced by the scanner is advised."
                     )
 
             # Rows 5-6:
@@ -3734,11 +3822,11 @@ class Sanitize(ProcessMIA):
                 img.set_qform(affine, nib.nifti1.xform_codes["scanner"])
                 save_file = True
                 print(
-                    "\nWARNING - Missing orientation information."
-                    "\nOrientation information could not be retrieved from "
-                    "the image header. The qform and sform matrices have been "
-                    "set to a default, LAS-oriented affine. Analyses of this "
-                    "dataset MAY BE INVALID."
+                    "\nSanitize brick WARNING: Missing orientation "
+                    "information.\nOrientation information could not be "
+                    "retrieved from the image header. The qform and sform "
+                    "matrices have been set to a default LAS-oriented "
+                    "affine. Analyses of this dataset MAY BE INVALID!"
                 )
 
             if (
@@ -3914,17 +4002,17 @@ class TemplateFromTemplateFlow(ProcessMIA):
         tpl_target_path = get_template(self.in_template, **template_spec)
         if not tpl_target_path:
             print(
-                "\nCould not find template '{0}' with specs={1}. Please "
-                "revise your template argument.".format(
-                    self.in_template, template_spec
-                )
+                "\nTemplateFromTemplateFlow brick: Could not find template "
+                "'{0}' with specs={1}. Please revise your template "
+                "argument.".format(self.in_template, template_spec)
             )
             return
 
         if isinstance(tpl_target_path, list):
             print(
-                "\nThe available template modifiers ({0}) did not select a "
-                "unique template (got '{1}'). Please revise your template "
+                "\nTemplateFromTemplateFlow brick: The available template "
+                "modifiers ({0}) did not select a unique template (got "
+                "'{1}'). Please revise your template "
                 "argument.".format(self.in_template, template_spec)
             )
             return
@@ -4101,7 +4189,10 @@ class Threshold(ProcessMIA):
                 valid_ext, in_ext, fileName = checkFileExt(file_name1, EXT)
 
                 if not valid_ext:
-                    print("\nThe input image format is" " not recognized...!")
+                    print(
+                        "\nThreshold brick: The input image format is not "
+                        "recognized...!"
+                    )
                     return
                 path, _ = os.path.split(file_name1)
 
@@ -4141,13 +4232,14 @@ class Threshold(ProcessMIA):
                         if retval == QMessageBox.YesToAll:
                             flag = False
                             print(
-                                "\nYesToAll selected: end of overwrite "
-                                "checks on input images ..."
+                                "\nThreshold brick: YesToAll selected: end of "
+                                "overwrite checks on input images ..."
                             )
                     else:
                         files_name = []
                         print(
-                            "\nAborted. Please check your input parameters ..."
+                            "\nThreshold brick Aborted. Please check your "
+                            "input parameters ..."
                         )
                         return
 
@@ -4168,8 +4260,9 @@ class Threshold(ProcessMIA):
                 self.outputs["out_files"] = files
             else:
                 print(
-                    "- There was no output file deducted during "
-                    "initialisation. Please check the input parameters...!"
+                    "- Threshold brick: There was no output file deducted "
+                    "during initialisation. Please check the input "
+                    "parameters...!"
                 )
 
         # tags inheritance (optional)
@@ -4375,7 +4468,10 @@ class TSNR(ProcessMIA):
             valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
 
             if not valid_ext:
-                print("\nThe input image format is" " not recognized...!")
+                print(
+                    "\nTSNR brick: The input image format is not "
+                    "recognized...!"
+                )
                 return
 
             if (
@@ -4403,7 +4499,7 @@ class TSNR(ProcessMIA):
             ):
                 msg = QMessageBox()
                 msg.setIcon(QMessageBox.Warning)
-                msg.setWindowTitle("mia_processes - " "TSNR brick Warning!")
+                msg.setWindowTitle("mia_processes - TSNR brick Warning!")
                 msg.setText(
                     "suffix_tsnr and prefix_tsnr input parameters are not "
                     "defined or consist only of one or more white "
@@ -4423,7 +4519,10 @@ class TSNR(ProcessMIA):
                     )
 
                 else:
-                    print("\nAborted. Please check your input parameters ...")
+                    print(
+                        "\nTSNR brick: Aborted. Please check your input "
+                        "parameters ..."
+                    )
                     return
 
             else:
@@ -4461,7 +4560,7 @@ class TSNR(ProcessMIA):
             ):
                 msg = QMessageBox()
                 msg.setIcon(QMessageBox.Warning)
-                msg.setWindowTitle("mia_processes - " "TSNR brick Warning!")
+                msg.setWindowTitle("mia_processes - TSNR brick Warning!")
                 msg.setText(
                     "suffix_stddev and prefix_stddev input parameters are not "
                     "defined or consist only of one or more white "
@@ -4480,7 +4579,10 @@ class TSNR(ProcessMIA):
                         "\n{0} will be overwrited ...".format(fileName)
                     )
                 else:
-                    print("\nAborted. Please check your input parameters ...")
+                    print(
+                        "\nTSNR brick Aborted. Please check your input "
+                        "parameters ..."
+                    )
                     return
 
             else:
@@ -4524,7 +4626,10 @@ class TSNR(ProcessMIA):
             FileNotFoundError,
             TypeError,
         ) as e:
-            print("\nError with files to mask, during " "initialisation: ", e)
+            print(
+                "\nTSNR brick: Error with files to mask, during the " "run: ",
+                e,
+            )
             img = None
 
         if img is not None:
