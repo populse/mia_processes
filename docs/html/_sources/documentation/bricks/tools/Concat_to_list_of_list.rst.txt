@@ -19,24 +19,24 @@ Make an output list of list containing the iteration of the input list1 with eac
 
 **Inputs parameters:**
 
-- *list1* (a list of string, optional, default value is ['ACA', 'ACM', 'ACP', 'PICA', 'ROI_CING', 'ROI_FRON', 'ROI_INSULA', 'ROI_OCC', 'ROI_PAR', 'ROI_STR', 'ROI_TEMP', 'ROI_THA', 'SCA'])
-    List 1.
+- *list1*
+    A list of string, optional. Default value is ['ACA', 'ACM', 'ACP', 'PICA', 'ROI_CING', 'ROI_FRON', 'ROI_INSULA', 'ROI_OCC', 'ROI_PAR', 'ROI_STR', 'ROI_TEMP', 'ROI_THA', 'SCA'].
 
     ::
 
       ex. ['ACA', 'ACM', 'ACP', 'PICA', 'ROI_CING', 'ROI_FRON', 'ROI_INSULA', 'ROI_OCC', 'ROI_PAR', 'ROI_STR', 'ROI_TEMP', 'ROI_THA', 'SCA']
 
-- *list2* (a list of string, optional, default value is ['_L', '_R'])
-    List 2.
+- *list2*
+    A list of string, optional. Default value is ['L', 'R']).
 
-['PICA', 'L']    ::
+    ::
 
-      ex.  ['L', 'R']
+      ex. ['L', 'R']
 
 **Outputs parameters:**
 
-- *listOflist* (a list of list)
-    Output list.
+- *listOflist*
+    Output list of lists.
 
     ::
 
