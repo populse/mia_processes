@@ -136,12 +136,13 @@ class Concat_to_list(ProcessMIA):
 
 class Concat_to_list_of_list(ProcessMIA):
     """
-    *Iteration the input list1 with each element of the input list2*
+    *Iteration of input list1 with each element of input list2*
 
-    Ex. ['a', 'b', 'c'] and ['_1', '_2'] gives
+    Ex. ['a', 'b', 'c'] and ['1', '2'] gives
         [['a', '1'], ['a', '2'],
          ['b', '1'], ['b', '2'],
          ['c', '1'], ['c', '2']
+
     """
 
     def __init__(self):
@@ -212,7 +213,10 @@ class Concat_to_list_of_list(ProcessMIA):
         super(Concat_to_list_of_list, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
-        if self.list1 != [] and self.list2 != []:
+        if self.list1 not in [[], traits.Undefined] and self.list2 not in [
+            [],
+            traits.Undefined,
+        ]:
             self.outputs["listOflist"] = [
                 [i, j] for i in self.list1 for j in self.list2
             ]
