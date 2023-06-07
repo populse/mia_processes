@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.tools.tools &#8212; mia_processes 2.2.1-dev+6ba95d3 documentation</title>
+    <title>mia_processes.bricks.tools.tools &#8212; mia_processes 2.2.1-dev+ac94862 documentation</title>
     <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
@@ -18,7 +18,7 @@
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.2.1-dev+6ba95d3 documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+ac94862 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.tools.tools</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -404,7 +404,7 @@
 
 <div class="viewcode-block" id="Files_To_List"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Files_To_List">[docs]</a><span class="k">class</span> <span class="nc">Files_To_List</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    * From 2 file names, generating a list containing all these file names.</span>
+<span class="sd">    * From 3 file names, generating a list containing all these file names.</span>
 
 <span class="sd">    Please, see the complete documention for the</span>
 <span class="sd">    `Files_To_List in the populse.mia_processes web site</span>
@@ -428,25 +428,28 @@
         <span class="c1"># Inputs description</span>
         <span class="n">file1_desc</span> <span class="o">=</span> <span class="s2">&quot;A string corresponding to an existing path file.&quot;</span>
         <span class="n">file2_desc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;An optional string corresponding &quot;</span> <span class="s2">&quot;to an existing path file.&quot;</span>
+            <span class="s2">&quot;An optional string corresponding to an existing path file.&quot;</span>
         <span class="p">)</span>
         <span class="n">file3_desc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;An optional string corresponding &quot;</span> <span class="s2">&quot;to an existing path file.&quot;</span>
+            <span class="s2">&quot;An optional string corresponding to an existing path file.&quot;</span>
         <span class="p">)</span>
 
         <span class="c1"># Outputs description</span>
-        <span class="n">file_list_desc</span> <span class="o">=</span> <span class="s2">&quot;A list of items which are an existing file name.&quot;</span>
+        <span class="n">file_list_desc</span> <span class="o">=</span> <span class="s2">&quot;A list of items which are path files.&quot;</span>
 
         <span class="c1"># Inputs traits</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span><span class="s2">&quot;file1&quot;</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">file1_desc</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file1</span> <span class="o">=</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;file2&quot;</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">file2_desc</span><span class="p">)</span>
         <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file2</span> <span class="o">=</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;file3&quot;</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">file3_desc</span><span class="p">)</span>
         <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file3</span> <span class="o">=</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span>
 
         <span class="c1"># Outputs traits</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
@@ -471,15 +474,25 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">Files_To_List</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="c1"># Outputs definition and tags inheritance (optional)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">file1</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">file1</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span><span class="p">]:</span>
-            <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">file2</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">file2</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span><span class="p">]</span>
-            <span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">file1</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">file2</span> <span class="ow">in</span> <span class="p">[</span>
+                <span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span><span class="p">,</span>
+            <span class="p">]</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">file3</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span><span class="p">]:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;file_list&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">file1</span><span class="p">]</span>
-            <span class="k">elif</span> <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">file3</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">file3</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span><span class="p">]</span>
-            <span class="p">):</span>
+
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">file3</span> <span class="ow">in</span> <span class="p">[</span>
+                <span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span><span class="p">,</span>
+            <span class="p">]</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">file2</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span><span class="p">]:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;file_list&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">file1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">file2</span><span class="p">]</span>
+
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">file2</span> <span class="ow">in</span> <span class="p">[</span>
+                <span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span><span class="p">,</span>
+            <span class="p">]</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">file3</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;file_list&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">file1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">file3</span><span class="p">]</span>
+
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;file_list&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">file1</span><span class="p">,</span>

@@ -58,7 +58,7 @@ From 3 file names, generating a list containing all theses file names
 
     ::
 
-      ex.  /home/ArthurBlair/data/Func.nii
+      ex. /home/ArthurBlair/data/Func.nii
 
 **Outputs parameters:**
 
