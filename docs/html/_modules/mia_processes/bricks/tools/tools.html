@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.tools.tools &#8212; mia_processes 2.2.1-dev+1685da4 documentation</title>
+    <title>mia_processes.bricks.tools.tools &#8212; mia_processes 2.2.1-dev+e4fadf2 documentation</title>
     <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
@@ -18,7 +18,7 @@
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.2.1-dev+1685da4 documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+e4fadf2 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.tools.tools</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -850,9 +850,9 @@
 
             <span class="k">if</span> <span class="n">patient_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span>
-                    <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Import_Data:</span><span class="se">\n</span><span class="s1"> The &quot;PatientName&quot; tag is not filled &#39;</span>
-                    <span class="s2">&quot;in the database for the </span><span class="si">{}</span><span class="s2"> file ...</span><span class="se">\n</span><span class="s2"> The calculation&quot;</span>
-                    <span class="s2">&quot;is aborted...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_in_db</span><span class="p">)</span>
+                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Import_Data brick:</span><span class="se">\n</span><span class="s2"> The &#39;PatientName&#39; tag is not &quot;</span>
+                    <span class="s2">&quot;filled in the database for the </span><span class="si">{}</span><span class="s2"> file ...</span><span class="se">\n</span><span class="s2"> The &quot;</span>
+                    <span class="s2">&quot;calculation is aborted...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_in_db</span><span class="p">)</span>
                 <span class="p">)</span>
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
 
@@ -888,7 +888,9 @@
             <span class="n">list_out</span> <span class="o">=</span> <span class="p">[]</span>
 
             <span class="k">for</span> <span class="n">ref_file</span> <span class="ow">in</span> <span class="n">all_ref_files</span><span class="p">:</span>
+
                 <span class="k">for</span> <span class="n">_filter</span> <span class="ow">in</span> <span class="n">filters</span><span class="p">:</span>
+
                     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">starts_with</span> <span class="ow">is</span> <span class="kc">True</span> <span class="ow">and</span> <span class="n">ref_file</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span>
                         <span class="n">_filter</span>
                     <span class="p">):</span>
