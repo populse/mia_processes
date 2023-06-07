@@ -38,23 +38,23 @@
 Files_To_List brick
 ===================
 
-From 2 file names, generating a list containing all theses file names
+From 3 file names, generating a list containing all theses file names
 ---------------------------------------------------------------------
 
-*'/home/ArthurBlair/data/Anat.nii' +  '/home/ArthurBlair/data/Func.nii' -> Files_To_List -> ['/home/ArthurBlair/data/Anat.nii', '/home/ArthurBlair/data/Func.nii']*
-
+- `file1` is mandatory, while `file2` and `file3` are optional. If one (or both) of the latter two entries is (are) undefined, it will not be present in `file_list`.
+- Ex. `file2` is undefined and `file3` is defined, the result for file_list will be [file1, file3].
 
 **Inputs parameters:**
 
 - *file1*
-    A string corresponding to an existing path file.
+    A string corresponding to a path file.
 
     ::
 
       ex. /home/ArthurBlair/data/Anat.nii
 
 - *file2*
-    An optional string corresponding to an existing path file.
+    An optional string corresponding to a path file.
 
     ::
 
@@ -68,7 +68,3 @@ From 2 file names, generating a list containing all theses file names
     ::
 
       ex. ['/home/ArthurBlair/data/Anat.nii', '/home/ArthurBlair/data/Func.nii']
-
--------------
-
-NOTE: If only file1 is specified, returns a list containing file1 only.

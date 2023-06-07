@@ -370,7 +370,7 @@ class Delete_data(ProcessMIA):
 
 class Files_To_List(ProcessMIA):
     """
-    * From 2 file names, generating a list containing all these file names.
+    * From 3 file names, generating a list containing all these file names.
 
     Please, see the complete documention for the
     `Files_To_List in the populse.mia_processes web site
@@ -394,25 +394,28 @@ class Files_To_List(ProcessMIA):
         # Inputs description
         file1_desc = "A string corresponding to an existing path file."
         file2_desc = (
-            "An optional string corresponding " "to an existing path file."
+            "An optional string corresponding to an existing path file."
         )
         file3_desc = (
-            "An optional string corresponding " "to an existing path file."
+            "An optional string corresponding to an existing path file."
         )
 
         # Outputs description
-        file_list_desc = "A list of items which are an existing file name."
+        file_list_desc = "A list of items which are path files."
 
         # Inputs traits
         self.add_trait("file1", traits.File(output=False, desc=file1_desc))
+        self.file1 = traits.Undefined
 
         self.add_trait(
             "file2", traits.File(output=False, optional=True, desc=file2_desc)
         )
+        self.file2 = traits.Undefined
 
         self.add_trait(
             "file3", traits.File(output=False, optional=True, desc=file3_desc)
         )
+        self.file3 = traits.Undefined
 
         # Outputs traits
         self.add_trait(
@@ -437,15 +440,25 @@ class Files_To_List(ProcessMIA):
         super(Files_To_List, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
-        if self.file1 and self.file1 not in ["<undefined>", traits.Undefined]:
-            if (not self.file2) or (
-                self.file2 in ["<undefined>", traits.Undefined]
-            ):
+        if self.file1 not in ["<undefined>", traits.Undefined]:
+            if self.file2 in [
+                "<undefined>",
+                traits.Undefined,
+            ] and self.file3 in ["<undefined>", traits.Undefined]:
                 self.outputs["file_list"] = [self.file1]
-            elif (not self.file3) or (
-                self.file3 in ["<undefined>", traits.Undefined]
-            ):
+
+            elif self.file3 in [
+                "<undefined>",
+                traits.Undefined,
+            ] and self.file2 not in ["<undefined>", traits.Undefined]:
                 self.outputs["file_list"] = [self.file1, self.file2]
+
+            elif self.file2 in [
+                "<undefined>",
+                traits.Undefined,
+            ] and self.file3 not in ["<undefined>", traits.Undefined]:
+                self.outputs["file_list"] = [self.file1, self.file3]
+
             else:
                 self.outputs["file_list"] = [
                     self.file1,
