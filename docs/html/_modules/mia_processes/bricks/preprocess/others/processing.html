@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.preprocess.others.processing &#8212; mia_processes 2.2.1-dev+1685da4 documentation</title>
+    <title>mia_processes.bricks.preprocess.others.processing &#8212; mia_processes 2.2.1-dev+e4fadf2 documentation</title>
     <link rel="stylesheet" href="../../../../../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
@@ -18,7 +18,7 @@
     <link rel="search" title="Search" href="../../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../../index.html">
-          <span>mia_processes 2.2.1-dev+1685da4 documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+e4fadf2 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.preprocess.others.processing</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -188,14 +188,20 @@
                 <span class="n">valid_ext</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">fileName</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">,</span> <span class="n">EXT</span><span class="p">)</span>
 
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_ext</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The input image format is&quot;</span> <span class="s2">&quot; not recognized...!&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span>
+                        <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">ApplyBiasCorrection brick: The input image &quot;</span>
+                        <span class="s2">&quot;format is not recognized...!&quot;</span>
+                    <span class="p">)</span>
                     <span class="k">return</span>
 
                 <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;out_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="n">fileName</span> <span class="o">+</span> <span class="s2">&quot;_inu.&quot;</span> <span class="o">+</span> <span class="n">in_ext</span>
                 <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No output_directory was found...!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s2">&quot;ApplyBiasCorrection brick: No output_directory was &quot;</span>
+                    <span class="s2">&quot;found...!</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
                 <span class="k">return</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
@@ -351,7 +357,10 @@
             <span class="n">valid_ext</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">fileName</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">,</span> <span class="n">EXT</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_ext</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The input image format is&quot;</span> <span class="s2">&quot; not recognized...!&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">ArtifactMask brick: The input image format is not &quot;</span>
+                    <span class="s2">&quot;recognized...!&quot;</span>
+                <span class="p">)</span>
                 <span class="k">return</span>
 
             <span class="n">file_hat</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
@@ -409,7 +418,11 @@
             <span class="ne">FileNotFoundError</span><span class="p">,</span>
             <span class="ne">TypeError</span><span class="p">,</span>
         <span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Error with files to mask, during &quot;</span> <span class="s2">&quot;initialisation: &quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">ArtifactMask brick: Error with files to mask, during &quot;</span>
+                <span class="s2">&quot;initialisation: &quot;</span><span class="p">,</span>
+                <span class="n">e</span><span class="p">,</span>
+            <span class="p">)</span>
             <span class="n">imnii</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="n">hmnii</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="n">rmnii</span> <span class="o">=</span> <span class="kc">None</span>
@@ -620,7 +633,10 @@
             <span class="k">for</span> <span class="n">file_name1</span> <span class="ow">in</span> <span class="n">files_name</span><span class="p">:</span>
                 <span class="n">valid_ext</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">fileName</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span><span class="n">file_name1</span><span class="p">,</span> <span class="n">EXT</span><span class="p">)</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_ext</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The input image format is&quot;</span> <span class="s2">&quot; not recognized...!&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span>
+                        <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Binarize brick: The input image format is not &quot;</span>
+                        <span class="s2">&quot;recognized...!&quot;</span>
+                    <span class="p">)</span>
                     <span class="k">return</span>
 
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">suffix</span> <span class="o">==</span> <span class="s2">&quot; &quot;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix</span> <span class="o">==</span> <span class="s2">&quot; &quot;</span> <span class="ow">and</span> <span class="n">flag</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
@@ -654,14 +670,14 @@
                         <span class="k">if</span> <span class="n">retval</span> <span class="o">==</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">YesToAll</span><span class="p">:</span>
                             <span class="n">flag</span> <span class="o">=</span> <span class="kc">False</span>
                             <span class="nb">print</span><span class="p">(</span>
-                                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">YesToAll selected: end of overwrite &quot;</span>
-                                <span class="s2">&quot;checks on input images ...&quot;</span>
+                                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Binarize brick: YesToAll selected ; end of &quot;</span>
+                                <span class="s2">&quot;overwrite checks on input images ...&quot;</span>
                             <span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">files_name</span> <span class="o">=</span> <span class="p">[]</span>
                         <span class="nb">print</span><span class="p">(</span>
-                            <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Aborted.&quot;</span>
-                            <span class="s2">&quot;Please check your input parameters ...&quot;</span>
+                            <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Binarize brick: Initialization Aborted. Please &quot;</span>
+                            <span class="s2">&quot;check your input parameters ...&quot;</span>
                         <span class="p">)</span>
                         <span class="k">return</span>
 
@@ -683,8 +699,9 @@
 
             <span class="k">else</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span>
-                    <span class="s2">&quot;- There was no output file deducted during &quot;</span>
-                    <span class="s2">&quot;initialisation. Please check the input parameters...!&quot;</span>
+                    <span class="s2">&quot;- Binarize brick: There was no output file deducted &quot;</span>
+                    <span class="s2">&quot;during initialization. Please check the &quot;</span>
+                    <span class="s2">&quot;input parameters...!&quot;</span>
                 <span class="p">)</span>
 
         <span class="c1"># tags inheritance (optional)</span>
@@ -756,8 +773,8 @@
                 <span class="ne">TypeError</span><span class="p">,</span>
             <span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span>
-                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Error with files to binarize, during &quot;</span>
-                    <span class="s2">&quot;initialisation: &quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Binarize brick: Error with files to binarize, during &quot;</span>
+                    <span class="s2">&quot;the run: &quot;</span><span class="p">,</span>
                     <span class="n">e</span><span class="p">,</span>
                 <span class="p">)</span>
                 <span class="n">img</span> <span class="o">=</span> <span class="kc">None</span>
@@ -884,7 +901,10 @@
             <span class="n">valid_ext</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">file_name</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">,</span> <span class="n">EXT</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_ext</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The input image format is not recognized...!&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">ConformImage brick: The input image format is not &quot;</span>
+                    <span class="s2">&quot;recognized...!&quot;</span>
+                <span class="p">)</span>
                 <span class="k">return</span>
 
             <span class="n">path</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">)</span>
@@ -935,8 +955,9 @@
 
             <span class="k">else</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span>
-                    <span class="s2">&quot;- There was no output file deducted during &quot;</span>
-                    <span class="s2">&quot;initialisation. Please check the input parameters...!&quot;</span>
+                    <span class="s2">&quot;- ConformImage brick: There was no output file deducted &quot;</span>
+                    <span class="s2">&quot;during initialization. Please check the input &quot;</span>
+                    <span class="s2">&quot;parameters...!&quot;</span>
                 <span class="p">)</span>
 
             <span class="c1"># tags inheritance (optional)</span>
@@ -962,7 +983,9 @@
             <span class="ne">TypeError</span><span class="p">,</span>
         <span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span>
-                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Error with file to conform, during &quot;</span> <span class="s2">&quot;initialisation: &quot;</span><span class="p">,</span> <span class="n">e</span>
+                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">ConformImage brick: Error with file to conform, during the &quot;</span>
+                <span class="s2">&quot;run: &quot;</span><span class="p">,</span>
+                <span class="n">e</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="n">img</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -1296,7 +1319,10 @@
                 <span class="n">valid_ext</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">fileName</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span><span class="n">file_name1</span><span class="p">,</span> <span class="n">EXT</span><span class="p">)</span>
 
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_ext</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The input image format is&quot;</span> <span class="s2">&quot; not recognized...!&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span>
+                        <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Enhance brick: The input image format is not &quot;</span>
+                        <span class="s2">&quot;recognized...!&quot;</span>
+                    <span class="p">)</span>
                     <span class="k">return</span>
                 <span class="n">path</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">file_name1</span><span class="p">)</span>
 
@@ -1309,7 +1335,7 @@
                     <span class="n">msg</span> <span class="o">=</span> <span class="n">QMessageBox</span><span class="p">()</span>
                     <span class="n">msg</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">Warning</span><span class="p">)</span>
                     <span class="n">msg</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span>
-                        <span class="s2">&quot;mia_processes - &quot;</span> <span class="s2">&quot;Enhance brick Warning!&quot;</span>
+                        <span class="s2">&quot;mia_processes - Enhance brick Warning!&quot;</span>
                     <span class="p">)</span>
                     <span class="n">msg</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span>
                         <span class="s2">&quot;Suffix and prefix input parameters are not &quot;</span>
@@ -1336,13 +1362,14 @@
                         <span class="k">if</span> <span class="n">retval</span> <span class="o">==</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">YesToAll</span><span class="p">:</span>
                             <span class="n">flag</span> <span class="o">=</span> <span class="kc">False</span>
                             <span class="nb">print</span><span class="p">(</span>
-                                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">YesToAll selected: end of overwrite &quot;</span>
-                                <span class="s2">&quot;checks on input images ...&quot;</span>
+                                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Enhance brick brick: YesToAll selected ; &quot;</span>
+                                <span class="s2">&quot;end of overwrite checks on input images ...&quot;</span>
                             <span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">files_name</span> <span class="o">=</span> <span class="p">[]</span>
                         <span class="nb">print</span><span class="p">(</span>
-                            <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Aborted. Please check your input parameters ...&quot;</span>
+                            <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Enhance brick brick: Aborted ; Please check &quot;</span>
+                            <span class="s2">&quot;your input parameters ...&quot;</span>
                         <span class="p">)</span>
                         <span class="k">return</span>
 
@@ -1364,8 +1391,9 @@
 
             <span class="k">else</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span>
-                    <span class="s2">&quot;- There was no output file deducted during &quot;</span>
-                    <span class="s2">&quot;initialisation. Please check the input parameters...!&quot;</span>
+                    <span class="s2">&quot;- Enhance brick: There was no output file deducted &quot;</span>
+                    <span class="s2">&quot;during initialisation. Please check the input &quot;</span>
+                    <span class="s2">&quot;parameters...!&quot;</span>
                 <span class="p">)</span>
 
         <span class="c1"># tags inheritance (optional)</span>
@@ -1434,7 +1462,8 @@
                 <span class="ne">TypeError</span><span class="p">,</span>
             <span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span>
-                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Error with file to enhance, during &quot;</span> <span class="s2">&quot;initialisation: &quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Enhance brick: Error with file to enhance, during the &quot;</span>
+                    <span class="s2">&quot;run: &quot;</span><span class="p">,</span>
                     <span class="n">e</span><span class="p">,</span>
                 <span class="p">)</span>
                 <span class="n">img</span> <span class="o">=</span> <span class="kc">None</span>
@@ -1549,11 +1578,14 @@
                 <span class="n">valid_ext</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">fileName</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">,</span> <span class="n">EXT</span><span class="p">)</span>
 
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_ext</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The input image format is&quot;</span> <span class="s2">&quot; not recognized...!&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span>
+                        <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">EstimateSNR brick: The input image format is not &quot;</span>
+                        <span class="s2">&quot;recognized...!&quot;</span>
+                    <span class="p">)</span>
                     <span class="k">return</span>
 
             <span class="k">else</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No output_directory was found...!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;EstimateSNR brick: No output_directory was found...!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
                 <span class="k">return</span>
 
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
@@ -1574,7 +1606,7 @@
             <span class="ne">FileNotFoundError</span><span class="p">,</span>
             <span class="ne">TypeError</span><span class="p">,</span>
         <span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Error with files, during &quot;</span> <span class="s2">&quot;initialisation: &quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">EstimateSNR brick: Error with files, during the run: &quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
             <span class="k">return</span>
 
         <span class="n">data</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">get_fdata</span><span class="p">()</span>
@@ -1681,7 +1713,10 @@
             <span class="n">valid_ext</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">fileName</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">,</span> <span class="n">EXT</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_ext</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The input image format is&quot;</span> <span class="s2">&quot; not recognized...!&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">GradientThreshold brick: The input image format is &quot;</span>
+                    <span class="s2">&quot;not recognized...!&quot;</span>
+                <span class="p">)</span>
                 <span class="k">return</span>
 
             <span class="n">path</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">)</span>
@@ -1715,7 +1750,10 @@
                     <span class="p">)</span>
 
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Aborted. Please check your input parameters ...&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span>
+                        <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">GradientThreshold brick Aborted. Please check &quot;</span>
+                        <span class="s2">&quot;your input parameters ...&quot;</span>
+                    <span class="p">)</span>
                     <span class="k">return</span>
 
             <span class="n">file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
@@ -1734,8 +1772,9 @@
 
             <span class="k">else</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span>
-                    <span class="s2">&quot;- There was no output file deducted during &quot;</span>
-                    <span class="s2">&quot;initialisation. Please check the input parameters...!&quot;</span>
+                    <span class="s2">&quot;- GradientThreshold brick: There was no output file &quot;</span>
+                    <span class="s2">&quot;deducted during initialization. Please check the input &quot;</span>
+                    <span class="s2">&quot;parameters...!&quot;</span>
                 <span class="p">)</span>
 
             <span class="c1"># tags inheritance (optional)</span>
@@ -1763,7 +1802,9 @@
             <span class="ne">TypeError</span><span class="p">,</span>
         <span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span>
-                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Error with file to enhance, during &quot;</span> <span class="s2">&quot;initialisation: &quot;</span><span class="p">,</span> <span class="n">e</span>
+                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">GradientThreshold brick: Error with file to enhance, &quot;</span>
+                <span class="s2">&quot;during the run: &quot;</span><span class="p">,</span>
+                <span class="n">e</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="n">img</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="n">seg_img</span> <span class="o">=</span> <span class="kc">None</span>
@@ -1922,7 +1963,10 @@
             <span class="n">valid_ext</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">fileName</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">,</span> <span class="n">EXT</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_ext</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The input image format is&quot;</span> <span class="s2">&quot; not recognized...!&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Harmonize brick: The input image format is &quot;</span>
+                    <span class="s2">&quot;not recognized...!&quot;</span>
+                <span class="p">)</span>
                 <span class="k">return</span>
 
             <span class="k">if</span> <span class="p">(</span>
@@ -1970,7 +2014,10 @@
                     <span class="p">)</span>
 
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Aborted. Please check your input parameters ...&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span>
+                        <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Harmonize brick: Aborted. Please check your &quot;</span>
+                        <span class="s2">&quot;input parameters ...&quot;</span>
+                    <span class="p">)</span>
                     <span class="k">return</span>
 
             <span class="n">file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
@@ -1989,8 +2036,9 @@
 
             <span class="k">else</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span>
-                    <span class="s2">&quot;- There was no output file deducted during &quot;</span>
-                    <span class="s2">&quot;initialisation. Please check the input parameters...!&quot;</span>
+                    <span class="s2">&quot;- Harmonize brick: There was no output file deducted &quot;</span>
+                    <span class="s2">&quot;during initialization. Please check the input &quot;</span>
+                    <span class="s2">&quot;parameters...!&quot;</span>
                 <span class="p">)</span>
 
             <span class="c1"># tags inheritance (optional)</span>
@@ -2013,7 +2061,9 @@
             <span class="ne">TypeError</span><span class="p">,</span>
         <span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span>
-                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Error with file to enhance, during &quot;</span> <span class="s2">&quot;initialisation: &quot;</span><span class="p">,</span> <span class="n">e</span>
+                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Harmonize brick: Error with file to enhance, during the &quot;</span>
+                <span class="s2">&quot;run: &quot;</span><span class="p">,</span>
+                <span class="n">e</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="n">img</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="n">wm_img</span> <span class="o">=</span> <span class="kc">None</span>
@@ -2180,7 +2230,10 @@
                     <span class="p">),</span>
                 <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No output_directory was found...!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s2">&quot;IntensityClip brick: No output_directory was &quot;</span>
+                    <span class="s2">&quot;found...!</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
                 <span class="k">return</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
@@ -2318,7 +2371,10 @@
             <span class="n">valid_ext</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">fileName</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">,</span> <span class="n">EXT</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_ext</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The input image format is&quot;</span> <span class="s2">&quot; not recognized...!&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Mask brick: The input image format is not &quot;</span>
+                    <span class="s2">&quot;recognized...!&quot;</span>
+                <span class="p">)</span>
                 <span class="k">return</span>
 
             <span class="k">if</span> <span class="p">(</span>
@@ -2364,7 +2420,10 @@
                     <span class="p">)</span>
 
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Aborted. Please check your input parameters ...&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span>
+                        <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Mask brick: Aborted. Please check your input &quot;</span>
+                        <span class="s2">&quot;parameters ...&quot;</span>
+                    <span class="p">)</span>
                     <span class="k">return</span>
 
             <span class="n">file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
@@ -2383,8 +2442,8 @@
 
             <span class="k">else</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span>
-                    <span class="s2">&quot;- There was no output file deducted during &quot;</span>
-                    <span class="s2">&quot;initialisation. Please check the input parameters...!&quot;</span>
+                    <span class="s2">&quot;- Mask brick: There was no output file deducted during &quot;</span>
+                    <span class="s2">&quot;initialization. Please check the input parameters...!&quot;</span>
                 <span class="p">)</span>
 
         <span class="c1"># tags inheritance (optional)</span>
@@ -2411,7 +2470,10 @@
             <span class="ne">FileNotFoundError</span><span class="p">,</span>
             <span class="ne">TypeError</span><span class="p">,</span>
         <span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Error with files to mask, during &quot;</span> <span class="s2">&quot;initialisation: &quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Mask brick: Error with files to mask, during &quot;</span> <span class="s2">&quot;the run: &quot;</span><span class="p">,</span>
+                <span class="n">e</span><span class="p">,</span>
+            <span class="p">)</span>
             <span class="n">img</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="n">img</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">mask_img</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
@@ -2523,7 +2585,9 @@
             <span class="ne">TypeError</span><span class="p">,</span>
         <span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span>
-                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Error with file to enhance, during &quot;</span> <span class="s2">&quot;initialisation: &quot;</span><span class="p">,</span> <span class="n">e</span>
+                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">NonSteadyStateDetector brick: Error with file to enhance, &quot;</span>
+                <span class="s2">&quot;during the run: &quot;</span><span class="p">,</span>
+                <span class="n">e</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="n">in_nii</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -2682,7 +2746,9 @@
                 <span class="ne">TypeError</span><span class="p">,</span>
             <span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span>
-                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Error with reference_image, during initialisation: &quot;</span><span class="p">,</span> <span class="n">e</span>
+                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Resample1 brick: Error with reference_image, during &quot;</span>
+                    <span class="s2">&quot;initialisation: &quot;</span><span class="p">,</span>
+                    <span class="n">e</span><span class="p">,</span>
                 <span class="p">)</span>
                 <span class="n">refName</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -2717,8 +2783,8 @@
                     <span class="ne">TypeError</span><span class="p">,</span>
                 <span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                     <span class="nb">print</span><span class="p">(</span>
-                        <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Error with files_to_resample, during &quot;</span>
-                        <span class="s2">&quot;initialisation: &quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Resample1 brick: Error with files_to_resample, &quot;</span>
+                        <span class="s2">&quot;during initialisation: &quot;</span><span class="p">,</span>
                         <span class="n">e</span><span class="p">,</span>
                     <span class="p">)</span>
                     <span class="n">fileName</span> <span class="o">=</span> <span class="kc">None</span>
@@ -3365,7 +3431,10 @@
             <span class="n">valid_ext</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">fileName</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">,</span> <span class="n">EXT</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_ext</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The input image format is&quot;</span> <span class="s2">&quot; not recognized...!&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">RotationMask brick: The input image format is not &quot;</span>
+                    <span class="s2">&quot;recognized...!&quot;</span>
+                <span class="p">)</span>
                 <span class="k">return</span>
 
             <span class="k">if</span> <span class="p">(</span>
@@ -3392,7 +3461,7 @@
                 <span class="n">msg</span> <span class="o">=</span> <span class="n">QMessageBox</span><span class="p">()</span>
                 <span class="n">msg</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">Warning</span><span class="p">)</span>
                 <span class="n">msg</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span>
-                    <span class="s2">&quot;mia_processes - &quot;</span> <span class="s2">&quot;RotationMask brick Warning!&quot;</span>
+                    <span class="s2">&quot;mia_processes - RotationMask brick Warning!&quot;</span>
                 <span class="p">)</span>
                 <span class="n">msg</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span>
                     <span class="s2">&quot;Suffix and prefix input parameters are not &quot;</span>
@@ -3413,7 +3482,10 @@
                     <span class="p">)</span>
 
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Aborted. Please check your input parameters ...&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span>
+                        <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">RotationMask brick Aborted. Please check your &quot;</span>
+                        <span class="s2">&quot;input parameters ...&quot;</span>
+                    <span class="p">)</span>
                     <span class="k">return</span>
 
             <span class="n">file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
@@ -3432,8 +3504,9 @@
 
             <span class="k">else</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span>
-                    <span class="s2">&quot;- There was no output file deducted during &quot;</span>
-                    <span class="s2">&quot;initialisation. Please check the input parameters...!&quot;</span>
+                    <span class="s2">&quot;- RotationMask brick: There was no output file deducted &quot;</span>
+                    <span class="s2">&quot;during initialization. Please check the input &quot;</span>
+                    <span class="s2">&quot;parameters...!&quot;</span>
                 <span class="p">)</span>
 
             <span class="c1"># tags inheritance (optional)</span>
@@ -3458,7 +3531,11 @@
             <span class="ne">FileNotFoundError</span><span class="p">,</span>
             <span class="ne">TypeError</span><span class="p">,</span>
         <span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Error with files to mask, during &quot;</span> <span class="s2">&quot;initialisation: &quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">RotationMask brick: Error with files to mask, during the &quot;</span>
+                <span class="s2">&quot;run: &quot;</span><span class="p">,</span>
+                <span class="n">e</span><span class="p">,</span>
+            <span class="p">)</span>
             <span class="n">img</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="k">if</span> <span class="n">img</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -3612,7 +3689,10 @@
             <span class="n">valid_ext</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">fileName</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">,</span> <span class="n">EXT</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_ext</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The input image format is&quot;</span> <span class="s2">&quot; not recognized...!&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Sanitize brick: The input image format is not &quot;</span>
+                    <span class="s2">&quot;recognized...!&quot;</span>
+                <span class="p">)</span>
                 <span class="k">return</span>
 
             <span class="k">if</span> <span class="p">(</span>
@@ -3660,7 +3740,10 @@
                     <span class="p">)</span>
 
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Aborted. Please check your input parameters ...&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span>
+                        <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Sanitize brick: Aborted. Please check your input &quot;</span>
+                        <span class="s2">&quot;parameters ...&quot;</span>
+                    <span class="p">)</span>
                     <span class="k">return</span>
 
             <span class="n">file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
@@ -3679,8 +3762,9 @@
 
             <span class="k">else</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span>
-                    <span class="s2">&quot;- There was no output file deducted during &quot;</span>
-                    <span class="s2">&quot;initialisation. Please check the input parameters...!&quot;</span>
+                    <span class="s2">&quot;- Sanitize brick: There was no output file deducted &quot;</span>
+                    <span class="s2">&quot;during initialisation. Please check the input &quot;</span>
+                    <span class="s2">&quot;parameters...!&quot;</span>
                 <span class="p">)</span>
 
             <span class="c1"># tags inheritance (optional)</span>
@@ -3705,7 +3789,11 @@
             <span class="ne">FileNotFoundError</span><span class="p">,</span>
             <span class="ne">TypeError</span><span class="p">,</span>
         <span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Error with files to mask, during &quot;</span> <span class="s2">&quot;initialisation: &quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Sanitize brick: Error with files to mask, during the &quot;</span>
+                <span class="s2">&quot;run: &quot;</span><span class="p">,</span>
+                <span class="n">e</span><span class="p">,</span>
+            <span class="p">)</span>
             <span class="n">img</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="k">if</span> <span class="n">img</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -3738,7 +3826,7 @@
                 <span class="n">img</span><span class="o">.</span><span class="n">set_sform</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">get_qform</span><span class="p">(),</span> <span class="n">qform_code</span><span class="p">)</span>
                 <span class="n">save_file</span> <span class="o">=</span> <span class="kc">True</span>
                 <span class="nb">print</span><span class="p">(</span>
-                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Note on orientation: sform matrix set&quot;</span>
+                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Sanitize brick: Note on orientation:&quot;</span>
                     <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The sform has been copied from qform.&quot;</span>
                 <span class="p">)</span>
 
@@ -3748,17 +3836,17 @@
                 <span class="n">img</span><span class="o">.</span><span class="n">set_qform</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">get_sform</span><span class="p">(),</span> <span class="n">sform_code</span><span class="p">)</span>
                 <span class="n">save_file</span> <span class="o">=</span> <span class="kc">True</span>
                 <span class="nb">print</span><span class="p">(</span>
-                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Note on orientation: qform matrix overwritten&quot;</span>
+                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Sanitize brick: Note on orientation:&quot;</span>
                     <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The qform has been copied from sform.&quot;</span>
                 <span class="p">)</span>
 
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_qform</span> <span class="ow">and</span> <span class="n">qform_code</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                     <span class="nb">print</span><span class="p">(</span>
-                        <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">WARNING - Invalid qform information.</span><span class="se">\n</span><span class="s2">The qform &quot;</span>
-                        <span class="s2">&quot;matrix found in the file header is invalid. The qform&quot;</span>
-                        <span class="s2">&quot; has been copied from sform. Checking the original &quot;</span>
-                        <span class="s2">&quot;qform information from the data produced by the &quot;</span>
-                        <span class="s2">&quot;scanner is advised.&quot;</span>
+                        <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Sanitize brick WARNING: Invalid qform &quot;</span>
+                        <span class="s2">&quot;information.</span><span class="se">\n</span><span class="s2">The qform matrix found in the file &quot;</span>
+                        <span class="s2">&quot;header is invalid. The qform has been copied from &quot;</span>
+                        <span class="s2">&quot;sform. Checking the original qform information from &quot;</span>
+                        <span class="s2">&quot;the data produced by the scanner is advised.&quot;</span>
                     <span class="p">)</span>
 
             <span class="c1"># Rows 5-6:</span>
@@ -3768,11 +3856,11 @@
                 <span class="n">img</span><span class="o">.</span><span class="n">set_qform</span><span class="p">(</span><span class="n">affine</span><span class="p">,</span> <span class="n">nib</span><span class="o">.</span><span class="n">nifti1</span><span class="o">.</span><span class="n">xform_codes</span><span class="p">[</span><span class="s2">&quot;scanner&quot;</span><span class="p">])</span>
                 <span class="n">save_file</span> <span class="o">=</span> <span class="kc">True</span>
                 <span class="nb">print</span><span class="p">(</span>
-                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">WARNING - Missing orientation information.&quot;</span>
-                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Orientation information could not be retrieved from &quot;</span>
-                    <span class="s2">&quot;the image header. The qform and sform matrices have been &quot;</span>
-                    <span class="s2">&quot;set to a default, LAS-oriented affine. Analyses of this &quot;</span>
-                    <span class="s2">&quot;dataset MAY BE INVALID.&quot;</span>
+                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Sanitize brick WARNING: Missing orientation &quot;</span>
+                    <span class="s2">&quot;information.</span><span class="se">\n</span><span class="s2">Orientation information could not be &quot;</span>
+                    <span class="s2">&quot;retrieved from the image header. The qform and sform &quot;</span>
+                    <span class="s2">&quot;matrices have been set to a default LAS-oriented &quot;</span>
+                    <span class="s2">&quot;affine. Analyses of this dataset MAY BE INVALID!&quot;</span>
                 <span class="p">)</span>
 
             <span class="k">if</span> <span class="p">(</span>
@@ -3948,17 +4036,17 @@
         <span class="n">tpl_target_path</span> <span class="o">=</span> <span class="n">get_template</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_template</span><span class="p">,</span> <span class="o">**</span><span class="n">template_spec</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">tpl_target_path</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span>
-                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Could not find template &#39;</span><span class="si">{0}</span><span class="s2">&#39; with specs=</span><span class="si">{1}</span><span class="s2">. Please &quot;</span>
-                <span class="s2">&quot;revise your template argument.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">in_template</span><span class="p">,</span> <span class="n">template_spec</span>
-                <span class="p">)</span>
+                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">TemplateFromTemplateFlow brick: Could not find template &quot;</span>
+                <span class="s2">&quot;&#39;</span><span class="si">{0}</span><span class="s2">&#39; with specs=</span><span class="si">{1}</span><span class="s2">. Please revise your template &quot;</span>
+                <span class="s2">&quot;argument.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_template</span><span class="p">,</span> <span class="n">template_spec</span><span class="p">)</span>
             <span class="p">)</span>
             <span class="k">return</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tpl_target_path</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="nb">print</span><span class="p">(</span>
-                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The available template modifiers (</span><span class="si">{0}</span><span class="s2">) did not select a &quot;</span>
-                <span class="s2">&quot;unique template (got &#39;</span><span class="si">{1}</span><span class="s2">&#39;). Please revise your template &quot;</span>
+                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">TemplateFromTemplateFlow brick: The available template &quot;</span>
+                <span class="s2">&quot;modifiers (</span><span class="si">{0}</span><span class="s2">) did not select a unique template (got &quot;</span>
+                <span class="s2">&quot;&#39;</span><span class="si">{1}</span><span class="s2">&#39;). Please revise your template &quot;</span>
                 <span class="s2">&quot;argument.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_template</span><span class="p">,</span> <span class="n">template_spec</span><span class="p">)</span>
             <span class="p">)</span>
             <span class="k">return</span>
@@ -4135,7 +4223,10 @@
                 <span class="n">valid_ext</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">fileName</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span><span class="n">file_name1</span><span class="p">,</span> <span class="n">EXT</span><span class="p">)</span>
 
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_ext</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The input image format is&quot;</span> <span class="s2">&quot; not recognized...!&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span>
+                        <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Threshold brick: The input image format is not &quot;</span>
+                        <span class="s2">&quot;recognized...!&quot;</span>
+                    <span class="p">)</span>
                     <span class="k">return</span>
                 <span class="n">path</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">file_name1</span><span class="p">)</span>
 
@@ -4175,13 +4266,14 @@
                         <span class="k">if</span> <span class="n">retval</span> <span class="o">==</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">YesToAll</span><span class="p">:</span>
                             <span class="n">flag</span> <span class="o">=</span> <span class="kc">False</span>
                             <span class="nb">print</span><span class="p">(</span>
-                                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">YesToAll selected: end of overwrite &quot;</span>
-                                <span class="s2">&quot;checks on input images ...&quot;</span>
+                                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Threshold brick: YesToAll selected: end of &quot;</span>
+                                <span class="s2">&quot;overwrite checks on input images ...&quot;</span>
                             <span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">files_name</span> <span class="o">=</span> <span class="p">[]</span>
                         <span class="nb">print</span><span class="p">(</span>
-                            <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Aborted. Please check your input parameters ...&quot;</span>
+                            <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Threshold brick Aborted. Please check your &quot;</span>
+                            <span class="s2">&quot;input parameters ...&quot;</span>
                         <span class="p">)</span>
                         <span class="k">return</span>
 
@@ -4202,8 +4294,9 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;out_files&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">files</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span>
-                    <span class="s2">&quot;- There was no output file deducted during &quot;</span>
-                    <span class="s2">&quot;initialisation. Please check the input parameters...!&quot;</span>
+                    <span class="s2">&quot;- Threshold brick: There was no output file deducted &quot;</span>
+                    <span class="s2">&quot;during initialisation. Please check the input &quot;</span>
+                    <span class="s2">&quot;parameters...!&quot;</span>
                 <span class="p">)</span>
 
         <span class="c1"># tags inheritance (optional)</span>
@@ -4409,7 +4502,10 @@
             <span class="n">valid_ext</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">fileName</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">,</span> <span class="n">EXT</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_ext</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The input image format is&quot;</span> <span class="s2">&quot; not recognized...!&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">TSNR brick: The input image format is not &quot;</span>
+                    <span class="s2">&quot;recognized...!&quot;</span>
+                <span class="p">)</span>
                 <span class="k">return</span>
 
             <span class="k">if</span> <span class="p">(</span>
@@ -4437,7 +4533,7 @@
             <span class="p">):</span>
                 <span class="n">msg</span> <span class="o">=</span> <span class="n">QMessageBox</span><span class="p">()</span>
                 <span class="n">msg</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">Warning</span><span class="p">)</span>
-                <span class="n">msg</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;mia_processes - &quot;</span> <span class="s2">&quot;TSNR brick Warning!&quot;</span><span class="p">)</span>
+                <span class="n">msg</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;mia_processes - TSNR brick Warning!&quot;</span><span class="p">)</span>
                 <span class="n">msg</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span>
                     <span class="s2">&quot;suffix_tsnr and prefix_tsnr input parameters are not &quot;</span>
                     <span class="s2">&quot;defined or consist only of one or more white &quot;</span>
@@ -4457,7 +4553,10 @@
                     <span class="p">)</span>
 
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Aborted. Please check your input parameters ...&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span>
+                        <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">TSNR brick: Aborted. Please check your input &quot;</span>
+                        <span class="s2">&quot;parameters ...&quot;</span>
+                    <span class="p">)</span>
                     <span class="k">return</span>
 
             <span class="k">else</span><span class="p">:</span>
@@ -4495,7 +4594,7 @@
             <span class="p">):</span>
                 <span class="n">msg</span> <span class="o">=</span> <span class="n">QMessageBox</span><span class="p">()</span>
                 <span class="n">msg</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">Warning</span><span class="p">)</span>
-                <span class="n">msg</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;mia_processes - &quot;</span> <span class="s2">&quot;TSNR brick Warning!&quot;</span><span class="p">)</span>
+                <span class="n">msg</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;mia_processes - TSNR brick Warning!&quot;</span><span class="p">)</span>
                 <span class="n">msg</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span>
                     <span class="s2">&quot;suffix_stddev and prefix_stddev input parameters are not &quot;</span>
                     <span class="s2">&quot;defined or consist only of one or more white &quot;</span>
@@ -4514,7 +4613,10 @@
                         <span class="s2">&quot;</span><span class="se">\n</span><span class="si">{0}</span><span class="s2"> will be overwrited ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fileName</span><span class="p">)</span>
                     <span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Aborted. Please check your input parameters ...&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span>
+                        <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">TSNR brick Aborted. Please check your input &quot;</span>
+                        <span class="s2">&quot;parameters ...&quot;</span>
+                    <span class="p">)</span>
                     <span class="k">return</span>
 
             <span class="k">else</span><span class="p">:</span>
@@ -4558,7 +4660,10 @@
             <span class="ne">FileNotFoundError</span><span class="p">,</span>
             <span class="ne">TypeError</span><span class="p">,</span>
         <span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Error with files to mask, during &quot;</span> <span class="s2">&quot;initialisation: &quot;</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">TSNR brick: Error with files to mask, during the &quot;</span> <span class="s2">&quot;run: &quot;</span><span class="p">,</span>
+                <span class="n">e</span><span class="p">,</span>
+            <span class="p">)</span>
             <span class="n">img</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="k">if</span> <span class="n">img</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>

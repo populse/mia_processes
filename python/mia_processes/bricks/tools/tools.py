@@ -816,9 +816,9 @@ class Import_Data(ProcessMIA):
 
             if patient_name is None:
                 print(
-                    '\nImport_Data:\n The "PatientName" tag is not filled '
-                    "in the database for the {} file ...\n The calculation"
-                    "is aborted...".format(self.file_in_db)
+                    "\nImport_Data brick:\n The 'PatientName' tag is not "
+                    "filled in the database for the {} file ...\n The "
+                    "calculation is aborted...".format(self.file_in_db)
                 )
                 return self.make_initResult()
 
