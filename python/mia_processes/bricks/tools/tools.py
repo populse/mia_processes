@@ -120,11 +120,14 @@ class Concat_to_list(ProcessMIA):
         super(Concat_to_list, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
-        if self.list1 != [] and self.list2 != []:
+        if self.list1 not in [[], traits.Undefined] and self.list2 not in [
+            [],
+            traits.Undefined,
+        ]:
             self.outputs["out_list"] = self.list1 + self.list2
 
-            if self.outputs:
-                self.outputs["notInDb"] = ["out_list"]
+        if self.outputs:
+            self.outputs["notInDb"] = ["out_list"]
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
