@@ -16,16 +16,18 @@ Makes the mean and standard deviation of parametric maps.
     - The `parametric_maps` are first convolved with the ROIs corresponding
       to `doublet_list`. The mean and standard deviation are then calculated
       for the ROI in each parametric maps.
-    - ROIs are defined from `doublet_list` parameter as
-      doublet_list[0][0] + doublet_list[0][1] + '.nii',
-      doublet_list[1][0] + doublet_list[1][1] + '.nii',
-      etc.
-    - The "/roi\_\ `PatientName`/ROI_analysis" directory is
-      created to receive the results from the runtime (e.g.
-      "/roi\_\ `PatientName`/ROI_analysis/" + doublet_list[0][0] + doublet_list[0][1] + "_mean_spmT_BOLD.txt").
-    - To work correctly, the "/roi\_/`PatientName`/convROI_BOLD" directory
-      must exist and contain the ROI files (e.g.
-      "/roi\_\ `PatientName`/convROI_BOLD/conv" + doublet_list[0][0] + doublet_list[0][1] + ".nii").
+
+
+    - The “PatientName_data/ROI_data/ROI_analysis” directory is created to receive the results.
+      If this directory exists at runtime, it is overwritten.
+    - Output file names are built like this:
+        - roi_calculation_parameter_contrast.txt
+	    - roi is deducted from each `rois_files` after deleting the extension. If `prefix_to_delete` is defined,
+	      and if it corresponds to the beginning of roi, this beginning of string is deleted.
+	    - calculation corresponds to "mean" (mean calculation) or "std" (standard deviation calculation).
+	    - parameter is deducted from each `parametric_maps`. This is the string before the first underscore.
+	      If there is no underscore, this is the file name after removing the extension.
+	    - contrast is `contrast_type`.
     - To work correctly, the database entry for the first element of `parametric_maps` must
       have the `PatientName` tag filled in.
 
@@ -33,48 +35,66 @@ Makes the mean and standard deviation of parametric maps.
 
 **Mandatory inputs parameters:**
 
-- *doublet_list* (a list of lists)
-    A list of lists containing doublets of strings.
-
-    ::
-
-      ex. [["ROI_OCC", "_L"], ["ROI_OCC", "_R"], ["ROI_PAR", "_l"], ["ROI_PAR", "_R"]]
-
-
-- *parametric_maps* (a list of existing files)
+- *parametric_maps*
+    A list of uncompressed file.
 
     ::
 
       ex. ['/home/username/data/raw_data/spmT_0001.nii',
            '/home/username/data/raw_data/beta_0001.nii']
 
+- *rois_files*
+    A list of regions of interest (a list of uncompressed file), which will be applied to the parametric maps
+    before calculating the mean and standard deviation of the parameters in the corresponding regions.
+
+    ::
+
+      ex. ['/home/username/data/raw_data/convACA_L.nii',
+           '/home/username/data/raw_data/convACA_R.nii',
+           '/home/username/data/raw_data/convACM_L.nii',
+           '/home/username/data/raw_data/convACM_R.nii']
+
+- *contrast_type*
+    The contrast used (a string).
+
+    ::
+
+      ex. BOLD
+
+- *prefix_to_delete*
+    The string to be deleted from the deduced ROI name, when creating the `mean_out_files` and the `std_out_files`.
+
+    ::
+
+      ex. conv
 
 **Outputs parameters:**
 
-- *mean_out_files* (a list of files)
-    A list of .txt files with the calculated average for each ROI determined after convolution.
+- *mean_out_files*
+    A list of .txt files with the calculated mean for each ROI convolved with each parametric map.
 
     ::
 
-      ex. ['/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_L_mean_spmT_BOLD.txt',
-           '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_R_mean_spmT_BOLD.txt',
-	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_L_mean_spmT_BOLD.txt',
-	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_R_mean_spmT_BOLD.txt',
-	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_L_mean_beta_BOLD.txt',
-	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_R_mean_beta_BOLD.txt',
-	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_L_mean_beta_BOLD.txt',
-	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_R_mean_beta_BOLD.txt']
+      ex. ['/home/username/data/derived_data/patient-name_data/ROI_data/ROI_analysis/ACA_L_mean_spmT_BOLD.txt',
+           '/home/username/data/derived_data/patient-name_data/ROI_data/ROI_analysis/ACA_R_mean_spmT_BOLD.txt',
+           '/home/username/data/derived_data/patient-name_data/ROI_data/ROI_analysis/ACM_L_mean_spmT_BOLD.txt',
+           '/home/username/data/derived_data/patient-name_data/ROI_data/ROI_analysis/ACM_R_mean_spmT_BOLD.txt',
+           '/home/username/data/derived_data/patient-name_data/ROI_data/ROI_analysis/ACA_L_mean_beta_BOLD.txt',
+	   '/home/username/data/derived_data/patient-name_data/ROI_data/ROI_analysis/ACA_R_mean_beta_BOLD.txt',
+	   '/home/username/data/derived_data/patient-name_data/ROI_data/ROI_analysis/ACM_L_mean_beta_BOLD.txt',
+	   '/home/username/data/derived_data/patient-name_data/ROI_data/ROI_analysis/ACM_R_mean_beta_BOLD.txt']
 
-- *std_out_files* (a list of files)
-    A list of .txt files with the standard deviation for each ROI determined after convolution.
+
+- *std_out_files*
+    A list of .txt files with the calculated standard deviation for each ROI convolved with each parametric map.
 
     ::
 
-      ex. ['/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_L_std_spmT_BOLD.txt',
-           '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_R_std_spmT_BOLD.txt',
-	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_L_std_spmT_BOLD.txt',
-	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_R_std_spmT_BOLD.txt',
-	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_L_std_beta_BOLD.txt',
-	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_R_std_beta_BOLD.txt',
-	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_L_std_beta_BOLD.txt',
-	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_R_std_beta_BOLD.txt']
+      ex. ['/home/username/data/derived_data/patient-name_data/ROI_data/ROI_analysis/convACA_L_std_spmT_BOLD.txt',
+	   '/home/username/data/derived_data/patient-name_data/ROI_data/ROI_analysis/convACA_R_std_spmT_BOLD.txt',
+	   '/home/username/data/derived_data/patient-name_data/ROI_data/ROI_analysis/convACM_L_std_spmT_BOLD.txt',
+	   '/home/username/data/derived_data/patient-name_data/ROI_data/ROI_analysis/convACM_R_std_spmT_BOLD.txt'
+	   '/home/username/data/derived_data/patient-name_data/ROI_data/ROI_analysis/convACA_L_std_beta_BOLD.txt',
+	   '/home/username/data/derived_data/patient-name_data/ROI_data/ROI_analysis//convACA_R_std_beta_BOLD.txt',
+	   '/home/username/data/derived_data/patient-name_data/ROI_data/ROI_analysis//convACM_L_std_beta_BOLD.txt',
+	   '/home/username/data/derived_data/patient-name_data/ROI_data/ROI_analysis/convACM_R_std_beta_BOLD.txt']
