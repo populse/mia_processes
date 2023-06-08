@@ -10,51 +10,52 @@
 ConvROI brick
 =============
 
-Convolve regions of interest with a mask.
+Image convolution with one image
+--------------------------------
 
-    - Resampling the mask to the size of the ROIs, using the first ROI.
-    - Then convolve each ROI with resized mask.
-    - ROIs are defined from doublet_list parameter as
-      doublet_list[0][0] + doublet_list[0][1] + '.nii',
-      doublet_list[1][0] + doublet_list[1][1] + '.nii',
-      etc.
-
-To work correctly, the database entry for the in_image parameter must have the "PatientName" tag filled in.
-This tag is used to create the folder `output_directory/roi_PatientName` (that will contains the ROI files) and the folder `output_directory/roi_PatientName/convROI_BOLD` (that will contains the convolution results)
-
+    - Resample the `convolve_with` to the size of `images_to_convolve`.
+    - Then, convolve each `images_to_convolve` with resized `convolve_with`.
+    - The “PatientName_data/ROI_data/convROI_BOLD” directory is created to receive the convolution results from the runtime.
+      If this directory exists at runtime, it is overwritten.
+    - To work correctly, the database entry for the `convolve_with` parameter must have the "PatientName" tag filled in.
 
 --------------------------------------
 
 **Mandatory inputs parameters:**
 
-- *doublet_list* (a list of lists)
-    A list of lists containing doublets of strings.
-
-    It is used to define ROI names as:
-
-      - doublet_list[0][0] + doublet_list[0][1] + '.nii',
-      - doublet_list[1][0] + doublet_list[1][1] + '.nii',
-      - etc.
+- *images_to_convolve*
+    A list of images to convolve with `convolve_with` image (a list of image paths).
 
     ::
 
-      ex.[["ROI_OCC", "_L"], ["ROI_OCC", "_R"], ["ROI_PAR", "_l"]]
+      ex. ['/home/username/data/raw_data/ACA_L.nii',
+           '/home/username/data/raw_data/ACA_R.nii',
+	   '/home/username/data/raw_data/ACM_L.nii',
+	   '/home/username/data/raw_data/ACM_R.nii']
 
-
-- *in_image* (a string representing an existing file)
-    Input mask
+- *convolve_with* (a string representing an existing file)
+    An image used to convolve with `images_to_convolve` (a string representing a path to a file).
 
     ::
 
       ex. '/home/username/data/raw_data/mask.nii'
 
 
-
-**Outputs parameters:**
-
-- *out_images* (a list of pathlike objects or strings representing a file)
-    Conforme Image (extensions: [.nii, .nii.gz])
+- *prefix*
+    Specify the string to be prepended to `out_images` (a string).
 
     ::
 
-      ex. ['/home/username/data/raw_data/func.nii']
+      ex. conv
+
+**Outputs parameters:**
+
+- *out_images*
+    The convolved images (a list of pathlike objects or strings representing a file).
+
+    ::
+
+      ex. [`/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD/convACA_L.nii',
+           `/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD/convACA_R.nii',
+           `/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD/convACM_L.nii',
+           '/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD/convACM_R.nii']

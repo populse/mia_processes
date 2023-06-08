@@ -984,10 +984,9 @@ class ConformImage(ProcessMIA):
 
 class ConvROI(ProcessMIA):
     """
-    * Convolve images with an image.
+    *Image convolution with one image*
 
-    - Resampling the convolve_with to the size of images_to_convolve,
-      using the first element of images_to_convolve.
+    - Resampling the convolve_with to the size of images_to_convolve.
     - Then convolve each element of images_to_convolve with resized
       convolve_with.
     - The output_directory/PatientName_data/ROI_data/convROI_BOLD directory is
@@ -1009,11 +1008,9 @@ class ConvROI(ProcessMIA):
 
         # Inputs description
         images_to_convolve_desc = (
-            "A list of images to convolve with " "convolve_with image"
+            "A list of images to convolve with convolve_with image"
         )
-        convolve_with_desc = (
-            "An image used to convolve with " "images_to_convolve"
-        )
+        convolve_with_desc = "Aa string representing a path to the file"
         prefix_desc = "The prefix for the out_images (a string)"
 
         # Outputs description
@@ -1084,7 +1081,7 @@ class ConvROI(ProcessMIA):
 
             if patient_name is None:
                 print(
-                    '\nConvROI:\n The "PatientName" tag is not filled '
+                    '\nConvROI brick:\n The "PatientName" tag is not filled '
                     "in the database for the {} file ...\n The calculation"
                     "is aborted...".format(self.convolve_with)
                 )
@@ -1149,21 +1146,19 @@ class ConvROI(ProcessMIA):
         if os.path.isdir(tmp):
             shutil.rmtree(tmp)
 
-        # Resampling the convolve_with to the size of the ROIs, using the
-        # first ROI in images_to_convolve
-        roi_img = nib.load(self.images_to_convolve[0])
-        roi_data = roi_img.get_fdata()
-        roi_size = roi_data.shape[:3]
+        # Resample the convolve_with to the size of images_to_convolve, then
+        # convolve each images_to_convolve with resized convolve_with.
         mask_thresh = threshold(self.convolve_with, 0.5).get_fdata()
-        resized_mask = resize(mask_thresh, roi_size)
 
-        # Convolve each ROI with resized convolve_with
         for roi_file in self.images_to_convolve:
             roi_img = nib.load(roi_file)
             roi_data = roi_img.get_fdata()
+            roi_size = roi_data.shape[:3]
+            resized_mask = resize(mask_thresh, roi_size)
             mult = (roi_data * resized_mask).astype(float)
-            # TODO: Should we take info from ROI or from the mask ?
-            #       Currently we take from ROI images
+            # TODO: Should we take info from images_to_convolve or from
+            #       convolve_with ?
+            #       Currently we take from images_to_convolve
             mult_img = nib.Nifti1Image(mult, roi_img.affine, roi_img.header)
 
             # Image save in conv_dir
