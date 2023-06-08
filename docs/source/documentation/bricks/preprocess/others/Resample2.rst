@@ -13,7 +13,7 @@ Resample2 brick
 Sets images to the resolution of a reference image using skimage.transform.resize()
 -----------------------------------------------------------------------------------
 
-    - The "`PatientName`\_data/ROI_data/convROI_BOLD2" directory is created to receive the convolution
+    - The "`PatientName`\_data/ROI_data/convROI_BOLD2" directory is created to receive the resampling
       results from the runtime. If this directory exists at runtime, it is deleted.
     - To work correctly, the database entry for the `reference_image` parameter
       must have the `PatientName` tag filled in.
