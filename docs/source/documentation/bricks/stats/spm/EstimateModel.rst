@@ -10,10 +10,9 @@
 EstimateModel brick
 ===================
 
+Model Estimation using classical (ReML - Restricted Maximum Likelihood) algorithms (SPM12 fMRI model estimation).
 
-Model Estimation using classical (ReML - Restricted Maximum Likelihood) algorithms (SPM12 fMRI model estimation). 
-
-The beta weights for each condition will be estimated. 
+The beta weights for each condition will be estimated.
 
 Bayesian methods are not implemented in this brick. If you need to use Bayesian method, please open a `ticket <https://github.com/populse/mia_processes/issues>`_
 
@@ -27,20 +26,20 @@ Bayesian methods are not implemented in this brick. If you need to use Bayesian 
     ::
         ex. '/home/username/data/derived_data/SPM.mat'
 
-**Optional inputs parameters with a default value:** 
+**Optional inputs parameters with a default value:**
 
 - *estimation_method* <=> method (a dictionary, optional, default value is {‘Classical’: 1}):
-    Estimation procedures for fMRI models: 
+    Estimation procedures for fMRI models:
         - Classical: model parameters are estimated using Restricted Maximum Likelihood (ReML). This correlation can be specified using either an AR(1) or an Independent and Identically Distributed (IID) error model (options chosen at the model specification stage)
 
-        - Bayesian methods are not implemented yet. 
-    
+        - Bayesian methods are not implemented yet.
+
     ::
         ex. {'Classical': 1}
 
 - *write_residuals* <=> write_residuals (a boolean, optional, default value is False):
-    Write images of residuals for each dynamique. 
-    
+    Write images of residuals for each dynamique.
+
     ::
         ex. True
 
@@ -55,8 +54,8 @@ Bayesian methods are not implemented in this brick. If you need to use Bayesian 
 
 - *tot_reg_num* (an integer, optional):
     The total number of estimated regression coefficients.
-    Default is Undefined. In this case, the number of estimated regression coefficients used will be the one defined in the database (for the smp_mat_file).
-        
+    Default is Undefined. In this case, the number of estimated regression coefficients used will be the one defined in the database for the smp_mat_file.
+
         ::
             ex. 8
 
@@ -64,7 +63,7 @@ Bayesian methods are not implemented in this brick. If you need to use Bayesian 
 
 - *beta_images* (a list of items which are a pathlike object or string representing a file):
     Images of estimated regression coefficients "beta_000k" where k indexes the kth regression coefficient .
-        
+
         ::
             ex. ['/home/username/data/derived_data/beta_0001.nii',
                 '/home/username/data/derived_data/beta_0002.nii',
@@ -74,7 +73,7 @@ Bayesian methods are not implemented in this brick. If you need to use Bayesian 
                 '/home/username/data/derived_data/beta_0006.nii',
                 '/home/username/data/derived_data/beta_0007.nii',
                 '/home/username/data/derived_data/beta_0008.nii']
-            
+
 - *mask_image* (a pathlike object or string representing a file):
     The mask image indicating which voxels were included in the analysis.
 
@@ -90,14 +89,14 @@ Bayesian methods are not implemented in this brick. If you need to use Bayesian 
 
 - *residual_image* (a pathlike object or string representing a file):
     The image of the variance of the error.
-    
+
     ::
         ex. '/home/username/data/derived_data/ResMS.nii'
 
 - *residual_images* (a list of items which are a pathlike object or string representing a file, optional):
-    The individual error "Res_000k" images where k indexes the kth dynamic (fourth dimensional points of the fuctional). 
+    The individual error "Res_000k" images where k indexes the kth dynamic (fourth dimensional points of the fuctional).
     These images are generated only if write_residuals is True.
-    
+
     ::
         ex. ['/home/username/data/derived_data/Res_0001.nii',
             '/home/username/data/derived_data/Res_0002.nii',

@@ -89,9 +89,11 @@ class EstimateContrast(ProcessMIA):
             "Conditions information (a list of list of string)"
         )
         contrast_weight_desc = "Contrast weights (list of list of float)"
-        session_desc = ("Session list (a list of list of float). "
-                        "Length should be equal to the number of sessions, "
-                        "with 1. for sessions to include and 0. elsewhere")
+        session_desc = (
+            "Session list (a list of list of float). "
+            "Length should be equal to the number of sessions, "
+            "with 1. for sessions to include and 0. elsewhere"
+        )
         multi_reg_desc = "The regressor files (a list of file)"
         residual_image_desc = "Mean-squared image of the residuals"
         beta_images_desc = "Parameter estimates of the design matrix"
@@ -189,9 +191,15 @@ class EstimateContrast(ProcessMIA):
         )
 
         self.add_trait(
-            "beta_images", InputMultiPath(File(), output=False, copyfile=False)
+            "beta_images",
+            InputMultiPath(
+                File(), output=False, copyfile=False, desc=beta_images_desc
+            ),
         )
-        self.add_trait("residual_image", File(output=False, copyfile=False))
+        self.add_trait(
+            "residual_image",
+            File(output=False, copyfile=False, desc=residual_image_desc),
+        )
         # self.add_trait(
         #     "use_derivs",
         #     traits.Bool(output=False, optional=True, xor=["group_contrast"]),
@@ -202,19 +210,19 @@ class EstimateContrast(ProcessMIA):
         # )
 
         # Outputs
-        self.add_trait("con_images",
-                       OutputMultiPath(File(),
-                                       optional=True,
-                                       output=True,
-                                       desc=con_images_desc)
-                       )
+        self.add_trait(
+            "con_images",
+            OutputMultiPath(
+                File(), optional=True, output=True, desc=con_images_desc
+            ),
+        )
 
-        self.add_trait("spmT_images",
-                       OutputMultiPath(File(),
-                                       optional=True,
-                                       output=True,
-                                       desc=spmT_images_desc)
-                       )
+        self.add_trait(
+            "spmT_images",
+            OutputMultiPath(
+                File(), optional=True, output=True, desc=spmT_images_desc
+            ),
+        )
 
         # self.add_trait("ess_images",
         #                OutputMultiPath(File(),
@@ -230,11 +238,10 @@ class EstimateContrast(ProcessMIA):
         #                                desc=spmF_images_desc)
         #                )
 
-        self.add_trait("out_spm_mat_file",
-                       File(output=True,
-                            copyfile=False,
-                            desc=out_spm_mat_file_desc)
-                       )
+        self.add_trait(
+            "out_spm_mat_file",
+            File(output=True, copyfile=False, desc=out_spm_mat_file_desc),
+        )
 
         self.init_default_traits()
         self.init_process("nipype.interfaces.spm.EstimateContrast")
@@ -304,9 +311,8 @@ class EstimateContrast(ProcessMIA):
         # because we want to avoid to read in the SPM.mat file
         # (potentially not created yet)
 
-        if (
-            (self.spm_mat_file)
-            and (self.spm_mat_file not in ["<undefined>", Undefined])
+        if (self.spm_mat_file) and (
+            self.spm_mat_file not in ["<undefined>", Undefined]
         ):
             # The management of self.process.output_directory could be
             # delegated to the
@@ -322,25 +328,29 @@ class EstimateContrast(ProcessMIA):
                 # Change output_directory for this process in order to
                 # use a specific directory for each analysis
 
-                if (os.path.dirname(spm_mat_dir) == self.output_directory
-                        and 'data' in os.path.basename(spm_mat_dir)):
+                if os.path.dirname(
+                    spm_mat_dir
+                ) == self.output_directory and "data" in os.path.basename(
+                    spm_mat_dir
+                ):
                     # if spm_mat already in a subfolder for a analysis
                     out_directory = spm_mat_dir
                 else:
                     # if spm_mat file not in a subfolder(for e.g spm_mat
                     # file in download data)
                     sub_name = get_dbFieldValue(
-                        self.project,
-                        self.spm_mat_file,
-                        "PatientName"
+                        self.project, self.spm_mat_file, "PatientName"
                     )
                     if sub_name is None:
-                        print("Please, fill 'PatientName' tag "
-                              "in the database for SPM file")
+                        print(
+                            "Please, fill 'PatientName' tag "
+                            "in the database for SPM file"
+                        )
                         return self.make_initResult()
 
-                    out_directory = os.path.join(self.output_directory,
-                                                 sub_name + 'data')
+                    out_directory = os.path.join(
+                        self.output_directory, sub_name + "data"
+                    )
 
                     if not os.path.exists(out_directory):
                         os.mkdir(out_directory)
@@ -354,9 +364,9 @@ class EstimateContrast(ProcessMIA):
             )
 
             # Counting the number of spmT and con files to create
-            # TODO: understand how to know exactly number of spmT/spmF in all cases
+            # TODO: understand how to know exactly number of spmT/spmF
             nb_spmT = 0
-            if self.multi_reg not in [Undefined, "<undefined>", []]:
+            if self.multi_reg not in [Undefined, "<undefined>", [], None]:
                 for reg_file in self.multi_reg:
                     if os.path.splitext(reg_file)[1] != ".txt":
                         nb_spmT += 1
@@ -529,9 +539,7 @@ class EstimateModel(ProcessMIA):
         #     "A dictionary of either Classical: 1, "
         #     "Bayesian: 1, or Bayesian2: 1"
         # )
-        estimation_method_desc = (
-            "A dictionary : Classical: 1"
-        )
+        estimation_method_desc = "A dictionary : Classical: 1"
         write_residuals_desc = "Write individual residual images (a boolean)"
         # flags_desc = (
         #     "Additional arguments (a dictionary with keys which are "
@@ -575,6 +583,25 @@ class EstimateModel(ProcessMIA):
             "voxel (a pathlike object or string representing an "
             "existing file)."
         )
+        factor_info_desc = (
+            "A list of items which are a dictionary for each "
+            "factor with keys which are 'name' or 'levels' "
+            "and with values which are a string (name of the "
+            "factor) or an integer (number of levels for the "
+            "factor)"
+        )
+        bases_desc = (
+            "To define basic functions for modeling hemodynamic "
+            "response (a 'none' string or a dictionary with keys "
+            "which are 'hrf' or 'fourier' or 'fourier_han' or "
+            "'gamma' or 'fir' and with values which are a dictionary "
+            "with keys which are 'derivs' or 'length' or 'order' and "
+            "with values which are a list or a float or an integer)"
+        )
+        spmT_images_desc = "Stat images from a t-contrast"
+        con_images_desc = "Contrast images from a t-contrast"
+        ess_images_desc = "Contrast images from an F-contrast"
+        spmF_images_desc = "Stat images from an F-contrast"
 
         # EstimateModel brick only works for classical method
         # Following outputs are generated by
@@ -623,7 +650,8 @@ class EstimateModel(ProcessMIA):
         )
 
         # self.add_trait(
-        #     "flags", traits.Dict(output=False, optional=True, desc=flags_desc)
+        #     "flags", traits.Dict(output=False,
+        #     optional=True, desc=flags_desc)
         # )
 
         self.add_trait(
@@ -647,6 +675,47 @@ class EstimateModel(ProcessMIA):
             ),
         )
         self.tot_reg_num = Undefined
+
+        # we need factor info and bases
+        # to know if contrasts will be estimated by SPM
+        self.add_trait(
+            "factor_info",
+            traits.List(
+                traits.Dict(
+                    traits.Enum("name", "levels"),
+                    traits.Either(traits.Str, traits.Int),
+                ),
+                usedefault=True,
+                output=False,
+                optional=True,
+                desc=factor_info_desc,
+            ),
+        )
+
+        self.add_trait(
+            "bases",
+            traits.Union(
+                traits.Dict(
+                    traits.Enum(
+                        "hrf", "fourier", "fourier_han", "gamma", "fir"
+                    ),
+                    traits.Dict(
+                        traits.Enum("derivs", "length", "order"),
+                        traits.Union(
+                            traits.Enum([0, 0], [1, 0], [1, 1]),
+                            traits.Int,
+                            traits.Float,
+                        ),
+                    ),
+                ),
+                traits.Enum(["none"]),
+                usedefault=True,
+                output=False,
+                optional=True,
+                desc=bases_desc,
+            ),
+        )
+        self.bases = {"hrf": {"derivs": [0, 0]}}
 
         # Output traits
         self.add_trait(
@@ -687,6 +756,36 @@ class EstimateModel(ProcessMIA):
         self.add_trait(
             "RPVimage",
             ImageFileSPM(output=True, optional=True, desc=RPVimage_desc),
+        )
+
+        # If factorial design specified in Level1design
+        # SPM also write T and F contrasts
+        self.add_trait(
+            "con_images",
+            OutputMultiPath(
+                File(), optional=True, output=True, desc=con_images_desc
+            ),
+        )
+
+        self.add_trait(
+            "spmT_images",
+            OutputMultiPath(
+                File(), optional=True, output=True, desc=spmT_images_desc
+            ),
+        )
+
+        self.add_trait(
+            "ess_images",
+            OutputMultiPath(
+                File(), optional=True, output=True, desc=ess_images_desc
+            ),
+        )
+
+        self.add_trait(
+            "spmF_images",
+            OutputMultiPath(
+                File(), optional=True, output=True, desc=spmF_images_desc
+            ),
         )
 
         # EstimateModel brick only works for classical method
@@ -768,25 +867,29 @@ class EstimateModel(ProcessMIA):
                 # Change output_directory for this process in order to
                 # use a specific directory for each analysis
 
-                if (os.path.dirname(spm_mat_dir) == self.output_directory
-                        and 'data' in os.path.basename(spm_mat_dir)):
+                if os.path.dirname(
+                    spm_mat_dir
+                ) == self.output_directory and "data" in os.path.basename(
+                    spm_mat_dir
+                ):
                     # if spm_mat already in a subfolder for a analysis
                     out_directory = spm_mat_dir
                 else:
                     # if spm_mat file not in a subfolder(for e.g spm_mat
                     # file in download data)
                     sub_name = get_dbFieldValue(
-                        self.project,
-                        self.spm_mat_file,
-                        "PatientName"
+                        self.project, self.spm_mat_file, "PatientName"
                     )
                     if sub_name is None:
-                        print("Please, fill 'PatientName' tag "
-                              "in the database for SPM file")
+                        print(
+                            "Please, fill 'PatientName' tag "
+                            "in the database for SPM file"
+                        )
                         return self.make_initResult()
 
-                    out_directory = os.path.join(self.output_directory,
-                                                 sub_name + 'data')
+                    out_directory = os.path.join(
+                        self.output_directory, sub_name + "data"
+                    )
 
                     if not os.path.exists(out_directory):
                         os.mkdir(out_directory)
@@ -902,12 +1005,86 @@ class EstimateModel(ProcessMIA):
             ):
                 self.outputs = {}
 
+            # If factorial design used in levelOne  Design,
+            # detecting the number of contrasts files to create
+            if self.factor_info:
+                number_factors = len(self.factor_info)
+                number_interactions = int(
+                    (number_factors * (number_factors - 1)) / 2
+                )
+                multiplier = 1
+                if "hrf" in self.bases.keys():
+                    if "derivs" in self.bases["hrf"].keys():
+                        multiplier += sum(self.bases["hrf"]["derivs"])
+                # number of F contarst =
+                # average effect of condition + main effect for each factor
+                # + interaction between each factor
+                number_f_contrast = 1 + number_factors + number_interactions
+                # number_of_T_contrast =
+                # positive effect of condition * derivs multiplier +
+                # positive effect of each factor * derivs multiplier +
+                # positive interaction between each factor
+                number_t_contrast = multiplier * (
+                    1 + number_factors + number_interactions
+                )
+
+                cons = []
+                spmTs = []
+                esss = []
+                spmFs = []
+                for i in range(number_f_contrast):
+                    i += 1
+                    esss.append("ess_{:04d}.{}".format(i, im_form))
+                    spmTs.append("spmF_{:04d}.{}".format(i, im_form))
+
+                    if esss:
+                        self.outputs["ess_images"] = [
+                            os.path.join(self.output_directory, ess)
+                            for ess in esss
+                        ]
+                    if spmFs:
+                        self.outputs["spmF_images"] = [
+                            os.path.join(self.output_directory, spmF)
+                            for spmF in spmFs
+                        ]
+                for i in range(number_t_contrast):
+                    i += 1
+                    i += number_f_contrast
+                    cons.append("con_{:04d}.{}".format(i, im_form))
+                    spmTs.append("spmT_{:04d}.{}".format(i, im_form))
+
+                    if cons:
+                        self.outputs["con_images"] = [
+                            os.path.join(self.output_directory, con)
+                            for con in cons
+                        ]
+                    if spmTs:
+                        self.outputs["spmT_images"] = [
+                            os.path.join(self.output_directory, spmT)
+                            for spmT in spmTs
+                        ]
+
         if self.outputs:
             for key, value in self.outputs.items():
-                if key == "out_spm_mat_file":
+                if key in [
+                    "out_spm_mat_file",
+                    "mask_image",
+                    "residual_image",
+                    "RPVimage",
+                ]:
                     self.inheritance_dict[value] = self.spm_mat_file
 
-                elif key == "beta_images":
+                elif key in "residual_images":
+                    for fullname in value:
+                        self.inheritance_dict[fullname] = self.spm_mat_file
+
+                elif key in [
+                    "beta_images",
+                    "con_images",
+                    "spmT_images",
+                    "ess_images",
+                    "spmF_images",
+                ]:
                     patient_name = get_dbFieldValue(
                         self.project, self.spm_mat_file, "PatientName"
                     )
@@ -982,19 +1159,6 @@ class EstimateModel(ProcessMIA):
                             set_dbFieldValue(
                                 self.project, fullname, tag_to_add
                             )
-
-                elif key == "mask_image":
-                    self.inheritance_dict[value] = self.spm_mat_file
-
-                elif key == "residual_image":
-                    self.inheritance_dict[value] = self.spm_mat_file
-
-                elif key == "residual_images":
-                    for fullname in value:
-                        self.inheritance_dict[fullname] = self.spm_mat_file
-
-                elif key == "RPVimage":
-                    self.inheritance_dict[value] = self.spm_mat_file
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -1662,6 +1826,12 @@ class Level1Design(ProcessMIA):
         # scans
         session_info["scans"] = self.sess_scans[idx_session]
 
+        # When HFR used, get model derivatives to multiply number of beta
+        multiplier = 1
+        if "hrf" in self.bases.keys():
+            if "derivs" in self.bases["hrf"].keys():
+                multiplier += sum(self.bases["hrf"]["derivs"])
+
         # cond
         if self.sess_cond_names[idx_session]:
             cond = []
@@ -1670,7 +1840,7 @@ class Level1Design(ProcessMIA):
             for idx_cond in range(len(self.sess_cond_names[idx_session])):
                 condition = self._get_conditions(idx_session, idx_cond)
                 cond.append(condition)
-                beta_sess += 1
+                beta_sess += 1 * multiplier
                 cond_nb += 1
 
                 if "pmod" in condition.keys():
@@ -1705,14 +1875,6 @@ class Level1Design(ProcessMIA):
             if "tmod" in mat:
                 for i in range(len(mat["tmod"])):
                     beta_sess += mat["tmod"][i]
-
-        # Don't understand what's the point of multiplier attribute.
-        # Moreover, it does not seem to be used afterwards!
-        # multiplier = 1
-
-        # if 'hrf' in self.bases.keys():
-        #    if 'deriv' in self.bases['hrf'].keys():
-        #        multiplier = sum(self.bases['hrf']['deriv']) + 1
 
         # regress
         if (
@@ -1793,27 +1955,25 @@ class Level1Design(ProcessMIA):
             # sync_process_output_traits() of the
             # capsul/process/nipype_process module raises an exception
             # in nipype if the mandatory parameter are not yet defined!
-            
-            dir_name = ''
+
+            dir_name = ""
             subjects_names = []
             for idx_session in range(len(self.sess_scans)):
                 sub_name = get_dbFieldValue(
-                    self.project,
-                    self.sess_scans[idx_session],
-                    "PatientName"
+                    self.project, self.sess_scans[idx_session], "PatientName"
                 )
                 if sub_name is None:
-                    print("Please, fill 'PatientName' tag "
-                          "in the database")
+                    print("Please, fill 'PatientName' tag " "in the database")
                     return self.make_initResult()
                 if sub_name not in subjects_names:
                     subjects_names.append(sub_name)
-                    dir_name += sub_name + '_'
+                    dir_name += sub_name + "_"
 
             if self.output_directory:
                 # Create a directory for this analysis
-                out_directory = os.path.join(self.output_directory,
-                                             dir_name + 'data')
+                out_directory = os.path.join(
+                    self.output_directory, dir_name + "data"
+                )
                 if not os.path.exists(out_directory):
                     os.mkdir(out_directory)
                 self.process.output_directory = out_directory
@@ -1931,6 +2091,7 @@ class Level1Design(ProcessMIA):
             self.inheritance_dict[self.outputs["spm_mat_file"]][
                 "own_tags"
             ] = []
+            # Add tag for number of regressors
             tag_to_add = dict()
             tag_to_add["name"] = "Regress num"
             tag_to_add["field_type"] = FIELD_TYPE_INTEGER
@@ -1955,6 +2116,35 @@ class Level1Design(ProcessMIA):
             set_dbFieldValue(
                 self.project, self.outputs["spm_mat_file"], tag_to_add
             )
+
+            # if self.factor_info:
+            #     # Add tag for factorial design
+            #     tag_to_add = dict()
+            #     tag_to_add["name"] = "Factorial design info"
+            #     tag_to_add["field_type"] = FIELD_TYPE_LIST_JSON
+            #     tag_to_add["description"] = ("Level1Design factorial "
+            #                                  "design info")
+            #     tag_to_add["visibility"] = True
+            #     tag_to_add["origin"] = TAG_ORIGIN_USER
+            #     tag_to_add["unit"] = None
+            #     tag_to_add["default_value"] = None
+            #     tag_to_add["value"] = self.factor_info
+            #     self.inheritance_dict[self.outputs["spm_mat_file"]][
+            #         "own_tags"
+            #     ].append(tag_to_add)
+            #     # FIXME: In the latest version of mia, indexing of the
+            #     #        database with particular tags defined in the
+            #     #        processes is done only at the end of the
+            #     #        initialisation of the whole pipeline. So we
+            #     #        cannot use the value of these tags in other
+            #     #        processes of the pipeline at the time of
+            #     #        initialisation (see populse_mia #290). Unti
+            #     #        better we use a quick and dirty hack with the
+            #     #        set_dbFieldValue() function !
+            #     set_dbFieldValue(
+            #         self.project, self.outputs["spm_mat_file"], tag_to_add
+            #     )
+
             dyn_num = 0
 
             for scan in self.sess_scans:
@@ -2116,8 +2306,9 @@ class Level1Design(ProcessMIA):
         super(Level1Design, self).run_process_mia()
         # Removing the spm_mat_file to avoid a bug (nipy/nipype Issues #2612)
         if self.output_directory:
-            out_file = os.path.join(self.dict4runtime["out_directory"],
-                                    "SPM.mat")
+            out_file = os.path.join(
+                self.dict4runtime["out_directory"], "SPM.mat"
+            )
 
             if os.path.isfile(out_file):
                 os.remove(out_file)
