@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.preprocess.others.processing &#8212; mia_processes 2.2.1-dev+e55188d documentation</title>
+    <title>mia_processes.bricks.preprocess.others.processing &#8212; mia_processes 2.2.1-dev+56496d0 documentation</title>
     <link rel="stylesheet" href="../../../../../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
@@ -18,7 +18,7 @@
     <link rel="search" title="Search" href="../../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../../index.html">
-          <span>mia_processes 2.2.1-dev+e55188d documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+56496d0 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.preprocess.others.processing</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -1018,10 +1018,9 @@
 
 <div class="viewcode-block" id="ConvROI"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.ConvROI">[docs]</a><span class="k">class</span> <span class="nc">ConvROI</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    * Convolve images with an image.</span>
+<span class="sd">    *Image convolution with one image*</span>
 
-<span class="sd">    - Resampling the convolve_with to the size of images_to_convolve,</span>
-<span class="sd">      using the first element of images_to_convolve.</span>
+<span class="sd">    - Resampling the convolve_with to the size of images_to_convolve.</span>
 <span class="sd">    - Then convolve each element of images_to_convolve with resized</span>
 <span class="sd">      convolve_with.</span>
 <span class="sd">    - The output_directory/PatientName_data/ROI_data/convROI_BOLD directory is</span>
@@ -1043,11 +1042,9 @@
 
         <span class="c1"># Inputs description</span>
         <span class="n">images_to_convolve_desc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;A list of images to convolve with &quot;</span> <span class="s2">&quot;convolve_with image&quot;</span>
+            <span class="s2">&quot;A list of images to convolve with convolve_with image&quot;</span>
         <span class="p">)</span>
-        <span class="n">convolve_with_desc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;An image used to convolve with &quot;</span> <span class="s2">&quot;images_to_convolve&quot;</span>
-        <span class="p">)</span>
+        <span class="n">convolve_with_desc</span> <span class="o">=</span> <span class="s2">&quot;Aa string representing a path to the file&quot;</span>
         <span class="n">prefix_desc</span> <span class="o">=</span> <span class="s2">&quot;The prefix for the out_images (a string)&quot;</span>
 
         <span class="c1"># Outputs description</span>
@@ -1118,7 +1115,7 @@
 
             <span class="k">if</span> <span class="n">patient_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span>
-                    <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">ConvROI:</span><span class="se">\n</span><span class="s1"> The &quot;PatientName&quot; tag is not filled &#39;</span>
+                    <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">ConvROI brick:</span><span class="se">\n</span><span class="s1"> The &quot;PatientName&quot; tag is not filled &#39;</span>
                     <span class="s2">&quot;in the database for the </span><span class="si">{}</span><span class="s2"> file ...</span><span class="se">\n</span><span class="s2"> The calculation&quot;</span>
                     <span class="s2">&quot;is aborted...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">convolve_with</span><span class="p">)</span>
                 <span class="p">)</span>
@@ -1183,21 +1180,19 @@
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">tmp</span><span class="p">):</span>
             <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
 
-        <span class="c1"># Resampling the convolve_with to the size of the ROIs, using the</span>
-        <span class="c1"># first ROI in images_to_convolve</span>
-        <span class="n">roi_img</span> <span class="o">=</span> <span class="n">nib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">images_to_convolve</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">roi_data</span> <span class="o">=</span> <span class="n">roi_img</span><span class="o">.</span><span class="n">get_fdata</span><span class="p">()</span>
-        <span class="n">roi_size</span> <span class="o">=</span> <span class="n">roi_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
+        <span class="c1"># Resample the convolve_with to the size of images_to_convolve, then</span>
+        <span class="c1"># convolve each images_to_convolve with resized convolve_with.</span>
         <span class="n">mask_thresh</span> <span class="o">=</span> <span class="n">threshold</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">convolve_with</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">get_fdata</span><span class="p">()</span>
-        <span class="n">resized_mask</span> <span class="o">=</span> <span class="n">resize</span><span class="p">(</span><span class="n">mask_thresh</span><span class="p">,</span> <span class="n">roi_size</span><span class="p">)</span>
 
-        <span class="c1"># Convolve each ROI with resized convolve_with</span>
         <span class="k">for</span> <span class="n">roi_file</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">images_to_convolve</span><span class="p">:</span>
             <span class="n">roi_img</span> <span class="o">=</span> <span class="n">nib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">roi_file</span><span class="p">)</span>
             <span class="n">roi_data</span> <span class="o">=</span> <span class="n">roi_img</span><span class="o">.</span><span class="n">get_fdata</span><span class="p">()</span>
+            <span class="n">roi_size</span> <span class="o">=</span> <span class="n">roi_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
+            <span class="n">resized_mask</span> <span class="o">=</span> <span class="n">resize</span><span class="p">(</span><span class="n">mask_thresh</span><span class="p">,</span> <span class="n">roi_size</span><span class="p">)</span>
             <span class="n">mult</span> <span class="o">=</span> <span class="p">(</span><span class="n">roi_data</span> <span class="o">*</span> <span class="n">resized_mask</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
-            <span class="c1"># TODO: Should we take info from ROI or from the mask ?</span>
-            <span class="c1">#       Currently we take from ROI images</span>
+            <span class="c1"># TODO: Should we take info from images_to_convolve or from</span>
+            <span class="c1">#       convolve_with ?</span>
+            <span class="c1">#       Currently we take from images_to_convolve</span>
             <span class="n">mult_img</span> <span class="o">=</span> <span class="n">nib</span><span class="o">.</span><span class="n">Nifti1Image</span><span class="p">(</span><span class="n">mult</span><span class="p">,</span> <span class="n">roi_img</span><span class="o">.</span><span class="n">affine</span><span class="p">,</span> <span class="n">roi_img</span><span class="o">.</span><span class="n">header</span><span class="p">)</span>
 
             <span class="c1"># Image save in conv_dir</span>
