@@ -1623,9 +1623,6 @@ class Mean_stdDev_calc(ProcessMIA):
       to rois_files.
     - To work correctly, the database entry for the first element of
       parametric_maps must have the "PatientName" tag filled in.
-    - To work correctly, the "/roi_"PatientName"/convROI_BOLD"
-      must exist and contain a previous convolution results (normally using
-      the ConvROI brick)
     """
 
     def __init__(self):
@@ -1645,6 +1642,10 @@ class Mean_stdDev_calc(ProcessMIA):
             "calculate their mean and standard deviation"
         )
         contrast_type_desc = "The Contrast used (a string, ex. BOLD)"
+        prefix_to_delete_desc = (
+            "The prefix to delete from the " "deduced ROI name (a string)"
+        )
+
         # Outputs description
         mean_out_files_desc = (
             "A list of .txt files with the calculated average for each "
@@ -1681,6 +1682,13 @@ class Mean_stdDev_calc(ProcessMIA):
             "contrast_type",
             traits.String(
                 "BOLD", output=False, optional=True, desc=contrast_type_desc
+            ),
+        )
+
+        self.add_trait(
+            "prefix_to_delete",
+            traits.String(
+                "conv", output=False, optional=True, desc=prefix_to_delete_desc
             ),
         )
 
@@ -1750,19 +1758,40 @@ class Mean_stdDev_calc(ProcessMIA):
             if self.contrast_type.isspace() or not self.contrast_type:
                 self.contrast_type = "UnknownContrast"
 
-            for parametric_map in self.parametric_maps:
-                map_name = (
-                    os.path.basename(parametric_map)[0:4]
-                    + "_"
-                    + self.contrast_type
-                )
+            if (
+                (not self.prefix_to_delete)
+                or (self.prefix_to_delete.isspace())
+                or (self.prefix_to_delete in [Undefined, "<undefined>"])
+            ):
+                self.prefix_to_delete = " "
 
-                # for roi in self.doublet_list:
+            for parametric_map in self.parametric_maps:
+                param_file_name = os.path.basename(parametric_map)
+
+                if "_" not in param_file_name:
+                    parameter = os.path.splitext(param_file_name)
+
+                else:
+                    parameter = param_file_name[: param_file_name.index("_")]
+
                 for roi in self.rois_files:
                     roi_name, _ = os.path.splitext(os.path.basename(roi))
 
+                    if self.prefix_to_delete != " " and roi_name.startswith(
+                        self.prefix_to_delete
+                    ):
+                        # fmt: off
+                        roi_name = roi_name[len(self.prefix_to_delete):]
+                        # fmt: on
+
                     mean_out_file = os.path.join(
-                        analysis_dir, roi_name + "_mean_" + map_name + ".txt"
+                        analysis_dir,
+                        roi_name
+                        + "_mean_"
+                        + parameter
+                        + "_"
+                        + self.contrast_type
+                        + ".txt",
                     )
                     # FIXME: In the latest version of mia, indexing of the
                     #        database with particular tags defined in the
@@ -1787,7 +1816,13 @@ class Mean_stdDev_calc(ProcessMIA):
                     self.inheritance_dict[mean_out_file] = parametric_map
 
                     std_out_file = os.path.join(
-                        analysis_dir, roi_name + "_std_" + map_name + ".txt"
+                        analysis_dir,
+                        roi_name
+                        + "_std_"
+                        + parameter
+                        + "_"
+                        + self.contrast_type
+                        + ".txt",
                     )
                     tag_to_add = dict()
                     tag_to_add["name"] = "PatientName"
@@ -1807,6 +1842,8 @@ class Mean_stdDev_calc(ProcessMIA):
 
             if std_out_files != []:
                 self.outputs["std_out_files"] = std_out_files
+
+        # FIXME: What are we doing about the tags inheritance?
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -1846,8 +1883,8 @@ class Mean_stdDev_calc(ProcessMIA):
         if os.path.isdir(tmp):
             shutil.rmtree(tmp)
 
-        if self.contrast_type.isspace() or not self.contrast_type:
-            self.contrast_type = "UnknownContrast"
+        # if self.contrast_type.isspace() or not self.contrast_type:
+        #    self.contrast_type = "UnknownContrast"
 
         for parametric_map in self.parametric_maps:
             # Resampling, if necessary, the parametric_map to the size of the
