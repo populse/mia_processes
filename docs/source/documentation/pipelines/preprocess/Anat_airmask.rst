@@ -6,9 +6,9 @@
 |`Home <../../../index.html>`_|`Documentation <../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +-----------------------------+-------------------------------------------+----------------------------------------------------+
 
-================================
+=====================
 Anat_airmask pipeline
-================================
+=====================
 
 Compute rotation mask, air mask, artifact mask and hat mask for structural data following step 1 from (`[Mortamet2009] <https://onlinelibrary.wiley.com/doi/10.1002/mrm.21992>`_).
 

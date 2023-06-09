@@ -133,7 +133,7 @@ Mia_processes's documentation
     - `Bold_hmc <pipelines/preprocess/Bold_hmc.html>`_
     - `Bold_mni_align <pipelines/preprocess/Bold_mni_align.html>`_
     - `Spatial_mask <pipelines/preprocess/Spatial_mask.html>`_ (in progress)
-    - `Spatial_preprocessing_1 <pipelines/preprocess/Spatial_preprocessing_1.html>`_
+    - `Spatial_preprocessing <pipelines/preprocess/Spatial_preprocessing.html>`_
 
   - **qualityControl**
 
