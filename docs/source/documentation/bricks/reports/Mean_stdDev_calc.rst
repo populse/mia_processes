@@ -19,15 +19,15 @@ Makes the mean and standard deviation of parametric maps.
     - The “PatientName_data/ROI_data/ROI_analysis” directory is created to receive the results.
       If this directory exists at runtime, it is overwritten.
     - Output file names are built like this:
-        - ``roi``_calculation_parameter_contrast.txt
-	    - roi is deducted from each `rois_files` after deleting the extension. If `prefix_to_delete` is defined,
-	      and if it corresponds to the beginning of roi, this beginning of string is deleted.
-	    - calculation corresponds to "mean" (mean calculation) or "std" (standard deviation calculation).
-	    - parameter is deducted from each `parametric_maps` file name. This is the string before the first underscore.
-	      If there is no underscore, this is the file name after removing the extension.
-	    - contrast is `contrast_type`.
-    - To work correctly, the database entry for the first element of `parametric_maps` must
-      have the `PatientName` tag filled in.
+        - ``roi``\_ ``calculation``\_ ``parameter``\_ ``contrast``.txt
+	    - ``roi`` is deducted from each `rois_files` after deleting the extension. If `prefix_to_delete`
+	      is defined and if it corresponds to the beginning of ``roi``, this beginning of string is deleted.
+	    - ``calculation`` corresponds to "mean" (mean calculation) or "std" (standard deviation calculation).
+	    - ``parameter`` is deducted from each `parametric_maps` file name. This is the string before the
+	      first underscore. If there is no underscore, this is the file name after removing the extension.
+	    - ``contrast`` is `contrast_type`.
+    - To work correctly, the database entry for the first element of `parametric_maps` must have the
+      `PatientName` tag filled in.
 
 --------------------------------------
 
