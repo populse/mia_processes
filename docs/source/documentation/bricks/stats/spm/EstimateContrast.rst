@@ -11,7 +11,7 @@ EstimateConstrast brick
 =======================
 
 
-Estimate contrasts of interest (SPM12 fMRI contrast manager). 
+Estimate contrasts of interest (SPM12 fMRI contrast manager).
 
 --------------------------------------
 
@@ -23,7 +23,7 @@ Estimate contrasts of interest (SPM12 fMRI contrast manager).
     ::
         ex. '/home/username/data/derived_data/SPM.mat'
 
-**Optional inputs parameters with a default value:** 
+**Optional inputs parameters with a default value:**
 
 - *session_type* <=> ?? (a string among "tcon", "fcon", "tconsess")
 
@@ -33,13 +33,13 @@ Estimate contrasts of interest (SPM12 fMRI contrast manager).
 
 - *contrast_name* <=> ?? (a list of string, optional, default value is ["+"]):
     Names of contrast.
-    
+
     ::
         ex. ["Task vs control", "Task vs baseline"]
 
 - *condition_name* <=> ?? (a list of list of string, optional, default value is [["R1_1"]]):
     Names of conditions used for each contrast.
-    
+
     ::
         ex. [[]]
 
@@ -72,8 +72,8 @@ Estimate contrasts of interest (SPM12 fMRI contrast manager).
 
 - *session* (a list of list of float, optional):
     Session list. Length should be equal to the number of sessions, with 1. for sessions to include and 0. elsewhere
-    Default is Undefined. 
-        
+    Default is Undefined.
+
         ::
             ex. ["0", "1.0"]
 
@@ -90,13 +90,19 @@ Estimate contrasts of interest (SPM12 fMRI contrast manager).
     Contrast images from a t-contrast.
 
     ::
-        ex. ['']
+        ex. ['/home/username/data/derived_data/con_0001.nii',
+            '/home/username/data/derived_data/con_0002.nii',
+            '/home/username/data/derived_data/con_0003.nii',
+            '/home/username/data/derived_data/con_0004.nii']
 
 - *spmT_images* (a list of items which are a pathlike object or string representing a file):
     Stat images from a t-contrast.
 
     ::
-        ex. ['']
+        ex. ['/home/username/data/derived_data/spmT_0001.nii',
+            '/home/username/data/derived_data/spmT_0002.nii',
+            '/home/username/data/derived_data/spmT_0003.nii',
+            '/home/username/data/derived_data/spmT_0004.nii']
 
 
 -------------

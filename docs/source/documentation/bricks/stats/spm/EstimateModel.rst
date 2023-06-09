@@ -43,7 +43,6 @@ Bayesian methods are not implemented in this brick. If you need to use Bayesian 
     ::
         ex. True
 
-
 - *version* (a string, optional, default value is spm12):
     Version of spm.
 
@@ -58,6 +57,21 @@ Bayesian methods are not implemented in this brick. If you need to use Bayesian 
 
         ::
             ex. 8
+
+- *factor_info* (a list of items which are a dictionary with keys which are ‘name’ and ‘levels’ and with values which are a string or an integer, optional):
+    Factor info used in Level1Design brick to specified a factorial design. In this case, SPM will automatically generate the contrasts necessary to test for the main effects and interactions.
+    This parameter should be used only if factorial design is specified in Level1Design brick.
+
+    ::
+        ex. [{"name": "Factor1", "levels": 2}, {"name": "Factor2", "levels": 2}]
+
+- *bases* (a dictionary with keys which are 'hrf' or 'fourier' or 'fourier_han' or 'gamma' or 'fir' and with values which are a dictionary with keys which are 'derivs' or 'length' or 'order' and with values which are a list or a float or an integer, optional):
+    Information used in Level1Design brick to define basic functions for modeling hemodynamic response.
+    Default is Undefined.
+    This parameter should be used only if factorial design is specified in Level1Design brick.
+
+    ::
+        ex. {"hrf": {"derivs": [1, 1]}}
 
 **Outputs parameters:**
 
@@ -110,6 +124,43 @@ Bayesian methods are not implemented in this brick. If you need to use Bayesian 
     The image of the estimated resolution elements per voxel.
         ::
             ex. '/home/username/data/derived_data/RPV.nii'
+
+- *con_images* (a list of items which are a pathlike object or string representing a file, optional):
+    Contrast images from a t-contrast. Only created if factor_info used in Level1Desig brick.
+
+    ::
+        ex. ['/home/username/data/derived_data/con_0005.nii',
+            '/home/username/data/derived_data/con_0006.nii',
+            '/home/username/data/derived_data/con_0007.nii',
+            '/home/username/data/derived_data/con_0008.nii']
+
+- *spmT_images* (a list of items which are a pathlike object or string representing a file):
+    Stat images from a t-contrast. Only created if factor_info used in Level1Desig brick.
+
+    ::
+        ex. ['/home/username/data/derived_data/spmT_0005.nii',
+            '/home/username/data/derived_data/spmT_0006.nii',
+            '/home/username/data/derived_data/spmT_0007.nii',
+            '/home/username/data/derived_data/spmT_0008.nii']
+
+- *ess_images* (a list of items which are a pathlike object or string representing a file, optional):
+    Contrast images from a f-contrast. Only created if factor_info used in Level1Desig brick.
+
+    ::
+        ex. ex. ['/home/username/data/derived_data/ess_0001.nii',
+            '/home/username/data/derived_data/ess_0002.nii',
+            '/home/username/data/derived_data/ess_0003.nii',
+            '/home/username/data/derived_data/ess_0004.nii']
+
+- *spmF_images* (a list of items which are a pathlike object or string representing a file):
+    Stat images from a f-contrast. Only created if factor_info used in Level1Desig brick.
+
+    ::
+        ex. ex. ['/home/username/data/derived_data/spmF_0001.nii',
+            '/home/username/data/derived_data/spmF_0002.nii',
+            '/home/username/data/derived_data/spmF_0003.nii',
+            '/home/username/data/derived_data/spmF_0004.nii']
+
 
 
 -------------

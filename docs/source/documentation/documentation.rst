@@ -104,7 +104,7 @@ Mia_processes's documentation
 
       - `EstimateConstrast <bricks/stats/spm/EstimateConstrast.html>`_ (in progress)
       - `EstimateModel <bricks/stats/spm/EstimateModel.html>`_ (in progress)
-      - `LevelDesign <bricks/stats/spm/LevelDesign.html>`_
+      - `Level1Design <bricks/stats/spm/Level1Design.html>`_
 
   - **tools**
 
