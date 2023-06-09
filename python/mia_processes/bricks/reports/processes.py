@@ -1619,10 +1619,16 @@ class Mean_stdDev_calc(ProcessMIA):
     """
     * Makes the mean and standard deviation of parametric_maps.
 
-    - The parametric_maps are first convolved with the ROIs corresponding
-      to rois_files.
+    - The parametric_maps are first resized, if necessary, to the size of the
+      rois_files. Next, the parametric_maps and the rois_files are convolved.
+      Finally, the mean and standard deviation are calculated for the
+      corresponding ROIs.
+    - The “PatientName_data/ROI_data/ROI_analysis” directory is created to
+      receive the results. If this directory exists at runtime, it is
+      overwritten.
     - To work correctly, the database entry for the first element of
-      parametric_maps must have the "PatientName" tag filled in.
+      parametric_maps must have the PatientName tag filled in.
+
     """
 
     def __init__(self):
@@ -1967,25 +1973,16 @@ class Result_collector(ProcessMIA):
 
     - To work correctly, the database entry for the first element of
       parameter_files must have the "PatientName" tag filled in.
-
+    - The “PatientName_data/results_aggregation” directory is created to
+      receive the results. If this directory exists at runtime, new results
+      can overwrite old results with the same name.
     - To work correctly, the name of each file in parameter_files must be
-      exactly like this: roi_hemi_calcul_param_contrast, where
+      exactly like this: roi_hemi_calcul_param_contrast.txt, where
       - roi: region of interest (ex. ACA)
       - hemi: hemisphere (ex. L)
       - calcul: type of calcul (ex. mean)
       - param: the parameter studied (ex. spmT)
       - contrast: the type of contrast/effect used (ex. BOLD)
-
-    - Currently, to function correctly, this brick requires the doublet made
-      up of the two hemispheres to be present in the parameter_files list and
-      each hemisphere to be represented by the letters L (left) and R (right).
-      For example:
-      [/aPath/ACM_R_moyenne_spmT_BOLD.txt,
-      /aPat/ACM_L_moyenne_spmT_BOLD.txt, etc.].
-      It would be desirable to develop this brick so that it could also be
-      used to collect a single territory without any notion of hemisphere (in
-      this case, of course, the brick would not generate any laterality
-      indices) => TODO ASAP
 
     """
 
@@ -2000,13 +1997,13 @@ class Result_collector(ProcessMIA):
         super(Result_collector, self).__init__()
 
         # Inputs description
-        laterality_index_desc = "Calculates the laterality indexes (a boolean)"
         parameter_files_desc = (
             "A list of .txt files. Each file contains one (and "
             "only one) value. The name of each file is used to "
             "define this value. The name must exactly be like "
             "this: roi_hemi_calcul_param_contrast"
         )
+        laterality_index_desc = "Calculates the laterality indexes (a boolean)"
         patient_info_desc = (
             "A dictionary whose keys/values correspond to "
             "information about the patient "
@@ -2124,7 +2121,7 @@ class Result_collector(ProcessMIA):
                 #          where there are not 5 objects returned.
                 # FIXME 2: Ideally, we should also make sure that they are well
                 #          roi, hemi, etc ... This is difficult to achieve for
-                #          the last point ...
+                #          this last point ...
                 # roi: region of interest (ex. ACA)
                 # hemi: hemisphere (ex. L)
                 # calcul: type of calcul (ex. mean)
@@ -2139,7 +2136,7 @@ class Result_collector(ProcessMIA):
                 except Exception as e:
                     print(
                         "\nResult_collector brick: initialization stopped "
-                        "due to the following problem:\n"
+                        "due to the following issue:\n"
                         " {}\n".format(e)
                     )
                     return self.make_initResult()
@@ -2336,12 +2333,6 @@ class Result_collector(ProcessMIA):
         res = dict()
 
         for data in self.parameter_files:
-            # FIXME 1: We need to protect the following command line. Case
-            #          where there are not 5 objects returned.
-            # FIXME 2: Ideally, we should also make sure that they are well
-            #          roi, hemi, etc ... This is difficult to achieve for
-            #          the last point ...
-
             # roi: region of interest (ex. ACA)
             # hemi: hemisphere (ex. L)
             # calcul: type of calcul (ex. mean)
