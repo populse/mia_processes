@@ -10,82 +10,57 @@
 Result_collector brick
 ======================
 
-Generates files with data for each region of interest
------------------------------------------------------
 
-    - The out_files will contain files with names corresponding to each `calculs` and `parametric_maps`
-      with the prefix `data` (e.g. BOLD_mean_spmT_0001.xls).
-    - The process look for input data corresponding to `mean_in_files` and `std_in_files`
-    - To work correctly, the "/roi\_\ `PatientName`/ROI_analysis" directory must exit to receive
-      the results from the runtime.
-    - To work correctly, the database entry for the first element of `parametric_maps` must
+Generates files containing summary data for each region of interest
+-------------------------------------------------------------------
+
+    - To work correctly, the database entry for the first element of `parameter_files` must
       have the `PatientName` tag filled in.
+    - The “PatientName_data/results_aggregation” directory is created to receive the results.
+      If this directory exists at runtime, new results can overwrite old results with the same name.
+    - Currently, to work correctly, this brick requires the doublet made up of the two hemispheres
+      to be present in the parameter_files list and each hemisphere to be represented by the letters
+      L (left) and R (right).
 
+      | For example:
+      | [/aPath/ACM_R_mean_spmT_BOLD.txt, /aPat/ACM_L_mean_spmT_BOLD.txt, etc.].
+
+      It would be desirable to develop this brick so that it could also be used to collect a single
+      territory without any notion of hemisphere (in this case, of course, the brick would not generate
+      any laterality indices) => TODO ASAP
+
+--------------------------------------
 
 **Inputs parameters:**
 
-- *parametric_maps* (a list of existing files)
+- *parameter_files*
+    A list of files, each containing a parameter value. To work correctly, the name of each file must be exactly like this:
+        - ``roi``\_ ``hemi``\_ ``calcul``\_ ``param``\_ ``contrast``.txt, where
+            - ``roi``: region of interest (ex. ACA)
+            - ``hemi``: hemisphere (ex. L)
+            - ``calcul``: type of calcul (ex. mean)
+            - ``param``: the parameter recorded in the file (ex. spmT)
+            - ``contrast``: the type of contrast/effect used (ex. BOLD)
 
     ::
 
-      ex. ['/home/username/data/raw_data/spmT_0001.nii',
-           '/home/username/data/raw_data/beta_0001.nii']
+     ex. ['/home/username/data/raw_data/ACA_L_mean_spmT_BOLD.txt',
+          '/home/username/data/raw_data/ACA_R_mean_spmT_BOLD.txt',
+	  '/home/username/data/raw_data/ACM_L_mean_spmT_BOLD.txt',
+	  '/home/username/data/raw_data/ACM_R_mean_spmT_BOLD.txt',
 
-- *data* (a string)
-    Defines the data type.
 
-    ::
 
-      ex. 'BOLD'
 
-- *calculs* ((a list of strings)
-    Defines the type of calculation.
-
-    ::
-
-      ex. ["mean", "std", "IL_mean", "IL_std"]
-
-- *mean_in_files* (a list of files)
-    A list of .txt files containing the average value of a parameter for a
-    given territory or region of interest.
+- *laterality_index*
+    | A Boolean to calculate (True) or not (False) the laterality index:
+    | (left hemisphere parameter - right hemisphere parameter) / (left hemisphere parameter + right hemisphere parameter)
 
     ::
 
-      ex. ['/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_L_meanspmT_BOLD.txt',
-           '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_R_meanspmT_BOLD.txt',
-	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_L_meanspmT_BOLD.txt',
-	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_R_meanspmT_BOLD.txt',
-	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_L_meanbeta_BOLD.txt',
-	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_R_meanbeta_BOLD.txt',
-	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_L_meanbeta_BOLD.txt',
-	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_R_meanbeta_BOLD.txt']
+      ex. True
 
-
-
-
-- *std_in_files* (a list of files)
-    A list of .txt files containing the standard deviation for a parameter
-    in a given territory or region of interest.
-
-    ::
-
-      ex. ['/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_L_stdspmT_BOLD.txt',
-           '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_R_stdspmT_BOLD.txt',
-	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_L_stdspmT_BOLD.txt',
-	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_R_stdspmT_BOLD.txt',
-	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_L_stdbeta_BOLD.txt',
-	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_R_stdbeta_BOLD.txt',
-	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_L_stdbeta_BOLD.txt',
-	   '/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_R_stdbeta_BOLD.txt']
-
-- *doublet_list* (a list of lists)
-    A list of lists containing doublets of strings.
-
-    ::
-
-      ex. [["ROI_OCC", "_L"], ["ROI_OCC", "_R"], ["ROI_PAR", "_l"], ["ROI_PAR", "_R"]]
-
-- *patient_info* (a dictionary)
+- *patient_info*
     A dictionary whose keys/values correspond to information about the patient.
 
     e.g. {
@@ -105,16 +80,11 @@ Generates files with data for each region of interest
 
 **Outputs parameters:**
 
-- *out_files* (a list of files)
-    A list of .xml files containing a summary of the requested results.
+- *out_files*
+    | A list of .xml files containing a summary of the input parameters. The file names generated are constructed as follows:
+    | ``contrast``\_ ``calcul``\_ ``param``.txt (e.g. BOLD_std_beta.xls).
 
     ::
 
-      ex. ['/home/username/data/derived_data/roi_PatientName/ROI_analysis/BOLD_mean_spmT_0001.xls',
-           '/home/username/data/derived_data/roi_PatientName/ROI_analysis/BOLD_std_spmT_0001.xls',
-           '/home/username/data/derived_data/roi_PatientName/ROI_analysis/BOLD_IL_mean_spmT_0001.xls',
-           '/home/username/data/derived_data/roi_PatientName/ROI_analysis/BOLD_IL_std_spmT_0001.xls',
-           '/home/username/data/derived_data/roi_PatientName/ROI_analysis/BOLD_mean_beta_0001.xls',
-           '/home/username/data/derived_data/roi_PatientName/ROI_analysis/BOLD_std_beta_0001.xls',
-           '/home/username/data/derived_data/roi_PatientName/ROI_analysis/BOLD_IL_mean_beta_0001.xls',
-           '/home/username/data/derived_data/roi_PatientName/ROI_analysis/BOLD_IL_std_beta_0001.xls']
+      ex. ['/home/username/data/derived_data/patient-name_data/results_aggregation/BOLD_IL_mean_spmT.xls',
+           '/home/username/data/derived_data/patient-name_data/results_aggregation/BOLD_mean_spmT.xls']

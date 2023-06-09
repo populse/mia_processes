@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.reports.processes &#8212; mia_processes 2.2.1-dev+92087d6 documentation</title>
+    <title>mia_processes.bricks.reports.processes &#8212; mia_processes 2.2.1-dev+9afe4fe documentation</title>
     <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
@@ -18,7 +18,7 @@
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.2.1-dev+92087d6 documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+9afe4fe documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.reports.processes</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -1653,10 +1653,16 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    * Makes the mean and standard deviation of parametric_maps.</span>
 
-<span class="sd">    - The parametric_maps are first convolved with the ROIs corresponding</span>
-<span class="sd">      to rois_files.</span>
+<span class="sd">    - The parametric_maps are first resized, if necessary, to the size of the</span>
+<span class="sd">      rois_files. Next, the parametric_maps and the rois_files are convolved.</span>
+<span class="sd">      Finally, the mean and standard deviation are calculated for the</span>
+<span class="sd">      corresponding ROIs.</span>
+<span class="sd">    - The “PatientName_data/ROI_data/ROI_analysis” directory is created to</span>
+<span class="sd">      receive the results. If this directory exists at runtime, it is</span>
+<span class="sd">      overwritten.</span>
 <span class="sd">    - To work correctly, the database entry for the first element of</span>
-<span class="sd">      parametric_maps must have the &quot;PatientName&quot; tag filled in.</span>
+<span class="sd">      parametric_maps must have the PatientName tag filled in.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Mean_stdDev_calc.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.Mean_stdDev_calc.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -2001,25 +2007,16 @@
 
 <span class="sd">    - To work correctly, the database entry for the first element of</span>
 <span class="sd">      parameter_files must have the &quot;PatientName&quot; tag filled in.</span>
-
+<span class="sd">    - The “PatientName_data/results_aggregation” directory is created to</span>
+<span class="sd">      receive the results. If this directory exists at runtime, new results</span>
+<span class="sd">      can overwrite old results with the same name.</span>
 <span class="sd">    - To work correctly, the name of each file in parameter_files must be</span>
-<span class="sd">      exactly like this: roi_hemi_calcul_param_contrast, where</span>
+<span class="sd">      exactly like this: roi_hemi_calcul_param_contrast.txt, where</span>
 <span class="sd">      - roi: region of interest (ex. ACA)</span>
 <span class="sd">      - hemi: hemisphere (ex. L)</span>
 <span class="sd">      - calcul: type of calcul (ex. mean)</span>
 <span class="sd">      - param: the parameter studied (ex. spmT)</span>
 <span class="sd">      - contrast: the type of contrast/effect used (ex. BOLD)</span>
-
-<span class="sd">    - Currently, to function correctly, this brick requires the doublet made</span>
-<span class="sd">      up of the two hemispheres to be present in the parameter_files list and</span>
-<span class="sd">      each hemisphere to be represented by the letters L (left) and R (right).</span>
-<span class="sd">      For example:</span>
-<span class="sd">      [/aPath/ACM_R_moyenne_spmT_BOLD.txt,</span>
-<span class="sd">      /aPat/ACM_L_moyenne_spmT_BOLD.txt, etc.].</span>
-<span class="sd">      It would be desirable to develop this brick so that it could also be</span>
-<span class="sd">      used to collect a single territory without any notion of hemisphere (in</span>
-<span class="sd">      this case, of course, the brick would not generate any laterality</span>
-<span class="sd">      indices) =&gt; TODO ASAP</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -2034,13 +2031,13 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">Result_collector</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="c1"># Inputs description</span>
-        <span class="n">laterality_index_desc</span> <span class="o">=</span> <span class="s2">&quot;Calculates the laterality indexes (a boolean)&quot;</span>
         <span class="n">parameter_files_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;A list of .txt files. Each file contains one (and &quot;</span>
             <span class="s2">&quot;only one) value. The name of each file is used to &quot;</span>
             <span class="s2">&quot;define this value. The name must exactly be like &quot;</span>
             <span class="s2">&quot;this: roi_hemi_calcul_param_contrast&quot;</span>
         <span class="p">)</span>
+        <span class="n">laterality_index_desc</span> <span class="o">=</span> <span class="s2">&quot;Calculates the laterality indexes (a boolean)&quot;</span>
         <span class="n">patient_info_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;A dictionary whose keys/values correspond to &quot;</span>
             <span class="s2">&quot;information about the patient &quot;</span>
@@ -2158,7 +2155,7 @@
                 <span class="c1">#          where there are not 5 objects returned.</span>
                 <span class="c1"># FIXME 2: Ideally, we should also make sure that they are well</span>
                 <span class="c1">#          roi, hemi, etc ... This is difficult to achieve for</span>
-                <span class="c1">#          the last point ...</span>
+                <span class="c1">#          this last point ...</span>
                 <span class="c1"># roi: region of interest (ex. ACA)</span>
                 <span class="c1"># hemi: hemisphere (ex. L)</span>
                 <span class="c1"># calcul: type of calcul (ex. mean)</span>
@@ -2173,7 +2170,7 @@
                 <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                     <span class="nb">print</span><span class="p">(</span>
                         <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Result_collector brick: initialization stopped &quot;</span>
-                        <span class="s2">&quot;due to the following problem:</span><span class="se">\n</span><span class="s2">&quot;</span>
+                        <span class="s2">&quot;due to the following issue:</span><span class="se">\n</span><span class="s2">&quot;</span>
                         <span class="s2">&quot; </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
                     <span class="p">)</span>
                     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
@@ -2370,12 +2367,6 @@
         <span class="n">res</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
 
         <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameter_files</span><span class="p">:</span>
-            <span class="c1"># FIXME 1: We need to protect the following command line. Case</span>
-            <span class="c1">#          where there are not 5 objects returned.</span>
-            <span class="c1"># FIXME 2: Ideally, we should also make sure that they are well</span>
-            <span class="c1">#          roi, hemi, etc ... This is difficult to achieve for</span>
-            <span class="c1">#          the last point ...</span>
-
             <span class="c1"># roi: region of interest (ex. ACA)</span>
             <span class="c1"># hemi: hemisphere (ex. L)</span>
             <span class="c1"># calcul: type of calcul (ex. mean)</span>
