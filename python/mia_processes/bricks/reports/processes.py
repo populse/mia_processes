@@ -1883,49 +1883,48 @@ class Mean_stdDev_calc(ProcessMIA):
         if os.path.isdir(tmp):
             shutil.rmtree(tmp)
 
-        # if self.contrast_type.isspace() or not self.contrast_type:
-        #    self.contrast_type = "UnknownContrast"
-
         for parametric_map in self.parametric_maps:
-            # Resampling, if necessary, the parametric_map to the size of the
-            # ROIs, using the first ROI in rois_files.
-            roi_1 = self.rois_files[0]
-            roi_img = nb.load(roi_1)
-            roi_data = roi_img.get_fdata()
-            roi_size = roi_data.shape[:3]
-
             # Reading parametric map
             map_img = nb.load(parametric_map)
             map_data = map_img.get_fdata()
-
             # Setting the NaN to 0 in parametric map
             map_data = np.nan_to_num(map_data)
+            # Deduction of the parameter from the name of the parametric map
+            param_file_name = os.path.basename(parametric_map)
 
-            # Give name with spmT_BOLD or beta_BOLD
-            map_name = (
-                os.path.basename(parametric_map)[0:4]
-                + "_"
-                + self.contrast_type
-            )
+            if "_" not in param_file_name:
+                parameter = os.path.splitext(param_file_name)
 
-            # Making sure that the ROI and parametric images
-            # are at the same size
-            if roi_size != map_data.shape[:3]:
-                map_data_max = max(map_data.max(), -map_data.min())
-                map_data = (
-                    resize(map_data / map_data_max, roi_size) * map_data_max
-                )
+            else:
+                parameter = param_file_name[: param_file_name.index("_")]
 
             for roi_file in self.rois_files:
                 roi_img = nb.load(roi_file)
                 roi_data = roi_img.get_fdata()
-
                 # Setting the NaN to 0 in ROI images
                 roi_data = np.nan_to_num(roi_data)
+                # Deduction of the ROI name from the roi_file
+                roi_name, _ = os.path.splitext(os.path.basename(roi_file))
+
+                if self.prefix_to_delete != " " and roi_name.startswith(
+                    self.prefix_to_delete
+                ):
+                    # fmt: off
+                    roi_name = roi_name[len(self.prefix_to_delete):]
+                    # fmt: on
+
+                # Making sure that the ROIs and parametric images are at the
+                # same size
+                if roi_data.shape[:3] != map_data.shape[:3]:
+                    map_data_max = max(map_data.max(), -map_data.min())
+                    final_map_data = (
+                        resize(map_data / map_data_max, roi_data.shape[:3])
+                        * map_data_max
+                    )
 
                 # Convolution of the parametric map with the ROI images
                 roi_thresh = (roi_data > 0).astype(float)
-                result = map_data * roi_thresh
+                result = final_map_data * roi_thresh
 
                 # Calculating mean and standard deviation
                 if np.size(result[result.nonzero()]) == 0:
@@ -1941,20 +1940,25 @@ class Mean_stdDev_calc(ProcessMIA):
                     mean_result = result[result.nonzero()].mean()
                     std_result = result[result.nonzero()].std()
 
-                roi_name, _ = os.path.splitext(os.path.basename(roi_file))
-                mean_out_file = os.path.join(
-                    analysis_dir, roi_name + "_mean_" + map_name + ".txt"
-                )
+                for calculation in ["mean", "std"]:
+                    out_file = os.path.join(
+                        analysis_dir,
+                        roi_name
+                        + "_"
+                        + calculation
+                        + "_"
+                        + parameter
+                        + "_"
+                        + self.contrast_type
+                        + ".txt",
+                    )
 
-                with open(mean_out_file, "w") as f:
-                    f.write("%.3f" % mean_result)
+                    with open(out_file, "w") as f:
+                        if calculation == "mean":
+                            f.write("%.3f" % mean_result)
 
-                std_out_file = os.path.join(
-                    analysis_dir, roi_name + "_std_" + map_name + ".txt"
-                )
-
-                with open(std_out_file, "w") as f:
-                    f.write("%.3f" % std_result)
+                        else:
+                            f.write("%.3f" % std_result)
 
 
 class Result_collector(ProcessMIA):

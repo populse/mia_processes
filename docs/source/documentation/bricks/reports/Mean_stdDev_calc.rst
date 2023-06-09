@@ -13,19 +13,17 @@ Mean_stdDev_calc brick
 Makes the mean and standard deviation of parametric maps.
 ---------------------------------------------------------
 
-    - The `parametric_maps` are first convolved with the ROIs corresponding
-      to `doublet_list`. The mean and standard deviation are then calculated
-      for the ROI in each parametric maps.
-
-
+    - The `parametric_maps` are first resized, if necessary, to the size of the `rois_files`.
+    - Next, the `parametric_maps` and the `rois_files` are convolved.
+    - Finally, the mean and standard deviation are calculated for the corresponding ROIs.
     - The “PatientName_data/ROI_data/ROI_analysis” directory is created to receive the results.
       If this directory exists at runtime, it is overwritten.
     - Output file names are built like this:
-        - roi_calculation_parameter_contrast.txt
+        - ``roi``_calculation_parameter_contrast.txt
 	    - roi is deducted from each `rois_files` after deleting the extension. If `prefix_to_delete` is defined,
 	      and if it corresponds to the beginning of roi, this beginning of string is deleted.
 	    - calculation corresponds to "mean" (mean calculation) or "std" (standard deviation calculation).
-	    - parameter is deducted from each `parametric_maps`. This is the string before the first underscore.
+	    - parameter is deducted from each `parametric_maps` file name. This is the string before the first underscore.
 	      If there is no underscore, this is the file name after removing the extension.
 	    - contrast is `contrast_type`.
     - To work correctly, the database entry for the first element of `parametric_maps` must
@@ -90,11 +88,11 @@ Makes the mean and standard deviation of parametric maps.
 
     ::
 
-      ex. ['/home/username/data/derived_data/patient-name_data/ROI_data/ROI_analysis/convACA_L_std_spmT_BOLD.txt',
-	   '/home/username/data/derived_data/patient-name_data/ROI_data/ROI_analysis/convACA_R_std_spmT_BOLD.txt',
-	   '/home/username/data/derived_data/patient-name_data/ROI_data/ROI_analysis/convACM_L_std_spmT_BOLD.txt',
-	   '/home/username/data/derived_data/patient-name_data/ROI_data/ROI_analysis/convACM_R_std_spmT_BOLD.txt'
-	   '/home/username/data/derived_data/patient-name_data/ROI_data/ROI_analysis/convACA_L_std_beta_BOLD.txt',
-	   '/home/username/data/derived_data/patient-name_data/ROI_data/ROI_analysis//convACA_R_std_beta_BOLD.txt',
-	   '/home/username/data/derived_data/patient-name_data/ROI_data/ROI_analysis//convACM_L_std_beta_BOLD.txt',
-	   '/home/username/data/derived_data/patient-name_data/ROI_data/ROI_analysis/convACM_R_std_beta_BOLD.txt']
+      ex. ['/home/username/data/derived_data/patient-name_data/ROI_data/ROI_analysis/ACA_L_std_spmT_BOLD.txt',
+	   '/home/username/data/derived_data/patient-name_data/ROI_data/ROI_analysis/ACA_R_std_spmT_BOLD.txt',
+	   '/home/username/data/derived_data/patient-name_data/ROI_data/ROI_analysis/ACM_L_std_spmT_BOLD.txt',
+	   '/home/username/data/derived_data/patient-name_data/ROI_data/ROI_analysis/ACM_R_std_spmT_BOLD.txt'
+	   '/home/username/data/derived_data/patient-name_data/ROI_data/ROI_analysis/ACA_L_std_beta_BOLD.txt',
+	   '/home/username/data/derived_data/patient-name_data/ROI_data/ROI_analysis/ACA_R_std_beta_BOLD.txt',
+	   '/home/username/data/derived_data/patient-name_data/ROI_data/ROI_analysis/ACM_L_std_beta_BOLD.txt',
+	   '/home/username/data/derived_data/patient-name_data/ROI_data/ROI_analysis/ACM_R_std_beta_BOLD.txt']
