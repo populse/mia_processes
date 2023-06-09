@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.reports package &#8212; mia_processes 2.2.1-dev+92087d6 documentation</title>
+    <title>mia_processes.bricks.reports package &#8212; mia_processes 2.2.1-dev+9afe4fe documentation</title>
     <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -18,7 +18,7 @@
     <link rel="search" title="Search" href="search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="index.html">
-          <span>mia_processes 2.2.1-dev+92087d6 documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+9afe4fe documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.reports package</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -380,10 +380,15 @@ self.make_initResult() object.</p>
 <li><p>Makes the mean and standard deviation of parametric_maps.</p></li>
 </ul>
 <ul class="simple">
-<li><p>The parametric_maps are first convolved with the ROIs corresponding
-to rois_files.</p></li>
+<li><p>The parametric_maps are first resized, if necessary, to the size of the
+rois_files. Next, the parametric_maps and the rois_files are convolved.
+Finally, the mean and standard deviation are calculated for the
+corresponding ROIs.</p></li>
+<li><p>The “PatientName_data/ROI_data/ROI_analysis” directory is created to
+receive the results. If this directory exists at runtime, it is
+overwritten.</p></li>
 <li><p>To work correctly, the database entry for the first element of
-parametric_maps must have the “PatientName” tag filled in.</p></li>
+parametric_maps must have the PatientName tag filled in.</p></li>
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -438,23 +443,16 @@ self.make_initResult() object.</p>
 <ul class="simple">
 <li><p>To work correctly, the database entry for the first element of
 parameter_files must have the “PatientName” tag filled in.</p></li>
+<li><p>The “PatientName_data/results_aggregation” directory is created to
+receive the results. If this directory exists at runtime, new results
+can overwrite old results with the same name.</p></li>
 <li><p>To work correctly, the name of each file in parameter_files must be
-exactly like this: roi_hemi_calcul_param_contrast, where
+exactly like this: roi_hemi_calcul_param_contrast.txt, where
 - roi: region of interest (ex. ACA)
 - hemi: hemisphere (ex. L)
 - calcul: type of calcul (ex. mean)
 - param: the parameter studied (ex. spmT)
 - contrast: the type of contrast/effect used (ex. BOLD)</p></li>
-<li><p>Currently, to function correctly, this brick requires the doublet made
-up of the two hemispheres to be present in the parameter_files list and
-each hemisphere to be represented by the letters L (left) and R (right).
-For example:
-[/aPath/ACM_R_moyenne_spmT_BOLD.txt,
-/aPat/ACM_L_moyenne_spmT_BOLD.txt, etc.].
-It would be desirable to develop this brick so that it could also be
-used to collect a single territory without any notion of hemisphere (in
-this case, of course, the brick would not generate any laterality
-indices) =&gt; TODO ASAP</p></li>
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
