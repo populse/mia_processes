@@ -6,10 +6,6 @@
 |`Home <../../../../index.html>`_|`Documentation <../../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +--------------------------------+----------------------------------------------+----------------------------------------------------+
 
-
-
-
-
 .. line break
 .. |br| raw:: html
 
@@ -44,9 +40,6 @@ Realign brick
 
 Realigns a time-series of images acquired from the same subject
 ---------------------------------------------------------------
-
->>> from mia_processes.bricks.preprocess.spm import Realign
->>> Realign.help()
 
 **Inputs parameters:**
 

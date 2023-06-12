@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.preprocess.others.processing &#8212; mia_processes 2.2.1-dev+321f552 documentation</title>
+    <title>mia_processes.bricks.preprocess.others.processing &#8212; mia_processes 2.2.1-dev+4c116d4 documentation</title>
     <link rel="stylesheet" href="../../../../../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
@@ -18,7 +18,7 @@
     <link rel="search" title="Search" href="../../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../../index.html">
-          <span>mia_processes 2.2.1-dev+321f552 documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+4c116d4 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.preprocess.others.processing</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -4167,8 +4167,10 @@
 
             <span class="c1"># Take the first 5 characters in the case if the GM was processed</span>
             <span class="c1"># ex. normalisation = wc1, normalisation then smooth = swc1 ...</span>
-            <span class="c1"># This is not the cleaner way ... in case of a file name</span>
-            <span class="c1"># (PatientName) starting with c1 !</span>
+            <span class="c1"># This is not the cleaner way ... for example in the case of a</span>
+            <span class="c1"># file name including `c1` in the first 5 characters for another</span>
+            <span class="c1"># reason (`c1` in PatientName, etc.).</span>
+            <span class="c1"># FiXME: what can we do to be cleaner?</span>
             <span class="k">if</span> <span class="s2">&quot;c1&quot;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">file_name</span><span class="p">))[:</span><span class="mi">5</span><span class="p">]:</span>
                 <span class="n">files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
 
@@ -4189,7 +4191,9 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">Threshold</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="c1"># Outputs definition</span>
-        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_files</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">threshold</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_files</span> <span class="o">!=</span> <span class="n">Undefined</span> <span class="ow">and</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold</span> <span class="o">!=</span> <span class="n">Undefined</span>
+        <span class="p">):</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">GM_filtering</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
                 <span class="n">files_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_namesFilter</span><span class="p">()</span>
 
