@@ -20,7 +20,7 @@ mia\_processes.pipelines.reports.bold\_iqms module
 mia\_processes.pipelines.reports.rois module
 -----------------------------------------------
 
-.. automodule:: mia_processes.pipelines.reports.rois
+.. automodule:: mia_processes.pipelines.reports.extract_roi_param
    :members:
    :undoc-members:
    :show-inheritance:

@@ -143,7 +143,7 @@ Mia_processes's documentation
   - **reports**
 
     - `Bold_iqms <pipelines/reports/Bold_iqms.html>`_
-    - `Rois_1 <pipelines/reports/Rois_1.html>`_ (in progress)
+    - `Extract_roi_param <pipelines/reports/Extract_roi_param.html>`_ (in progress)
 
   - **stats**
 

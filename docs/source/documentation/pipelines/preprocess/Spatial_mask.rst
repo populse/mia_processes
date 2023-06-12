@@ -6,9 +6,9 @@
 |`Home <../../../../index.html>`_|`Documentation <../../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +--------------------------------+----------------------------------------------+----------------------------------------------------+
 
-==================
-Spatial_mask brick
-==================
+=====================
+Spatial_mask pipeline
+=====================
 
 From a list of images resulting from a previous segmentation, produces a grey matter mask at the resolution of a functional image
 ---------------------------------------------------------------------------------------------------------------------------------
