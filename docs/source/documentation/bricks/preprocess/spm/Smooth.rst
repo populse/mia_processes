@@ -13,9 +13,6 @@ Smooth brick
 3D Gaussian smoothing of image volumes
 --------------------------------------
 
->>> from mia_processes.bricks.preprocess.spm import Smooth
->>> Smooth.help()
-
 **Inputs parameters:**
 
 - *in_files <=> data* [#label]_
