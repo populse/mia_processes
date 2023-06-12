@@ -25,7 +25,7 @@ import traits.api as traits
 from capsul.api import Pipeline
 
 
-class Rois(Pipeline):
+class Extract_roi_param(Pipeline):
     """
     * Blabla.
 
