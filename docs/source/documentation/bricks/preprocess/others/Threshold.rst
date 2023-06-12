@@ -11,8 +11,7 @@ Threshold brick
 ===============
 
 Makes a binary mask image at a given threshold
-
---------------------------------------
+----------------------------------------------
 
 **Mandatory inputs parameters:**
 

@@ -4133,8 +4133,10 @@ class Threshold(ProcessMIA):
 
             # Take the first 5 characters in the case if the GM was processed
             # ex. normalisation = wc1, normalisation then smooth = swc1 ...
-            # This is not the cleaner way ... in case of a file name
-            # (PatientName) starting with c1 !
+            # This is not the cleaner way ... for example in the case of a
+            # file name including `c1` in the first 5 characters for another
+            # reason (`c1` in PatientName, etc.).
+            # FiXME: what can we do to be cleaner?
             if "c1" in os.path.basename(os.path.normpath(file_name))[:5]:
                 files.append(file_name)
 
@@ -4155,7 +4157,9 @@ class Threshold(ProcessMIA):
         super(Threshold, self).list_outputs()
 
         # Outputs definition
-        if (self.in_files) and (self.threshold):
+        if self.in_files != Undefined and (
+            self.threshold and self.threshold != Undefined
+        ):
             if self.GM_filtering is True:
                 files_name = self._namesFilter()
 
