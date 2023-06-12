@@ -68,7 +68,7 @@ An example of fMRI data pre-processing
       ex. /home/username/data/raw_data/Anat.nii
 
 - *func_files*
-    Functional images under hypercapnic challenge (ex. 3D T2* sequence sush as echo planar imaging). A list of items which are an
+    Functional images (ex. 3D T2* sequence sush as echo planar imaging). A list of items which are an
     existing, uncompressed file (valid extensions: [.img, .nii, .hdr]).
 
     ::
@@ -136,7 +136,7 @@ An example of fMRI data pre-processing
       ex. /home/username/data/derived_data/swrFunc.nii
 
 - *coregistered_source*
-    Coregistered source files, corresponding to ‘source’ images (a list of items which are an existing file name).
+    Coregistered source files, corresponding to `source` images (a list of items which are an existing file name).
 
     ::
 
