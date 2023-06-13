@@ -10,8 +10,8 @@
 Spatial_mask pipeline
 =====================
 
-From a list of images resulting from a previous segmentation, produces a grey matter mask at the resolution of a functional image
----------------------------------------------------------------------------------------------------------------------------------
+From a list of images resulting from a previous segmentation, produces a grey matter mask
+-----------------------------------------------------------------------------------------
 
 **Pipeline insight**
 
@@ -30,7 +30,7 @@ From a list of images resulting from a previous segmentation, produces a grey ma
 **inputs parameters:**
 
 - *native_class_images*
-    A list of images, resulting from a previous segmetation to grey matters, white matters, etc. (valid extensions: [.nii, .nii.gz]).
+    A list of images, resulting from a previous segmentation to grey matters, white matters, etc. (valid extensions: [.nii, .nii.gz]).
 
     ::
 
