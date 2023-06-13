@@ -6,7 +6,7 @@ The purpose of this module is to blabla.
 
 :Contains:
     :Class:
-        - Rois
+        - Extract_roi_param
 
 """
 
@@ -27,7 +27,8 @@ from capsul.api import Pipeline
 
 class Extract_roi_param(Pipeline):
     """
-    * Blabla.
+    *Produces gray matter masks for various ROIs and means, standard
+    deviations, laterality indexes for beta and spmT values in these ROIs*
 
     """
 
