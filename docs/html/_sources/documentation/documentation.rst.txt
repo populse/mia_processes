@@ -104,7 +104,7 @@ Mia_processes's documentation
 
       - `EstimateContrast <bricks/stats/spm/EstimateContrast.html>`_ (in progress)
       - `EstimateModel <bricks/stats/spm/EstimateModel.html>`_ (in progress)
-      - `Level1Design <bricks/stats/spm/Level1Design.html>`_
+      - `Level1Design <bricks/stats/spm/Level1Design.html>`_ (in progress)
 
   - **tools**
 
@@ -143,8 +143,8 @@ Mia_processes's documentation
   - **reports**
 
     - `Bold_iqms <pipelines/reports/Bold_iqms.html>`_
-    - `Extract_roi_param <pipelines/reports/Extract_roi_param.html>`_ (in progress)
+    - `Extract_roi_param <pipelines/reports/Extract_roi_param.html>`_
 
   - **stats**
 
-    - `Bold_stats <pipelines/stats/Bold_stats.html>`_ (in progress)
+    - `Bold_stat <pipelines/stats/Bold_stat.html>`_ (in progress)
