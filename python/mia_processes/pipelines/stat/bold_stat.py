@@ -36,10 +36,6 @@ class Bold_stat(Pipeline):
             "estimatecontrast",
             "mia_processes.bricks.stat.spm.model.EstimateContrast",
         )
-        self.nodes["estimatecontrast"].set_plug_value(
-            "multi_reg", traits.Undefined
-        )
-        self.nodes["estimatecontrast"].process.multi_reg = traits.Undefined
         self.add_process(
             "level1design", "mia_processes.bricks.stat.spm.model.Level1Design"
         )
@@ -59,9 +55,8 @@ class Bold_stat(Pipeline):
 
         # links
         self.export_parameter(
-            "estimatecontrast", "multi_reg", "regressors", is_optional=False
+            "make_a_list", "obj1", "regressors", is_optional=False
         )
-        self.add_link("regressors->make_a_list.obj1")
         self.export_parameter(
             "level1design", "sess_scans", "smoothed_func", is_optional=False
         )
