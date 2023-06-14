@@ -122,6 +122,10 @@ Mia_processes's documentation
 
 - **pipelines**
 
+  - **CerebVascularReact**
+
+    - `CO2_inhalation <pipelines/CerebVascularReact/CO2_inhalation.html>`_
+
   - **preprocess**
 
     - `Anat_airmask <pipelines/preprocess/Anat_airmask.html>`_
@@ -147,4 +151,4 @@ Mia_processes's documentation
 
   - **stats**
 
-    - `Bold_stat <pipelines/stats/Bold_stat.html>`_ (in progress)
+    - `Bold_stat <pipelines/stats/Bold_stat.html>`_
