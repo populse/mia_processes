@@ -77,41 +77,38 @@ class EstimateContrast(ProcessMIA):
 
         # Inputs description
         spm_mat_file_desc = (
-            "SPM.mat file (a pathlike object or string " "representing a file)"
+            "SPM.mat file (a pathlike object or string representing a file)"
         )
-        session_type_desc = (
-            "Selects the contrast type. One of tcon "
-            "(T-contrast), fcon (F-contrast) or tconsess "
-            "(T-contrast cond/sess based)"
-        )
-        contrast_name_desc = "Name of contrasts (a list of string)"
-        condition_name_desc = (
+        T_contrast_name_desc = "Name of T contrasts (a list of string)"
+        T_condition_name_desc = (
             "Conditions information (a list of list of string)"
         )
-        contrast_weight_desc = "Contrast weights (list of list of float)"
+        T_contrast_weight_desc = "Contrast weights (list of list of float)"
         session_desc = (
             "Session list (a list of list of float). "
             "Length should be equal to the number of sessions, "
             "with 1. for sessions to include and 0. elsewhere"
         )
-        multi_reg_desc = "The regressor files (a list of file)"
+        F_contrast_names = "Name of F contrasts (a list of string)"
+        F_contrast_T_names_desc = (
+            "Name of T contrasts used to create F contrast"
+            "(a list of list of string)"
+        )
         residual_image_desc = "Mean-squared image of the residuals"
         beta_images_desc = "Parameter estimates of the design matrix"
-        # out_dir_name_desc = 'Out directory name'
-
-        # TODO : understand use_derivs and group_contrast
-        # use_derivs_desc = ("Use derivatives for estimation. "
-        #                    "Mutually exclusive with inputs: group_contrast")
-        # group_contrast_desc = ("Higher level contrast. "
-        #                        "Mutually exclusive with inputs: use_derivs.")
+        use_derivs_desc = (
+            "Use derivatives for estimation. "
+            "Mutually exclusive group_contrast parameter."
+        )
+        group_contrast_desc = (
+            "Higher level contrast. " "Mutually exclusive use_derivs prameter."
+        )
 
         # Outputs description
-        spmT_images_desc = "Stat images from a t-contrast"
-        con_images_desc = "Contrast images from a t-contrast"
-
-        # This bricks only works for T contrast
-        # ess_images_desc = "Contrast images from an F-contrast"
-        # spmF_images_desc = "Stat images from an F-contrast"
+        spmT_images_desc = "Stat images from a T-contrast"
+        con_images_desc = "Contrast images from a T-contrast"
+        ess_images_desc = "Contrast images from an F-contrast"
+        spmF_images_desc = "Stat images from an F-contrast"
         out_spm_mat_file_desc = "Updated SPM mat file."
 
         # Inputs
@@ -121,49 +118,37 @@ class EstimateContrast(ProcessMIA):
         )
 
         self.add_trait(
-            "session_type",
-            traits.Enum(
-                "tcon",
-                "fcon",
-                "tconsess",
-                output=False,
-                optional=True,
-                desc=session_type_desc,
-            ),
-        )
-
-        self.add_trait(
-            "contrast_name",
+            "T_contrast_names",
             traits.List(
                 traits.String(),
                 output=False,
                 optional=True,
-                desc=contrast_name_desc,
+                desc=T_contrast_name_desc,
             ),
         )
-        self.contrast_name = ["+"]
+        self.T_contrast_names = ["+"]
 
         self.add_trait(
-            "condition_name",
+            "T_condition_names",
             traits.List(
                 traits.List(traits.String()),
                 output=False,
                 optional=True,
-                desc=condition_name_desc,
+                desc=T_condition_name_desc,
             ),
         )
-        self.condition_name = [["R1_1"]]
+        self.T_condition_names = [["R1_1"]]
 
         self.add_trait(
-            "contrast_weight",
+            "T_contrast_weights",
             traits.List(
                 traits.List(traits.Float()),
                 output=False,
                 optional=True,
-                desc=contrast_weight_desc,
+                desc=T_contrast_weight_desc,
             ),
         )
-        self.contrast_weight = [[1.0]]
+        self.T_contrast_weights = [[1.0]]
 
         self.add_trait(
             "session",
@@ -180,13 +165,22 @@ class EstimateContrast(ProcessMIA):
         self.session = Undefined
 
         self.add_trait(
-            "multi_reg",
-            traits.Either(
-                Undefined,
-                traits.List(File()),
+            "F_contrast_names",
+            traits.List(
+                traits.String(),
                 output=False,
                 optional=True,
-                desc=multi_reg_desc,
+                desc=F_contrast_names,
+            ),
+        )
+
+        self.add_trait(
+            "F_contrast_T_names",
+            traits.List(
+                traits.List(traits.String()),
+                output=False,
+                optional=True,
+                desc=F_contrast_T_names_desc,
             ),
         )
 
@@ -196,18 +190,21 @@ class EstimateContrast(ProcessMIA):
                 File(), output=False, copyfile=False, desc=beta_images_desc
             ),
         )
+
         self.add_trait(
             "residual_image",
             File(output=False, copyfile=False, desc=residual_image_desc),
         )
-        # self.add_trait(
-        #     "use_derivs",
-        #     traits.Bool(output=False, optional=True, xor=["group_contrast"]),
-        # )
-        # self.add_trait(
-        #     "group_contrast",
-        #     traits.Bool(output=False, optional=True, xor=["use_derivs"]),
-        # )
+
+        self.add_trait(
+            "use_derivs",
+            traits.Bool(output=False, optional=True, desc=use_derivs_desc),
+        )
+
+        self.add_trait(
+            "group_contrast",
+            traits.Bool(output=False, optional=True, desc=group_contrast_desc),
+        )
 
         # Outputs
         self.add_trait(
@@ -224,19 +221,19 @@ class EstimateContrast(ProcessMIA):
             ),
         )
 
-        # self.add_trait("ess_images",
-        #                OutputMultiPath(File(),
-        #                                optional=True,
-        #                                output=True,
-        #                                desc=ess_images_desc)
-        #                )
+        self.add_trait(
+            "ess_images",
+            OutputMultiPath(
+                File(), optional=True, output=True, desc=ess_images_desc
+            ),
+        )
 
-        # self.add_trait("spmF_images",
-        #                OutputMultiPath(File(),
-        #                                optional=True,
-        #                                output=True,
-        #                                desc=spmF_images_desc)
-        #                )
+        self.add_trait(
+            "spmF_images",
+            OutputMultiPath(
+                File(), optional=True, output=True, desc=spmF_images_desc
+            ),
+        )
 
         self.add_trait(
             "out_spm_mat_file",
@@ -246,47 +243,70 @@ class EstimateContrast(ProcessMIA):
         self.init_default_traits()
         self.init_process("nipype.interfaces.spm.EstimateContrast")
 
-    def _get_contrasts(self, session_type):
+    def _get_contrasts(self):
         """
         Get list of contrasts with each contrast being a list of the form:
+        - for T contrasts
         [('contrast_name',
-          'stat',
-          [condition list],
+          'T',
+          [condition name list],
           [weight list],
           [session list])]
+        or
+        [('contrast_name',
+          'T',
+          [condition name list],
+          [weight list])]
+
+        - for F contrasts
+        [('contrast_name',
+          'F',
+          [T-contrast])]
         """
-
-        contrasts = [tuple()]
-
-        if session_type == "tcon":
-            stat = "T"
-        # elif session_type == "fcon":
-        #     stat = "F"
-        else:
-            stat = None
-
-        if stat is not None:
+        contrasts = []
+        # Get T contrasts
+        if self.T_contrast_names:
             if self.session is Undefined:
-                contrasts = [
-                    (cont_name, stat, condition, cont_weight)
+                contrasts_T = [
+                    (cont_name, "T", condition, cont_weight)
                     for cont_name, condition, cont_weight in zip(
-                        self.contrast_name,
-                        self.condition_name,
-                        self.contrast_weight,
+                        self.T_contrast_names,
+                        self.T_condition_names,
+                        self.T_contrast_weights,
                     )
                 ]
             else:
-                contrasts = [
-                    (cont_name, stat, condition, cont_weight, sess)
+                contrasts_T = [
+                    (cont_name, "T", condition, cont_weight, sess)
                     if sess is not Undefined
-                    else (cont_name, stat, condition, cont_weight)
+                    else (cont_name, "T", condition, cont_weight)
                     for cont_name, condition, cont_weight, sess in zip(
-                        self.contrast_name,
-                        self.condition_name,
-                        self.contrast_weight,
+                        self.T_contrast_names,
+                        self.T_condition_names,
+                        self.T_contrast_weights,
                         self.session,
                     )
                 ]
+            contrasts += contrasts_T
+        # Get F contrast
+        # In nipype, for F contrast,
+        # the condition list should contain previously defined T-contrasts
+        if self.F_contrast_names:
+            contrasts_F = []
+            for cont_name, T_cont_names in zip(
+                self.F_contrast_names, self.F_contrast_T_names
+            ):
+                # Get T contrast previously defined
+                contrast_T = []
+                for T_cont_name in T_cont_names:
+                    for contrast in contrasts_T:
+                        if contrast[0] == T_cont_name:
+                            contrast_T.append(contrast)
+                            break
+                    if not contrast_T:
+                        return None
+                contrasts_F.append((cont_name, "F", contrast_T))
+            contrasts += contrasts_F
 
         return contrasts
 
@@ -305,11 +325,17 @@ class EstimateContrast(ProcessMIA):
         """
         super(EstimateContrast, self).list_outputs()
 
-        # TODO : add F contrast
-
         # We cannot directly called Nipype's method to get all the output
         # because we want to avoid to read in the SPM.mat file
         # (potentially not created yet)
+
+        if self.use_derivs and self.group_contrast:
+            print(
+                "\nInitialisation failed. Both input parameters 'use_derivs' "
+                "and 'group_contrast' are mutually exclusive. Please, define "
+                "only one of these two parameters to True...!"
+            )
+            return self.make_initResult()
 
         if (self.spm_mat_file) and (
             self.spm_mat_file not in ["<undefined>", Undefined]
@@ -359,25 +385,34 @@ class EstimateContrast(ProcessMIA):
                 print("No output_directory was found...!\n")
                 return self.make_initResult()
 
+            # Check that contrasts can be created
+            contrasts = self._get_contrasts()
+            if contrasts is None:
+                print("Contrast ca not be created, please check the inputs\n")
+                return self.make_initResult()
+
             self.outputs["out_spm_mat_file"] = os.path.join(
                 self.output_directory, spm_mat_file
             )
 
-            # Counting the number of spmT and con files to create
-            # TODO: understand how to know exactly number of spmT/spmF
-            nb_spmT = 0
-            if self.multi_reg not in [Undefined, "<undefined>", [], None]:
-                for reg_file in self.multi_reg:
-                    if os.path.splitext(reg_file)[1] != ".txt":
-                        nb_spmT += 1
-            else:
-                nb_spmT = len(self.contrast_name)
+            nb_contrasts = 0
+            # Get number of contrasts already created
+            nb_contrasts_old = get_dbFieldValue(
+                self.project, self.spm_mat_file, "Contrasts num"
+            )
 
+            if nb_contrasts_old is not None:
+                nb_contrasts = nb_contrasts_old
+
+            nb_spmT = len(self.T_contrast_names)
+            nb_contrasts += nb_spmT
             spmT_files = []
             con_files = []
 
             for i in range(nb_spmT):
                 i += 1
+                if nb_contrasts_old is not None:
+                    i += nb_contrasts_old
                 spmT_files.append(
                     os.path.join(
                         self.output_directory, "spmT_{:04d}.nii".format(i)
@@ -388,97 +423,132 @@ class EstimateContrast(ProcessMIA):
                         self.output_directory, "con_{:04d}.nii".format(i)
                     )
                 )
-                # spmT_files.append(os.path.join(path,
-                #                                'spmT_{:04d}.nii'.format(i)))
-                # con_files.append(os.path.join(path,
-                #                               'con_{:04d}.nii'.format(i)))
+
+            spmF_files = []
+            ess_files = []
+            if self.F_contrast_names:
+                nb_spmF = len(self.F_contrast_names)
+                nb_contrasts += nb_spmF
+                for i in range(nb_spmF):
+                    i += 1
+                    i += nb_spmT
+                    if nb_contrasts_old is not None:
+                        i += nb_contrasts_old
+                    spmF_files.append(
+                        os.path.join(
+                            self.output_directory, "spmF_{:04d}.nii".format(i)
+                        )
+                    )
+                    ess_files.append(
+                        os.path.join(
+                            self.output_directory, "ess_{:04d}.nii".format(i)
+                        )
+                    )
 
             if spmT_files:
                 self.outputs["spmT_images"] = spmT_files
                 self.outputs["con_images"] = con_files
+            if spmF_files:
+                self.outputs["spmF_images"] = spmF_files
+                self.outputs["ess_images"] = ess_files
 
         if self.outputs:
-            self.inheritance_dict[
-                self.outputs["out_spm_mat_file"]
-            ] = self.spm_mat_file
+            # FIXME: In the latest version of mia, indexing of the
+            #        database with particular tags defined in the
+            #        processes is done only at the end of the
+            #        initialisation of the whole pipeline. So we
+            #        cannot use the value of these tags in other
+            #        processes of the pipeline at the time of
+            #        initialisation (see populse_mia #290). Unti
+            #        better we use a quick and dirty hack with the
+            #        set_dbFieldValue() function !
+            for key, value in self.outputs.items():
+                if key == "out_spm_mat_file":
+                    self.inheritance_dict[value] = self.spm_mat_file
 
-            if spmT_files:
-                # FIXME: Quick and dirty. This brick was written quickly and
-                #        will need to be reworked to cover all cases. At that
-                #        time, inheritance will also need to be reviewed.
-                #        Currently we take the first element of the lists, but
-                #        in the general case there can be several elements in
-                #        the lists
-                self.inheritance_dict[
-                    self.outputs["spmT_images"][0]
-                ] = self.spm_mat_file
-                # FIXME: In the latest version of mia, indexing of the
-                #        database with particular tags defined in the
-                #        processes is done only at the end of the
-                #        initialisation of the whole pipeline. So we
-                #        cannot use the value of these tags in other
-                #        processes of the pipeline at the time of
-                #        initialisation (see populse_mia #290). Unti
-                #        better we use a quick and dirty hack with the
-                #        set_dbFieldValue() function !
-
-                tag_to_add = dict()
-                tag_to_add["name"] = "PatientName"
-                tag_to_add["field_type"] = "string"
-                tag_to_add["description"] = ""
-                tag_to_add["visibility"] = True
-                tag_to_add["origin"] = "user"
-                tag_to_add["unit"] = None
-                tag_to_add["default_value"] = None
-                tag_to_add["value"] = get_dbFieldValue(
-                    self.project, self.spm_mat_file, "PatientName"
-                )
-
-                if tag_to_add["value"] is not None:
-                    set_dbFieldValue(self.project, spmT_files[0], tag_to_add)
-
-                else:
-                    print(
-                        "\nEstimateContrast brick:\nThe 'PatientName' "
-                        "tag could not be added to the database for "
-                        "the '{}' parameter. This can lead to a "
-                        "subsequent issue during "
-                        "initialization!!\n".format(spmT_files[0])
+                    # Update/add number of contrast
+                    tag_to_add = dict()
+                    tag_to_add["name"] = "Contrasts num"
+                    tag_to_add["field_type"] = FIELD_TYPE_INTEGER
+                    tag_to_add["description"] = "Total number of contrasts"
+                    tag_to_add["visibility"] = True
+                    tag_to_add["origin"] = TAG_ORIGIN_USER
+                    tag_to_add["unit"] = None
+                    tag_to_add["default_value"] = None
+                    tag_to_add["value"] = nb_contrasts
+                    set_dbFieldValue(self.project, value, tag_to_add)
+                elif key in [
+                    "con_images",
+                    "spmT_images",
+                    "ess_images",
+                    "spmF_images",
+                ]:
+                    pathology = get_dbFieldValue(
+                        self.project, self.spm_mat_file, "Pathology"
+                    )
+                    age = get_dbFieldValue(
+                        self.project, self.spm_mat_file, "Age"
+                    )
+                    patient_name = get_dbFieldValue(
+                        self.project, self.spm_mat_file, "PatientName"
                     )
 
-                age = get_dbFieldValue(self.project, self.spm_mat_file, "Age")
+                    for fullname in value:
+                        self.inheritance_dict[fullname] = self.spm_mat_file
 
-                if age is not None:
-                    tag_to_add = dict()
-                    tag_to_add["name"] = "Age"
-                    tag_to_add["field_type"] = "int"
-                    tag_to_add["description"] = ""
-                    tag_to_add["visibility"] = True
-                    tag_to_add["origin"] = "user"
-                    tag_to_add["unit"] = None
-                    tag_to_add["default_value"] = None
-                    tag_to_add["value"] = age
-                    set_dbFieldValue(self.project, spmT_files[0], tag_to_add)
+                        if patient_name is not None:
+                            tag_to_add = dict()
+                            tag_to_add["name"] = "PatientName"
+                            tag_to_add["field_type"] = "string"
+                            tag_to_add["description"] = ""
+                            tag_to_add["visibility"] = True
+                            tag_to_add["origin"] = "user"
+                            tag_to_add["unit"] = None
+                            tag_to_add["default_value"] = None
+                            tag_to_add["value"] = patient_name
+                            set_dbFieldValue(
+                                self.project, fullname, tag_to_add
+                            )
 
-                pathology = get_dbFieldValue(
-                    self.project, self.spm_mat_file, "Pathology"
-                )
+                        if age is not None:
+                            tag_to_add = dict()
+                            tag_to_add["name"] = "Age"
+                            tag_to_add["field_type"] = "int"
+                            tag_to_add["description"] = ""
+                            tag_to_add["visibility"] = True
+                            tag_to_add["origin"] = "user"
+                            tag_to_add["unit"] = None
+                            tag_to_add["default_value"] = None
+                            tag_to_add["value"] = age
+                            set_dbFieldValue(
+                                self.project, fullname, tag_to_add
+                            )
 
-                if pathology is not None:
-                    tag_to_add = dict()
-                    tag_to_add["name"] = "Pathology"
-                    tag_to_add["field_type"] = "string"
-                    tag_to_add["description"] = ""
-                    tag_to_add["visibility"] = True
-                    tag_to_add["origin"] = "user"
-                    tag_to_add["unit"] = None
-                    tag_to_add["default_value"] = None
-                    tag_to_add["value"] = pathology
-                    set_dbFieldValue(self.project, spmT_files[0], tag_to_add)
+                        if pathology is not None:
+                            tag_to_add = dict()
+                            tag_to_add["name"] = "Pathology"
+                            tag_to_add["field_type"] = "string"
+                            tag_to_add["description"] = ""
+                            tag_to_add["visibility"] = True
+                            tag_to_add["origin"] = "user"
+                            tag_to_add["unit"] = None
+                            tag_to_add["default_value"] = None
+                            tag_to_add["value"] = pathology
+                            set_dbFieldValue(
+                                self.project, fullname, tag_to_add
+                            )
 
-                self.inheritance_dict[
-                    self.outputs["con_images"][0]
-                ] = self.spm_mat_file
+                        # Update/add number of contrast
+                        tag_to_add = dict()
+                        tag_to_add["name"] = "Contrasts num"
+                        tag_to_add["field_type"] = FIELD_TYPE_INTEGER
+                        tag_to_add["description"] = "Total number of contrasts"
+                        tag_to_add["visibility"] = True
+                        tag_to_add["origin"] = TAG_ORIGIN_USER
+                        tag_to_add["unit"] = None
+                        tag_to_add["default_value"] = None
+                        tag_to_add["value"] = nb_contrasts
+                        set_dbFieldValue(self.project, fullname, tag_to_add)
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -489,18 +559,13 @@ class EstimateContrast(ProcessMIA):
         super(EstimateContrast, self).run_process_mia()
 
         self.process.spm_mat_file = self.spm_mat_file
-        self.process.contrasts = self._get_contrasts(self.session_type)
+        self.process.contrasts = self._get_contrasts()
         self.process.beta_images = self.beta_images
         self.process.residual_image = self.residual_image
-
-        # if self.use_derivs is not None:
-        #     self.process.use_derivs = self.use_derivs
-        # else:
-        #     if self.group_contrast is not None:
-        #         self.process.group_contrast = self.group_contrast
-
-        #     else:
-        #         self.process.use_derivs = False
+        if self.use_derivs:
+            self.process.use_derivs = self.use_derivs
+        if self.group_contrast:
+            self.process.group_contrast = self.group_contrast
 
         return self.process.run(configuration_dict={})
 
@@ -1032,6 +1097,7 @@ class EstimateModel(ProcessMIA):
                         if "derivs" in self.bases["hrf"].keys():
                             multiplier += sum(self.bases["hrf"]["derivs"])
                 else:
+                    self.outputs = {}
                     print(
                         "If factorial design have been specified in "
                         "Level1Design brick, please fill the base parameter"
@@ -1094,7 +1160,20 @@ class EstimateModel(ProcessMIA):
                     "RPVimage",
                 ]:
                     self.inheritance_dict[value] = self.spm_mat_file
-
+                    if key == "out_spm_mat_file" and self.factor_info:
+                        # Add tag for number of contrast created in database
+                        tag_to_add = dict()
+                        tag_to_add["name"] = "Contrasts num"
+                        tag_to_add["field_type"] = FIELD_TYPE_INTEGER
+                        tag_to_add["description"] = "Total number of contrasts"
+                        tag_to_add["visibility"] = True
+                        tag_to_add["origin"] = TAG_ORIGIN_USER
+                        tag_to_add["unit"] = None
+                        tag_to_add["default_value"] = None
+                        tag_to_add["value"] = (
+                            number_t_contrast + number_f_contrast
+                        )
+                        set_dbFieldValue(self.project, value, tag_to_add)
                 elif key in "residual_images":
                     for fullname in value:
                         self.inheritance_dict[fullname] = self.spm_mat_file

@@ -12,9 +12,10 @@ EstimateModel brick
 
 Model Estimation using classical (ReML - Restricted Maximum Likelihood) algorithms (SPM12 fMRI model estimation).
 
-The beta weights for each condition will be estimated.
+This step willl estimate on fitted data the parameters of the model created during the model specification stage,
+i.e. estimate the value of the β associated with each conditions.
 
-Bayesian methods are not implemented in this brick. If you need to use Bayesian method, please open a `ticket <https://github.com/populse/mia_processes/issues>`_
+Bayesian methods are not implemented in this brick. If you need to use Bayesian methods, please open a `ticket <https://github.com/populse/mia_processes/issues>`_
 
 --------------------------------------
 

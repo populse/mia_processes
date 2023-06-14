@@ -17,7 +17,7 @@ Estimate contrasts of interest (SPM12 fMRI contrast manager).
 
 **Mandatory inputs parameters:**
 
-- *spm_mat_file* <=> spmmat (a string representing an existing file):
+- *spm_mat_file* (a string representing an existing file):
     The SPM.mat file that contains the estimate model.
 
     ::
@@ -25,29 +25,56 @@ Estimate contrasts of interest (SPM12 fMRI contrast manager).
 
 **Optional inputs parameters with a default value:**
 
-- *session_type* <=> ?? (a string among "tcon", "fcon", "tconsess")
-
-
-    ::
-        ex. 'tcon'
-
-- *contrast_name* <=> ?? (a list of string, optional, default value is ["+"]):
-    Names of contrast.
+- *T_contrast_name* (a list of string, optional, default value is ["+"]):
+    Names of each T contrast.
 
     ::
-        ex. ["Task vs control", "Task vs baseline"]
+        ex. ['Task vs control', 'Task vs baseline']
 
-- *condition_name* <=> ?? (a list of list of string, optional, default value is [["R1_1"]]):
-    Names of conditions used for each contrast.
-
-    ::
-        ex. [[]]
-
-- *contrast_weight* (a list of list of float, default value is [[1.0]])
-    List of contrast weights.
+- *T_condition_names*  (a list of list of string, optional, default value is [["R1_1"]]):
+    Names of conditions used for each T contrast.
 
     ::
-        ex. [[1.0]]
+        ex. [['T', 'C'], ['T', 'B']]
+
+- *T_contrast_weight* (a list of list of float, optional, default value is [[1.0]]):
+    List of contrast weights for each T contrast.
+
+    ::
+        ex. [[1, -1], [1 -1]]
+
+- *use_derivs* (a boolean, optional, default value is False):
+    Use derivatives for estimation. Mutually exclusive group_contrast parameter.
+
+    ::
+        ex. True
+
+- *group_contrast* (a boolean, optional, default value is False):
+    Higher level contrast. Mutually exclusive use_derivs parameter.
+
+    ::
+        ex. True
+
+**Optional inputs:**
+
+- *session* (a list of list of float, optional):
+    Session list. Length should be equal to the number of sessions, with 1. for sessions to include and 0. elsewhere
+    Default is Undefined.
+
+        ::
+            ex. ["0", "1.0"]
+
+- *F_contrast_name* (a list of string, optional):
+    Names of each F contrast.
+
+    ::
+        ex. ['Positif effect of condition']
+
+- *F_contrast_T_names* (a list of list of string, optional):
+    Names of T contrast used for each F contrast.
+
+    ::
+        ex. [['Task vs control', 'Task vs baseline']]
 
 - *beta_images* (a list of items which are a pathlike object or string representing an existing file)
     Estimated regression coefficients.
@@ -68,15 +95,6 @@ Estimate contrasts of interest (SPM12 fMRI contrast manager).
     ::
         ex. '/home/username/data/derived_data/ResMS.nii'
 
-**Optional inputs:**
-
-- *session* (a list of list of float, optional):
-    Session list. Length should be equal to the number of sessions, with 1. for sessions to include and 0. elsewhere
-    Default is Undefined.
-
-        ::
-            ex. ["0", "1.0"]
-
 **Outputs parameters:**
 
 - *out_spm_mat_file* (a pathlike object or string representing a file):
@@ -87,7 +105,7 @@ Estimate contrasts of interest (SPM12 fMRI contrast manager).
         ex. '/home/username/data/derived_data/SPM.mat'
 
 - *con_images* (a list of items which are a pathlike object or string representing a file):
-    Contrast images from a t-contrast.
+    Contrast images from a T-contrast.
 
     ::
         ex. ['/home/username/data/derived_data/con_0001.nii',
@@ -96,7 +114,7 @@ Estimate contrasts of interest (SPM12 fMRI contrast manager).
             '/home/username/data/derived_data/con_0004.nii']
 
 - *spmT_images* (a list of items which are a pathlike object or string representing a file):
-    Stat images from a t-contrast.
+    Stat images from a T-contrast.
 
     ::
         ex. ['/home/username/data/derived_data/spmT_0001.nii',
@@ -104,10 +122,26 @@ Estimate contrasts of interest (SPM12 fMRI contrast manager).
             '/home/username/data/derived_data/spmT_0003.nii',
             '/home/username/data/derived_data/spmT_0004.nii']
 
+- *ess_images* (a list of items which are a pathlike object or string representing a file):
+    Contrast images from a F-contrast.
+
+    ::
+        ex. ['/home/username/data/derived_data/ess_0001.nii',
+            '/home/username/data/derived_data/ess_0002.nii',
+            '/home/username/data/derived_data/ess_0003.nii',
+            '/home/username/data/derived_data/ess_0004.nii']
+
+- *spmF_images* (a list of items which are a pathlike object or string representing a file):
+    Stat images from a F-contrast.
+
+    ::
+        ex. ['/home/username/data/derived_data/spmF_0001.nii',
+            '/home/username/data/derived_data/spmF_0002.nii',
+            '/home/username/data/derived_data/spmF_0003.nii',
+            '/home/username/data/derived_data/spmF_0004.nii']
+
 
 -------------
-
-.. [#label] Syntax: mia_processes/nipype EstimateConstrast brick <=> SPM12 fMRI contrast manager.
 
 	    Usefull links:
 	    `nipype EstimateContrast <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.spm.model.html#estimatemodel>`_
