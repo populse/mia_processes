@@ -77,7 +77,7 @@ class EstimateContrast(ProcessMIA):
 
         # Inputs description
         spm_mat_file_desc = (
-            "SPM.mat file (a pathlike object or string " "representing a file)"
+            "SPM.mat file (a pathlike object or string representing a file)"
         )
         session_type_desc = (
             "Selects the contrast type. One of tcon "
