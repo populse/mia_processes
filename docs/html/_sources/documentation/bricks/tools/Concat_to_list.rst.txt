@@ -11,21 +11,24 @@ Concat_to_list  brick
 =====================
 
 Make an output list corresponding to the concatenation of list1 and list2
+-------------------------------------------------------------------------
 
     Ex. ['a', 'b', 'c'] and ['d', 'e'] gives:
         ['a', 'b', 'c', d', 'e']
 
----------------------------------------------------------------------
+-----------------------
 
 **Inputs parameters:**
 
-- *list1* (a list)
+- *list1*
+    A list.
 
     ::
 
       ex. ['ACA', 'ACM']
 
 - *list2* (a list)
+    A list.
 
     ::
 
@@ -33,7 +36,7 @@ Make an output list corresponding to the concatenation of list1 and list2
 
 **Outputs parameters:**
 
-- *out_list"*
+- *out_list*
     A list corresponding to the concatenation of list1 and list2.
 
     ::

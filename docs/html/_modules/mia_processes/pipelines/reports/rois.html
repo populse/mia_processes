@@ -1,0 +1,235 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>mia_processes.pipelines.reports.rois &#8212; mia_processes 2.2.1-dev+3b89253 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
+          <span>mia_processes 2.2.1-dev+3b89253 documentation</span></a></h1>
+        <h2 class="heading"><span>mia_processes.pipelines.reports.rois</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <h1>Source code for mia_processes.pipelines.reports.rois</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="sd">&quot;&quot;&quot;blabla.</span>
+
+<span class="sd">The purpose of this module is to blabla.</span>
+
+<span class="sd">:Contains:</span>
+<span class="sd">    :Class:</span>
+<span class="sd">        - Rois</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1">##########################################################################</span>
+<span class="c1"># mia_processes - Copyright (C) IRMaGe/CEA, 2018</span>
+<span class="c1"># Distributed under the terms of the CeCILL license, as published by</span>
+<span class="c1"># the CEA-CNRS-INRIA. Refer to the LICENSE file or to</span>
+<span class="c1"># http://www.cecill.info/licences/Licence_CeCILL_V2.1-en.html</span>
+<span class="c1"># for details.</span>
+<span class="c1">##########################################################################</span>
+
+<span class="c1"># Other import</span>
+<span class="kn">import</span> <span class="nn">traits.api</span> <span class="k">as</span> <span class="nn">traits</span>
+
+<span class="c1"># Capsul import</span>
+<span class="kn">from</span> <span class="nn">capsul.api</span> <span class="kn">import</span> <span class="n">Pipeline</span>
+
+
+<div class="viewcode-block" id="Rois"><a class="viewcode-back" href="../../../../mia_processes.pipelines.reports.html#mia_processes.pipelines.reports.rois.Rois">[docs]</a><span class="k">class</span> <span class="nc">Rois</span><span class="p">(</span><span class="n">Pipeline</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    * Blabla.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Rois.pipeline_definition"><a class="viewcode-back" href="../../../../mia_processes.pipelines.reports.html#mia_processes.pipelines.reports.rois.Rois.pipeline_definition">[docs]</a>    <span class="k">def</span> <span class="nf">pipeline_definition</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Building the pipeline&quot;&quot;&quot;</span>
+        <span class="c1"># nodes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;concat_to_list_of_list&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.tools.tools.Concat_to_list_of_list&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;import_data&quot;</span><span class="p">,</span> <span class="s2">&quot;mia_processes.bricks.tools.tools.Import_Data&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;find_in_list_1&quot;</span><span class="p">,</span> <span class="s2">&quot;mia_processes.bricks.tools.tools.Find_In_List&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;find_in_list_2&quot;</span><span class="p">,</span> <span class="s2">&quot;mia_processes.bricks.tools.tools.Find_In_List&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;files_to_list&quot;</span><span class="p">,</span> <span class="s2">&quot;mia_processes.bricks.tools.tools.Files_To_List&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;files_to_list&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_plug_value</span><span class="p">(</span><span class="s2">&quot;file1&quot;</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;files_to_list&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_plug_value</span><span class="p">(</span><span class="s2">&quot;file2&quot;</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;convroi&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.preprocess.others.processing.ConvROI&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;resample1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.preprocess.others.processing.Resample1&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;resample2&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.preprocess.others.processing.Resample2&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;mean_stddev_calc&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.reports.processes.Mean_stdDev_calc&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;mean_stddev_calc&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_plug_value</span><span class="p">(</span>
+            <span class="s2">&quot;parametric_maps&quot;</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span>
+            <span class="s2">&quot;mean_stddev_calc&quot;</span>
+        <span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">parametric_maps</span> <span class="o">=</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;concat_to_list&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.tools.tools.Concat_to_list&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;result_collector&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.reports.processes.Result_collector&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;result_collector&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_plug_value</span><span class="p">(</span>
+            <span class="s2">&quot;parameter_files&quot;</span><span class="p">,</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span>
+            <span class="s2">&quot;result_collector&quot;</span>
+        <span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">parameter_files</span> <span class="o">=</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;result_collector&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_plug_value</span><span class="p">(</span><span class="s2">&quot;laterality_index&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># links</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;find_in_list_1&quot;</span><span class="p">,</span> <span class="s2">&quot;in_list&quot;</span><span class="p">,</span> <span class="s2">&quot;spmT_images&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;spmT_images-&gt;import_data.file_in_db&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;find_in_list_2&quot;</span><span class="p">,</span> <span class="s2">&quot;in_list&quot;</span><span class="p">,</span> <span class="s2">&quot;beta_images&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;convroi&quot;</span><span class="p">,</span> <span class="s2">&quot;convolve_with&quot;</span><span class="p">,</span> <span class="s2">&quot;mask_002&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;mask_002-&gt;resample1.files_to_resample&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span>
+            <span class="s2">&quot;concat_to_list_of_list.listOflist-&gt;import_data.rois_list&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;import_data.rois_files-&gt;convroi.images_to_convolve&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;find_in_list_1.out_file-&gt;files_to_list.file1&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;find_in_list_1.out_file-&gt;resample1.reference_image&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;find_in_list_2.out_file-&gt;files_to_list.file2&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span>
+            <span class="s2">&quot;files_to_list.file_list-&gt;mean_stddev_calc.parametric_maps&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;convroi.out_images-&gt;mean_stddev_calc.rois_files&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;convroi.out_images-&gt;resample2.files_to_resample&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;convroi&quot;</span><span class="p">,</span> <span class="s2">&quot;out_images&quot;</span><span class="p">,</span> <span class="s2">&quot;conv_roi_masks&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;resample1.out_files-&gt;resample2.reference_image&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;resample2&quot;</span><span class="p">,</span> <span class="s2">&quot;out_images&quot;</span><span class="p">,</span> <span class="s2">&quot;resample2_masks&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;mean_stddev_calc.mean_out_files-&gt;concat_to_list.list1&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;mean_stddev_calc.std_out_files-&gt;concat_to_list.list2&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span>
+            <span class="s2">&quot;concat_to_list.out_list-&gt;result_collector.parameter_files&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;result_collector&quot;</span><span class="p">,</span> <span class="s2">&quot;out_files&quot;</span><span class="p">,</span> <span class="s2">&quot;xls_files&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;result_collector&quot;</span><span class="p">,</span> <span class="s2">&quot;patient_info&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+
+        <span class="c1"># parameters order</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">reorder_traits</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;spmT_images&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;beta_images&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;mask_002&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;patient_info&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;resample2_masks&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;xls_files&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;conv_roi_masks&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c1"># nodes positions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_position</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;concat_to_list_of_list&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">614.2930418166122</span><span class="p">,</span> <span class="mf">827.1208223644738</span><span class="p">),</span>
+            <span class="s2">&quot;import_data&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">925.9736882862239</span><span class="p">,</span> <span class="mf">848.8631446556915</span><span class="p">),</span>
+            <span class="s2">&quot;find_in_list_1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">776.4427376188082</span><span class="p">,</span> <span class="mf">303.29535996898</span><span class="p">),</span>
+            <span class="s2">&quot;find_in_list_2&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">856.2337859568112</span><span class="p">,</span> <span class="mf">567.1330449805765</span><span class="p">),</span>
+            <span class="s2">&quot;files_to_list&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1026.2058853774747</span><span class="p">,</span> <span class="mf">483.98336643917287</span><span class="p">),</span>
+            <span class="s2">&quot;convroi&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1089.7332639638682</span><span class="p">,</span> <span class="mf">685.6142079029513</span><span class="p">),</span>
+            <span class="s2">&quot;resample1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1134.4471373729352</span><span class="p">,</span> <span class="mf">232.24020431310066</span><span class="p">),</span>
+            <span class="s2">&quot;resample2&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1419.5562603305748</span><span class="p">,</span> <span class="mf">274.20917687569397</span><span class="p">),</span>
+            <span class="s2">&quot;inputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">612.3472403891509</span><span class="p">,</span> <span class="mf">560.3262591732853</span><span class="p">),</span>
+            <span class="s2">&quot;mean_stddev_calc&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1432.1926253095098</span><span class="p">,</span> <span class="mf">449.1820536125214</span><span class="p">),</span>
+            <span class="s2">&quot;concat_to_list&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1748.091183783158</span><span class="p">,</span> <span class="mf">395.2820325663692</span><span class="p">),</span>
+            <span class="s2">&quot;result_collector&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1612.1473004020177</span><span class="p">,</span> <span class="mf">658.4933845149167</span><span class="p">),</span>
+            <span class="s2">&quot;outputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1922.8337322988386</span><span class="p">,</span> <span class="mf">777.3577137671373</span><span class="p">),</span>
+        <span class="p">}</span>
+
+        <span class="c1"># nodes dimensions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_dimension</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;concat_to_list_of_list&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">143.21875</span><span class="p">,</span> <span class="mf">110.0</span><span class="p">),</span>
+            <span class="s2">&quot;import_data&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">147.703125</span><span class="p">,</span> <span class="mf">180.0</span><span class="p">),</span>
+            <span class="s2">&quot;find_in_list_1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">118.84375</span><span class="p">,</span> <span class="mf">110.0</span><span class="p">),</span>
+            <span class="s2">&quot;find_in_list_2&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">118.84375</span><span class="p">,</span> <span class="mf">110.0</span><span class="p">),</span>
+            <span class="s2">&quot;files_to_list&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">97.640625</span><span class="p">,</span> <span class="mf">145.0</span><span class="p">),</span>
+            <span class="s2">&quot;convroi&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">208.0625</span><span class="p">,</span> <span class="mf">145.0</span><span class="p">),</span>
+            <span class="s2">&quot;resample1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">176.84375</span><span class="p">,</span> <span class="mf">250.0</span><span class="p">),</span>
+            <span class="s2">&quot;resample2&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">193.921875</span><span class="p">,</span> <span class="mf">145.0</span><span class="p">),</span>
+            <span class="s2">&quot;inputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">119.17251223929541</span><span class="p">,</span> <span class="mf">136.0</span><span class="p">),</span>
+            <span class="s2">&quot;mean_stddev_calc&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">214.171875</span><span class="p">,</span> <span class="mf">145.0</span><span class="p">),</span>
+            <span class="s2">&quot;concat_to_list&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">97.96875</span><span class="p">,</span> <span class="mf">110.0</span><span class="p">),</span>
+            <span class="s2">&quot;result_collector&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">171.640625</span><span class="p">,</span> <span class="mf">145.0</span><span class="p">),</span>
+            <span class="s2">&quot;outputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">126.07117003946317</span><span class="p">,</span> <span class="mf">111.0</span><span class="p">),</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_autoexport_nodes_parameters</span> <span class="o">=</span> <span class="kc">False</span></div></div>
+</pre></div>
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
+    </div>
+  </body>
+</html>

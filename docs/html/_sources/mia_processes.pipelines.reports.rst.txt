@@ -17,10 +17,10 @@ mia\_processes.pipelines.reports.bold\_iqms module
    :undoc-members:
    :show-inheritance:
 
-mia\_processes.pipelines.reports.rois\_1 module
+mia\_processes.pipelines.reports.rois module
 -----------------------------------------------
 
-.. automodule:: mia_processes.pipelines.reports.rois_1
+.. automodule:: mia_processes.pipelines.reports.extract_roi_param
    :members:
    :undoc-members:
    :show-inheritance:

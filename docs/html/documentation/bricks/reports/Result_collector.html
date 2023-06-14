@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Result_collector brick &#8212; mia_processes 2.2.1-dev+1685da4 documentation</title>
+    <title>Result_collector brick &#8212; mia_processes 2.2.1-dev+aa362ce3 documentation</title>
     <link rel="stylesheet" href="../../../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
@@ -18,7 +18,7 @@
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
-          <span>mia_processes 2.2.1-dev+1685da4 documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+aa362ce3 documentation</span></a></h1>
         <h2 class="heading"><span>Result_collector brick</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -48,87 +48,69 @@
 </table>
 <div class="section" id="result-collector-brick">
 <h1>Result_collector brick<a class="headerlink" href="#result-collector-brick" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="generates-files-with-data-for-each-region-of-interest">
-<h2>Generates files with data for each region of interest<a class="headerlink" href="#generates-files-with-data-for-each-region-of-interest" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="generates-files-containing-summary-data-for-each-region-of-interest">
+<h2>Generates files containing summary data for each region of interest<a class="headerlink" href="#generates-files-containing-summary-data-for-each-region-of-interest" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<div><ul class="simple">
-<li><p>The out_files will contain files with names corresponding to each <cite>calculs</cite> and <cite>parametric_maps</cite>
-with the prefix <cite>data</cite> (e.g. BOLD_mean_spmT_0001.xls).</p></li>
-<li><p>The process look for input data corresponding to <cite>mean_in_files</cite> and <cite>std_in_files</cite></p></li>
-<li><p>To work correctly, the “/roi_<cite>PatientName</cite>/ROI_analysis” directory must exit to receive
-the results from the runtime.</p></li>
-<li><p>To work correctly, the database entry for the first element of <cite>parametric_maps</cite> must
+<div><ul>
+<li><p>To work correctly, the database entry for the first element of <cite>parameter_files</cite> must
 have the <cite>PatientName</cite> tag filled in.</p></li>
+<li><p>The “PatientName_data/results_aggregation” directory is created to receive the results.
+If this directory exists at runtime, new results can overwrite old results with the same name.</p></li>
+<li><p>Currently, to work correctly, this brick requires the doublet made up of the two hemispheres
+to be present in the parameter_files list and each hemisphere to be represented by the letters
+L (left) and R (right).</p>
+<div class="line-block">
+<div class="line">For example:</div>
+<div class="line">[/aPath/ACM_R_mean_spmT_BOLD.txt, /aPat/ACM_L_mean_spmT_BOLD.txt, etc.].</div>
+</div>
+<p>It would be desirable to develop this brick so that it could also be used to collect a single
+territory without any notion of hemisphere (in this case, of course, the brick would not generate
+any laterality indices) =&gt; TODO ASAP</p>
+</li>
 </ul>
 </div></blockquote>
+<hr class="docutils" />
 <p><strong>Inputs parameters:</strong></p>
 <ul>
-<li><p><em>parametric_maps</em> (a list of existing files)</p>
-<blockquote>
-<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/raw_data/spmT_0001.nii&#39;</span><span class="p">,</span>
-     <span class="s1">&#39;/home/username/data/raw_data/beta_0001.nii&#39;</span><span class="p">]</span>
-</pre></div>
-</div>
-</div></blockquote>
-</li>
 <li><dl>
-<dt><em>data</em> (a string)</dt><dd><p>Defines the data type.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;BOLD&#39;</span>
+<dt><em>parameter_files</em></dt><dd><dl class="simple">
+<dt>A list of files, each containing a parameter value. To work correctly, the name of each file must be exactly like this:</dt><dd><ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">roi</span></code>_ <code class="docutils literal notranslate"><span class="pre">hemi</span></code>_ <code class="docutils literal notranslate"><span class="pre">calcul</span></code>_ <code class="docutils literal notranslate"><span class="pre">param</span></code>_ <code class="docutils literal notranslate"><span class="pre">contrast</span></code>.txt, where</dt><dd><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">roi</span></code>: region of interest (ex. ACA)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">hemi</span></code>: hemisphere (ex. L)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">calcul</span></code>: type of calcul (ex. mean)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">param</span></code>: the parameter recorded in the file (ex. spmT)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">contrast</span></code>: the type of contrast/effect used (ex. BOLD)</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/raw_data/ACA_L_mean_spmT_BOLD.txt&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/raw_data/ACA_R_mean_spmT_BOLD.txt&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/raw_data/ACM_L_mean_spmT_BOLD.txt&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/raw_data/ACM_R_mean_spmT_BOLD.txt&#39;</span><span class="p">,</span>
 </pre></div>
 </div>
 </dd>
 </dl>
 </li>
 <li><dl>
-<dt><em>calculs</em> ((a list of strings)</dt><dd><p>Defines the type of calculation.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;std&quot;</span><span class="p">,</span> <span class="s2">&quot;IL_mean&quot;</span><span class="p">,</span> <span class="s2">&quot;IL_std&quot;</span><span class="p">]</span>
+<dt><em>laterality_index</em></dt><dd><div class="line-block">
+<div class="line">A Boolean to calculate (True) or not (False) the laterality index:</div>
+<div class="line">(left hemisphere parameter - right hemisphere parameter) / (left hemisphere parameter + right hemisphere parameter)</div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">True</span>
 </pre></div>
 </div>
 </dd>
 </dl>
 </li>
 <li><dl>
-<dt><em>mean_in_files</em> (a list of files)</dt><dd><p>A list of .txt files containing the average value of a parameter for a
-given territory or region of interest.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_L_meanspmT_BOLD.txt&#39;</span><span class="p">,</span>
-     <span class="s1">&#39;/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_R_meanspmT_BOLD.txt&#39;</span><span class="p">,</span>
-     <span class="s1">&#39;/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_L_meanspmT_BOLD.txt&#39;</span><span class="p">,</span>
-     <span class="s1">&#39;/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_R_meanspmT_BOLD.txt&#39;</span><span class="p">,</span>
-     <span class="s1">&#39;/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_L_meanbeta_BOLD.txt&#39;</span><span class="p">,</span>
-     <span class="s1">&#39;/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_R_meanbeta_BOLD.txt&#39;</span><span class="p">,</span>
-     <span class="s1">&#39;/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_L_meanbeta_BOLD.txt&#39;</span><span class="p">,</span>
-     <span class="s1">&#39;/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_R_meanbeta_BOLD.txt&#39;</span><span class="p">]</span>
-</pre></div>
-</div>
-</dd>
-</dl>
-</li>
-<li><dl>
-<dt><em>std_in_files</em> (a list of files)</dt><dd><p>A list of .txt files containing the standard deviation for a parameter
-in a given territory or region of interest.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_L_stdspmT_BOLD.txt&#39;</span><span class="p">,</span>
-     <span class="s1">&#39;/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_R_stdspmT_BOLD.txt&#39;</span><span class="p">,</span>
-     <span class="s1">&#39;/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_L_stdspmT_BOLD.txt&#39;</span><span class="p">,</span>
-     <span class="s1">&#39;/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_R_stdspmT_BOLD.txt&#39;</span><span class="p">,</span>
-     <span class="s1">&#39;/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_L_stdbeta_BOLD.txt&#39;</span><span class="p">,</span>
-     <span class="s1">&#39;/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_OCC_R_stdbeta_BOLD.txt&#39;</span><span class="p">,</span>
-     <span class="s1">&#39;/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_L_stdbeta_BOLD.txt&#39;</span><span class="p">,</span>
-     <span class="s1">&#39;/home/username/data/derived_data/roi_PatientName/ROI_analysis/ROI_PAR_R_stdbeta_BOLD.txt&#39;</span><span class="p">]</span>
-</pre></div>
-</div>
-</dd>
-</dl>
-</li>
-<li><dl>
-<dt><em>doublet_list</em> (a list of lists)</dt><dd><p>A list of lists containing doublets of strings.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[[</span><span class="s2">&quot;ROI_OCC&quot;</span><span class="p">,</span> <span class="s2">&quot;_L&quot;</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;ROI_OCC&quot;</span><span class="p">,</span> <span class="s2">&quot;_R&quot;</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;ROI_PAR&quot;</span><span class="p">,</span> <span class="s2">&quot;_l&quot;</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;ROI_PAR&quot;</span><span class="p">,</span> <span class="s2">&quot;_R&quot;</span><span class="p">]]</span>
-</pre></div>
-</div>
-</dd>
-</dl>
-</li>
-<li><dl>
-<dt><em>patient_info</em> (a dictionary)</dt><dd><p>A dictionary whose keys/values correspond to information about the patient.</p>
+<dt><em>patient_info</em></dt><dd><p>A dictionary whose keys/values correspond to information about the patient.</p>
 <dl>
 <dt>e.g. {</dt><dd><blockquote>
 <div><div class="line-block">
@@ -154,15 +136,12 @@ in a given territory or region of interest.</p>
 <p><strong>Outputs parameters:</strong></p>
 <ul>
 <li><dl>
-<dt><em>out_files</em> (a list of files)</dt><dd><p>A list of .xml files containing a summary of the requested results.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/derived_data/roi_PatientName/ROI_analysis/BOLD_mean_spmT_0001.xls&#39;</span><span class="p">,</span>
-     <span class="s1">&#39;/home/username/data/derived_data/roi_PatientName/ROI_analysis/BOLD_std_spmT_0001.xls&#39;</span><span class="p">,</span>
-     <span class="s1">&#39;/home/username/data/derived_data/roi_PatientName/ROI_analysis/BOLD_IL_mean_spmT_0001.xls&#39;</span><span class="p">,</span>
-     <span class="s1">&#39;/home/username/data/derived_data/roi_PatientName/ROI_analysis/BOLD_IL_std_spmT_0001.xls&#39;</span><span class="p">,</span>
-     <span class="s1">&#39;/home/username/data/derived_data/roi_PatientName/ROI_analysis/BOLD_mean_beta_0001.xls&#39;</span><span class="p">,</span>
-     <span class="s1">&#39;/home/username/data/derived_data/roi_PatientName/ROI_analysis/BOLD_std_beta_0001.xls&#39;</span><span class="p">,</span>
-     <span class="s1">&#39;/home/username/data/derived_data/roi_PatientName/ROI_analysis/BOLD_IL_mean_beta_0001.xls&#39;</span><span class="p">,</span>
-     <span class="s1">&#39;/home/username/data/derived_data/roi_PatientName/ROI_analysis/BOLD_IL_std_beta_0001.xls&#39;</span><span class="p">]</span>
+<dt><em>out_files</em></dt><dd><div class="line-block">
+<div class="line">A list of .xml files containing a summary of the input parameters. The file names generated are constructed as follows:</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">contrast</span></code>_ <code class="docutils literal notranslate"><span class="pre">calcul</span></code>_ <code class="docutils literal notranslate"><span class="pre">param</span></code>.txt (e.g. BOLD_std_beta.xls).</div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/derived_data/patient-name_data/results_aggregation/BOLD_IL_mean_spmT.xls&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/results_aggregation/BOLD_mean_spmT.xls&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 </dd>

@@ -1,0 +1,228 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Extract_roi_param pipeline &#8212; mia_processes 2.2.1-dev+aa362ce3 documentation</title>
+    <link rel="stylesheet" href="../../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
+          <span>mia_processes 2.2.1-dev+aa362ce3 documentation</span></a></h1>
+        <h2 class="heading"><span>Extract_roi_param pipeline</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <div class="toctree-wrapper compound">
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 35%" />
+<col style="width: 40%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference external" href="../../../../index.html">Home</a></p></td>
+<td><p><a class="reference external" href="../../../documentation.html">Documentation</a></p></td>
+<td><p><a class="reference external" href="https://github.com/populse/mia_processes">GitHub</a></p></td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="extract-roi-param-pipeline">
+<h1>Extract_roi_param pipeline<a class="headerlink" href="#extract-roi-param-pipeline" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="produces-gray-matter-masks-for-various-rois-and-means-standard-deviations-laterality-indices-for-beta-and-spmt-values-in-these-rois">
+<h2>Produces gray matter masks for various ROIs and means, standard deviations, laterality indices for beta and spmT values in these ROIs<a class="headerlink" href="#produces-gray-matter-masks-for-various-rois-and-means-standard-deviations-laterality-indices-for-beta-and-spmt-values-in-these-rois" title="Permalink to this headline">¶</a></h2>
+<p><strong>Pipeline insight</strong></p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Extract_roi_param pipeline combines the following bricks:</dt><dd><ul>
+<li><p><a class="reference external" href="../../bricks/tools/Concat_to_list_of_list.html">Concat_to_list_of_list</a></p></li>
+<li><p><a class="reference external" href="../../bricks/tools/Import_Data.html">Import_Data</a></p></li>
+<li><p><a class="reference external" href="../../bricks/tools/Find_In_List.html">Find_In_List</a></p></li>
+<li><p><a class="reference external" href="../../bricks/tools/Files_To_List.html">Files_To_List</a></p></li>
+<li><p><a class="reference external" href="../../bricks/preprocess/others/ConvROI.html">ConvROI</a></p></li>
+<li><p><a class="reference external" href="../../bricks/preprocess/others/Resample1.html">Resample1</a></p></li>
+<li><p><a class="reference external" href="../../bricks/preprocess/others/Resample2.html">Resample2</a></p></li>
+<li><p><a class="reference external" href="../../bricks/reports/Mean_stdDev_calc.html">Mean_stdDev_calc</a></p></li>
+<li><p><a class="reference external" href="../../bricks/tools/Concat_to_list.html">Concat_to_list</a></p></li>
+<li><p><a class="reference external" href="../../bricks/reports/Result_collector.html">Result_collector</a></p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<a class="reference internal image-reference" href="../../../_images/Extract_roi_param.png"><img alt="spatial mask pipeline" src="../../../_images/Extract_roi_param.png" style="width: 1000px;" /></a>
+<hr class="docutils" />
+<p><strong>Inputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>spmT_images</em></dt><dd><p>A list of T-statistics images, previously obtained from the <a class="reference external" href="../../bricks/stats/spm/EstimateContrast.html">EstimateContrast</a> brick.</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/raw_data/spmT_0001.nii&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div></blockquote>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>beta_images</em></dt><dd><p>A list of estimated regression coefficients images (beta_000k.nii, where k indexes the kth regression coefficient), previously obtained from the <a class="reference external" href="../../bricks/stats/spm/EstimateModel.html">EstimateModel</a> brick.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/raw_data/beta_0001.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/raw_data/beta_0002.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/raw_data/beta_0003.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/raw_data/beta_0004.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/raw_data/beta_0005.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/raw_data/beta_0006.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/raw_data/beta_0007.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/raw_data/beta_0008.nii&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>mask_002</em></dt><dd><p>A grey matter mask with a resolution defined previously in the <a class="reference external" href="../preprocess/Spatial_mask.html">Spatial_mask</a>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">username</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">mask_anat_002</span><span class="o">.</span><span class="n">nii</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>patient_info</em></dt><dd><p>A dictionary whose keys/values correspond to information about the patient. If the value for a key is not defined, the corresponding tag and its value will be searched for in the database.
+<cite>patient_info</cite> keys/values therefore take precedence over database tags, allowing the user to force patient data.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">{</span><span class="s1">&#39;PatientName&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">undefined</span><span class="o">&gt;</span><span class="p">,</span>
+     <span class="s1">&#39;Pathology&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">undefined</span><span class="o">&gt;</span><span class="p">,</span>
+     <span class="s1">&#39;Age&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">undefined</span><span class="o">&gt;</span><span class="p">,</span>
+     <span class="s1">&#39;Sex&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">undefined</span><span class="o">&gt;</span><span class="p">,</span>
+     <span class="s1">&#39;MR&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">undefined</span><span class="o">&gt;</span><span class="p">,</span>
+     <span class="s1">&#39;Gas&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">undefined</span><span class="o">&gt;</span><span class="p">,</span>
+     <span class="s1">&#39;GasAdmin&#39;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">undefined</span><span class="o">&gt;</span><span class="p">}</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Outputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>resample2_masks</em></dt><dd><p>A list of images, corresponding to <cite>conv_roi_maks</cite> after resampling to the resolution of <cite>spmT_images</cite>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convACA_L_2.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convACA_R_2.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convACM_L_2.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convACM_R_2.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convACP_L_2.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convACP_R_2.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convPICA_L_2.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convPICA_R_2.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convROI-CING_L_2.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convROI-CING_R_2.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convROI-FRON_L_2.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convROI-FRON_R_2.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convROI-INSULA_L_2.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convROI-INSULA_R_2.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convROI-OCC_L_2.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convROI-OCC_R_2.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convROI-PAR_L_2.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convROI-PAR_R_2.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convROI-STR_L_2.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convROI-STR_R_2.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convROI-TEMP_L_2.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convROI-TEMP_R_2.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convROI-THA_L_2.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convROI-THA_R_2.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convSCA_L_2.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD2/convSCA_R_2.nii&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>xls_files</em></dt><dd><p>A list of xls files containing the means and standard deviations of the parameters in the ROIs defined by the <a class="reference external" href="../../bricks/tools/Concat_to_list_of_list.html">Concat_to_list_of_list</a> brick.
+The laterality index between the two hemispheres is also calculated (files with <code class="docutils literal notranslate"><span class="pre">IL</span></code> in the name).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/derived_data/patient-name_data/results_aggregation/BOLD_IL_mean_beta.xls&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/results_aggregation/BOLD_mean_spmT.xls&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/results_aggregation/BOLD_mean_beta.xls&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/results_aggregation/BOLD_IL_std_spmT.xls&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/results_aggregation/BOLD_IL_mean_spmT.xls&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/results_aggregation/BOLD_std_spmT.xls&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/results_aggregation/BOLD_std_beta.xls&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/results_aggregation/BOLD_IL_std_beta.xls&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>conv_roi_maks</em></dt><dd><p>A list of images, resulting from the convolution of <cite>mask_002</cite> with the ROIs defined by the <a class="reference external" href="../../bricks/tools/Concat_to_list_of_list.html">Concat_to_list_of_list</a> brick.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD/convACA_L.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD/convACA_R.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD/convACM_L.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_dat/convROI_BOLD/convACM_R.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD/convACP_L.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD/convACP_R.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD/convPICA_L.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD/convPICA_R.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD/convROI-CING_L.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD/convROI-CING_R.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD/convROI-FRON_L.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD/convROI-FRON_R.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD/convROI-INSULA_L.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD/convROI-INSULA_R.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD/convROI-OCC_L.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD/convROI-OCC_R.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD/convROI-PAR_L.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD/convROI-PAR_R.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD/convROI-STR_L.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD/convROI-STR_R.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD/convROI-TEMP_L.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD/convROI-TEMP_R.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD/convROI-THA_L.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD/convROI-THA_R.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD/convSCA_L.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/convROI_BOLD/convSCA_R.nii&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
+    </div>
+  </body>
+</html>

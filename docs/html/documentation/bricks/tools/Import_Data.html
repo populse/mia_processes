@@ -1,0 +1,130 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Import_Data brick &#8212; mia_processes 2.2.1-dev+aa362ce3 documentation</title>
+    <link rel="stylesheet" href="../../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
+          <span>mia_processes 2.2.1-dev+aa362ce3 documentation</span></a></h1>
+        <h2 class="heading"><span>Import_Data brick</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <div class="toctree-wrapper compound">
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 35%" />
+<col style="width: 42%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference external" href="../../../index.html">Home</a></p></td>
+<td><p><a class="reference external" href="../../documentation.html">Documentation</a></p></td>
+<td><p><a class="reference external" href="https://github.com/populse/mia_processes">GitHub</a></p></td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="import-data-brick">
+<h1>Import_Data  brick<a class="headerlink" href="#import-data-brick" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="import-reference-data-into-the-current-pipeline">
+<h2>Import reference data into the current pipeline<a class="headerlink" href="#import-reference-data-into-the-current-pipeline" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>This brick was originally written to automatically select and load reference data during pipeline operation.</p></li>
+<li><p>The <cite>rois_list</cite> parameter is used to filter the data to be imported from a library defined by <cite>lib_dir</cite>.
+If <cite>roi_list</cite> is a list, each element of it will be a filename filter applied to select reference data.
+If <cite>roi_list</cite> is a list of lists, the filters will result from concatenating the elements of each internal
+list with the underscore caracter (e.g. [[“foo”, “1”], [“faa”, “2”]] gives two filters, “foo_1” and “faa_2”.</p></li>
+<li><p>If <cite>lib_dir</cite> is not set, the default library used will be the miaresources/ROIs/ directory.</p></li>
+<li><p>The <cite>file_in_db</cite> file is used only to retrieve the value of the associated <cite>PatientName</cite> tag.</p></li>
+<li><p>The reference data is imported into the <cite>output_directory/PatientName_data/ROI_data/raw_data</cite> directory.</p></li>
+</ul>
+<p><strong>Inputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>rois_list</em></dt><dd><p>A list of strings or a list of lists of strings, defining the data to be imported (used as a filter).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[[</span><span class="s1">&#39;ACA&#39;</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;ACA&#39;</span><span class="p">,</span> <span class="s1">&#39;R&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;ACM&#39;</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;ACM&#39;</span><span class="p">,</span> <span class="s1">&#39;R&#39;</span><span class="p">]]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>lib_dir</em></dt><dd><p>The path to a data library (if not defined, the default resources path is used, i.e. miaresources/ROIs/).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">&lt;</span><span class="n">undefined</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>file_in_db</em></dt><dd><p>A file in database, only used to catch the <cite>PatientName</cite> tag value.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">username</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">Anat</span><span class="o">.</span><span class="n">nii</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>starts_with</em></dt><dd><p>If True, applies the file filter only to the beginning of the names, otherwise to the whole names (a boolean).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">True</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Outputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>rois_files</em></dt><dd><p>The list of resulting available files (a list of files).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/raw_data/ACA_L.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/raw_data/ACA_R.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/raw_data/ACM_L.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/patient-name_data/ROI_data/raw_data/ACM_R.nii&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
+    </div>
+  </body>
+</html>

@@ -25,7 +25,7 @@ from capsul.api import Pipeline
 
 class Bold_stat(Pipeline):
     """
-    * The statistical calculation pipeline used in the CVR evaluation.
+    *GLM-based statistical calculation pipeline used in the CVR evaluation*
 
     """
 

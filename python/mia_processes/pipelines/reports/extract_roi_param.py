@@ -6,7 +6,7 @@ The purpose of this module is to blabla.
 
 :Contains:
     :Class:
-        - Rois
+        - Extract_roi_param
 
 """
 
@@ -25,9 +25,10 @@ import traits.api as traits
 from capsul.api import Pipeline
 
 
-class Rois(Pipeline):
+class Extract_roi_param(Pipeline):
     """
-    * Blabla.
+    *Produces gray matter masks for various ROIs and means, standard
+    deviations, laterality indexes for beta and spmT values in these ROIs*
 
     """
 
@@ -88,6 +89,7 @@ class Rois(Pipeline):
         self.nodes[
             "result_collector"
         ].process.parameter_files = traits.Undefined
+        self.nodes["result_collector"].set_plug_value("laterality_index", True)
 
         # links
         self.export_parameter(

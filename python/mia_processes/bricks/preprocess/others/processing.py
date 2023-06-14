@@ -984,10 +984,9 @@ class ConformImage(ProcessMIA):
 
 class ConvROI(ProcessMIA):
     """
-    * Convolve images with an image.
+    *Image convolution with one image*
 
-    - Resampling the convolve_with to the size of images_to_convolve,
-      using the first element of images_to_convolve.
+    - Resampling the convolve_with to the size of images_to_convolve.
     - Then convolve each element of images_to_convolve with resized
       convolve_with.
     - The output_directory/PatientName_data/ROI_data/convROI_BOLD directory is
@@ -1009,11 +1008,9 @@ class ConvROI(ProcessMIA):
 
         # Inputs description
         images_to_convolve_desc = (
-            "A list of images to convolve with " "convolve_with image"
+            "A list of images to convolve with convolve_with image"
         )
-        convolve_with_desc = (
-            "An image used to convolve with " "images_to_convolve"
-        )
+        convolve_with_desc = "Aa string representing a path to the file"
         prefix_desc = "The prefix for the out_images (a string)"
 
         # Outputs description
@@ -1084,7 +1081,7 @@ class ConvROI(ProcessMIA):
 
             if patient_name is None:
                 print(
-                    '\nConvROI:\n The "PatientName" tag is not filled '
+                    '\nConvROI brick:\n The "PatientName" tag is not filled '
                     "in the database for the {} file ...\n The calculation"
                     "is aborted...".format(self.convolve_with)
                 )
@@ -1149,21 +1146,19 @@ class ConvROI(ProcessMIA):
         if os.path.isdir(tmp):
             shutil.rmtree(tmp)
 
-        # Resampling the convolve_with to the size of the ROIs, using the
-        # first ROI in images_to_convolve
-        roi_img = nib.load(self.images_to_convolve[0])
-        roi_data = roi_img.get_fdata()
-        roi_size = roi_data.shape[:3]
+        # Resample the convolve_with to the size of images_to_convolve, then
+        # convolve each images_to_convolve with resized convolve_with.
         mask_thresh = threshold(self.convolve_with, 0.5).get_fdata()
-        resized_mask = resize(mask_thresh, roi_size)
 
-        # Convolve each ROI with resized convolve_with
         for roi_file in self.images_to_convolve:
             roi_img = nib.load(roi_file)
             roi_data = roi_img.get_fdata()
+            roi_size = roi_data.shape[:3]
+            resized_mask = resize(mask_thresh, roi_size)
             mult = (roi_data * resized_mask).astype(float)
-            # TODO: Should we take info from ROI or from the mask ?
-            #       Currently we take from ROI images
+            # TODO: Should we take info from images_to_convolve or from
+            #       convolve_with ?
+            #       Currently we take from images_to_convolve
             mult_img = nib.Nifti1Image(mult, roi_img.affine, roi_img.header)
 
             # Image save in conv_dir
@@ -2594,13 +2589,6 @@ class Resample1(ProcessMIA):
         self.requirement = []
 
         # Inputs description
-        reference_image_desc = (
-            "A 3D or 4D image used as reference to "
-            "resample the files_to_resample images (a "
-            "pathlike object or string representing a file "
-            "with extension in [.img, .nii, .hdr])."
-        )
-
         files_to_resample_desc = (
             "The 3D images that will be resampled (a "
             "list of pathlike object or string "
@@ -2609,21 +2597,27 @@ class Resample1(ProcessMIA):
             "representing a file, valid extensions: "
             "[.img, .nii, .hdr])."
         )
+        reference_image_desc = (
+            "A 3D or 4D image used as reference to "
+            "resample the files_to_resample images (a "
+            "pathlike object or string representing a file "
+            "with extension in [.img, .nii, .hdr])."
+        )
+        interp_desc = (
+            "The order of the spline interpolation (an integer "
+            "between 0 and 5; trilinear == 3)."
+        )
+        prefix_desc = "The prefix for the out_files image (a string)."
         suffix_to_delete_desc = (
             "The suffix to delete from the "
             "files_to_resample, when creating the "
             "out_files (a string)."
         )
         suffix_desc = "The suffix for the out_files image (a string)."
-        prefix_desc = "The prefix for the out_files image (a string)."
-        interp_desc = (
-            "The order of the spline interpolation (an integer "
-            "between 0 and 5; trilinear == 3)."
-        )
 
         # Outputs description
         out_files_desc = (
-            "The resulting image after resampling (a pathlike "
+            "The resulting images after resampling (a pathlike "
             "object or string representing a file, or a list of "
             "pathlike objects or strings representing a file)."
         )
@@ -2696,9 +2690,9 @@ class Resample1(ProcessMIA):
 
         # Outputs definition
         if (
-            (self.reference_image)
-            and (self.files_to_resample)
-            and (self.interp)
+            self.reference_image != Undefined
+            and self.files_to_resample != Undefined
+            and self.interp != Undefined
         ):
             files = []
             files_name = self.files_to_resample
@@ -2838,11 +2832,11 @@ class Resample1(ProcessMIA):
                     file_name_no_ext[-len(self.suffix_to_delete):]
                     == self.suffix_to_delete
                 ):
-                    # fmt: on
                     file_name_no_ext = file_name_no_ext[
-                        : -len(self.suffix_to_delete)
+                        :-len(self.suffix_to_delete)
                     ]
 
+                # fmt: on
                 files.append(
                     os.path.join(
                         self.output_directory,
@@ -3132,7 +3126,7 @@ class Resample1(ProcessMIA):
 
 class Resample2(ProcessMIA):
     """
-    *Resamples an image to the resolution of a reference image*
+    *Resamples images to the resolution of a reference image*
 
     - Uses skimage.transform.resize()
     - The output_directory/PatientName_data/ROI_data/convROI_BOLD2 directory is
@@ -3166,7 +3160,7 @@ class Resample2(ProcessMIA):
             "existing, uncompressed file)"
         )
 
-        suffix_desc = "The suffix for the out_images (a string)."
+        suffix_desc = "The suffix for the out_images (a string)"
 
         # Outputs description
         out_images_desc = "The resampled images"
@@ -3230,7 +3224,7 @@ class Resample2(ProcessMIA):
 
             if patient_name is None:
                 print(
-                    "\nResample2:\n The PatientName tag is not filled "
+                    "\nResample2 brick:\n The PatientName tag is not filled "
                     "in the database for the {} file ...\n The calculation"
                     "is aborted...".format(self.reference_image)
                 )
@@ -3253,6 +3247,7 @@ class Resample2(ProcessMIA):
                 list_out.append(out_file)
 
             self.outputs["out_images"] = list_out
+            # FIXME: What are we doing about the tags inheritance?
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -4138,8 +4133,10 @@ class Threshold(ProcessMIA):
 
             # Take the first 5 characters in the case if the GM was processed
             # ex. normalisation = wc1, normalisation then smooth = swc1 ...
-            # This is not the cleaner way ... in case of a file name
-            # (PatientName) starting with c1 !
+            # This is not the cleaner way ... for example in the case of a
+            # file name including `c1` in the first 5 characters for another
+            # reason (`c1` in PatientName, etc.).
+            # FiXME: what can we do to be cleaner?
             if "c1" in os.path.basename(os.path.normpath(file_name))[:5]:
                 files.append(file_name)
 
@@ -4160,7 +4157,9 @@ class Threshold(ProcessMIA):
         super(Threshold, self).list_outputs()
 
         # Outputs definition
-        if (self.in_files) and (self.threshold):
+        if self.in_files != Undefined and (
+            self.threshold and self.threshold != Undefined
+        ):
             if self.GM_filtering is True:
                 files_name = self._namesFilter()
 

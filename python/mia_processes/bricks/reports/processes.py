@@ -1619,13 +1619,16 @@ class Mean_stdDev_calc(ProcessMIA):
     """
     * Makes the mean and standard deviation of parametric_maps.
 
-    - The parametric_maps are first convolved with the ROIs corresponding
-      to rois_files.
+    - The parametric_maps are first resized, if necessary, to the size of the
+      rois_files. Next, the parametric_maps and the rois_files are convolved.
+      Finally, the mean and standard deviation are calculated for the
+      corresponding ROIs.
+    - The “PatientName_data/ROI_data/ROI_analysis” directory is created to
+      receive the results. If this directory exists at runtime, it is
+      overwritten.
     - To work correctly, the database entry for the first element of
-      parametric_maps must have the "PatientName" tag filled in.
-    - To work correctly, the "/roi_"PatientName"/convROI_BOLD"
-      must exist and contain a previous convolution results (normally using
-      the ConvROI brick)
+      parametric_maps must have the PatientName tag filled in.
+
     """
 
     def __init__(self):
@@ -1645,6 +1648,10 @@ class Mean_stdDev_calc(ProcessMIA):
             "calculate their mean and standard deviation"
         )
         contrast_type_desc = "The Contrast used (a string, ex. BOLD)"
+        prefix_to_delete_desc = (
+            "The prefix to delete from the " "deduced ROI name (a string)"
+        )
+
         # Outputs description
         mean_out_files_desc = (
             "A list of .txt files with the calculated average for each "
@@ -1681,6 +1688,13 @@ class Mean_stdDev_calc(ProcessMIA):
             "contrast_type",
             traits.String(
                 "BOLD", output=False, optional=True, desc=contrast_type_desc
+            ),
+        )
+
+        self.add_trait(
+            "prefix_to_delete",
+            traits.String(
+                "conv", output=False, optional=True, desc=prefix_to_delete_desc
             ),
         )
 
@@ -1750,19 +1764,40 @@ class Mean_stdDev_calc(ProcessMIA):
             if self.contrast_type.isspace() or not self.contrast_type:
                 self.contrast_type = "UnknownContrast"
 
-            for parametric_map in self.parametric_maps:
-                map_name = (
-                    os.path.basename(parametric_map)[0:4]
-                    + "_"
-                    + self.contrast_type
-                )
+            if (
+                (not self.prefix_to_delete)
+                or (self.prefix_to_delete.isspace())
+                or (self.prefix_to_delete in [Undefined, "<undefined>"])
+            ):
+                self.prefix_to_delete = " "
 
-                # for roi in self.doublet_list:
+            for parametric_map in self.parametric_maps:
+                param_file_name = os.path.basename(parametric_map)
+
+                if "_" not in param_file_name:
+                    parameter = os.path.splitext(param_file_name)
+
+                else:
+                    parameter = param_file_name[: param_file_name.index("_")]
+
                 for roi in self.rois_files:
                     roi_name, _ = os.path.splitext(os.path.basename(roi))
 
+                    if self.prefix_to_delete != " " and roi_name.startswith(
+                        self.prefix_to_delete
+                    ):
+                        # fmt: off
+                        roi_name = roi_name[len(self.prefix_to_delete):]
+                        # fmt: on
+
                     mean_out_file = os.path.join(
-                        analysis_dir, roi_name + "_mean_" + map_name + ".txt"
+                        analysis_dir,
+                        roi_name
+                        + "_mean_"
+                        + parameter
+                        + "_"
+                        + self.contrast_type
+                        + ".txt",
                     )
                     # FIXME: In the latest version of mia, indexing of the
                     #        database with particular tags defined in the
@@ -1787,7 +1822,13 @@ class Mean_stdDev_calc(ProcessMIA):
                     self.inheritance_dict[mean_out_file] = parametric_map
 
                     std_out_file = os.path.join(
-                        analysis_dir, roi_name + "_std_" + map_name + ".txt"
+                        analysis_dir,
+                        roi_name
+                        + "_std_"
+                        + parameter
+                        + "_"
+                        + self.contrast_type
+                        + ".txt",
                     )
                     tag_to_add = dict()
                     tag_to_add["name"] = "PatientName"
@@ -1807,6 +1848,8 @@ class Mean_stdDev_calc(ProcessMIA):
 
             if std_out_files != []:
                 self.outputs["std_out_files"] = std_out_files
+
+        # FIXME: What are we doing about the tags inheritance?
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -1846,49 +1889,48 @@ class Mean_stdDev_calc(ProcessMIA):
         if os.path.isdir(tmp):
             shutil.rmtree(tmp)
 
-        if self.contrast_type.isspace() or not self.contrast_type:
-            self.contrast_type = "UnknownContrast"
-
         for parametric_map in self.parametric_maps:
-            # Resampling, if necessary, the parametric_map to the size of the
-            # ROIs, using the first ROI in rois_files.
-            roi_1 = self.rois_files[0]
-            roi_img = nb.load(roi_1)
-            roi_data = roi_img.get_fdata()
-            roi_size = roi_data.shape[:3]
-
             # Reading parametric map
             map_img = nb.load(parametric_map)
             map_data = map_img.get_fdata()
-
             # Setting the NaN to 0 in parametric map
             map_data = np.nan_to_num(map_data)
+            # Deduction of the parameter from the name of the parametric map
+            param_file_name = os.path.basename(parametric_map)
 
-            # Give name with spmT_BOLD or beta_BOLD
-            map_name = (
-                os.path.basename(parametric_map)[0:4]
-                + "_"
-                + self.contrast_type
-            )
+            if "_" not in param_file_name:
+                parameter = os.path.splitext(param_file_name)
 
-            # Making sure that the ROI and parametric images
-            # are at the same size
-            if roi_size != map_data.shape[:3]:
-                map_data_max = max(map_data.max(), -map_data.min())
-                map_data = (
-                    resize(map_data / map_data_max, roi_size) * map_data_max
-                )
+            else:
+                parameter = param_file_name[: param_file_name.index("_")]
 
             for roi_file in self.rois_files:
                 roi_img = nb.load(roi_file)
                 roi_data = roi_img.get_fdata()
-
                 # Setting the NaN to 0 in ROI images
                 roi_data = np.nan_to_num(roi_data)
+                # Deduction of the ROI name from the roi_file
+                roi_name, _ = os.path.splitext(os.path.basename(roi_file))
+
+                if self.prefix_to_delete != " " and roi_name.startswith(
+                    self.prefix_to_delete
+                ):
+                    # fmt: off
+                    roi_name = roi_name[len(self.prefix_to_delete):]
+                    # fmt: on
+
+                # Making sure that the ROIs and parametric images are at the
+                # same size
+                if roi_data.shape[:3] != map_data.shape[:3]:
+                    map_data_max = max(map_data.max(), -map_data.min())
+                    final_map_data = (
+                        resize(map_data / map_data_max, roi_data.shape[:3])
+                        * map_data_max
+                    )
 
                 # Convolution of the parametric map with the ROI images
                 roi_thresh = (roi_data > 0).astype(float)
-                result = map_data * roi_thresh
+                result = final_map_data * roi_thresh
 
                 # Calculating mean and standard deviation
                 if np.size(result[result.nonzero()]) == 0:
@@ -1904,20 +1946,25 @@ class Mean_stdDev_calc(ProcessMIA):
                     mean_result = result[result.nonzero()].mean()
                     std_result = result[result.nonzero()].std()
 
-                roi_name, _ = os.path.splitext(os.path.basename(roi_file))
-                mean_out_file = os.path.join(
-                    analysis_dir, roi_name + "_mean_" + map_name + ".txt"
-                )
+                for calculation in ["mean", "std"]:
+                    out_file = os.path.join(
+                        analysis_dir,
+                        roi_name
+                        + "_"
+                        + calculation
+                        + "_"
+                        + parameter
+                        + "_"
+                        + self.contrast_type
+                        + ".txt",
+                    )
 
-                with open(mean_out_file, "w") as f:
-                    f.write("%.3f" % mean_result)
+                    with open(out_file, "w") as f:
+                        if calculation == "mean":
+                            f.write("%.3f" % mean_result)
 
-                std_out_file = os.path.join(
-                    analysis_dir, roi_name + "_std_" + map_name + ".txt"
-                )
-
-                with open(std_out_file, "w") as f:
-                    f.write("%.3f" % std_result)
+                        else:
+                            f.write("%.3f" % std_result)
 
 
 class Result_collector(ProcessMIA):
@@ -1926,25 +1973,16 @@ class Result_collector(ProcessMIA):
 
     - To work correctly, the database entry for the first element of
       parameter_files must have the "PatientName" tag filled in.
-
+    - The “PatientName_data/results_aggregation” directory is created to
+      receive the results. If this directory exists at runtime, new results
+      can overwrite old results with the same name.
     - To work correctly, the name of each file in parameter_files must be
-      exactly like this: roi_hemi_calcul_param_contrast, where
+      exactly like this: roi_hemi_calcul_param_contrast.txt, where
       - roi: region of interest (ex. ACA)
       - hemi: hemisphere (ex. L)
       - calcul: type of calcul (ex. mean)
       - param: the parameter studied (ex. spmT)
       - contrast: the type of contrast/effect used (ex. BOLD)
-
-    - Currently, to function correctly, this brick requires the doublet made
-      up of the two hemispheres to be present in the parameter_files list and
-      each hemisphere to be represented by the letters L (left) and R (right).
-      For example:
-      [/aPath/ACM_R_moyenne_spmT_BOLD.txt,
-      /aPat/ACM_L_moyenne_spmT_BOLD.txt, etc.].
-      It would be desirable to develop this brick so that it could also be
-      used to collect a single territory without any notion of hemisphere (in
-      this case, of course, the brick would not generate any laterality
-      indices) => TODO ASAP
 
     """
 
@@ -1959,13 +1997,13 @@ class Result_collector(ProcessMIA):
         super(Result_collector, self).__init__()
 
         # Inputs description
-        laterality_index_desc = "Calculates the laterality indexes (a boolean)"
         parameter_files_desc = (
             "A list of .txt files. Each file contains one (and "
             "only one) value. The name of each file is used to "
             "define this value. The name must exactly be like "
             "this: roi_hemi_calcul_param_contrast"
         )
+        laterality_index_desc = "Calculates the laterality indexes (a boolean)"
         patient_info_desc = (
             "A dictionary whose keys/values correspond to "
             "information about the patient "
@@ -2083,7 +2121,7 @@ class Result_collector(ProcessMIA):
                 #          where there are not 5 objects returned.
                 # FIXME 2: Ideally, we should also make sure that they are well
                 #          roi, hemi, etc ... This is difficult to achieve for
-                #          the last point ...
+                #          this last point ...
                 # roi: region of interest (ex. ACA)
                 # hemi: hemisphere (ex. L)
                 # calcul: type of calcul (ex. mean)
@@ -2098,7 +2136,7 @@ class Result_collector(ProcessMIA):
                 except Exception as e:
                     print(
                         "\nResult_collector brick: initialization stopped "
-                        "due to the following problem:\n"
+                        "due to the following issue:\n"
                         " {}\n".format(e)
                     )
                     return self.make_initResult()
@@ -2295,12 +2333,6 @@ class Result_collector(ProcessMIA):
         res = dict()
 
         for data in self.parameter_files:
-            # FIXME 1: We need to protect the following command line. Case
-            #          where there are not 5 objects returned.
-            # FIXME 2: Ideally, we should also make sure that they are well
-            #          roi, hemi, etc ... This is difficult to achieve for
-            #          the last point ...
-
             # roi: region of interest (ex. ACA)
             # hemi: hemisphere (ex. L)
             # calcul: type of calcul (ex. mean)

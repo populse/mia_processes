@@ -102,9 +102,9 @@ Mia_processes's documentation
 
     - **spm**
 
-      - `EstimateConstrast <bricks/stats/spm/EstimateConstrast.html>`_ (in progress)
+      - `EstimateContrast <bricks/stats/spm/EstimateContrast.html>`_ (in progress)
       - `EstimateModel <bricks/stats/spm/EstimateModel.html>`_ (in progress)
-      - `Level1Design <bricks/stats/spm/Level1Design.html>`_
+      - `Level1Design <bricks/stats/spm/Level1Design.html>`_ (in progress)
 
   - **tools**
 
@@ -113,7 +113,9 @@ Mia_processes's documentation
     - `Delete_Data <bricks/tools/Delete_data.html>`_
     - `Files_To_List <bricks/tools/Files_To_List.html>`_
     - `Filter_Files_List <bricks/tools/Filter_Files_List.html>`_
+    - `Find_In_List <bricks/tools/Find_In_List.html>`_
     - `Input_Filter <bricks/tools/Input_Filter.html>`_
+    - `Import_Data <bricks/tools/Import_Data.html>`_
     - `List_Duplicate <bricks/tools/List_Duplicate.html>`_
     - `List_To_File <bricks/tools/List_To_File.html>`_
     - `Make_A_List <bricks/tools/Make_A_List.html>`_
@@ -130,8 +132,8 @@ Mia_processes's documentation
     - `Anat_spatial_norm <pipelines/preprocess/Anat_spatial_norm.html>`_
     - `Bold_hmc <pipelines/preprocess/Bold_hmc.html>`_
     - `Bold_mni_align <pipelines/preprocess/Bold_mni_align.html>`_
-    - `Spatial_mask <pipelines/preprocess/Spatial_mask.html>`_ (in progress)
-    - `Spatial_preprocessing_1 <pipelines/preprocess/Spatial_preprocessing_1.html>`_
+    - `Spatial_mask <pipelines/preprocess/Spatial_mask.html>`_
+    - `Spatial_preprocessing <pipelines/preprocess/Spatial_preprocessing.html>`_
 
   - **qualityControl**
 
@@ -141,8 +143,8 @@ Mia_processes's documentation
   - **reports**
 
     - `Bold_iqms <pipelines/reports/Bold_iqms.html>`_
-    - `Rois_1 <pipelines/reports/Rois_1.html>`_ (in progress)
+    - `Extract_roi_param <pipelines/reports/Extract_roi_param.html>`_
 
   - **stats**
 
-    - `Bold_stats <pipelines/stats/Bold_stats.html>`_ (in progress)
+    - `Bold_stat <pipelines/stats/Bold_stat.html>`_ (in progress)

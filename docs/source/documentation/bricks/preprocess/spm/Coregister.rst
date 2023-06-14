@@ -41,9 +41,6 @@ Coregister brick
 Align together scans of different modalities
 --------------------------------------------
 
->>> from mia_processes.bricks.preprocess.spm import Coregister
->>> Coregister.help()
-
 **Inputs parameters:**
 
 - *target <=> ref* [#label]_
