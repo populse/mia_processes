@@ -79,11 +79,11 @@ class EstimateContrast(ProcessMIA):
         spm_mat_file_desc = (
             "SPM.mat file (a pathlike object or string representing a file)"
         )
-        T_contrast_name_desc = "Name of T contrasts (a list of string)"
-        T_condition_name_desc = (
+        T_contrast_names_desc = "Name of T contrasts (a list of string)"
+        T_condition_names_desc = (
             "Conditions information (a list of list of string)"
         )
-        T_contrast_weight_desc = "Contrast weights (list of list of float)"
+        T_contrast_weights_desc = "Contrast weights (list of list of float)"
         session_desc = (
             "Session list (a list of list of float). "
             "Length should be equal to the number of sessions, "
@@ -123,7 +123,7 @@ class EstimateContrast(ProcessMIA):
                 traits.String(),
                 output=False,
                 optional=True,
-                desc=T_contrast_name_desc,
+                desc=T_contrast_names_desc,
             ),
         )
         self.T_contrast_names = ["+"]
@@ -134,7 +134,7 @@ class EstimateContrast(ProcessMIA):
                 traits.List(traits.String()),
                 output=False,
                 optional=True,
-                desc=T_condition_name_desc,
+                desc=T_condition_names_desc,
             ),
         )
         self.T_condition_names = [["R1_1"]]
@@ -145,7 +145,7 @@ class EstimateContrast(ProcessMIA):
                 traits.List(traits.Float()),
                 output=False,
                 optional=True,
-                desc=T_contrast_weight_desc,
+                desc=T_contrast_weights_desc,
             ),
         )
         self.T_contrast_weights = [[1.0]]
@@ -1270,26 +1270,6 @@ class EstimateModel(ProcessMIA):
         self.process.estimation_method = self.estimation_method
         self.process.write_residuals = self.write_residuals
 
-        # self.process.flags = self.flags
-        # Removing the image files to avoid a bug
-        # I do not observe the bug now, i comment the following lines:
-        # TODO: In fact, self.outputs is == {} at this point(see issue #272).
-        #       If necessary, we can use the dict4runtine object?
-        #
-        # for key, value in self.outputs.items():
-        #   if key not in ["out_spm_mat_file"]:
-        #        if value not in ["<undefined>", Undefined]:
-
-        #            if type(value) in [list, traits.TraitListObject,
-        #                               traits.List]:
-
-        #                for element in value:
-        #                    if os.path.isfile(element):
-        #                        os.remove(element)
-        #           else:
-        #                if os.path.isfile(value):
-        #                    os.remove(value)
-        # self.process.run()
         return self.process.run(configuration_dict={})
 
 

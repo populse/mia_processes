@@ -4,7 +4,7 @@
 
 :Contains:
     :Class:
-        - Bold_stat
+        - Bold_stat_cvr
 
 """
 
@@ -23,7 +23,7 @@ import traits.api as traits
 from capsul.api import Pipeline
 
 
-class Bold_stat(Pipeline):
+class Bold_stat_cvr(Pipeline):
     """
     *GLM-based statistical calculation pipeline used in the CVR evaluation*
 

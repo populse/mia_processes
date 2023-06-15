@@ -61,7 +61,8 @@ class CO2_inhalation(Pipeline):
             "resample1": True,
         }
         self.add_process(
-            "3_boldStat", "mia_processes.pipelines.stat.bold_stat.Bold_stat"
+            "3_boldStat",
+            "mia_processes.pipelines.stat.bold_stat_cvr.Bold_stat_cvr",
         )
         self.nodes["3_boldStat"].process.nodes_activation = {
             "estimatecontrast": True,
