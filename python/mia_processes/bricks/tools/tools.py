@@ -277,6 +277,7 @@ class Delete_data(ProcessMIA):
 
         # Inputs traits
         self.add_trait("in_file", traits.File(output=False, desc=in_file_desc))
+        self.in_file = traits.Undefined
 
         self.add_trait(
             "to_keep_filters",
@@ -297,6 +298,7 @@ class Delete_data(ProcessMIA):
         self.add_trait(
             "files_removed", traits.List(output=True, desc=files_removed_desc)
         )
+        self.files_removed = traits.Undefined
 
         self.init_default_traits()
 
@@ -515,6 +517,7 @@ class Filter_Files_List(ProcessMIA):
             "in_list",
             traits.List(traits.File, output=False, desc=in_list_desc),
         )
+        self.in_list = traits.Undefined
 
         self.add_trait(
             "index_filter",
@@ -533,6 +536,7 @@ class Filter_Files_List(ProcessMIA):
         self.add_trait(
             "filtered_list", traits.List(output=True, desc=filtered_list_desc)
         )
+        self.filtered_list = traits.Undefined
 
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
@@ -983,11 +987,13 @@ class Input_Filter(ProcessMIA):
         self.add_trait(
             "input", traits.List(traits.File, output=False, desc=input_desc)
         )
+        self.input = traits.Undefined
 
         # Outputs traits
         self.add_trait(
             "output", traits.List(traits.File, output=True, desc=output_desc)
         )
+        self.output = traits.Undefined
 
         # Instantiation of the filter object
         self.filter = Filter(
@@ -1177,6 +1183,7 @@ class List_To_File(ProcessMIA):
             "file_list",
             traits.List(traits.File(), output=False, desc=file_list_desc),
         )
+        self.file_list = traits.Undefined
 
         self.add_trait(
             "index_filter",
@@ -1193,6 +1200,7 @@ class List_To_File(ProcessMIA):
 
         # Outputs traits
         self.add_trait("file", traits.File(output=True, desc=file_desc))
+        self.file = traits.Undefined
 
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
@@ -1275,10 +1283,12 @@ class Make_A_List(ProcessMIA):
 
         # Inputs traits
         self.add_trait("obj1", traits.Any(output=False, desc=obj1_desc))
+        self.obj1 = traits.Undefined
 
         self.add_trait(
             "obj2", traits.Any(output=False, optional=True, desc=obj2_desc)
         )
+        self.obj2 = traits.Undefined
 
         # Outputs traits
         self.add_trait(
