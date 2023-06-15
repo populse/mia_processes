@@ -41,9 +41,6 @@ Filter_Files_List brick
 Selects one or more (slicing) elements from a list
 --------------------------------------------------
 
-['/home/ArthurBlair/data/raw_data/Anat.nii', '/home/ArthurBlair/data/raw_data/Func.nii'] -> Filter_Files_List -> ['/home/ArthurBlair/data/raw_data/Func.nii']
-
-
 **Inputs parameters:**
 
 - *in_list*
@@ -51,10 +48,10 @@ Selects one or more (slicing) elements from a list
 
     ::
 
-      ex. ['/home/ArthurBlair/data/raw_data/Anat.nii',
-           '/home/ArthurBlair/data/raw_data/Func.nii',
-           '/home/ArthurBlair/data/raw_data/rp_Func.txt',
-           '/home/ArthurBlair/data/raw_data/meanFunc.nii']
+      ex. ['/home/username/data/raw_data/Anat.nii',
+           '/home/username/data/raw_data/Func.nii',
+           '/home/username/data/raw_data/rp_Func.txt',
+           '/home/username/data/raw_data/meanFunc.nii']
 
 - *index_filter*
     A list of 0 index to 2 indices (integer) for filtering. If no index is given, takes the first element of in_list. If there is one index, takes the element at that position in in_list. If two indices, selects the elements between the first and the second index (the index corresponds to the actual position in the list, i.e. there is no "0" index as in python).
@@ -70,6 +67,6 @@ Selects one or more (slicing) elements from a list
 
     ::
 
-      ex. ['/home/ArthurBlair/data/Func.nii',
-           '/home/ArthurBlair/data/raw_data/rp_Func.txt',
-           '/home/ArthurBlair/data/raw_data/meanFunc.nii']
+      ex. ['/home/username/data/raw_data/Func.nii',
+           '/home/username/data/raw_data/rp_Func.txt',
+           '/home/username/data/raw_data/meanFunc.nii']

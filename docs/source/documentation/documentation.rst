@@ -20,7 +20,7 @@ Mia_processes's documentation
       - `CalcDropTRs <bricks/preprocess/afni/CalcDropTRs.html>`_
       - `Despike <bricks/preprocess/afni/Despike.html>`_
       - `FWHMx <bricks/reports/FWHMx.html>`_
-      - `GCOR correlation <bricks/reports/GCOR.html>`_
+      - `GCOR <bricks/reports/GCOR.html>`_
       - `OutliersCount <bricks/reports/OutlierCount.html>`_
       - `QualityIndex <bricks/reports/QualityIndex.html>`_
       - `RefitDeoblique <bricks/preprocess/afni/RefitDeoblique.html>`_
@@ -70,9 +70,9 @@ Mia_processes's documentation
       - `Resample2 <bricks/preprocess/others/Resample2.html>`_
       - `RotationMask <bricks/preprocess/others/RotationMask.html>`_
       - `Sanitize <bricks/preprocess/others/Sanitize.html>`_
+      - `TSNR <bricks/preprocess/others/TSNR.html>`_
       - `TemplateFromTemplateFlow <bricks/preprocess/others/TemplateFromTemplateFlow.html>`_
       - `Threshold <bricks/preprocess/others/Threshold.html>`_
-      - `TSNR <bricks/preprocess/others/TSNR.html>`_
 
 
     - **spm**
@@ -95,6 +95,7 @@ Mia_processes's documentation
     - `Mean_stdDev_calc <bricks/reports/Mean_stdDev_calc.html>`_
     - `ReportAnatMriqc <bricks/reports/ReportAnatMriqc.html>`_
     - `ReportFuncMriqc <bricks/reports/ReportFuncMriqc.html>`_
+    - `ReportGroupMriqc <bricks/reports/ReportGroupMriqc.html>`_ (in progress)
     - `Result_collector <bricks/reports/Result_collector.html>`_
     - `Spikes <bricks/reports/Spikes.html>`_
 
@@ -114,8 +115,8 @@ Mia_processes's documentation
     - `Files_To_List <bricks/tools/Files_To_List.html>`_
     - `Filter_Files_List <bricks/tools/Filter_Files_List.html>`_
     - `Find_In_List <bricks/tools/Find_In_List.html>`_
-    - `Input_Filter <bricks/tools/Input_Filter.html>`_
     - `Import_Data <bricks/tools/Import_Data.html>`_
+    - `Input_Filter <bricks/tools/Input_Filter.html>`_
     - `List_Duplicate <bricks/tools/List_Duplicate.html>`_
     - `List_To_File <bricks/tools/List_To_File.html>`_
     - `Make_A_List <bricks/tools/Make_A_List.html>`_
@@ -131,8 +132,8 @@ Mia_processes's documentation
     - `Anat_airmask <pipelines/preprocess/Anat_airmask.html>`_
     - `Anat_headmask <pipelines/preprocess/Anat_headmask.html>`_
     - `Anat_mni_tpms <pipelines/preprocess/Anat_mni_tpms.html>`_
-    - `Anat_skullstrip_synthstrip <pipelines/preprocess/Anat_skullstrip_synthstrip.html>`_
     - `Anat_skullstrip <pipelines/preprocess/Anat_skullstrip.html>`_
+    - `Anat_skullstrip_synthstrip <pipelines/preprocess/Anat_skullstrip_synthstrip.html>`_
     - `Anat_spatial_norm <pipelines/preprocess/Anat_spatial_norm.html>`_
     - `Bold_hmc <pipelines/preprocess/Bold_hmc.html>`_
     - `Bold_mni_align <pipelines/preprocess/Bold_mni_align.html>`_

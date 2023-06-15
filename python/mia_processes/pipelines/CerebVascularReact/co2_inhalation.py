@@ -19,7 +19,6 @@ using hypercapnia challenge.
 # for details.
 ##########################################################################
 
-
 from capsul.api import Pipeline
 
 

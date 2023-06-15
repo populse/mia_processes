@@ -49,7 +49,7 @@ Computes the warp that best aligns the template (atlas) to the individual's imag
 
     ::
 
-      ex. /home/ArthurBlair/data/raw_data/Anat.nii
+      ex. /home/username/data/raw_data/Anat.nii
 
 - *deformation_file <=> subj.def*  [#label]_
     File y_*.nii containing 3 deformation fields for the deformation in x, y and z dimension. Mutually exclusive with *image_to_align* and
@@ -57,7 +57,7 @@ Computes the warp that best aligns the template (atlas) to the individual's imag
 
     ::
 
-      ex. /home/ArthurBlair/data/downloaded_data/y_Anat.nii
+      ex. /home/username/data/downloaded_data/y_Anat.nii
 
 
 - *apply_to_files <=> subj.resample* [#label]_
@@ -66,7 +66,7 @@ Computes the warp that best aligns the template (atlas) to the individual's imag
 
     ::
 
-      ex. ['/home/ArthurBlair/data/raw_data/Anat.nii']
+      ex. ['/home/username/data/raw_data/Anat.nii']
 
 - *jobtype*
     One of 'write' (write) or  'est' (estimate) or 'estwrite' (estimate and write).
@@ -110,7 +110,7 @@ Computes the warp that best aligns the template (atlas) to the individual's imag
 
     ::
 
-      ex. /home/ArthurBlair/spm12/tpm/TPM.nii
+      ex. /home/username/spm12/tpm/TPM.nii
 
 - *affine_regularization_type <=> eoptions.affreg* [#label]_
     Standard space for affine registration (‘mni’ or ‘size’ or ‘none’).
@@ -175,14 +175,14 @@ Computes the warp that best aligns the template (atlas) to the individual's imag
 
     ::
 
-      ex. /home/ArthurBlair/data/derived_data/y_Anat.nii
+      ex. /home/username/data/derived_data/y_Anat.nii
 
 - *normalized_files*
     Normalised other files (a list of items which are a pathlike object or string representing an existing file).
 
     ::
 
-      ex. /home/ArthurBlair/data/derived_data/wAnat.nii
+      ex. /home/username/data/derived_data/wAnat.nii
 
 -------------
 

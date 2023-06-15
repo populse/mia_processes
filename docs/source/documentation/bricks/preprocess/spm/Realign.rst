@@ -50,7 +50,7 @@ Realigns a time-series of images acquired from the same subject
 
     ::
 
-      ex. ['/home/ArthurBlair/data/raw_data/Func.nii']
+      ex. ['/home/username/data/raw_data/Func.nii']
 
 - *jobtype*
     One of 'estwrite', 'estimate' or 'write':
@@ -198,7 +198,7 @@ Realigns a time-series of images acquired from the same subject
 
     ::
 
-      ex. /home/ArthurBlair/data/derived_data/rFunc.nii
+      ex. /home/username/data/derived_data/rFunc.nii
 
 - *modified_in_files*
     If the jobtype parameter is equal to estimate or estwrite, these will be copies of the in_files with a rewritten header (a list of items
@@ -207,7 +207,7 @@ Realigns a time-series of images acquired from the same subject
 
     ::
 
-      ex. /home/ArthurBlair/data/derived_data/Func.nii
+      ex. /home/username/data/derived_data/Func.nii
 
 - *mean_image*
     If the write_which parameter is equal to [2, 1] or [0, 1] and jobtype parameter is equal to write or estwrite, this will be the Mean image
@@ -215,7 +215,7 @@ Realigns a time-series of images acquired from the same subject
 
     ::
 
-      ex. /home/ArthurBlair/data/derived_data/meanFunc.nii
+      ex. /home/username/data/derived_data/meanFunc.nii
 
 - *realignment_parameters*
     If the jobtype parameter is equal to estimate or estwrite, this will be the Estimated translation and rotation parameters (a list of items
@@ -223,7 +223,7 @@ Realigns a time-series of images acquired from the same subject
 
     ::
 
-      ex. /home/ArthurBlair/data/derived_data/rp_Func.txt
+      ex. /home/username/data/derived_data/rp_Func.txt
 
 -------------
 

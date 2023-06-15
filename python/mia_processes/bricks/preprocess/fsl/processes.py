@@ -8,9 +8,9 @@ populse_mia.
 
 :Contains:
     :Class:
+        - BetSurfacesExtraction
         - FastSegment
         - Smooth
-        - BetSurfacesExtraction
 
 """
 

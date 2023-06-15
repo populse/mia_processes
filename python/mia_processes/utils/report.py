@@ -66,13 +66,14 @@ class Report:
     """Create pdf report
 
     IQMs_file --> mriqc individual report (with all IQMs)
-    mriqc_group ---> mriqc report group
+    mriqc_group --> mriqc report group
 
-    Functions:
-    - get_iqms_data
-    - mriqc_anat_make_report
-    - mriqc_func_make_report
-    - mriqc_group_make_report
+    Methods:
+      - get_iqms_data
+      - mriqc_anat_make_report
+      - mriqc_func_make_report
+      - mriqc_group_make_report
+
     """
 
     def __init__(self, report_file, dict4runtime, **kwargs):
@@ -359,419 +360,69 @@ class Report:
         # Canvas creation
         self.report = []
 
-    def mriqc_func_make_report(
-        self,
-    ):
-        """Make mriqc functional individual report"""
+    def get_iqms_data(self, param):
+        """Get iqms data"""
 
-        # First page - cover ##################################################
-        #######################################################################
-
-        self.report.append(self.image_cov)
-        # width, height
-        self.report.append(Spacer(0 * mm, 8 * mm))
-        self.report.append(Paragraph(self.header_title, self.styles["Center"]))
-        self.report.append(Spacer(0 * mm, 10 * mm))
-        line = ReportLine(150)
-        line.hAlign = "CENTER"
-        self.report.append(line)
-        self.report.append(Spacer(0 * mm, 10 * mm))
-        self.report.append(Paragraph(self.title, self.styles["Center"]))
-        self.report.append(Spacer(0 * mm, 10 * mm))
-        self.report.append(self.cover_data)
-        self.report.append(Spacer(0 * mm, 6 * mm))
-        self.report.append(
-            Paragraph(self.textDisclaimer, self.styles["Justify"])
-        )
-        self.report.append(Spacer(0 * mm, 6 * mm))
-        # Footnote
-        line = ReportLine(500)
-        line.hAlign = "CENTER"
-        self.report.append(line)
-        self.report.append(Spacer(0 * mm, 2.5 * mm))
-        self.report.append(
-            Paragraph(
-                "<font size = 8><sup>$</sup>Esteban O et "
-                "al., <i>MRIQC: Advancing the Automatic "
-                "Prediction of Image Quality in MRI from"
-                " Unseen Sites</i>, PLOS ONE 12(9)"
-                ":e0184661.</font>",
-                self.styles["Left"],
-            )
-        )
-        self.report.append(PageBreak())
-
-        # Second page - IQMs ##################################################
-        #######################################################################
-        self.report.append(
-            Paragraph(
-                "<font size = 18 ><b>Image parameters" "</b></font>",
-                self.styles["Center"],
-            )
-        )
-        self.report.append(Spacer(0 * mm, 4 * mm))
-        line = ReportLine(150)
-        line.hAlign = "CENTER"
-        self.report.append(line)
-        self.report.append(Spacer(0 * mm, 20 * mm))
-        # Spatial and temporal resolution ###################################
-        self.report.append(
-            Paragraph(
-                "<font size = 15 > <b>SPATIAL AND "
-                "TEMPORAL RESOLUTION</b> </font>",
-                self.styles["Bullet1"],
-            )
-        )
-        self.report.append(Spacer(0 * mm, 2 * mm))
-        self.report.append(Paragraph("Length - Spacing", self.styles["Left2"]))
-        self.report.append(Spacer(0 * mm, 10 * mm))
-
-        # size_x
-        self.report.append(self.get_iqms_data("size_x"))
-        self.report.append(Spacer(0 * mm, 1 * mm))
-        # size_y
-        self.report.append(self.get_iqms_data("size_y"))
-        self.report.append(Spacer(0 * mm, 1 * mm))
-        # size_z
-        self.report.append(self.get_iqms_data("size_z"))
-        self.report.append(Spacer(0 * mm, 1 * mm))
-        # size_t
-        self.report.append(self.get_iqms_data("size_t"))
-        self.report.append(Spacer(0 * mm, 2.5 * mm))
-        # spacing_x
-        self.report.append(self.get_iqms_data("spacing_x"))
-        self.report.append(Spacer(0 * mm, 1 * mm))
-        # spacing_y
-        self.report.append(self.get_iqms_data("spacing_y"))
-        self.report.append(Spacer(0 * mm, 1 * mm))
-        # spacing_z
-        self.report.append(self.get_iqms_data("spacing_z"))
-        self.report.append(Spacer(0 * mm, 1 * mm))
-        # spacing_tr
-        self.report.append(self.get_iqms_data("spacing_tr"))
-        self.report.append(Spacer(0 * mm, 20 * mm))
-        # Measures for artifacts and other ##################################
-        self.report.append(
-            Paragraph(
-                "<font size = 15 > <b>MEASURES FOR "
-                "ARTIFACTS AND OTHER</b> </font>",
-                self.styles["Bullet1"],
-            )
-        )
-        self.report.append(Spacer(0 * mm, 10 * mm))
-        # aor
-        self.report.append(self.get_iqms_data("aor"))
-        self.report.append(Spacer(0 * mm, 1 * mm))
-        # aqi
-        self.report.append(self.get_iqms_data("aqi"))
-        self.report.append(Spacer(0 * mm, 2.5 * mm))
-        # gsr_x
-        self.report.append(self.get_iqms_data("gsr_x"))
-        self.report.append(Spacer(0 * mm, 1 * mm))
-        # gsr_y
-        self.report.append(self.get_iqms_data("gsr_y"))
-        self.report.append(Spacer(0 * mm, 2.5 * mm))
-        # fd_mean
-        self.report.append(self.get_iqms_data("fd_mean"))
-        self.report.append(Spacer(0 * mm, 1 * mm))
-        # fd_num
-        self.report.append(self.get_iqms_data("fd_num"))
-        self.report.append(Spacer(0 * mm, 1 * mm))
-        # fd_perc
-        self.report.append(self.get_iqms_data("fd_perc"))
-        self.report.append(Spacer(0 * mm, 2.5 * mm))
-        # dummy_trs
-        self.report.append(self.get_iqms_data("dummy_trs"))
-        self.report.append(Spacer(0 * mm, 82 * mm))
-        # Footnote
-        line = ReportLine(500)
-        line.hAlign = "CENTER"
-        self.report.append(line)
-        self.report.append(Spacer(0 * mm, 2.5 * mm))
-
-        for param in ("gsr_x", "fd_mean"):
-            self.report.append(
-                Paragraph(
-                    "<font size = 8><sup>"
-                    + self.dict4runtime["extra_info"][param][2]
-                    + "</sup>"
-                    + self.dict4runtime["extra_info"][param][3]
-                    + "</font>",
-                    self.styles["Left"],
+        if self.iqms_data.get(param) is None:
+            if self.dict4runtime["extra_info"][param][2] is None:
+                return Paragraph(
+                    "<font size = 11> <b> "
+                    + self.dict4runtime["extra_info"][param][0]
+                    + " </b> </font>: Not determined",
+                    self.styles["Bullet2"],
                 )
-            )
-
-        self.report.append(PageBreak())
-
-        # Third page - IQMs ###################################################
-        #######################################################################
-        self.report.append(
-            Paragraph(
-                "<font size = 18 ><b>Image parameters" "</b></font>",
-                self.styles["Center"],
-            )
-        )
-        self.report.append(Spacer(0 * mm, 4 * mm))
-        line = ReportLine(150)
-        line.hAlign = "CENTER"
-        self.report.append(line)
-        self.report.append(Spacer(0 * mm, 20 * mm))
-        # Measures for the spatial information ##############################
-        self.report.append(
-            Paragraph(
-                "<font size = 15 ><b>MEASURES FOR THE "
-                "SPATIAL INFORMATION</b></font>",
-                self.styles["Bullet1"],
-            )
-        )
-        self.report.append(Spacer(0 * mm, 10 * mm))
-        # summary_bg_mean
-        self.report.append(self.get_iqms_data("summary_bg_mean"))
-        self.report.append(Spacer(0 * mm, 1 * mm))
-        # summary_bg_stdv
-        self.report.append(self.get_iqms_data("summary_bg_stdv"))
-        self.report.append(Spacer(0 * mm, 1 * mm))
-        # summary_bg_median
-        self.report.append(self.get_iqms_data("summary_bg_median"))
-        self.report.append(Spacer(0 * mm, 1 * mm))
-        # summary_bg_mad
-        self.report.append(self.get_iqms_data("summary_bg_mad"))
-        self.report.append(Spacer(0 * mm, 1 * mm))
-        # summary_bg_p95
-        self.report.append(self.get_iqms_data("summary_bg_p95"))
-        self.report.append(Spacer(0 * mm, 1 * mm))
-        # summary_bg_p05
-        self.report.append(self.get_iqms_data("summary_bg_p05"))
-        self.report.append(Spacer(0 * mm, 1 * mm))
-        # summary_bg_k
-        self.report.append(self.get_iqms_data("summary_bg_k"))
-        self.report.append(Spacer(0 * mm, 1 * mm))
-        # summary_bg_n
-        self.report.append(self.get_iqms_data("summary_bg_n"))
-        self.report.append(Spacer(0 * mm, 2.5 * mm))
-        # summary_fg_mean
-        self.report.append(self.get_iqms_data("summary_fg_mean"))
-        self.report.append(Spacer(0 * mm, 1 * mm))
-        # summary_fg_stdv
-        self.report.append(self.get_iqms_data("summary_fg_stdv"))
-        self.report.append(Spacer(0 * mm, 1 * mm))
-        # summary_fg_median
-        self.report.append(self.get_iqms_data("summary_fg_median"))
-        self.report.append(Spacer(0 * mm, 1 * mm))
-        # summary_fg_mad
-        self.report.append(self.get_iqms_data("summary_fg_mad"))
-        self.report.append(Spacer(0 * mm, 1 * mm))
-        # summary_fg_p95
-        self.report.append(self.get_iqms_data("summary_fg_p95"))
-        self.report.append(Spacer(0 * mm, 1 * mm))
-        # summary_fg_p05
-        self.report.append(self.get_iqms_data("summary_fg_p05"))
-        self.report.append(Spacer(0 * mm, 1 * mm))
-        # summary_fg_k
-        self.report.append(self.get_iqms_data("summary_fg_k"))
-        self.report.append(Spacer(0 * mm, 1 * mm))
-        # summary_fg_n
-        self.report.append(self.get_iqms_data("summary_fg_n"))
-        self.report.append(Spacer(0 * mm, 2.5 * mm))
-        # snr
-        self.report.append(self.get_iqms_data("snr"))
-        self.report.append(Spacer(0 * mm, 2.5 * mm))
-        # fber
-        self.report.append(self.get_iqms_data("fber"))
-        self.report.append(Spacer(0 * mm, 2.5 * mm))
-        # efc
-        self.report.append(self.get_iqms_data("efc"))
-        self.report.append(Spacer(0 * mm, 2.5 * mm))
-        # fwhm_x
-        self.report.append(self.get_iqms_data("fwhm_x"))
-        self.report.append(Spacer(0 * mm, 1 * mm))
-        # fwhm_y
-        self.report.append(self.get_iqms_data("fwhm_y"))
-        self.report.append(Spacer(0 * mm, 1 * mm))
-        # fwhm_z
-        self.report.append(self.get_iqms_data("fwhm_z"))
-        self.report.append(Spacer(0 * mm, 1 * mm))
-        # fwhm_avg
-        self.report.append(self.get_iqms_data("fwhm_avg"))
-        self.report.append(Spacer(0 * mm, 1 * mm))
-        self.report.append(Spacer(0 * mm, 66 * mm))
-        # Footnote
-        line = ReportLine(500)
-        line.hAlign = "CENTER"
-        self.report.append(line)
-        self.report.append(Spacer(0 * mm, 2.5 * mm))
-
-        for param in ("summary_bg_k", "fber", "efc", "fwhm_x"):
-            self.report.append(
-                Paragraph(
-                    "<font size = 8><sup>"
+            else:
+                return Paragraph(
+                    "<font size = 9><sup>"
                     + self.dict4runtime["extra_info"][param][2]
-                    + "</sup>"
-                    + self.dict4runtime["extra_info"][param][3]
-                    + "</font>",
-                    self.styles["Left"],
+                    + "</sup></font><font size = 11><b>"
+                    + self.dict4runtime["extra_info"][param][0]
+                    + "</b></font>: Not determined",
+                    self.styles["Bullet2"],
                 )
-            )
 
-        self.report.append(PageBreak())
-
-        # fourth page - IQMs ##################################################
-        #######################################################################
-        self.report.append(
-            Paragraph(
-                "<font size = 18 ><b>Image parameters" "</b></font>",
-                self.styles["Center"],
-            )
-        )
-        self.report.append(Spacer(0 * mm, 4 * mm))
-        line = ReportLine(150)
-        line.hAlign = "CENTER"
-        self.report.append(line)
-        self.report.append(Spacer(0 * mm, 20 * mm))
-        # Measures for the temporal information #############################
-        self.report.append(
-            Paragraph(
-                "<font size = 15 ><b>MEASURES FOR THE "
-                "TEMPORAL INFORMATION</b></font>",
-                self.styles["Bullet1"],
-            )
-        )
-        self.report.append(Spacer(0 * mm, 10 * mm))
-        # dvars_nstd
-        self.report.append(self.get_iqms_data("dvars_nstd"))
-        self.report.append(Spacer(0 * mm, 1 * mm))
-        # dvars_std
-        self.report.append(self.get_iqms_data("dvars_std"))
-        self.report.append(Spacer(0 * mm, 1 * mm))
-        # dvars_vstd
-        self.report.append(self.get_iqms_data("dvars_vstd"))
-        self.report.append(Spacer(0 * mm, 2.5 * mm))
-        # tsnr
-        self.report.append(self.get_iqms_data("tsnr"))
-        self.report.append(Spacer(0 * mm, 2.5 * mm))
-        # gcor
-        self.report.append(self.get_iqms_data("gcor"))
-        self.report.append(Spacer(0 * mm, 170 * mm))
-        # Footnote
-        line = ReportLine(500)
-        line.hAlign = "CENTER"
-        self.report.append(line)
-        self.report.append(Spacer(0 * mm, 2.5 * mm))
-
-        for param in ("dvars_nstd", "tsnr", "gcor"):
-            self.report.append(
-                Paragraph(
-                    "<font size = 8><sup>"
-                    + self.dict4runtime["extra_info"][param][2]
-                    + "</sup>"
-                    + self.dict4runtime["extra_info"][param][3]
-                    + "</font>",
-                    self.styles["Left"],
+        else:
+            if self.dict4runtime["extra_info"][param][2] is None:
+                return Paragraph(
+                    "<font size = 11> <b>{0}</b> </font>: {1}".format(
+                        self.dict4runtime["extra_info"][param][0],
+                        str(
+                            round(
+                                self.iqms_data.get(param),
+                                self.dict4runtime["extra_info"][param][1],
+                            )
+                        )
+                        if isinstance(
+                            self.dict4runtime["extra_info"][param][1], int
+                        )
+                        else self.dict4runtime["extra_info"][param][1].format(
+                            self.iqms_data[param]
+                        ),
+                    ),
+                    self.styles["Bullet2"],
                 )
-            )
 
-        self.report.append(PageBreak())
-
-        # Fifth - slice planes display - Raw functional #######################
-        #######################################################################
-        self.report.append(
-            Paragraph(
-                "<font size = 18 > <b>MRI axial slice "
-                "planes display</b> </font>",
-                self.styles["Center"],
-            )
-        )
-        self.report.append(Spacer(0 * mm, 4 * mm))
-        line = ReportLine(150)
-        line.hAlign = "CENTER"
-        self.report.append(line)
-        self.report.append(Spacer(0 * mm, 10 * mm))
-        self.report.append(
-            Paragraph(
-                "<font size = 14 >Raw functional"
-                "images (1<sup>st</sup> dynamic)"
-                "</font>",
-                self.styles["Center"],
-            )
-        )
-        self.report.append(Spacer(0 * mm, 10 * mm))
-        self.report.append(
-            Paragraph(
-                '<font size = 9 ><i>"Neurological" '
-                "convention, the left side of the "
-                "image corresponds to the left side of "
-                "the brain.</i></font>",
-                self.styles["Center"],
-            )
-        )
-        self.report.append(Spacer(0 * mm, 1 * mm))
-        tmpdir = tempfile.TemporaryDirectory()
-        slices_image = slice_planes_plot(
-            self.func,
-            self.func_fig_rows,
-            self.func_fig_cols,
-            inf_slice_start=self.func_inf_slice_start,
-            slices_gap=self.func_slices_gap,
-            cmap="Greys_r",
-            out_dir=tmpdir.name,
-        )
-        # reminder: A4 == 210mmx297mm
-        slices_image = Image(
-            slices_image, width=7.4803 * inch, height=9.0551 * inch
-        )
-        slices_image.hAlign = "CENTER"
-        self.report.append(slices_image)
-        self.report.append(PageBreak())
-
-        # Sixth page - slice planes display - Normalised functional (MNI) #####
-        #######################################################################
-        self.report.append(
-            Paragraph(
-                "<font size = 18 > <b>MRI axial slice "
-                "planes display</b> </font>",
-                self.styles["Center"],
-            )
-        )
-        self.report.append(Spacer(0 * mm, 4 * mm))
-        line = ReportLine(150)
-        line.hAlign = "CENTER"
-        self.report.append(line)
-        self.report.append(Spacer(0 * mm, 10 * mm))
-        self.report.append(
-            Paragraph(
-                "<font size = 14 >Normalised mean " "functional (MNI)</font>",
-                self.styles["Center"],
-            )
-        )
-
-        self.report.append(Spacer(0 * mm, 10 * mm))
-        self.report.append(
-            Paragraph(
-                '<font size = 9 > <i> "Neurological" '
-                "convention, the left side of the "
-                "image corresponds to the left side of "
-                "the brain. </i> <br/> </font>",
-                self.styles["Center"],
-            )
-        )
-        self.report.append(Spacer(0 * mm, 1 * mm))
-        slices_image = slice_planes_plot(
-            self.norm_func,
-            self.norm_func_fig_rows,
-            self.norm_func_fig_cols,
-            inf_slice_start=self.norm_func_inf_slice_start,
-            slices_gap=self.norm_func_slices_gap,
-            cmap="Greys_r",
-            out_dir=tmpdir.name,
-        )
-        # reminder: A4 == 210mmx297mm
-        slices_image = Image(
-            slices_image, width=7.4803 * inch, height=9.0551 * inch
-        )
-        slices_image.hAlign = "CENTER"
-        self.report.append(slices_image)
-        self.page.build(self.report, canvasmaker=PageNumCanvas)
-        tmpdir.cleanup()
+            else:
+                return Paragraph(
+                    "<font size = 9><sup>{0}</sup></font><font size = 11><b>"
+                    "{1}</b></font>: {2}".format(
+                        self.dict4runtime["extra_info"][param][2],
+                        self.dict4runtime["extra_info"][param][0],
+                        str(
+                            round(
+                                self.iqms_data.get(param),
+                                self.dict4runtime["extra_info"][param][1],
+                            )
+                        )
+                        if isinstance(
+                            self.dict4runtime["extra_info"][param][1], int
+                        )
+                        else self.dict4runtime["extra_info"][param][1].format(
+                            self.iqms_data[param]
+                        ),
+                    ),
+                    self.styles["Bullet2"],
+                )
 
     def mriqc_anat_make_report(
         self,
@@ -1365,6 +1016,420 @@ class Report:
         self.page.build(self.report, canvasmaker=PageNumCanvas)
         tmpdir.cleanup()
 
+    def mriqc_func_make_report(
+        self,
+    ):
+        """Make mriqc functional individual report"""
+
+        # First page - cover ##################################################
+        #######################################################################
+
+        self.report.append(self.image_cov)
+        # width, height
+        self.report.append(Spacer(0 * mm, 8 * mm))
+        self.report.append(Paragraph(self.header_title, self.styles["Center"]))
+        self.report.append(Spacer(0 * mm, 10 * mm))
+        line = ReportLine(150)
+        line.hAlign = "CENTER"
+        self.report.append(line)
+        self.report.append(Spacer(0 * mm, 10 * mm))
+        self.report.append(Paragraph(self.title, self.styles["Center"]))
+        self.report.append(Spacer(0 * mm, 10 * mm))
+        self.report.append(self.cover_data)
+        self.report.append(Spacer(0 * mm, 6 * mm))
+        self.report.append(
+            Paragraph(self.textDisclaimer, self.styles["Justify"])
+        )
+        self.report.append(Spacer(0 * mm, 6 * mm))
+        # Footnote
+        line = ReportLine(500)
+        line.hAlign = "CENTER"
+        self.report.append(line)
+        self.report.append(Spacer(0 * mm, 2.5 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size = 8><sup>$</sup>Esteban O et "
+                "al., <i>MRIQC: Advancing the Automatic "
+                "Prediction of Image Quality in MRI from"
+                " Unseen Sites</i>, PLOS ONE 12(9)"
+                ":e0184661.</font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(PageBreak())
+
+        # Second page - IQMs ##################################################
+        #######################################################################
+        self.report.append(
+            Paragraph(
+                "<font size = 18 ><b>Image parameters" "</b></font>",
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        line = ReportLine(150)
+        line.hAlign = "CENTER"
+        self.report.append(line)
+        self.report.append(Spacer(0 * mm, 20 * mm))
+        # Spatial and temporal resolution ###################################
+        self.report.append(
+            Paragraph(
+                "<font size = 15 > <b>SPATIAL AND "
+                "TEMPORAL RESOLUTION</b> </font>",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 2 * mm))
+        self.report.append(Paragraph("Length - Spacing", self.styles["Left2"]))
+        self.report.append(Spacer(0 * mm, 10 * mm))
+
+        # size_x
+        self.report.append(self.get_iqms_data("size_x"))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # size_y
+        self.report.append(self.get_iqms_data("size_y"))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # size_z
+        self.report.append(self.get_iqms_data("size_z"))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # size_t
+        self.report.append(self.get_iqms_data("size_t"))
+        self.report.append(Spacer(0 * mm, 2.5 * mm))
+        # spacing_x
+        self.report.append(self.get_iqms_data("spacing_x"))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # spacing_y
+        self.report.append(self.get_iqms_data("spacing_y"))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # spacing_z
+        self.report.append(self.get_iqms_data("spacing_z"))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # spacing_tr
+        self.report.append(self.get_iqms_data("spacing_tr"))
+        self.report.append(Spacer(0 * mm, 20 * mm))
+        # Measures for artifacts and other ##################################
+        self.report.append(
+            Paragraph(
+                "<font size = 15 > <b>MEASURES FOR "
+                "ARTIFACTS AND OTHER</b> </font>",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 10 * mm))
+        # aor
+        self.report.append(self.get_iqms_data("aor"))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # aqi
+        self.report.append(self.get_iqms_data("aqi"))
+        self.report.append(Spacer(0 * mm, 2.5 * mm))
+        # gsr_x
+        self.report.append(self.get_iqms_data("gsr_x"))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # gsr_y
+        self.report.append(self.get_iqms_data("gsr_y"))
+        self.report.append(Spacer(0 * mm, 2.5 * mm))
+        # fd_mean
+        self.report.append(self.get_iqms_data("fd_mean"))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # fd_num
+        self.report.append(self.get_iqms_data("fd_num"))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # fd_perc
+        self.report.append(self.get_iqms_data("fd_perc"))
+        self.report.append(Spacer(0 * mm, 2.5 * mm))
+        # dummy_trs
+        self.report.append(self.get_iqms_data("dummy_trs"))
+        self.report.append(Spacer(0 * mm, 82 * mm))
+        # Footnote
+        line = ReportLine(500)
+        line.hAlign = "CENTER"
+        self.report.append(line)
+        self.report.append(Spacer(0 * mm, 2.5 * mm))
+
+        for param in ("gsr_x", "fd_mean"):
+            self.report.append(
+                Paragraph(
+                    "<font size = 8><sup>"
+                    + self.dict4runtime["extra_info"][param][2]
+                    + "</sup>"
+                    + self.dict4runtime["extra_info"][param][3]
+                    + "</font>",
+                    self.styles["Left"],
+                )
+            )
+
+        self.report.append(PageBreak())
+
+        # Third page - IQMs ###################################################
+        #######################################################################
+        self.report.append(
+            Paragraph(
+                "<font size = 18 ><b>Image parameters" "</b></font>",
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        line = ReportLine(150)
+        line.hAlign = "CENTER"
+        self.report.append(line)
+        self.report.append(Spacer(0 * mm, 20 * mm))
+        # Measures for the spatial information ##############################
+        self.report.append(
+            Paragraph(
+                "<font size = 15 ><b>MEASURES FOR THE "
+                "SPATIAL INFORMATION</b></font>",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 10 * mm))
+        # summary_bg_mean
+        self.report.append(self.get_iqms_data("summary_bg_mean"))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # summary_bg_stdv
+        self.report.append(self.get_iqms_data("summary_bg_stdv"))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # summary_bg_median
+        self.report.append(self.get_iqms_data("summary_bg_median"))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # summary_bg_mad
+        self.report.append(self.get_iqms_data("summary_bg_mad"))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # summary_bg_p95
+        self.report.append(self.get_iqms_data("summary_bg_p95"))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # summary_bg_p05
+        self.report.append(self.get_iqms_data("summary_bg_p05"))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # summary_bg_k
+        self.report.append(self.get_iqms_data("summary_bg_k"))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # summary_bg_n
+        self.report.append(self.get_iqms_data("summary_bg_n"))
+        self.report.append(Spacer(0 * mm, 2.5 * mm))
+        # summary_fg_mean
+        self.report.append(self.get_iqms_data("summary_fg_mean"))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # summary_fg_stdv
+        self.report.append(self.get_iqms_data("summary_fg_stdv"))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # summary_fg_median
+        self.report.append(self.get_iqms_data("summary_fg_median"))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # summary_fg_mad
+        self.report.append(self.get_iqms_data("summary_fg_mad"))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # summary_fg_p95
+        self.report.append(self.get_iqms_data("summary_fg_p95"))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # summary_fg_p05
+        self.report.append(self.get_iqms_data("summary_fg_p05"))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # summary_fg_k
+        self.report.append(self.get_iqms_data("summary_fg_k"))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # summary_fg_n
+        self.report.append(self.get_iqms_data("summary_fg_n"))
+        self.report.append(Spacer(0 * mm, 2.5 * mm))
+        # snr
+        self.report.append(self.get_iqms_data("snr"))
+        self.report.append(Spacer(0 * mm, 2.5 * mm))
+        # fber
+        self.report.append(self.get_iqms_data("fber"))
+        self.report.append(Spacer(0 * mm, 2.5 * mm))
+        # efc
+        self.report.append(self.get_iqms_data("efc"))
+        self.report.append(Spacer(0 * mm, 2.5 * mm))
+        # fwhm_x
+        self.report.append(self.get_iqms_data("fwhm_x"))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # fwhm_y
+        self.report.append(self.get_iqms_data("fwhm_y"))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # fwhm_z
+        self.report.append(self.get_iqms_data("fwhm_z"))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # fwhm_avg
+        self.report.append(self.get_iqms_data("fwhm_avg"))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        self.report.append(Spacer(0 * mm, 66 * mm))
+        # Footnote
+        line = ReportLine(500)
+        line.hAlign = "CENTER"
+        self.report.append(line)
+        self.report.append(Spacer(0 * mm, 2.5 * mm))
+
+        for param in ("summary_bg_k", "fber", "efc", "fwhm_x"):
+            self.report.append(
+                Paragraph(
+                    "<font size = 8><sup>"
+                    + self.dict4runtime["extra_info"][param][2]
+                    + "</sup>"
+                    + self.dict4runtime["extra_info"][param][3]
+                    + "</font>",
+                    self.styles["Left"],
+                )
+            )
+
+        self.report.append(PageBreak())
+
+        # fourth page - IQMs ##################################################
+        #######################################################################
+        self.report.append(
+            Paragraph(
+                "<font size = 18 ><b>Image parameters" "</b></font>",
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        line = ReportLine(150)
+        line.hAlign = "CENTER"
+        self.report.append(line)
+        self.report.append(Spacer(0 * mm, 20 * mm))
+        # Measures for the temporal information #############################
+        self.report.append(
+            Paragraph(
+                "<font size = 15 ><b>MEASURES FOR THE "
+                "TEMPORAL INFORMATION</b></font>",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 10 * mm))
+        # dvars_nstd
+        self.report.append(self.get_iqms_data("dvars_nstd"))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # dvars_std
+        self.report.append(self.get_iqms_data("dvars_std"))
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # dvars_vstd
+        self.report.append(self.get_iqms_data("dvars_vstd"))
+        self.report.append(Spacer(0 * mm, 2.5 * mm))
+        # tsnr
+        self.report.append(self.get_iqms_data("tsnr"))
+        self.report.append(Spacer(0 * mm, 2.5 * mm))
+        # gcor
+        self.report.append(self.get_iqms_data("gcor"))
+        self.report.append(Spacer(0 * mm, 170 * mm))
+        # Footnote
+        line = ReportLine(500)
+        line.hAlign = "CENTER"
+        self.report.append(line)
+        self.report.append(Spacer(0 * mm, 2.5 * mm))
+
+        for param in ("dvars_nstd", "tsnr", "gcor"):
+            self.report.append(
+                Paragraph(
+                    "<font size = 8><sup>"
+                    + self.dict4runtime["extra_info"][param][2]
+                    + "</sup>"
+                    + self.dict4runtime["extra_info"][param][3]
+                    + "</font>",
+                    self.styles["Left"],
+                )
+            )
+
+        self.report.append(PageBreak())
+
+        # Fifth - slice planes display - Raw functional #######################
+        #######################################################################
+        self.report.append(
+            Paragraph(
+                "<font size = 18 > <b>MRI axial slice "
+                "planes display</b> </font>",
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        line = ReportLine(150)
+        line.hAlign = "CENTER"
+        self.report.append(line)
+        self.report.append(Spacer(0 * mm, 10 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size = 14 >Raw functional"
+                "images (1<sup>st</sup> dynamic)"
+                "</font>",
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 10 * mm))
+        self.report.append(
+            Paragraph(
+                '<font size = 9 ><i>"Neurological" '
+                "convention, the left side of the "
+                "image corresponds to the left side of "
+                "the brain.</i></font>",
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        tmpdir = tempfile.TemporaryDirectory()
+        slices_image = slice_planes_plot(
+            self.func,
+            self.func_fig_rows,
+            self.func_fig_cols,
+            inf_slice_start=self.func_inf_slice_start,
+            slices_gap=self.func_slices_gap,
+            cmap="Greys_r",
+            out_dir=tmpdir.name,
+        )
+        # reminder: A4 == 210mmx297mm
+        slices_image = Image(
+            slices_image, width=7.4803 * inch, height=9.0551 * inch
+        )
+        slices_image.hAlign = "CENTER"
+        self.report.append(slices_image)
+        self.report.append(PageBreak())
+
+        # Sixth page - slice planes display - Normalised functional (MNI) #####
+        #######################################################################
+        self.report.append(
+            Paragraph(
+                "<font size = 18 > <b>MRI axial slice "
+                "planes display</b> </font>",
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        line = ReportLine(150)
+        line.hAlign = "CENTER"
+        self.report.append(line)
+        self.report.append(Spacer(0 * mm, 10 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size = 14 >Normalised mean " "functional (MNI)</font>",
+                self.styles["Center"],
+            )
+        )
+
+        self.report.append(Spacer(0 * mm, 10 * mm))
+        self.report.append(
+            Paragraph(
+                '<font size = 9 > <i> "Neurological" '
+                "convention, the left side of the "
+                "image corresponds to the left side of "
+                "the brain. </i> <br/> </font>",
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        slices_image = slice_planes_plot(
+            self.norm_func,
+            self.norm_func_fig_rows,
+            self.norm_func_fig_cols,
+            inf_slice_start=self.norm_func_inf_slice_start,
+            slices_gap=self.norm_func_slices_gap,
+            cmap="Greys_r",
+            out_dir=tmpdir.name,
+        )
+        # reminder: A4 == 210mmx297mm
+        slices_image = Image(
+            slices_image, width=7.4803 * inch, height=9.0551 * inch
+        )
+        slices_image.hAlign = "CENTER"
+        self.report.append(slices_image)
+        self.page.build(self.report, canvasmaker=PageNumCanvas)
+        tmpdir.cleanup()
+
     def mriqc_group_make_report(self):
         """Make mriqc group report"""
 
@@ -1790,67 +1855,3 @@ class Report:
         self.report.append(PageBreak())
 
         self.page.build(self.report, canvasmaker=PageNumCanvas)
-
-    def get_iqms_data(self, param):
-        """Get iqms data"""
-
-        if self.iqms_data.get(param) is None:
-            if self.dict4runtime["extra_info"][param][2] is None:
-                return Paragraph(
-                    "<font size = 11> <b> "
-                    + self.dict4runtime["extra_info"][param][0]
-                    + " </b> </font>: Not determined",
-                    self.styles["Bullet2"],
-                )
-            else:
-                return Paragraph(
-                    "<font size = 9><sup>"
-                    + self.dict4runtime["extra_info"][param][2]
-                    + "</sup></font><font size = 11><b>"
-                    + self.dict4runtime["extra_info"][param][0]
-                    + "</b></font>: Not determined",
-                    self.styles["Bullet2"],
-                )
-
-        else:
-            if self.dict4runtime["extra_info"][param][2] is None:
-                return Paragraph(
-                    "<font size = 11> <b>{0}</b> </font>: {1}".format(
-                        self.dict4runtime["extra_info"][param][0],
-                        str(
-                            round(
-                                self.iqms_data.get(param),
-                                self.dict4runtime["extra_info"][param][1],
-                            )
-                        )
-                        if isinstance(
-                            self.dict4runtime["extra_info"][param][1], int
-                        )
-                        else self.dict4runtime["extra_info"][param][1].format(
-                            self.iqms_data[param]
-                        ),
-                    ),
-                    self.styles["Bullet2"],
-                )
-
-            else:
-                return Paragraph(
-                    "<font size = 9><sup>{0}</sup></font><font size = 11><b>"
-                    "{1}</b></font>: {2}".format(
-                        self.dict4runtime["extra_info"][param][2],
-                        self.dict4runtime["extra_info"][param][0],
-                        str(
-                            round(
-                                self.iqms_data.get(param),
-                                self.dict4runtime["extra_info"][param][1],
-                            )
-                        )
-                        if isinstance(
-                            self.dict4runtime["extra_info"][param][1], int
-                        )
-                        else self.dict4runtime["extra_info"][param][1].format(
-                            self.iqms_data[param]
-                        ),
-                    ),
-                    self.styles["Bullet2"],
-                )
