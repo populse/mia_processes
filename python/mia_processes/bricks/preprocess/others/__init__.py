@@ -13,6 +13,7 @@ Atomic calculations that do not come from ants, fsl, spm, etc.
 ##########################################################################
 
 from .processing import (  # noqa: F401
+    TSNR,
     ApplyBiasCorrection,
     ArtifactMask,
     Binarize,
@@ -29,7 +30,6 @@ from .processing import (  # noqa: F401
     Resample2,
     RotationMask,
     Sanitize,
-    TSNR,
     TemplateFromTemplateFlow,
     Threshold,
 )

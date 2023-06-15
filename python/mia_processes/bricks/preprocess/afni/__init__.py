@@ -13,12 +13,12 @@ The atomic calculations from afni.
 ##########################################################################
 
 from .processes import (  # noqa: F401
+    GCOR,
     Automask,
     Calc,
     CalcDropTRs,
     Despike,
     FWHMx,
-    GCOR,
     OutlierCount,
     QualityIndex,
     RefitDeoblique,
