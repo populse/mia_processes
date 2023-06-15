@@ -41,8 +41,6 @@ List_Duplicate brick
 From a file name, generating a list containing this file name and the file name itself
 ---------------------------------------------------------------------------------------
 
-*'/home/ArthurBlair/data/Anat.nii' -> List_Duplicate -> ['/home/ArthurBlair/data/Anat.nii'] + '/home/ArthurBlair/data/Anat.nii'*
-
 **Inputs parameters:**
 
 - *file_name*
@@ -50,7 +48,7 @@ From a file name, generating a list containing this file name and the file name 
 
     ::
 
-      ex. /home/ArthurBlair/data/Func.nii
+      ex. /home/username/data/Func.nii
 
 **Outputs parameters:**
 
@@ -59,11 +57,11 @@ From a file name, generating a list containing this file name and the file name 
 
     ::
 
-      ex.  /home/ArthurBlair/data/Func.nii
+      ex.  /home/username/data/Func.nii
 
 - *out_list*
     A list with one string element corresponding to an existing path file.
 
     ::
 
-      ex. ['/home/ArthurBlair/data/Func.nii']
+      ex. ['/home/username/data/Func.nii']

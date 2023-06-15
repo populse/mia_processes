@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.utils.report &#8212; mia_processes 2.2.1-dev+d5320be6 documentation</title>
+    <title>mia_processes.utils.report &#8212; mia_processes 2.2.1-dev+dafe34dd documentation</title>
     <link rel="stylesheet" href="../../../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
@@ -18,7 +18,7 @@
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
-          <span>mia_processes 2.2.1-dev+d5320be6 documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+dafe34dd documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.utils.report</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -100,13 +100,14 @@
     <span class="sd">&quot;&quot;&quot;Create pdf report</span>
 
 <span class="sd">    IQMs_file --&gt; mriqc individual report (with all IQMs)</span>
-<span class="sd">    mriqc_group ---&gt; mriqc report group</span>
+<span class="sd">    mriqc_group --&gt; mriqc report group</span>
 
-<span class="sd">    Functions:</span>
-<span class="sd">    - get_iqms_data</span>
-<span class="sd">    - mriqc_anat_make_report</span>
-<span class="sd">    - mriqc_func_make_report</span>
-<span class="sd">    - mriqc_group_make_report</span>
+<span class="sd">    Methods:</span>
+<span class="sd">      - get_iqms_data</span>
+<span class="sd">      - mriqc_anat_make_report</span>
+<span class="sd">      - mriqc_func_make_report</span>
+<span class="sd">      - mriqc_group_make_report</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Report.__init__"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.report.Report.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">report_file</span><span class="p">,</span> <span class="n">dict4runtime</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -393,419 +394,69 @@
         <span class="c1"># Canvas creation</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">report</span> <span class="o">=</span> <span class="p">[]</span></div>
 
-<div class="viewcode-block" id="Report.mriqc_func_make_report"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.report.Report.mriqc_func_make_report">[docs]</a>    <span class="k">def</span> <span class="nf">mriqc_func_make_report</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-    <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Make mriqc functional individual report&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Report.get_iqms_data"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.report.Report.get_iqms_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_iqms_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get iqms data&quot;&quot;&quot;</span>
 
-        <span class="c1"># First page - cover ##################################################</span>
-        <span class="c1">#######################################################################</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image_cov</span><span class="p">)</span>
-        <span class="c1"># width, height</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">8</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Paragraph</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">header_title</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">]))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="n">line</span> <span class="o">=</span> <span class="n">ReportLine</span><span class="p">(</span><span class="mi">150</span><span class="p">)</span>
-        <span class="n">line</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;CENTER&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Paragraph</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">]))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cover_data</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <span class="n">Paragraph</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">textDisclaimer</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Justify&quot;</span><span class="p">])</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># Footnote</span>
-        <span class="n">line</span> <span class="o">=</span> <span class="n">ReportLine</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span>
-        <span class="n">line</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;CENTER&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mf">2.5</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <span class="n">Paragraph</span><span class="p">(</span>
-                <span class="s2">&quot;&lt;font size = 8&gt;&lt;sup&gt;$&lt;/sup&gt;Esteban O et &quot;</span>
-                <span class="s2">&quot;al., &lt;i&gt;MRIQC: Advancing the Automatic &quot;</span>
-                <span class="s2">&quot;Prediction of Image Quality in MRI from&quot;</span>
-                <span class="s2">&quot; Unseen Sites&lt;/i&gt;, PLOS ONE 12(9)&quot;</span>
-                <span class="s2">&quot;:e0184661.&lt;/font&gt;&quot;</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Left&quot;</span><span class="p">],</span>
-            <span class="p">)</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PageBreak</span><span class="p">())</span>
-
-        <span class="c1"># Second page - IQMs ##################################################</span>
-        <span class="c1">#######################################################################</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <span class="n">Paragraph</span><span class="p">(</span>
-                <span class="s2">&quot;&lt;font size = 18 &gt;&lt;b&gt;Image parameters&quot;</span> <span class="s2">&quot;&lt;/b&gt;&lt;/font&gt;&quot;</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">],</span>
-            <span class="p">)</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="n">line</span> <span class="o">=</span> <span class="n">ReportLine</span><span class="p">(</span><span class="mi">150</span><span class="p">)</span>
-        <span class="n">line</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;CENTER&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># Spatial and temporal resolution ###################################</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <span class="n">Paragraph</span><span class="p">(</span>
-                <span class="s2">&quot;&lt;font size = 15 &gt; &lt;b&gt;SPATIAL AND &quot;</span>
-                <span class="s2">&quot;TEMPORAL RESOLUTION&lt;/b&gt; &lt;/font&gt;&quot;</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet1&quot;</span><span class="p">],</span>
-            <span class="p">)</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Paragraph</span><span class="p">(</span><span class="s2">&quot;Length - Spacing&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Left2&quot;</span><span class="p">]))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-
-        <span class="c1"># size_x</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;size_x&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># size_y</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;size_y&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># size_z</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;size_z&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># size_t</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;size_t&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mf">2.5</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># spacing_x</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;spacing_x&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># spacing_y</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;spacing_y&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># spacing_z</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;spacing_z&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># spacing_tr</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;spacing_tr&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># Measures for artifacts and other ##################################</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <span class="n">Paragraph</span><span class="p">(</span>
-                <span class="s2">&quot;&lt;font size = 15 &gt; &lt;b&gt;MEASURES FOR &quot;</span>
-                <span class="s2">&quot;ARTIFACTS AND OTHER&lt;/b&gt; &lt;/font&gt;&quot;</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet1&quot;</span><span class="p">],</span>
-            <span class="p">)</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># aor</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;aor&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># aqi</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;aqi&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mf">2.5</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># gsr_x</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;gsr_x&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># gsr_y</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;gsr_y&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mf">2.5</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># fd_mean</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;fd_mean&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># fd_num</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;fd_num&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># fd_perc</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;fd_perc&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mf">2.5</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># dummy_trs</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;dummy_trs&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">82</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># Footnote</span>
-        <span class="n">line</span> <span class="o">=</span> <span class="n">ReportLine</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span>
-        <span class="n">line</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;CENTER&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mf">2.5</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-
-        <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;gsr_x&quot;</span><span class="p">,</span> <span class="s2">&quot;fd_mean&quot;</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                <span class="n">Paragraph</span><span class="p">(</span>
-                    <span class="s2">&quot;&lt;font size = 8&gt;&lt;sup&gt;&quot;</span>
-                    <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
-                    <span class="o">+</span> <span class="s2">&quot;&lt;/sup&gt;&quot;</span>
-                    <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span>
-                    <span class="o">+</span> <span class="s2">&quot;&lt;/font&gt;&quot;</span><span class="p">,</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Left&quot;</span><span class="p">],</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">iqms_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">param</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">Paragraph</span><span class="p">(</span>
+                    <span class="s2">&quot;&lt;font size = 11&gt; &lt;b&gt; &quot;</span>
+                    <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="o">+</span> <span class="s2">&quot; &lt;/b&gt; &lt;/font&gt;: Not determined&quot;</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
                 <span class="p">)</span>
-            <span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PageBreak</span><span class="p">())</span>
-
-        <span class="c1"># Third page - IQMs ###################################################</span>
-        <span class="c1">#######################################################################</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <span class="n">Paragraph</span><span class="p">(</span>
-                <span class="s2">&quot;&lt;font size = 18 &gt;&lt;b&gt;Image parameters&quot;</span> <span class="s2">&quot;&lt;/b&gt;&lt;/font&gt;&quot;</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">],</span>
-            <span class="p">)</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="n">line</span> <span class="o">=</span> <span class="n">ReportLine</span><span class="p">(</span><span class="mi">150</span><span class="p">)</span>
-        <span class="n">line</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;CENTER&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># Measures for the spatial information ##############################</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <span class="n">Paragraph</span><span class="p">(</span>
-                <span class="s2">&quot;&lt;font size = 15 &gt;&lt;b&gt;MEASURES FOR THE &quot;</span>
-                <span class="s2">&quot;SPATIAL INFORMATION&lt;/b&gt;&lt;/font&gt;&quot;</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet1&quot;</span><span class="p">],</span>
-            <span class="p">)</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># summary_bg_mean</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;summary_bg_mean&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># summary_bg_stdv</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;summary_bg_stdv&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># summary_bg_median</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;summary_bg_median&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># summary_bg_mad</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;summary_bg_mad&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># summary_bg_p95</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;summary_bg_p95&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># summary_bg_p05</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;summary_bg_p05&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># summary_bg_k</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;summary_bg_k&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># summary_bg_n</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;summary_bg_n&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mf">2.5</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># summary_fg_mean</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;summary_fg_mean&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># summary_fg_stdv</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;summary_fg_stdv&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># summary_fg_median</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;summary_fg_median&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># summary_fg_mad</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;summary_fg_mad&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># summary_fg_p95</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;summary_fg_p95&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># summary_fg_p05</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;summary_fg_p05&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># summary_fg_k</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;summary_fg_k&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># summary_fg_n</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;summary_fg_n&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mf">2.5</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># snr</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;snr&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mf">2.5</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># fber</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;fber&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mf">2.5</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># efc</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;efc&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mf">2.5</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># fwhm_x</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;fwhm_x&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># fwhm_y</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;fwhm_y&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># fwhm_z</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;fwhm_z&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># fwhm_avg</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;fwhm_avg&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">66</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># Footnote</span>
-        <span class="n">line</span> <span class="o">=</span> <span class="n">ReportLine</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span>
-        <span class="n">line</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;CENTER&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mf">2.5</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-
-        <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;summary_bg_k&quot;</span><span class="p">,</span> <span class="s2">&quot;fber&quot;</span><span class="p">,</span> <span class="s2">&quot;efc&quot;</span><span class="p">,</span> <span class="s2">&quot;fwhm_x&quot;</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                <span class="n">Paragraph</span><span class="p">(</span>
-                    <span class="s2">&quot;&lt;font size = 8&gt;&lt;sup&gt;&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">Paragraph</span><span class="p">(</span>
+                    <span class="s2">&quot;&lt;font size = 9&gt;&lt;sup&gt;&quot;</span>
                     <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
-                    <span class="o">+</span> <span class="s2">&quot;&lt;/sup&gt;&quot;</span>
-                    <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span>
-                    <span class="o">+</span> <span class="s2">&quot;&lt;/font&gt;&quot;</span><span class="p">,</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Left&quot;</span><span class="p">],</span>
+                    <span class="o">+</span> <span class="s2">&quot;&lt;/sup&gt;&lt;/font&gt;&lt;font size = 11&gt;&lt;b&gt;&quot;</span>
+                    <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="o">+</span> <span class="s2">&quot;&lt;/b&gt;&lt;/font&gt;: Not determined&quot;</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
                 <span class="p">)</span>
-            <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PageBreak</span><span class="p">())</span>
-
-        <span class="c1"># fourth page - IQMs ##################################################</span>
-        <span class="c1">#######################################################################</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <span class="n">Paragraph</span><span class="p">(</span>
-                <span class="s2">&quot;&lt;font size = 18 &gt;&lt;b&gt;Image parameters&quot;</span> <span class="s2">&quot;&lt;/b&gt;&lt;/font&gt;&quot;</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">],</span>
-            <span class="p">)</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="n">line</span> <span class="o">=</span> <span class="n">ReportLine</span><span class="p">(</span><span class="mi">150</span><span class="p">)</span>
-        <span class="n">line</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;CENTER&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># Measures for the temporal information #############################</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <span class="n">Paragraph</span><span class="p">(</span>
-                <span class="s2">&quot;&lt;font size = 15 &gt;&lt;b&gt;MEASURES FOR THE &quot;</span>
-                <span class="s2">&quot;TEMPORAL INFORMATION&lt;/b&gt;&lt;/font&gt;&quot;</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet1&quot;</span><span class="p">],</span>
-            <span class="p">)</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># dvars_nstd</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;dvars_nstd&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># dvars_std</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;dvars_std&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># dvars_vstd</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;dvars_vstd&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mf">2.5</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># tsnr</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;tsnr&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mf">2.5</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># gcor</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;gcor&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">170</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="c1"># Footnote</span>
-        <span class="n">line</span> <span class="o">=</span> <span class="n">ReportLine</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span>
-        <span class="n">line</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;CENTER&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mf">2.5</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-
-        <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;dvars_nstd&quot;</span><span class="p">,</span> <span class="s2">&quot;tsnr&quot;</span><span class="p">,</span> <span class="s2">&quot;gcor&quot;</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                <span class="n">Paragraph</span><span class="p">(</span>
-                    <span class="s2">&quot;&lt;font size = 8&gt;&lt;sup&gt;&quot;</span>
-                    <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
-                    <span class="o">+</span> <span class="s2">&quot;&lt;/sup&gt;&quot;</span>
-                    <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span>
-                    <span class="o">+</span> <span class="s2">&quot;&lt;/font&gt;&quot;</span><span class="p">,</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Left&quot;</span><span class="p">],</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">Paragraph</span><span class="p">(</span>
+                    <span class="s2">&quot;&lt;font size = 11&gt; &lt;b&gt;</span><span class="si">{0}</span><span class="s2">&lt;/b&gt; &lt;/font&gt;: </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                        <span class="nb">str</span><span class="p">(</span>
+                            <span class="nb">round</span><span class="p">(</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">iqms_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">param</span><span class="p">),</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+                            <span class="p">)</span>
+                        <span class="p">)</span>
+                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="nb">int</span>
+                        <span class="p">)</span>
+                        <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">iqms_data</span><span class="p">[</span><span class="n">param</span><span class="p">]</span>
+                        <span class="p">),</span>
+                    <span class="p">),</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
                 <span class="p">)</span>
-            <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PageBreak</span><span class="p">())</span>
-
-        <span class="c1"># Fifth - slice planes display - Raw functional #######################</span>
-        <span class="c1">#######################################################################</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <span class="n">Paragraph</span><span class="p">(</span>
-                <span class="s2">&quot;&lt;font size = 18 &gt; &lt;b&gt;MRI axial slice &quot;</span>
-                <span class="s2">&quot;planes display&lt;/b&gt; &lt;/font&gt;&quot;</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">],</span>
-            <span class="p">)</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="n">line</span> <span class="o">=</span> <span class="n">ReportLine</span><span class="p">(</span><span class="mi">150</span><span class="p">)</span>
-        <span class="n">line</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;CENTER&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <span class="n">Paragraph</span><span class="p">(</span>
-                <span class="s2">&quot;&lt;font size = 14 &gt;Raw functional&quot;</span>
-                <span class="s2">&quot;images (1&lt;sup&gt;st&lt;/sup&gt; dynamic)&quot;</span>
-                <span class="s2">&quot;&lt;/font&gt;&quot;</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">],</span>
-            <span class="p">)</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <span class="n">Paragraph</span><span class="p">(</span>
-                <span class="s1">&#39;&lt;font size = 9 &gt;&lt;i&gt;&quot;Neurological&quot; &#39;</span>
-                <span class="s2">&quot;convention, the left side of the &quot;</span>
-                <span class="s2">&quot;image corresponds to the left side of &quot;</span>
-                <span class="s2">&quot;the brain.&lt;/i&gt;&lt;/font&gt;&quot;</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">],</span>
-            <span class="p">)</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="n">tmpdir</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span>
-        <span class="n">slices_image</span> <span class="o">=</span> <span class="n">slice_planes_plot</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">func_fig_rows</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">func_fig_cols</span><span class="p">,</span>
-            <span class="n">inf_slice_start</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">func_inf_slice_start</span><span class="p">,</span>
-            <span class="n">slices_gap</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">func_slices_gap</span><span class="p">,</span>
-            <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Greys_r&quot;</span><span class="p">,</span>
-            <span class="n">out_dir</span><span class="o">=</span><span class="n">tmpdir</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="c1"># reminder: A4 == 210mmx297mm</span>
-        <span class="n">slices_image</span> <span class="o">=</span> <span class="n">Image</span><span class="p">(</span>
-            <span class="n">slices_image</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">7.4803</span> <span class="o">*</span> <span class="n">inch</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">9.0551</span> <span class="o">*</span> <span class="n">inch</span>
-        <span class="p">)</span>
-        <span class="n">slices_image</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;CENTER&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">slices_image</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PageBreak</span><span class="p">())</span>
-
-        <span class="c1"># Sixth page - slice planes display - Normalised functional (MNI) #####</span>
-        <span class="c1">#######################################################################</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <span class="n">Paragraph</span><span class="p">(</span>
-                <span class="s2">&quot;&lt;font size = 18 &gt; &lt;b&gt;MRI axial slice &quot;</span>
-                <span class="s2">&quot;planes display&lt;/b&gt; &lt;/font&gt;&quot;</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">],</span>
-            <span class="p">)</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="n">line</span> <span class="o">=</span> <span class="n">ReportLine</span><span class="p">(</span><span class="mi">150</span><span class="p">)</span>
-        <span class="n">line</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;CENTER&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <span class="n">Paragraph</span><span class="p">(</span>
-                <span class="s2">&quot;&lt;font size = 14 &gt;Normalised mean &quot;</span> <span class="s2">&quot;functional (MNI)&lt;/font&gt;&quot;</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">],</span>
-            <span class="p">)</span>
-        <span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <span class="n">Paragraph</span><span class="p">(</span>
-                <span class="s1">&#39;&lt;font size = 9 &gt; &lt;i&gt; &quot;Neurological&quot; &#39;</span>
-                <span class="s2">&quot;convention, the left side of the &quot;</span>
-                <span class="s2">&quot;image corresponds to the left side of &quot;</span>
-                <span class="s2">&quot;the brain. &lt;/i&gt; &lt;br/&gt; &lt;/font&gt;&quot;</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">],</span>
-            <span class="p">)</span>
-        <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
-        <span class="n">slices_image</span> <span class="o">=</span> <span class="n">slice_planes_plot</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">norm_func</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">norm_func_fig_rows</span><span class="p">,</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">norm_func_fig_cols</span><span class="p">,</span>
-            <span class="n">inf_slice_start</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_func_inf_slice_start</span><span class="p">,</span>
-            <span class="n">slices_gap</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_func_slices_gap</span><span class="p">,</span>
-            <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Greys_r&quot;</span><span class="p">,</span>
-            <span class="n">out_dir</span><span class="o">=</span><span class="n">tmpdir</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="c1"># reminder: A4 == 210mmx297mm</span>
-        <span class="n">slices_image</span> <span class="o">=</span> <span class="n">Image</span><span class="p">(</span>
-            <span class="n">slices_image</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">7.4803</span> <span class="o">*</span> <span class="n">inch</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">9.0551</span> <span class="o">*</span> <span class="n">inch</span>
-        <span class="p">)</span>
-        <span class="n">slices_image</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;CENTER&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">slices_image</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="p">,</span> <span class="n">canvasmaker</span><span class="o">=</span><span class="n">PageNumCanvas</span><span class="p">)</span>
-        <span class="n">tmpdir</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span></div>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">Paragraph</span><span class="p">(</span>
+                    <span class="s2">&quot;&lt;font size = 9&gt;&lt;sup&gt;</span><span class="si">{0}</span><span class="s2">&lt;/sup&gt;&lt;/font&gt;&lt;font size = 11&gt;&lt;b&gt;&quot;</span>
+                    <span class="s2">&quot;</span><span class="si">{1}</span><span class="s2">&lt;/b&gt;&lt;/font&gt;: </span><span class="si">{2}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                        <span class="nb">str</span><span class="p">(</span>
+                            <span class="nb">round</span><span class="p">(</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">iqms_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">param</span><span class="p">),</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+                            <span class="p">)</span>
+                        <span class="p">)</span>
+                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="nb">int</span>
+                        <span class="p">)</span>
+                        <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">iqms_data</span><span class="p">[</span><span class="n">param</span><span class="p">]</span>
+                        <span class="p">),</span>
+                    <span class="p">),</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
+                <span class="p">)</span></div>
 
 <div class="viewcode-block" id="Report.mriqc_anat_make_report"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.report.Report.mriqc_anat_make_report">[docs]</a>    <span class="k">def</span> <span class="nf">mriqc_anat_make_report</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -1399,6 +1050,420 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="p">,</span> <span class="n">canvasmaker</span><span class="o">=</span><span class="n">PageNumCanvas</span><span class="p">)</span>
         <span class="n">tmpdir</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span></div>
 
+<div class="viewcode-block" id="Report.mriqc_func_make_report"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.report.Report.mriqc_func_make_report">[docs]</a>    <span class="k">def</span> <span class="nf">mriqc_func_make_report</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Make mriqc functional individual report&quot;&quot;&quot;</span>
+
+        <span class="c1"># First page - cover ##################################################</span>
+        <span class="c1">#######################################################################</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image_cov</span><span class="p">)</span>
+        <span class="c1"># width, height</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">8</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Paragraph</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">header_title</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">ReportLine</span><span class="p">(</span><span class="mi">150</span><span class="p">)</span>
+        <span class="n">line</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;CENTER&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Paragraph</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cover_data</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">textDisclaimer</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Justify&quot;</span><span class="p">])</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># Footnote</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">ReportLine</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span>
+        <span class="n">line</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;CENTER&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mf">2.5</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size = 8&gt;&lt;sup&gt;$&lt;/sup&gt;Esteban O et &quot;</span>
+                <span class="s2">&quot;al., &lt;i&gt;MRIQC: Advancing the Automatic &quot;</span>
+                <span class="s2">&quot;Prediction of Image Quality in MRI from&quot;</span>
+                <span class="s2">&quot; Unseen Sites&lt;/i&gt;, PLOS ONE 12(9)&quot;</span>
+                <span class="s2">&quot;:e0184661.&lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Left&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PageBreak</span><span class="p">())</span>
+
+        <span class="c1"># Second page - IQMs ##################################################</span>
+        <span class="c1">#######################################################################</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size = 18 &gt;&lt;b&gt;Image parameters&quot;</span> <span class="s2">&quot;&lt;/b&gt;&lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">ReportLine</span><span class="p">(</span><span class="mi">150</span><span class="p">)</span>
+        <span class="n">line</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;CENTER&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># Spatial and temporal resolution ###################################</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size = 15 &gt; &lt;b&gt;SPATIAL AND &quot;</span>
+                <span class="s2">&quot;TEMPORAL RESOLUTION&lt;/b&gt; &lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet1&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Paragraph</span><span class="p">(</span><span class="s2">&quot;Length - Spacing&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Left2&quot;</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+
+        <span class="c1"># size_x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;size_x&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># size_y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;size_y&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># size_z</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;size_z&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># size_t</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;size_t&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mf">2.5</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># spacing_x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;spacing_x&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># spacing_y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;spacing_y&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># spacing_z</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;spacing_z&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># spacing_tr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;spacing_tr&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># Measures for artifacts and other ##################################</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size = 15 &gt; &lt;b&gt;MEASURES FOR &quot;</span>
+                <span class="s2">&quot;ARTIFACTS AND OTHER&lt;/b&gt; &lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet1&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># aor</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;aor&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># aqi</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;aqi&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mf">2.5</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># gsr_x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;gsr_x&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># gsr_y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;gsr_y&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mf">2.5</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># fd_mean</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;fd_mean&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># fd_num</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;fd_num&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># fd_perc</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;fd_perc&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mf">2.5</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># dummy_trs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;dummy_trs&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">82</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># Footnote</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">ReportLine</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span>
+        <span class="n">line</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;CENTER&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mf">2.5</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;gsr_x&quot;</span><span class="p">,</span> <span class="s2">&quot;fd_mean&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">Paragraph</span><span class="p">(</span>
+                    <span class="s2">&quot;&lt;font size = 8&gt;&lt;sup&gt;&quot;</span>
+                    <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
+                    <span class="o">+</span> <span class="s2">&quot;&lt;/sup&gt;&quot;</span>
+                    <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span>
+                    <span class="o">+</span> <span class="s2">&quot;&lt;/font&gt;&quot;</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Left&quot;</span><span class="p">],</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PageBreak</span><span class="p">())</span>
+
+        <span class="c1"># Third page - IQMs ###################################################</span>
+        <span class="c1">#######################################################################</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size = 18 &gt;&lt;b&gt;Image parameters&quot;</span> <span class="s2">&quot;&lt;/b&gt;&lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">ReportLine</span><span class="p">(</span><span class="mi">150</span><span class="p">)</span>
+        <span class="n">line</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;CENTER&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># Measures for the spatial information ##############################</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size = 15 &gt;&lt;b&gt;MEASURES FOR THE &quot;</span>
+                <span class="s2">&quot;SPATIAL INFORMATION&lt;/b&gt;&lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet1&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># summary_bg_mean</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;summary_bg_mean&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># summary_bg_stdv</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;summary_bg_stdv&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># summary_bg_median</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;summary_bg_median&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># summary_bg_mad</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;summary_bg_mad&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># summary_bg_p95</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;summary_bg_p95&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># summary_bg_p05</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;summary_bg_p05&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># summary_bg_k</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;summary_bg_k&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># summary_bg_n</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;summary_bg_n&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mf">2.5</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># summary_fg_mean</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;summary_fg_mean&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># summary_fg_stdv</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;summary_fg_stdv&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># summary_fg_median</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;summary_fg_median&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># summary_fg_mad</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;summary_fg_mad&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># summary_fg_p95</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;summary_fg_p95&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># summary_fg_p05</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;summary_fg_p05&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># summary_fg_k</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;summary_fg_k&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># summary_fg_n</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;summary_fg_n&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mf">2.5</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># snr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;snr&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mf">2.5</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># fber</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;fber&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mf">2.5</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># efc</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;efc&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mf">2.5</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># fwhm_x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;fwhm_x&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># fwhm_y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;fwhm_y&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># fwhm_z</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;fwhm_z&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># fwhm_avg</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;fwhm_avg&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">66</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># Footnote</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">ReportLine</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span>
+        <span class="n">line</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;CENTER&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mf">2.5</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;summary_bg_k&quot;</span><span class="p">,</span> <span class="s2">&quot;fber&quot;</span><span class="p">,</span> <span class="s2">&quot;efc&quot;</span><span class="p">,</span> <span class="s2">&quot;fwhm_x&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">Paragraph</span><span class="p">(</span>
+                    <span class="s2">&quot;&lt;font size = 8&gt;&lt;sup&gt;&quot;</span>
+                    <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
+                    <span class="o">+</span> <span class="s2">&quot;&lt;/sup&gt;&quot;</span>
+                    <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span>
+                    <span class="o">+</span> <span class="s2">&quot;&lt;/font&gt;&quot;</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Left&quot;</span><span class="p">],</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PageBreak</span><span class="p">())</span>
+
+        <span class="c1"># fourth page - IQMs ##################################################</span>
+        <span class="c1">#######################################################################</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size = 18 &gt;&lt;b&gt;Image parameters&quot;</span> <span class="s2">&quot;&lt;/b&gt;&lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">ReportLine</span><span class="p">(</span><span class="mi">150</span><span class="p">)</span>
+        <span class="n">line</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;CENTER&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># Measures for the temporal information #############################</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size = 15 &gt;&lt;b&gt;MEASURES FOR THE &quot;</span>
+                <span class="s2">&quot;TEMPORAL INFORMATION&lt;/b&gt;&lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet1&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># dvars_nstd</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;dvars_nstd&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># dvars_std</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;dvars_std&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># dvars_vstd</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;dvars_vstd&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mf">2.5</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># tsnr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;tsnr&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mf">2.5</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># gcor</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_iqms_data</span><span class="p">(</span><span class="s2">&quot;gcor&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">170</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># Footnote</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">ReportLine</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span>
+        <span class="n">line</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;CENTER&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mf">2.5</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;dvars_nstd&quot;</span><span class="p">,</span> <span class="s2">&quot;tsnr&quot;</span><span class="p">,</span> <span class="s2">&quot;gcor&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">Paragraph</span><span class="p">(</span>
+                    <span class="s2">&quot;&lt;font size = 8&gt;&lt;sup&gt;&quot;</span>
+                    <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
+                    <span class="o">+</span> <span class="s2">&quot;&lt;/sup&gt;&quot;</span>
+                    <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span>
+                    <span class="o">+</span> <span class="s2">&quot;&lt;/font&gt;&quot;</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Left&quot;</span><span class="p">],</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PageBreak</span><span class="p">())</span>
+
+        <span class="c1"># Fifth - slice planes display - Raw functional #######################</span>
+        <span class="c1">#######################################################################</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size = 18 &gt; &lt;b&gt;MRI axial slice &quot;</span>
+                <span class="s2">&quot;planes display&lt;/b&gt; &lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">ReportLine</span><span class="p">(</span><span class="mi">150</span><span class="p">)</span>
+        <span class="n">line</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;CENTER&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size = 14 &gt;Raw functional&quot;</span>
+                <span class="s2">&quot;images (1&lt;sup&gt;st&lt;/sup&gt; dynamic)&quot;</span>
+                <span class="s2">&quot;&lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s1">&#39;&lt;font size = 9 &gt;&lt;i&gt;&quot;Neurological&quot; &#39;</span>
+                <span class="s2">&quot;convention, the left side of the &quot;</span>
+                <span class="s2">&quot;image corresponds to the left side of &quot;</span>
+                <span class="s2">&quot;the brain.&lt;/i&gt;&lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="n">tmpdir</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span>
+        <span class="n">slices_image</span> <span class="o">=</span> <span class="n">slice_planes_plot</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">func</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">func_fig_rows</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">func_fig_cols</span><span class="p">,</span>
+            <span class="n">inf_slice_start</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">func_inf_slice_start</span><span class="p">,</span>
+            <span class="n">slices_gap</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">func_slices_gap</span><span class="p">,</span>
+            <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Greys_r&quot;</span><span class="p">,</span>
+            <span class="n">out_dir</span><span class="o">=</span><span class="n">tmpdir</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="c1"># reminder: A4 == 210mmx297mm</span>
+        <span class="n">slices_image</span> <span class="o">=</span> <span class="n">Image</span><span class="p">(</span>
+            <span class="n">slices_image</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">7.4803</span> <span class="o">*</span> <span class="n">inch</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">9.0551</span> <span class="o">*</span> <span class="n">inch</span>
+        <span class="p">)</span>
+        <span class="n">slices_image</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;CENTER&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">slices_image</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PageBreak</span><span class="p">())</span>
+
+        <span class="c1"># Sixth page - slice planes display - Normalised functional (MNI) #####</span>
+        <span class="c1">#######################################################################</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size = 18 &gt; &lt;b&gt;MRI axial slice &quot;</span>
+                <span class="s2">&quot;planes display&lt;/b&gt; &lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">ReportLine</span><span class="p">(</span><span class="mi">150</span><span class="p">)</span>
+        <span class="n">line</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;CENTER&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size = 14 &gt;Normalised mean &quot;</span> <span class="s2">&quot;functional (MNI)&lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s1">&#39;&lt;font size = 9 &gt; &lt;i&gt; &quot;Neurological&quot; &#39;</span>
+                <span class="s2">&quot;convention, the left side of the &quot;</span>
+                <span class="s2">&quot;image corresponds to the left side of &quot;</span>
+                <span class="s2">&quot;the brain. &lt;/i&gt; &lt;br/&gt; &lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="n">slices_image</span> <span class="o">=</span> <span class="n">slice_planes_plot</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">norm_func</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">norm_func_fig_rows</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">norm_func_fig_cols</span><span class="p">,</span>
+            <span class="n">inf_slice_start</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_func_inf_slice_start</span><span class="p">,</span>
+            <span class="n">slices_gap</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_func_slices_gap</span><span class="p">,</span>
+            <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Greys_r&quot;</span><span class="p">,</span>
+            <span class="n">out_dir</span><span class="o">=</span><span class="n">tmpdir</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="c1"># reminder: A4 == 210mmx297mm</span>
+        <span class="n">slices_image</span> <span class="o">=</span> <span class="n">Image</span><span class="p">(</span>
+            <span class="n">slices_image</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">7.4803</span> <span class="o">*</span> <span class="n">inch</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">9.0551</span> <span class="o">*</span> <span class="n">inch</span>
+        <span class="p">)</span>
+        <span class="n">slices_image</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;CENTER&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">slices_image</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="p">,</span> <span class="n">canvasmaker</span><span class="o">=</span><span class="n">PageNumCanvas</span><span class="p">)</span>
+        <span class="n">tmpdir</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span></div>
+
 <div class="viewcode-block" id="Report.mriqc_group_make_report"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.report.Report.mriqc_group_make_report">[docs]</a>    <span class="k">def</span> <span class="nf">mriqc_group_make_report</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Make mriqc group report&quot;&quot;&quot;</span>
 
@@ -1823,71 +1888,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PageBreak</span><span class="p">())</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="p">,</span> <span class="n">canvasmaker</span><span class="o">=</span><span class="n">PageNumCanvas</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="Report.get_iqms_data"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.report.Report.get_iqms_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_iqms_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Get iqms data&quot;&quot;&quot;</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">iqms_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">param</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">Paragraph</span><span class="p">(</span>
-                    <span class="s2">&quot;&lt;font size = 11&gt; &lt;b&gt; &quot;</span>
-                    <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-                    <span class="o">+</span> <span class="s2">&quot; &lt;/b&gt; &lt;/font&gt;: Not determined&quot;</span><span class="p">,</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
-                <span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">Paragraph</span><span class="p">(</span>
-                    <span class="s2">&quot;&lt;font size = 9&gt;&lt;sup&gt;&quot;</span>
-                    <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
-                    <span class="o">+</span> <span class="s2">&quot;&lt;/sup&gt;&lt;/font&gt;&lt;font size = 11&gt;&lt;b&gt;&quot;</span>
-                    <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-                    <span class="o">+</span> <span class="s2">&quot;&lt;/b&gt;&lt;/font&gt;: Not determined&quot;</span><span class="p">,</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
-                <span class="p">)</span>
-
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">Paragraph</span><span class="p">(</span>
-                    <span class="s2">&quot;&lt;font size = 11&gt; &lt;b&gt;</span><span class="si">{0}</span><span class="s2">&lt;/b&gt; &lt;/font&gt;: </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
-                        <span class="nb">str</span><span class="p">(</span>
-                            <span class="nb">round</span><span class="p">(</span>
-                                <span class="bp">self</span><span class="o">.</span><span class="n">iqms_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">param</span><span class="p">),</span>
-                                <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
-                            <span class="p">)</span>
-                        <span class="p">)</span>
-                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="nb">int</span>
-                        <span class="p">)</span>
-                        <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">iqms_data</span><span class="p">[</span><span class="n">param</span><span class="p">]</span>
-                        <span class="p">),</span>
-                    <span class="p">),</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
-                <span class="p">)</span>
-
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">Paragraph</span><span class="p">(</span>
-                    <span class="s2">&quot;&lt;font size = 9&gt;&lt;sup&gt;</span><span class="si">{0}</span><span class="s2">&lt;/sup&gt;&lt;/font&gt;&lt;font size = 11&gt;&lt;b&gt;&quot;</span>
-                    <span class="s2">&quot;</span><span class="si">{1}</span><span class="s2">&lt;/b&gt;&lt;/font&gt;: </span><span class="si">{2}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
-                        <span class="nb">str</span><span class="p">(</span>
-                            <span class="nb">round</span><span class="p">(</span>
-                                <span class="bp">self</span><span class="o">.</span><span class="n">iqms_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">param</span><span class="p">),</span>
-                                <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
-                            <span class="p">)</span>
-                        <span class="p">)</span>
-                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="nb">int</span>
-                        <span class="p">)</span>
-                        <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">iqms_data</span><span class="p">[</span><span class="n">param</span><span class="p">]</span>
-                        <span class="p">),</span>
-                    <span class="p">),</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
-                <span class="p">)</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="p">,</span> <span class="n">canvasmaker</span><span class="o">=</span><span class="n">PageNumCanvas</span><span class="p">)</span></div></div>
 </pre></div>
 
       </div>

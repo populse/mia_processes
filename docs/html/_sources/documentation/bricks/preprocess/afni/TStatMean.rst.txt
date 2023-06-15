@@ -29,8 +29,8 @@ Compute mean of input voxels for a 3D+time dataset image.
 
 - *output_type* (NIFTI or NIFTI_GZ, optional, default value is NIFTI)
     | Format of the output image (one of NIFTI, NIFTI_GZ).
-    |   NIFTI: \*.nii
-    |   NIFTI_GZ: \*.nii.gz
+    |   - NIFTI: \*.nii
+    |   - NIFTI_GZ: \*.nii.gz
 
     ::
 
