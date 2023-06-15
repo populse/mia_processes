@@ -10,7 +10,7 @@
 Make_a_list brick
 ===================
 
-MFrom 2 objects, generating a list containing all these objects
+From 2 objects, generating a list containing all these objects
 
 ---------------------------------------------------------------------
 

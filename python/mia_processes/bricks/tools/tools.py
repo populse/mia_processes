@@ -13,8 +13,8 @@ needed to run other higher-level bricks.
         - Files_To_List
         - Filter_Files_List
         - Find_In_List
-        - Input_Filter
         - Import_Data
+        - Input_Filter
         - List_Duplicate
         - List_To_File
         - Make_A_List

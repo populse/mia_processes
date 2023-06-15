@@ -8,8 +8,8 @@ compute necessary values for reporting.
     :Class:
         - AnatIQMs
         - BoldIQMs
-        - ComputeDVARS
         - CarpetParcellation
+        - ComputeDVARS
         - FramewiseDisplacement
         - Mean_stdDev_calc
         - Result_collector
@@ -28,12 +28,19 @@ compute necessary values for reporting.
         - gsr
         - image_binary_dilation
         - normalize_mc_params
+        - regress_poly
         - rpve
         - snr
         - snr_dietrich
         - summary_stats
         - volume_fraction
         - wm2max
+        - _AR_est_YW
+        - _flatten_dict
+        - _prepare_mask
+        - _robust_zscore
+
+
 """
 
 ##########################################################################
@@ -2853,6 +2860,19 @@ def fber(img, headmask, rotmask=None):
     return float(fg_mu / bg_mu)
 
 
+def fuzzy_jaccard(in_tpms, in_mni_tpms):
+    """blabla"""
+    overlaps = []
+    for tpm, mni_tpm in zip(in_tpms, in_mni_tpms):
+        tpm = tpm.reshape(-1)
+        mni_tpm = mni_tpm.reshape(-1)
+
+        num = np.min([tpm, mni_tpm], axis=0).sum()
+        den = np.max([tpm, mni_tpm], axis=0).sum()
+        overlaps.append(float(num / den))
+    return overlaps
+
+
 def find_peaks(data):
     """
     :param data: a numpy ndarray
@@ -2882,19 +2902,6 @@ def find_spikes(data, spike_thresh):
     spikes = np.logical_or(spikes, np.abs(t_z) > spike_thresh)
     spike_inds = [tuple(i) for i in np.transpose(spikes.nonzero())]
     return spike_inds, t_z
-
-
-def fuzzy_jaccard(in_tpms, in_mni_tpms):
-    """blabla"""
-    overlaps = []
-    for tpm, mni_tpm in zip(in_tpms, in_mni_tpms):
-        tpm = tpm.reshape(-1)
-        mni_tpm = mni_tpm.reshape(-1)
-
-        num = np.min([tpm, mni_tpm], axis=0).sum()
-        den = np.max([tpm, mni_tpm], axis=0).sum()
-        overlaps.append(float(num / den))
-    return overlaps
 
 
 def gsr(epi_data, mask, direction="y", ref_file=None, out_file=None):
@@ -3223,6 +3230,11 @@ def wm2max(img, mu_wm):
     return float(mu_wm / np.percentile(img.reshape(-1), 99.95))
 
 
+def _AR_est_YW(x, order, rxx=None):
+    """Retrieve AR coefficients while dropping the sig_sq return value"""
+    return AR_est_YW(x, order, rxx=rxx)[0]
+
+
 def _flatten_dict(indict):
     """Reduce a dictionary of dictionaries to a dictionary
 
@@ -3283,8 +3295,3 @@ def _robust_zscore(data):
     return (data - np.atleast_2d(np.median(data, axis=1)).T) / np.atleast_2d(
         data.std(axis=1)
     ).T
-
-
-def _AR_est_YW(x, order, rxx=None):
-    """Retrieve AR coefficients while dropping the sig_sq return value"""
-    return AR_est_YW(x, order, rxx=rxx)[0]

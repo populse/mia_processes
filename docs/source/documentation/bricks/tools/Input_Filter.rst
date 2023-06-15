@@ -41,9 +41,6 @@ Input_Filter brick
 To filter the content of the Data Browser tab or the output data of another brick
 ---------------------------------------------------------------------------------
 
-*[Preselected data (or not) from the Data Browser or the output data from another brick] -> Input_Filter -> ['/home/ArthurBlair/data/raw_data/Anat.nii']*
-
-
 **Inputs parameters:**
 
 - *input*
@@ -51,7 +48,7 @@ To filter the content of the Data Browser tab or the output data of another bric
 
     ::
 
-      ex. ['/home/ArthurBlair/data/Anat.nii', '/home/ArthurBlair/data/Func.nii']
+      ex. ['/home/username/data/Anat.nii', '/home/username/data/Func.nii']
 
 **Outputs parameters:**
 
@@ -60,7 +57,7 @@ To filter the content of the Data Browser tab or the output data of another bric
 
     ::
 
-      ex. ['/home/ArthurBlair/data/Func.nii']
+      ex. ['/home/username/data/Func.nii']
 
 -------------
 

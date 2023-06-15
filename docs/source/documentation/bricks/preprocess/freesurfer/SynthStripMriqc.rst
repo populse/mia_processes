@@ -55,9 +55,9 @@ If you use this bricks in your analysis, please cite: `SynthStrip: Skull-Strippi
 
 - *output_type* ('NIFTI' or 'NIFTI_GZ' or 'MGZ', optional, default value is NIFTI)
     | Format of the output image (one of NIFTI, NIFTI_GZ, MGZ).
-    |   NIFTI: \*.nii
-    |   NIFTI_GZ: \*.nii.gz
-    |   MGZ: \*.mgz
+    |   - NIFTI: \*.nii
+    |   - NIFTI_GZ: \*.nii.gz
+    |   - MGZ: \*.mgz
 
     ::
 

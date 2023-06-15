@@ -48,7 +48,7 @@ Segments,  bias  corrects  and  spatially normalises - all in the same model
 
     ::
 
-      ex. ['/home/ArthurBlair/data/raw_data/Anat.nii']
+      ex. ['/home/username/data/raw_data/Anat.nii']
 
 - *channel_info <=> (channel.biasreg, channel.biasfwhm, (channel.write))* [#label]_
     A tuple (consisting of a float, a float and a tuple consisting of a boolean, a boolean) with the following fields:
@@ -126,12 +126,12 @@ Segments,  bias  corrects  and  spatially normalises - all in the same model
 
     ::
 
-      ex.  [(('/home/ArthurBlair/spm12/tpm/TPM.nii', 1), 2, (True, False), (False, False)),
-            (('/home/ArthurBlair/spm12/tpm/TPM.nii', 2), 2, (True, False), (False, False)),
-            (('/home/ArthurBlair/spm12/tpm/TPM.nii', 3), 2, (True, False), (False, False)),
-            (('/home/ArthurBlair/spm12/tpm/TPM.nii', 4), 3, (True, False), (False, False)),
-            (('/home/ArthurBlair/spm12/tpm/TPM.nii', 5), 4, (True, False), (False, False)),
-            (('/home/ArthurBlair/spm12/tpm/TPM.nii', 6), 2, (True, False), (False, False))]
+      ex.  [(('/home/username/spm12/tpm/TPM.nii', 1), 2, (True, False), (False, False)),
+            (('/home/username/spm12/tpm/TPM.nii', 2), 2, (True, False), (False, False)),
+            (('/home/username/spm12/tpm/TPM.nii', 3), 2, (True, False), (False, False)),
+            (('/home/username/spm12/tpm/TPM.nii', 4), 3, (True, False), (False, False)),
+            (('/home/username/spm12/tpm/TPM.nii', 5), 4, (True, False), (False, False)),
+            (('/home/username/spm12/tpm/TPM.nii', 6), 2, (True, False), (False, False))]
 
 - *warping_regularization <=> warp.reg* [#label]_
     The measure of the roughness of the deformations for registration. Involve the sum of 5 elements (a float or list of floats; the latter is
@@ -175,14 +175,14 @@ Segments,  bias  corrects  and  spatially normalises - all in the same model
 
     ::
 
-      ex. /home/ArthurBlair/data/raw_data/mAnat.nii
+      ex. /home/username/data/raw_data/mAnat.nii
 
 - *bias_field_images*
     The estimated bias field (a list of items which are a pathlike object or string representing an existing file).
 
     ::
 
-      ex. /home/ArthurBlair/data/raw_data/BiasField_Anat.nii
+      ex. /home/username/data/raw_data/BiasField_Anat.nii
 
 - *native_class_images*
     Native space probability maps (a list of items which are a list of items which are a pathlike object or string representing an existing
@@ -190,44 +190,44 @@ Segments,  bias  corrects  and  spatially normalises - all in the same model
 
     ::
 
-      ex. [['/home/ArthurBlair/data/raw_data/c1Anat.nii'],
-           ['/home/ArthurBlair/data/raw_data/c2Anat.nii'],
-           ['/home/ArthurBlair/data/raw_data/c3Anat.nii'],
-           ['/home/ArthurBlair/data/raw_data/c4Anat.nii'],
-           ['/home/ArthurBlair/data/raw_data/c5Anat.nii']]
+      ex. [['/home/username/data/raw_data/c1Anat.nii'],
+           ['/home/username/data/raw_data/c2Anat.nii'],
+           ['/home/username/data/raw_data/c3Anat.nii'],
+           ['/home/username/data/raw_data/c4Anat.nii'],
+           ['/home/username/data/raw_data/c5Anat.nii']]
 
 - *dartel_input_images*
     "Imported" class images into a form that can be used with the Dartel toolbox (a list of items which are a list of items which are a pathlike object or string representing an existing file).
 
     ::
 
-      ex. [['/home/ArthurBlair/data/raw_data/rc1Anat.nii'],
-           ['/home/ArthurBlair/data/raw_data/rc2Anat.nii'],
-           ['/home/ArthurBlair/data/raw_data/rc3Anat.nii'],
-           ['/home/ArthurBlair/data/raw_data/rc4Anat.nii'],
-           ['/home/ArthurBlair/data/raw_data/rc5Anat.nii']]
+      ex. [['/home/username/data/raw_data/rc1Anat.nii'],
+           ['/home/username/data/raw_data/rc2Anat.nii'],
+           ['/home/username/data/raw_data/rc3Anat.nii'],
+           ['/home/username/data/raw_data/rc4Anat.nii'],
+           ['/home/username/data/raw_data/rc5Anat.nii']]
 
 - *modulated_class_images*
     Modulated and normalised class images (a list of items which are a list of items which are a pathlike object or string representing an existing file).
 
     ::
 
-      ex. [['/home/ArthurBlair/data/raw_data/mwc1Anat.nii'],
-           ['/home/ArthurBlair/data/raw_data/mwc2Anat.nii'],
-           ['/home/ArthurBlair/data/raw_data/mwc3Anat.nii'],
-           ['/home/ArthurBlair/data/raw_data/mwc4Anat.nii'],
-           ['/home/ArthurBlair/data/raw_data/mwc5Anat.nii']]
+      ex. [['/home/username/data/raw_data/mwc1Anat.nii'],
+           ['/home/username/data/raw_data/mwc2Anat.nii'],
+           ['/home/username/data/raw_data/mwc3Anat.nii'],
+           ['/home/username/data/raw_data/mwc4Anat.nii'],
+           ['/homeusername/data/raw_data/mwc5Anat.nii']]
 
 - *normalized_class_images*
     Normalised class images, without modulation (a list of items which are a list of items which are a pathlike object or string representing an existing file).
 
     ::
 
-      ex. [['/home/ArthurBlair/data/raw_data/wc1Anat.nii'],
-           ['/home/ArthurBlair/data/raw_data/wc2Anat.nii'],
-           ['/home/ArthurBlair/data/raw_data/wc3Anat.nii'],
-           ['/home/ArthurBlair/data/raw_data/wc4Anat.nii'],
-           ['/home/ArthurBlair/data/raw_data/wc5Anat.nii']]
+      ex. [['/home/username/data/raw_data/wc1Anat.nii'],
+           ['/home/username/data/raw_data/wc2Anat.nii'],
+           ['/home/username/data/raw_data/wc3Anat.nii'],
+           ['/home/username/data/raw_data/wc4Anat.nii'],
+           ['/home/username/data/raw_data/wc5Anat.nii']]
 
 - *inverse_deformation_field*
     Inverse deformation field. Could be used for spatially normalising surface files as GIFTI (a list of items which are a pathlike object or
@@ -235,7 +235,7 @@ Segments,  bias  corrects  and  spatially normalises - all in the same model
 
     ::
 
-      ex. /home/ArthurBlair/data/raw_data/iy_Anat.nii
+      ex. /home/username/data/raw_data/iy_Anat.nii
 
 - *forward_deformation_field*
     Forward deformation field. Could be used for spatially normalising images to MNI space (a list of items which are a pathlike object or
@@ -243,14 +243,14 @@ Segments,  bias  corrects  and  spatially normalises - all in the same model
 
     ::
 
-      ex. /home/ArthurBlair/data/raw_data/y_Anat.nii
+      ex. /home/username/data/raw_data/y_Anat.nii
 
 - *transformation_mat*
     Normalisation transformation (a list of items which are a pathlike object or string representing an existing file).
 
     ::
 
-      ex. /home/ArthurBlair/data/raw_data/Anat_seg8.mat
+      ex. /home/username/data/raw_data/Anat_seg8.mat
 
 -------------
 

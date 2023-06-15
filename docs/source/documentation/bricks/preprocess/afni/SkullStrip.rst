@@ -17,7 +17,7 @@ Extract the brain from surrounding tissue from MRI T1-weighted images (using AFN
 **Mandatory inputs parameters:**
 
 - *in_file* (a string representing an existing file)
-    'A 3D-T1 file to skull-strip (valid extensions: [.nii, .nii.gz]).
+    A 3D-T1 file to skull-strip (valid extensions: [.nii, .nii.gz]).
 
     ::
 
@@ -28,8 +28,8 @@ Extract the brain from surrounding tissue from MRI T1-weighted images (using AFN
 
 - *output_type* (NIFTI or NIFTI_GZ, optional, default value is NIFTI)
     | Format of the output image (one of NIFTI, NIFTI_GZ).
-    |   NIFTI: \*.nii
-    |   NIFTI_GZ: \*.nii.gz
+    |   - NIFTI: \*.nii
+    |   - NIFTI_GZ: \*.nii.gz
 
     ::
 
