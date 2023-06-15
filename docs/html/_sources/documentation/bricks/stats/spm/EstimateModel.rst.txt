@@ -62,7 +62,7 @@ Bayesian methods are not implemented in this brick. If you need to use Bayesian 
     Default is Undefined. In this case, the number of estimated regression coefficients used will be the one defined in the database for the smp_mat_file.
 
     ::
-            
+
         ex. 8
 
 - *factor_info* (a list of items which are a dictionary with keys which are ‘name’ and ‘levels’ and with values which are a string or an integer, optional):
@@ -88,7 +88,7 @@ Bayesian methods are not implemented in this brick. If you need to use Bayesian 
     Images of estimated regression coefficients "beta_000k" where k indexes the kth regression coefficient.
 
     ::
-            
+
         ex. ['/home/username/data/derived_data/beta_0001.nii',
             '/home/username/data/derived_data/beta_0002.nii',
             '/home/username/data/derived_data/beta_0003.nii',
@@ -115,9 +115,9 @@ Bayesian methods are not implemented in this brick. If you need to use Bayesian 
 
 - *residual_image* (a pathlike object or string representing a file):
     The image of the variance of the error.
-    
+
     ::
-        
+
         ex. '/home/username/data/derived_data/ResMS.nii'
 
 - *residual_images* (a list of items which are a pathlike object or string representing a file, optional):
@@ -136,7 +136,7 @@ Bayesian methods are not implemented in this brick. If you need to use Bayesian 
 
 - *RPVimage* (a pathlike object or string representing a file):
     The image of the estimated resolution elements per voxel.
-        
+
     ::
 
         ex. '/home/username/data/derived_data/RPV.nii'

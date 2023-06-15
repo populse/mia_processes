@@ -14,13 +14,13 @@ EstimateConstrast brick
 Estimate contrasts of interest (SPM12 fMRI contrast manager).
 -------------------------------------------------------------
 
-To define a new T-contrast: 
+To define a new T-contrast:
     - add the contrast name in 'T_contrast_names' parameter
     - add the name of the conditions used for this contrast in 'T_condition_names' parameter
-    - add the contrast weight for this contrast in 'T_contrast_weights' parameters 
+    - add the contrast weight for this contrast in 'T_contrast_weights' parameters
     - if some session should not be include, specify this in 'session' parameter
 
-To define a new F-contrast: 
+To define a new F-contrast:
     - define the T-contrasts that should be used for estimate this F-contrast
     - add the contrast name in 'F_contrast_names' parameter
     - add the names of T-contrasts that should be used in 'F_contrast_T_names' parameter
@@ -40,7 +40,7 @@ To define a new F-contrast:
     Estimated regression coefficients.
 
     ::
-        
+
         ex. ['/home/username/data/derived_data/beta_0001.nii',
             '/home/username/data/derived_data/beta_0002.nii',
             '/home/username/data/derived_data/beta_0003.nii',
@@ -101,7 +101,7 @@ To define a new F-contrast:
     Default is Undefined.
 
     ::
-        
+
         ex. ['0', '1.0']
 
 - *F_contrast_name* (a list of string, optional):
