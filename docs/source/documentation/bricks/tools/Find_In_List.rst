@@ -49,7 +49,7 @@ From a list of files, select the 1rst element that contains a pattern
 
     ::
 
-      ex. ['/home/username/data/Anat1_001.nii', ['/home/username/data/Anat1_002.nii', '/home/username/data/Anat1_003.nii', '/home/username/data/Anat2_002.nii']
+      ex. ['/home/username/data/Anat1_001.nii', '/home/username/data/Anat1_002.nii', '/home/username/data/Anat1_003.nii', '/home/username/data/Anat2_002.nii']
 
 - *pattern*
     Pattern to look for (a string).

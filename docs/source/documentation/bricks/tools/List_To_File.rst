@@ -41,8 +41,6 @@ List_To_File brick
 From a list of files, generation of a single file
 -------------------------------------------------
 
-*['/home/ArthurBlair/data/Anat.nii', '/home/ArthurBlair/data/Func.nii'] -> List_To_File -> '/home/ArthurBlair/data/Func.nii'*
-
 **Inputs parameters:**
 
 - *file_list*
@@ -50,7 +48,7 @@ From a list of files, generation of a single file
 
     ::
 
-      ex. ['/home/ArthurBlair/data/Anat.nii', '/home/ArthurBlair/data/Func.nii']
+      ex. ['/home/username/data/Anat.nii', '/home/username/data/Func.nii']
 
 - *index_filter*
     A list of 0 to 1 indexes (integer) for filtering.
@@ -66,7 +64,7 @@ From a list of files, generation of a single file
 
     ::
 
-      ex. '/home/ArthurBlair/data/Func.nii'
+      ex. /home/username/data/Anat.nii
 
 -------------
 

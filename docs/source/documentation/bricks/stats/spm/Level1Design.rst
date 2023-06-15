@@ -50,7 +50,7 @@ fMRI model specification for GLM analysis.
 
         [sess_1_ScanPath_1, sess_2_scanPath_2, ..., sess_n_scanPath_n]
 
-        ex. ['/home/ArthurBlair/data/raw_data/Func_1.nii', '/home/ArthurBlair/data/raw_data/Func_2.nii']
+        ex. ['/home/username/data/raw_data/Func_1.nii', '/home/username/data/raw_data/Func_2.nii']
 
 - *sess_cond_names <=> sess.cond.name* [#label]_
     The name of each condition (list of items which are a list of items which are a string). Each session can have several or no conditions, so any number of condition types (event or time) can be specified for each session. In a general way, ``sess_cond_names`` can be defined as:
@@ -355,7 +355,7 @@ fMRI model specification for GLM analysis.
           [sess_n_file_1, sess_n_file_2, ..., sess_n_file_n]
         ] # Use None if no value for a session
 
-        ex. [['/home/ArthurBlair/data/raw_data/file1.mat', '/home/ArthurBlair/data/raw_data/file2.txt'], None]
+        ex. [['/home/username/data/raw_data/file1.mat', '/home/username/data/raw_data/file2.txt'], None]
 
 - *sess_hpf <=> sess.hpf* [#label]_
     High-pass filter (a list of items which are a float). One value per session must be applied. Slow signal drifts with a period longer than the applied value will be removed.
@@ -419,7 +419,7 @@ fMRI model specification for GLM analysis.
 
     ::
 
-      ex. /home/ArthurBlair/data/raw_data/mask_swc1Anat.nii
+      ex. /home/username/data/raw_data/mask_swc1Anat.nii
 
 - *model_serial_correlations <=> cvi* [#label]_
     Serial correlations in fMRI time series due to aliased biorhythms and unmodelled neuronal activity can be accounted for using an autoregressive AR(1) model during Classical (ReML) parameter estimation. Serial correlation can be ignored if the 'none' option is selected. FAST option is only available in SPM12 (one of AR(1), or FAST or none).

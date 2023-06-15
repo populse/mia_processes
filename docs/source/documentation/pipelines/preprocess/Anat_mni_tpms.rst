@@ -13,7 +13,7 @@ Anat_mni_tpms pipeline
 Get templates tissues probability map (white matter (WM), grey matter (GM) and cerebrospinal (CSF))
 from 'MNI152NLin2009cAsym' template (resolution 1 mm) and register them in subject space.
 
-Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical workflow.
+Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6/>`_ anatomical workflow.
 
 --------------------------------------
 
@@ -61,4 +61,4 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
 
 Usefull links:
 
-`mriqc v22.06 <https://github.com/nipreps/mriqc/blob/22.0.6/mriqc/workflows/anatomical.py#L408>_`
+`mriqc v22.06 <https://github.com/nipreps/mriqc/blob/22.0.6/mriqc/workflows/anatomical.py#L408>`_

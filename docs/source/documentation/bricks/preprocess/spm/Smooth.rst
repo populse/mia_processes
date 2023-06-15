@@ -20,7 +20,7 @@ Smooth brick
 
     ::
 
-      ex. ['/home/ArthurBlair/data/raw_data/Func.nii']
+      ex. ['/home/username/data/raw_data/Func.nii']
 
 - *fwhm <=> fwhm* [#label]_
     Specify the full-width at half maximum (FWHM) of the Gaussian smoothing kernel in mm (a float or a list of 3 items which are a float).
@@ -66,7 +66,7 @@ Smooth brick
 
     ::
 
-      ex. /home/ArthurBlair/data/derived_data/sFunc.nii
+      ex. /home/username/data/derived_data/sFunc.nii
 
 -------------
 

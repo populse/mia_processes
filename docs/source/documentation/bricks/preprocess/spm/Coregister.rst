@@ -49,7 +49,7 @@ Align together scans of different modalities
 
     ::
 
-      ex. /home/ArthurBlair/data/downloaded_data/meanFunc.nii
+      ex. /home/username/data/downloaded_data/meanFunc.nii
 
 - *source <=> source* [#label]_
     The image that is jiggled about to best match the target image. A list of items which are an existing, uncompressed file (valid
@@ -57,14 +57,14 @@ Align together scans of different modalities
 
     ::
 
-      ex. ['/home/ArthurBlair/data/raw_data/Anat.nii']
+      ex. ['/home/username/data/raw_data/Anat.nii']
 
 - *apply_to_files <=> other* [#label]_
     These are any images that need to remain in alignment with the source image (a list of items which are an existing file name).
 
     ::
 
-      ex. ['/home/ArthurBlair/data/raw_data/Func.nii']
+      ex. ['/home/username/data/raw_data/Func.nii']
 
 
 
@@ -170,14 +170,14 @@ Align together scans of different modalities
 
     ::
 
-      ex. /home/ArthurBlair/data/raw_data/Anat.nii
+      ex. /home/username/data/raw_data/Anat.nii
 
 - *coregistered_files*
     A list of items which are an existing file name. Coregistered other files, corresponding to 'apply_to_files' images.
 
     ::
 
-      ex. /home/ArthurBlair/data/raw_data/Func.nii
+      ex. /home/username/data/raw_data/Func.nii
 
 -------------
 
