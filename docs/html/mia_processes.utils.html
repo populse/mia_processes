@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.utils package &#8212; mia_processes 2.2.1-dev+d5320be6 documentation</title>
+    <title>mia_processes.utils package &#8212; mia_processes 2.2.1-dev+dafe34dd documentation</title>
     <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -18,7 +18,7 @@
     <link rel="search" title="Search" href="search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="index.html">
-          <span>mia_processes 2.2.1-dev+d5320be6 documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+dafe34dd documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.utils package</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -37,6 +37,7 @@
 <dl class="simple">
 <dt>Contains:</dt><dd><dl class="simple">
 <dt>Modules:</dt><dd><ul class="simple">
+<li><p>report.py</p></li>
 <li><p>tools.py</p></li>
 </ul>
 </dd>
@@ -66,12 +67,16 @@
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Create pdf report</p>
 <p>IQMs_file –&gt; mriqc individual report (with all IQMs)
-mriqc_group —&gt; mriqc report group</p>
-<p>Functions:
-- get_iqms_data
-- mriqc_anat_make_report
-- mriqc_func_make_report
-- mriqc_group_make_report</p>
+mriqc_group –&gt; mriqc report group</p>
+<dl class="simple">
+<dt>Methods:</dt><dd><ul class="simple">
+<li><p>get_iqms_data</p></li>
+<li><p>mriqc_anat_make_report</p></li>
+<li><p>mriqc_func_make_report</p></li>
+<li><p>mriqc_group_make_report</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py method">
 <dt id="mia_processes.utils.report.Report.__init__">
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">report_file</span></em>, <em class="sig-param"><span class="n">dict4runtime</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/utils/report.html#Report.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.utils.report.Report.__init__" title="Permalink to this definition">¶</a></dt>

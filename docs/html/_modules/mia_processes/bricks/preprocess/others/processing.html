@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.preprocess.others.processing &#8212; mia_processes 2.2.1-dev+d5320be6 documentation</title>
+    <title>mia_processes.bricks.preprocess.others.processing &#8212; mia_processes 2.2.1-dev+dafe34dd documentation</title>
     <link rel="stylesheet" href="../../../../../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
@@ -18,7 +18,7 @@
     <link rel="search" title="Search" href="../../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../../index.html">
-          <span>mia_processes 2.2.1-dev+d5320be6 documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+dafe34dd documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.preprocess.others.processing</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -56,9 +56,9 @@
 <span class="sd">        - Resample2</span>
 <span class="sd">        - RotationMask</span>
 <span class="sd">        - Sanitize</span>
+<span class="sd">        - TSNR</span>
 <span class="sd">        - TemplateFromTemplateFlow</span>
 <span class="sd">        - Threshold</span>
-<span class="sd">        - TSNR</span>
 
 <span class="sd">    :Function:</span>
 <span class="sd">        - artifact_mask</span>
@@ -3908,6 +3908,333 @@
                 <span class="n">nib</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">file_out</span><span class="p">)</span></div></div>
 
 
+<div class="viewcode-block" id="TSNR"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.TSNR">[docs]</a><span class="k">class</span> <span class="nc">TSNR</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    * Computes the time-course SNR for a time series.</span>
+
+<span class="sd">    Please, see the complete documentation for the</span>
+<span class="sd">    `TSNR&#39; brick in the populse.mia_processes website</span>
+<span class="sd">    https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/TSNR.html</span>
+
+<span class="sd">    adapted from:</span>
+<span class="sd">    https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5de5913b31/nipype/algorithms/confounds.py#L899</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TSNR.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.TSNR.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+
+<span class="sd">        The input and output plugs are defined here. The special</span>
+<span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
+<span class="sd">        third-party products necessary for the running of the brick.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">TSNR</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Inputs description</span>
+        <span class="n">in_file_desc</span> <span class="o">=</span> <span class="s2">&quot;An existing path file.&quot;</span>
+        <span class="n">prefix_tsnr_desc</span> <span class="o">=</span> <span class="s2">&quot;Prefix of the tsnr image (a string).&quot;</span>
+        <span class="n">suffix_tsnr_desc</span> <span class="o">=</span> <span class="s2">&quot;Suffix of the tsnr image (a string).&quot;</span>
+        <span class="n">prefix_stddev_desc</span> <span class="o">=</span> <span class="s2">&quot;Prefix of the tsnr image (a string).&quot;</span>
+        <span class="n">suffix_stddev_desc</span> <span class="o">=</span> <span class="s2">&quot;Suffix of the tsnr image (a string).&quot;</span>
+
+        <span class="c1"># Outputs description</span>
+        <span class="n">out_tsnr_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Path of the scan after masking &quot;</span>
+            <span class="s2">&quot;(a pathlike object or string representing a file).&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">out_stddev_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Path of the scan after masking &quot;</span>
+            <span class="s2">&quot;(a pathlike object or string representing a file).&quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Inputs traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;in_file&quot;</span><span class="p">,</span> <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">in_file_desc</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;prefix_tsnr&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">String</span><span class="p">(</span>
+                <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">prefix_tsnr_desc</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;suffix_tsnr&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">String</span><span class="p">(</span>
+                <span class="s2">&quot;_tsnr&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">suffix_tsnr_desc</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;prefix_stddev&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">String</span><span class="p">(</span>
+                <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">prefix_stddev_desc</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;suffix_stddev&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">String</span><span class="p">(</span>
+                <span class="s2">&quot;_stddev&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">suffix_stddev_desc</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Outputs traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;out_tsnr_file&quot;</span><span class="p">,</span> <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">out_tsnr_file_desc</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;out_stddev_file&quot;</span><span class="p">,</span>
+            <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">out_stddev_file_desc</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TSNR.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.TSNR.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+
+<span class="sd">        The main objective of this method is to produce the outputs of the</span>
+<span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
+<span class="sd">        if defined here. To work properly this method must return</span>
+<span class="sd">        self.make_initResult() object.</span>
+
+<span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">TSNR</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+
+        <span class="c1"># Outputs definition</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">:</span>
+            <span class="n">valid_ext</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">fileName</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">,</span> <span class="n">EXT</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_ext</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">TSNR brick: The input image format is not &quot;</span>
+                    <span class="s2">&quot;recognized...!&quot;</span>
+                <span class="p">)</span>
+                <span class="k">return</span>
+
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">suffix_tsnr</span><span class="p">)</span>
+                <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">suffix_tsnr</span><span class="o">.</span><span class="n">isspace</span><span class="p">())</span>
+                <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">suffix_tsnr</span> <span class="ow">in</span> <span class="p">[</span><span class="n">Undefined</span><span class="p">,</span> <span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">]</span>
+            <span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">suffix_tsnr</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span>
+
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix_tsnr</span><span class="p">)</span>
+                <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix_tsnr</span><span class="o">.</span><span class="n">isspace</span><span class="p">())</span>
+                <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix_tsnr</span> <span class="ow">in</span> <span class="p">[</span><span class="n">Undefined</span><span class="p">,</span> <span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">])</span>
+            <span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">prefix_tsnr</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span>
+
+            <span class="n">file_tsnr</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+            <span class="n">path</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">suffix_tsnr</span> <span class="o">==</span> <span class="s2">&quot; &quot;</span>
+                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix_tsnr</span> <span class="o">==</span> <span class="s2">&quot; &quot;</span>
+                <span class="ow">and</span> <span class="n">path</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span>
+            <span class="p">):</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="n">QMessageBox</span><span class="p">()</span>
+                <span class="n">msg</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">Warning</span><span class="p">)</span>
+                <span class="n">msg</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;mia_processes - TSNR brick Warning!&quot;</span><span class="p">)</span>
+                <span class="n">msg</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span>
+                    <span class="s2">&quot;suffix_tsnr and prefix_tsnr input parameters are not &quot;</span>
+                    <span class="s2">&quot;defined or consist only of one or more white &quot;</span>
+                    <span class="s2">&quot;spaces.</span><span class="se">\n</span><span class="s2">The </span><span class="si">{0}</span><span class="s2"> input parameter will be &quot;</span>
+                    <span class="s2">&quot;overwritten ...</span><span class="se">\n</span><span class="s2"> Yes or &quot;</span>
+                    <span class="s2">&quot;Abort?&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fileName</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="n">msg</span><span class="o">.</span><span class="n">setStandardButtons</span><span class="p">(</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">Yes</span> <span class="o">|</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">Abort</span><span class="p">)</span>
+                <span class="n">retval</span> <span class="o">=</span> <span class="n">msg</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
+
+                <span class="k">if</span> <span class="n">retval</span> <span class="o">!=</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">Abort</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span>
+                        <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">TSNR brick warning: the out_tsnr_file output &quot;</span>
+                        <span class="s2">&quot;parameter is the same as the in_file input &quot;</span>
+                        <span class="s2">&quot;parameter (suffix and prefix are not defined):&quot;</span>
+                        <span class="s2">&quot;</span><span class="se">\n</span><span class="si">{0}</span><span class="s2"> will be overwrited ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fileName</span><span class="p">)</span>
+                    <span class="p">)</span>
+
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span>
+                        <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">TSNR brick: Aborted. Please check your input &quot;</span>
+                        <span class="s2">&quot;parameters ...&quot;</span>
+                    <span class="p">)</span>
+                    <span class="k">return</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">file_tsnr</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                    <span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">prefix_tsnr</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                        <span class="o">+</span> <span class="n">fileName</span>
+                        <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">suffix_tsnr</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                        <span class="o">+</span> <span class="s2">&quot;.&quot;</span>
+                        <span class="o">+</span> <span class="n">in_ext</span>
+                    <span class="p">),</span>
+                <span class="p">)</span>
+
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">suffix_stddev</span><span class="p">)</span>
+                <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">suffix_stddev</span><span class="o">.</span><span class="n">isspace</span><span class="p">())</span>
+                <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">suffix_stddev</span> <span class="ow">in</span> <span class="p">[</span><span class="n">Undefined</span><span class="p">,</span> <span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">]</span>
+            <span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">suffix_stddev</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span>
+
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix_stddev</span><span class="p">)</span>
+                <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix_stddev</span><span class="o">.</span><span class="n">isspace</span><span class="p">())</span>
+                <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix_stddev</span> <span class="ow">in</span> <span class="p">[</span><span class="n">Undefined</span><span class="p">,</span> <span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">])</span>
+            <span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">prefix_stddev</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span>
+
+            <span class="n">file_stddev</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">suffix_stddev</span> <span class="o">==</span> <span class="s2">&quot; &quot;</span>
+                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix_stddev</span> <span class="o">==</span> <span class="s2">&quot; &quot;</span>
+                <span class="ow">and</span> <span class="n">path</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span>
+            <span class="p">):</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="n">QMessageBox</span><span class="p">()</span>
+                <span class="n">msg</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">Warning</span><span class="p">)</span>
+                <span class="n">msg</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;mia_processes - TSNR brick Warning!&quot;</span><span class="p">)</span>
+                <span class="n">msg</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span>
+                    <span class="s2">&quot;suffix_stddev and prefix_stddev input parameters are not &quot;</span>
+                    <span class="s2">&quot;defined or consist only of one or more white &quot;</span>
+                    <span class="s2">&quot;spaces.</span><span class="se">\n</span><span class="s2">The </span><span class="si">{0}</span><span class="s2"> input parameter will be &quot;</span>
+                    <span class="s2">&quot;overwritten ...</span><span class="se">\n</span><span class="s2"> Yes or &quot;</span>
+                    <span class="s2">&quot;Abort?&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fileName</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="n">msg</span><span class="o">.</span><span class="n">setStandardButtons</span><span class="p">(</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">Yes</span> <span class="o">|</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">Abort</span><span class="p">)</span>
+                <span class="n">retval</span> <span class="o">=</span> <span class="n">msg</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
+
+                <span class="k">if</span> <span class="n">retval</span> <span class="o">!=</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">Abort</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span>
+                        <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">TSNR brick warning: the out_stddev_file output &quot;</span>
+                        <span class="s2">&quot;parameter is the same as the in_files input &quot;</span>
+                        <span class="s2">&quot;parameter (suffix and prefix are not defined):&quot;</span>
+                        <span class="s2">&quot;</span><span class="se">\n</span><span class="si">{0}</span><span class="s2"> will be overwrited ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fileName</span><span class="p">)</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span>
+                        <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">TSNR brick Aborted. Please check your input &quot;</span>
+                        <span class="s2">&quot;parameters ...&quot;</span>
+                    <span class="p">)</span>
+                    <span class="k">return</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">file_stddev</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                    <span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">prefix_stddev</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                        <span class="o">+</span> <span class="n">fileName</span>
+                        <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">suffix_stddev</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                        <span class="o">+</span> <span class="s2">&quot;.&quot;</span>
+                        <span class="o">+</span> <span class="n">in_ext</span>
+                    <span class="p">),</span>
+                <span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;out_tsnr_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">file_tsnr</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;out_stddev_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">file_stddev</span>
+
+            <span class="c1"># tags inheritance (optional)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;out_tsnr_file&quot;</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;out_tsnr_file&quot;</span><span class="p">]</span>
+                <span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;out_stddev_file&quot;</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;out_stddev_file&quot;</span><span class="p">]</span>
+                <span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
+
+        <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TSNR.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.TSNR.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">TSNR</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+
+        <span class="n">file_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">img</span> <span class="o">=</span> <span class="n">nib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span>
+            <span class="n">nib</span><span class="o">.</span><span class="n">filebasedimages</span><span class="o">.</span><span class="n">ImageFileError</span><span class="p">,</span>
+            <span class="ne">FileNotFoundError</span><span class="p">,</span>
+            <span class="ne">TypeError</span><span class="p">,</span>
+        <span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">TSNR brick: Error with files to mask, during the &quot;</span> <span class="s2">&quot;run: &quot;</span><span class="p">,</span>
+                <span class="n">e</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">img</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">img</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">header</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">get_fdata</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
+                <span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,)</span>
+            <span class="p">)</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;i&quot;</span><span class="p">:</span>
+                <span class="n">header</span><span class="o">.</span><span class="n">set_data_dtype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+            <span class="n">meanimg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">stddevimg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+            <span class="n">tsnr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">meanimg</span><span class="p">)</span>
+            <span class="n">stddevimg_nonzero</span> <span class="o">=</span> <span class="n">stddevimg</span> <span class="o">&gt;</span> <span class="mf">1.0e-3</span>
+            <span class="n">tsnr</span><span class="p">[</span><span class="n">stddevimg_nonzero</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">meanimg</span><span class="p">[</span><span class="n">stddevimg_nonzero</span><span class="p">]</span> <span class="o">/</span> <span class="n">stddevimg</span><span class="p">[</span><span class="n">stddevimg_nonzero</span><span class="p">]</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Image save</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">file_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
+            <span class="n">file_name_no_ext</span><span class="p">,</span> <span class="n">file_extension</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">file_extension</span> <span class="o">==</span> <span class="s2">&quot;.gz&quot;</span><span class="p">:</span>
+                <span class="p">(</span><span class="n">file_name_no_ext_2</span><span class="p">,</span> <span class="n">file_extension_2</span><span class="p">)</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span>
+                    <span class="n">file_name_no_ext</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="n">file_extension_2</span> <span class="o">==</span> <span class="s2">&quot;.nii&quot;</span><span class="p">:</span>
+                    <span class="n">file_name_no_ext</span> <span class="o">=</span> <span class="n">file_name_no_ext_2</span>
+                    <span class="n">file_extension</span> <span class="o">=</span> <span class="s2">&quot;.nii.gz&quot;</span>
+
+            <span class="n">tsnr_file_out</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                <span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">prefix_tsnr</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                    <span class="o">+</span> <span class="n">file_name_no_ext</span>
+                    <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">suffix_tsnr</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                    <span class="o">+</span> <span class="n">file_extension</span>
+                <span class="p">),</span>
+            <span class="p">)</span>
+            <span class="n">tsnr_img</span> <span class="o">=</span> <span class="n">nib</span><span class="o">.</span><span class="n">Nifti1Image</span><span class="p">(</span><span class="n">tsnr</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span class="n">affine</span><span class="p">,</span> <span class="n">header</span><span class="p">)</span>
+            <span class="n">nib</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">tsnr_img</span><span class="p">,</span> <span class="n">tsnr_file_out</span><span class="p">)</span>
+
+            <span class="n">stddev_file_out</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
+                <span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">prefix_stddev</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                    <span class="o">+</span> <span class="n">file_name_no_ext</span>
+                    <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">suffix_stddev</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                    <span class="o">+</span> <span class="n">file_extension</span>
+                <span class="p">),</span>
+            <span class="p">)</span>
+            <span class="n">stddev_img</span> <span class="o">=</span> <span class="n">nib</span><span class="o">.</span><span class="n">Nifti1Image</span><span class="p">(</span><span class="n">stddevimg</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span class="n">affine</span><span class="p">,</span> <span class="n">header</span><span class="p">)</span>
+            <span class="n">nib</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">stddev_img</span><span class="p">,</span> <span class="n">stddev_file_out</span><span class="p">)</span></div></div>
+
+
 <div class="viewcode-block" id="TemplateFromTemplateFlow"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.TemplateFromTemplateFlow">[docs]</a><span class="k">class</span> <span class="nc">TemplateFromTemplateFlow</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    * Get template image from templateflow.</span>
@@ -4391,333 +4718,6 @@
                 <span class="p">),</span>
             <span class="p">)</span>
             <span class="n">nib</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">img_final</span><span class="p">,</span> <span class="n">out_file</span><span class="p">)</span></div></div>
-
-
-<div class="viewcode-block" id="TSNR"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.TSNR">[docs]</a><span class="k">class</span> <span class="nc">TSNR</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    * Computes the time-course SNR for a time series.</span>
-
-<span class="sd">    Please, see the complete documentation for the</span>
-<span class="sd">    `TSNR&#39; brick in the populse.mia_processes website</span>
-<span class="sd">    https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/TSNR.html</span>
-
-<span class="sd">    adapted from:</span>
-<span class="sd">    https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5de5913b31/nipype/algorithms/confounds.py#L899</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-
-<div class="viewcode-block" id="TSNR.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.TSNR.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
-
-<span class="sd">        The input and output plugs are defined here. The special</span>
-<span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
-<span class="sd">        third-party products necessary for the running of the brick.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">TSNR</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-
-        <span class="c1"># Third party softwares required for the execution of the brick</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[]</span>
-
-        <span class="c1"># Inputs description</span>
-        <span class="n">in_file_desc</span> <span class="o">=</span> <span class="s2">&quot;An existing path file.&quot;</span>
-        <span class="n">prefix_tsnr_desc</span> <span class="o">=</span> <span class="s2">&quot;Prefix of the tsnr image (a string).&quot;</span>
-        <span class="n">suffix_tsnr_desc</span> <span class="o">=</span> <span class="s2">&quot;Suffix of the tsnr image (a string).&quot;</span>
-        <span class="n">prefix_stddev_desc</span> <span class="o">=</span> <span class="s2">&quot;Prefix of the tsnr image (a string).&quot;</span>
-        <span class="n">suffix_stddev_desc</span> <span class="o">=</span> <span class="s2">&quot;Suffix of the tsnr image (a string).&quot;</span>
-
-        <span class="c1"># Outputs description</span>
-        <span class="n">out_tsnr_file_desc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;Path of the scan after masking &quot;</span>
-            <span class="s2">&quot;(a pathlike object or string representing a file).&quot;</span>
-        <span class="p">)</span>
-
-        <span class="n">out_stddev_file_desc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;Path of the scan after masking &quot;</span>
-            <span class="s2">&quot;(a pathlike object or string representing a file).&quot;</span>
-        <span class="p">)</span>
-
-        <span class="c1"># Inputs traits</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
-            <span class="s2">&quot;in_file&quot;</span><span class="p">,</span> <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">in_file_desc</span><span class="p">)</span>
-        <span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
-            <span class="s2">&quot;prefix_tsnr&quot;</span><span class="p">,</span>
-            <span class="n">traits</span><span class="o">.</span><span class="n">String</span><span class="p">(</span>
-                <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">prefix_tsnr_desc</span>
-            <span class="p">),</span>
-        <span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
-            <span class="s2">&quot;suffix_tsnr&quot;</span><span class="p">,</span>
-            <span class="n">traits</span><span class="o">.</span><span class="n">String</span><span class="p">(</span>
-                <span class="s2">&quot;_tsnr&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">suffix_tsnr_desc</span>
-            <span class="p">),</span>
-        <span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
-            <span class="s2">&quot;prefix_stddev&quot;</span><span class="p">,</span>
-            <span class="n">traits</span><span class="o">.</span><span class="n">String</span><span class="p">(</span>
-                <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">prefix_stddev_desc</span>
-            <span class="p">),</span>
-        <span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
-            <span class="s2">&quot;suffix_stddev&quot;</span><span class="p">,</span>
-            <span class="n">traits</span><span class="o">.</span><span class="n">String</span><span class="p">(</span>
-                <span class="s2">&quot;_stddev&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">suffix_stddev_desc</span>
-            <span class="p">),</span>
-        <span class="p">)</span>
-
-        <span class="c1"># Outputs traits</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
-            <span class="s2">&quot;out_tsnr_file&quot;</span><span class="p">,</span> <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">out_tsnr_file_desc</span><span class="p">)</span>
-        <span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
-            <span class="s2">&quot;out_stddev_file&quot;</span><span class="p">,</span>
-            <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">out_stddev_file_desc</span><span class="p">),</span>
-        <span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
-
-<div class="viewcode-block" id="TSNR.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.TSNR.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
-
-<span class="sd">        The main objective of this method is to produce the outputs of the</span>
-<span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
-<span class="sd">        if defined here. To work properly this method must return</span>
-<span class="sd">        self.make_initResult() object.</span>
-
-<span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
-<span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">TSNR</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
-
-        <span class="c1"># Outputs definition</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">:</span>
-            <span class="n">valid_ext</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">fileName</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">,</span> <span class="n">EXT</span><span class="p">)</span>
-
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_ext</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span>
-                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">TSNR brick: The input image format is not &quot;</span>
-                    <span class="s2">&quot;recognized...!&quot;</span>
-                <span class="p">)</span>
-                <span class="k">return</span>
-
-            <span class="k">if</span> <span class="p">(</span>
-                <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">suffix_tsnr</span><span class="p">)</span>
-                <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">suffix_tsnr</span><span class="o">.</span><span class="n">isspace</span><span class="p">())</span>
-                <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">suffix_tsnr</span> <span class="ow">in</span> <span class="p">[</span><span class="n">Undefined</span><span class="p">,</span> <span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">]</span>
-            <span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">suffix_tsnr</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span>
-
-            <span class="k">if</span> <span class="p">(</span>
-                <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix_tsnr</span><span class="p">)</span>
-                <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix_tsnr</span><span class="o">.</span><span class="n">isspace</span><span class="p">())</span>
-                <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix_tsnr</span> <span class="ow">in</span> <span class="p">[</span><span class="n">Undefined</span><span class="p">,</span> <span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">])</span>
-            <span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">prefix_tsnr</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span>
-
-            <span class="n">file_tsnr</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-
-            <span class="n">path</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">)</span>
-
-            <span class="k">if</span> <span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">suffix_tsnr</span> <span class="o">==</span> <span class="s2">&quot; &quot;</span>
-                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix_tsnr</span> <span class="o">==</span> <span class="s2">&quot; &quot;</span>
-                <span class="ow">and</span> <span class="n">path</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span>
-            <span class="p">):</span>
-                <span class="n">msg</span> <span class="o">=</span> <span class="n">QMessageBox</span><span class="p">()</span>
-                <span class="n">msg</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">Warning</span><span class="p">)</span>
-                <span class="n">msg</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;mia_processes - TSNR brick Warning!&quot;</span><span class="p">)</span>
-                <span class="n">msg</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span>
-                    <span class="s2">&quot;suffix_tsnr and prefix_tsnr input parameters are not &quot;</span>
-                    <span class="s2">&quot;defined or consist only of one or more white &quot;</span>
-                    <span class="s2">&quot;spaces.</span><span class="se">\n</span><span class="s2">The </span><span class="si">{0}</span><span class="s2"> input parameter will be &quot;</span>
-                    <span class="s2">&quot;overwritten ...</span><span class="se">\n</span><span class="s2"> Yes or &quot;</span>
-                    <span class="s2">&quot;Abort?&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fileName</span><span class="p">)</span>
-                <span class="p">)</span>
-                <span class="n">msg</span><span class="o">.</span><span class="n">setStandardButtons</span><span class="p">(</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">Yes</span> <span class="o">|</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">Abort</span><span class="p">)</span>
-                <span class="n">retval</span> <span class="o">=</span> <span class="n">msg</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
-
-                <span class="k">if</span> <span class="n">retval</span> <span class="o">!=</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">Abort</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span>
-                        <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">TSNR brick warning: the out_tsnr_file output &quot;</span>
-                        <span class="s2">&quot;parameter is the same as the in_file input &quot;</span>
-                        <span class="s2">&quot;parameter (suffix and prefix are not defined):&quot;</span>
-                        <span class="s2">&quot;</span><span class="se">\n</span><span class="si">{0}</span><span class="s2"> will be overwrited ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fileName</span><span class="p">)</span>
-                    <span class="p">)</span>
-
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span>
-                        <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">TSNR brick: Aborted. Please check your input &quot;</span>
-                        <span class="s2">&quot;parameters ...&quot;</span>
-                    <span class="p">)</span>
-                    <span class="k">return</span>
-
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">file_tsnr</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                    <span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">prefix_tsnr</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-                        <span class="o">+</span> <span class="n">fileName</span>
-                        <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">suffix_tsnr</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-                        <span class="o">+</span> <span class="s2">&quot;.&quot;</span>
-                        <span class="o">+</span> <span class="n">in_ext</span>
-                    <span class="p">),</span>
-                <span class="p">)</span>
-
-            <span class="k">if</span> <span class="p">(</span>
-                <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">suffix_stddev</span><span class="p">)</span>
-                <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">suffix_stddev</span><span class="o">.</span><span class="n">isspace</span><span class="p">())</span>
-                <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">suffix_stddev</span> <span class="ow">in</span> <span class="p">[</span><span class="n">Undefined</span><span class="p">,</span> <span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">]</span>
-            <span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">suffix_stddev</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span>
-
-            <span class="k">if</span> <span class="p">(</span>
-                <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix_stddev</span><span class="p">)</span>
-                <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix_stddev</span><span class="o">.</span><span class="n">isspace</span><span class="p">())</span>
-                <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prefix_stddev</span> <span class="ow">in</span> <span class="p">[</span><span class="n">Undefined</span><span class="p">,</span> <span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">])</span>
-            <span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">prefix_stddev</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span>
-
-            <span class="n">file_stddev</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-
-            <span class="k">if</span> <span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">suffix_stddev</span> <span class="o">==</span> <span class="s2">&quot; &quot;</span>
-                <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">prefix_stddev</span> <span class="o">==</span> <span class="s2">&quot; &quot;</span>
-                <span class="ow">and</span> <span class="n">path</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span>
-            <span class="p">):</span>
-                <span class="n">msg</span> <span class="o">=</span> <span class="n">QMessageBox</span><span class="p">()</span>
-                <span class="n">msg</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">Warning</span><span class="p">)</span>
-                <span class="n">msg</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;mia_processes - TSNR brick Warning!&quot;</span><span class="p">)</span>
-                <span class="n">msg</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span>
-                    <span class="s2">&quot;suffix_stddev and prefix_stddev input parameters are not &quot;</span>
-                    <span class="s2">&quot;defined or consist only of one or more white &quot;</span>
-                    <span class="s2">&quot;spaces.</span><span class="se">\n</span><span class="s2">The </span><span class="si">{0}</span><span class="s2"> input parameter will be &quot;</span>
-                    <span class="s2">&quot;overwritten ...</span><span class="se">\n</span><span class="s2"> Yes or &quot;</span>
-                    <span class="s2">&quot;Abort?&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fileName</span><span class="p">)</span>
-                <span class="p">)</span>
-                <span class="n">msg</span><span class="o">.</span><span class="n">setStandardButtons</span><span class="p">(</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">Yes</span> <span class="o">|</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">Abort</span><span class="p">)</span>
-                <span class="n">retval</span> <span class="o">=</span> <span class="n">msg</span><span class="o">.</span><span class="n">exec_</span><span class="p">()</span>
-
-                <span class="k">if</span> <span class="n">retval</span> <span class="o">!=</span> <span class="n">QMessageBox</span><span class="o">.</span><span class="n">Abort</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span>
-                        <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">TSNR brick warning: the out_stddev_file output &quot;</span>
-                        <span class="s2">&quot;parameter is the same as the in_files input &quot;</span>
-                        <span class="s2">&quot;parameter (suffix and prefix are not defined):&quot;</span>
-                        <span class="s2">&quot;</span><span class="se">\n</span><span class="si">{0}</span><span class="s2"> will be overwrited ...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fileName</span><span class="p">)</span>
-                    <span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span>
-                        <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">TSNR brick Aborted. Please check your input &quot;</span>
-                        <span class="s2">&quot;parameters ...&quot;</span>
-                    <span class="p">)</span>
-                    <span class="k">return</span>
-
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">file_stddev</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                    <span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">prefix_stddev</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-                        <span class="o">+</span> <span class="n">fileName</span>
-                        <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">suffix_stddev</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-                        <span class="o">+</span> <span class="s2">&quot;.&quot;</span>
-                        <span class="o">+</span> <span class="n">in_ext</span>
-                    <span class="p">),</span>
-                <span class="p">)</span>
-
-            <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;out_tsnr_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">file_tsnr</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;out_stddev_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">file_stddev</span>
-
-            <span class="c1"># tags inheritance (optional)</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;out_tsnr_file&quot;</span><span class="p">]:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;out_tsnr_file&quot;</span><span class="p">]</span>
-                <span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;out_stddev_file&quot;</span><span class="p">]:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;out_stddev_file&quot;</span><span class="p">]</span>
-                <span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
-
-        <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
-
-<div class="viewcode-block" id="TSNR.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.TSNR.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">TSNR</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
-
-        <span class="n">file_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span>
-
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">img</span> <span class="o">=</span> <span class="n">nib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
-        <span class="k">except</span> <span class="p">(</span>
-            <span class="n">nib</span><span class="o">.</span><span class="n">filebasedimages</span><span class="o">.</span><span class="n">ImageFileError</span><span class="p">,</span>
-            <span class="ne">FileNotFoundError</span><span class="p">,</span>
-            <span class="ne">TypeError</span><span class="p">,</span>
-        <span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span>
-                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">TSNR brick: Error with files to mask, during the &quot;</span> <span class="s2">&quot;run: &quot;</span><span class="p">,</span>
-                <span class="n">e</span><span class="p">,</span>
-            <span class="p">)</span>
-            <span class="n">img</span> <span class="o">=</span> <span class="kc">None</span>
-
-        <span class="k">if</span> <span class="n">img</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">header</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">get_fdata</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
-                <span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,)</span>
-            <span class="p">)</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-
-            <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;i&quot;</span><span class="p">:</span>
-                <span class="n">header</span><span class="o">.</span><span class="n">set_data_dtype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-                <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-
-            <span class="n">meanimg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-            <span class="n">stddevimg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-            <span class="n">tsnr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">meanimg</span><span class="p">)</span>
-            <span class="n">stddevimg_nonzero</span> <span class="o">=</span> <span class="n">stddevimg</span> <span class="o">&gt;</span> <span class="mf">1.0e-3</span>
-            <span class="n">tsnr</span><span class="p">[</span><span class="n">stddevimg_nonzero</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="n">meanimg</span><span class="p">[</span><span class="n">stddevimg_nonzero</span><span class="p">]</span> <span class="o">/</span> <span class="n">stddevimg</span><span class="p">[</span><span class="n">stddevimg_nonzero</span><span class="p">]</span>
-            <span class="p">)</span>
-
-            <span class="c1"># Image save</span>
-            <span class="n">_</span><span class="p">,</span> <span class="n">file_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
-            <span class="n">file_name_no_ext</span><span class="p">,</span> <span class="n">file_extension</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">file_extension</span> <span class="o">==</span> <span class="s2">&quot;.gz&quot;</span><span class="p">:</span>
-                <span class="p">(</span><span class="n">file_name_no_ext_2</span><span class="p">,</span> <span class="n">file_extension_2</span><span class="p">)</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span>
-                    <span class="n">file_name_no_ext</span>
-                <span class="p">)</span>
-                <span class="k">if</span> <span class="n">file_extension_2</span> <span class="o">==</span> <span class="s2">&quot;.nii&quot;</span><span class="p">:</span>
-                    <span class="n">file_name_no_ext</span> <span class="o">=</span> <span class="n">file_name_no_ext_2</span>
-                    <span class="n">file_extension</span> <span class="o">=</span> <span class="s2">&quot;.nii.gz&quot;</span>
-
-            <span class="n">tsnr_file_out</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                <span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">prefix_tsnr</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-                    <span class="o">+</span> <span class="n">file_name_no_ext</span>
-                    <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">suffix_tsnr</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-                    <span class="o">+</span> <span class="n">file_extension</span>
-                <span class="p">),</span>
-            <span class="p">)</span>
-            <span class="n">tsnr_img</span> <span class="o">=</span> <span class="n">nib</span><span class="o">.</span><span class="n">Nifti1Image</span><span class="p">(</span><span class="n">tsnr</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span class="n">affine</span><span class="p">,</span> <span class="n">header</span><span class="p">)</span>
-            <span class="n">nib</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">tsnr_img</span><span class="p">,</span> <span class="n">tsnr_file_out</span><span class="p">)</span>
-
-            <span class="n">stddev_file_out</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
-                <span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">prefix_stddev</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-                    <span class="o">+</span> <span class="n">file_name_no_ext</span>
-                    <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">suffix_stddev</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-                    <span class="o">+</span> <span class="n">file_extension</span>
-                <span class="p">),</span>
-            <span class="p">)</span>
-            <span class="n">stddev_img</span> <span class="o">=</span> <span class="n">nib</span><span class="o">.</span><span class="n">Nifti1Image</span><span class="p">(</span><span class="n">stddevimg</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span class="n">affine</span><span class="p">,</span> <span class="n">header</span><span class="p">)</span>
-            <span class="n">nib</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">stddev_img</span><span class="p">,</span> <span class="n">stddev_file_out</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="artifact_mask"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.others.html#mia_processes.bricks.preprocess.others.processing.artifact_mask">[docs]</a><span class="k">def</span> <span class="nf">artifact_mask</span><span class="p">(</span><span class="n">imdata</span><span class="p">,</span> <span class="n">airdata</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">zscore</span><span class="o">=</span><span class="mf">10.0</span><span class="p">):</span>
