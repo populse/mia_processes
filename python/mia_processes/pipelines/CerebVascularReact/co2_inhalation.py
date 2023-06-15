@@ -37,8 +37,8 @@ class CO2_inhalation(Pipeline):
         # nodes
         self.add_process(
             "1_spatial_preprocessing",
-            "mia_processes.pipelines.preprocess.spatial_preprocessing."
-            "Spatial_preprocessing",
+            "mia_processes.pipelines.preprocess.bold_spatial_preprocessing1."
+            "Bold_spatial_preprocessing1",
         )
         self.nodes["1_spatial_preprocessing"].process.nodes_activation = {
             "newsegment": True,

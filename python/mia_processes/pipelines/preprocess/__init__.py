@@ -22,5 +22,10 @@ from .anat_skullstrip_synthstrip import (  # noqa: F401
 from .anat_spatial_norm import Anat_spatial_norm  # noqa: F401
 from .bold_hmc import Bold_hmc  # noqa: F401
 from .bold_mni_align import Bold_mni_align  # noqa: F401
+from .bold_spatial_preprocessing1 import (  # noqa: F401
+    Bold_spatial_preprocessing1,
+)
+from .bold_spatial_preprocessing2 import (  # noqa: F401
+    Bold_spatial_preprocessing2,
+)
 from .spatial_mask import Spatial_mask  # noqa: F401
-from .spatial_preprocessing import Spatial_preprocessing  # noqa: F401
