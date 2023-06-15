@@ -4,20 +4,21 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
-    <title>Files_To_List brick &#8212; mia_processes 2.2.1-dev+5241b0ab documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/haiku.css" />
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Files_To_List brick &#8212; mia_processes 2.2.1-dev+38eeb539 documentation</title>
+    <link rel="stylesheet" href="../../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
-          <span>mia_processes 2.2.1-dev+5241b0ab documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+38eeb539 documentation</span></a></h1>
         <h2 class="heading"><span>Files_To_List brick</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -45,9 +46,9 @@
 </tr>
 </tbody>
 </table>
-<section id="files-to-list-brick">
+<div class="section" id="files-to-list-brick">
 <h1>Files_To_List brick<a class="headerlink" href="#files-to-list-brick" title="Permalink to this headline">¶</a></h1>
-<section id="from-3-file-names-generating-a-list-containing-all-theses-file-names">
+<div class="section" id="from-3-file-names-generating-a-list-containing-all-theses-file-names">
 <h2>From 3 file names, generating a list containing all theses file names<a class="headerlink" href="#from-3-file-names-generating-a-list-containing-all-theses-file-names" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p><cite>file1</cite> is mandatory, while <cite>file2</cite> and <cite>file3</cite> are optional. If one (or both) of the latter two entries is (are) undefined, it will not be present in <cite>file_list</cite>.</p></li>
@@ -57,7 +58,7 @@
 <ul>
 <li><dl>
 <dt><em>file1</em></dt><dd><p>A string corresponding to a path file.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">Anat</span><span class="o">.</span><span class="n">nii</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">username</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">Anat</span><span class="o">.</span><span class="n">nii</span>
 </pre></div>
 </div>
 </dd>
@@ -65,7 +66,7 @@
 </li>
 <li><dl>
 <dt><em>file2</em></dt><dd><p>An optional string corresponding to a path file.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">Func</span><span class="o">.</span><span class="n">nii</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">username</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">Func</span><span class="o">.</span><span class="n">nii</span>
 </pre></div>
 </div>
 </dd>
@@ -76,15 +77,15 @@
 <ul>
 <li><dl>
 <dt><em>file_list</em></dt><dd><p>A list.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/Anat.nii&#39;</span><span class="p">,</span> <span class="s1">&#39;/home/ArthurBlair/data/Func.nii&#39;</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/Anat.nii&#39;</span><span class="p">,</span> <span class="s1">&#39;/home/username/data/Func.nii&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 </dd>
 </dl>
 </li>
 </ul>
-</section>
-</section>
+</div>
+</div>
 
 
       </div>
@@ -98,7 +99,7 @@
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
     </div>
   </body>
 </html>

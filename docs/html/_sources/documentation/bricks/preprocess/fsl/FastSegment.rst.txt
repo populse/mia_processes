@@ -38,8 +38,8 @@ By default the image type is set to T1 but it is also possible to segment T2 and
 
 - *output_type* ('NIFTI' or 'NIFTI_GZ', optional, default value is NIFTI)
     | Format of the output image (one of NIFTI, NIFTI_GZ).
-    |   NIFTI: \*.nii
-    |   NIFTI_GZ: \*.nii.gz
+    |   - NIFTI: \*.nii
+    |   - NIFTI_GZ: \*.nii.gz
 
     ::
 

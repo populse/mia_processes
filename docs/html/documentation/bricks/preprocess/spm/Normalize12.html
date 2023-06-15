@@ -4,20 +4,21 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
-    <title>Normalize12 brick &#8212; mia_processes 2.2.1-dev+5241b0ab documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css" />
-    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Normalize12 brick &#8212; mia_processes 2.2.1-dev+38eeb539 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
     <script src="../../../../_static/jquery.js"></script>
     <script src="../../../../_static/underscore.js"></script>
     <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.2.1-dev+5241b0ab documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+38eeb539 documentation</span></a></h1>
         <h2 class="heading"><span>Normalize12 brick</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -45,16 +46,16 @@
 </tr>
 </tbody>
 </table>
-<section id="normalize12-brick">
+<div class="section" id="normalize12-brick">
 <h1>Normalize12 brick<a class="headerlink" href="#normalize12-brick" title="Permalink to this headline">¶</a></h1>
-<section id="computes-the-warp-that-best-aligns-the-template-atlas-to-the-individual-s-image">
+<div class="section" id="computes-the-warp-that-best-aligns-the-template-atlas-to-the-individual-s-image">
 <h2>Computes the warp that best aligns the template (atlas) to the individual’s image<a class="headerlink" href="#computes-the-warp-that-best-aligns-the-template-atlas-to-the-individual-s-image" title="Permalink to this headline">¶</a></h2>
 <p><strong>Inputs parameters:</strong></p>
 <ul>
 <li><dl>
 <dt><em>image_to_align &lt;=&gt; subj.vol</em> <a class="footnote-reference brackets" href="#label" id="id1">1</a></dt><dd><p>The image that the template (atlas) data is warped into alignment with. Mutually exclusive with <em>deformation_file</em> parameter. A
 pathlike object or string representing an existing file (valid extensions in [.img, .nii, .hdr]).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">Anat</span><span class="o">.</span><span class="n">nii</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">username</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">Anat</span><span class="o">.</span><span class="n">nii</span>
 </pre></div>
 </div>
 </dd>
@@ -63,7 +64,7 @@ pathlike object or string representing an existing file (valid extensions in [.i
 <li><dl>
 <dt><em>deformation_file &lt;=&gt; subj.def</em>  <a class="footnote-reference brackets" href="#label" id="id2">1</a></dt><dd><p>File y_*.nii containing 3 deformation fields for the deformation in x, y and z dimension. Mutually exclusive with <em>image_to_align</em> and
 <em>tpm</em> parameters. A pathlike object or string representing an existing file (valid extensions in [.img, .nii, .hdr]).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">downloaded_data</span><span class="o">/</span><span class="n">y_Anat</span><span class="o">.</span><span class="n">nii</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">username</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">downloaded_data</span><span class="o">/</span><span class="n">y_Anat</span><span class="o">.</span><span class="n">nii</span>
 </pre></div>
 </div>
 </dd>
@@ -72,7 +73,7 @@ pathlike object or string representing an existing file (valid extensions in [.i
 <li><dl>
 <dt><em>apply_to_files &lt;=&gt; subj.resample</em> <a class="footnote-reference brackets" href="#label" id="id3">1</a></dt><dd><p>Files to apply transformation to. They can be any images that are in register with the image used to generate the deformation. A list
 of items which are an existing, uncompressed file (valid extensions in [.img, .nii, .hdr]).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/Anat.nii&#39;</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/raw_data/Anat.nii&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 </dd>
@@ -128,7 +129,7 @@ of items which are an existing, uncompressed file (valid extensions in [.img, .n
 </li>
 <li><dl>
 <dt><em>tpm &lt;=&gt; eoptions.tpm</em> <a class="footnote-reference brackets" href="#label" id="id6">1</a></dt><dd><p>The template in form of tissue probability atlas (a pathlike object or string representing an existing file). Mutually exclusive with the <em>deformation_file</em> parameter.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">spm12</span><span class="o">/</span><span class="n">tpm</span><span class="o">/</span><span class="n">TPM</span><span class="o">.</span><span class="n">nii</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">username</span><span class="o">/</span><span class="n">spm12</span><span class="o">/</span><span class="n">tpm</span><span class="o">/</span><span class="n">TPM</span><span class="o">.</span><span class="n">nii</span>
 </pre></div>
 </div>
 </dd>
@@ -204,7 +205,7 @@ of items which are an existing, uncompressed file (valid extensions in [.img, .n
 <ul>
 <li><dl>
 <dt><em>deformation_field</em></dt><dd><p>NIfTI file containing 3 deformation fields for the deformation in x, y and z dimension (a list of items which are a pathlike object or string representing an existing file).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">derived_data</span><span class="o">/</span><span class="n">y_Anat</span><span class="o">.</span><span class="n">nii</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">username</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">derived_data</span><span class="o">/</span><span class="n">y_Anat</span><span class="o">.</span><span class="n">nii</span>
 </pre></div>
 </div>
 </dd>
@@ -212,7 +213,7 @@ of items which are an existing, uncompressed file (valid extensions in [.img, .n
 </li>
 <li><dl>
 <dt><em>normalized_files</em></dt><dd><p>Normalised other files (a list of items which are a pathlike object or string representing an existing file).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">derived_data</span><span class="o">/</span><span class="n">wAnat</span><span class="o">.</span><span class="n">nii</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">username</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">derived_data</span><span class="o">/</span><span class="n">wAnat</span><span class="o">.</span><span class="n">nii</span>
 </pre></div>
 </div>
 </dd>
@@ -234,8 +235,8 @@ of items which are an existing, uncompressed file (valid extensions in [.img, .n
 <a class="reference external" href="https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.spm.preprocess.html#normalize12">nipype Normalize12</a></p>
 </dd>
 </dl>
-</section>
-</section>
+</div>
+</div>
 
 
       </div>
@@ -249,7 +250,7 @@ of items which are an existing, uncompressed file (valid extensions in [.img, .n
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
     </div>
   </body>
 </html>

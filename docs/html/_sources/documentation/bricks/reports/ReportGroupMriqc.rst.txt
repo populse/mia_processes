@@ -6,12 +6,11 @@
 |`Home <../../../../index.html>`_|`Documentation <../../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +--------------------------------+----------------------------------------------+----------------------------------------------------+
 
-=======================
-EstimateConstrast brick
-=======================
+======================
+ReportGroupMriqc brick
+======================
 
-
-/!/ Documentation in progress
+TO DO
 
 --------------------------------------
 
@@ -20,4 +19,5 @@ EstimateConstrast brick
 TO DO
 
 **Outputs parameters:**
+
 TO DO

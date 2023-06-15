@@ -35,7 +35,7 @@
    &nbsp;
 
 ================================
-Bold_1 pipeline
+Spatial_preprocessing_1 pipeline
 ================================
 
 An example of fMRI data pre-processing

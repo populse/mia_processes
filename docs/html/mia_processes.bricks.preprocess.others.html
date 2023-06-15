@@ -4,20 +4,21 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
-    <title>mia_processes.bricks.preprocess.others package &#8212; mia_processes 2.2.1-dev+5241b0ab documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/haiku.css" />
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>mia_processes.bricks.preprocess.others package &#8212; mia_processes 2.2.1-dev+38eeb539 documentation</title>
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="index.html">
-          <span>mia_processes 2.2.1-dev+5241b0ab documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+38eeb539 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.preprocess.others package</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -30,13 +31,13 @@
       <div class="content" role="main">
         
         
-  <section id="module-mia_processes.bricks.preprocess.others">
+  <div class="section" id="module-mia_processes.bricks.preprocess.others">
 <span id="mia-processes-bricks-preprocess-others-package"></span><h1>mia_processes.bricks.preprocess.others package<a class="headerlink" href="#module-mia_processes.bricks.preprocess.others" title="Permalink to this headline">¶</a></h1>
 <p>Atomic calculations that do not come from ants, fsl, spm, etc.</p>
-<section id="submodules">
+<div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
-</section>
-<section id="module-mia_processes.bricks.preprocess.others.processing">
+</div>
+<div class="section" id="module-mia_processes.bricks.preprocess.others.processing">
 <span id="mia-processes-bricks-preprocess-others-processing-module"></span><h2>mia_processes.bricks.preprocess.others.processing module<a class="headerlink" href="#module-mia_processes.bricks.preprocess.others.processing" title="Permalink to this headline">¶</a></h2>
 <p>The other preprocess library of the mia_processes package.</p>
 <p>The purpose of this module is to provide bricks generally necessary for the
@@ -62,9 +63,9 @@ pre-processing steps, which are not found in nipype.</p>
 <li><p>Resample2</p></li>
 <li><p>RotationMask</p></li>
 <li><p>Sanitize</p></li>
+<li><p>TSNR</p></li>
 <li><p>TemplateFromTemplateFlow</p></li>
 <li><p>Threshold</p></li>
-<li><p>TSNR</p></li>
 </ul>
 </dd>
 <dt class="field-even">Function</dt>
@@ -78,8 +79,8 @@ pre-processing steps, which are not found in nipype.</p>
 </dd>
 </dl>
 <dl class="py class">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.ApplyBiasCorrection">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.others.processing.</span></span><span class="sig-name descname"><span class="pre">ApplyBiasCorrection</span></span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#ApplyBiasCorrection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.ApplyBiasCorrection" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.ApplyBiasCorrection">
+<em class="property">class </em><code class="sig-prename descclassname">mia_processes.bricks.preprocess.others.processing.</code><code class="sig-name descname">ApplyBiasCorrection</code><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#ApplyBiasCorrection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.ApplyBiasCorrection" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
 <p><em>Apply bias field correction to an input file using the bias image.</em></p>
 <p>Please, see the complete documentation for the ‘ApplyBiasCorrection’ brick
@@ -94,8 +95,8 @@ in the populse.mia_processes website
 </ul>
 </div>
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.ApplyBiasCorrection.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#ApplyBiasCorrection.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.ApplyBiasCorrection.__init__" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.ApplyBiasCorrection.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#ApplyBiasCorrection.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.ApplyBiasCorrection.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the attributes initialisation / instantiation.</p>
 <p>The input and output plugs are defined here. The special
 ‘self.requirement’ attribute (optional) is used to define the
@@ -103,8 +104,8 @@ third-party products necessary for the running of the brick.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.ApplyBiasCorrection.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#ApplyBiasCorrection.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.ApplyBiasCorrection.list_outputs" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.ApplyBiasCorrection.list_outputs">
+<code class="sig-name descname">list_outputs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">is_plugged</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#ApplyBiasCorrection.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.ApplyBiasCorrection.list_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -121,16 +122,16 @@ self.make_initResult() object.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.ApplyBiasCorrection.run_process_mia">
-<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#ApplyBiasCorrection.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.ApplyBiasCorrection.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.ApplyBiasCorrection.run_process_mia">
+<code class="sig-name descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#ApplyBiasCorrection.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.ApplyBiasCorrection.run_process_mia" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the process launch step of the brick.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.ArtifactMask">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.others.processing.</span></span><span class="sig-name descname"><span class="pre">ArtifactMask</span></span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#ArtifactMask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.ArtifactMask" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.ArtifactMask">
+<em class="property">class </em><code class="sig-prename descclassname">mia_processes.bricks.preprocess.others.processing.</code><code class="sig-name descname">ArtifactMask</code><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#ArtifactMask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.ArtifactMask" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
 <ul class="simple">
 <li><p>Computes the artifact mask using the method described in [Mortamet2009].*</p></li>
@@ -149,8 +150,8 @@ in the populse.mia_processes website
 </ul>
 </div>
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.ArtifactMask.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#ArtifactMask.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.ArtifactMask.__init__" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.ArtifactMask.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#ArtifactMask.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.ArtifactMask.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the attributes initialisation / instantiation.</p>
 <p>The input and output plugs are defined here. The special
 ‘self.requirement’ attribute (optional) is used to define the
@@ -158,8 +159,8 @@ third-party products necessary for the running of the brick.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.ArtifactMask.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#ArtifactMask.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.ArtifactMask.list_outputs" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.ArtifactMask.list_outputs">
+<code class="sig-name descname">list_outputs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">is_plugged</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#ArtifactMask.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.ArtifactMask.list_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -176,16 +177,16 @@ self.make_initResult() object.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.ArtifactMask.run_process_mia">
-<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#ArtifactMask.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.ArtifactMask.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.ArtifactMask.run_process_mia">
+<code class="sig-name descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#ArtifactMask.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.ArtifactMask.run_process_mia" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the process launch step of the brick.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.Binarize">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.others.processing.</span></span><span class="sig-name descname"><span class="pre">Binarize</span></span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Binarize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Binarize" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.Binarize">
+<em class="property">class </em><code class="sig-prename descclassname">mia_processes.bricks.preprocess.others.processing.</code><code class="sig-name descname">Binarize</code><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Binarize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Binarize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
 <p><em>Image binarization.</em></p>
 <p>Please, see the complete documentation for the <cite>Binarize</cite> brick
@@ -202,8 +203,8 @@ in the populse.mia_processes website
 </ul>
 </div>
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.Binarize.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Binarize.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Binarize.__init__" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.Binarize.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Binarize.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Binarize.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the attributes initialisation / instantiation.</p>
 <p>The input and output plugs are defined here. The special
 ‘self.requirement’ attribute (optional) is used to define the
@@ -211,8 +212,8 @@ third-party products necessary for the running of the brick.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.Binarize.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Binarize.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Binarize.list_outputs" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.Binarize.list_outputs">
+<code class="sig-name descname">list_outputs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">is_plugged</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Binarize.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Binarize.list_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -229,16 +230,16 @@ self.make_initResult() object.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.Binarize.run_process_mia">
-<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Binarize.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Binarize.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.Binarize.run_process_mia">
+<code class="sig-name descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Binarize.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Binarize.run_process_mia" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the process launch step of the brick.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.ConformImage">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.others.processing.</span></span><span class="sig-name descname"><span class="pre">ConformImage</span></span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#ConformImage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.ConformImage" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.ConformImage">
+<em class="property">class </em><code class="sig-prename descclassname">mia_processes.bricks.preprocess.others.processing.</code><code class="sig-name descname">ConformImage</code><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#ConformImage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.ConformImage" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
 <ul class="simple">
 <li><p>Conform T1w image to standard.</p></li>
@@ -257,8 +258,8 @@ in the populse.mia_processes website
 </ul>
 </div>
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.ConformImage.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#ConformImage.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.ConformImage.__init__" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.ConformImage.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#ConformImage.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.ConformImage.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the attributes initialisation / instantiation.</p>
 <p>The input and output plugs are defined here. The special
 ‘self.requirement’ attribute (optional) is used to define the
@@ -266,8 +267,8 @@ third-party products necessary for the running of the brick.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.ConformImage.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#ConformImage.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.ConformImage.list_outputs" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.ConformImage.list_outputs">
+<code class="sig-name descname">list_outputs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">is_plugged</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#ConformImage.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.ConformImage.list_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -284,16 +285,16 @@ self.make_initResult() object.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.ConformImage.run_process_mia">
-<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#ConformImage.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.ConformImage.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.ConformImage.run_process_mia">
+<code class="sig-name descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#ConformImage.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.ConformImage.run_process_mia" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the process launch step of the brick.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.ConvROI">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.others.processing.</span></span><span class="sig-name descname"><span class="pre">ConvROI</span></span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#ConvROI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.ConvROI" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.ConvROI">
+<em class="property">class </em><code class="sig-prename descclassname">mia_processes.bricks.preprocess.others.processing.</code><code class="sig-name descname">ConvROI</code><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#ConvROI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.ConvROI" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
 <p><em>Image convolution with one image</em></p>
 <ul class="simple">
@@ -315,8 +316,8 @@ parameter must have the “PatientName” tag filled in.</p></li>
 </ul>
 </div>
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.ConvROI.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#ConvROI.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.ConvROI.__init__" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.ConvROI.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#ConvROI.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.ConvROI.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the attributes initialisation/instantiation.</p>
 <p>The input and output plugs are defined here. The special
 ‘self.requirement’ attribute (optional) is used to define the
@@ -324,8 +325,8 @@ third-party products necessary for the running of the brick.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.ConvROI.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#ConvROI.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.ConvROI.list_outputs" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.ConvROI.list_outputs">
+<code class="sig-name descname">list_outputs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">is_plugged</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#ConvROI.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.ConvROI.list_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -344,16 +345,16 @@ self.make_initResult() object.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.ConvROI.run_process_mia">
-<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#ConvROI.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.ConvROI.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.ConvROI.run_process_mia">
+<code class="sig-name descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#ConvROI.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.ConvROI.run_process_mia" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the process launch step of the brick.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.Enhance">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.others.processing.</span></span><span class="sig-name descname"><span class="pre">Enhance</span></span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Enhance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Enhance" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.Enhance">
+<em class="property">class </em><code class="sig-prename descclassname">mia_processes.bricks.preprocess.others.processing.</code><code class="sig-name descname">Enhance</code><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Enhance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Enhance" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
 <p><a href="#id5"><span class="problematic" id="id6">*</span></a>Image enhancing.</p>
 <p>Please, see the complete documentation for the <a href="#id7"><span class="problematic" id="id8">`</span></a>Enhance’ brick
@@ -370,8 +371,8 @@ in the populse.mia_processes website
 </ul>
 </div>
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.Enhance.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Enhance.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Enhance.__init__" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.Enhance.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Enhance.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Enhance.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the attributes initialisation / instantiation.</p>
 <p>The input and output plugs are defined here. The special
 ‘self.requirement’ attribute (optional) is used to define the
@@ -379,8 +380,8 @@ third-party products necessary for the running of the brick.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.Enhance.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Enhance.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Enhance.list_outputs" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.Enhance.list_outputs">
+<code class="sig-name descname">list_outputs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">is_plugged</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Enhance.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Enhance.list_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -397,16 +398,16 @@ self.make_initResult() object.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.Enhance.run_process_mia">
-<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Enhance.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Enhance.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.Enhance.run_process_mia">
+<code class="sig-name descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Enhance.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Enhance.run_process_mia" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the process launch step of the brick.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.EstimateSNR">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.others.processing.</span></span><span class="sig-name descname"><span class="pre">EstimateSNR</span></span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#EstimateSNR"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.EstimateSNR" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.EstimateSNR">
+<em class="property">class </em><code class="sig-prename descclassname">mia_processes.bricks.preprocess.others.processing.</code><code class="sig-name descname">EstimateSNR</code><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#EstimateSNR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.EstimateSNR" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
 <p><a href="#id9"><span class="problematic" id="id10">*</span></a>Estimate SNR using a segmentation file.</p>
 <p>Please, see the complete documentation for the <a href="#id11"><span class="problematic" id="id12">`</span></a>EstimateSNR’ brick
@@ -423,8 +424,8 @@ in the populse.mia_processes website
 </ul>
 </div>
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.EstimateSNR.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#EstimateSNR.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.EstimateSNR.__init__" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.EstimateSNR.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#EstimateSNR.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.EstimateSNR.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the attributes initialisation / instantiation.</p>
 <p>The input and output plugs are defined here. The special
 ‘self.requirement’ attribute (optional) is used to define the
@@ -432,8 +433,8 @@ third-party products necessary for the running of the brick.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.EstimateSNR.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#EstimateSNR.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.EstimateSNR.list_outputs" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.EstimateSNR.list_outputs">
+<code class="sig-name descname">list_outputs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">is_plugged</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#EstimateSNR.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.EstimateSNR.list_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -450,16 +451,16 @@ self.make_initResult() object.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.EstimateSNR.run_process_mia">
-<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#EstimateSNR.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.EstimateSNR.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.EstimateSNR.run_process_mia">
+<code class="sig-name descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#EstimateSNR.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.EstimateSNR.run_process_mia" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the process launch step of the brick.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.GradientThreshold">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.others.processing.</span></span><span class="sig-name descname"><span class="pre">GradientThreshold</span></span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#GradientThreshold"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.GradientThreshold" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.GradientThreshold">
+<em class="property">class </em><code class="sig-prename descclassname">mia_processes.bricks.preprocess.others.processing.</code><code class="sig-name descname">GradientThreshold</code><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#GradientThreshold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.GradientThreshold" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
 <ul class="simple">
 <li><p>Computes a threshold from the histogram of the magnitude gradient image.</p></li>
@@ -478,8 +479,8 @@ in the populse.mia_processes website
 </ul>
 </div>
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.GradientThreshold.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#GradientThreshold.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.GradientThreshold.__init__" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.GradientThreshold.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#GradientThreshold.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.GradientThreshold.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the attributes initialisation / instantiation.</p>
 <p>The input and output plugs are defined here. The special
 ‘self.requirement’ attribute (optional) is used to define the
@@ -487,8 +488,8 @@ third-party products necessary for the running of the brick.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.GradientThreshold.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#GradientThreshold.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.GradientThreshold.list_outputs" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.GradientThreshold.list_outputs">
+<code class="sig-name descname">list_outputs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">is_plugged</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#GradientThreshold.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.GradientThreshold.list_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -505,16 +506,16 @@ self.make_initResult() object.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.GradientThreshold.run_process_mia">
-<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#GradientThreshold.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.GradientThreshold.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.GradientThreshold.run_process_mia">
+<code class="sig-name descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#GradientThreshold.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.GradientThreshold.run_process_mia" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the process launch step of the brick.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.Harmonize">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.others.processing.</span></span><span class="sig-name descname"><span class="pre">Harmonize</span></span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Harmonize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Harmonize" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.Harmonize">
+<em class="property">class </em><code class="sig-prename descclassname">mia_processes.bricks.preprocess.others.processing.</code><code class="sig-name descname">Harmonize</code><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Harmonize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Harmonize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
 <ul class="simple">
 <li><p>Harmonize.</p></li>
@@ -533,8 +534,8 @@ in the populse.mia_processes website
 </ul>
 </div>
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.Harmonize.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Harmonize.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Harmonize.__init__" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.Harmonize.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Harmonize.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Harmonize.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the attributes initialisation / instantiation.</p>
 <p>The input and output plugs are defined here. The special
 ‘self.requirement’ attribute (optional) is used to define the
@@ -542,8 +543,8 @@ third-party products necessary for the running of the brick.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.Harmonize.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Harmonize.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Harmonize.list_outputs" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.Harmonize.list_outputs">
+<code class="sig-name descname">list_outputs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">is_plugged</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Harmonize.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Harmonize.list_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -560,16 +561,16 @@ self.make_initResult() object.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.Harmonize.run_process_mia">
-<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Harmonize.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Harmonize.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.Harmonize.run_process_mia">
+<code class="sig-name descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Harmonize.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Harmonize.run_process_mia" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the process launch step of the brick.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.IntensityClip">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.others.processing.</span></span><span class="sig-name descname"><span class="pre">IntensityClip</span></span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#IntensityClip"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.IntensityClip" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.IntensityClip">
+<em class="property">class </em><code class="sig-prename descclassname">mia_processes.bricks.preprocess.others.processing.</code><code class="sig-name descname">IntensityClip</code><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#IntensityClip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.IntensityClip" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
 <ul class="simple">
 <li><p>Clip the intensity range as prescribed by the percentiles.</p></li>
@@ -586,8 +587,8 @@ the populse.mia_processes website
 </ul>
 </div>
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.IntensityClip.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#IntensityClip.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.IntensityClip.__init__" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.IntensityClip.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#IntensityClip.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.IntensityClip.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the attributes initialisation / instantiation.</p>
 <p>The input and output plugs are defined here. The special
 ‘self.requirement’ attribute (optional) is used to define the
@@ -595,8 +596,8 @@ third-party products necessary for the running of the brick.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.IntensityClip.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#IntensityClip.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.IntensityClip.list_outputs" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.IntensityClip.list_outputs">
+<code class="sig-name descname">list_outputs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">is_plugged</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#IntensityClip.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.IntensityClip.list_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -613,16 +614,16 @@ self.make_initResult() object.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.IntensityClip.run_process_mia">
-<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#IntensityClip.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.IntensityClip.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.IntensityClip.run_process_mia">
+<code class="sig-name descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#IntensityClip.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.IntensityClip.run_process_mia" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the process launch step of the brick.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.Mask">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.others.processing.</span></span><span class="sig-name descname"><span class="pre">Mask</span></span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Mask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Mask" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.Mask">
+<em class="property">class </em><code class="sig-prename descclassname">mia_processes.bricks.preprocess.others.processing.</code><code class="sig-name descname">Mask</code><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Mask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Mask" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
 <ul class="simple">
 <li><p>Mask image.</p></li>
@@ -641,8 +642,8 @@ in the populse.mia_processes website
 </ul>
 </div>
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.Mask.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Mask.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Mask.__init__" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.Mask.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Mask.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Mask.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the attributes initialisation / instantiation.</p>
 <p>The input and output plugs are defined here. The special
 ‘self.requirement’ attribute (optional) is used to define the
@@ -650,8 +651,8 @@ third-party products necessary for the running of the brick.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.Mask.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Mask.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Mask.list_outputs" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.Mask.list_outputs">
+<code class="sig-name descname">list_outputs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">is_plugged</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Mask.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Mask.list_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -668,16 +669,16 @@ self.make_initResult() object.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.Mask.run_process_mia">
-<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Mask.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Mask.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.Mask.run_process_mia">
+<code class="sig-name descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Mask.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Mask.run_process_mia" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the process launch step of the brick.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.NonSteadyStateDetector">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.others.processing.</span></span><span class="sig-name descname"><span class="pre">NonSteadyStateDetector</span></span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#NonSteadyStateDetector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.NonSteadyStateDetector" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.NonSteadyStateDetector">
+<em class="property">class </em><code class="sig-prename descclassname">mia_processes.bricks.preprocess.others.processing.</code><code class="sig-name descname">NonSteadyStateDetector</code><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#NonSteadyStateDetector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.NonSteadyStateDetector" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
 <ul class="simple">
 <li><p>Detect non-steady-state at the beginning of a bold 4D image.</p></li>
@@ -696,8 +697,8 @@ self.make_initResult() object.</p>
 </ul>
 </div>
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.NonSteadyStateDetector.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#NonSteadyStateDetector.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.NonSteadyStateDetector.__init__" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.NonSteadyStateDetector.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#NonSteadyStateDetector.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.NonSteadyStateDetector.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the attributes initialisation / instantiation.</p>
 <p>The input and output plugs are defined here. The special
 ‘self.requirement’ attribute (optional) is used to define the
@@ -705,8 +706,8 @@ third-party products necessary for the running of the brick.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.NonSteadyStateDetector.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#NonSteadyStateDetector.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.NonSteadyStateDetector.list_outputs" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.NonSteadyStateDetector.list_outputs">
+<code class="sig-name descname">list_outputs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">is_plugged</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#NonSteadyStateDetector.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.NonSteadyStateDetector.list_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -723,16 +724,16 @@ self.make_initResult() object.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.NonSteadyStateDetector.run_process_mia">
-<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#NonSteadyStateDetector.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.NonSteadyStateDetector.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.NonSteadyStateDetector.run_process_mia">
+<code class="sig-name descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#NonSteadyStateDetector.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.NonSteadyStateDetector.run_process_mia" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the process launch step of the brick.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.Resample1">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.others.processing.</span></span><span class="sig-name descname"><span class="pre">Resample1</span></span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Resample1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Resample1" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.Resample1">
+<em class="property">class </em><code class="sig-prename descclassname">mia_processes.bricks.preprocess.others.processing.</code><code class="sig-name descname">Resample1</code><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Resample1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Resample1" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
 <p><em>Resamples an image to the resolution of a reference image</em></p>
 <ul class="simple">
@@ -750,8 +751,8 @@ self.make_initResult() object.</p>
 </ul>
 </div>
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.Resample1.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Resample1.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Resample1.__init__" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.Resample1.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Resample1.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Resample1.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the attributes initialisation / instantiation.</p>
 <p>The input and output plugs are defined here. The special
 ‘self.requirement’ attribute (optional) is used to define the
@@ -759,8 +760,8 @@ third-party products necessary for the running of the brick.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.Resample1.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Resample1.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Resample1.list_outputs" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.Resample1.list_outputs">
+<code class="sig-name descname">list_outputs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">is_plugged</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Resample1.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Resample1.list_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -777,16 +778,16 @@ self.make_initResult() object.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.Resample1.run_process_mia">
-<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Resample1.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Resample1.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.Resample1.run_process_mia">
+<code class="sig-name descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Resample1.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Resample1.run_process_mia" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the process launch step of the brick.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.Resample2">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.others.processing.</span></span><span class="sig-name descname"><span class="pre">Resample2</span></span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Resample2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Resample2" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.Resample2">
+<em class="property">class </em><code class="sig-prename descclassname">mia_processes.bricks.preprocess.others.processing.</code><code class="sig-name descname">Resample2</code><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Resample2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Resample2" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
 <p><em>Resamples images to the resolution of a reference image</em></p>
 <ul class="simple">
@@ -806,8 +807,8 @@ must have the “PatientName” tag filled in.</p></li>
 </ul>
 </div>
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.Resample2.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Resample2.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Resample2.__init__" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.Resample2.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Resample2.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Resample2.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the attributes initialisation/instantiation.</p>
 <p>The input and output plugs are defined here. The special
 ‘self.requirement’ attribute (optional) is used to define the
@@ -815,8 +816,8 @@ third-party products necessary for the running of the brick.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.Resample2.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Resample2.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Resample2.list_outputs" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.Resample2.list_outputs">
+<code class="sig-name descname">list_outputs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">is_plugged</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Resample2.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Resample2.list_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -835,16 +836,16 @@ self.make_initResult() object.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.Resample2.run_process_mia">
-<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Resample2.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Resample2.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.Resample2.run_process_mia">
+<code class="sig-name descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Resample2.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Resample2.run_process_mia" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the process launch step of the brick.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.RotationMask">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.others.processing.</span></span><span class="sig-name descname"><span class="pre">RotationMask</span></span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#RotationMask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.RotationMask" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.RotationMask">
+<em class="property">class </em><code class="sig-prename descclassname">mia_processes.bricks.preprocess.others.processing.</code><code class="sig-name descname">RotationMask</code><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#RotationMask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.RotationMask" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
 <ul class="simple">
 <li><p>Compute the rotation mask image.</p></li>
@@ -863,8 +864,8 @@ self.make_initResult() object.</p>
 </ul>
 </div>
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.RotationMask.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#RotationMask.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.RotationMask.__init__" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.RotationMask.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#RotationMask.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.RotationMask.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the attributes initialisation / instantiation.</p>
 <p>The input and output plugs are defined here. The special
 ‘self.requirement’ attribute (optional) is used to define the
@@ -872,8 +873,8 @@ third-party products necessary for the running of the brick.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.RotationMask.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#RotationMask.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.RotationMask.list_outputs" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.RotationMask.list_outputs">
+<code class="sig-name descname">list_outputs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">is_plugged</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#RotationMask.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.RotationMask.list_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -890,16 +891,16 @@ self.make_initResult() object.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.RotationMask.run_process_mia">
-<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#RotationMask.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.RotationMask.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.RotationMask.run_process_mia">
+<code class="sig-name descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#RotationMask.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.RotationMask.run_process_mia" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the process launch step of the brick.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.Sanitize">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.others.processing.</span></span><span class="sig-name descname"><span class="pre">Sanitize</span></span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Sanitize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Sanitize" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.Sanitize">
+<em class="property">class </em><code class="sig-prename descclassname">mia_processes.bricks.preprocess.others.processing.</code><code class="sig-name descname">Sanitize</code><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Sanitize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Sanitize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
 <ul class="simple">
 <li><p>Sanitize input bold image.</p></li>
@@ -918,8 +919,8 @@ self.make_initResult() object.</p>
 </ul>
 </div>
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.Sanitize.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Sanitize.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Sanitize.__init__" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.Sanitize.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Sanitize.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Sanitize.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the attributes initialisation / instantiation.</p>
 <p>The input and output plugs are defined here. The special
 ‘self.requirement’ attribute (optional) is used to define the
@@ -927,8 +928,8 @@ third-party products necessary for the running of the brick.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.Sanitize.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Sanitize.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Sanitize.list_outputs" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.Sanitize.list_outputs">
+<code class="sig-name descname">list_outputs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">is_plugged</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Sanitize.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Sanitize.list_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -945,16 +946,16 @@ self.make_initResult() object.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.Sanitize.run_process_mia">
-<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Sanitize.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Sanitize.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.Sanitize.run_process_mia">
+<code class="sig-name descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Sanitize.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Sanitize.run_process_mia" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the process launch step of the brick.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.TSNR">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.others.processing.</span></span><span class="sig-name descname"><span class="pre">TSNR</span></span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#TSNR"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.TSNR" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.TSNR">
+<em class="property">class </em><code class="sig-prename descclassname">mia_processes.bricks.preprocess.others.processing.</code><code class="sig-name descname">TSNR</code><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#TSNR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.TSNR" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
 <ul class="simple">
 <li><p>Computes the time-course SNR for a time series.</p></li>
@@ -973,8 +974,8 @@ self.make_initResult() object.</p>
 </ul>
 </div>
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.TSNR.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#TSNR.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.TSNR.__init__" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.TSNR.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#TSNR.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.TSNR.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the attributes initialisation / instantiation.</p>
 <p>The input and output plugs are defined here. The special
 ‘self.requirement’ attribute (optional) is used to define the
@@ -982,8 +983,8 @@ third-party products necessary for the running of the brick.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.TSNR.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#TSNR.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.TSNR.list_outputs" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.TSNR.list_outputs">
+<code class="sig-name descname">list_outputs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">is_plugged</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#TSNR.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.TSNR.list_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -1000,16 +1001,16 @@ self.make_initResult() object.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.TSNR.run_process_mia">
-<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#TSNR.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.TSNR.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.TSNR.run_process_mia">
+<code class="sig-name descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#TSNR.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.TSNR.run_process_mia" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the process launch step of the brick.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.TemplateFromTemplateFlow">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.others.processing.</span></span><span class="sig-name descname"><span class="pre">TemplateFromTemplateFlow</span></span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#TemplateFromTemplateFlow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.TemplateFromTemplateFlow" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.TemplateFromTemplateFlow">
+<em class="property">class </em><code class="sig-prename descclassname">mia_processes.bricks.preprocess.others.processing.</code><code class="sig-name descname">TemplateFromTemplateFlow</code><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#TemplateFromTemplateFlow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.TemplateFromTemplateFlow" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
 <ul class="simple">
 <li><p>Get template image from templateflow.</p></li>
@@ -1026,8 +1027,8 @@ self.make_initResult() object.</p>
 </ul>
 </div>
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.TemplateFromTemplateFlow.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#TemplateFromTemplateFlow.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.TemplateFromTemplateFlow.__init__" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.TemplateFromTemplateFlow.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#TemplateFromTemplateFlow.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.TemplateFromTemplateFlow.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the attributes initialisation / instantiation.</p>
 <p>The input and output plugs are defined here. The special
 ‘self.requirement’ attribute (optional) is used to define the
@@ -1035,8 +1036,8 @@ third-party products necessary for the running of the brick.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.TemplateFromTemplateFlow.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#TemplateFromTemplateFlow.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.TemplateFromTemplateFlow.list_outputs" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.TemplateFromTemplateFlow.list_outputs">
+<code class="sig-name descname">list_outputs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">is_plugged</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#TemplateFromTemplateFlow.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.TemplateFromTemplateFlow.list_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -1053,16 +1054,16 @@ self.make_initResult() object.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.TemplateFromTemplateFlow.run_process_mia">
-<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#TemplateFromTemplateFlow.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.TemplateFromTemplateFlow.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.TemplateFromTemplateFlow.run_process_mia">
+<code class="sig-name descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#TemplateFromTemplateFlow.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.TemplateFromTemplateFlow.run_process_mia" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the process launch step of the brick.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.Threshold">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.others.processing.</span></span><span class="sig-name descname"><span class="pre">Threshold</span></span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Threshold"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Threshold" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.Threshold">
+<em class="property">class </em><code class="sig-prename descclassname">mia_processes.bricks.preprocess.others.processing.</code><code class="sig-name descname">Threshold</code><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Threshold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Threshold" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
 <ul class="simple">
 <li><p>Image thresholding.</p></li>
@@ -1079,8 +1080,8 @@ self.make_initResult() object.</p>
 </ul>
 </div>
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.Threshold.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Threshold.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Threshold.__init__" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.Threshold.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Threshold.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Threshold.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the attributes initialisation / instantiation.</p>
 <p>The input and output plugs are defined here. The special
 ‘self.requirement’ attribute (optional) is used to define the
@@ -1088,8 +1089,8 @@ third-party products necessary for the running of the brick.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.Threshold.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Threshold.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Threshold.list_outputs" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.Threshold.list_outputs">
+<code class="sig-name descname">list_outputs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">is_plugged</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Threshold.list_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Threshold.list_outputs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the initialisation step of the brick.</p>
 <p>The main objective of this method is to produce the outputs of the
 bricks (self.outputs) and the associated tags (self.inheritance_dic),
@@ -1106,22 +1107,22 @@ self.make_initResult() object.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.Threshold.run_process_mia">
-<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Threshold.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Threshold.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.Threshold.run_process_mia">
+<code class="sig-name descname">run_process_mia</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#Threshold.run_process_mia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.Threshold.run_process_mia" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the process launch step of the brick.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.artifact_mask">
-<span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.others.processing.</span></span><span class="sig-name descname"><span class="pre">artifact_mask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">imdata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">airdata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zscore</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#artifact_mask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.artifact_mask" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.artifact_mask">
+<code class="sig-prename descclassname">mia_processes.bricks.preprocess.others.processing.</code><code class="sig-name descname">artifact_mask</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">imdata</span></em>, <em class="sig-param"><span class="n">airdata</span></em>, <em class="sig-param"><span class="n">distance</span></em>, <em class="sig-param"><span class="n">zscore</span><span class="o">=</span><span class="default_value">10.0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#artifact_mask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.artifact_mask" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes a mask of artifacts found in the air region</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.is_outlier">
-<span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.others.processing.</span></span><span class="sig-name descname"><span class="pre">is_outlier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thresh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3.5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#is_outlier"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.is_outlier" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.is_outlier">
+<code class="sig-prename descclassname">mia_processes.bricks.preprocess.others.processing.</code><code class="sig-name descname">is_outlier</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">points</span></em>, <em class="sig-param"><span class="n">thresh</span><span class="o">=</span><span class="default_value">3.5</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#is_outlier"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.is_outlier" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a boolean array with True if points are outliers and False
 otherwise.
 :param nparray points: an numobservations by numdimensions numpy array</p>
@@ -1148,8 +1149,8 @@ Statistical Techniques, Edward F. Mykytka, Ph.D., Editor.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="mia_processes.bricks.preprocess.others.processing.threshold">
-<span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.preprocess.others.processing.</span></span><span class="sig-name descname"><span class="pre">threshold</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thresh</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#threshold"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.threshold" title="Permalink to this definition">¶</a></dt>
+<dt id="mia_processes.bricks.preprocess.others.processing.threshold">
+<code class="sig-prename descclassname">mia_processes.bricks.preprocess.others.processing.</code><code class="sig-name descname">threshold</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">file_name</span></em>, <em class="sig-param"><span class="n">thresh</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/preprocess/others/processing.html#threshold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.bricks.preprocess.others.processing.threshold" title="Permalink to this definition">¶</a></dt>
 <dd><p>Basic method for image thresholding</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1164,8 +1165,8 @@ Statistical Techniques, Edward F. Mykytka, Ph.D., Editor.</p>
 </dl>
 </dd></dl>
 
-</section>
-</section>
+</div>
+</div>
 
 
       </div>
@@ -1179,7 +1180,7 @@ Statistical Techniques, Edward F. Mykytka, Ph.D., Editor.</p>
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
     </div>
   </body>
 </html>

@@ -34,11 +34,11 @@ Registers each 3D volume from the input dataset to the base volume using AFNI 3d
 
 - *interpolation* (Fourier or linear or cubic or quintic or heptic, optional, default value is heptic)
     Different interpolation methods:
-      -Fourier = Use a Fourier method (the default: most accurate; slowest).
-      -linear  = Use linear (1st order polynomial) interpolation (least accurate).
-      -cubic   = Use the cubic (3rd order) Lagrange polynomial interpolation.
-      -quintic = Use the quintic (5th order) Lagrange polynomial interpolation.
-      -heptic  = Use the heptic (7th order) Lagrange polynomial interpolation.
+      - Fourier = Use a Fourier method (the default: most accurate; slowest).
+      - linear  = Use linear (1st order polynomial) interpolation (least accurate).
+      - cubic   = Use the cubic (3rd order) Lagrange polynomial interpolation.
+      - quintic = Use the quintic (5th order) Lagrange polynomial interpolation.
+      - heptic  = Use the heptic (7th order) Lagrange polynomial interpolation.
 
     ::
 
@@ -46,8 +46,8 @@ Registers each 3D volume from the input dataset to the base volume using AFNI 3d
 
 - *output_type* (NIFTI or NIFTI_GZ, optional, default value is NIFTI)
     | Format of the output image (one of NIFTI, NIFTI_GZ).
-    |   NIFTI: \*.nii
-    |   NIFTI_GZ: \*.nii.gz
+    |   - NIFTI: \*.nii
+    |   - NIFTI_GZ: \*.nii.gz
 
     ::
 

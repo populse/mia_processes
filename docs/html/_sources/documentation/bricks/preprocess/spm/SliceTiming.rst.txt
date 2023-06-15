@@ -20,7 +20,7 @@ Bring back every slice of a BOLD image to the reference slice time.
 
     ::
 
-      ex. ['/home/ArthurBlair/data/raw_data/Func.nii']
+      ex. ['/home/username/data/raw_data/Func.nii']
 
 - *acquisition*
     Type of the acquisition, either sequential ascending, sequential descending, interleaved (middle-top), interleaved (bottom-up) or interleaved (top-down). Slice ordering is assumed to be from foot to head and bottom slice = 1.
@@ -78,7 +78,7 @@ Bring back every slice of a BOLD image to the reference slice time.
 
     ::
 
-      ex. /home/ArthurBlair/data/derived_data/aFunc.nii
+      ex. /home/username/data/derived_data/aFunc.nii
 
 -------------
 

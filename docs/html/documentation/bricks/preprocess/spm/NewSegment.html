@@ -4,20 +4,21 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
-    <title>NewSegment brick &#8212; mia_processes 2.2.1-dev+5241b0ab documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css" />
-    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NewSegment brick &#8212; mia_processes 2.2.1-dev+38eeb539 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
     <script src="../../../../_static/jquery.js"></script>
     <script src="../../../../_static/underscore.js"></script>
     <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.2.1-dev+5241b0ab documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+38eeb539 documentation</span></a></h1>
         <h2 class="heading"><span>NewSegment brick</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -45,15 +46,15 @@
 </tr>
 </tbody>
 </table>
-<section id="newsegment-brick">
+<div class="section" id="newsegment-brick">
 <h1>NewSegment brick<a class="headerlink" href="#newsegment-brick" title="Permalink to this headline">¶</a></h1>
-<section id="segments-bias-corrects-and-spatially-normalises-all-in-the-same-model">
+<div class="section" id="segments-bias-corrects-and-spatially-normalises-all-in-the-same-model">
 <h2>Segments,  bias  corrects  and  spatially normalises - all in the same model<a class="headerlink" href="#segments-bias-corrects-and-spatially-normalises-all-in-the-same-model" title="Permalink to this headline">¶</a></h2>
 <p><strong>Inputs parameters:</strong></p>
 <ul>
 <li><dl>
 <dt><em>channel_files &lt;=&gt; channel.vols</em> <a class="footnote-reference brackets" href="#label" id="id1">1</a></dt><dd><p>Path of the scans for processing (valid extensions, .img, .nii, .hdr).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/Anat.nii&#39;</span><span class="p">]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/raw_data/Anat.nii&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 </dd>
@@ -173,12 +174,12 @@ modulation.</p>
 </ul>
 </div></blockquote>
 </div></blockquote>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span>  <span class="p">[((</span><span class="s1">&#39;/home/ArthurBlair/spm12/tpm/TPM.nii&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)),</span>
-      <span class="p">((</span><span class="s1">&#39;/home/ArthurBlair/spm12/tpm/TPM.nii&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)),</span>
-      <span class="p">((</span><span class="s1">&#39;/home/ArthurBlair/spm12/tpm/TPM.nii&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)),</span>
-      <span class="p">((</span><span class="s1">&#39;/home/ArthurBlair/spm12/tpm/TPM.nii&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="mi">3</span><span class="p">,</span> <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)),</span>
-      <span class="p">((</span><span class="s1">&#39;/home/ArthurBlair/spm12/tpm/TPM.nii&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="mi">4</span><span class="p">,</span> <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)),</span>
-      <span class="p">((</span><span class="s1">&#39;/home/ArthurBlair/spm12/tpm/TPM.nii&#39;</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">))]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span>  <span class="p">[((</span><span class="s1">&#39;/home/username/spm12/tpm/TPM.nii&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)),</span>
+      <span class="p">((</span><span class="s1">&#39;/home/username/spm12/tpm/TPM.nii&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)),</span>
+      <span class="p">((</span><span class="s1">&#39;/home/username/spm12/tpm/TPM.nii&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)),</span>
+      <span class="p">((</span><span class="s1">&#39;/home/username/spm12/tpm/TPM.nii&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="mi">3</span><span class="p">,</span> <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)),</span>
+      <span class="p">((</span><span class="s1">&#39;/home/username/spm12/tpm/TPM.nii&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="mi">4</span><span class="p">,</span> <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)),</span>
+      <span class="p">((</span><span class="s1">&#39;/home/username/spm12/tpm/TPM.nii&#39;</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">))]</span>
 </pre></div>
 </div>
 </dd>
@@ -231,7 +232,7 @@ fields to write; Inverse, Forward).</p>
 <ul>
 <li><dl>
 <dt><em>bias_corrected_images</em></dt><dd><p>The bias corrected images (a list of items which are a pathlike object or string representing an existing file).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">mAnat</span><span class="o">.</span><span class="n">nii</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">username</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">mAnat</span><span class="o">.</span><span class="n">nii</span>
 </pre></div>
 </div>
 </dd>
@@ -239,7 +240,7 @@ fields to write; Inverse, Forward).</p>
 </li>
 <li><dl>
 <dt><em>bias_field_images</em></dt><dd><p>The estimated bias field (a list of items which are a pathlike object or string representing an existing file).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">BiasField_Anat</span><span class="o">.</span><span class="n">nii</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">username</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">BiasField_Anat</span><span class="o">.</span><span class="n">nii</span>
 </pre></div>
 </div>
 </dd>
@@ -248,11 +249,11 @@ fields to write; Inverse, Forward).</p>
 <li><dl>
 <dt><em>native_class_images</em></dt><dd><p>Native space probability maps (a list of items which are a list of items which are a pathlike object or string representing an existing
 file).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/c1Anat.nii&#39;</span><span class="p">],</span>
-     <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/c2Anat.nii&#39;</span><span class="p">],</span>
-     <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/c3Anat.nii&#39;</span><span class="p">],</span>
-     <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/c4Anat.nii&#39;</span><span class="p">],</span>
-     <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/c5Anat.nii&#39;</span><span class="p">]]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[[</span><span class="s1">&#39;/home/username/data/raw_data/c1Anat.nii&#39;</span><span class="p">],</span>
+     <span class="p">[</span><span class="s1">&#39;/home/username/data/raw_data/c2Anat.nii&#39;</span><span class="p">],</span>
+     <span class="p">[</span><span class="s1">&#39;/home/username/data/raw_data/c3Anat.nii&#39;</span><span class="p">],</span>
+     <span class="p">[</span><span class="s1">&#39;/home/username/data/raw_data/c4Anat.nii&#39;</span><span class="p">],</span>
+     <span class="p">[</span><span class="s1">&#39;/home/username/data/raw_data/c5Anat.nii&#39;</span><span class="p">]]</span>
 </pre></div>
 </div>
 </dd>
@@ -260,11 +261,11 @@ file).</p>
 </li>
 <li><dl>
 <dt><em>dartel_input_images</em></dt><dd><p>“Imported” class images into a form that can be used with the Dartel toolbox (a list of items which are a list of items which are a pathlike object or string representing an existing file).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/rc1Anat.nii&#39;</span><span class="p">],</span>
-     <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/rc2Anat.nii&#39;</span><span class="p">],</span>
-     <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/rc3Anat.nii&#39;</span><span class="p">],</span>
-     <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/rc4Anat.nii&#39;</span><span class="p">],</span>
-     <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/rc5Anat.nii&#39;</span><span class="p">]]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[[</span><span class="s1">&#39;/home/username/data/raw_data/rc1Anat.nii&#39;</span><span class="p">],</span>
+     <span class="p">[</span><span class="s1">&#39;/home/username/data/raw_data/rc2Anat.nii&#39;</span><span class="p">],</span>
+     <span class="p">[</span><span class="s1">&#39;/home/username/data/raw_data/rc3Anat.nii&#39;</span><span class="p">],</span>
+     <span class="p">[</span><span class="s1">&#39;/home/username/data/raw_data/rc4Anat.nii&#39;</span><span class="p">],</span>
+     <span class="p">[</span><span class="s1">&#39;/home/username/data/raw_data/rc5Anat.nii&#39;</span><span class="p">]]</span>
 </pre></div>
 </div>
 </dd>
@@ -272,11 +273,11 @@ file).</p>
 </li>
 <li><dl>
 <dt><em>modulated_class_images</em></dt><dd><p>Modulated and normalised class images (a list of items which are a list of items which are a pathlike object or string representing an existing file).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/mwc1Anat.nii&#39;</span><span class="p">],</span>
-     <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/mwc2Anat.nii&#39;</span><span class="p">],</span>
-     <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/mwc3Anat.nii&#39;</span><span class="p">],</span>
-     <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/mwc4Anat.nii&#39;</span><span class="p">],</span>
-     <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/mwc5Anat.nii&#39;</span><span class="p">]]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[[</span><span class="s1">&#39;/home/username/data/raw_data/mwc1Anat.nii&#39;</span><span class="p">],</span>
+     <span class="p">[</span><span class="s1">&#39;/home/username/data/raw_data/mwc2Anat.nii&#39;</span><span class="p">],</span>
+     <span class="p">[</span><span class="s1">&#39;/home/username/data/raw_data/mwc3Anat.nii&#39;</span><span class="p">],</span>
+     <span class="p">[</span><span class="s1">&#39;/home/username/data/raw_data/mwc4Anat.nii&#39;</span><span class="p">],</span>
+     <span class="p">[</span><span class="s1">&#39;/homeusername/data/raw_data/mwc5Anat.nii&#39;</span><span class="p">]]</span>
 </pre></div>
 </div>
 </dd>
@@ -284,11 +285,11 @@ file).</p>
 </li>
 <li><dl>
 <dt><em>normalized_class_images</em></dt><dd><p>Normalised class images, without modulation (a list of items which are a list of items which are a pathlike object or string representing an existing file).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/wc1Anat.nii&#39;</span><span class="p">],</span>
-     <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/wc2Anat.nii&#39;</span><span class="p">],</span>
-     <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/wc3Anat.nii&#39;</span><span class="p">],</span>
-     <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/wc4Anat.nii&#39;</span><span class="p">],</span>
-     <span class="p">[</span><span class="s1">&#39;/home/ArthurBlair/data/raw_data/wc5Anat.nii&#39;</span><span class="p">]]</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[[</span><span class="s1">&#39;/home/username/data/raw_data/wc1Anat.nii&#39;</span><span class="p">],</span>
+     <span class="p">[</span><span class="s1">&#39;/home/username/data/raw_data/wc2Anat.nii&#39;</span><span class="p">],</span>
+     <span class="p">[</span><span class="s1">&#39;/home/username/data/raw_data/wc3Anat.nii&#39;</span><span class="p">],</span>
+     <span class="p">[</span><span class="s1">&#39;/home/username/data/raw_data/wc4Anat.nii&#39;</span><span class="p">],</span>
+     <span class="p">[</span><span class="s1">&#39;/home/username/data/raw_data/wc5Anat.nii&#39;</span><span class="p">]]</span>
 </pre></div>
 </div>
 </dd>
@@ -297,7 +298,7 @@ file).</p>
 <li><dl>
 <dt><em>inverse_deformation_field</em></dt><dd><p>Inverse deformation field. Could be used for spatially normalising surface files as GIFTI (a list of items which are a pathlike object or
 string representing an existing file).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">iy_Anat</span><span class="o">.</span><span class="n">nii</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">username</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">iy_Anat</span><span class="o">.</span><span class="n">nii</span>
 </pre></div>
 </div>
 </dd>
@@ -306,7 +307,7 @@ string representing an existing file).</p>
 <li><dl>
 <dt><em>forward_deformation_field</em></dt><dd><p>Forward deformation field. Could be used for spatially normalising images to MNI space (a list of items which are a pathlike object or
 string representing an existing file).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">y_Anat</span><span class="o">.</span><span class="n">nii</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">username</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">y_Anat</span><span class="o">.</span><span class="n">nii</span>
 </pre></div>
 </div>
 </dd>
@@ -314,7 +315,7 @@ string representing an existing file).</p>
 </li>
 <li><dl>
 <dt><em>transformation_mat</em></dt><dd><p>Normalisation transformation (a list of items which are a pathlike object or string representing an existing file).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">ArthurBlair</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">Anat_seg8</span><span class="o">.</span><span class="n">mat</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">username</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">raw_data</span><span class="o">/</span><span class="n">Anat_seg8</span><span class="o">.</span><span class="n">mat</span>
 </pre></div>
 </div>
 </dd>
@@ -337,8 +338,8 @@ string representing an existing file).</p>
 <a class="reference external" href="https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.spm.preprocess.html#newsegment">nipype NewSegment</a></p>
 </dd>
 </dl>
-</section>
-</section>
+</div>
+</div>
 
 
       </div>
@@ -352,7 +353,7 @@ string representing an existing file).</p>
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
     </div>
   </body>
 </html>

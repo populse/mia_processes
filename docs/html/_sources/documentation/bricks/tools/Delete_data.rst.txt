@@ -14,11 +14,11 @@ Delete data from database.
 The input of this brick should be an output file from a brick or a pipeline.
 All the outputs from this file history will be removed.
 
-If "to_keep_filters" is used, the files macthing the regex of the filter will be kept.
+If "to_keep_filters" is used, the files matching the regex of the filter will be kept.
 
-If "to_remove_filter" is used, the files macthing the regex of the filter will be deleted.
+If "to_remove_filter" is used, the files matching the regex of the filter will be deleted.
 
-You can check that your regex `here <https://regex101.com/>`_.
+You can check your regex `here <https://regex101.com/>`_.
 
 --------------------------------------
 

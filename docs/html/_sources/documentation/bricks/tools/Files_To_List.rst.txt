@@ -51,14 +51,14 @@ From 3 file names, generating a list containing all theses file names
 
     ::
 
-      ex. /home/ArthurBlair/data/Anat.nii
+      ex. /home/username/data/Anat.nii
 
 - *file2*
     An optional string corresponding to a path file.
 
     ::
 
-      ex. /home/ArthurBlair/data/Func.nii
+      ex. /home/username/data/Func.nii
 
 **Outputs parameters:**
 
@@ -67,4 +67,4 @@ From 3 file names, generating a list containing all theses file names
 
     ::
 
-      ex. ['/home/ArthurBlair/data/Anat.nii', '/home/ArthurBlair/data/Func.nii']
+      ex. ['/home/username/data/Anat.nii', '/home/username/data/Func.nii']
