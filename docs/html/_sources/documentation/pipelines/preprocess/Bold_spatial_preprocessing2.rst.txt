@@ -2,9 +2,9 @@
 
 .. toctree::
 
-+--------------------------------+----------------------------------------------+----------------------------------------------------+
-|`Home <../../../../index.html>`_|`Documentation <../../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
-+--------------------------------+----------------------------------------------+----------------------------------------------------+
++-----------------------------+-------------------------------------------+----------------------------------------------------+
+|`Home <../../../index.html>`_|`Documentation <../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
++-----------------------------+-------------------------------------------+----------------------------------------------------+
 
 ====================================
 Bold_spatial_preprocessing2 pipeline
@@ -18,7 +18,7 @@ An example of fMRI data pre-processing
 - Spatial_preprocessing pipeline combines the following bricks:
     - `Slice timing  <../../bricks/tools/List_Duplicate.html>`_
     - `Realign <../../bricks/preprocess/spm/Realign.html>`_
-    - `Normalize12 Estimate & write <../../bricks/preprocess/spm/Normalize12.html>`_ 
+    - `Normalize12 Estimate & write <../../bricks/preprocess/spm/Normalize12.html>`_
         (default values: jobtype = 'estwrite', bias_regularization = 0.0001, bias_fwhm = 30, write_interp = 4)
     - `Normalize12 Write <../../bricks/preprocess/spm/Normalize12.html>`_
         (default values: jobtype = 'write', write_interp = 4)
