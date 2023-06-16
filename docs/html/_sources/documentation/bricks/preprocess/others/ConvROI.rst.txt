@@ -13,11 +13,11 @@ ConvROI brick
 Image convolution with one image
 --------------------------------
 
-    - Resample the `convolve_with` to the size of `images_to_convolve`.
-    - Then, convolve each `images_to_convolve` with resized `convolve_with`.
-    - The “PatientName_data/ROI_data/convROI_BOLD” directory is created to receive the convolution results from the runtime.
-      If this directory exists at runtime, it is overwritten.
-    - To work correctly, the database entry for the `convolve_with` parameter must have the "PatientName" tag filled in.
+- Resample the `convolve_with` to the size of `images_to_convolve`.
+- Then, convolve each `images_to_convolve` with resized `convolve_with`.
+- The “PatientName_data/ROI_data/convROI_BOLD” directory is created to receive the convolution results from the runtime.
+  If this directory exists at runtime, it is overwritten.
+- To work correctly, the database entry for the `convolve_with` parameter must have the "PatientName" tag filled in.
 
 --------------------------------------
 

@@ -5,18 +5,20 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.tools.tools &#8212; mia_processes 2.2.1-dev+94839b67 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css" />
-    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <title>mia_processes.bricks.tools.tools &#8212; mia_processes 2.2.1-dev+eae66182 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
     <script src="../../../../_static/jquery.js"></script>
     <script src="../../../../_static/underscore.js"></script>
     <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.2.1-dev+94839b67 documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+eae66182 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.tools.tools</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -90,7 +92,7 @@
 
 
 <div class="viewcode-block" id="Concat_to_list"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Concat_to_list">[docs]</a><span class="k">class</span> <span class="nc">Concat_to_list</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Make an output list corresponding to the concatenation of list1 and list2*</span>
 
 <span class="sd">    Ex. [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;] and [&#39;d&#39;, &#39;e&#39;] gives</span>
@@ -98,7 +100,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Concat_to_list.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Concat_to_list.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -136,7 +138,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">out_list</span> <span class="o">=</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span></div>
 
 <div class="viewcode-block" id="Concat_to_list.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Concat_to_list.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -165,12 +167,12 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Concat_to_list.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Concat_to_list.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="k">return</span></div></div>
 
 
 <div class="viewcode-block" id="Concat_to_list_of_list"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Concat_to_list_of_list">[docs]</a><span class="k">class</span> <span class="nc">Concat_to_list_of_list</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Iteration of input list1 with each element of input list2*</span>
 
 <span class="sd">    Ex. [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;] and [&#39;1&#39;, &#39;2&#39;] gives</span>
@@ -181,7 +183,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Concat_to_list_of_list.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Concat_to_list_of_list.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -232,7 +234,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">listOflist</span> <span class="o">=</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span></div>
 
 <div class="viewcode-block" id="Concat_to_list_of_list.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Concat_to_list_of_list.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -263,17 +265,17 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Concat_to_list_of_list.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Concat_to_list_of_list.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="k">return</span></div></div>
 
 
 <div class="viewcode-block" id="Delete_data"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Delete_data">[docs]</a><span class="k">class</span> <span class="nc">Delete_data</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Delete from database data</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Delete_data.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Delete_data.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -335,7 +337,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Delete_data.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Delete_data.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
 <span class="sd">        if defined here. In order not to include an output in the database,</span>
@@ -401,12 +403,12 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Delete_data.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Delete_data.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="k">return</span></div></div>
 
 
 <div class="viewcode-block" id="Files_To_List"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Files_To_List">[docs]</a><span class="k">class</span> <span class="nc">Files_To_List</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    * From 3 file names, generating a list containing all these file names.</span>
 
 <span class="sd">    Please, see the complete documention for the</span>
@@ -416,7 +418,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Files_To_List.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Files_To_List.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -461,7 +463,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">file_list</span> <span class="o">=</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span></div>
 
 <div class="viewcode-block" id="Files_To_List.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Files_To_List.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -510,12 +512,12 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Files_To_List.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Files_To_List.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="k">return</span></div></div>
 
 
 <div class="viewcode-block" id="Filter_Files_List"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Filter_Files_List">[docs]</a><span class="k">class</span> <span class="nc">Filter_Files_List</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    * Selects one or more (slicing) element(s) from a list.</span>
 
 <span class="sd">    Please, see the complete documention for the</span>
@@ -525,7 +527,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Filter_Files_List.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Filter_Files_List.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -571,7 +573,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">filtered_list</span> <span class="o">=</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span></div>
 
 <div class="viewcode-block" id="Filter_Files_List.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Filter_Files_List.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -648,18 +650,18 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Filter_Files_List.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Filter_Files_List.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="k">return</span></div></div>
 
 
 <div class="viewcode-block" id="Find_In_List"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Find_In_List">[docs]</a><span class="k">class</span> <span class="nc">Find_In_List</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *From a list of files, select the 1rst element that contains a pattern*</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Find_In_List.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Find_In_List.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -706,7 +708,7 @@
         <span class="p">)</span></div>
 
 <div class="viewcode-block" id="Find_In_List.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Find_In_List.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -738,12 +740,12 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Find_In_List.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Find_In_List.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="k">return</span></div></div>
 
 
 <div class="viewcode-block" id="Import_Data"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Import_Data">[docs]</a><span class="k">class</span> <span class="nc">Import_Data</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Import reference data into the current pipeline*</span>
 
 <span class="sd">    - This brick was originally written to select regions of interest.</span>
@@ -761,7 +763,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Import_Data.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Import_Data.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -845,7 +847,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Import_Data.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Import_Data.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -939,7 +941,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Import_Data.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Import_Data.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="c1"># No need the next line (we don&#39;t use self.process and SPM)</span>
         <span class="c1"># super(Import_Data, self).run_process_mia()</span>
 
@@ -983,7 +985,7 @@
 
 
 <div class="viewcode-block" id="Input_Filter"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Input_Filter">[docs]</a><span class="k">class</span> <span class="nc">Input_Filter</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    * | To filter the content of the Data Browser tab or the</span>
 <span class="sd">      | output data of another brick.</span>
 
@@ -994,7 +996,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Input_Filter.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Input_Filter.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -1033,7 +1035,7 @@
         <span class="p">)</span></div>
 
 <div class="viewcode-block" id="Input_Filter.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Input_Filter.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -1098,12 +1100,12 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Input_Filter.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Input_Filter.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="k">return</span></div></div>
 
 
 <div class="viewcode-block" id="List_Duplicate"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.List_Duplicate">[docs]</a><span class="k">class</span> <span class="nc">List_Duplicate</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    * | From a file name, generating a list containing this file name</span>
 <span class="sd">      | and the file name itself.</span>
 
@@ -1114,7 +1116,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="List_Duplicate.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.List_Duplicate.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -1151,7 +1153,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">out_list</span> <span class="o">=</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span></div>
 
 <div class="viewcode-block" id="List_Duplicate.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.List_Duplicate.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -1176,12 +1178,12 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="List_Duplicate.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.List_Duplicate.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="k">return</span></div></div>
 
 
 <div class="viewcode-block" id="List_To_File"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.List_To_File">[docs]</a><span class="k">class</span> <span class="nc">List_To_File</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    * From several filenames, selects and generates a file.</span>
 
 <span class="sd">    Please, see the complete documention for the</span>
@@ -1191,7 +1193,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="List_To_File.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.List_To_File.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -1235,7 +1237,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">file</span> <span class="o">=</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span></div>
 
 <div class="viewcode-block" id="List_To_File.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.List_To_File.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -1279,12 +1281,12 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="List_To_File.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.List_To_File.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="k">return</span></div></div>
 
 
 <div class="viewcode-block" id="Make_A_List"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Make_A_List">[docs]</a><span class="k">class</span> <span class="nc">Make_A_List</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    * From 2 objects, generating a list containing all these objects.</span>
 
 <span class="sd">    Please, see the complete documention for the</span>
@@ -1294,7 +1296,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Make_A_List.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Make_A_List.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -1329,7 +1331,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">obj_list</span> <span class="o">=</span> <span class="n">traits</span><span class="o">.</span><span class="n">Undefined</span></div>
 
 <div class="viewcode-block" id="Make_A_List.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Make_A_List.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
 <span class="sd">        if defined here. In order not to include an output in the database,</span>
@@ -1361,7 +1363,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Make_A_List.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Make_A_List.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="k">return</span></div></div>
 </pre></div>
 
@@ -1376,7 +1378,7 @@
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
     </div>
   </body>
 </html>

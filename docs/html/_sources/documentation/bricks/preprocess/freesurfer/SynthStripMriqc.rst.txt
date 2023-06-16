@@ -6,11 +6,12 @@
 |`Home <../../../../index.html>`_|`Documentation <../../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +--------------------------------+----------------------------------------------+----------------------------------------------------+
 
-==========================
+=====================
 SynthStripMriqc brick
-==========================
+=====================
 
-Skull-stripping using SynthStrip tool (mri_synthstrip in FreeSurfer) as done in `mriqc v22.06 <https://mriqc.readthedocs.io/en/22.0.6/>`_ .
+Skull-stripping using SynthStrip tool (mri_synthstrip in FreeSurfer) as done in `mriqc v22.06 <https://mriqc.readthedocs.io/en/22.0.6/>`_
+-----------------------------------------------------------------------------------------------------------------------------------------
 
 Adapted from  `mriqc_1 <https://github.com/nipreps/mriqc/blob/22.0.6/mriqc/synthstrip/cli.py>`_,
 `mriqc_2 <https://github.com/nipreps/mriqc/blob/22.0.6/mriqc/synthstrip/model.py>`_ and
@@ -82,6 +83,9 @@ If you use this bricks in your analysis, please cite: `SynthStrip: Skull-Strippi
 -------------
 
 Usefull links:
+
 `mriqc v22.06 - cli <https://github.com/nipreps/mriqc/blob/22.0.6/mriqc/synthstrip/cli.py>`_
+
 `mriqc v22.06 - model <https://github.com/nipreps/mriqc/blob/22.0.6/mriqc/synthstrip/model.py>`_
+
 `Freesurfer SynthStrip <https://github.com/freesurfer/freesurfer/blob/2995ded957961a7f3704de57eee88eb6cc30d52d/mri_synthstrip/mri_synthstrip>`_

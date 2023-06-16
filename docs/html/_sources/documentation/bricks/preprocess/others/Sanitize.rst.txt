@@ -10,7 +10,8 @@
 Sanitize brick
 ==============
 
-Sanitize input bold image.
+Sanitize input bold image
+-------------------------
 
 Adapted from `niworkflows <https://github.com/nipreps/niworkflows>`_.
 
@@ -67,4 +68,5 @@ Adapted from `niworkflows <https://github.com/nipreps/niworkflows>`_.
 -------------
 
 Usefull links:
+
 `SanitizeImage niworflow <https://github.com/nipreps/niworkflows/blob/45ab13e1bf6fdbf5e29c90cef44055b0b9cf391b/niworkflows/interfaces/header.py#L394>`_

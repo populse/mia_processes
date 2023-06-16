@@ -10,7 +10,10 @@
 ArtifactMask brick
 ==================
 
-Computes the artifact mask using the method described in the step 1 (Background Region Segmentation) of (`[Mortamet2009] <https://onlinelibrary.wiley.com/doi/10.1002/mrm.21992>`_)
+Computes artifact mask
+----------------------
+
+Using the method described in the step 1 (Background Region Segmentation) of the paper of `Mortamet and colleagues <https://onlinelibrary.wiley.com/doi/10.1002/mrm.21992>`_
 
 Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical workflow.
 
@@ -85,4 +88,5 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
 -------------
 
 Usefull links:
+
 `Artifactmask mriqc - nipype <https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/interfaces/anatomical.py#L301>`_

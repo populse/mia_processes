@@ -10,8 +10,10 @@
 QualityIndex brick
 ===================
 
-Computes a quality index for each sub-brick in a 3D+time dataset using AFNI 3dTqual command.
-The output is a 1D time series with the index for each sub-brick
+Computes a quality index for each sub-brick (3D volumes for each TR) in a 3D+time dataset using AFNI 3dTqual
+------------------------------------------------------------------------------------------------------------
+
+The output is a 1D time series with the index for each sub-brick.
 
 --------------------------------------
 
@@ -100,4 +102,5 @@ The output is a 1D time series with the index for each sub-brick
 Usefull links:
 
 `AFNI 3dTqual <https://afni.nimh.nih.gov/pub/dist/doc/program_help/3dTqual.html>`_
+
 `AFNI QualityIndex - nipype <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.afni.preprocess.html#qualityindex>`__

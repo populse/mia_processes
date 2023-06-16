@@ -10,9 +10,8 @@
 SkullStrip brick
 ================
 
-Extract the brain from surrounding tissue from MRI T1-weighted images (using AFNI 3dSkullStrip command).
-
---------------------------------------
+Using AFNI 3dSkullStrip, from T1-weighted MRI images, extract the brain from surrounding tissue
+-----------------------------------------------------------------------------------------------
 
 **Mandatory inputs parameters:**
 
@@ -56,4 +55,5 @@ Extract the brain from surrounding tissue from MRI T1-weighted images (using AFN
 Usefull links:
 
 `AFNI 3dSkullStrip <https://afni.nimh.nih.gov/pub/dist/doc/program_help/3dSkullStrip.html>`_
+
 `AFNI SkullStrip - nipype <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.afni.preprocess.html#skullstrip>`_

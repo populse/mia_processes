@@ -10,10 +10,8 @@
 ApplyTransforms brick
 =====================
 
-ApplyTransforms, applied to an input image, transforms it according to a reference image and a transform (or a set of transforms)
-using ANTs ApplyTransforms command.
-
---------------------------------------
+Using ANTs ApplyTransforms, transforms an input image according to a reference image and a transform (or a set of transforms)
+-----------------------------------------------------------------------------------------------------------------------------
 
 **Mandatory inputs parameters:**
 
@@ -25,23 +23,23 @@ using ANTs ApplyTransforms command.
       ex. '/home/username/data/raw_data/T1w.nii'
 
 - *reference_image* (a string representing an existing file)
-    Input file to apply transformation to (valid extensions: [.nii, .nii.gz]).
+    Reference image space that you wish to warp into (valid extensions: [.nii, .nii.gz]).
 
     ::
 
-      ex. '/home/username/data/raw_data/T1w.nii'
+      ex. '/home/username/data/raw_data/ref_T1w.nii'
 
 - *transforms* (multiples string representing existing files)
-    Transform files that will be applied in reverse order.
+    Transform files that will be applied in reverse order (the last specified transform will be applied first).
 
     ::
 
-      ex. ['identity', 'ants_Warp.nii.gz', 'trans.mat']
+      ex. ['/home/username/data/raw_data/post_n4c_T1w_clipped_masked_InverseComposite.h5']
 
 **Optional inputs parameters with a default value:**
 
 - *default_value* (a float, optional, default value is 0.0)
-    ex.
+
     ::
 
       ex. 0.0
@@ -79,7 +77,7 @@ using ANTs ApplyTransforms command.
 
     ::
 
-        ex. 't_'
+      ex. 't_'
 
 - *print_out_composite_warp_file* (a boolean, optional, default value is False)
     Output a composite warp file instead of a transformed image.
@@ -115,10 +113,12 @@ using ANTs ApplyTransforms command.
 
     ::
 
-      ex. '/home/username/data/derived_data/denoise_func.nii'
+      ex. '/home/username/data/derived_data/t_T1w.nii'
 
 -------------
 
 Usefull links:
 
 `ANTS ApplyTransforms - nipype <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.ants.html#applytransforms>`_
+
+`ANTS ApplyTransforms <https://antsx.github.io/ANTsRCore/reference/antsApplyTransforms.html>`_

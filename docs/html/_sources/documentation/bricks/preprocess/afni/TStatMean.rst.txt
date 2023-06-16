@@ -10,11 +10,12 @@
 TStatMean brick
 ===============
 
-Mean of bold images (using mean option of the AFNI 3dTstat command).
+Mean of bold images (using mean option of the AFNI 3dTstat)
+-----------------------------------------------------------
 
 Compute mean of input voxels for a 3D+time dataset image.
 
---------------------------------------
+---------------------------
 
 **Mandatory inputs parameters:**
 
@@ -57,4 +58,5 @@ Compute mean of input voxels for a 3D+time dataset image.
 Usefull links:
 
 `AFNI 3dTstat <https://afni.nimh.nih.gov/pub/dist/doc/program_help/3dTstat.html>`_
+
 `AFNI TStat - nipype <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.afni.utils.html#tstat>`_

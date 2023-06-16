@@ -10,9 +10,11 @@
 Denoise brick
 =============
 
-Denoise image using Non-Local Means algorithm (NLMEANS).
-The value of a pixel is replaced by an average of a set of other pixel values: the specific patches centered on the other pixels are contrasted to the patch centered on the pixel of interest, a
-nd the average only applies to pixels with patches close to the current patch.
+Denoise image using Non-Local Means algorithm (NLMEANS)
+-------------------------------------------------------
+
+The value of a pixel is replaced by an average of a set of other pixel values: the specific patches centered on the other pixels are contrasted
+to the patch centered on the pixel of interest, and the average only applies to pixels with patches close to the current patch.
 
 --------------------------------------
 
@@ -100,6 +102,9 @@ nd the average only applies to pixels with patches close to the current patch.
 Usefull links:
 
 `Dipy Denoise - nipype <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.dipy.preprocess.html#denoise>`_
+
 `Dipy Denoise <https://dipy.org/documentation/1.6.0./examples_built/denoise_nlmeans/#example-denoise-nlmeans>`_
+
 `NLMEANS article 1 <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2881565/>`_
+
 `NLMEANS article 2 <https://hal.science/hal-00645538/document>`_

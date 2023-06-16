@@ -6,12 +6,14 @@
 |`Home <../../../../index.html>`_|`Documentation <../../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +--------------------------------+----------------------------------------------+----------------------------------------------------+
 
-============================
+===========
 FWHMx brick
-============================
+===========
 
-Computes FWHMs using AFNI FWHMx command.
-This program computes FWHMs for all sub-bricks in the input dataset, each one separately
+Computes FWHMs using AFNI FWHMx
+-------------------------------
+
+This brick computes FWHMs for all sub-bricks (3D volumes for each TR) in the input dataset, each one separately.
 
 --------------------------------------
 
@@ -78,4 +80,5 @@ This program computes FWHMs for all sub-bricks in the input dataset, each one se
 Usefull links:
 
 `AFNI FWHMx <https://afni.nimh.nih.gov/pub/dist/doc/program_help/3dFWHMx.html>`_
+
 `AFNI FWHMx - nipype <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.afni.utils.html#fwhmx>`_

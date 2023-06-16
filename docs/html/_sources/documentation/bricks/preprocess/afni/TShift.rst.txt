@@ -10,14 +10,15 @@
 TShift brick
 ============
 
-Slice-time correction of bold images (using mean option of the AFNI 3dTshift command).
+Slice-time correction of bold images (using mean option of the AFNI 3dTshift)
+-----------------------------------------------------------------------------
+
 Shifts voxel time series from input so that separate slices are aligned to the same temporal origin.
 
 You can either used "slice_timing" parameter or "tpattern" parameter to specify slice time.
 If neither of this two parameters are defined, the process return the input file.
 
-
---------------------------------------
+-----------------------------
 
 **Mandatory inputs parameters:**
 
@@ -160,4 +161,5 @@ If neither of this two parameters are defined, the process return the input file
 Usefull links:
 
 `AFNI 3dTshift <https://afni.nimh.nih.gov/pub/dist/doc/program_help/3dTshift.html>`_
+
 `AFNI TShift - nipype <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.afni.preprocess.html#tshift>`_

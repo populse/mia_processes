@@ -10,7 +10,8 @@
 BetSurfacesExtraction brick
 ===========================
 
-Surfaces (skull, inskull, outskull, outskin) extraction using BET (FSL).
+Surfaces (skull, inskull, outskull, outskin) extraction using BET (FSL)
+-----------------------------------------------------------------------
 
 Both bet2 and betsurf programs are used in order to get skull and scalp
 surfaces created by betsurf (fsl BET -A option)
@@ -104,5 +105,7 @@ The mask and mesh files (.vtk) are generated.
 -------------
 
 Usefull links:
+
 `FSL BET <https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/BET/UserGuide>`_
+
 `FSL FAST - nipype <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.fsl.preprocess.html#bet>`_

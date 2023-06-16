@@ -19,10 +19,10 @@ Mia_processes's documentation
       - `Calc <bricks/preprocess/afni/Calc.html>`_
       - `CalcDropTRs <bricks/preprocess/afni/CalcDropTRs.html>`_
       - `Despike <bricks/preprocess/afni/Despike.html>`_
-      - `FWHMx <bricks/reports/FWHMx.html>`_
-      - `GCOR <bricks/reports/GCOR.html>`_
-      - `OutliersCount <bricks/reports/OutlierCount.html>`_
-      - `QualityIndex <bricks/reports/QualityIndex.html>`_
+      - `FWHMx <bricks/preprocess/afni/FWHMx.html>`_
+      - `GCOR <bricks/preprocess/afni/GCOR.html>`_
+      - `OutliersCount <bricks/preprocess/afni/OutlierCount.html>`_
+      - `QualityIndex <bricks/preprocess/afni/QualityIndex.html>`_
       - `RefitDeoblique <bricks/preprocess/afni/RefitDeoblique.html>`_
       - `SkullStrip <bricks/preprocess/afni/SkullStrip.html>`_
       - `TShift <bricks/preprocess/afni/TShift.html>`_

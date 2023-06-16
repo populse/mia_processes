@@ -4,20 +4,21 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
-    <title>ApplyTransforms brick &#8212; mia_processes 2.2.1-dev+a6961723 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css" />
-    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ApplyTransforms brick &#8212; mia_processes 2.2.1-dev+eae66182 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
     <script src="../../../../_static/jquery.js"></script>
     <script src="../../../../_static/underscore.js"></script>
     <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.2.1-dev+a6961723 documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+eae66182 documentation</span></a></h1>
         <h2 class="heading"><span>ApplyTransforms brick</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -45,11 +46,10 @@
 </tr>
 </tbody>
 </table>
-<section id="applytransforms-brick">
+<div class="section" id="applytransforms-brick">
 <h1>ApplyTransforms brick<a class="headerlink" href="#applytransforms-brick" title="Permalink to this headline">¶</a></h1>
-<p>ApplyTransforms, applied to an input image, transforms it according to a reference image and a transform (or a set of transforms)
-using ANTs ApplyTransforms command.</p>
-<hr class="docutils" />
+<div class="section" id="using-ants-applytransforms-transforms-an-input-image-according-to-a-reference-image-and-a-transform-or-a-set-of-transforms">
+<h2>Using ANTs ApplyTransforms, transforms an input image according to a reference image and a transform (or a set of transforms)<a class="headerlink" href="#using-ants-applytransforms-transforms-an-input-image-according-to-a-reference-image-and-a-transform-or-a-set-of-transforms" title="Permalink to this headline">¶</a></h2>
 <p><strong>Mandatory inputs parameters:</strong></p>
 <ul>
 <li><dl>
@@ -61,16 +61,16 @@ using ANTs ApplyTransforms command.</p>
 </dl>
 </li>
 <li><dl>
-<dt><em>reference_image</em> (a string representing an existing file)</dt><dd><p>Input file to apply transformation to (valid extensions: [.nii, .nii.gz]).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/T1w.nii&#39;</span>
+<dt><em>reference_image</em> (a string representing an existing file)</dt><dd><p>Reference image space that you wish to warp into (valid extensions: [.nii, .nii.gz]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/ref_T1w.nii&#39;</span>
 </pre></div>
 </div>
 </dd>
 </dl>
 </li>
 <li><dl>
-<dt><em>transforms</em> (multiples string representing existing files)</dt><dd><p>Transform files that will be applied in reverse order.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;identity&#39;</span><span class="p">,</span> <span class="s1">&#39;ants_Warp.nii.gz&#39;</span><span class="p">,</span> <span class="s1">&#39;trans.mat&#39;</span><span class="p">]</span>
+<dt><em>transforms</em> (multiples string representing existing files)</dt><dd><p>Transform files that will be applied in reverse order (the last specified transform will be applied first).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/raw_data/post_n4c_T1w_clipped_masked_InverseComposite.h5&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 </dd>
@@ -79,13 +79,12 @@ using ANTs ApplyTransforms command.</p>
 </ul>
 <p><strong>Optional inputs parameters with a default value:</strong></p>
 <ul>
-<li><dl>
-<dt><em>default_value</em> (a float, optional, default value is 0.0)</dt><dd><p>ex.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mf">0.0</span>
+<li><p><em>default_value</em> (a float, optional, default value is 0.0)</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mf">0.0</span>
 </pre></div>
 </div>
-</dd>
-</dl>
+</div></blockquote>
 </li>
 <li><dl>
 <dt><em>dimension</em> (2 or 3 or 4, optional, default value is 3)</dt><dd><p>This option forces the image to be treated as a specified-dimensional image (2 or 3 or 4).</p>
@@ -164,7 +163,7 @@ Default is Undefined (ie parameter not used).</p>
 <ul>
 <li><dl>
 <dt><em>out_file</em> (a strings representing a file)</dt><dd><p>Out image (extensions: [.nii, .nii.gz]).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/denoise_func.nii&#39;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/t_T1w.nii&#39;</span>
 </pre></div>
 </div>
 </dd>
@@ -174,7 +173,9 @@ Default is Undefined (ie parameter not used).</p>
 <hr class="docutils" />
 <p>Usefull links:</p>
 <p><a class="reference external" href="https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.ants.html#applytransforms">ANTS ApplyTransforms - nipype</a></p>
-</section>
+<p><a class="reference external" href="https://antsx.github.io/ANTsRCore/reference/antsApplyTransforms.html">ANTS ApplyTransforms</a></p>
+</div>
+</div>
 
 
       </div>
@@ -188,7 +189,7 @@ Default is Undefined (ie parameter not used).</p>
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
     </div>
   </body>
 </html>

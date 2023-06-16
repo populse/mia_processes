@@ -10,7 +10,9 @@
 FastSegment brick
 =================
 
-Brain tissue segmentation using FAST (FSL).
+Brain tissue segmentation using FAST (FSL)
+------------------------------------------
+
 This brick can be used to segment one input image.
 The tissue class segmented are Grey Matter, White Matter and CSF.
 By default the image type is set to T1 but it is also possible to segment T2 and PD images by changing the img_type parameter.
@@ -95,5 +97,7 @@ By default the image type is set to T1 but it is also possible to segment T2 and
 -------------
 
 Usefull links:
+
 `FSL FAST <https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FAST>`_
+
 `FSL FAST - nipype <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.fsl.preprocess.html#fast>`_

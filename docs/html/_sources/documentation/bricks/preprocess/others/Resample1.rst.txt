@@ -10,8 +10,8 @@
 Resample1 brick
 ================
 
-Resamples an image to the resolution of a reference image using nibabel.processing.resample_from_to().
-------------------------------------------------------------------------------------------------------
+Resamples an image to the resolution of a reference image using nibabel.processing.resample_from_to()
+-----------------------------------------------------------------------------------------------------
 
 **Mandatory inputs parameters:**
 
@@ -73,4 +73,5 @@ Resamples an image to the resolution of a reference image using nibabel.processi
 -------------
 
 Usefull links:
+
  `nibabel.processing.resample_from_to() <https://nipy.org/nibabel/reference/nibabel.processing.html#resample-from-to>`_

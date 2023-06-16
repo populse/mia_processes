@@ -10,9 +10,8 @@
 Volreg brick
 ============
 
-Registers each 3D volume from the input dataset to the base volume using AFNI 3dvolreg command
-
---------------------------------------
+Registers each 3D volume from the input dataset to the base volume using AFNI 3dvolreg
+--------------------------------------------------------------------------------------
 
 **Mandatory inputs parameters:**
 
@@ -144,4 +143,5 @@ Registers each 3D volume from the input dataset to the base volume using AFNI 3d
 Usefull links:
 
 `AFNI 3dvolreg <https://afni.nimh.nih.gov/pub/dist/doc/program_help/3dvolreg.html>`_
+
 `AFNI Volreg - nipype <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.afni.preprocess.html#volreg>`_

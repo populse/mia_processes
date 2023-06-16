@@ -6,11 +6,13 @@
 |`Home <../../../../index.html>`_|`Documentation <../../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +--------------------------------+----------------------------------------------+----------------------------------------------------+
 
-============
+==========
 Mask brick
-============
+==========
 
-Apply a binary mask to an image.
+Apply a binary mask to an image
+-------------------------------
+
 Be carrefull, if the suffix and prefix input parameters are not defined or consist only of one or more white spaces, the input parameter will be overwritten.
 
 Adapted from `niworkflows <https://github.com/nipreps/niworkflows>`_.
@@ -64,4 +66,5 @@ Adapted from `niworkflows <https://github.com/nipreps/niworkflows>`_.
 -------------
 
 Usefull links:
+
 `Mask niworflow <https://github.com/nipreps/niworkflows/blob/45ab13e1bf6fdbf5e29c90cef44055b0b9cf391b/niworkflows/interfaces/norm.py#L474>`_

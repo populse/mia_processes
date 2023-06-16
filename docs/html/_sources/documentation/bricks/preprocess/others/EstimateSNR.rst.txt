@@ -11,6 +11,7 @@ EstimateSNR brick
 =================
 
 Estimate SNR using a segmentation file
+--------------------------------------
 
 Adapted from `MRIQC <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical workflow.
 
@@ -44,4 +45,5 @@ Adapted from `MRIQC <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
 -------------
 
 Usefull links:
+
 `_estimate_snr function <https://github.com/nipreps/mriqc/blob/22.0.6/mriqc/workflows/anatomical.py#L970>`_
