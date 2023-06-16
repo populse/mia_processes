@@ -11,8 +11,7 @@ ApplyBiasCorrection brick
 =========================
 
 Apply bias field correction to an input file using the bias image
-
---------------------------------------
+-----------------------------------------------------------------
 
 **Mandatory inputs parameters:**
 

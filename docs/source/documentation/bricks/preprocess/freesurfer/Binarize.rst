@@ -10,10 +10,11 @@
 Binarize brick
 ==============
 
-Binarize an input volume (or volume-encoded surface file).
+Binarize an input volume (or volume-encoded surface file)
+---------------------------------------------------------
 
 Binarization can be done based on threshold (using min or rmin and/or max or rmax options) or on matched values (using match option).
-All voxels in the threshold/match are set to the binval value (1 by default) and all voxels out of range are set to the binvalnot value (0 by default)
+All voxels in the threshold/match are set to the binval value (1 by default) and all voxels out of range are set to the binvalnot value (0 by default).
 
 By default all the option are set to Undefined.
 
@@ -196,5 +197,7 @@ By default all the option are set to Undefined.
 -------------
 
 Usefull links:
+
 `Freesurfer Binarize <https://surfer.nmr.mgh.harvard.edu/fswiki/mri_binarize>`_
+
 `Freesurfer Binarize - nipype <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.freesurfer.model.html#binarize>`_

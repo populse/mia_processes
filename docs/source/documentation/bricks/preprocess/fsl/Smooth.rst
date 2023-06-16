@@ -11,7 +11,6 @@ Smooth brick
 ============
 
 3D Gaussian smoothing of image volumes
-
 --------------------------------------
 
 **Mandatory nputs parameters:**
@@ -70,4 +69,5 @@ Smooth brick
 -------------
 
 Usefull links:
+
 `FSL Smooth <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.fsl.utils.html#smooth>`_

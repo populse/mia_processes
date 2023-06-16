@@ -10,7 +10,10 @@
 Enhance brick
 =============
 
-Image enhancing. The aims is to resample signal excess voxels.
+Image enhancing
+---------------
+
+The aims is to resample signal excess voxels.
 
 For each images, voxels with signal excess (superior to 99.8%) are set to a random value among the voxel's values superior to the median.
 
@@ -58,6 +61,6 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
 
 -------------
 
-
 Usefull links:
+
 `Enhance image mriqc <https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/anatomical.py#L974>`_

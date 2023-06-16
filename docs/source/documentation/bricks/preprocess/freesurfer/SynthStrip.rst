@@ -73,4 +73,5 @@ If you use this bricks in your analysis, please cite: `SynthStrip: Skull-Strippi
 -------------
 
 Usefull links:
+
 `Freesurfer SynthStrip <https://surfer.nmr.mgh.harvard.edu/docs/synthstrip/>`_

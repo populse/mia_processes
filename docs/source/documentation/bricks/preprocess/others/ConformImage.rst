@@ -10,7 +10,9 @@
 ConformImage brick
 ==================
 
-Conform T1w image:
+Conform T1w image
+-----------------
+
 - remove axes length 1 at end of image shapes if needed (nibabel.squeeze_image)
 - reordered to be closest to canonical if needed (nibabel.as_closest_canonical)
 
@@ -59,5 +61,7 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
 -------------
 
 Usefull links:
+
 `Conform image mriqc <https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/interfaces/common/conform_image.py#L75>`_
+
 `nibabel functions <https://nipy.org/nibabel/reference/nibabel.funcs.html>`_
