@@ -12,7 +12,7 @@ Submodules
 mia\_processes.pipelines.stat.bold\_stat module
 -----------------------------------------------
 
-.. automodule:: mia_processes.pipelines.stat.bold_stat
+.. automodule:: mia_processes.pipelines.stat.bold_stat_cvr
    :members:
    :undoc-members:
    :show-inheritance:

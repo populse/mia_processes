@@ -103,9 +103,9 @@ Mia_processes's documentation
 
     - **spm**
 
-      - `EstimateContrast <bricks/stats/spm/EstimateContrast.html>`_ (in progress)
-      - `EstimateModel <bricks/stats/spm/EstimateModel.html>`_ (in progress)
-      - `Level1Design <bricks/stats/spm/Level1Design.html>`_ (in progress)
+      - `EstimateContrast <bricks/stats/spm/EstimateContrast.html>`_
+      - `EstimateModel <bricks/stats/spm/EstimateModel.html>`_
+      - `Level1Design <bricks/stats/spm/Level1Design.html>`_
 
   - **tools**
 
@@ -125,7 +125,7 @@ Mia_processes's documentation
 
   - **CerebVascularReact**
 
-    - `CO2_inhalation <pipelines/CerebVascularReact/CO2_inhalation.html>`_
+    - `CO2_inhalation <pipelines/CerebVascularReact/CO2_inhalation.html>`_  (in progress)
 
   - **preprocess**
 
@@ -137,8 +137,9 @@ Mia_processes's documentation
     - `Anat_spatial_norm <pipelines/preprocess/Anat_spatial_norm.html>`_
     - `Bold_hmc <pipelines/preprocess/Bold_hmc.html>`_
     - `Bold_mni_align <pipelines/preprocess/Bold_mni_align.html>`_
+    - `Bold_spatial_preprocessing1 <pipelines/preprocess/Bold_spatial_preprocessing1.html>`_
+    - `Bold_spatial_preprocessing2 <pipelines/preprocess/Bold_spatial_preprocessing2.html>`_
     - `Spatial_mask <pipelines/preprocess/Spatial_mask.html>`_
-    - `Spatial_preprocessing <pipelines/preprocess/Spatial_preprocessing.html>`_
 
   - **qualityControl**
 
@@ -152,4 +153,4 @@ Mia_processes's documentation
 
   - **stats**
 
-    - `Bold_stat <pipelines/stats/Bold_stat.html>`_
+    - `Bold_stat_cvr <pipelines/stats/Bold_stat_cvr.html>`_

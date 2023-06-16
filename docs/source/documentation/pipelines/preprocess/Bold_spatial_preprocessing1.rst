@@ -34,16 +34,16 @@
 
    &nbsp;
 
-==============================
-Spatial_preprocessing pipeline
-==============================
+====================================
+Bold_spatial_preprocessing1 pipeline
+====================================
 
 An example of fMRI data pre-processing
 --------------------------------------
 
 **Pipeline insight**
 
-- Spatial_preprocessing pipeline combines the following bricks:
+- Bold_spatial_preprocessing1 pipeline combines the following bricks:
     - `List_Duplicate  <../../bricks/tools/List_Duplicate.html>`_
     - `NewSegment  <../../bricks/preprocess/spm/NewSegment.html>`_
     - `Normalize12 <../../bricks/preprocess/spm/Normalize12.html>`_
@@ -51,7 +51,7 @@ An example of fMRI data pre-processing
     - `Coregister  <../../bricks/preprocess/spm/Coregister.html>`_
     - `Smooth  <../../bricks/preprocess/spm/Smooth..html>`_
 
-.. image:: ../../images/spatial_preprocessing_pipeline.png
+.. image:: ../../images/Bold_spatial_preprocessing1_pipeline.png
   :width: 1000
   :alt: spatial preprocessing pipeline
 

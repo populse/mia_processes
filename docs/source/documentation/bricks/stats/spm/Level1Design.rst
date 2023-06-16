@@ -369,7 +369,7 @@ fMRI model specification for GLM analysis.
 
     ::
 
-      ex. []
+      ex.  [{"name": "Factor1", "levels": 2}, {"name": "Factor2", "levels": 2}]
 
 - *bases <=> bases* [#label]_
     To define basic functions for modeling hemodynamic response (a None or a dictionary with keys which are ‘hrf’ or ‘fourier’ or ‘fourier_han’ or ‘gamma’ or ‘fir’ and with values which are a dictionary with keys which are ‘derivs’ or ‘length' or ‘order’ and with values which are a list of 2 elements or a float or an integer).

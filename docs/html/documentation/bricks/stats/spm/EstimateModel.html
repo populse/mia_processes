@@ -4,21 +4,20 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>EstimateModel brick &#8212; mia_processes 2.2.1-dev+38eeb539 documentation</title>
-    <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
-    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>EstimateModel brick &#8212; mia_processes 2.2.1-dev+94839b67 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
     <script src="../../../../_static/jquery.js"></script>
     <script src="../../../../_static/underscore.js"></script>
     <script src="../../../../_static/doctools.js"></script>
-    <script src="../../../../_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.2.1-dev+38eeb539 documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+94839b67 documentation</span></a></h1>
         <h2 class="heading"><span>EstimateModel brick</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -46,15 +45,210 @@
 </tr>
 </tbody>
 </table>
-<div class="section" id="estimatemodel-brick">
+<section id="estimatemodel-brick">
 <h1>EstimateModel brick<a class="headerlink" href="#estimatemodel-brick" title="Permalink to this headline">¶</a></h1>
-<p>/!/ Documentation in progress</p>
+<section id="model-estimation-using-classical-reml-restricted-maximum-likelihood-algorithms-spm12-fmri-model-estimation">
+<h2>Model Estimation using classical (ReML - Restricted Maximum Likelihood) algorithms (SPM12 fMRI model estimation).<a class="headerlink" href="#model-estimation-using-classical-reml-restricted-maximum-likelihood-algorithms-spm12-fmri-model-estimation" title="Permalink to this headline">¶</a></h2>
+<p>This step willl estimate on fitted data the parameters of the model created during the model specification stage,
+i.e. estimate the value of the β associated with each conditions.</p>
+<p>Bayesian methods are not implemented in this brick. If you need to use Bayesian methods, please open a <a class="reference external" href="https://github.com/populse/mia_processes/issues">ticket</a>.</p>
 <hr class="docutils" />
 <p><strong>Mandatory inputs parameters:</strong></p>
-<p>TO DO</p>
-<p><strong>Outputs parameters:</strong>
-TO DO</p>
+<ul>
+<li><dl>
+<dt><em>spm_mat_file</em> &lt;=&gt; spmmat (a string representing an existing file):</dt><dd><p>The SPM.mat file that contains the design specification.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/SPM.mat&#39;</span>
+</pre></div>
 </div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Optional inputs parameters with a default value:</strong></p>
+<ul>
+<li><dl>
+<dt><em>estimation_method</em> &lt;=&gt; method (a dictionary, optional, default value is {‘Classical’: 1}):</dt><dd><dl class="simple">
+<dt>Estimation procedures for fMRI models:</dt><dd><ul class="simple">
+<li><p>Classical: model parameters are estimated using Restricted Maximum Likelihood (ReML). This correlation can be specified using either an AR(1) or an Independent and Identically Distributed (IID) error model (options chosen at the <a class="reference external" href="bricks/stats/spm/Level1Design.html">model specification stage</a>)</p></li>
+<li><p>Bayesian methods are not implemented yet.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">{</span><span class="s1">&#39;Classical&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>write_residuals</em> &lt;=&gt; write_residuals (a boolean, optional, default value is False):</dt><dd><p>Write images of residuals for each dynamique.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">True</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>version</em> (a string, optional, default value is spm12):</dt><dd><p>Version of spm.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;spm12&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Optional inputs:</strong></p>
+<ul>
+<li><dl>
+<dt><em>tot_reg_num</em> (an integer, optional):</dt><dd><p>The total number of estimated regression coefficients.
+Default is Undefined. In this case, the number of estimated regression coefficients used will be the one defined in the database for the smp_mat_file.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">8</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>factor_info</em> (a list of items which are a dictionary with keys which are ‘name’ and ‘levels’ and with values which are a string or an integer, optional):</dt><dd><p>factor_info  parameter used in <a class="reference external" href="bricks/stats/spm/Level1Design.html">Level1Design brick</a> to specified a factorial design. In this case, SPM will automatically generate the contrasts necessary to test for the main effects and interactions.
+This parameter should be used only if factorial design is specified in Level1Design brick.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Factor1&quot;</span><span class="p">,</span> <span class="s2">&quot;levels&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">},</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Factor2&quot;</span><span class="p">,</span> <span class="s2">&quot;levels&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>bases</em> (a dictionary with keys which are ‘hrf’ or ‘fourier’ or ‘fourier_han’ or ‘gamma’ or ‘fir’ and with values which are a dictionary with keys which are ‘derivs’ or ‘length’ or ‘order’ and with values which are a list or a float or an integer, optional):</dt><dd><p>Information used in <a class="reference external" href="bricks/stats/spm/Level1Design.html">Level1Design brick</a> brick to define basic functions for modeling hemodynamic response.
+Default is Undefined.
+This parameter should be used only if factorial design is specified in Level1Design brick.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">{</span><span class="s2">&quot;hrf&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;derivs&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]}}</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Outputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>beta_images</em> (a list of items which are a pathlike object or string representing a file):</dt><dd><p>Images of estimated regression coefficients “beta_000k” where k indexes the kth regression coefficient.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/derived_data/beta_0001.nii&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/home/username/data/derived_data/beta_0002.nii&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/home/username/data/derived_data/beta_0003.nii&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/home/username/data/derived_data/beta_0004.nii&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/home/username/data/derived_data/beta_0005.nii&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/home/username/data/derived_data/beta_0006.nii&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/home/username/data/derived_data/beta_0007.nii&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/home/username/data/derived_data/beta_0008.nii&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>mask_image</em> (a pathlike object or string representing a file):</dt><dd><p>The mask image indicating which voxels were included in the analysis.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/mask.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>out_spm_mat_file</em> (a pathlike object or string representing a file):</dt><dd><p>The SPM.mat file containing specification of the design and estimated model parameters.
+Note that the input smp_mat_file will be overwritten.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/SPM.mat&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>residual_image</em> (a pathlike object or string representing a file):</dt><dd><p>The image of the variance of the error.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/ResMS.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>residual_images</em> (a list of items which are a pathlike object or string representing a file, optional):</dt><dd><p>The individual error “Res_000k” images where k indexes the kth dynamic (fourth dimensional points of the fuctional).
+These images are generated only if write_residuals is True.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/derived_data/Res_0001.nii&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/home/username/data/derived_data/Res_0002.nii&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/home/username/data/derived_data/Res_0003.nii&#39;</span><span class="p">,</span>
+    <span class="o">...</span><span class="p">,</span>
+    <span class="s1">&#39;/home/username/data/derived_data/Res_0238.nii&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/home/username/data/derived_data/Res_0239.nii&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/home/username/data/derived_data/Res_0240.nii&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>RPVimage</em> (a pathlike object or string representing a file):</dt><dd><p>The image of the estimated resolution elements per voxel.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/RPV.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>con_images</em> (a list of items which are a pathlike object or string representing a file, optional):</dt><dd><p>Contrast images from a t-contrast. Only created if factor_info used in Level1Design brick.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/derived_data/con_0005.nii&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/home/username/data/derived_data/con_0006.nii&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/home/username/data/derived_data/con_0007.nii&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/home/username/data/derived_data/con_0008.nii&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>spmT_images</em> (a list of items which are a pathlike object or string representing a file):</dt><dd><p>Stat images from a t-contrast. Only created if factor_info used in Level1Design brick.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/derived_data/spmT_0005.nii&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/home/username/data/derived_data/spmT_0006.nii&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/home/username/data/derived_data/spmT_0007.nii&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/home/username/data/derived_data/spmT_0008.nii&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>ess_images</em> (a list of items which are a pathlike object or string representing a file, optional):</dt><dd><p>Contrast images from a f-contrast. Only created if factor_info used in Level1Design brick.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/derived_data/ess_0001.nii&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/home/username/data/derived_data/ess_0002.nii&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/home/username/data/derived_data/ess_0003.nii&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/home/username/data/derived_data/ess_0004.nii&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>spmF_images</em> (a list of items which are a pathlike object or string representing a file):</dt><dd><p>Stat images from a f-contrast. Only created if factor_info used in Level1Design brick.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/derived_data/spmF_0001.nii&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/home/username/data/derived_data/spmF_0002.nii&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/home/username/data/derived_data/spmF_0003.nii&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/home/username/data/derived_data/spmF_0004.nii&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<hr class="docutils" />
+<dl class="footnote brackets">
+<dt class="label" id="label"><span class="brackets">1</span></dt>
+<dd><p>Syntax: mia_processes/nipype EstimateModel brick &lt;=&gt; SPM12 fMRI model estimation.</p>
+<p>Usefull links:
+<a class="reference external" href="https://www.fil.ion.ucl.ac.uk/spm/doc/manual.pdf#page=73">SPM12 fMRI model estimation</a>,
+<a class="reference external" href="https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.spm.model.html#estimatemodel">nipype EstimateModel</a></p>
+</dd>
+</dl>
+</section>
+</section>
 
 
       </div>
@@ -68,7 +262,7 @@ TO DO</p>
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
     </div>
   </body>
 </html>
