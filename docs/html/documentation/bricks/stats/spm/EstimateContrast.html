@@ -4,21 +4,20 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>EstimateConstrast brick &#8212; mia_processes 2.2.1-dev+38eeb539 documentation</title>
-    <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
-    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>EstimateConstrast brick &#8212; mia_processes 2.2.1-dev+a6961723 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
     <script src="../../../../_static/jquery.js"></script>
     <script src="../../../../_static/underscore.js"></script>
     <script src="../../../../_static/doctools.js"></script>
-    <script src="../../../../_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.2.1-dev+38eeb539 documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+a6961723 documentation</span></a></h1>
         <h2 class="heading"><span>EstimateConstrast brick</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -46,15 +45,194 @@
 </tr>
 </tbody>
 </table>
-<div class="section" id="estimateconstrast-brick">
+<section id="estimateconstrast-brick">
 <h1>EstimateConstrast brick<a class="headerlink" href="#estimateconstrast-brick" title="Permalink to this headline">¶</a></h1>
-<p>/!/ Documentation in progress</p>
+<section id="estimate-contrasts-of-interest-spm12-fmri-contrast-manager">
+<h2>Estimate contrasts of interest (SPM12 fMRI contrast manager).<a class="headerlink" href="#estimate-contrasts-of-interest-spm12-fmri-contrast-manager" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt>To define a new T-contrast:</dt><dd><ul class="simple">
+<li><p>add the contrast name in ‘T_contrast_names’ parameter</p></li>
+<li><p>add the name of the conditions used for this contrast in ‘T_condition_names’ parameter</p></li>
+<li><p>add the contrast weight for this contrast in ‘T_contrast_weights’ parameters</p></li>
+<li><p>if some session should not be include, specify this in ‘session’ parameter</p></li>
+</ul>
+</dd>
+<dt>To define a new F-contrast:</dt><dd><ul class="simple">
+<li><p>define the T-contrasts that should be used for estimate this F-contrast</p></li>
+<li><p>add the contrast name in ‘F_contrast_names’ parameter</p></li>
+<li><p>add the names of T-contrasts that should be used in ‘F_contrast_T_names’ parameter</p></li>
+</ul>
+</dd>
+</dl>
 <hr class="docutils" />
 <p><strong>Mandatory inputs parameters:</strong></p>
-<p>TO DO</p>
-<p><strong>Outputs parameters:</strong>
-TO DO</p>
+<ul>
+<li><dl>
+<dt><em>spm_mat_file</em> (a string representing an existing file):</dt><dd><p>The SPM.mat file that contains the estimate model.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/SPM.mat&#39;</span>
+</pre></div>
 </div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>beta_images</em> (a list of items which are a pathlike object or string representing an existing file)</dt><dd><p>Estimated regression coefficients.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/derived_data/beta_0001.nii&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/home/username/data/derived_data/beta_0002.nii&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/home/username/data/derived_data/beta_0003.nii&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/home/username/data/derived_data/beta_0004.nii&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/home/username/data/derived_data/beta_0005.nii&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/home/username/data/derived_data/beta_0006.nii&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/home/username/data/derived_data/beta_0007.nii&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/home/username/data/derived_data/beta_0008.nii&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>residual_image</em> (a string representing an existing file):</dt><dd><p>Mean-squared image of the residuals.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/ResMS.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Optional inputs parameters with a default value:</strong></p>
+<ul>
+<li><dl>
+<dt><em>T_contrast_names</em> (a list of string, optional, default value is [‘+’]):</dt><dd><p>Names of each T-contrast.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;Task vs control&#39;</span><span class="p">,</span> <span class="s1">&#39;Task vs baseline&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>T_condition_names</em>  (a list of list of string, optional, default value is [[‘R1_1’]]):</dt><dd><p>Names of conditions used for each T-contrast.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[[</span><span class="s1">&#39;T&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;T&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">]]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>T_contrast_weights</em> (a list of list of float, optional, default value is [[1.0]]):</dt><dd><p>List of contrast weights for each T-contrast.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span> <span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>use_derivs</em> (a boolean, optional, default value is False):</dt><dd><p>Use derivatives for estimation. Mutually exclusive group_contrast parameter.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">True</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>group_contrast</em> (a boolean, optional, default value is False):</dt><dd><p>Higher level contrast. Mutually exclusive use_derivs parameter.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">True</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Optional inputs:</strong></p>
+<ul>
+<li><dl>
+<dt><em>session</em> (a list of list of float, optional):</dt><dd><p>Session list. Length should be equal to the number of sessions, with 1. for sessions to include and 0. elsewhere
+Default is Undefined.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;1.0&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>F_contrast_name</em> (a list of string, optional):</dt><dd><p>Names of each F contrast.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;Positif effect of condition&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>F_contrast_T_names</em> (a list of list of string, optional):</dt><dd><p>Names of T contrast used for each F contrast.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[[</span><span class="s1">&#39;Task vs control&#39;</span><span class="p">,</span> <span class="s1">&#39;Task vs baseline&#39;</span><span class="p">]]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Outputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>out_spm_mat_file</em> (a pathlike object or string representing a file):</dt><dd><p>The SPM.mat file containing specification of the design, estimated model parameters and contrast.
+Note that the input smp_mat_file will be overwritten.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/SPM.mat&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>con_images</em> (a list of items which are a pathlike object or string representing a file, optional):</dt><dd><p>Contrast images from a T-contrast.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/derived_data/con_0001.nii&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/home/username/data/derived_data/con_0002.nii&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/home/username/data/derived_data/con_0003.nii&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/home/username/data/derived_data/con_0004.nii&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>spmT_images</em> (a list of items which are a pathlike object or string representing a file, optional):</dt><dd><p>Stat images from a T-contrast.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/derived_data/spmT_0001.nii&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/home/username/data/derived_data/spmT_0002.nii&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/home/username/data/derived_data/spmT_0003.nii&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/home/username/data/derived_data/spmT_0004.nii&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>ess_images</em> (a list of items which are a pathlike object or string representing a file, optional):</dt><dd><p>Contrast images from a F-contrast.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/derived_data/ess_0001.nii&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/home/username/data/derived_data/ess_0002.nii&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/home/username/data/derived_data/ess_0003.nii&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/home/username/data/derived_data/ess_0004.nii&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>spmF_images</em> (a list of items which are a pathlike object or string representing a file, optional):</dt><dd><p>Stat images from a F-contrast.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/derived_data/spmF_0001.nii&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/home/username/data/derived_data/spmF_0002.nii&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/home/username/data/derived_data/spmF_0003.nii&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/home/username/data/derived_data/spmF_0004.nii&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<hr class="docutils" />
+<blockquote>
+<div><p>Usefull links:
+<a class="reference external" href="https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.spm.model.html#estimatemodel">nipype EstimateContrast</a></p>
+</div></blockquote>
+</section>
+</section>
 
 
       </div>
@@ -68,7 +246,7 @@ TO DO</p>
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
     </div>
   </body>
 </html>

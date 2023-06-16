@@ -2,27 +2,27 @@
 
 .. toctree::
 
-+--------------------------------+----------------------------------------------+----------------------------------------------------+
-|`Home <../../../../index.html>`_|`Documentation <../../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
-+--------------------------------+----------------------------------------------+----------------------------------------------------+
++--------------------------------+-------------------------------------------+----------------------------------------------------+
+|`Home <../../../../index.html>`_|`Documentation <../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
++--------------------------------+-------------------------------------------+----------------------------------------------------+
 
-===============
-Bold_Stat brick
-===============
+===================
+Bold_stat_cvr brick
+===================
 
 SPM-based first level GLM analysis used in the CVR evaluation
 -------------------------------------------------------------
 
 **Pipeline insight**
 
-- Bold_Stat pipeline combines the following bricks:
+- Bold_stat_cvr pipeline combines the following bricks:
     - `Level1Design <../../bricks/stats/spm/Level1Design.html>`_
     - `EstimateModel <../../bricks/stats/spm/EstimateModel.html>`_
     - `EstimateContrast <../../bricks/stats/spm/EstimateContrast.html>`_
 
-.. image:: ../../images/Bold_stat.png
+.. image:: ../../images/Bold_stat_cvr.png
   :width: 1000
-  :alt: Bold stat pipeline
+  :alt: Bold stat cvr pipeline
 
 --------------------------------------
 
