@@ -17,13 +17,12 @@ Purpose
 By default, populse_mia offers in its Pipeline Manager (an interface including all the libraries known by populse_mia), two brick libraries, `nipype <https://github.com/nipy/nipype>`_ and `mia_processes <https://github.com/populse/mia_processes>`_.
 
 One one hand, nipype, an open-source community initiative developed under the umbrella of NiPy is provided as it is and `its documentation <https://nipype.readthedocs.io/en/latest/>`_ will be found directly on the nipype website.
-On the other hand, the mia_processes library developed by the `populse team <https://github.com/populse>`_ is documented `here <documentation/documentation.html>`_. Some mia_processes bricks are based on bricks inherited from nipype, others are completely originals.
+On the other hand, the mia_processes library developed by the `populse team <https://github.com/populse/mia_processes/graphs/contributors>`_ is documented `here <documentation/documentation.html>`_. Some mia_processes bricks are based on bricks inherited from nipype, others are completely originals.
 
 
-Indices and tables
-==================
+Indices and tables for developers
+=================================
 
-* `Documentation <./documentation/documentation.html>`_
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`

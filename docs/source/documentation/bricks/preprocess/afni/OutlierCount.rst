@@ -6,13 +6,12 @@
 |`Home <../../../../index.html>`_|`Documentation <../../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +--------------------------------+----------------------------------------------+----------------------------------------------------+
 
-===================
+==================
 OutlierCount brick
-===================
+==================
 
-Computes outliers for all sub-bricks in the input dataset, each one separately using AFNI 3dToutcount command
-
---------------------------------------
+Using AFNI 3dToutcount, computes outliers for all sub-bricks (3D volumes for each TR) in the input dataset
+----------------------------------------------------------------------------------------------------------
 
 **Mandatory inputs parameters:**
 
@@ -104,4 +103,5 @@ Computes outliers for all sub-bricks in the input dataset, each one separately u
 Usefull links:
 
 `AFNI 3dToutcount <https://afni.nimh.nih.gov/pub/dist/doc/program_help/3dToutcount.html>`_
+
 `AFNI OutlierCount - nipype <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.afni.preprocess.html#outliercount>`_

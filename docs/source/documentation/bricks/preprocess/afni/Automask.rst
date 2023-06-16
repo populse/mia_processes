@@ -10,7 +10,8 @@
 Automask brick
 ==============
 
-Create a brain-only mask of the image using AFNI 3dAutomask command.
+Create a brain-only mask of the image using AFNI 3dAutomask
+-----------------------------------------------------------
 
 AFNI 3dClipLevel algorithm is used to find clipping level and after an erosion/dilation step, only the largest connected component of the supra-threshold voxels are kept.
 
@@ -98,4 +99,5 @@ Be carreful this program by itself does NOT do 'skull-stripping'.
 Usefull links:
 
 `AFNI 3dAutomask <https://afni.nimh.nih.gov/pub/dist/doc/program_help/3dAutomask.html>`_
+
 `AFNI 3dAutomask - nipype <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.afni.preprocess.html#automask>`_

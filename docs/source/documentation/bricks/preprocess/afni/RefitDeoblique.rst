@@ -10,9 +10,12 @@
 RefitDeoblique brick
 ====================
 
-Deoblique dataset (ie transform dataset from oblique to cardinal) using AFNI 3drefit command.
+Deoblique dataset (ie transform dataset from oblique to cardinal) using AFNI 3drefit
+------------------------------------------------------------------------------------
 
 Output file name is the same as input file name.
+
+---------------
 
 **Mandatory inputs parameters:**
 
@@ -47,4 +50,5 @@ Output file name is the same as input file name.
 Usefull links:
 
 `AFNI 3drefit <https://afni.nimh.nih.gov/pub/dist/doc/program_help/3drefit.html>`_
+
 `AFNI Refit - nipype <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.afni.utils.html#refit>`_

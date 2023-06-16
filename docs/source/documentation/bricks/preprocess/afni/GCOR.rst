@@ -6,13 +6,12 @@
 |`Home <../../../../index.html>`_|`Documentation <../../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +--------------------------------+----------------------------------------------+----------------------------------------------------+
 
-============================
+==========
 GCOR brick
-============================
+==========
 
-Computes the average correlation between every voxel and ever other voxel, over any give mask using AFNI GCOR command.
-
---------------------------------------
+Using AFNI GCOR, computes the average correlation between every voxel and every other voxel, over any given mask
+----------------------------------------------------------------------------------------------------------------
 
 **Mandatory inputs parameters:**
 
@@ -72,4 +71,5 @@ Computes the average correlation between every voxel and ever other voxel, over 
 Usefull links:
 
 `AFNI GCOR <https://afni.nimh.nih.gov/pub/dist/doc/program_help/@compute_gcor.html>`_
+
 `AFNI GCOR - nipype <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.afni.utils.html#gcor>`_

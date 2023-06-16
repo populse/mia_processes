@@ -10,9 +10,8 @@
 AffineInitializer brick
 =======================
 
-Initialize an affine transform using ANTs AffineInitizer command.
-
---------------------------------------
+Initialize an affine transform using ANTs AffineInitizer
+--------------------------------------------------------
 
 **Mandatory inputs parameters:**
 
@@ -88,3 +87,5 @@ Initialize an affine transform using ANTs AffineInitizer command.
 Usefull links:
 
 `ANTS AffineInitializer - nipype <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.ants.html#affineinitializer>`_
+
+`ANTS AffineInitializer <https://antsx.github.io/ANTsR/reference/affineInitializer.html>`_

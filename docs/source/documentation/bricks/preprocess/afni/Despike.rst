@@ -10,7 +10,9 @@
 Despike brick
 =============
 
-Removes spikes from the 3D+time input dataset using AFNI 3dDespike command.
+Removes spikes from the 3D+time input dataset using AFNI 3dDespike
+------------------------------------------------------------------
+
 The spike values replaced by something more pleasing to the eye.
 The output dataset will always be stored in floats.
 
@@ -65,4 +67,5 @@ The output dataset will always be stored in floats.
 Usefull links:
 
 `AFNI 3dDespike <https://afni.nimh.nih.gov/pub/dist/doc/program_help/3dDespike.html>`_
+
 `AFNI Despike - nipype <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.afni.preprocess.html#despike>`_

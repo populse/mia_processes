@@ -10,7 +10,8 @@
 N4BiasFieldCorrection brick
 ===========================
 
-Bias field correction using ANTs N4BiasFieldCorrection
+N4 Bias field correction using ANTs N4BiasFieldCorrection
+---------------------------------------------------------
 
 N4 is a variant of the popular N3 (nonparameteric nonuniform normalization) retrospective bias correction algorithm.
 Based on the assumption that the corruption of the low frequency bias field can be modeled as a convolution of the intensity histogram by a Gaussian,
@@ -164,3 +165,5 @@ and then spatially smoothing this result by a B-spline modeling of the bias fiel
 Usefull links:
 
 `ANTS N4BiasFieldCorrection - nipype <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.ants.html#n4biasfieldcorrection>`_
+
+`ANTS N4BiasFieldCorrection <https://github.com/ANTsX/ANTs/wiki/N4BiasFieldCorrection>`_

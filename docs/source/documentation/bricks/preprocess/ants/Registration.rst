@@ -10,7 +10,8 @@
 Registration brick
 ==================
 
-Image registration using ANTs Registration command.
+Image registration using ANTs Registration
+------------------------------------------
 
 This brick registers a moving_image to a fixed_image, using a predefined (or a sequence of) cost function(s)
 and transformation operations. The cost function is defined using one or more ‘metrics’.
@@ -357,3 +358,5 @@ Here can be found some of classical registration parameters(used in fMRIPrep and
 Usefull links:
 
 `ANTs Registration - nipype <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.ants.html#registration>`_
+
+`ANTs Registration <https://github.com/ANTsX/ANTs/wiki/ANTS-and-antsRegistration/3b3b6e1f6c283196fa2a4a9d4085788eafa38e71>`_
