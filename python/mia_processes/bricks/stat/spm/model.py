@@ -467,6 +467,8 @@ class EstimateContrast(ProcessMIA):
                     self.inheritance_dict[value] = self.spm_mat_file
 
                     # Update/add number of contrast
+                    # FIXME: if brick use in a pipeline, this tag is
+                    # not kept in the database (but the pipeline is working)
                     tag_to_add = dict()
                     tag_to_add["name"] = "Contrasts num"
                     tag_to_add["field_type"] = FIELD_TYPE_INTEGER
@@ -539,6 +541,9 @@ class EstimateContrast(ProcessMIA):
                             )
 
                         # Update/add number of contrast
+                        # FIXME: if brick use in a pipeline, this tag is
+                        # not kept in the database
+                        # (but the pipeline is working)
                         tag_to_add = dict()
                         tag_to_add["name"] = "Contrasts num"
                         tag_to_add["field_type"] = FIELD_TYPE_INTEGER
@@ -1162,6 +1167,9 @@ class EstimateModel(ProcessMIA):
                     self.inheritance_dict[value] = self.spm_mat_file
                     if key == "out_spm_mat_file" and self.factor_info:
                         # Add tag for number of contrast created in database
+                        # FIXME: if brick use in a pipeline, this tag is
+                        # not kept in the database
+                        # (but the pipeline is working)
                         tag_to_add = dict()
                         tag_to_add["name"] = "Contrasts num"
                         tag_to_add["field_type"] = FIELD_TYPE_INTEGER
