@@ -95,7 +95,7 @@ Mia_processes's documentation
     - `Mean_stdDev_calc <bricks/reports/Mean_stdDev_calc.html>`_
     - `ReportAnatMriqc <bricks/reports/ReportAnatMriqc.html>`_
     - `ReportFuncMriqc <bricks/reports/ReportFuncMriqc.html>`_
-    - `ReportGroupMriqc <bricks/reports/ReportGroupMriqc.html>`_ (in progress)
+    - `ReportGroupMriqc <bricks/reports/ReportGroupMriqc.html>`_
     - `Result_collector <bricks/reports/Result_collector.html>`_
     - `Spikes <bricks/reports/Spikes.html>`_
 
