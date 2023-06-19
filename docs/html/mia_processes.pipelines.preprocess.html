@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.pipelines.preprocess package &#8212; mia_processes 2.2.1-dev+eae66182 documentation</title>
+    <title>mia_processes.pipelines.preprocess package &#8212; mia_processes 2.2.1-dev+9d064287 documentation</title>
     <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -18,7 +18,7 @@
     <link rel="search" title="Search" href="search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="index.html">
-          <span>mia_processes 2.2.1-dev+eae66182 documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+9d064287 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.pipelines.preprocess package</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -44,18 +44,11 @@
 <dt id="mia_processes.pipelines.preprocess.anat_airmask.Anat_airmask">
 <em class="property">class </em><code class="sig-prename descclassname">mia_processes.pipelines.preprocess.anat_airmask.</code><code class="sig-name descname">Anat_airmask</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">autoexport_nodes_parameters</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/preprocess/anat_airmask.html#Anat_airmask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.pipelines.preprocess.anat_airmask.Anat_airmask" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">capsul.pipeline.pipeline.Pipeline</span></code></p>
-<ul>
-<li><div class="line-block">
-<div class="line">Compute rotation mask, air mask, artifact mask and hat mask for</div>
-<div class="line">structural data.</div>
-</div>
-</li>
-</ul>
-<p>following step 1 from
-(<a href="#id1"><span class="problematic" id="id2">`</span></a>[Mortamet2009]</p>
-<blockquote>
-<div><p>&lt;<a class="reference external" href="https://onlinelibrary.wiley.com/doi/10.1002/mrm.21992">https://onlinelibrary.wiley.com/doi/10.1002/mrm.21992</a>&gt;`_).</p>
-</div></blockquote>
+<p><em>Compute rotation mask, air mask, artifact mask and hat mask for
+structural data</em></p>
+<p>Following step 1 from <a class="reference external" href="https://onlinelibrary.wiley.com/doi/10.1002/mrm.21992">[Mortamet2009]</a></p>
+<p>Please, see the complete documentation for the
+<a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/pipelines/preprocess/Anat_airmask.html">Anat_airmask pipeline in the populse.mia_processes website</a></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <ul class="simple">
@@ -80,13 +73,10 @@
 <dt id="mia_processes.pipelines.preprocess.anat_headmask.Anat_headmask">
 <em class="property">class </em><code class="sig-prename descclassname">mia_processes.pipelines.preprocess.anat_headmask.</code><code class="sig-name descname">Anat_headmask</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">autoexport_nodes_parameters</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/preprocess/anat_headmask.html#Anat_headmask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.pipelines.preprocess.anat_headmask.Anat_headmask" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">capsul.pipeline.pipeline.Pipeline</span></code></p>
-<ul>
-<li><div class="line-block">
-<div class="line">Compute head mask from skull stripped structural image using</div>
-<div class="line">“Denoise” from Dipy.</div>
-</div>
-</li>
-</ul>
+<p><em>Compute head mask from skull stripped structural image using “Denoise”
+from Dipy</em></p>
+<p>Please, see the complete documentation for the
+<a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/pipelines/preprocess/Anat_headmask.html">Anat_headmask pipeline in the populse.mia_processes website</a></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <ul class="simple">
@@ -111,17 +101,14 @@
 <dt id="mia_processes.pipelines.preprocess.anat_mni_tpms.Anat_mni_tpms">
 <em class="property">class </em><code class="sig-prename descclassname">mia_processes.pipelines.preprocess.anat_mni_tpms.</code><code class="sig-name descname">Anat_mni_tpms</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">autoexport_nodes_parameters</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/preprocess/anat_mni_tpms.html#Anat_mni_tpms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.pipelines.preprocess.anat_mni_tpms.Anat_mni_tpms" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">capsul.pipeline.pipeline.Pipeline</span></code></p>
-<ul>
-<li><div class="line-block">
-<div class="line">Get templates tissues probability map (white matter (WM),</div>
-<div class="line">grey matter (GM) and cerebrospinal (CSF)).</div>
-</div>
-</li>
-</ul>
+<p><em>Get templates tissues probability map (white matter - WM -,
+grey matter - GM - and cerebrospinal - CSF -)</em></p>
 <p>From ‘MNI152NLin2009cAsym’ template
 (resolution 1 mm) and register them in subject space.</p>
 <p>Adapted from <a class="reference external" href="https://mriqc.readthedocs.io/en/22.0.6//">mriqc</a>
 anatomical workflow.</p>
+<p>Please, see the complete documentation for the
+<a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/pipelines/preprocess/Anat_mni_tpms.html">Anat_mni_tpms pipeline in the populse.mia_processes website</a></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <ul class="simple">
@@ -146,9 +133,9 @@ anatomical workflow.</p>
 <dt id="mia_processes.pipelines.preprocess.anat_skullstrip.Anat_skullstrip">
 <em class="property">class </em><code class="sig-prename descclassname">mia_processes.pipelines.preprocess.anat_skullstrip.</code><code class="sig-name descname">Anat_skullstrip</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">autoexport_nodes_parameters</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/preprocess/anat_skullstrip.html#Anat_skullstrip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.pipelines.preprocess.anat_skullstrip.Anat_skullstrip" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">capsul.pipeline.pipeline.Pipeline</span></code></p>
-<ul class="simple">
-<li><p>Bias correction and skull stripping of a structural image.</p></li>
-</ul>
+<p><em>Bias correction and skull stripping of a structural image</em></p>
+<p>Please, see the complete documentation for the
+<a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/pipelines/preprocess/Anat_skullstrip.html">Anat_skullstrip pipeline in the populse.mia_processes website</a></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <ul class="simple">
@@ -173,10 +160,10 @@ anatomical workflow.</p>
 <dt id="mia_processes.pipelines.preprocess.anat_skullstrip_synthstrip.Anat_skullstrip_synthstrip">
 <em class="property">class </em><code class="sig-prename descclassname">mia_processes.pipelines.preprocess.anat_skullstrip_synthstrip.</code><code class="sig-name descname">Anat_skullstrip_synthstrip</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">autoexport_nodes_parameters</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/preprocess/anat_skullstrip_synthstrip.html#Anat_skullstrip_synthstrip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.pipelines.preprocess.anat_skullstrip_synthstrip.Anat_skullstrip_synthstrip" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">capsul.pipeline.pipeline.Pipeline</span></code></p>
-<ul class="simple">
-<li><p>Create a brain-extraction workflow using SynthStrip (Freesurfer).</p></li>
-</ul>
+<p><em>Create a brain-extraction workflow using SynthStrip (Freesurfer)</em></p>
 <p>Adapted from <a class="reference external" href="https://github.com/nipreps/mriqc/blob/5a0f0408bd0c176dbc46088c6ffe279269180f3f/mriqc/workflows/anatomical.py#L849">mriqc v22.06 synthstrip workflow</a></p>
+<p>Please, see the complete documentation for the
+<a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/pipelines/preprocess/Anat_skullstrip_synthstrip.html">Anat_skullstrip_synthstrip pipeline in the populse.mia_processes website</a></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <ul class="simple">
@@ -201,10 +188,10 @@ anatomical workflow.</p>
 <dt id="mia_processes.pipelines.preprocess.anat_spatial_norm.Anat_spatial_norm">
 <em class="property">class </em><code class="sig-prename descclassname">mia_processes.pipelines.preprocess.anat_spatial_norm.</code><code class="sig-name descname">Anat_spatial_norm</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">autoexport_nodes_parameters</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/preprocess/anat_spatial_norm.html#Anat_spatial_norm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.pipelines.preprocess.anat_spatial_norm.Anat_spatial_norm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">capsul.pipeline.pipeline.Pipeline</span></code></p>
-<ul class="simple">
-<li><p>Spatial normalization to MNI (using ‘MNI152NLin2009cAsym’ template).</p></li>
-</ul>
+<p><em>Spatial normalization to MNI (using ‘MNI152NLin2009cAsym’ template)</em></p>
 <p>Adapted from <a class="reference external" href="https://github.com/nipreps/mriqc/blob/5a0f0408bd0c176dbc46088c6ffe279269180f3f/mriqc/workflows/anatomical.py#L282">mriqc 22.06 anatomical workflow</a></p>
+<p>Please, see the complete documentation for the
+<a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/pipelines/preprocess/Anat_spatial_norm.html">Anat_spatial_norm pipeline in the populse.mia_processes website</a></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <ul class="simple">
@@ -229,9 +216,9 @@ anatomical workflow.</p>
 <dt id="mia_processes.pipelines.preprocess.bold_hmc.Bold_hmc">
 <em class="property">class </em><code class="sig-prename descclassname">mia_processes.pipelines.preprocess.bold_hmc.</code><code class="sig-name descname">Bold_hmc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">autoexport_nodes_parameters</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/preprocess/bold_hmc.html#Bold_hmc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.pipelines.preprocess.bold_hmc.Bold_hmc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">capsul.pipeline.pipeline.Pipeline</span></code></p>
-<ul class="simple">
-<li><p>Head-motion correction based on 3dvolreg from AFNI.</p></li>
-</ul>
+<p><em>Head-motion correction based on 3dvolreg from AFNI</em></p>
+<p>Please, see the complete documentation for the
+<a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/pipelines/preprocess/Bold_hmc.html">Bold_hmc pipeline in the populse.mia_processes website</a></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <ul class="simple">
@@ -256,10 +243,10 @@ anatomical workflow.</p>
 <dt id="mia_processes.pipelines.preprocess.bold_mni_align.Bold_mni_align">
 <em class="property">class </em><code class="sig-prename descclassname">mia_processes.pipelines.preprocess.bold_mni_align.</code><code class="sig-name descname">Bold_mni_align</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">autoexport_nodes_parameters</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/preprocess/bold_mni_align.html#Bold_mni_align"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.pipelines.preprocess.bold_mni_align.Bold_mni_align" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">capsul.pipeline.pipeline.Pipeline</span></code></p>
-<ul class="simple">
-<li><p>Registered a mean functional image EPI in MNI space.</p></li>
-</ul>
+<p><em>Registered a mean functional image EPI in MNI space</em></p>
 <p>For checking out registration.</p>
+<p>Please, see the complete documentation for the
+<a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/pipelines/preprocess/Bold_mni_align.html">Bold_mni_align pipeline in the populse.mia_processes website</a></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <ul class="simple">
@@ -295,13 +282,9 @@ anatomical workflow.</p>
 <dt id="mia_processes.pipelines.preprocess.spatial_mask.Spatial_mask">
 <em class="property">class </em><code class="sig-prename descclassname">mia_processes.pipelines.preprocess.spatial_mask.</code><code class="sig-name descname">Spatial_mask</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">autoexport_nodes_parameters</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/preprocess/spatial_mask.html#Spatial_mask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mia_processes.pipelines.preprocess.spatial_mask.Spatial_mask" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">capsul.pipeline.pipeline.Pipeline</span></code></p>
-<ul class="simple">
-<li><p>Makes the grey matter native mask for cerebrovascular reserve analyse.</p></li>
-</ul>
-<p>User_processes_ECdev.studies.spatial_mask_1.Spatial_mask_1()</p>
-<p>Please, see the complete documentation for the Spatial_mask_1
-pipeline in the
-<a class="reference external" href="https://gricad-gitlab.univ-grenoble-alpes.fr/condamie/ec_dev">https://gricad-gitlab.univ-grenoble-alpes.fr/condamie/ec_dev</a> web site</p>
+<p><em>Makes the grey matter native mask for cerebrovascular reserve analyse</em></p>
+<p>Please, see the complete documentation for the <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/pipelines/preprocess/Spatial_mask.html">Spatial_mask brick in
+the populse.mia_processes website</a></p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <ul class="simple">
@@ -318,9 +301,6 @@ pipeline in the
 
 </dd></dl>
 
-</div>
-<div class="section" id="mia-processes-pipelines-preprocess-spatial-preprocessing-module">
-<h2>mia_processes.pipelines.preprocess.spatial_preprocessing module<a class="headerlink" href="#mia-processes-pipelines-preprocess-spatial-preprocessing-module" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 

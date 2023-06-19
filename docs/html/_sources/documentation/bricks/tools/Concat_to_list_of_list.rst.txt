@@ -11,6 +11,7 @@ Concat_to_list_of_list brick
 ============================
 
 Make an output list of list containing the iteration of the input list1 with each element of the input list2
+------------------------------------------------------------------------------------------------------------
 
     Ex. ['a', 'b', 'c'] and ['1', '2'] gives:
         [['a', '1'], ['a', '2'], ['b', '1'], ['b', '2'], ['c', '1'], ['c', '2']]

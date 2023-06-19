@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>EstimateModel brick &#8212; mia_processes 2.2.1-dev+eae66182 documentation</title>
+    <title>EstimateModel brick &#8212; mia_processes 2.2.1-dev+9d064287 documentation</title>
     <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
@@ -18,7 +18,7 @@
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.2.1-dev+eae66182 documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+9d064287 documentation</span></a></h1>
         <h2 class="heading"><span>EstimateModel brick</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -48,11 +48,11 @@
 </table>
 <div class="section" id="estimatemodel-brick">
 <h1>EstimateModel brick<a class="headerlink" href="#estimatemodel-brick" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="model-estimation-using-classical-reml-restricted-maximum-likelihood-algorithms-spm12-fmri-model-estimation">
-<h2>Model Estimation using classical (ReML - Restricted Maximum Likelihood) algorithms (SPM12 fMRI model estimation).<a class="headerlink" href="#model-estimation-using-classical-reml-restricted-maximum-likelihood-algorithms-spm12-fmri-model-estimation" title="Permalink to this headline">¶</a></h2>
-<p>This step willl estimate on fitted data the parameters of the model created during the model specification stage,
+<div class="section" id="model-estimation-using-classical-reml-restricted-maximum-likelihood-procedure-spm12-fmri-model-estimation">
+<h2>Model Estimation using classical (ReML - Restricted Maximum Likelihood) procedure (SPM12 fMRI model estimation)<a class="headerlink" href="#model-estimation-using-classical-reml-restricted-maximum-likelihood-procedure-spm12-fmri-model-estimation" title="Permalink to this headline">¶</a></h2>
+<p>This step will estimate on fitted data the parameters of the model created during the model specification stage,
 i.e. estimate the value of the β associated with each conditions.</p>
-<p>Bayesian methods are not implemented in this brick. If you need to use Bayesian methods, please open a <a class="reference external" href="https://github.com/populse/mia_processes/issues">ticket</a>.</p>
+<p>Bayesian methods are not currently implemented in this brick. If you need to use Bayesian procedures, please open a <a class="reference external" href="https://github.com/populse/mia_processes/issues">ticket</a>.</p>
 <hr class="docutils" />
 <p><strong>Mandatory inputs parameters:</strong></p>
 <ul>
@@ -134,13 +134,13 @@ This parameter should be used only if factorial design is specified in Level1Des
 <li><dl>
 <dt><em>beta_images</em> (a list of items which are a pathlike object or string representing a file):</dt><dd><p>Images of estimated regression coefficients “beta_000k” where k indexes the kth regression coefficient.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/derived_data/beta_0001.nii&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;/home/username/data/derived_data/beta_0002.nii&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;/home/username/data/derived_data/beta_0003.nii&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;/home/username/data/derived_data/beta_0004.nii&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;/home/username/data/derived_data/beta_0005.nii&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;/home/username/data/derived_data/beta_0006.nii&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;/home/username/data/derived_data/beta_0007.nii&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;/home/username/data/derived_data/beta_0008.nii&#39;</span><span class="p">]</span>
+     <span class="s1">&#39;/home/username/data/derived_data/beta_0002.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/beta_0003.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/beta_0004.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/beta_0005.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/beta_0006.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/beta_0007.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/beta_0008.nii&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 </dd>
@@ -175,12 +175,12 @@ Note that the input smp_mat_file will be overwritten.</p>
 <dt><em>residual_images</em> (a list of items which are a pathlike object or string representing a file, optional):</dt><dd><p>The individual error “Res_000k” images where k indexes the kth dynamic (fourth dimensional points of the fuctional).
 These images are generated only if write_residuals is True.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/derived_data/Res_0001.nii&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;/home/username/data/derived_data/Res_0002.nii&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;/home/username/data/derived_data/Res_0003.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/Res_0002.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/Res_0003.nii&#39;</span><span class="p">,</span>
     <span class="o">...</span><span class="p">,</span>
-    <span class="s1">&#39;/home/username/data/derived_data/Res_0238.nii&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;/home/username/data/derived_data/Res_0239.nii&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;/home/username/data/derived_data/Res_0240.nii&#39;</span><span class="p">]</span>
+     <span class="s1">&#39;/home/username/data/derived_data/Res_0238.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/Res_0239.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/Res_0240.nii&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 </dd>
@@ -197,9 +197,9 @@ These images are generated only if write_residuals is True.</p>
 <li><dl>
 <dt><em>con_images</em> (a list of items which are a pathlike object or string representing a file, optional):</dt><dd><p>Contrast images from a t-contrast. Only created if factor_info used in Level1Design brick.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/derived_data/con_0005.nii&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;/home/username/data/derived_data/con_0006.nii&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;/home/username/data/derived_data/con_0007.nii&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;/home/username/data/derived_data/con_0008.nii&#39;</span><span class="p">]</span>
+     <span class="s1">&#39;/home/username/data/derived_data/con_0006.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/con_0007.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/con_0008.nii&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 </dd>
@@ -208,9 +208,9 @@ These images are generated only if write_residuals is True.</p>
 <li><dl>
 <dt><em>spmT_images</em> (a list of items which are a pathlike object or string representing a file):</dt><dd><p>Stat images from a t-contrast. Only created if factor_info used in Level1Design brick.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/derived_data/spmT_0005.nii&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;/home/username/data/derived_data/spmT_0006.nii&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;/home/username/data/derived_data/spmT_0007.nii&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;/home/username/data/derived_data/spmT_0008.nii&#39;</span><span class="p">]</span>
+     <span class="s1">&#39;/home/username/data/derived_data/spmT_0006.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/spmT_0007.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/spmT_0008.nii&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 </dd>
@@ -219,9 +219,9 @@ These images are generated only if write_residuals is True.</p>
 <li><dl>
 <dt><em>ess_images</em> (a list of items which are a pathlike object or string representing a file, optional):</dt><dd><p>Contrast images from a f-contrast. Only created if factor_info used in Level1Design brick.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/derived_data/ess_0001.nii&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;/home/username/data/derived_data/ess_0002.nii&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;/home/username/data/derived_data/ess_0003.nii&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;/home/username/data/derived_data/ess_0004.nii&#39;</span><span class="p">]</span>
+     <span class="s1">&#39;/home/username/data/derived_data/ess_0002.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/ess_0003.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/ess_0004.nii&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 </dd>
@@ -230,9 +230,9 @@ These images are generated only if write_residuals is True.</p>
 <li><dl>
 <dt><em>spmF_images</em> (a list of items which are a pathlike object or string representing a file):</dt><dd><p>Stat images from a f-contrast. Only created if factor_info used in Level1Design brick.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/derived_data/spmF_0001.nii&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;/home/username/data/derived_data/spmF_0002.nii&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;/home/username/data/derived_data/spmF_0003.nii&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;/home/username/data/derived_data/spmF_0004.nii&#39;</span><span class="p">]</span>
+     <span class="s1">&#39;/home/username/data/derived_data/spmF_0002.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/spmF_0003.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/spmF_0004.nii&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 </dd>
@@ -240,14 +240,9 @@ These images are generated only if write_residuals is True.</p>
 </li>
 </ul>
 <hr class="docutils" />
-<dl class="footnote brackets">
-<dt class="label" id="label"><span class="brackets">1</span></dt>
-<dd><p>Syntax: mia_processes/nipype EstimateModel brick &lt;=&gt; SPM12 fMRI model estimation.</p>
-<p>Usefull links:
-<a class="reference external" href="https://www.fil.ion.ucl.ac.uk/spm/doc/manual.pdf#page=73">SPM12 fMRI model estimation</a>,
+<p>Usefull links:</p>
+<p><a class="reference external" href="https://www.fil.ion.ucl.ac.uk/spm/doc/manual.pdf#page=73">SPM12 fMRI model estimation</a>,
 <a class="reference external" href="https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.spm.model.html#estimatemodel">nipype EstimateModel</a></p>
-</dd>
-</dl>
 </div>
 </div>
 

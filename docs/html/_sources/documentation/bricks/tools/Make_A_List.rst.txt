@@ -11,8 +11,7 @@ Make_a_list brick
 ===================
 
 From 2 objects, generating a list containing all these objects
-
----------------------------------------------------------------------
+--------------------------------------------------------------
 
 **Inputs parameters:**
 

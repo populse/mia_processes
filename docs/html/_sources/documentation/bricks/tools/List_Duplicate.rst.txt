@@ -39,7 +39,7 @@ List_Duplicate brick
 ====================
 
 From a file name, generating a list containing this file name and the file name itself
----------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------
 
 **Inputs parameters:**
 

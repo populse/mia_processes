@@ -10,9 +10,8 @@
 EstimateConstrast brick
 =======================
 
-
-Estimate contrasts of interest (SPM12 fMRI contrast manager).
--------------------------------------------------------------
+Estimate contrasts of interest (SPM12 fMRI contrast manager)
+------------------------------------------------------------
 
 To define a new T-contrast:
     - add the contrast name in 'T_contrast_names' parameter
@@ -42,13 +41,13 @@ To define a new F-contrast:
     ::
 
         ex. ['/home/username/data/derived_data/beta_0001.nii',
-            '/home/username/data/derived_data/beta_0002.nii',
-            '/home/username/data/derived_data/beta_0003.nii',
-            '/home/username/data/derived_data/beta_0004.nii',
-            '/home/username/data/derived_data/beta_0005.nii',
-            '/home/username/data/derived_data/beta_0006.nii',
-            '/home/username/data/derived_data/beta_0007.nii',
-            '/home/username/data/derived_data/beta_0008.nii']
+             '/home/username/data/derived_data/beta_0002.nii',
+             '/home/username/data/derived_data/beta_0003.nii',
+             '/home/username/data/derived_data/beta_0004.nii',
+             '/home/username/data/derived_data/beta_0005.nii',
+             '/home/username/data/derived_data/beta_0006.nii',
+             '/home/username/data/derived_data/beta_0007.nii',
+             '/home/username/data/derived_data/beta_0008.nii']
 
 - *residual_image* (a string representing an existing file):
     Mean-squared image of the residuals.
@@ -134,9 +133,9 @@ To define a new F-contrast:
     ::
 
         ex. ['/home/username/data/derived_data/con_0001.nii',
-            '/home/username/data/derived_data/con_0002.nii',
-            '/home/username/data/derived_data/con_0003.nii',
-            '/home/username/data/derived_data/con_0004.nii']
+             '/home/username/data/derived_data/con_0002.nii',
+             '/home/username/data/derived_data/con_0003.nii',
+             '/home/username/data/derived_data/con_0004.nii']
 
 - *spmT_images* (a list of items which are a pathlike object or string representing a file, optional):
     Stat images from a T-contrast.
@@ -144,9 +143,9 @@ To define a new F-contrast:
     ::
 
         ex. ['/home/username/data/derived_data/spmT_0001.nii',
-            '/home/username/data/derived_data/spmT_0002.nii',
-            '/home/username/data/derived_data/spmT_0003.nii',
-            '/home/username/data/derived_data/spmT_0004.nii']
+             '/home/username/data/derived_data/spmT_0002.nii',
+             '/home/username/data/derived_data/spmT_0003.nii',
+             '/home/username/data/derived_data/spmT_0004.nii']
 
 - *ess_images* (a list of items which are a pathlike object or string representing a file, optional):
     Contrast images from a F-contrast.
@@ -154,9 +153,9 @@ To define a new F-contrast:
     ::
 
         ex. ['/home/username/data/derived_data/ess_0001.nii',
-            '/home/username/data/derived_data/ess_0002.nii',
-            '/home/username/data/derived_data/ess_0003.nii',
-            '/home/username/data/derived_data/ess_0004.nii']
+             '/home/username/data/derived_data/ess_0002.nii',
+             '/home/username/data/derived_data/ess_0003.nii',
+             '/home/username/data/derived_data/ess_0004.nii']
 
 - *spmF_images* (a list of items which are a pathlike object or string representing a file, optional):
     Stat images from a F-contrast.
@@ -164,12 +163,13 @@ To define a new F-contrast:
     ::
 
         ex. ['/home/username/data/derived_data/spmF_0001.nii',
-            '/home/username/data/derived_data/spmF_0002.nii',
-            '/home/username/data/derived_data/spmF_0003.nii',
-            '/home/username/data/derived_data/spmF_0004.nii']
+             '/home/username/data/derived_data/spmF_0002.nii',
+             '/home/username/data/derived_data/spmF_0003.nii',
+             '/home/username/data/derived_data/spmF_0004.nii']
 
 
 -------------
 
-	    Usefull links:
-	    `nipype EstimateContrast <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.spm.model.html#estimatemodel>`_
+Usefull links:
+
+`nipype EstimateContrast <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.spm.model.html#estimatemodel>`_

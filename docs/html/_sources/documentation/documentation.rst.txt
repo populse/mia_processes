@@ -151,6 +151,6 @@ Mia_processes's documentation
     - `Bold_iqms <pipelines/reports/Bold_iqms.html>`_
     - `Extract_roi_param <pipelines/reports/Extract_roi_param.html>`_
 
-  - **stats**
+  - **stat**
 
-    - `Bold_stat_cvr <pipelines/stats/Bold_stat_cvr.html>`_
+    - `Bold_stat_cvr <pipelines/stat/Bold_stat_cvr.html>`_

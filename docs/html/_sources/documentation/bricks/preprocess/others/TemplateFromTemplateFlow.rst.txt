@@ -14,7 +14,7 @@ Get template image from TemplateFlow
 ------------------------------------
 
 TemplateFlow is a repository of neuroimaging templates including spatial mapping across standard space.
-Each tempalte is described by a template name (for example: 'MNI152NLin2009cAsym', 'MNIColin27', 'MNIPediatricAsym') and by several optional entities (resolustion, suffix, label..).
+Each tempalte is described by a template name (for example: 'MNI152NLin2009cAsym', 'MNIColin27', 'MNIPediatricAsym') and by several optional entities (resolution, suffix, label..).
 
 --------------------------------------
 

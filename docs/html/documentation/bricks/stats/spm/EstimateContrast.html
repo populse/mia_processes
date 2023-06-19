@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>EstimateConstrast brick &#8212; mia_processes 2.2.1-dev+eae66182 documentation</title>
+    <title>EstimateConstrast brick &#8212; mia_processes 2.2.1-dev+9d064287 documentation</title>
     <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
@@ -18,7 +18,7 @@
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.2.1-dev+eae66182 documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+9d064287 documentation</span></a></h1>
         <h2 class="heading"><span>EstimateConstrast brick</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -49,7 +49,7 @@
 <div class="section" id="estimateconstrast-brick">
 <h1>EstimateConstrast brick<a class="headerlink" href="#estimateconstrast-brick" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="estimate-contrasts-of-interest-spm12-fmri-contrast-manager">
-<h2>Estimate contrasts of interest (SPM12 fMRI contrast manager).<a class="headerlink" href="#estimate-contrasts-of-interest-spm12-fmri-contrast-manager" title="Permalink to this headline">¶</a></h2>
+<h2>Estimate contrasts of interest (SPM12 fMRI contrast manager)<a class="headerlink" href="#estimate-contrasts-of-interest-spm12-fmri-contrast-manager" title="Permalink to this headline">¶</a></h2>
 <dl class="simple">
 <dt>To define a new T-contrast:</dt><dd><ul class="simple">
 <li><p>add the contrast name in ‘T_contrast_names’ parameter</p></li>
@@ -79,13 +79,13 @@
 <li><dl>
 <dt><em>beta_images</em> (a list of items which are a pathlike object or string representing an existing file)</dt><dd><p>Estimated regression coefficients.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/derived_data/beta_0001.nii&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;/home/username/data/derived_data/beta_0002.nii&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;/home/username/data/derived_data/beta_0003.nii&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;/home/username/data/derived_data/beta_0004.nii&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;/home/username/data/derived_data/beta_0005.nii&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;/home/username/data/derived_data/beta_0006.nii&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;/home/username/data/derived_data/beta_0007.nii&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;/home/username/data/derived_data/beta_0008.nii&#39;</span><span class="p">]</span>
+     <span class="s1">&#39;/home/username/data/derived_data/beta_0002.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/beta_0003.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/beta_0004.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/beta_0005.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/beta_0006.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/beta_0007.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/beta_0008.nii&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 </dd>
@@ -185,9 +185,9 @@ Note that the input smp_mat_file will be overwritten.</p>
 <li><dl>
 <dt><em>con_images</em> (a list of items which are a pathlike object or string representing a file, optional):</dt><dd><p>Contrast images from a T-contrast.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/derived_data/con_0001.nii&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;/home/username/data/derived_data/con_0002.nii&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;/home/username/data/derived_data/con_0003.nii&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;/home/username/data/derived_data/con_0004.nii&#39;</span><span class="p">]</span>
+     <span class="s1">&#39;/home/username/data/derived_data/con_0002.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/con_0003.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/con_0004.nii&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 </dd>
@@ -196,9 +196,9 @@ Note that the input smp_mat_file will be overwritten.</p>
 <li><dl>
 <dt><em>spmT_images</em> (a list of items which are a pathlike object or string representing a file, optional):</dt><dd><p>Stat images from a T-contrast.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/derived_data/spmT_0001.nii&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;/home/username/data/derived_data/spmT_0002.nii&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;/home/username/data/derived_data/spmT_0003.nii&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;/home/username/data/derived_data/spmT_0004.nii&#39;</span><span class="p">]</span>
+     <span class="s1">&#39;/home/username/data/derived_data/spmT_0002.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/spmT_0003.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/spmT_0004.nii&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 </dd>
@@ -207,9 +207,9 @@ Note that the input smp_mat_file will be overwritten.</p>
 <li><dl>
 <dt><em>ess_images</em> (a list of items which are a pathlike object or string representing a file, optional):</dt><dd><p>Contrast images from a F-contrast.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/derived_data/ess_0001.nii&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;/home/username/data/derived_data/ess_0002.nii&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;/home/username/data/derived_data/ess_0003.nii&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;/home/username/data/derived_data/ess_0004.nii&#39;</span><span class="p">]</span>
+     <span class="s1">&#39;/home/username/data/derived_data/ess_0002.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/ess_0003.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/ess_0004.nii&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 </dd>
@@ -218,9 +218,9 @@ Note that the input smp_mat_file will be overwritten.</p>
 <li><dl>
 <dt><em>spmF_images</em> (a list of items which are a pathlike object or string representing a file, optional):</dt><dd><p>Stat images from a F-contrast.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/data/derived_data/spmF_0001.nii&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;/home/username/data/derived_data/spmF_0002.nii&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;/home/username/data/derived_data/spmF_0003.nii&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;/home/username/data/derived_data/spmF_0004.nii&#39;</span><span class="p">]</span>
+     <span class="s1">&#39;/home/username/data/derived_data/spmF_0002.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/spmF_0003.nii&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/data/derived_data/spmF_0004.nii&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 </dd>
@@ -228,10 +228,8 @@ Note that the input smp_mat_file will be overwritten.</p>
 </li>
 </ul>
 <hr class="docutils" />
-<blockquote>
-<div><p>Usefull links:
-<a class="reference external" href="https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.spm.model.html#estimatemodel">nipype EstimateContrast</a></p>
-</div></blockquote>
+<p>Usefull links:</p>
+<p><a class="reference external" href="https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.spm.model.html#estimatemodel">nipype EstimateContrast</a></p>
 </div>
 </div>
 

@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.reports.processes &#8212; mia_processes 2.2.1-dev+eae66182 documentation</title>
+    <title>mia_processes.bricks.reports.processes &#8212; mia_processes 2.2.1-dev+9d064287 documentation</title>
     <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
@@ -18,7 +18,7 @@
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.2.1-dev+eae66182 documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev+9d064287 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.reports.processes</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -131,14 +131,14 @@
 
 <div class="viewcode-block" id="AnatIQMs"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.AnatIQMs">[docs]</a><span class="k">class</span> <span class="nc">AnatIQMs</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    * Computes the anatomical IQMs.</span>
+<span class="sd">    *Computes the anatomical IQMs*</span>
 
-<span class="sd">    Please, see the complete documentation for the `AnatIQMs&#39; brick</span>
+<span class="sd">    Please, see the complete documentation for the `AnatIQMs brick</span>
 <span class="sd">    in the populse.mia_processes website</span>
-<span class="sd">    https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/AnatIQMs.html</span>
+<span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/reports/AnatIQMs.html&gt;`_</span>
 
-<span class="sd">    adapted from:</span>
-<span class="sd">    https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/anatomical.py#L332</span>
+<span class="sd">    adapted from `mriqc</span>
+<span class="sd">    &lt;https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/anatomical.py#L332&gt;`_</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -634,14 +634,14 @@
 
 <div class="viewcode-block" id="BoldIQMs"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.BoldIQMs">[docs]</a><span class="k">class</span> <span class="nc">BoldIQMs</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    * Computes the functional IQMs.</span>
+<span class="sd">    *Computes the functional IQMs*</span>
 
-<span class="sd">    Please, see the complete documentation for the `BoldIQMs&#39; brick</span>
+<span class="sd">    Please, see the complete documentation for the `BoldIQMs brick</span>
 <span class="sd">    in the populse.mia_processes website</span>
-<span class="sd">    https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/BoldIQMs.html</span>
+<span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/reports/BoldIQMs.html&gt;`_</span>
 
-<span class="sd">    adapted from:</span>
-<span class="sd">    https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/functional.py#L243</span>
+<span class="sd">    adapted from `mriqc</span>
+<span class="sd">    &lt;https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/functional.py#L243&gt;`_</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -1060,17 +1060,20 @@
 
 <div class="viewcode-block" id="CarpetParcellation"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.CarpetParcellation">[docs]</a><span class="k">class</span> <span class="nc">CarpetParcellation</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    * | Dilate brainmask, substract from itself then generate</span>
-<span class="sd">      | the union of obtained crown mask and epi parcellation.</span>
+<span class="sd">    *Dilate the brainmask, substract it from itself then generate the union</span>
+<span class="sd">    of the obtained crown mask and the epi parcellation*</span>
 
-<span class="sd">    Please, see the complete documentation for the `CarpetParcellation&#39; brick</span>
+<span class="sd">    Please, see the complete documentation for the `CarpetParcellation brick</span>
 <span class="sd">    in the populse.mia_processes website</span>
 <span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/reports/CarpetParcellation.html&gt;`_</span>
 
-<span class="sd">    adapted from:</span>
-<span class="sd">    https://github.com/nipreps/niworkflows/blob/45ab13e1bf6fdbf5e29c90cef44055b0b9cf391b/niworkflows/interfaces/morphology.py#L46</span>
-<span class="sd">    https://github.com/nipreps/niworkflows/blob/45ab13e1bf6fdbf5e29c90cef44055b0b9cf391b/niworkflows/interfaces/morphology.py#L79</span>
-<span class="sd">    https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/functional.py#L1022</span>
+<span class="sd">    Adapted from</span>
+<span class="sd">    `niworkflows binary dilatation</span>
+<span class="sd">    &lt;https://github.com/nipreps/niworkflows/blob/45ab13e1bf6fdbf5e29c90cef44055b0b9cf391b/niworkflows/interfaces/morphology.py#L46&gt;`_,</span>
+<span class="sd">    `niworkflows binary subtraction</span>
+<span class="sd">    &lt;https://github.com/nipreps/niworkflows/blob/45ab13e1bf6fdbf5e29c90cef44055b0b9cf391b/niworkflows/interfaces/morphology.py#L79&gt;`_,</span>
+<span class="sd">    `mriqc</span>
+<span class="sd">    &lt;https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/functional.py#L1022&gt;`_</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -1223,14 +1226,14 @@
 
 <div class="viewcode-block" id="ComputeDVARS"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.ComputeDVARS">[docs]</a><span class="k">class</span> <span class="nc">ComputeDVARS</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    * Computes the DVARS.</span>
+<span class="sd">    *Computes the DVARS*</span>
 
-<span class="sd">    Please, see the complete documentation for the `ComputeDVARS&#39; brick</span>
+<span class="sd">    Please, see the complete documentation for the `ComputeDVARS brick</span>
 <span class="sd">    in the populse.mia_processes website</span>
 <span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/reports/ComputeDVARS.html&gt;`_</span>
 
-<span class="sd">    adapted from:</span>
-<span class="sd">    https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5de5913b31/nipype/algorithms/confounds.py#L100</span>
+<span class="sd">    adapted from `nipype</span>
+<span class="sd">    &lt;https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5de5913b31/nipype/algorithms/confounds.py#L100&gt;`_</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -1477,21 +1480,20 @@
 
 <div class="viewcode-block" id="FramewiseDisplacement"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.FramewiseDisplacement">[docs]</a><span class="k">class</span> <span class="nc">FramewiseDisplacement</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    * Calculate the FD (framewise displacement) as in [Power2012].</span>
+<span class="sd">    *Calculate the FD (framewise displacement) as in [Power2012]*</span>
 
 <span class="sd">    This implementation reproduces the calculation in fsl_motion_outliers</span>
 
-<span class="sd">    [Power2012] Power et al., Spurious but systematic correlations</span>
-<span class="sd">    in functional connectivity MRI networks arise from subject</span>
-<span class="sd">    motion, NeuroImage 59(3), 2012. doi:`10.1016/j.neuroimage.2011.10.018</span>
-<span class="sd">    &lt;https://doi.org/10.1016/j.neuroimage.2011.10.018&gt;`.</span>
+<span class="sd">    `[Power2012] &lt;https://doi.org/10.1016/j.neuroimage.2011.10.018&gt;`_ Power</span>
+<span class="sd">    et al., Spurious but systematic correlations in functional connectivity</span>
+<span class="sd">    MRI networks arise from subject motion, NeuroImage 59(3).</span>
 
-<span class="sd">    Please, see the complete documentation for the `FramewiseDisplacement&#39;</span>
+<span class="sd">    Please, see the complete documentation for the `FramewiseDisplacement</span>
 <span class="sd">    brick in the populse.mia_processes website</span>
 <span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/reports/FramewiseDisplacement.html&gt;`_</span>
 
-<span class="sd">    adapted from:</span>
-<span class="sd">    https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5de5913b31/nipype/algorithms/confounds.py#L298</span>
+<span class="sd">    adapted from `nipype</span>
+<span class="sd">    &lt;https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5de5913b31/nipype/algorithms/confounds.py#L298&gt;`_</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -1658,7 +1660,7 @@
 
 <div class="viewcode-block" id="Mean_stdDev_calc"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.Mean_stdDev_calc">[docs]</a><span class="k">class</span> <span class="nc">Mean_stdDev_calc</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    * Makes the mean and standard deviation of parametric_maps.</span>
+<span class="sd">    *Makes the mean and standard deviation of parametric_maps*</span>
 
 <span class="sd">    - The parametric_maps are first resized, if necessary, to the size of the</span>
 <span class="sd">      rois_files. Next, the parametric_maps and the rois_files are convolved.</span>
@@ -1669,6 +1671,10 @@
 <span class="sd">      overwritten.</span>
 <span class="sd">    - To work correctly, the database entry for the first element of</span>
 <span class="sd">      parametric_maps must have the PatientName tag filled in.</span>
+
+<span class="sd">    Please, see the complete documentation for the `Mean_stdDev_calc</span>
+<span class="sd">    brick in the populse.mia_processes website</span>
+<span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/reports/Mean_stdDev_calc.html&gt;`_</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -2019,11 +2025,15 @@
 <span class="sd">      can overwrite old results with the same name.</span>
 <span class="sd">    - To work correctly, the name of each file in parameter_files must be</span>
 <span class="sd">      exactly like this: roi_hemi_calcul_param_contrast.txt, where</span>
-<span class="sd">      - roi: region of interest (ex. ACA)</span>
-<span class="sd">      - hemi: hemisphere (ex. L)</span>
-<span class="sd">      - calcul: type of calcul (ex. mean)</span>
-<span class="sd">      - param: the parameter studied (ex. spmT)</span>
-<span class="sd">      - contrast: the type of contrast/effect used (ex. BOLD)</span>
+<span class="sd">        - roi: region of interest (ex. ACA)</span>
+<span class="sd">        - hemi: hemisphere (ex. L)</span>
+<span class="sd">        - calcul: type of calcul (ex. mean)</span>
+<span class="sd">        - param: the parameter studied (ex. spmT)</span>
+<span class="sd">        - contrast: the type of contrast/effect used (ex. BOLD)</span>
+
+<span class="sd">    Please, see the complete documentation for the `Result_collector</span>
+<span class="sd">    brick in the populse.mia_processes website</span>
+<span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/reports/Result_collector.html&gt;`_</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -2502,15 +2512,18 @@
 
 <div class="viewcode-block" id="Spikes"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.Spikes">[docs]</a><span class="k">class</span> <span class="nc">Spikes</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    * Computes the number of spikes.</span>
+<span class="sd">    *Computes the number of spikes*</span>
 
-<span class="sd">    Please, see the complete documentation for the `Spikes&#39; brick in the</span>
+<span class="sd">    Please, see the complete documentation for the `Spikes brick in the</span>
 <span class="sd">    populse.mia_processes website</span>
 <span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/reports/Spikes.html&gt;`_</span>
 
-<span class="sd">    adapted from:</span>
-<span class="sd">    https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/functional.py#L939</span>
-<span class="sd">    https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/interfaces/functional.py#L223</span>
+<span class="sd">    adapted from `mriqc spikes_mask function</span>
+<span class="sd">    &lt;https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/functional.py#L939&gt;`_</span>
+<span class="sd">    and</span>
+<span class="sd">    `mriqc Spikes class</span>
+<span class="sd">    &lt;https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/interfaces/functional.py#L223&gt;`_</span>
+
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -2894,19 +2907,6 @@
     <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">fg_mu</span> <span class="o">/</span> <span class="n">bg_mu</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="fuzzy_jaccard"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.fuzzy_jaccard">[docs]</a><span class="k">def</span> <span class="nf">fuzzy_jaccard</span><span class="p">(</span><span class="n">in_tpms</span><span class="p">,</span> <span class="n">in_mni_tpms</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;blabla&quot;&quot;&quot;</span>
-    <span class="n">overlaps</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">tpm</span><span class="p">,</span> <span class="n">mni_tpm</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">in_tpms</span><span class="p">,</span> <span class="n">in_mni_tpms</span><span class="p">):</span>
-        <span class="n">tpm</span> <span class="o">=</span> <span class="n">tpm</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">mni_tpm</span> <span class="o">=</span> <span class="n">mni_tpm</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-
-        <span class="n">num</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">([</span><span class="n">tpm</span><span class="p">,</span> <span class="n">mni_tpm</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-        <span class="n">den</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="n">tpm</span><span class="p">,</span> <span class="n">mni_tpm</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-        <span class="n">overlaps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">num</span> <span class="o">/</span> <span class="n">den</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">overlaps</span></div>
-
-
 <div class="viewcode-block" id="find_peaks"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.find_peaks">[docs]</a><span class="k">def</span> <span class="nf">find_peaks</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    :param data: a numpy ndarray</span>
@@ -2936,6 +2936,19 @@
     <span class="n">spikes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_or</span><span class="p">(</span><span class="n">spikes</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">t_z</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">spike_thresh</span><span class="p">)</span>
     <span class="n">spike_inds</span> <span class="o">=</span> <span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">spikes</span><span class="o">.</span><span class="n">nonzero</span><span class="p">())]</span>
     <span class="k">return</span> <span class="n">spike_inds</span><span class="p">,</span> <span class="n">t_z</span></div>
+
+
+<div class="viewcode-block" id="fuzzy_jaccard"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.fuzzy_jaccard">[docs]</a><span class="k">def</span> <span class="nf">fuzzy_jaccard</span><span class="p">(</span><span class="n">in_tpms</span><span class="p">,</span> <span class="n">in_mni_tpms</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;blabla&quot;&quot;&quot;</span>
+    <span class="n">overlaps</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">tpm</span><span class="p">,</span> <span class="n">mni_tpm</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">in_tpms</span><span class="p">,</span> <span class="n">in_mni_tpms</span><span class="p">):</span>
+        <span class="n">tpm</span> <span class="o">=</span> <span class="n">tpm</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">mni_tpm</span> <span class="o">=</span> <span class="n">mni_tpm</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">num</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">([</span><span class="n">tpm</span><span class="p">,</span> <span class="n">mni_tpm</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="n">den</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="n">tpm</span><span class="p">,</span> <span class="n">mni_tpm</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="n">overlaps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">num</span> <span class="o">/</span> <span class="n">den</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">overlaps</span></div>
 
 
 <div class="viewcode-block" id="gsr"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.gsr">[docs]</a><span class="k">def</span> <span class="nf">gsr</span><span class="p">(</span><span class="n">epi_data</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">ref_file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">out_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>

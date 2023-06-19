@@ -10,9 +10,10 @@
 Anat_airmask pipeline
 =====================
 
-Compute rotation mask, air mask, artifact mask and hat mask for structural data following step 1 from (`[Mortamet2009] <https://onlinelibrary.wiley.com/doi/10.1002/mrm.21992>`_).
+Compute rotation mask, air mask, artifact mask and hat mask for structural data following step 1 from `[Mortamet2009] <https://onlinelibrary.wiley.com/doi/10.1002/mrm.21992>`_
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical workflow.
+- Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical workflow.
 
 --------------------------------------
 
@@ -94,4 +95,5 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
 -------------
 
 Usefull links:
-`[Mortamet2009] <https://onlinelibrary.wiley.com/doi/10.1002/mrm.21992>_`
+
+`[Mortamet2009] <https://onlinelibrary.wiley.com/doi/10.1002/mrm.21992>`_

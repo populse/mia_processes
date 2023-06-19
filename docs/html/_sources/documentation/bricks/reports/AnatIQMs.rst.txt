@@ -11,6 +11,7 @@ AnatIQMs brick
 ==============
 
 Computes the anatomical Image Quality Metrics (IQMs) as defined in mriqc v22.06
+-------------------------------------------------------------------------------
 
 A no-reference IQM is a measurement of some aspect of the actual image which cannot be compared to a reference value for
 the metric since there is no ground-truth about what this number should be.

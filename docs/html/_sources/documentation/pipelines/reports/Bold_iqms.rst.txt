@@ -10,8 +10,10 @@
 Bold_iqms pipeline
 ==================
 
-Compute no-reference IQMs (image quality metrics) from functional (BOLD).
-Used in bold_mriqc pipeline.
+Compute no-reference IQMs (image quality metrics) from functional (BOLD)
+------------------------------------------------------------------------
+
+- Used in bold_mriqc pipeline.
 
 --------------------------------------
 

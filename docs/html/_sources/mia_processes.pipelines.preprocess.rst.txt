@@ -80,11 +80,3 @@ mia\_processes.pipelines.preprocess.spatial\_mask module
    :members:
    :undoc-members:
    :show-inheritance:
-
-mia\_processes.pipelines.preprocess.spatial\_preprocessing module
------------------------------------------------------------------
-
-.. automodule:: mia_processes.pipelines.preprocess.spatial_preprocessing
-   :members:
-   :undoc-members:
-   :show-inheritance:

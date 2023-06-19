@@ -10,9 +10,8 @@
 Anat_skullstrip pipeline
 ========================
 
-Bias correction and skull stripping of a structural image.
-
---------------------------------------
+Bias correction and skull stripping of a structural image
+---------------------------------------------------------
 
 **Pipeline insight**
 
