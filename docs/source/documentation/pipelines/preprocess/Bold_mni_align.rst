@@ -6,12 +6,12 @@
 |`Home <../../../index.html>`_|`Documentation <../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +-----------------------------+-------------------------------------------+----------------------------------------------------+
 
-================================
+=======================
 Bold_mni_align pipeline
-================================
+=======================
 
-Registered a mean functional image EPI in MNI space (for checking out registration).
-
+Register a mean functional image EPI in MNI space (for checking out registration)
+---------------------------------------------------------------------------------
 
 Adapted from `mriqc 22.06 <https://github.com/nipreps/mriqc/blob/22.0.6/mriqc/workflows/functional.py#L753>`_
 

@@ -53,7 +53,7 @@ An example of fMRI data pre-processing
 
 .. image:: ../../images/Bold_spatial_preprocessing1_pipeline.png
   :width: 1000
-  :alt: spatial preprocessing pipeline
+  :alt: spatial preprocessing1 pipeline
 
 --------------------
 

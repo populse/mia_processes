@@ -6,13 +6,12 @@
 |`Home <../../../../index.html>`_|`Documentation <../../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +--------------------------------+----------------------------------------------+----------------------------------------------------+
 
-======================
+=====================
 ReportAnatMriqc brick
-======================
+=====================
 
 Generates the report for anatomical data in mriqc pipeline
-
---------------------------------------
+----------------------------------------------------------
 
 **Mandatory inputs parameters:**
 

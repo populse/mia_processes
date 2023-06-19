@@ -10,15 +10,17 @@
 Delete_data brick
 =================
 
-Delete data from database.
-The input of this brick should be an output file from a brick or a pipeline.
-All the outputs from this file history will be removed.
+Delete data from database
+-------------------------
 
-If "to_keep_filters" is used, the files matching the regex of the filter will be kept.
+- The input of this brick should be an output file from a brick or a pipeline.
+  All the outputs from this file history will be removed.
 
-If "to_remove_filter" is used, the files matching the regex of the filter will be deleted.
+- If "to_keep_filters" is used, the files matching the regex of the filter will be kept.
 
-You can check your regex `here <https://regex101.com/>`_.
+- If "to_remove_filter" is used, the files matching the regex of the filter will be deleted.
+
+- You can check your regex `here <https://regex101.com/>`_.
 
 --------------------------------------
 
@@ -59,5 +61,3 @@ You can check your regex `here <https://regex101.com/>`_.
     ::
 
       ex. ['/home/username/data/derived_data/automask_func.nii']
-
--------------

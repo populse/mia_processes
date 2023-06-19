@@ -10,8 +10,8 @@
 Mean_stdDev_calc brick
 ======================
 
-Makes the mean and standard deviation of parametric maps.
----------------------------------------------------------
+Makes the mean and standard deviation of parametric maps
+--------------------------------------------------------
 
     - The `parametric_maps` are first resized, if necessary, to the size of the `rois_files`.
     - Next, the `parametric_maps` and the `rois_files` are convolved.

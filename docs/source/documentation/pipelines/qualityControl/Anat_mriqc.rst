@@ -10,8 +10,8 @@
 Anat_mriqc pipeline
 ===================
 
-Get no-reference IQMs (image quality metrics) from structural (T1w and T2w)
-data using mriqc anatomical workflow (`mriqc v22.06 <https://mriqc.readthedocs.io/en/22.0.6/>`_).
+Get no-reference IQMs (image quality metrics) from structural (T1w and T2w) data using mriqc anatomical workflow (`mriqc v22.06 <https://mriqc.readthedocs.io/en/22.0.6/>`_)
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 **Disclaimer**: A special effort has been made to provide a pipeline in Mia that gives as much as possible
 the same result as when computing with the native MRIQC. The variation in results between multiple runs

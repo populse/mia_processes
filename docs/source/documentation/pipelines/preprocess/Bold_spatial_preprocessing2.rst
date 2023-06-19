@@ -19,11 +19,11 @@ An example of fMRI data pre-processing
     - `Slice timing  <../../bricks/tools/List_Duplicate.html>`_
     - `Realign <../../bricks/preprocess/spm/Realign.html>`_
     - `Normalize12 Estimate & write <../../bricks/preprocess/spm/Normalize12.html>`_
-        (default values: jobtype = 'estwrite', bias_regularization = 0.0001, bias_fwhm = 30, write_interp = 4)
+        - (default values: jobtype = 'estwrite', bias_regularization = 0.0001, bias_fwhm = 30, write_interp = 4)
     - `Normalize12 Write <../../bricks/preprocess/spm/Normalize12.html>`_
-        (default values: jobtype = 'write', write_interp = 4)
-    - `Coregister  <../../bricks/preprocess/spm/Coregister.html>`_
-    - `Smooth  <../../bricks/preprocess/spm/Smooth..html>`_
+        - (default values: jobtype = 'write', write_interp = 4)
+    - `Coregister <../../bricks/preprocess/spm/Coregister.html>`_
+    - `Smooth <../../bricks/preprocess/spm/Smooth..html>`_
 
 .. image:: ../../images/Bold_spatial_preprocessing2_pipeline.png
   :width: 1000

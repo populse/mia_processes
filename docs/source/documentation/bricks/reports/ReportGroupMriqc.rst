@@ -11,14 +11,13 @@ ReportGroupMriqc brick
 ======================
 
 Generate a group report for mriqc pipeline
--------------------------------------------
+------------------------------------------
 
-Gererate a pdf report for all the subjects for which mriqc run for the choosen modality.
-Boxplots are generated for each IQMs.
-The box extends from the first quartile (Q1) to the third quartile (Q3) of the data, with a line at the median.
-The whiskers extend from the box by 1.5x the inter-quartile range (IQR).
-
-A '.tsv' file containing all the IQMs is also generated.
+- Gererate a pdf report for all the subjects for which mriqc run for the choosen modality.
+- Boxplots are generated for each IQMs.
+    - The box extends from the first quartile (Q1) to the third quartile (Q3) of the data, with a line at the median.
+    - The whiskers extend from the box by 1.5x the inter-quartile range (IQR).
+- A '.tsv' file containing all the IQMs is also generated.
 
 -----------------------------------
 
@@ -51,4 +50,5 @@ A '.tsv' file containing all the IQMs is also generated.
 -------------
 
 Usefull links:
+
 `matplotlib boxplot <https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.boxplot.html>`_

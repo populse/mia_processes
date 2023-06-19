@@ -10,8 +10,8 @@
 Anat_skullstrip_synthstrip pipeline
 ======================================
 
-Create a brain-extraction workflow using SynthStrip (Freesurfer).
-
+Create a brain-extraction workflow using SynthStrip (Freesurfer)
+----------------------------------------------------------------
 
 Adapted from `mriqc v22.06 synthstrip workflow <https://github.com/nipreps/mriqc/blob/5a0f0408bd0c176dbc46088c6ffe279269180f3f/mriqc/workflows/anatomical.py#L849>`_
 
@@ -76,4 +76,5 @@ Adapted from `mriqc v22.06 synthstrip workflow <https://github.com/nipreps/mriqc
 Usefull links:
 
 `SynthStrip <https://surfer.nmr.mgh.harvard.edu/docs/synthstrip/>`_
+
 `mriqc synthstrip workflow <https://mriqc.readthedocs.io/en/22.0.6/workflows.html#mriqc.workflows.anatomical.synthstrip_wf>`_

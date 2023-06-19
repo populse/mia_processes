@@ -10,13 +10,13 @@
 EstimateModel brick
 ===================
 
-Model Estimation using classical (ReML - Restricted Maximum Likelihood) algorithms (SPM12 fMRI model estimation).
------------------------------------------------------------------------------------------------------------------
+Model Estimation using classical (ReML - Restricted Maximum Likelihood) procedure (SPM12 fMRI model estimation)
+---------------------------------------------------------------------------------------------------------------
 
-This step willl estimate on fitted data the parameters of the model created during the model specification stage,
+This step will estimate on fitted data the parameters of the model created during the model specification stage,
 i.e. estimate the value of the β associated with each conditions.
 
-Bayesian methods are not implemented in this brick. If you need to use Bayesian methods, please open a `ticket <https://github.com/populse/mia_processes/issues>`_.
+Bayesian methods are not currently implemented in this brick. If you need to use Bayesian procedures, please open a `ticket <https://github.com/populse/mia_processes/issues>`_.
 
 --------------------------------------
 
@@ -90,13 +90,13 @@ Bayesian methods are not implemented in this brick. If you need to use Bayesian 
     ::
 
         ex. ['/home/username/data/derived_data/beta_0001.nii',
-            '/home/username/data/derived_data/beta_0002.nii',
-            '/home/username/data/derived_data/beta_0003.nii',
-            '/home/username/data/derived_data/beta_0004.nii',
-            '/home/username/data/derived_data/beta_0005.nii',
-            '/home/username/data/derived_data/beta_0006.nii',
-            '/home/username/data/derived_data/beta_0007.nii',
-            '/home/username/data/derived_data/beta_0008.nii']
+             '/home/username/data/derived_data/beta_0002.nii',
+             '/home/username/data/derived_data/beta_0003.nii',
+             '/home/username/data/derived_data/beta_0004.nii',
+             '/home/username/data/derived_data/beta_0005.nii',
+             '/home/username/data/derived_data/beta_0006.nii',
+             '/home/username/data/derived_data/beta_0007.nii',
+             '/home/username/data/derived_data/beta_0008.nii']
 
 - *mask_image* (a pathlike object or string representing a file):
     The mask image indicating which voxels were included in the analysis.
@@ -127,12 +127,12 @@ Bayesian methods are not implemented in this brick. If you need to use Bayesian 
     ::
 
         ex. ['/home/username/data/derived_data/Res_0001.nii',
-            '/home/username/data/derived_data/Res_0002.nii',
-            '/home/username/data/derived_data/Res_0003.nii',
+             '/home/username/data/derived_data/Res_0002.nii',
+             '/home/username/data/derived_data/Res_0003.nii',
             ...,
-            '/home/username/data/derived_data/Res_0238.nii',
-            '/home/username/data/derived_data/Res_0239.nii',
-            '/home/username/data/derived_data/Res_0240.nii']
+             '/home/username/data/derived_data/Res_0238.nii',
+             '/home/username/data/derived_data/Res_0239.nii',
+             '/home/username/data/derived_data/Res_0240.nii']
 
 - *RPVimage* (a pathlike object or string representing a file):
     The image of the estimated resolution elements per voxel.
@@ -147,9 +147,9 @@ Bayesian methods are not implemented in this brick. If you need to use Bayesian 
     ::
 
         ex. ['/home/username/data/derived_data/con_0005.nii',
-            '/home/username/data/derived_data/con_0006.nii',
-            '/home/username/data/derived_data/con_0007.nii',
-            '/home/username/data/derived_data/con_0008.nii']
+             '/home/username/data/derived_data/con_0006.nii',
+             '/home/username/data/derived_data/con_0007.nii',
+             '/home/username/data/derived_data/con_0008.nii']
 
 - *spmT_images* (a list of items which are a pathlike object or string representing a file):
     Stat images from a t-contrast. Only created if factor_info used in Level1Design brick.
@@ -157,9 +157,9 @@ Bayesian methods are not implemented in this brick. If you need to use Bayesian 
     ::
 
         ex. ['/home/username/data/derived_data/spmT_0005.nii',
-            '/home/username/data/derived_data/spmT_0006.nii',
-            '/home/username/data/derived_data/spmT_0007.nii',
-            '/home/username/data/derived_data/spmT_0008.nii']
+             '/home/username/data/derived_data/spmT_0006.nii',
+             '/home/username/data/derived_data/spmT_0007.nii',
+             '/home/username/data/derived_data/spmT_0008.nii']
 
 - *ess_images* (a list of items which are a pathlike object or string representing a file, optional):
     Contrast images from a f-contrast. Only created if factor_info used in Level1Design brick.
@@ -167,9 +167,9 @@ Bayesian methods are not implemented in this brick. If you need to use Bayesian 
     ::
 
         ex. ['/home/username/data/derived_data/ess_0001.nii',
-            '/home/username/data/derived_data/ess_0002.nii',
-            '/home/username/data/derived_data/ess_0003.nii',
-            '/home/username/data/derived_data/ess_0004.nii']
+             '/home/username/data/derived_data/ess_0002.nii',
+             '/home/username/data/derived_data/ess_0003.nii',
+             '/home/username/data/derived_data/ess_0004.nii']
 
 - *spmF_images* (a list of items which are a pathlike object or string representing a file):
     Stat images from a f-contrast. Only created if factor_info used in Level1Design brick.
@@ -177,16 +177,15 @@ Bayesian methods are not implemented in this brick. If you need to use Bayesian 
     ::
 
         ex. ['/home/username/data/derived_data/spmF_0001.nii',
-            '/home/username/data/derived_data/spmF_0002.nii',
-            '/home/username/data/derived_data/spmF_0003.nii',
-            '/home/username/data/derived_data/spmF_0004.nii']
+             '/home/username/data/derived_data/spmF_0002.nii',
+             '/home/username/data/derived_data/spmF_0003.nii',
+             '/home/username/data/derived_data/spmF_0004.nii']
 
 
 
 -------------
 
-.. [#label] Syntax: mia_processes/nipype EstimateModel brick <=> SPM12 fMRI model estimation.
+Usefull links:
 
-	    Usefull links:
-	    `SPM12 fMRI model estimation <https://www.fil.ion.ucl.ac.uk/spm/doc/manual.pdf#page=73>`_,
-	    `nipype EstimateModel <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.spm.model.html#estimatemodel>`_
+`SPM12 fMRI model estimation <https://www.fil.ion.ucl.ac.uk/spm/doc/manual.pdf#page=73>`_,
+`nipype EstimateModel <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.spm.model.html#estimatemodel>`_

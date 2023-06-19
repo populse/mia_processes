@@ -10,11 +10,11 @@
 Spikes brick
 ============
 
-Computes the number of spikes.
+Computes the number of spikes
+-----------------------------
 
-Adapted from mriqc functional workflow (`spikes <https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/functional.py#L939>`_
-and `spikes mask <https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/functional.py#L939>`_)
-
+Adapted from mriqc functional workflow (`spikes_mask function <https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/functional.py#L939>`_
+and `Spikes class <https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/interfaces/functional.py#L223>`_).
 
 --------------------------------------
 
@@ -80,4 +80,5 @@ and `spikes mask <https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882ba
 Usefull links:
 
 `mriqc spikes <https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/functional.py#L939>`_
+
 `mriqc spikes mask <https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/functional.py#L939>`_

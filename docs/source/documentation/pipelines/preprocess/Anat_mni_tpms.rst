@@ -10,10 +10,12 @@
 Anat_mni_tpms pipeline
 ================================
 
-Get templates tissues probability map (white matter (WM), grey matter (GM) and cerebrospinal (CSF))
-from 'MNI152NLin2009cAsym' template (resolution 1 mm) and register them in subject space.
+Get templates tissues probability map and register them in subject space
+------------------------------------------------------------------------
 
-Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6/>`_ anatomical workflow.
+- Get white matter (WM), grey matter (GM) and cerebrospinal (CSF) from 'MNI152NLin2009cAsym' template (resolution 1 mm).
+
+- Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6/>`_ anatomical workflow.
 
 --------------------------------------
 

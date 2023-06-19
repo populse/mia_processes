@@ -10,7 +10,8 @@
 Bold_hmc pipeline
 =================
 
-Head motion correction of a bold image.
+Head motion correction of a bold image
+--------------------------------------
 
 Adapted from `bold HCM pipeline in mriqc 22.06 <https://github.com/nipreps/mriqc/blob/22.0.6/mriqc/workflows/functional.py#L666>`_
 

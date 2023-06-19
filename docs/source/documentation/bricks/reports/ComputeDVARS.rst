@@ -6,11 +6,12 @@
 |`Home <../../../../index.html>`_|`Documentation <../../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +--------------------------------+----------------------------------------------+----------------------------------------------------+
 
-====================
+==================
 ComputeDVARS brick
-====================
+==================
 
-Computes DVARS (derivative of variance).
+Computes DVARS (derivative of variance)
+---------------------------------------
 
 The average change in mean intensity between each pair of fMRI volumes in a series.
 Higher values indicate more dramatic changes (e.g., due to motion or spiking).
@@ -84,4 +85,5 @@ Adapted from `nipype Cofunds <https://github.com/nipy/nipype/blob/f662acfce8def4
 Usefull links:
 
 `nipype Cofunds <https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5de5913b31/nipype/algorithms/confounds.py#L100>`_
+
 `mriqc IQMS <https://mriqc.readthedocs.io/en/22.0.6/iqms/bold.html>`_

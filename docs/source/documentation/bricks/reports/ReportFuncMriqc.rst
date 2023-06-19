@@ -6,13 +6,12 @@
 |`Home <../../../../index.html>`_|`Documentation <../../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +--------------------------------+----------------------------------------------+----------------------------------------------------+
 
-======================
+=====================
 ReportFuncMriqc brick
-======================
+=====================
 
-Generates the report for functionnal data in mriqc pipeline.
-
---------------------------------------
+Generates the report for functionnal data in mriqc pipeline
+-----------------------------------------------------------
 
 **Mandatory inputs parameters:**
 

@@ -6,13 +6,14 @@
 |`Home <../../../index.html>`_|`Documentation <../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
 +-----------------------------+-------------------------------------------+----------------------------------------------------+
 
-================================
+======================
 Anat_headmask pipeline
-================================
+======================
 
-Compute head mask from skull stripped structural image using "Denoise" from Dipy.
+Compute head mask from skull stripped structural image using `Denoise` from Dipy
+--------------------------------------------------------------------------------
 
-Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical workflow.
+- Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical workflow.
 
 --------------------------------------
 
@@ -57,4 +58,5 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
 -------------
 
 Usefull links:
+
 `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_
