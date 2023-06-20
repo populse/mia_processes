@@ -15,7 +15,7 @@
 import os
 import sys
 
-sys.path.insert(0, os.path.abspath("../../python"))
+sys.path.insert(0, os.path.abspath("../../"))
 # Next lines to use only in dev mode (not when pushing to github)
 sys.path.insert(0, os.path.abspath("../../../populse_mia/python"))
 sys.path.insert(0, os.path.abspath("../../../populse_db/python"))
