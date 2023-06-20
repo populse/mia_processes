@@ -25,13 +25,11 @@ repos:
         language: python
         args: ["--line-length=79"]
 
-# isort is currently used only loccally, see:
-# https://stackoverflow.com/questions/75665819/not-the-same-result-with-local-pre-commit-and-github-pre-commit-ci
-#-   repo: https://github.com/pycqa/isort
-#    rev: 5.12.0
-#    hooks: # imports sorting
-#    -   id: isort
-#        name: isort (python)
+-   repo: https://github.com/pycqa/isort
+    rev: 5.12.0
+    hooks: # imports sorting
+    -   id: isort
+        name: isort (python)
 
 -   repo: https://github.com/econchick/interrogate
     rev: 1.5.0
