@@ -162,6 +162,18 @@ class Bold_iqms(Pipeline):
         self.add_link("computedvars.out_file->boldiqms.in_dvars_file")
         self.add_link("fwhmx.out_file->boldiqms.in_fwhm_file")
         self.add_link("qualityindex.out_file->boldiqms.in_QI_file")
+        self.export_parameter(
+            "outliercount", "out_file", "outliercount_file", is_optional=True
+        )
+        self.export_parameter(
+            "computedvars", "out_file", "dvars_file", is_optional=True
+        )
+        self.export_parameter(
+            "framewisedisplacement", "out_file", "fd_file", is_optional=True
+        )
+        self.export_parameter(
+            "spikes", "out_file", "spike_file", is_optional=True
+        )
 
         # parameters order
 

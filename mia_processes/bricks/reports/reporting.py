@@ -783,10 +783,13 @@ class ReportFuncMriqc(ProcessMIA):
 
         IQMs_file_desc = "A .JSON file containing the IQMs"
 
-        func_desc = (
-            "An existing, uncompressed functional image file (valid "
-            "extensions: .nii)"
+        IQMs_plot_desc = (
+            "A figure with carpet and " "outliers/dvars/FD/spikes plot"
         )
+
+        func_desc = "An existing, functional image file"
+
+        func_mean_desc = "An existing, mean functional image file"
 
         func_fig_rows_desc = (
             "The number of lines for the functional slice " "planes plot"
@@ -828,6 +831,8 @@ class ReportFuncMriqc(ProcessMIA):
         norm_func_slices_gap_desc = (
             "Gap between slices in normalised " "functional slice planes plot"
         )
+
+        stddev_func_desc = "Functional standard deviation image"
 
         # Outputs description
         report_desc = "The generated report (pdf)"
@@ -877,6 +882,16 @@ class ReportFuncMriqc(ProcessMIA):
         )
 
         self.add_trait(
+            "func_mean",
+            File(
+                copyfile=False,
+                output=False,
+                optional=True,
+                desc=func_mean_desc,
+            ),
+        )
+
+        self.add_trait(
             "func_slices_gap",
             traits.Either(
                 Undefined,
@@ -885,6 +900,16 @@ class ReportFuncMriqc(ProcessMIA):
                 output=False,
                 optional=True,
                 desc=func_slices_gap_desc,
+            ),
+        )
+
+        self.add_trait(
+            "IQMs_plot",
+            File(
+                copyfile=False,
+                output=False,
+                optional=True,
+                desc=IQMs_plot_desc,
             ),
         )
 
@@ -933,6 +958,16 @@ class ReportFuncMriqc(ProcessMIA):
                 output=False,
                 optional=True,
                 desc=norm_func_slices_gap_desc,
+            ),
+        )
+
+        self.add_trait(
+            "stddev_func",
+            File(
+                copyfile=False,
+                output=False,
+                optional=True,
+                desc=stddev_func_desc,
             ),
         )
 
@@ -1304,6 +1339,9 @@ class ReportFuncMriqc(ProcessMIA):
             self.dict4runtime,
             IQMs_file=self.IQMs_file,
             func=self.func,
+            IQMS_plot=self.IQMs_plot,
+            stddev=self.stddev_func,
+            func_mean=self.func_mean,
             func_fig_rows=self.func_fig_rows,
             func_fig_cols=self.func_fig_cols,
             func_inf_slice_start=self.func_inf_slice_start,

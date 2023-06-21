@@ -431,6 +431,7 @@ def slice_planes_plot(
     dyn=1,
     cmap="Greys_r",
     out_dir=None,
+    only_noise=False,
 ):
     "blablabla"
 
@@ -565,8 +566,12 @@ def slice_planes_plot(
     fig = plt.figure(figsize=(7.4803, 9.0551))  # Width, height in inches.
 
     mask_data = np.logical_not(np.isnan(brain_data))
-    vmin = np.percentile(brain_data[mask_data], 0.5)
-    vmax = np.percentile(brain_data[mask_data], 99.5)
+    if only_noise:
+        vmin = np.percentile(brain_data[mask_data], 0)
+        vmax = np.percentile(brain_data[mask_data], 61)
+    else:
+        vmin = np.percentile(brain_data[mask_data], 0.5)
+        vmax = np.percentile(brain_data[mask_data], 99.5)
 
     zooms = brain_img.header.get_zooms()
     grid = ImageGrid(fig, 111, nrows_ncols=(fig_rows, fig_cols), axes_pad=0)

@@ -97,6 +97,9 @@ class Bold_mriqc(Pipeline):
             "mriqc_func_report",
             "mia_processes.bricks.reports.reporting." "ReportFuncMriqc",
         )
+        self.add_process(
+            "plot_iqms", "mia_processes.bricks.reports.processes.BoldIQMsPlot"
+        )
 
         # links
         self.export_parameter(
@@ -133,6 +136,24 @@ class Bold_mriqc(Pipeline):
         self.add_link("volreg.oned_file->" "bold_iqms_pipeline.hmc_motion")
         self.add_link("bold_mni_align.epi_parc->bold_iqms_pipeline.epi_parc")
         self.add_link("bold_mni_align.epi_mni->mriqc_func_report.norm_func")
+        self.add_link(
+            "bold_iqms_pipeline.outliercount_file->"
+            "plot_iqms.in_outliers_file"
+        )
+        self.add_link("bold_iqms_pipeline.fd_file->plot_iqms.in_fd_file")
+        self.add_link("bold_iqms_pipeline.dvars_file->plot_iqms.in_dvars_file")
+        self.add_link(
+            "bold_iqms_pipeline.spike_file->" "plot_iqms.in_spikes_file"
+        )
+        self.add_link(
+            "nonsteadystatedetector.n_volumes_to_discard->"
+            "plot_iqms.drop_trs"
+        )
+        self.add_link("bold_iqms_pipeline.carpet_seg->plot_iqms.carpet_seg")
+        self.add_link("sanitize.out_file->plot_iqms.in_func")
+        self.add_link("plot_iqms.out_file->mriqc_func_report.IQMs_plot")
+        self.add_link("tsnr.out_stddev_file->mriqc_func_report.stddev_func")
+        self.add_link("mean.out_file->mriqc_func_report.func_mean")
         self.export_parameter(
             "mriqc_func_report",
             "report",
@@ -158,22 +179,24 @@ class Bold_mriqc(Pipeline):
             "bold_mni_align": (283.31445431594545, 116.08725895240536),
             "inputs": (-890.4021152762024, 569.7810895696218),
             "outputs": (1530.1459691893501, 147.22476292910784),
-            "mriqc_func_report": (1282.5825850836268, 1058.7313069644374),
+            "mriqc_func_report": (1549.0303706025636, 592.4476823062976),
+            "plot_iqms": (1300.6566434431888, 640.3365297646346),
         }
 
         # nodes dimensions
         self.node_dimension = {
-            "bold_iqms_pipeline": (299.734375, 810.0),
-            "nonsteadystatedetector": (194.09375, 75.0),
-            "sanitize": (202.453125, 215.0),
-            "tsnr": (194.03125, 215.0),
-            "mean": (146.0, 145.0),
-            "automask": (146.0, 145.0),
-            "volreg": (154.453125, 215.0),
-            "bold_mni_align": (377.796875, 670.0),
-            "inputs": (243.9375, 1265.0),
-            "outputs": (203.16492003946317, 355.0),
-            "mriqc_func_report": (210.8125, 425.0),
+            "bold_iqms_pipeline": (364.546875, 810.0),
+            "nonsteadystatedetector": (233.125, 75.0),
+            "sanitize": (243.9375, 215.0),
+            "tsnr": (239.265625, 215.0),
+            "mean": (175.671875, 145.0),
+            "automask": (217.53125, 285.0),
+            "volreg": (251.46875, 425.0),
+            "bold_mni_align": (459.453125, 670.0),
+            "inputs": (106.00063723929541, 65.0),
+            "outputs": (107.25, 110.0),
+            "mriqc_func_report": (260.484375, 460.0),
+            "plot_iqms": (192.265625, 355.0),
         }
 
         self.do_autoexport_nodes_parameters = False
