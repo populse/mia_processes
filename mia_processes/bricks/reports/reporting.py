@@ -93,6 +93,8 @@ class ReportAnatMriqc(ProcessMIA):
             "Gap between slices in anatomical slice planes " "plot"
         )
 
+        brain_mask_desc = ""
+
         norm_anat_desc = (
             "An existing, uncompressed normalised anatomical "
             "image file (valid extensions: .nii)"
@@ -117,6 +119,8 @@ class ReportAnatMriqc(ProcessMIA):
         norm_anat_slices_gap_desc = (
             "Gap between slices in normalised " "anatomical slice planes plot"
         )
+
+        segmentation_desc = ""
 
         # Outputs description
         report_desc = "The generated report (pdf)"
@@ -174,6 +178,26 @@ class ReportAnatMriqc(ProcessMIA):
                 output=False,
                 optional=True,
                 desc=anat_slices_gap_desc,
+            ),
+        )
+
+        self.add_trait(
+            "brain_mask",
+            ImageFileSPM(
+                copyfile=False,
+                output=False,
+                optional=False,
+                desc=brain_mask_desc,
+            ),
+        )
+
+        self.add_trait(
+            "segmentation",
+            ImageFileSPM(
+                copyfile=False,
+                output=False,
+                optional=False,
+                desc=segmentation_desc,
             ),
         )
 
@@ -746,6 +770,8 @@ class ReportAnatMriqc(ProcessMIA):
             anat_fig_cols=self.anat_fig_cols,
             anat_inf_slice_start=self.anat_inf_slice_start,
             anat_slices_gap=self.anat_slices_gap,
+            brain_mask=self.brain_mask,
+            segmentation=self.segmentation,
             norm_anat=self.norm_anat,
             norm_anat_fig_rows=self.norm_anat_fig_rows,
             norm_anat_fig_cols=self.norm_anat_fig_cols,

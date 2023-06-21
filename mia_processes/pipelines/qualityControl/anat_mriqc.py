@@ -105,6 +105,10 @@ class Anat_mriqc(Pipeline):
             "anat_airmask.in_mask"
         )
         self.add_link(
+            "anat_skullstrip_pipeline.out_mask_synthstrip->"
+            "mriqc_anat_report.brain_mask"
+        )
+        self.add_link(
             "anat_skullstrip_pipeline.out_corrected" "->harmonize.in_file"
         )
         self.add_link(
@@ -116,6 +120,9 @@ class Anat_mriqc(Pipeline):
         )
         self.add_link("anat_skullstrip_pipeline.bias_image->anatiqms.in_inu")
         self.add_link("segment.tissue_class_map->anatiqms.segmentation")
+        self.add_link(
+            "segment.tissue_class_map->" "mriqc_anat_report.segmentation"
+        )
         self.add_link("segment.partial_volume_files->list_to_file.file_list")
         self.add_link("segment.partial_volume_files->anatiqms.pvms")
         self.add_link(

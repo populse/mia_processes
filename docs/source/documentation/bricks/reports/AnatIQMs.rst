@@ -103,7 +103,7 @@ Adapted from `mriqc <https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e88
       ex. '/home/username/data/derived_data/T1w_rotmasked.nii'
 
 - *segmentation* (a string representing an existing file)
-    Segmentation maskt (valid extensions: [.nii, .nii.gz]).
+    Segmentation mask (valid extensions: [.nii, .nii.gz]).
 
     ::
 

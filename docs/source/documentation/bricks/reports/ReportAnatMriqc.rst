@@ -29,6 +29,20 @@ Generates the report for anatomical data in mriqc pipeline
 
       ex. '/home/username/data/derived_data/T1w_anat_qc.json'
 
+- *brain_mask* (a string representing an existing file)
+    Mask image.
+
+    ::
+
+      ex. '/home/username/data/derived_data/pre_n4c_T1W_clipped_desc-brain.nii'
+
+- *segmentation* (a string representing an existing file)
+    Segmentation mask (valid extensions: [.nii, .nii.gz]).
+
+    ::
+
+      ex. '/home/username/data/derived_data/ss_n4c_T1w_clippep_seg.nii'
+
 **Optional inputs with default value parameters:**
 
 - *anat_fig_cols* (an integer, optional, default value is 5)
