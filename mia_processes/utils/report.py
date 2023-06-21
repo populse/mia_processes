@@ -1329,7 +1329,44 @@ class Report:
 
         self.report.append(PageBreak())
 
-        # Fifth - slice planes display - Raw functional #######################
+        # Fifth - Carpet plot #######################
+        #######################################################################
+        self.report.append(
+            Paragraph(
+                "<font size = 18 > <b>Summary plot " "</b> </font>",
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        line = ReportLine(150)
+        line.hAlign = "CENTER"
+        self.report.append(line)
+        self.report.append(Spacer(0 * mm, 10 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size = 9 > <i>Summary plot,"
+                "showing the slice-wise signal intensity at the extremes for "
+                "the identification of spikes, the outliers metric, "
+                "the DVARS, the FD and the carpetplot. "
+                "The carpet plot rows correspond to voxelwise time series, "
+                "and are separated into regions: cortical gray matter, "
+                "deep gray matter, white matter and cerebrospinal fluid, "
+                "cerebellum and the brain-edge or “crown”. The crown "
+                "corresponds to the voxels located on a closed "
+                "band around the brain </i></font>",
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # reminder: A4 == 210mmx297mm
+        image = Image(
+            self.IQMS_plot, width=7.4803 * inch, height=9.0551 * inch
+        )
+        image.hAlign = "CENTER"
+        self.report.append(image)
+        self.report.append(PageBreak())
+
+        # Sixth - slice planes display - Raw functional #######################
         #######################################################################
         self.report.append(
             Paragraph(
@@ -1345,7 +1382,7 @@ class Report:
         self.report.append(Spacer(0 * mm, 10 * mm))
         self.report.append(
             Paragraph(
-                "<font size = 14 >Raw functional"
+                "<font size = 14 >Raw functional "
                 "images (1<sup>st</sup> dynamic)"
                 "</font>",
                 self.styles["Center"],
@@ -1380,7 +1417,7 @@ class Report:
         self.report.append(slices_image)
         self.report.append(PageBreak())
 
-        # Sixth page - slice planes display - Normalised functional (MNI) #####
+        # Seventh page - slice planes display - Normalised functional (MNI) ###
         #######################################################################
         self.report.append(
             Paragraph(
@@ -1427,6 +1464,106 @@ class Report:
         )
         slices_image.hAlign = "CENTER"
         self.report.append(slices_image)
+
+        # Eighth page - slice planes display - stddev #####
+        #######################################################################
+        self.report.append(
+            Paragraph(
+                "<font size = 18 > <b>MRI axial slice "
+                "planes display</b> </font>",
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        line = ReportLine(150)
+        line.hAlign = "CENTER"
+        self.report.append(line)
+        self.report.append(Spacer(0 * mm, 10 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size = 14 > Temporal standard deviation</font>",
+                self.styles["Center"],
+            )
+        )
+
+        self.report.append(Spacer(0 * mm, 10 * mm))
+        self.report.append(
+            Paragraph(
+                '<font size = 9 > <i> "Neurological" '
+                "convention, the left side of the "
+                "image corresponds to the left side of "
+                "the brain. </i> <br/> </font>",
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        slices_image = slice_planes_plot(
+            self.stddev,
+            self.func_fig_rows,
+            self.func_fig_cols,
+            inf_slice_start=self.func_inf_slice_start,
+            slices_gap=self.func_slices_gap,
+            cmap="viridis",
+            out_dir=tmpdir.name,
+        )
+        # reminder: A4 == 210mmx297mm
+        slices_image = Image(
+            slices_image, width=7.4803 * inch, height=9.0551 * inch
+        )
+        slices_image.hAlign = "CENTER"
+        self.report.append(slices_image)
+        self.report.append(PageBreak())
+
+        # Nineth page - slice planes display - Background #####
+        #######################################################################
+        self.report.append(
+            Paragraph(
+                "<font size = 18 > <b>MRI axial slice "
+                "planes display</b> </font>",
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        line = ReportLine(150)
+        line.hAlign = "CENTER"
+        self.report.append(line)
+        self.report.append(Spacer(0 * mm, 10 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size = 14 > Average functional "
+                "image with background enhancement</font>",
+                self.styles["Center"],
+            )
+        )
+
+        self.report.append(Spacer(0 * mm, 10 * mm))
+        self.report.append(
+            Paragraph(
+                '<font size = 9 > <i> "Neurological" '
+                "convention, the left side of the "
+                "image corresponds to the left side of "
+                "the brain. </i> <br/> </font>",
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        slices_image = slice_planes_plot(
+            self.func_mean,
+            self.func_fig_rows,
+            self.func_fig_cols,
+            inf_slice_start=self.func_inf_slice_start,
+            slices_gap=self.func_slices_gap,
+            cmap="viridis_r",
+            out_dir=tmpdir.name,
+            only_noise=True,
+        )
+        # reminder: A4 == 210mmx297mm
+        slices_image = Image(
+            slices_image, width=7.4803 * inch, height=9.0551 * inch
+        )
+        slices_image.hAlign = "CENTER"
+        self.report.append(slices_image)
+
         self.page.build(self.report, canvasmaker=PageNumCanvas)
         tmpdir.cleanup()
 

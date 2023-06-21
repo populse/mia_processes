@@ -3728,12 +3728,52 @@ class Sanitize(ProcessMIA):
 
             if file:
                 self.outputs["out_file"] = file
+                # FIXME: In the latest version of mia, indexing of the
+                #        database with particular tags defined in the
+                #        processes is done only at the end of the
+                #        initialisation of the whole pipeline. So we
+                #        cannot use the value of these tags in other
+                #        processes of the pipeline at the time of
+                #        initialisation (see populse_mia #290). Until
+                #        better we use a quick and dirty hack with the
+                #        set_dbFieldValue() function !
+
+                tag_to_add = dict()
+                tag_to_add["name"] = "RepetitionTime"
+                tag_to_add["field_type"] = "float"
+                tag_to_add["description"] = (
+                    "The period of time "
+                    "in msec between the "
+                    "beginning of a pulse "
+                    "sequence and the "
+                    "beginning of the "
+                    "succeeding pulse "
+                    "sequence"
+                )
+                tag_to_add["visibility"] = True
+                tag_to_add["origin"] = "user"
+                tag_to_add["unit"] = "ms"
+                tag_to_add["default_value"] = None
+                tag_to_add["value"] = get_dbFieldValue(
+                    self.project, self.in_file, "RepetitionTime"
+                )
+
+                if tag_to_add["value"] is not None:
+                    set_dbFieldValue(self.project, file, tag_to_add)
+
+                else:
+                    print(
+                        "Sanitize:\n the 'RepetitionTime' tag could "
+                        "not be added to the database for the '{}' "
+                        "parameter. This can lead to a subsequent issue "
+                        "during initialization!!\n".format(file)
+                    )
 
             else:
                 print(
                     "- Sanitize brick: There was no output file deducted "
-                    "during initialisation. Please check the input "
-                    "parameters...!"
+                    "during initialisation. "
+                    "Please check the input parameters...!"
                 )
 
             # tags inheritance (optional)

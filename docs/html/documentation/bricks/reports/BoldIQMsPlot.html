@@ -1,0 +1,169 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>BoldQMsPlot brick &#8212; mia_processes 2.2.1-dev documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/haiku.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
+          <span>mia_processes 2.2.1-dev documentation</span></a></h1>
+        <h2 class="heading"><span>BoldQMsPlot brick</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <div class="toctree-wrapper compound">
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 35%" />
+<col style="width: 40%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference external" href="../../../../index.html">Home</a></p></td>
+<td><p><a class="reference external" href="../../../documentation.html">Documentation</a></p></td>
+<td><p><a class="reference external" href="https://github.com/populse/mia_processes">GitHub</a></p></td>
+</tr>
+</tbody>
+</table>
+<section id="boldqmsplot-brick">
+<h1>BoldQMsPlot brick<a class="headerlink" href="#boldqmsplot-brick" title="Permalink to this headline">¶</a></h1>
+<p>Plot a figure showing the slice-wise signal intensity at the extremes for the identification of spikes,
+the outliers metric, the DVARS, the FD and the carpetplot.
+The carpet plot rows correspond to voxelwise time series, and are separated into regions:
+cortical gray matter, deep gray matter, white matter and cerebrospinal fluid, cerebellum and the brain-edge or “crown”.
+The crown corresponds to the voxels located on a closed band around the brain.</p>
+<p>Used <a class="reference external" href="https://github.com/nipreps/niworkflows/blob/83bb10ee21d89546b1c5b05f2c7e4ae29ad1bece/niworkflows/viz/plots.py#L38">Niworkflow FMRIplot</a></p>
+<hr class="docutils" />
+<p><strong>Mandatory inputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>in_func</em> (a string representing an existing file)</dt><dd><p>Bold image (valid extensions: [.nii, .nii.gz]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/func_valid.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Optional inputs with default value parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>drop_trs</em> (an int, optional, default value is 0)</dt><dd><p>Number of dummy scans drops.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">2</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>fd_thresh</em> (a float, optional, default value is 0.2)</dt><dd><p>Motion threshold for FD computation.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mf">0.2</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Optional inputs:</strong></p>
+<ul>
+<li><dl>
+<dt><em>carpet_seg</em></dt><dd><p>Carpet segmentation.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/cseg_t_tpl-MNI152NLin2009cAsym_res-01_desc-carpet_dseg.nii.gz&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>in_dvars_file</em> (a string representing an existing file, optional)</dt><dd><p>DVARS file.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/dvars_reg_func_valid.out&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>in_fd_file</em> (a string representing an existing file, optional)</dt><dd><p>FD file.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/fd_reg_func_valid_oned.out&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>in_outliers_file</em> (a string representing an existing file, optional)</dt><dd><p>Outliers file.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/outliers_reg_func_valid.out&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>in_spikes_file</em> (a string representing an existing file, optional)</dt><dd><p>Spikes file.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/spikes_reg_func_valid.out&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>tr</em> (a float, optional)</dt><dd><p>Repetion time. Default value is Undefined, the TR in the database will be used.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mf">3000.0</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Outputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>out_file</em> (a strings representing a file)</dt><dd><p>A figure with carpet and outliers/dvars/FD/spikes plot.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/func_valid_fmriplot.png&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<hr class="docutils" />
+<p>Usefull links:</p>
+<p><a class="reference external" href="https://github.com/nipreps/niworkflows/blob/83bb10ee21d89546b1c5b05f2c7e4ae29ad1bece/niworkflows/viz/plots.py#L38">Niworkflow FMRIplot</a></p>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </div>
+  </body>
+</html>

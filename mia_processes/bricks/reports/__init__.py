@@ -16,6 +16,7 @@ and to create the report itself.
 from .processes import (  # noqa: F401
     AnatIQMs,
     BoldIQMs,
+    BoldIQMsPlot,
     CarpetParcellation,
     ComputeDVARS,
     FramewiseDisplacement,

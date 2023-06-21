@@ -4,21 +4,20 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bold_iqms pipeline &#8212; mia_processes 2.2.1-dev+9d064287 documentation</title>
-    <link rel="stylesheet" href="../../../_static/haiku.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Bold_iqms pipeline &#8212; mia_processes 2.2.1-dev documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/haiku.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
-          <span>mia_processes 2.2.1-dev+9d064287 documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev documentation</span></a></h1>
         <h2 class="heading"><span>Bold_iqms pipeline</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -46,9 +45,9 @@
 </tr>
 </tbody>
 </table>
-<div class="section" id="bold-iqms-pipeline">
+<section id="bold-iqms-pipeline">
 <h1>Bold_iqms pipeline<a class="headerlink" href="#bold-iqms-pipeline" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="compute-no-reference-iqms-image-quality-metrics-from-functional-bold">
+<section id="compute-no-reference-iqms-image-quality-metrics-from-functional-bold">
 <h2>Compute no-reference IQMs (image quality metrics) from functional (BOLD)<a class="headerlink" href="#compute-no-reference-iqms-image-quality-metrics-from-functional-bold" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p>Used in bold_mriqc pipeline.</p></li>
@@ -269,12 +268,46 @@
 </dd>
 </dl>
 </li>
+<li><dl>
+<dt><em>dvars_file</em></dt><dd><p>DVARS out file.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/dvars_reg_func_valid.out&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>fd_file</em></dt><dd><p>Framewise displacement out file.</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/fd_reg_func_valid_oned.out&#39;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>outliercount_file</em></dt><dd><p>Outlier count out file.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/outliers_reg_func_valid.out&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>spike_file</em></dt><dd><p>File with all the spkies detected.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/spikes_func.out&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
 </ul>
 <hr class="docutils" />
 <p>Usefull links:</p>
 <p><a class="reference external" href="https://mriqc.readthedocs.io/en/22.0.6/">mriqc 22.06</a></p>
-</div>
-</div>
+</section>
+</section>
 
 
       </div>
@@ -288,7 +321,7 @@
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
     </div>
   </body>
 </html>

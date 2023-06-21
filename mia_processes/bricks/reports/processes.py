@@ -8,6 +8,7 @@ compute necessary values for reporting.
     :Class:
         - AnatIQMs
         - BoldIQMs
+        - BoldIQMsPlot
         - CarpetParcellation
         - ComputeDVARS
         - FramewiseDisplacement
@@ -61,6 +62,7 @@ from math import sqrt
 
 import nibabel as nb
 import numpy as np
+import pandas as pd
 import scipy.ndimage as nd
 from nilearn.signal import clean
 from nipy.algorithms.registration import aff2euler, to_matrix44
@@ -75,6 +77,8 @@ from nipype.interfaces.base import (
 )
 from nipype.interfaces.spm.base import ImageFileSPM
 from nitime.algorithms import AR_est_YW
+from niworkflows.utils.timeseries import _nifti_timeseries
+from niworkflows.viz.plots import fMRIPlot
 from numpy.polynomial import Legendre
 
 # populse_mia import
@@ -1022,6 +1026,190 @@ class BoldIQMs(ProcessMIA):
 
         with open(report_file, "w") as fp:
             json.dump(flat_results_dict, fp)
+
+
+class BoldIQMsPlot(ProcessMIA):
+    """
+    Plot a figure showing the slice-wise signal intensity at the extremes for
+    the identification of spikes,
+    the outliers metric, the DVARS, the FD and the carpetplot.
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instantiation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(BoldIQMsPlot, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = []
+
+        # Inputs description
+        in_func_desc = "Bold image"
+        in_outliers_file_desc = "Outliers file."
+        in_dvars_file_desc = "DVARS file."
+        in_fd_file_desc = "FD file."
+        fd_thresh_desc = "Motion threshold for FD computation."
+        in_spikes_file_desc = " Spikes file."
+        carpet_seg_desc = "Carpet segmentation."
+        drop_trs_desc = "Number of dummy scans drops."
+        tr_desc = "Repetition time"
+
+        # Outputs description
+        out_file_desc = (
+            "A figure with carpet and outliers/dvars/FD/spikes plot"
+        )
+
+        # Inputs traits
+        self.add_trait(
+            "in_func", File(output=False, optional=False, desc=in_func_desc)
+        )
+
+        self.add_trait(
+            "in_outliers_file",
+            File(output=False, optional=True, desc=in_outliers_file_desc),
+        )
+
+        self.add_trait(
+            "in_dvars_file",
+            File(output=False, optional=True, desc=in_dvars_file_desc),
+        )
+
+        self.add_trait(
+            "in_fd_file",
+            File(output=False, optional=True, desc=in_fd_file_desc),
+        )
+
+        self.add_trait(
+            "in_spikes_file",
+            File(output=False, optional=True, desc=in_spikes_file_desc),
+        )
+
+        self.add_trait(
+            "carpet_seg",
+            File(output=False, optional=True, desc=carpet_seg_desc),
+        )
+
+        self.add_trait(
+            "drop_trs",
+            traits.Int(0, output=False, optional=True, desc=drop_trs_desc),
+        )
+
+        self.add_trait(
+            "fd_thresh",
+            traits.Float(
+                0.2, output=False, optional=True, desc=fd_thresh_desc
+            ),
+        )
+
+        self.add_trait(
+            "tr",
+            traits.Either(
+                Undefined,
+                traits.Float(),
+                output=False,
+                optional=True,
+                desc=tr_desc,
+            ),
+        )
+        self.tr = Undefined
+
+        # Outputs traits
+        self.add_trait(
+            "out_file", File(output=True, optional=True, desc=out_file_desc)
+        )
+
+        self.init_default_traits()
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(BoldIQMsPlot, self).list_outputs()
+
+        if self.tr is Undefined:
+            # Get TR in the database
+            tr = get_dbFieldValue(self.project, self.in_func, "RepetitionTime")
+            if tr is None:
+                print("Please add TR in database for functional file")
+                return self.make_initResult()
+            if tr:
+                self.tr = tr[0]
+
+        # Outputs definition and tags inheritance (optional)
+        if self.in_func:
+            valid_ext, in_ext, fileName = checkFileExt(self.in_func, EXT)
+
+            if not valid_ext:
+                print("\nThe input image format is not recognized ...!")
+                return
+
+            if self.output_directory:
+                self.outputs["out_file"] = os.path.join(
+                    self.output_directory, fileName + "_fmriplot.png"
+                )
+
+            else:
+                print("No output_directory was found...!\n")
+                return
+
+            self.inheritance_dict[self.outputs["out_file"]] = self.in_func
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(BoldIQMsPlot, self).run_process_mia()
+
+        dataframe = pd.DataFrame(
+            {
+                "outliers": np.loadtxt(
+                    self.in_outliers_file, usecols=[0]
+                ).tolist(),
+                # Pick non-standardize dvars (col 1)
+                # First timepoint is NaN (difference)
+                "DVARS": [np.nan]
+                + np.loadtxt(
+                    self.in_dvars_file, skiprows=1, usecols=[1]
+                ).tolist(),
+                # First timepoint is zero (reference volume)
+                "FD": [0.0]
+                + np.loadtxt(
+                    self.in_fd_file, skiprows=1, usecols=[0]
+                ).tolist(),
+            }
+        )
+
+        input_data = nb.load(self.in_func)
+        seg_file = self.carpet_seg
+        dataset, segments = _nifti_timeseries(input_data, seg_file)
+
+        fig = fMRIPlot(
+            dataset,
+            segments=segments,
+            spikes_files=([self.in_spikes_file]),
+            tr=(self.tr),
+            confounds=dataframe,
+            units={"outliers": "%", "FD": "mm"},
+            vlines={"FD": [self.fd_thresh]},
+            nskip=self.drop_trs,
+        ).plot()
+        fig.savefig(self.out_file, bbox_inches="tight")
 
 
 class CarpetParcellation(ProcessMIA):

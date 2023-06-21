@@ -33,7 +33,8 @@ ANTS_RANDOM_SEED should be set (e.g. ANTS_RANDOM_SEED = 1). Further discussion i
 |   - `Volume registration <../../bricks/preprocess/afni/Volreg.html>`_
 |      (default values : twopass = True, nterpolation = 'Fourier')
 |   - `MIN align <../../pipelines/preprocess/Bold_mni_align.html>`_
-|   - `IQMS computation <../../pipelines/reports/Bold_iqms.html>`_
+|   - `IQMs computation <../../pipelines/reports/Bold_iqms.html>`_
+|   - `Plot IQMs <../../bricks/reports/BoldIQMsPlot.html>`_
 |   - `Func report  <../../bricks/reports/ReportFuncMriqc.html>`_
 
 **Mandatory inputs parameters**

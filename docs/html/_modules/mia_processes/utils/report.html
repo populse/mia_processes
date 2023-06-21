@@ -5,20 +5,18 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.utils.report &#8212; mia_processes 2.2.1-dev+9d064287 documentation</title>
-    <link rel="stylesheet" href="../../../_static/haiku.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <title>mia_processes.utils.report &#8212; mia_processes 2.2.1-dev documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/haiku.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
-          <span>mia_processes 2.2.1-dev+9d064287 documentation</span></a></h1>
+          <span>mia_processes 2.2.1-dev documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.utils.report</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -97,7 +95,7 @@
 
 
 <div class="viewcode-block" id="Report"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.report.Report">[docs]</a><span class="k">class</span> <span class="nc">Report</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Create pdf report</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create pdf report</span>
 
 <span class="sd">    IQMs_file --&gt; mriqc individual report (with all IQMs)</span>
 <span class="sd">    mriqc_group --&gt; mriqc report group</span>
@@ -111,7 +109,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Report.__init__"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.report.Report.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">report_file</span><span class="p">,</span> <span class="n">dict4runtime</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Create Canvas , create cover and make report&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create Canvas , create cover and make report&quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span> <span class="o">=</span> <span class="n">dict4runtime</span>
         <span class="n">ref_exp</span> <span class="o">=</span> <span class="s2">&quot;Undefined&quot;</span>
@@ -395,7 +393,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">report</span> <span class="o">=</span> <span class="p">[]</span></div>
 
 <div class="viewcode-block" id="Report.get_iqms_data"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.report.Report.get_iqms_data">[docs]</a>    <span class="k">def</span> <span class="nf">get_iqms_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Get iqms data&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get iqms data&quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">iqms_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">param</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;extra_info&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -461,7 +459,7 @@
 <div class="viewcode-block" id="Report.mriqc_anat_make_report"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.report.Report.mriqc_anat_make_report">[docs]</a>    <span class="k">def</span> <span class="nf">mriqc_anat_make_report</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Make mriqc anat individual report&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Make mriqc anat individual report&quot;&quot;&quot;</span>
 
         <span class="c1"># First page - cover ##################################################</span>
         <span class="c1">#######################################################################</span>
@@ -1053,7 +1051,7 @@
 <div class="viewcode-block" id="Report.mriqc_func_make_report"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.report.Report.mriqc_func_make_report">[docs]</a>    <span class="k">def</span> <span class="nf">mriqc_func_make_report</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Make mriqc functional individual report&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Make mriqc functional individual report&quot;&quot;&quot;</span>
 
         <span class="c1"># First page - cover ##################################################</span>
         <span class="c1">#######################################################################</span>
@@ -1363,7 +1361,44 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PageBreak</span><span class="p">())</span>
 
-        <span class="c1"># Fifth - slice planes display - Raw functional #######################</span>
+        <span class="c1"># Fifth - Carpet plot #######################</span>
+        <span class="c1">#######################################################################</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size = 18 &gt; &lt;b&gt;Summary plot &quot;</span> <span class="s2">&quot;&lt;/b&gt; &lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">ReportLine</span><span class="p">(</span><span class="mi">150</span><span class="p">)</span>
+        <span class="n">line</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;CENTER&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size = 9 &gt; &lt;i&gt;Summary plot,&quot;</span>
+                <span class="s2">&quot;showing the slice-wise signal intensity at the extremes for &quot;</span>
+                <span class="s2">&quot;the identification of spikes, the outliers metric, &quot;</span>
+                <span class="s2">&quot;the DVARS, the FD and the carpetplot. &quot;</span>
+                <span class="s2">&quot;The carpet plot rows correspond to voxelwise time series, &quot;</span>
+                <span class="s2">&quot;and are separated into regions: cortical gray matter, &quot;</span>
+                <span class="s2">&quot;deep gray matter, white matter and cerebrospinal fluid, &quot;</span>
+                <span class="s2">&quot;cerebellum and the brain-edge or “crown”. The crown &quot;</span>
+                <span class="s2">&quot;corresponds to the voxels located on a closed &quot;</span>
+                <span class="s2">&quot;band around the brain &lt;/i&gt;&lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="c1"># reminder: A4 == 210mmx297mm</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">IQMS_plot</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">7.4803</span> <span class="o">*</span> <span class="n">inch</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">9.0551</span> <span class="o">*</span> <span class="n">inch</span>
+        <span class="p">)</span>
+        <span class="n">image</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;CENTER&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PageBreak</span><span class="p">())</span>
+
+        <span class="c1"># Sixth - slice planes display - Raw functional #######################</span>
         <span class="c1">#######################################################################</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
             <span class="n">Paragraph</span><span class="p">(</span>
@@ -1379,7 +1414,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
             <span class="n">Paragraph</span><span class="p">(</span>
-                <span class="s2">&quot;&lt;font size = 14 &gt;Raw functional&quot;</span>
+                <span class="s2">&quot;&lt;font size = 14 &gt;Raw functional &quot;</span>
                 <span class="s2">&quot;images (1&lt;sup&gt;st&lt;/sup&gt; dynamic)&quot;</span>
                 <span class="s2">&quot;&lt;/font&gt;&quot;</span><span class="p">,</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">],</span>
@@ -1414,7 +1449,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">slices_image</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PageBreak</span><span class="p">())</span>
 
-        <span class="c1"># Sixth page - slice planes display - Normalised functional (MNI) #####</span>
+        <span class="c1"># Seventh page - slice planes display - Normalised functional (MNI) ###</span>
         <span class="c1">#######################################################################</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
             <span class="n">Paragraph</span><span class="p">(</span>
@@ -1461,11 +1496,111 @@
         <span class="p">)</span>
         <span class="n">slices_image</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;CENTER&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">slices_image</span><span class="p">)</span>
+
+        <span class="c1"># Eighth page - slice planes display - stddev #####</span>
+        <span class="c1">#######################################################################</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size = 18 &gt; &lt;b&gt;MRI axial slice &quot;</span>
+                <span class="s2">&quot;planes display&lt;/b&gt; &lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">ReportLine</span><span class="p">(</span><span class="mi">150</span><span class="p">)</span>
+        <span class="n">line</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;CENTER&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size = 14 &gt; Temporal standard deviation&lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s1">&#39;&lt;font size = 9 &gt; &lt;i&gt; &quot;Neurological&quot; &#39;</span>
+                <span class="s2">&quot;convention, the left side of the &quot;</span>
+                <span class="s2">&quot;image corresponds to the left side of &quot;</span>
+                <span class="s2">&quot;the brain. &lt;/i&gt; &lt;br/&gt; &lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="n">slices_image</span> <span class="o">=</span> <span class="n">slice_planes_plot</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stddev</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">func_fig_rows</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">func_fig_cols</span><span class="p">,</span>
+            <span class="n">inf_slice_start</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">func_inf_slice_start</span><span class="p">,</span>
+            <span class="n">slices_gap</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">func_slices_gap</span><span class="p">,</span>
+            <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;viridis&quot;</span><span class="p">,</span>
+            <span class="n">out_dir</span><span class="o">=</span><span class="n">tmpdir</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="c1"># reminder: A4 == 210mmx297mm</span>
+        <span class="n">slices_image</span> <span class="o">=</span> <span class="n">Image</span><span class="p">(</span>
+            <span class="n">slices_image</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">7.4803</span> <span class="o">*</span> <span class="n">inch</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">9.0551</span> <span class="o">*</span> <span class="n">inch</span>
+        <span class="p">)</span>
+        <span class="n">slices_image</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;CENTER&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">slices_image</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PageBreak</span><span class="p">())</span>
+
+        <span class="c1"># Nineth page - slice planes display - Background #####</span>
+        <span class="c1">#######################################################################</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size = 18 &gt; &lt;b&gt;MRI axial slice &quot;</span>
+                <span class="s2">&quot;planes display&lt;/b&gt; &lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">ReportLine</span><span class="p">(</span><span class="mi">150</span><span class="p">)</span>
+        <span class="n">line</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;CENTER&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size = 14 &gt; Average functional &quot;</span>
+                <span class="s2">&quot;image with background enhancement&lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s1">&#39;&lt;font size = 9 &gt; &lt;i&gt; &quot;Neurological&quot; &#39;</span>
+                <span class="s2">&quot;convention, the left side of the &quot;</span>
+                <span class="s2">&quot;image corresponds to the left side of &quot;</span>
+                <span class="s2">&quot;the brain. &lt;/i&gt; &lt;br/&gt; &lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="n">slices_image</span> <span class="o">=</span> <span class="n">slice_planes_plot</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">func_mean</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">func_fig_rows</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">func_fig_cols</span><span class="p">,</span>
+            <span class="n">inf_slice_start</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">func_inf_slice_start</span><span class="p">,</span>
+            <span class="n">slices_gap</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">func_slices_gap</span><span class="p">,</span>
+            <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;viridis_r&quot;</span><span class="p">,</span>
+            <span class="n">out_dir</span><span class="o">=</span><span class="n">tmpdir</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">only_noise</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="c1"># reminder: A4 == 210mmx297mm</span>
+        <span class="n">slices_image</span> <span class="o">=</span> <span class="n">Image</span><span class="p">(</span>
+            <span class="n">slices_image</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">7.4803</span> <span class="o">*</span> <span class="n">inch</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">9.0551</span> <span class="o">*</span> <span class="n">inch</span>
+        <span class="p">)</span>
+        <span class="n">slices_image</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;CENTER&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">slices_image</span><span class="p">)</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="p">,</span> <span class="n">canvasmaker</span><span class="o">=</span><span class="n">PageNumCanvas</span><span class="p">)</span>
         <span class="n">tmpdir</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Report.mriqc_group_make_report"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.report.Report.mriqc_group_make_report">[docs]</a>    <span class="k">def</span> <span class="nf">mriqc_group_make_report</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Make mriqc group report&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Make mriqc group report&quot;&quot;&quot;</span>
 
         <span class="c1"># First page - cover ##################################################</span>
         <span class="c1">#######################################################################</span>
@@ -1902,7 +2037,7 @@
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
     </div>
   </body>
 </html>

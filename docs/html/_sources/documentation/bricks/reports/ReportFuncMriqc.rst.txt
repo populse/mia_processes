@@ -52,13 +52,6 @@ Generates the report for functionnal data in mriqc pipeline
 
       ex. 'spikes_'
 
-- *norm_func* (a string representing an existing file)
-    An existing, uncompressed normalised functional image file (valid extensions: [.nii, .nii.gz]).
-
-    ::
-
-      ex. '/home/username/data/raw_data/T1w.nii'
-
 - *norm_func_fig_cols* (an integer, optional, default value is 5)
     The number of lines for the normalised functional slice planes plot.
 
@@ -91,6 +84,27 @@ Generates the report for functionnal data in mriqc pipeline
 
       ex. 0
 
+- *IQMs_plot* (a string representing an existing file)
+    A figure with carpet and outliers/dvars/FD/spikes plot.
+
+    ::
+
+      ex. '/home/username/data/raw_data/func_valid_fmriplot.png'
+
+- *norm_func* (a string representing an existing file)
+    An existing, normalised functional image file (valid extensions: [.nii, .nii.gz]).
+
+    ::
+
+      ex. '/home/username/data/raw_data/w_n4c_mean_reg_func_valid.nii'
+
+- *mean_func* (a string representing an existing file)
+    Mean functional image file (valid extensions: [.nii, .nii.gz]).
+
+    ::
+
+      ex. '/home/username/data/raw_data/mean_reg_func_valid.nii'
+
 
 - *norm_func_inf_slice_start* (an integer, optional)
     The first index displayed in normalised functional slice planes plot.
@@ -107,6 +121,13 @@ Generates the report for functionnal data in mriqc pipeline
     ::
 
       ex. 0
+
+- *stddev_func* (a string representing an existing file)
+    Functional standard deviation image (valid extensions: [.nii, .nii.gz]).
+
+    ::
+
+      ex. '/home/username/data/raw_data/reg_func_valid_stddev.nii'
 
 
 
