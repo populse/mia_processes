@@ -205,6 +205,33 @@ Compute no-reference IQMs (image quality metrics) from functional (BOLD)
 
       ex. '/home/username/data/derived_data/cseg_t_tpl-MNI152NLin2009cAsym_res-01_desc-carpet_dseg.nii.gz'
 
+- *dvars_file*
+    DVARS out file.
+
+    ::
+
+      ex. '/home/username/data/derived_data/dvars_reg_func_valid.out'
+
+- *fd_file*
+   Framewise displacement out file.
+
+    ::
+
+      ex. '/home/username/data/derived_data/fd_reg_func_valid_oned.out'
+
+- *outliercount_file*
+    Outlier count out file.
+
+    ::
+
+      ex. '/home/username/data/derived_data/outliers_reg_func_valid.out'
+
+- *spike_file*
+    File with all the spkies detected.
+
+    ::
+
+      ex. '/home/username/data/derived_data/spikes_func.out'
 
 -------------
 

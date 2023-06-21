@@ -99,7 +99,7 @@ Generates the report for functionnal data in mriqc pipeline
       ex. '/home/username/data/raw_data/w_n4c_mean_reg_func_valid.nii'
 
 - *mean_func* (a string representing an existing file)
-   Mean functional image file (valid extensions: [.nii, .nii.gz]).
+    Mean functional image file (valid extensions: [.nii, .nii.gz]).
 
     ::
 
