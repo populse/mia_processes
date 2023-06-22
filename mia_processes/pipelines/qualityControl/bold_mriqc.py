@@ -161,12 +161,9 @@ class Bold_mriqc(Pipeline):
             pipeline_parameter="func_report",
             is_optional=True,
         )
-        self.export_parameter(
-            "bold_iqms_pipeline", "carpet_seg", is_optional=True
-        )
 
         # parameters order
-        self.reorder_traits(("func_file", "carpet_seg", "func_report"))
+        self.reorder_traits(("func_file", "func_report"))
 
         # nodes positions
         self.node_position = {
