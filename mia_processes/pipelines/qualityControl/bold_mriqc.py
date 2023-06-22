@@ -154,6 +154,7 @@ class Bold_mriqc(Pipeline):
         self.add_link("plot_iqms.out_file->mriqc_func_report.IQMs_plot")
         self.add_link("tsnr.out_stddev_file->mriqc_func_report.stddev_func")
         self.add_link("mean.out_file->mriqc_func_report.func_mean")
+        self.add_link("automask.out_file->mriqc_func_report.brain_mask")
         self.export_parameter(
             "mriqc_func_report",
             "report",

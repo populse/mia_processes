@@ -2,9 +2,9 @@
 
 .. toctree::
 
-+--------------------------------+----------------------------------------------+----------------------------------------------------+
-|`Home <../../../../index.html>`_|`Documentation <../../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
-+--------------------------------+----------------------------------------------+----------------------------------------------------+
++--------------------------------+-------------------------------------------+----------------------------------------------------+
+|`Home <../../../../index.html>`_|`Documentation <../../documentation.html>`_|`GitHub <https://github.com/populse/mia_processes>`_|
++--------------------------------+-------------------------------------------+----------------------------------------------------+
 
 =====================
 ReportFuncMriqc brick
@@ -67,6 +67,13 @@ Generates the report for functionnal data in mriqc pipeline
       ex. 5
 
 **Optional inputs:**
+
+- *brain_mask* (a string representing an existing file)
+    Mask image.
+
+    ::
+
+      ex. '/home/username/data/derived_data/automask_mean_func_valid.nii'
 
 - *func_inf_slice_start* (an integer, optional)
     The first index displayed in functional slice planes plot.

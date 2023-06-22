@@ -28,6 +28,7 @@ from .tools import (  # noqa: F401
     mriqc_group_iqms_tsv,
     plot_boxplot_points,
     plot_qi2,
+    plot_segmentation,
     set_dbFieldValue,
     slice_planes_plot,
 )
