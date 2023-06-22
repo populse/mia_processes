@@ -1214,8 +1214,8 @@ class BoldIQMsPlot(ProcessMIA):
 
 class CarpetParcellation(ProcessMIA):
     """
-    *Dilate the brainmask, substract it from itself then generate the union
-    of the obtained crown mask and the epi parcellation*
+    *Dilate the brain mask, remove it from itself then generate the union
+    of the obtained crown mask and the EPI parcellation*
 
     Please, see the complete documentation for the `CarpetParcellation brick
     in the populse.mia_processes website
@@ -1345,13 +1345,13 @@ class CarpetParcellation(ProcessMIA):
         brainmask_img = nb.load(self.brainmask)
         brainmaskdata = np.bool_(brainmask_img.dataobj)
 
-        # Obtain dilated brainmask
+        # Obtain dilated brain mask
         dilated = image_binary_dilation(
             brainmaskdata,
             radius=2,
         )
 
-        # Binary substraction
+        # Binary subtraction
         brainmaskdata[np.bool_(dilated)] = False
 
         # Carpet parcellation
