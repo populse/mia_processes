@@ -29,12 +29,34 @@ Generates the report for anatomical data in mriqc pipeline
 
       ex. '/home/username/data/derived_data/T1w_anat_qc.json'
 
+- *art_mask* (a pathlike object or string representing a file)
+    Artifact mask image (extensions: [.nii, .nii.gz]).
+
+    ::
+
+      ex. '/home/username/data/derived_data/art_T1w_mask.nii'
+
+- *air_mask* (a pathlike object or string representing a file)
+    Air mask ("hat" mask without artifacts) image.
+
+    ::
+
+      ex. '/home/username/data/derived_data/air_T1w_mask.nii'
+
+
 - *brain_mask* (a string representing an existing file)
     Mask image.
 
     ::
 
       ex. '/home/username/data/derived_data/pre_n4c_T1W_clipped_desc-brain.nii'
+
+- *head_mask* (a pathlike object or string representing a file)
+    Outskin mask (extensions: [.nii, .nii.gz])
+
+    ::
+
+      ex. '/home/username/data/derived_data/T1w_brain_outskin_mask.nii'
 
 - *segmentation* (a string representing an existing file)
     Segmentation mask (valid extensions: [.nii, .nii.gz]).
