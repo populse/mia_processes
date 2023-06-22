@@ -144,6 +144,11 @@ class Anat_mriqc(Pipeline):
         self.add_link("anat_airmask.out_art_mask->anatiqms.artmask")
         self.add_link("anat_airmask.out_air_mask->anatiqms.airmask")
         self.add_link("anat_airmask.out_rot_mask->anatiqms.rotmask")
+        self.add_link(
+            "anat_headmask.outskin_mask_file->" "mriqc_anat_report.head_mask"
+        )
+        self.add_link("anat_airmask.out_art_mask->mriqc_anat_report.art_mask")
+        self.add_link("anat_airmask.out_air_mask->mriqc_anat_report.air_mask")
         self.add_link("anat_mni_tpms_pipeline.mni_tpms->anatiqms.mni_tpms")
         self.add_link("anatiqms.out_file->mriqc_anat_report.IQMs_file")
         self.add_link("harmonize.out_file->anatiqms.in_noinu")

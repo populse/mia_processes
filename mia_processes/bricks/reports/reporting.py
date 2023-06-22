@@ -93,7 +93,13 @@ class ReportAnatMriqc(ProcessMIA):
             "Gap between slices in anatomical slice planes " "plot"
         )
 
-        brain_mask_desc = ""
+        air_mask_desc = "Air mask"
+
+        art_mask_desc = "Art mask"
+
+        brain_mask_desc = "Brain mask"
+
+        head_mask_desc = "Head mask"
 
         norm_anat_desc = (
             "An existing, uncompressed normalised anatomical "
@@ -120,7 +126,7 @@ class ReportAnatMriqc(ProcessMIA):
             "Gap between slices in normalised " "anatomical slice planes plot"
         )
 
-        segmentation_desc = ""
+        segmentation_desc = "Segmentation file"
 
         # Outputs description
         report_desc = "The generated report (pdf)"
@@ -198,6 +204,36 @@ class ReportAnatMriqc(ProcessMIA):
                 output=False,
                 optional=False,
                 desc=segmentation_desc,
+            ),
+        )
+
+        self.add_trait(
+            "head_mask",
+            ImageFileSPM(
+                copyfile=False,
+                output=False,
+                optional=False,
+                desc=head_mask_desc,
+            ),
+        )
+
+        self.add_trait(
+            "art_mask",
+            ImageFileSPM(
+                copyfile=False,
+                output=False,
+                optional=False,
+                desc=art_mask_desc,
+            ),
+        )
+
+        self.add_trait(
+            "air_mask",
+            ImageFileSPM(
+                copyfile=False,
+                output=False,
+                optional=False,
+                desc=air_mask_desc,
             ),
         )
 
@@ -772,6 +808,9 @@ class ReportAnatMriqc(ProcessMIA):
             anat_slices_gap=self.anat_slices_gap,
             brain_mask=self.brain_mask,
             segmentation=self.segmentation,
+            air_mask=self.air_mask,
+            art_mask=self.art_mask,
+            head_mask=self.head_mask,
             norm_anat=self.norm_anat,
             norm_anat_fig_rows=self.norm_anat_fig_rows,
             norm_anat_fig_cols=self.norm_anat_fig_cols,
@@ -806,6 +845,7 @@ class ReportFuncMriqc(ProcessMIA):
         self.requirement = []
 
         # Inputs description
+        brain_mask_desc = "Brain mask"
 
         IQMs_file_desc = "A .JSON file containing the IQMs"
 
@@ -936,6 +976,16 @@ class ReportFuncMriqc(ProcessMIA):
                 output=False,
                 optional=True,
                 desc=IQMs_plot_desc,
+            ),
+        )
+
+        self.add_trait(
+            "brain_mask",
+            ImageFileSPM(
+                copyfile=False,
+                output=False,
+                optional=False,
+                desc=brain_mask_desc,
             ),
         )
 
@@ -1372,6 +1422,7 @@ class ReportFuncMriqc(ProcessMIA):
             func_fig_cols=self.func_fig_cols,
             func_inf_slice_start=self.func_inf_slice_start,
             func_slices_gap=self.func_slices_gap,
+            brain_mask=self.brain_mask,
             norm_func=self.norm_func,
             norm_func_fig_rows=self.norm_func_fig_rows,
             norm_func_fig_cols=self.norm_func_fig_cols,

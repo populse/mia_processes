@@ -414,6 +414,7 @@ def plot_segmentation(anat_file, segmentation, name, out_dir=None, **kwargs):
     disp.savefig(out_file)
     disp.close()
     disp = None
+
     return out_file
 
 
@@ -488,6 +489,7 @@ def slice_planes_plot(
     cmap="Greys_r",
     out_dir=None,
     only_noise=False,
+    out_name=None,
 ):
     "blablabla"
 
@@ -689,6 +691,8 @@ def slice_planes_plot(
         )
 
     fname, ext = os.path.splitext(os.path.basename(data))
+    if out_name:
+        fname += "_" + out_name
 
     if out_dir is None:
         out_file = os.path.abspath(fname + "_slice_planes_plot.png")
