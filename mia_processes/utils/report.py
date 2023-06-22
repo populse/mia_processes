@@ -58,6 +58,7 @@ from mia_processes.utils import (
     PageNumCanvas,
     ReportLine,
     plot_qi2,
+    plot_segmentation,
     slice_planes_plot,
 )
 
@@ -996,22 +997,238 @@ class Report:
         )
         slices_image.hAlign = "CENTER"
         self.report.append(slices_image)
+        self.report.append(PageBreak())
 
-        # FIXME: Currently, we make and save (in derived_data) the
-        # qi2 graph, but we don't include it in the report because
-        # the result with the test data looks strange.
-        _ = plot_qi2(
+        # Eighth page - slice planes display - Background #####
+        #######################################################################
+        self.report.append(
+            Paragraph(
+                "<font size = 18 > <b>MRI axial slice "
+                "planes display</b> </font>",
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        line = ReportLine(150)
+        line.hAlign = "CENTER"
+        self.report.append(line)
+        self.report.append(Spacer(0 * mm, 10 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size = 14 > Anatomical "
+                "image with background enhancement</font>",
+                self.styles["Center"],
+            )
+        )
+
+        self.report.append(Spacer(0 * mm, 10 * mm))
+        self.report.append(
+            Paragraph(
+                '<font size = 9 > <i> "Neurological" '
+                "convention, the left side of the "
+                "image corresponds to the left side of "
+                "the brain. </i> <br/> </font>",
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        slices_image = slice_planes_plot(
+            self.anat,
+            self.anat_fig_rows,
+            self.anat_fig_cols,
+            inf_slice_start=self.anat_inf_slice_start,
+            slices_gap=self.anat_slices_gap,
+            cmap="viridis_r",
+            out_dir=tmpdir.name,
+            only_noise=True,
+            out_name="background",
+        )
+        # reminder: A4 == 210mmx297mm
+        slices_image = Image(
+            slices_image, width=7.4803 * inch, height=9.0551 * inch
+        )
+        slices_image.hAlign = "CENTER"
+        self.report.append(slices_image)
+        self.report.append(PageBreak())
+
+        # Nineth page - slice planes display - Segmentation #####
+        #######################################################################
+        self.report.append(
+            Paragraph(
+                "<font size = 18 > <b>MRI display</b> </font>",
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        line = ReportLine(150)
+        line.hAlign = "CENTER"
+        self.report.append(line)
+        self.report.append(Spacer(0 * mm, 5 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size = 14 > Anatomical "
+                "image with segmentation</font>",
+                self.styles["Center"],
+            )
+        )
+
+        self.report.append(Spacer(0 * mm, 5 * mm))
+        self.report.append(
+            Paragraph(
+                '<font size = 9 > <i> "Neurological" '
+                "convention, the left side of the "
+                "image corresponds to the left side of "
+                "the brain. </i> <br/> </font>",
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 5 * mm))
+        self.report.append(
+            Paragraph(
+                "Brain tissue segmentation",
+                self.styles["Left2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        plot_seg = plot_segmentation(
+            self.anat,
+            self.segmentation,
+            out_dir=tmpdir.name,
+            name="PlotSegmentation",
+            cut_coords=9,
+            display_mode="z",
+            levels=[0.5, 1.5, 2.5],
+            colors=["r", "g", "b"],
+        )
+
+        image = Image(plot_seg, width=7.4803 * inch, height=1.5 * inch)
+        image.hAlign = "CENTER"
+        self.report.append(image)
+
+        self.report.append(Spacer(0 * mm, 5 * mm))
+        self.report.append(
+            Paragraph(
+                "Brain mask",
+                self.styles["Left2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+
+        plot_bmask = plot_segmentation(
+            self.anat,
+            self.brain_mask,
+            out_dir=tmpdir.name,
+            name="PlotBrainmask",
+            cut_coords=9,
+            display_mode="z",
+            levels=[0.5],
+            colors=["r"],
+        )
+
+        image = Image(plot_bmask, width=7.4803 * inch, height=1.5 * inch)
+        image.hAlign = "CENTER"
+        self.report.append(image)
+
+        self.report.append(Spacer(0 * mm, 5 * mm))
+        self.report.append(
+            Paragraph(
+                "Hat mask",
+                self.styles["Left2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+
+        plot_airmask = plot_segmentation(
+            self.anat,
+            self.air_mask,
+            out_dir=tmpdir.name,
+            name="PlotAirmask",
+            cut_coords=6,
+            display_mode="x",
+            levels=[0.5],
+            colors=["r"],
+        )
+
+        image = Image(plot_airmask, width=7.4803 * inch, height=1.5 * inch)
+        image.hAlign = "CENTER"
+        self.report.append(image)
+
+        self.report.append(Spacer(0 * mm, 5 * mm))
+        self.report.append(
+            Paragraph(
+                "Head outline",
+                self.styles["Left2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+
+        plot_headmask = plot_segmentation(
+            self.anat,
+            self.head_mask,
+            out_dir=tmpdir.name,
+            name="PlotHeadmask",
+            cut_coords=6,
+            display_mode="x",
+            levels=[0.5],
+            colors=["r"],
+        )
+
+        image = Image(plot_headmask, width=7.4803 * inch, height=1.5 * inch)
+        image.hAlign = "CENTER"
+        self.report.append(image)
+
+        self.report.append(Spacer(0 * mm, 5 * mm))
+        self.report.append(
+            Paragraph(
+                "Artifacts in background",
+                self.styles["Left2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+
+        plot_artmask = plot_segmentation(
+            self.anat,
+            self.art_mask,
+            out_dir=tmpdir.name,
+            name="PlotArtmask",
+            cut_coords=9,
+            display_mode="z",
+            levels=[0.5],
+            colors=["r"],
+            saturate=True,
+        )
+
+        image = Image(plot_artmask, width=7.4803 * inch, height=1.5 * inch)
+        image.hAlign = "CENTER"
+        self.report.append(image)
+
+        self.report.append(PageBreak())
+
+        # Tenth page - qi2 plot #####
+        #######################################################################
+        self.report.append(
+            Paragraph(
+                "<font size = 18 > <b>Distribution of the noise in "
+                "the background</b> </font>",
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 10 * mm))
+
+        qi2 = plot_qi2(
             np.asarray(self.iqms_data["histogram_qi2_x_grid"]),
             np.asarray(self.iqms_data["histogram_qi2_ref_pdf"]),
             np.asarray(self.iqms_data["histogram_qi2_fit_pdf"]),
             np.asarray(self.iqms_data["histogram_qi2_ref_data"]),
             int(self.iqms_data["histogram_qi2_cutoff_idx"]),
             out_file=os.path.join(
-                os.path.split(os.path.split(self.anat)[0])[0],
-                "derived_data",
-                "qi2_plot.svg",
+                tmpdir.name,
+                "qi2_plot.png",
             ),
         )
+        image = Image(qi2, width=7.4803 * inch, height=5 * inch)
+        image.hAlign = "CENTER"
+        self.report.append(image)
 
         self.page.build(self.report, canvasmaker=PageNumCanvas)
         tmpdir.cleanup()
@@ -1464,6 +1681,7 @@ class Report:
         )
         slices_image.hAlign = "CENTER"
         self.report.append(slices_image)
+        self.report.append(PageBreak())
 
         # Eighth page - slice planes display - stddev #####
         #######################################################################
@@ -1563,6 +1781,63 @@ class Report:
         )
         slices_image.hAlign = "CENTER"
         self.report.append(slices_image)
+        self.report.append(PageBreak())
+
+        # Nineth page - slice planes display - Segmentation #####
+        #######################################################################
+        self.report.append(
+            Paragraph(
+                "<font size = 18 > <b>MRI " "display</b> </font>",
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        line = ReportLine(150)
+        line.hAlign = "CENTER"
+        self.report.append(line)
+        self.report.append(Spacer(0 * mm, 5 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size = 14 > Anatomical "
+                "image with segmentation</font>",
+                self.styles["Center"],
+            )
+        )
+
+        self.report.append(Spacer(0 * mm, 5 * mm))
+        self.report.append(
+            Paragraph(
+                '<font size = 9 > <i> "Neurological" '
+                "convention, the left side of the "
+                "image corresponds to the left side of "
+                "the brain. </i> <br/> </font>",
+                self.styles["Center"],
+            )
+        )
+
+        self.report.append(Spacer(0 * mm, 5 * mm))
+        self.report.append(
+            Paragraph(
+                "Brain mask",
+                self.styles["Left2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+
+        plot_bmask = plot_segmentation(
+            self.func_mean,
+            self.brain_mask,
+            out_dir=tmpdir.name,
+            name="PlotBrainmask",
+            cut_coords=9,
+            display_mode="z",
+            levels=[0.5],
+            colors=["r"],
+        )
+
+        image = Image(plot_bmask, width=7.4803 * inch, height=1.5 * inch)
+        image.hAlign = "CENTER"
+        self.report.append(image)
 
         self.page.build(self.report, canvasmaker=PageNumCanvas)
         tmpdir.cleanup()

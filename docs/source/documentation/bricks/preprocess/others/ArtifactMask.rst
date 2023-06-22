@@ -33,7 +33,7 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
 
     ::
 
-      ex. '/home/username/data/raw_data/T1w_outskin_mask.nii'
+      ex. '/home/username/data/derived_data/T1w_outskin_mask.nii'
 
 - *nasion_post_mask* (a string representing an existing file)
     Template mask registred in the in-file space (valid extensions: [.nii, .nii.gz]).
@@ -41,7 +41,7 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
 
     ::
 
-      ex. '/home/username/data/raw_data/t_tpl-MNI152NLin2009cAsym_res-01_desc-head_mask.nii'
+      ex. '/home/username/data/derived_data/t_tpl-MNI152NLin2009cAsym_res-01_desc-head_mask.nii'
 
 **Optional inputs with default value parameters:**
 
@@ -59,7 +59,7 @@ Adapted from `mriqc <https://mriqc.readthedocs.io/en/22.0.6//>`_ anatomical work
 
     ::
 
-      ex. '/home/username/data/raw_data/T1w_rotmasked.nii'
+      ex. '/home/username/data/derived_data/T1w_rotmasked.nii'
 
 **Outputs parameters:**
 

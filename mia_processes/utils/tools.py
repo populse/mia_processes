@@ -37,6 +37,8 @@ import numpy as np
 import pandas as pd
 from matplotlib.cm import get_cmap
 from mpl_toolkits.axes_grid1 import ImageGrid
+from nilearn.plotting import plot_anat
+from nitransforms.io.afni import _dicom_real_to_card
 from populse_mia.data_manager.data_history_inspect import data_history_pipeline
 from populse_mia.data_manager.project import (
     COLLECTION_CURRENT,
@@ -355,9 +357,64 @@ def plot_qi2(x_grid, ref_pdf, fit_pdf, ref_data, cutoff_idx, out_file=None):
     plt.legend()
 
     if out_file is None:
-        out_file = os.path.abspath("qi2_plot.svg")
+        out_file = os.path.abspath("qi2_plot.png")
 
     fig.savefig(out_file, bbox_inches="tight", pad_inches=0, dpi=300)
+    return out_file
+
+
+def plot_segmentation(anat_file, segmentation, name, out_dir=None, **kwargs):
+    """
+    Adapted from
+    <https://github.com/nipreps/mriqc/blob/5a0f0408bd0c176dbc46088c6ffe279269180f3f/mriqc/viz/utils.py#L550>
+    """
+
+    vmax = kwargs.get("vmax")
+    vmin = kwargs.get("vmin")
+
+    anat_ras = nib.as_closest_canonical(nib.load(anat_file))
+    anat_ras_plumb = anat_ras.__class__(
+        anat_ras.dataobj, _dicom_real_to_card(anat_ras.affine), anat_ras.header
+    )
+
+    seg_ras = nib.as_closest_canonical(nib.load(segmentation))
+    seg_ras_plumb = seg_ras.__class__(
+        seg_ras.dataobj, _dicom_real_to_card(seg_ras.affine), seg_ras.header
+    )
+
+    if kwargs.get("saturate", False):
+        vmax = np.percentile(anat_ras.get_fdata().reshape(-1), 70)
+
+    if vmax is None and vmin is None:
+        vmin = np.percentile(anat_ras.get_fdata().reshape(-1), 10)
+        vmax = np.percentile(anat_ras.get_fdata().reshape(-1), 99)
+
+    disp = plot_anat(
+        anat_ras_plumb,
+        display_mode=kwargs.get("display_mode", "ortho"),
+        cut_coords=kwargs.get("cut_coords", 8),
+        title=kwargs.get("title"),
+        vmax=vmax,
+        vmin=vmin,
+    )
+    disp.add_contours(
+        seg_ras_plumb,
+        levels=kwargs.get("levels", [1]),
+        colors=kwargs.get("colors", "r"),
+    )
+
+    fname, ext = os.path.splitext(os.path.basename(anat_file))
+
+    if out_dir is None:
+        out_file = os.path.abspath(fname + "_slice_planes_plot.png")
+
+    else:
+        out_file = os.path.join(out_dir, fname + name + ".png")
+
+    disp.savefig(out_file)
+    disp.close()
+    disp = None
+
     return out_file
 
 
@@ -432,6 +489,7 @@ def slice_planes_plot(
     cmap="Greys_r",
     out_dir=None,
     only_noise=False,
+    out_name=None,
 ):
     "blablabla"
 
@@ -633,6 +691,8 @@ def slice_planes_plot(
         )
 
     fname, ext = os.path.splitext(os.path.basename(data))
+    if out_name:
+        fname += "_" + out_name
 
     if out_dir is None:
         out_file = os.path.abspath(fname + "_slice_planes_plot.png")
