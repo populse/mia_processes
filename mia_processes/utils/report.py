@@ -1055,7 +1055,7 @@ class Report:
         #######################################################################
         self.report.append(
             Paragraph(
-                "<font size = 18 > <b>MRI " "display</b> </font>",
+                "<font size = 18 > <b>MRI display</b> </font>",
                 self.styles["Center"],
             )
         )
@@ -1202,21 +1202,33 @@ class Report:
         image.hAlign = "CENTER"
         self.report.append(image)
 
-        # FIXME: Currently, we make and save (in derived_data) the
-        # qi2 graph, but we don't include it in the report because
-        # the result with the test data looks strange.
-        _ = plot_qi2(
+        self.report.append(PageBreak())
+
+        # Tenth page - qi2 plot #####
+        #######################################################################
+        self.report.append(
+            Paragraph(
+                "<font size = 18 > <b>Distribution of the noise in "
+                "the background</b> </font>",
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 10 * mm))
+
+        qi2 = plot_qi2(
             np.asarray(self.iqms_data["histogram_qi2_x_grid"]),
             np.asarray(self.iqms_data["histogram_qi2_ref_pdf"]),
             np.asarray(self.iqms_data["histogram_qi2_fit_pdf"]),
             np.asarray(self.iqms_data["histogram_qi2_ref_data"]),
             int(self.iqms_data["histogram_qi2_cutoff_idx"]),
             out_file=os.path.join(
-                os.path.split(os.path.split(self.anat)[0])[0],
-                "derived_data",
-                os.path.basename(self.anat) + "_qi2_plot.svg",
+                tmpdir.name,
+                "qi2_plot.png",
             ),
         )
+        image = Image(qi2, width=7.4803 * inch, height=5 * inch)
+        image.hAlign = "CENTER"
+        self.report.append(image)
 
         self.page.build(self.report, canvasmaker=PageNumCanvas)
         tmpdir.cleanup()

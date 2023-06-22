@@ -357,7 +357,7 @@ def plot_qi2(x_grid, ref_pdf, fit_pdf, ref_data, cutoff_idx, out_file=None):
     plt.legend()
 
     if out_file is None:
-        out_file = os.path.abspath("qi2_plot.svg")
+        out_file = os.path.abspath("qi2_plot.png")
 
     fig.savefig(out_file, bbox_inches="tight", pad_inches=0, dpi=300)
     return out_file
