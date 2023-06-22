@@ -35,12 +35,12 @@
 <table class="docutils align-default">
 <colgroup>
 <col style="width: 25%" />
-<col style="width: 35%" />
-<col style="width: 40%" />
+<col style="width: 34%" />
+<col style="width: 41%" />
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference external" href="../../../../index.html">Home</a></p></td>
-<td><p><a class="reference external" href="../../../documentation.html">Documentation</a></p></td>
+<td><p><a class="reference external" href="../../documentation.html">Documentation</a></p></td>
 <td><p><a class="reference external" href="https://github.com/populse/mia_processes">GitHub</a></p></td>
 </tr>
 </tbody>
@@ -62,6 +62,46 @@
 <li><dl>
 <dt><em>IQMs_file</em> (a string representing an existing file)</dt><dd><p>A .json file containing the IQMs (valid extensions: [.json]).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/T1w_anat_qc.json&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>art_mask</em> (a pathlike object or string representing a file)</dt><dd><p>Artifact mask image (extensions: [.nii, .nii.gz]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/art_T1w_mask.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>air_mask</em> (a pathlike object or string representing a file)</dt><dd><p>Air mask (“hat” mask without artifacts) image.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/air_T1w_mask.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>brain_mask</em> (a string representing an existing file)</dt><dd><p>Mask image.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/pre_n4c_T1W_clipped_desc-brain.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>head_mask</em> (a pathlike object or string representing a file)</dt><dd><p>Outskin mask (extensions: [.nii, .nii.gz])</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/T1w_brain_outskin_mask.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>segmentation</em> (a string representing an existing file)</dt><dd><p>Segmentation mask (valid extensions: [.nii, .nii.gz]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/ss_n4c_T1w_clippep_seg.nii&#39;</span>
 </pre></div>
 </div>
 </dd>
