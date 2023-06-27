@@ -12,6 +12,10 @@ in populse_mia.
         - EstimateContrast
         - EstimateModel
         - Level1Design
+        - MultipleRegressionDesign
+        - OneSampleTTestDesign
+        - PairedTTestDesign
+        - TwoSampleTTestDesign
 
 """
 
@@ -2406,3 +2410,1645 @@ class Level1Design(ProcessMIA):
         self.process.model_serial_correlations = self.model_serial_correlations
 
         return self.process.run(configuration_dict={})
+
+
+class MultipleRegressionDesign(ProcessMIA):
+    """
+    *Create SPM design for multiple regression*
+
+    Please, see the complete documentation for the `MultipleRegressionDesign
+    brick in the populse.mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/stats/spm/MultipleRegressionDesign.html>`_
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation / instantiation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(MultipleRegressionDesign, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = ["spm", "nipype"]
+
+        # Inputs description
+        in_files_desc = (
+            "Input contrasts files (a list of at least 2 items which are a "
+            "string representing an existing file)"
+        )
+        out_dir_name_desc = "Name of the output directory"
+        include_intercept_desc = "Include intercept in design. (a bolean)"
+        user_covariates_vectors_desc = (
+            "Covariates vector (a list of list of float)"
+        )
+        user_covariates_names_desc = "Covariates names (a list of string)"
+        user_covariates_centerings_desc = (
+            "Covariates centering (a list among 1 (Overall mean), "
+            "2 (No centering)"
+        )
+        covariates_vectors_desc = "Covariates vector (a list of list of float)"
+        covariates_names_desc = "Covariates names (a list of string)"
+        covariates_interactions_desc = (
+            "Covariates interaction (a list of int among 1 (None), "
+            "2 (With factor 1), 3 (With factor 2),4 (With factor 3))"
+        )
+        covariates_centerings_desc = (
+            "Covariates centering (one of 1 (Overall mean), "
+            "2 (Factor 1 mean), 3 (Factor 2 mean), 4 (Factor 3 mean), "
+            "5 (No centering), 6 (User specified value), "
+            "7 (As implied by ANCOVA), 8 (GM))"
+        )
+        threshold_masking_desc = (
+            "Threshold mask (a string among none, " "absolute, relative)"
+        )
+        threshold_mask_value_desc = "Threshold value (a float)"
+        use_implicit_mask_desc = (
+            "Use implicit mask NaNs or zeros to threshold. (a boolean)"
+        )
+        explicit_mask_file_desc = (
+            "Mask file to applied (a string that represent " "a path)"
+        )
+        global_calc_desc = (
+            "Global calculation (a string among omit, mean, value)"
+        )
+        global_calc_values_desc = (
+            "Vector of global value (only if global_cal is set " "to User)"
+        )
+        normalisation_desc = (
+            "Normalisation type (one of 1 (None) , 2 (proportional), "
+            "3 (ancova))"
+        )
+        no_grand_mean_scaling_desc = (
+            "Do not perform grand mean scaling. (a boolean) "
+        )
+
+        # Outputs description
+        spm_mat_file_desc = (
+            "SPM.mat file (a pathlike object or string " "representing a file"
+        )
+
+        # Inputs traits
+        self.add_trait(
+            "in_files",
+            InputMultiPath(
+                File(), output=False, copyfile=False, desc=in_files_desc
+            ),
+        )
+
+        self.add_trait(
+            "out_dir_name",
+            traits.String(
+                "spm_stat_2ndLevel",
+                output=False,
+                optional=True,
+                desc=out_dir_name_desc,
+            ),
+        )
+
+        self.add_trait(
+            "include_intercept",
+            traits.Bool(
+                True,
+                usedefault=True,
+                output=False,
+                optional=True,
+                desc=include_intercept_desc,
+            ),
+        )
+
+        self.add_trait(
+            "users_covariates_names",
+            traits.List(
+                traits.String(),
+                output=False,
+                optional=True,
+                desc=user_covariates_names_desc,
+            ),
+        )
+
+        self.add_trait(
+            "users_covariates_vectors",
+            traits.List(
+                traits.List(traits.Float()),
+                output=False,
+                optional=True,
+                desc=user_covariates_vectors_desc,
+            ),
+        )
+
+        self.add_trait(
+            "user_covariates_centerings",
+            traits.List(
+                traits.Either(traits.Enum(1, 2), None),
+                output=False,
+                optional=True,
+                value=[],
+                desc=user_covariates_centerings_desc,
+            ),
+        )
+
+        self.add_trait(
+            "covariates_names",
+            traits.List(
+                traits.String(),
+                output=False,
+                optional=True,
+                desc=covariates_names_desc,
+            ),
+        )
+
+        self.add_trait(
+            "covariates_vectors",
+            traits.List(
+                traits.List(traits.Float()),
+                output=False,
+                optional=True,
+                desc=covariates_vectors_desc,
+            ),
+        )
+
+        self.add_trait(
+            "covariates_interactions",
+            traits.List(
+                traits.Either(traits.Enum(1, 2, 3, 4), None),
+                output=False,
+                optional=True,
+                value=[],
+                desc=covariates_interactions_desc,
+            ),
+        )
+
+        self.add_trait(
+            "covariates_centerings",
+            traits.List(
+                traits.Either(traits.Enum(1, 2, 3, 4, 5, 6, 7, 8), None),
+                output=False,
+                optional=True,
+                value=[],
+                desc=covariates_centerings_desc,
+            ),
+        )
+
+        self.add_trait(
+            "threshold_masking",
+            traits.Enum(
+                "None",
+                "Absolute",
+                "Relative",
+                output=False,
+                optional=True,
+                usedefault=True,
+                desc=threshold_masking_desc,
+            ),
+        )
+
+        self.add_trait(
+            "threshold_mask_value",
+            traits.Either(
+                Undefined,
+                traits.Float(),
+                output=False,
+                optional=True,
+                usedefault=True,
+                desc=threshold_mask_value_desc,
+            ),
+        )
+
+        self.add_trait(
+            "use_implicit_mask",
+            traits.Bool(
+                True,
+                usedefault=True,
+                output=False,
+                optional=True,
+                desc=use_implicit_mask_desc,
+            ),
+        )
+
+        self.add_trait(
+            "explicit_mask_file",
+            traits.File(
+                output=False,
+                optional=True,
+                desc=explicit_mask_file_desc,
+            ),
+        )
+
+        self.add_trait(
+            "global_calc",
+            traits.Enum(
+                "Omit",
+                "Mean",
+                "User",
+                output=False,
+                optional=True,
+                usedefault=True,
+                desc=global_calc_desc,
+            ),
+        )
+
+        self.add_trait(
+            "global_calc_values",
+            traits.Either(
+                Undefined,
+                traits.List(
+                    traits.Float(),
+                ),
+                output=False,
+                optional=True,
+                desc=global_calc_values_desc,
+            ),
+        )
+
+        self.add_trait(
+            "no_grand_mean_scaling",
+            traits.Bool(
+                True,
+                usedefault=True,
+                output=False,
+                optional=True,
+                desc=no_grand_mean_scaling_desc,
+            ),
+        )
+
+        self.add_trait(
+            "normalisation",
+            traits.Enum(
+                1,
+                2,
+                3,
+                output=False,
+                optional=True,
+                usedefault=True,
+                desc=normalisation_desc,
+            ),
+        )
+
+        # Output traits
+        self.add_trait(
+            "spm_mat_file", File(output=True, desc=spm_mat_file_desc)
+        )
+
+        # Special parameter used as a messenger for the run_process_mia method
+        self.add_trait(
+            "dict4runtime",
+            traits.Dict(output=False, optional=True, userlevel=1),
+        )
+
+        self.init_default_traits()
+        self.init_process("nipype.interfaces.spm.MultipleRegressionDesign")
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dict),
+        The optional self.inheritance_dict can have two structures. On the one
+        hand it can be a dictionary whose keys are the documents to inherit
+        metadata and the values the documents used for the inheritance of
+        these metadata. On the other hand, it can be a dictionary whose keys
+        are the documents to inherit metadata and the values are dictionary
+        with two keys; parent (for usual inheritance) or own_tags (to add a
+        new tag or modify an existing one). In order not to include an output
+        in the database, the name of the plug related to this output must be
+        an element of the list corresponding to the value of the optional key
+        "notInDb" of the self.outputs dictionary. To work properly this method
+        must return self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(MultipleRegressionDesign, self).list_outputs()
+
+        # global_calc_values only if global_calc set to "User"
+        if (self.global_calc) == "User" and (
+            self.global_cal_value in ["<undefined>", Undefined]
+        ):
+            print(
+                "Initialization failed... If global_cal set to User, "
+                "required global_cal_value parameter"
+            )
+            return self.make_initResult()
+
+        # If threshold_masking set to Absoulte or Relative
+        # threshold_mask_value should be specified
+        if (
+            self.threshold_masking == "Relative"
+            or self.threshold_masking == "Absolute"
+        ) and (self.threshold_mask_value in ["<undefined>", Undefined]):
+            print(
+                "Initialization failed... If threshold_masking set to  "
+                "Relative or Absoulte, required threshold_mask_value "
+                "parameter"
+            )
+            return self.make_initResult()
+
+        # Check in_files lenght
+        if len(self.in_files) < 2:
+            print(
+                "Initialization failed... "
+                "At least 2 files should be used for in_files"
+            )
+            return self.make_initResult()
+
+        # Check covariates
+        if self.user_covariates_names:
+            user_covariates = get_covariates(
+                self.user_covariates_names,
+                self.user_covariates_vectors,
+                self.user_covariates_centerings,
+            )
+            if user_covariates is None:
+                print(
+                    "Initialization failed... "
+                    "Name, vector, centering should be defined "
+                    "for each covariate"
+                )
+                return self.make_initResult()
+        if self.covariates_names:
+            covariates = get_covariates(
+                self.covariates_names,
+                self.covariates_vectors,
+                self.covariates_centerings,
+                interactions=self.covariates_interactions,
+            )
+            if covariates is None:
+                print(
+                    "Initialization failed... "
+                    "Name, vector, centering, intercation should be defined "
+                    "for each covariate"
+                )
+                return self.make_initResult()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.in_files:
+            # The management of self.process.output_directory could be
+            # delegated to the
+            # populse_mia.user_interface.pipeline_manager.process_mia
+            # module. We can't do it at the moment because the
+            # sync_process_output_traits() of the
+            # capsul/process/nipype_process module raises an exception
+            # in nipype if the mandatory parameter are not yet defined!
+            if not self.out_dir_name:
+                self.out_dir_name = "spm_stat_2ndLevel"
+            out_directory = os.path.join(
+                self.output_directory, self.out_dir_name
+            )
+
+            if self.output_directory:
+                # Create a directory for this analysis
+                if not os.path.exists(out_directory):
+                    os.mkdir(out_directory)
+                self.process.output_directory = out_directory
+                self.dict4runtime["out_directory"] = out_directory
+            else:
+                print("No output_directory was found...!\n")
+                return self.make_initResult()
+
+            self.outputs["spm_mat_file"] = os.path.join(
+                out_directory, "SPM.mat"
+            )
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(MultipleRegressionDesign, self).run_process_mia()
+
+        self.process.spm_mat_dir = self.dict4runtime["out_directory"]
+        self.process.in_files = self.in_files
+        self.process.include_intercept = self.include_intercept
+        if self.user_covariates_names:
+            self.process.user_covariates = get_covariates(
+                self.user_covariates_names,
+                self.user_covariates_vectors,
+                self.user_covariates_centerings,
+            )
+
+        if self.covariates_names:
+            self.process.covariates = get_covariates(
+                self.covariates_names,
+                self.covariates_vectors,
+                self.covariates_centerings,
+                interactions=self.covariates_interactions,
+            )
+        if self.threshold_masking == "None":
+            self.process.threshold_mask_none = True
+        elif self.threshold_masking == "Relative":
+            self.process.threshold_mask_relative = self.threshold_mask_value
+        elif self.threshold_masking == "Absolute":
+            self.process.threshold_mask_absolute = self.threshold_mask_value
+        self.process.use_implicit_threshold = self.use_implicit_mask
+        if self.explicit_mask_file:
+            self.process.explicit_mask_file = self.explicit_mask_file
+        if self.global_calc == "Omit":
+            self.process.global_calc_omit = True
+        elif self.global_calc == "Mean":
+            self.process.global_calc_mean = True
+        elif self.global_calc == "User":
+            self.process.global_calc_values = self.global_calc_values
+        self.process.no_grand_mean_scaling = self.no_grand_mean_scaling
+        self.process.global_normalization = self.normalisation
+
+        return self.process.run(configuration_dict={})
+
+
+class OneSampleTTestDesign(ProcessMIA):
+    """
+    *Create SPM design for one sample t-test*
+
+    Please, see the complete documentation for the `OneSampleTTestDesign brick
+    in the populse.mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/stats/spm/OneSampleTTestDesign.html>`_
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation / instantiation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(OneSampleTTestDesign, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = ["spm", "nipype"]
+
+        # Inputs description
+        in_files_desc = (
+            "Input contrasts files (a list of at least 2 items which are a "
+            "string representing an existing file)"
+        )
+        out_dir_name_desc = "Name of the output directory"
+        covariates_vectors_desc = "Covariates vector (a list of list of float)"
+        covariates_names_desc = "Covariates names (a list of string)"
+        covariates_interactions_desc = (
+            "Covariates interaction (a list of int among 1 (None), "
+            "2 (With factor 1), 3 (With factor 2),4 (With factor 3))"
+        )
+        covariates_centerings_desc = (
+            "Covariates centering (a list of string among 1 (Overall mean), "
+            "2 (Factor 1 mean), 3 (Factor 2 mean), 4 (Factor 3 mean), "
+            "5 (No centering), 6 (User specified value), "
+            "7 (As implied by ANCOVA), 8 (GM))"
+        )
+        threshold_masking_desc = (
+            "Threshold mask (a string among none, " "absolute, relative)"
+        )
+        threshold_mask_value_desc = "Threshold value (a float)"
+        use_implicit_mask_desc = (
+            "Use implicit mask NaNs or zeros to threshold. (a boolean)"
+        )
+        explicit_mask_file_desc = (
+            "Mask file to applied (a string that represent " "a path)"
+        )
+        global_calc_desc = (
+            "Global calculation (a string among omit, mean, value)"
+        )
+        global_calc_values_desc = (
+            "Vector of global value (only if global_cal is set " "to User)"
+        )
+        normalisation_desc = (
+            "Normalisation type (one of 1 (None) , 2 (proportional), "
+            "3 (ancova))"
+        )
+        no_grand_mean_scaling_desc = (
+            "Do not perform grand mean scaling. (a boolean) "
+        )
+
+        # Outputs description
+        spm_mat_file_desc = (
+            "SPM.mat file (a pathlike object or string " "representing a file"
+        )
+
+        # Inputs traits
+        self.add_trait(
+            "in_files",
+            InputMultiPath(
+                File(), output=False, copyfile=False, desc=in_files_desc
+            ),
+        )
+
+        self.add_trait(
+            "out_dir_name",
+            traits.String(
+                "spm_stat_2ndLevel",
+                output=False,
+                optional=True,
+                desc=out_dir_name_desc,
+            ),
+        )
+
+        self.add_trait(
+            "covariates_names",
+            traits.List(
+                traits.String(),
+                output=False,
+                optional=True,
+                desc=covariates_names_desc,
+            ),
+        )
+
+        self.add_trait(
+            "covariates_vectors",
+            traits.List(
+                traits.List(traits.Float()),
+                output=False,
+                optional=True,
+                desc=covariates_vectors_desc,
+            ),
+        )
+
+        self.add_trait(
+            "covariates_interactions",
+            traits.List(
+                traits.Either(traits.Enum(1, 2, 3, 4), None),
+                output=False,
+                optional=True,
+                value=[],
+                desc=covariates_interactions_desc,
+            ),
+        )
+
+        self.add_trait(
+            "covariates_centerings",
+            traits.List(
+                traits.Either(traits.Enum(1, 2, 3, 4, 5, 6, 7, 8), None),
+                output=False,
+                optional=True,
+                value=[],
+                desc=covariates_centerings_desc,
+            ),
+        )
+
+        self.add_trait(
+            "threshold_masking",
+            traits.Enum(
+                "None",
+                "Absolute",
+                "Relative",
+                output=False,
+                optional=True,
+                usedefault=True,
+                desc=threshold_masking_desc,
+            ),
+        )
+
+        self.add_trait(
+            "threshold_mask_value",
+            traits.Either(
+                Undefined,
+                traits.Float(),
+                output=False,
+                optional=True,
+                usedefault=True,
+                desc=threshold_mask_value_desc,
+            ),
+        )
+
+        self.add_trait(
+            "use_implicit_mask",
+            traits.Bool(
+                True,
+                usedefault=True,
+                output=False,
+                optional=True,
+                desc=use_implicit_mask_desc,
+            ),
+        )
+
+        self.add_trait(
+            "explicit_mask_file",
+            traits.File(
+                output=False,
+                optional=True,
+                desc=explicit_mask_file_desc,
+            ),
+        )
+
+        self.add_trait(
+            "global_calc",
+            traits.Enum(
+                "Omit",
+                "Mean",
+                "User",
+                output=False,
+                optional=True,
+                usedefault=True,
+                desc=global_calc_desc,
+            ),
+        )
+
+        self.add_trait(
+            "global_calc_values",
+            traits.Either(
+                Undefined,
+                traits.List(
+                    traits.Float(),
+                ),
+                output=False,
+                optional=True,
+                desc=global_calc_values_desc,
+            ),
+        )
+
+        self.add_trait(
+            "no_grand_mean_scaling",
+            traits.Bool(
+                True,
+                usedefault=True,
+                output=False,
+                optional=True,
+                desc=no_grand_mean_scaling_desc,
+            ),
+        )
+
+        self.add_trait(
+            "normalisation",
+            traits.Enum(
+                1,
+                2,
+                3,
+                output=False,
+                optional=True,
+                usedefault=True,
+                desc=normalisation_desc,
+            ),
+        )
+
+        # Output traits
+        self.add_trait(
+            "spm_mat_file", File(output=True, desc=spm_mat_file_desc)
+        )
+
+        # Special parameter used as a messenger for the run_process_mia method
+        self.add_trait(
+            "dict4runtime",
+            traits.Dict(output=False, optional=True, userlevel=1),
+        )
+
+        self.init_default_traits()
+        self.init_process("nipype.interfaces.spm.OneSampleTTestDesign")
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dict),
+        The optional self.inheritance_dict can have two structures. On the one
+        hand it can be a dictionary whose keys are the documents to inherit
+        metadata and the values the documents used for the inheritance of
+        these metadata. On the other hand, it can be a dictionary whose keys
+        are the documents to inherit metadata and the values are dictionary
+        with two keys; parent (for usual inheritance) or own_tags (to add a
+        new tag or modify an existing one). In order not to include an output
+        in the database, the name of the plug related to this output must be
+        an element of the list corresponding to the value of the optional key
+        "notInDb" of the self.outputs dictionary. To work properly this method
+        must return self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(OneSampleTTestDesign, self).list_outputs()
+
+        # global_calc_values only if global_calc set to "User"
+        if (self.global_calc) == "User" and (
+            self.global_cal_value in ["<undefined>", Undefined]
+        ):
+            print(
+                "Initialization failed... If global_cal set to User, "
+                "required global_cal_value parameter"
+            )
+            return self.make_initResult()
+
+        # If threshold_masking set to Absoulte or Relative
+        # threshold_mask_value should be specified
+        if (
+            self.threshold_masking == "Relative"
+            or self.threshold_masking == "Absolute"
+        ) and (self.threshold_mask_value in ["<undefined>", Undefined]):
+            print(
+                "Initialization failed... If threshold_masking set to  "
+                "Relative or Absoulte, required threshold_mask_value "
+                "parameter"
+            )
+            return self.make_initResult()
+
+        # Check in_files lenght
+        if len(self.in_files) < 2:
+            print(
+                "Initialization failed... "
+                "At least 2 files should be used for in_files"
+            )
+            return self.make_initResult()
+
+        # Check covariates
+        if self.covariates_names:
+            covariates = get_covariates(
+                self.covariates_names,
+                self.covariates_vectors,
+                self.covariates_centerings,
+                interactions=self.covariates_interactions,
+            )
+            if covariates is None:
+                print(
+                    "Initialization failed... "
+                    "Name, vector, centering, intercation should be defined "
+                    "for each covariate"
+                )
+                return self.make_initResult()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.in_files:
+            # The management of self.process.output_directory could be
+            # delegated to the
+            # populse_mia.user_interface.pipeline_manager.process_mia
+            # module. We can't do it at the moment because the
+            # sync_process_output_traits() of the
+            # capsul/process/nipype_process module raises an exception
+            # in nipype if the mandatory parameter are not yet defined!
+            if not self.out_dir_name:
+                self.out_dir_name = "spm_stat_2ndLevel"
+            out_directory = os.path.join(
+                self.output_directory, self.out_dir_name
+            )
+
+            if self.output_directory:
+                # Create a directory for this analysis
+                if not os.path.exists(out_directory):
+                    os.mkdir(out_directory)
+                self.process.output_directory = out_directory
+                self.dict4runtime["out_directory"] = out_directory
+            else:
+                print("No output_directory was found...!\n")
+                return self.make_initResult()
+
+            self.outputs["spm_mat_file"] = os.path.join(
+                out_directory, "SPM.mat"
+            )
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(OneSampleTTestDesign, self).run_process_mia()
+
+        self.process.spm_mat_dir = self.dict4runtime["out_directory"]
+        self.process.in_files = self.in_files
+        if self.covariates_names:
+            self.process.covariates = get_covariates(
+                self.covariates_names,
+                self.covariates_vectors,
+                self.covariates_centerings,
+                interactions=self.covariates_interactions,
+            )
+        if self.threshold_masking == "None":
+            self.process.threshold_mask_none = True
+        elif self.threshold_masking == "Relative":
+            self.process.threshold_mask_relative = self.threshold_mask_value
+        elif self.threshold_masking == "Absolute":
+            self.process.threshold_mask_absolute = self.threshold_mask_value
+        self.process.use_implicit_threshold = self.use_implicit_mask
+        if self.explicit_mask_file:
+            self.process.explicit_mask_file = self.explicit_mask_file
+        if self.global_calc == "Omit":
+            self.process.global_calc_omit = True
+        elif self.global_calc == "Mean":
+            self.process.global_calc_mean = True
+        elif self.global_calc == "User":
+            self.process.global_calc_values = self.global_calc_values
+        self.process.no_grand_mean_scaling = self.no_grand_mean_scaling
+        self.process.global_normalization = self.normalisation
+
+        return self.process.run(configuration_dict={})
+
+
+class PairedTTestDesign(ProcessMIA):
+    """
+    *Create SPM design for one sample t-test*
+
+    Please, see the complete documentation for the `OneSampleTTestDesign brick
+    in the populse.mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/stats/spm/OneSampleTTestDesign.html>`_
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation / instantiation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(PairedTTestDesign, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = ["spm", "nipype"]
+
+        # Inputs description
+        paired_files_desc = (
+            "Input paired files (a list of list with 2 items which are a "
+            "string representing an existing file)"
+        )
+        out_dir_name_desc = "Name of the output directory"
+        covariates_vectors_desc = "Covariates vector (a list of list of float)"
+        covariates_names_desc = "Covariates names (a list of string)"
+        covariates_interactions_desc = (
+            "Covariates interaction (a list of int among 1 (None), "
+            "2 (With factor 1), 3 (With factor 2),4 (With factor 3))"
+        )
+        covariates_centerings_desc = (
+            "Covariates centering (a list of string among 1 (Overall mean), "
+            "2 (Factor 1 mean), 3 (Factor 2 mean), 4 (Factor 3 mean), "
+            "5 (No centering), 6 (User specified value), "
+            "7 (As implied by ANCOVA), 8 (GM))"
+        )
+        threshold_masking_desc = (
+            "Threshold mask (a string among none, " "absolute, relative)"
+        )
+        threshold_mask_value_desc = "Threshold value (a float)"
+        use_implicit_mask_desc = (
+            "Use implicit mask NaNs or zeros to threshold. (a boolean)"
+        )
+        explicit_mask_file_desc = (
+            "Mask file to applied (a string that represent " "a path)"
+        )
+        global_calc_desc = (
+            "Global calculation (a string among omit, mean, value)"
+        )
+        global_calc_values_desc = (
+            "Vector of global value (only if global_cal is set " "to User)"
+        )
+        normalisation_desc = (
+            "Normalisation type (one of 1 (None) , 2 (proportional), "
+            "3 (ancova))"
+        )
+        no_grand_mean_scaling_desc = (
+            "Do not perform grand mean scaling. (a boolean) "
+        )
+
+        # Outputs description
+        spm_mat_file_desc = (
+            "SPM.mat file (a pathlike object or string " "representing a file"
+        )
+
+        # Inputs traits
+        self.add_trait(
+            "paired_files",
+            traits.List(
+                InputMultiPath(
+                    File(),
+                ),
+                output=False,
+                copyfile=False,
+                desc=paired_files_desc,
+            ),
+        )
+
+        self.add_trait(
+            "out_dir_name",
+            traits.String(
+                "spm_stat_2ndLevel",
+                output=False,
+                optional=True,
+                desc=out_dir_name_desc,
+            ),
+        )
+
+        self.add_trait(
+            "covariates_names",
+            traits.List(
+                traits.String(),
+                output=False,
+                optional=True,
+                desc=covariates_names_desc,
+            ),
+        )
+
+        self.add_trait(
+            "covariates_vectors",
+            traits.List(
+                traits.List(traits.Float()),
+                output=False,
+                optional=True,
+                desc=covariates_vectors_desc,
+            ),
+        )
+
+        self.add_trait(
+            "covariates_interactions",
+            traits.List(
+                traits.Either(traits.Enum(1, 2, 3, 4), None),
+                output=False,
+                optional=True,
+                value=[],
+                desc=covariates_interactions_desc,
+            ),
+        )
+
+        self.add_trait(
+            "covariates_centerings",
+            traits.List(
+                traits.Either(traits.Enum(1, 2, 3, 4, 5, 6, 7, 8), None),
+                output=False,
+                optional=True,
+                value=[],
+                desc=covariates_centerings_desc,
+            ),
+        )
+
+        self.add_trait(
+            "threshold_masking",
+            traits.Enum(
+                "None",
+                "Absolute",
+                "Relative",
+                output=False,
+                optional=True,
+                usedefault=True,
+                desc=threshold_masking_desc,
+            ),
+        )
+
+        self.add_trait(
+            "threshold_mask_value",
+            traits.Either(
+                Undefined,
+                traits.Float(),
+                output=False,
+                optional=True,
+                usedefault=True,
+                desc=threshold_mask_value_desc,
+            ),
+        )
+
+        self.add_trait(
+            "use_implicit_mask",
+            traits.Bool(
+                True,
+                usedefault=True,
+                output=False,
+                optional=True,
+                desc=use_implicit_mask_desc,
+            ),
+        )
+
+        self.add_trait(
+            "explicit_mask_file",
+            traits.File(
+                output=False,
+                optional=True,
+                desc=explicit_mask_file_desc,
+            ),
+        )
+
+        self.add_trait(
+            "global_calc",
+            traits.Enum(
+                "Omit",
+                "Mean",
+                "User",
+                output=False,
+                optional=True,
+                usedefault=True,
+                desc=global_calc_desc,
+            ),
+        )
+
+        self.add_trait(
+            "global_calc_values",
+            traits.Either(
+                Undefined,
+                traits.List(
+                    traits.Float(),
+                ),
+                output=False,
+                optional=True,
+                desc=global_calc_values_desc,
+            ),
+        )
+
+        self.add_trait(
+            "no_grand_mean_scaling",
+            traits.Bool(
+                True,
+                usedefault=True,
+                output=False,
+                optional=True,
+                desc=no_grand_mean_scaling_desc,
+            ),
+        )
+
+        self.add_trait(
+            "normalisation",
+            traits.Enum(
+                1,
+                2,
+                3,
+                output=False,
+                optional=True,
+                usedefault=True,
+                desc=normalisation_desc,
+            ),
+        )
+
+        # Output traits
+        self.add_trait(
+            "spm_mat_file", File(output=True, desc=spm_mat_file_desc)
+        )
+
+        # Special parameter used as a messenger for the run_process_mia method
+        self.add_trait(
+            "dict4runtime",
+            traits.Dict(output=False, optional=True, userlevel=1),
+        )
+
+        self.init_default_traits()
+        self.init_process("nipype.interfaces.spm.PairedTTestDesign")
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dict),
+        The optional self.inheritance_dict can have two structures. On the one
+        hand it can be a dictionary whose keys are the documents to inherit
+        metadata and the values the documents used for the inheritance of
+        these metadata. On the other hand, it can be a dictionary whose keys
+        are the documents to inherit metadata and the values are dictionary
+        with two keys; parent (for usual inheritance) or own_tags (to add a
+        new tag or modify an existing one). In order not to include an output
+        in the database, the name of the plug related to this output must be
+        an element of the list corresponding to the value of the optional key
+        "notInDb" of the self.outputs dictionary. To work properly this method
+        must return self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(PairedTTestDesign, self).list_outputs()
+
+        # global_calc_values only if global_calc set to "User"
+        if (self.global_calc) == "User" and (
+            self.global_cal_value in ["<undefined>", Undefined]
+        ):
+            print(
+                "Initialization failed... If global_cal set to User, "
+                "required global_cal_value parameter"
+            )
+            return self.make_initResult()
+
+        # If threshold_masking set to Absoulte or Relative
+        # threshold_mask_value should be specified
+        if (
+            self.threshold_masking == "Relative"
+            or self.threshold_masking == "Absolute"
+        ) and (self.threshold_mask_value in ["<undefined>", Undefined]):
+            print(
+                "Initialization failed... If threshold_masking set to  "
+                "Relative or Absoulte, required threshold_mask_value "
+                "parameter"
+            )
+            return self.make_initResult()
+
+        # Check in_files lenght
+        if len(self.paired_files[0]) < 2:
+            print(
+                "Initialization failed... "
+                "At least 2 files should be used for paired_files"
+            )
+            return self.make_initResult()
+
+        # Check covariates
+        if self.covariates_names:
+            covariates = get_covariates(
+                self.covariates_names,
+                self.covariates_vectors,
+                self.covariates_centerings,
+                interactions=self.covariates_interactions,
+            )
+            if covariates is None:
+                print(
+                    "Initialization failed... "
+                    "Name, vector, centering, intercation should be defined "
+                    "for each covariate"
+                )
+                return self.make_initResult()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.in_files:
+            # The management of self.process.output_directory could be
+            # delegated to the
+            # populse_mia.user_interface.pipeline_manager.process_mia
+            # module. We can't do it at the moment because the
+            # sync_process_output_traits() of the
+            # capsul/process/nipype_process module raises an exception
+            # in nipype if the mandatory parameter are not yet defined!
+            if not self.out_dir_name:
+                self.out_dir_name = "spm_stat_2ndLevel"
+            out_directory = os.path.join(
+                self.output_directory, self.out_dir_name
+            )
+
+            if self.output_directory:
+                # Create a directory for this analysis
+                if not os.path.exists(out_directory):
+                    os.mkdir(out_directory)
+                self.process.output_directory = out_directory
+                self.dict4runtime["out_directory"] = out_directory
+            else:
+                print("No output_directory was found...!\n")
+                return self.make_initResult()
+
+            self.outputs["spm_mat_file"] = os.path.join(
+                out_directory, "SPM.mat"
+            )
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(PairedTTestDesign, self).run_process_mia()
+
+        self.process.spm_mat_dir = self.dict4runtime["out_directory"]
+        self.process.paired_files = self.paired_files
+        if self.covariates_names:
+            self.process.covariates = get_covariates(
+                self.covariates_names,
+                self.covariates_vectors,
+                self.covariates_centerings,
+                interactions=self.covariates_interactions,
+            )
+        if self.threshold_masking == "None":
+            self.process.threshold_mask_none = True
+        elif self.threshold_masking == "Relative":
+            self.process.threshold_mask_relative = self.threshold_mask_value
+        elif self.threshold_masking == "Absolute":
+            self.process.threshold_mask_absolute = self.threshold_mask_value
+        self.process.use_implicit_threshold = self.use_implicit_mask
+        if self.explicit_mask_file:
+            self.process.explicit_mask_file = self.explicit_mask_file
+        if self.global_calc == "Omit":
+            self.process.global_calc_omit = True
+        elif self.global_calc == "Mean":
+            self.process.global_calc_mean = True
+        elif self.global_calc == "User":
+            self.process.global_calc_values = self.global_calc_values
+        self.process.no_grand_mean_scaling = self.no_grand_mean_scaling
+        self.process.global_normalization = self.normalisation
+
+        return self.process.run(configuration_dict={})
+
+
+class TwoSampleTTestDesign(ProcessMIA):
+    """
+    *Create SPM design for two sample t-test*
+
+    Please, see the complete documentation for the `TwoSampleTTestDesign brick
+    in the populse.mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/stats/spm/TwoSampleTTestDesign.html>`_
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation / instantiation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(TwoSampleTTestDesign, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = ["spm", "nipype"]
+
+        # Inputs description
+        group1_files_desc = (
+            " Group 1 input files (a list of at least 2 items which are a "
+            "string representing an existing file)"
+        )
+        group2_files_desc = (
+            " Group 2 input files (a list of at least 2 items which are a "
+            "string representing an existing file)"
+        )
+        out_dir_name_desc = "Name of the output directory"
+        independence_desc = (
+            "Independence of the measurments between levels (a boolean)"
+        )
+        unequal_variance_desc = (
+            "Are the variaces equal or unequal between " "groups ? (a boolean)"
+        )
+        covariates_vectors_desc = "Covariates vector (a list of list of float)"
+        covariates_names_desc = "Covariates names (a list of string)"
+        covariates_interactions_desc = (
+            "Covariates interaction (a list of int among 1 (None), "
+            "2 (With factor 1), 3 (With factor 2),4 (With factor 3))"
+        )
+        covariates_centerings_desc = (
+            "Covariates centering (a list of string among 1 (Overall mean), "
+            "2 (Factor 1 mean), 3 (Factor 2 mean), 4 (Factor 3 mean), "
+            "5 (No centering), 6 (User specified value), "
+            "7 (As implied by ANCOVA), 8 (GM))"
+        )
+        threshold_masking_desc = (
+            "Threshold mask (a string among none, " "absolute, relative)"
+        )
+        threshold_mask_value_desc = "Threshold value (a float)"
+        use_implicit_mask_desc = (
+            "Use implicit mask NaNs or zeros to threshold. (a boolean)"
+        )
+        explicit_mask_file_desc = (
+            "Mask file to applied (a string that represent " "a path)"
+        )
+        global_calc_desc = (
+            "Global calculation (a string among omit, mean, value)"
+        )
+        global_calc_values_desc = (
+            "Vector of global value (only if global_cal is set " "to User)"
+        )
+        normalisation_desc = (
+            "Normalisation type (one of 1 (None) , 2 (proportional), "
+            "3 (ancova))"
+        )
+        no_grand_mean_scaling_desc = (
+            "Do not perform grand mean scaling. (a boolean) "
+        )
+
+        # Outputs description
+        spm_mat_file_desc = (
+            "SPM.mat file (a pathlike object or string " "representing a file"
+        )
+
+        # Inputs traits
+        self.add_trait(
+            "group1_files",
+            InputMultiPath(
+                File(), output=False, copyfile=False, desc=group1_files_desc
+            ),
+        )
+
+        self.add_trait(
+            "group2_files",
+            InputMultiPath(
+                File(), output=False, copyfile=False, desc=group2_files_desc
+            ),
+        )
+
+        self.add_trait(
+            "out_dir_name",
+            traits.String(
+                "spm_stat_2ndLevel",
+                output=False,
+                optional=True,
+                desc=out_dir_name_desc,
+            ),
+        )
+
+        self.add_trait(
+            "independence",
+            traits.Bool(
+                True,
+                usedefault=True,
+                output=False,
+                optional=True,
+                desc=independence_desc,
+            ),
+        )
+
+        self.add_trait(
+            "unequal_variance",
+            traits.Bool(
+                True,
+                usedefault=True,
+                output=False,
+                optional=True,
+                desc=unequal_variance_desc,
+            ),
+        )
+
+        self.add_trait(
+            "covariates_names",
+            traits.List(
+                traits.String(),
+                output=False,
+                optional=True,
+                desc=covariates_names_desc,
+            ),
+        )
+
+        self.add_trait(
+            "covariates_vectors",
+            traits.List(
+                traits.List(traits.Float()),
+                output=False,
+                optional=True,
+                desc=covariates_vectors_desc,
+            ),
+        )
+
+        self.add_trait(
+            "covariates_interactions",
+            traits.List(
+                traits.Either(traits.Enum(1, 2, 3, 4), None),
+                output=False,
+                optional=True,
+                value=[],
+                desc=covariates_interactions_desc,
+            ),
+        )
+
+        self.add_trait(
+            "covariates_centerings",
+            traits.List(
+                traits.Either(traits.Enum(1, 2, 3, 4, 5, 6, 7, 8), None),
+                output=False,
+                optional=True,
+                value=[],
+                desc=covariates_centerings_desc,
+            ),
+        )
+
+        self.add_trait(
+            "threshold_masking",
+            traits.Enum(
+                "None",
+                "Absolute",
+                "Relative",
+                output=False,
+                optional=True,
+                usedefault=True,
+                desc=threshold_masking_desc,
+            ),
+        )
+
+        self.add_trait(
+            "threshold_mask_value",
+            traits.Either(
+                Undefined,
+                traits.Float(),
+                output=False,
+                optional=True,
+                usedefault=True,
+                desc=threshold_mask_value_desc,
+            ),
+        )
+
+        self.add_trait(
+            "use_implicit_mask",
+            traits.Bool(
+                True,
+                usedefault=True,
+                output=False,
+                optional=True,
+                desc=use_implicit_mask_desc,
+            ),
+        )
+
+        self.add_trait(
+            "explicit_mask_file",
+            traits.File(
+                output=False,
+                optional=True,
+                desc=explicit_mask_file_desc,
+            ),
+        )
+
+        self.add_trait(
+            "global_calc",
+            traits.Enum(
+                "Omit",
+                "Mean",
+                "User",
+                output=False,
+                optional=True,
+                usedefault=True,
+                desc=global_calc_desc,
+            ),
+        )
+
+        self.add_trait(
+            "global_calc_values",
+            traits.Either(
+                Undefined,
+                traits.List(
+                    traits.Float(),
+                ),
+                output=False,
+                optional=True,
+                desc=global_calc_values_desc,
+            ),
+        )
+
+        self.add_trait(
+            "no_grand_mean_scaling",
+            traits.Bool(
+                True,
+                usedefault=True,
+                output=False,
+                optional=True,
+                desc=no_grand_mean_scaling_desc,
+            ),
+        )
+
+        self.add_trait(
+            "normalisation",
+            traits.Enum(
+                1,
+                2,
+                3,
+                output=False,
+                optional=True,
+                usedefault=True,
+                desc=normalisation_desc,
+            ),
+        )
+
+        # Output traits
+        self.add_trait(
+            "spm_mat_file", File(output=True, desc=spm_mat_file_desc)
+        )
+
+        # Special parameter used as a messenger for the run_process_mia method
+        self.add_trait(
+            "dict4runtime",
+            traits.Dict(output=False, optional=True, userlevel=1),
+        )
+
+        self.init_default_traits()
+        self.init_process("nipype.interfaces.spm.TwoSampleTTestDesign")
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dict),
+        The optional self.inheritance_dict can have two structures. On the one
+        hand it can be a dictionary whose keys are the documents to inherit
+        metadata and the values the documents used for the inheritance of
+        these metadata. On the other hand, it can be a dictionary whose keys
+        are the documents to inherit metadata and the values are dictionary
+        with two keys; parent (for usual inheritance) or own_tags (to add a
+        new tag or modify an existing one). In order not to include an output
+        in the database, the name of the plug related to this output must be
+        an element of the list corresponding to the value of the optional key
+        "notInDb" of the self.outputs dictionary. To work properly this method
+        must return self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(TwoSampleTTestDesign, self).list_outputs()
+
+        # global_calc_values only if global_calc set to "User"
+        if (self.global_calc) == "User" and (
+            self.global_cal_value in ["<undefined>", Undefined]
+        ):
+            print(
+                "Initialization failed... If global_cal set to User, "
+                "required global_cal_value parameter"
+            )
+            return self.make_initResult()
+
+        # If threshold_masking set to Absoulte or Relative
+        # threshold_mask_value should be specified
+        if (
+            self.threshold_masking == "Relative"
+            or self.threshold_masking == "Absolute"
+        ) and (self.threshold_mask_value in ["<undefined>", Undefined]):
+            print(
+                "Initialization failed... If threshold_masking set to  "
+                "Relative or Absoulte, required threshold_mask_value "
+                "parameter"
+            )
+            return self.make_initResult()
+
+        # Check in_files lenght
+        if (len(self.group1_files) < 2) or (len(self.group2_files) < 2):
+            print(
+                "Initialization failed... "
+                "At least 2 files should be used for group_files"
+            )
+            return self.make_initResult()
+
+        # Check covariates
+        if self.covariates_names:
+            covariates = get_covariates(
+                self.covariates_names,
+                self.covariates_vectors,
+                self.covariates_centerings,
+                interactions=self.covariates_interactions,
+            )
+            if covariates is None:
+                print(
+                    "Initialization failed... "
+                    "Name, vector, centering, intercation should be defined "
+                    "for each covariate"
+                )
+                return self.make_initResult()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.group1_files and self.group2_files:
+            # The management of self.process.output_directory could be
+            # delegated to the
+            # populse_mia.user_interface.pipeline_manager.process_mia
+            # module. We can't do it at the moment because the
+            # sync_process_output_traits() of the
+            # capsul/process/nipype_process module raises an exception
+            # in nipype if the mandatory parameter are not yet defined!
+            if not self.out_dir_name:
+                self.out_dir_name = "spm_stat_2ndLevel"
+            out_directory = os.path.join(
+                self.output_directory, self.out_dir_name
+            )
+
+            if self.output_directory:
+                # Create a directory for this analysis
+                if not os.path.exists(out_directory):
+                    os.mkdir(out_directory)
+                self.process.output_directory = out_directory
+                self.dict4runtime["out_directory"] = out_directory
+            else:
+                print("No output_directory was found...!\n")
+                return self.make_initResult()
+
+            self.outputs["spm_mat_file"] = os.path.join(
+                out_directory, "SPM.mat"
+            )
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(TwoSampleTTestDesign, self).run_process_mia()
+
+        self.process.spm_mat_dir = self.dict4runtime["out_directory"]
+        self.process.group1_files = self.group1_files
+        self.process.group2_files = self.group2_files
+        self.process.unequal_variance = self.unequal_variance
+        self.process.dependent = self.independence
+        if self.covariates_names:
+            self.process.covariates = get_covariates(
+                self.covariates_names,
+                self.covariates_vectors,
+                self.covariates_centerings,
+                interactions=self.covariates_interactions,
+            )
+
+        if self.threshold_masking == "None":
+            self.process.threshold_mask_none = True
+        elif self.threshold_masking == "Relative":
+            self.process.threshold_mask_relative = self.threshold_mask_value
+        elif self.threshold_masking == "Absolute":
+            self.process.threshold_mask_absolute = self.threshold_mask_value
+        self.process.use_implicit_threshold = self.use_implicit_mask
+        if self.explicit_mask_file:
+            self.process.explicit_mask_file = self.explicit_mask_file
+        if self.global_calc == "Omit":
+            self.process.global_calc_omit = True
+        elif self.global_calc == "Mean":
+            self.process.global_calc_mean = True
+        elif self.global_calc == "User":
+            self.process.global_calc_values = self.global_calc_values
+        self.process.no_grand_mean_scaling = self.no_grand_mean_scaling
+        self.process.global_normalization = self.normalisation
+
+        return self.process.run(configuration_dict={})
+
+
+def get_covariates(names, vectors, centerings, interactions=None):
+    """Generate the covariates list contaning dictionaries
+    with the following key :
+    name, vector, interaction, centering
+    """
+    covariates = []
+
+    for i in range(len(names)):
+        try:
+            covariate = {}
+            covariate["name"] = names[i]
+            covariate["vector"] = vectors[i]
+            covariate["centering"] = centerings[i]
+            if interactions:
+                covariate["interaction"] = interactions[i]
+            covariates.append(covariate)
+        except Exception:
+            return None
+
+    return covariates
