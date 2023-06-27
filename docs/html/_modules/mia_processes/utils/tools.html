@@ -69,6 +69,8 @@
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">matplotlib.cm</span> <span class="kn">import</span> <span class="n">get_cmap</span>
 <span class="kn">from</span> <span class="nn">mpl_toolkits.axes_grid1</span> <span class="kn">import</span> <span class="n">ImageGrid</span>
+<span class="kn">from</span> <span class="nn">nilearn.plotting</span> <span class="kn">import</span> <span class="n">plot_anat</span>
+<span class="kn">from</span> <span class="nn">nitransforms.io.afni</span> <span class="kn">import</span> <span class="n">_dicom_real_to_card</span>
 <span class="kn">from</span> <span class="nn">populse_mia.data_manager.data_history_inspect</span> <span class="kn">import</span> <span class="n">data_history_pipeline</span>
 <span class="kn">from</span> <span class="nn">populse_mia.data_manager.project</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">COLLECTION_CURRENT</span><span class="p">,</span>
@@ -387,9 +389,64 @@
     <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">out_file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">out_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">&quot;qi2_plot.svg&quot;</span><span class="p">)</span>
+        <span class="n">out_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s2">&quot;qi2_plot.png&quot;</span><span class="p">)</span>
 
     <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">out_file</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span> <span class="n">pad_inches</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out_file</span></div>
+
+
+<div class="viewcode-block" id="plot_segmentation"><a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.tools.plot_segmentation">[docs]</a><span class="k">def</span> <span class="nf">plot_segmentation</span><span class="p">(</span><span class="n">anat_file</span><span class="p">,</span> <span class="n">segmentation</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">out_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Adapted from</span>
+<span class="sd">    &lt;https://github.com/nipreps/mriqc/blob/5a0f0408bd0c176dbc46088c6ffe279269180f3f/mriqc/viz/utils.py#L550&gt;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">vmax</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vmax&quot;</span><span class="p">)</span>
+    <span class="n">vmin</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vmin&quot;</span><span class="p">)</span>
+
+    <span class="n">anat_ras</span> <span class="o">=</span> <span class="n">nib</span><span class="o">.</span><span class="n">as_closest_canonical</span><span class="p">(</span><span class="n">nib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">anat_file</span><span class="p">))</span>
+    <span class="n">anat_ras_plumb</span> <span class="o">=</span> <span class="n">anat_ras</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span>
+        <span class="n">anat_ras</span><span class="o">.</span><span class="n">dataobj</span><span class="p">,</span> <span class="n">_dicom_real_to_card</span><span class="p">(</span><span class="n">anat_ras</span><span class="o">.</span><span class="n">affine</span><span class="p">),</span> <span class="n">anat_ras</span><span class="o">.</span><span class="n">header</span>
+    <span class="p">)</span>
+
+    <span class="n">seg_ras</span> <span class="o">=</span> <span class="n">nib</span><span class="o">.</span><span class="n">as_closest_canonical</span><span class="p">(</span><span class="n">nib</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">segmentation</span><span class="p">))</span>
+    <span class="n">seg_ras_plumb</span> <span class="o">=</span> <span class="n">seg_ras</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span>
+        <span class="n">seg_ras</span><span class="o">.</span><span class="n">dataobj</span><span class="p">,</span> <span class="n">_dicom_real_to_card</span><span class="p">(</span><span class="n">seg_ras</span><span class="o">.</span><span class="n">affine</span><span class="p">),</span> <span class="n">seg_ras</span><span class="o">.</span><span class="n">header</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;saturate&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="n">vmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">anat_ras</span><span class="o">.</span><span class="n">get_fdata</span><span class="p">()</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="mi">70</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">vmax</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">vmin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">vmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">anat_ras</span><span class="o">.</span><span class="n">get_fdata</span><span class="p">()</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="mi">10</span><span class="p">)</span>
+        <span class="n">vmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">anat_ras</span><span class="o">.</span><span class="n">get_fdata</span><span class="p">()</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="mi">99</span><span class="p">)</span>
+
+    <span class="n">disp</span> <span class="o">=</span> <span class="n">plot_anat</span><span class="p">(</span>
+        <span class="n">anat_ras_plumb</span><span class="p">,</span>
+        <span class="n">display_mode</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;display_mode&quot;</span><span class="p">,</span> <span class="s2">&quot;ortho&quot;</span><span class="p">),</span>
+        <span class="n">cut_coords</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cut_coords&quot;</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span>
+        <span class="n">title</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">),</span>
+        <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>
+        <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">disp</span><span class="o">.</span><span class="n">add_contours</span><span class="p">(</span>
+        <span class="n">seg_ras_plumb</span><span class="p">,</span>
+        <span class="n">levels</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;levels&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+        <span class="n">colors</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;colors&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">),</span>
+    <span class="p">)</span>
+
+    <span class="n">fname</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">anat_file</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">out_dir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">out_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">fname</span> <span class="o">+</span> <span class="s2">&quot;_slice_planes_plot.png&quot;</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">out_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_dir</span><span class="p">,</span> <span class="n">fname</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;.png&quot;</span><span class="p">)</span>
+
+    <span class="n">disp</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">out_file</span><span class="p">)</span>
+    <span class="n">disp</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">disp</span> <span class="o">=</span> <span class="kc">None</span>
+
     <span class="k">return</span> <span class="n">out_file</span></div>
 
 
@@ -464,6 +521,7 @@
     <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Greys_r&quot;</span><span class="p">,</span>
     <span class="n">out_dir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">only_noise</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">out_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="s2">&quot;blablabla&quot;</span>
 
@@ -665,6 +723,8 @@
         <span class="p">)</span>
 
     <span class="n">fname</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">out_name</span><span class="p">:</span>
+        <span class="n">fname</span> <span class="o">+=</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">out_name</span>
 
     <span class="k">if</span> <span class="n">out_dir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">out_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">fname</span> <span class="o">+</span> <span class="s2">&quot;_slice_planes_plot.png&quot;</span><span class="p">)</span>

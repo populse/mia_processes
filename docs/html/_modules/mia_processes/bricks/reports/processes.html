@@ -1246,8 +1246,8 @@
 
 <div class="viewcode-block" id="CarpetParcellation"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.processes.CarpetParcellation">[docs]</a><span class="k">class</span> <span class="nc">CarpetParcellation</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    *Dilate the brainmask, substract it from itself then generate the union</span>
-<span class="sd">    of the obtained crown mask and the epi parcellation*</span>
+<span class="sd">    *Dilate the brain mask, remove it from itself then generate the union</span>
+<span class="sd">    of the obtained crown mask and the EPI parcellation*</span>
 
 <span class="sd">    Please, see the complete documentation for the `CarpetParcellation brick</span>
 <span class="sd">    in the populse.mia_processes website</span>
@@ -1377,13 +1377,13 @@
         <span class="n">brainmask_img</span> <span class="o">=</span> <span class="n">nb</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">brainmask</span><span class="p">)</span>
         <span class="n">brainmaskdata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">bool_</span><span class="p">(</span><span class="n">brainmask_img</span><span class="o">.</span><span class="n">dataobj</span><span class="p">)</span>
 
-        <span class="c1"># Obtain dilated brainmask</span>
+        <span class="c1"># Obtain dilated brain mask</span>
         <span class="n">dilated</span> <span class="o">=</span> <span class="n">image_binary_dilation</span><span class="p">(</span>
             <span class="n">brainmaskdata</span><span class="p">,</span>
             <span class="n">radius</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="c1"># Binary substraction</span>
+        <span class="c1"># Binary subtraction</span>
         <span class="n">brainmaskdata</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">bool_</span><span class="p">(</span><span class="n">dilated</span><span class="p">)]</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="c1"># Carpet parcellation</span>
