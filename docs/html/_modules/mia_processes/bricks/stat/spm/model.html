@@ -44,6 +44,10 @@
 <span class="sd">        - EstimateContrast</span>
 <span class="sd">        - EstimateModel</span>
 <span class="sd">        - Level1Design</span>
+<span class="sd">        - MultipleRegressionDesign</span>
+<span class="sd">        - OneSampleTTestDesign</span>
+<span class="sd">        - PairedTTestDesign</span>
+<span class="sd">        - TwoSampleTTestDesign</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 
@@ -2436,6 +2440,1673 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">mask_image</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mask_image</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">model_serial_correlations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_serial_correlations</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
+
+
+<div class="viewcode-block" id="MultipleRegressionDesign"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.MultipleRegressionDesign">[docs]</a><span class="k">class</span> <span class="nc">MultipleRegressionDesign</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    *Create SPM design for multiple regression*</span>
+
+<span class="sd">    Please, see the complete documentation for the `MultipleRegressionDesign brick</span>
+<span class="sd">    in the populse.mia_processes website</span>
+<span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/stats/spm/MultipleRegressionDesign.html&gt;`_</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="MultipleRegressionDesign.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.MultipleRegressionDesign.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+
+<span class="sd">        The input and output plugs are defined here. The special</span>
+<span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
+<span class="sd">        third-party products necessary for the running of the brick.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">MultipleRegressionDesign</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;spm&quot;</span><span class="p">,</span> <span class="s2">&quot;nipype&quot;</span><span class="p">]</span>
+
+        <span class="c1"># Inputs description</span>
+        <span class="n">in_files_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Input contrasts files (a list of at least 2 items which are a &quot;</span>
+            <span class="s2">&quot;string representing an existing file)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">out_dir_name_desc</span> <span class="o">=</span> <span class="s2">&quot;Name of the output directory&quot;</span>
+        <span class="n">include_intercept_desc</span> <span class="o">=</span> <span class="s2">&quot;Include intercept in design. (a bolean)&quot;</span>
+        <span class="n">user_covariates_vectors_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Covariates vector (a list of list of float)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">user_covariates_names_desc</span> <span class="o">=</span> <span class="s2">&quot;Covariates names (a list of string)&quot;</span>
+        <span class="n">user_covariates_centerings_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Covariates centering (a list among 1 (Overall mean), &quot;</span>
+            <span class="s2">&quot;2 (No centering)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">covariates_vectors_desc</span> <span class="o">=</span> <span class="s2">&quot;Covariates vector (a list of list of float)&quot;</span>
+        <span class="n">covariates_names_desc</span> <span class="o">=</span> <span class="s2">&quot;Covariates names (a list of string)&quot;</span>
+        <span class="n">covariates_interactions_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Covariates interaction (a list of int among 1 (None), &quot;</span>
+            <span class="s2">&quot;2 (With factor 1), 3 (With factor 2),4 (With factor 3))&quot;</span>
+        <span class="p">)</span>
+        <span class="n">covariates_centerings_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Covariates centering (one of 1 (Overall mean), &quot;</span>
+            <span class="s2">&quot;2 (Factor 1 mean), 3 (Factor 2 mean), 4 (Factor 3 mean), &quot;</span>
+            <span class="s2">&quot;5 (No centering), 6 (User specified value), &quot;</span>
+            <span class="s2">&quot;7 (As implied by ANCOVA), 8 (GM))&quot;</span>
+        <span class="p">)</span>
+        <span class="n">threshold_masking_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Threshold mask (a string among none, &quot;</span>
+            <span class="s2">&quot;absolute, relative)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">threshold_mask_value_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;Threshold value (a float)&quot;</span><span class="p">)</span>
+        <span class="n">use_implicit_mask_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Use implicit mask NaNs or zeros to threshold. (a boolean)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">explicit_mask_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Mask file to applied (a string that represent &quot;</span>
+            <span class="s2">&quot;a path)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">global_calc_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Global calculation (a string among omit, mean, value)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">global_calc_values_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Vector of global value (only if global_cal is set &quot;</span>
+            <span class="s2">&quot;to User)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">normalisation_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Normalisation type (one of 1 (None) , 2 (proportional), &quot;</span>
+            <span class="s2">&quot;3 (ancova))&quot;</span>
+        <span class="p">)</span>
+        <span class="n">no_grand_mean_scaling_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Do not perform grand mean scaling. (a boolean) &quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Outputs description</span>
+        <span class="n">spm_mat_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;SPM.mat file (a pathlike object or string &quot;</span> <span class="s2">&quot;representing a file&quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Inputs traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;in_files&quot;</span><span class="p">,</span>
+            <span class="n">InputMultiPath</span><span class="p">(</span>
+                <span class="n">File</span><span class="p">(),</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">copyfile</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">in_files_desc</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;out_dir_name&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="s2">&quot;spm_stat_2ndLevel&quot;</span><span class="p">,</span>
+                          <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                          <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                          <span class="n">desc</span><span class="o">=</span><span class="n">out_dir_name_desc</span>
+                          <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;include_intercept&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">desc</span><span class="o">=</span><span class="n">include_intercept_desc</span><span class="p">,</span>
+                        <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;users_covariates_names&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">String</span><span class="p">(),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">user_covariates_names_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;users_covariates_vectors&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">()),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">user_covariates_vectors_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;user_covariates_centerings&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="kc">None</span><span class="p">),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">value</span><span class="o">=</span><span class="p">[],</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">user_covariates_centerings_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;covariates_names&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">String</span><span class="p">(),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">covariates_names_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;covariates_vectors&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">()),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">covariates_vectors_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;covariates_interactions&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
+                              <span class="kc">None</span><span class="p">),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">value</span><span class="o">=</span><span class="p">[],</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">covariates_interactions_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;covariates_centerings&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="kc">None</span><span class="p">),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">value</span><span class="o">=</span><span class="p">[],</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">covariates_centerings_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;threshold_masking&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="s2">&quot;None&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;Absolute&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;Relative&quot;</span><span class="p">,</span>
+                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">desc</span><span class="o">=</span><span class="n">threshold_masking_desc</span><span class="p">,</span>
+                        <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;threshold_mask_value&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span><span class="n">Undefined</span><span class="p">,</span>
+                          <span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
+                          <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                          <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                          <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                          <span class="n">desc</span><span class="o">=</span><span class="n">threshold_mask_value_desc</span><span class="p">,</span>
+                          <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;use_implicit_mask&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">desc</span><span class="o">=</span><span class="n">use_implicit_mask_desc</span><span class="p">,</span>
+                        <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;explicit_mask_file&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">File</span><span class="p">(</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">explicit_mask_file_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;global_calc&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="s2">&quot;Omit&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;Mean&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;User&quot;</span><span class="p">,</span>
+                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">desc</span><span class="o">=</span><span class="n">global_calc_desc</span><span class="p">,</span>
+                        <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;global_calc_values&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span>
+                    <span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
+                <span class="p">),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">global_calc_values_desc</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;no_grand_mean_scaling&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">desc</span><span class="o">=</span><span class="n">no_grand_mean_scaling_desc</span><span class="p">,</span>
+                        <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;normalisation&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="s2">&quot;1&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;2&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;3&quot;</span><span class="p">,</span>
+                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">desc</span><span class="o">=</span><span class="n">normalisation_desc</span><span class="p">,</span>
+                        <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Output traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;spm_mat_file&quot;</span><span class="p">,</span> <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">spm_mat_file_desc</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Special parameter used as a messenger for the run_process_mia method</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;dict4runtime&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Dict</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">userlevel</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.spm.MultipleRegressionDesign&quot;</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_covariates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">vectors</span><span class="p">,</span> <span class="n">centerings</span><span class="p">,</span> <span class="n">interactions</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate the covariates list contaning dictionary</span>
+<span class="sd">        with the following key :</span>
+<span class="sd">        name, vector, interaction, centering</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">covariates</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="p">)):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">covariate</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="n">covariate</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">names</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">covariate</span><span class="p">[</span><span class="s2">&quot;vector&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vectors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">interactions</span><span class="p">:</span>
+                    <span class="n">covariate</span><span class="p">[</span><span class="s2">&quot;interaction&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">interactions</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">covariate</span><span class="p">[</span><span class="s2">&quot;centering&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">centerings</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">covariates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">covariate</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="n">covariates</span>
+
+<div class="viewcode-block" id="MultipleRegressionDesign.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.MultipleRegressionDesign.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+
+<span class="sd">        The main objective of this method is to produce the outputs of the</span>
+<span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dict),</span>
+<span class="sd">        The optional self.inheritance_dict can have two structures. On the one</span>
+<span class="sd">        hand it can be a dictionary whose keys are the documents to inherit</span>
+<span class="sd">        metadata and the values the documents used for the inheritance of</span>
+<span class="sd">        these metadata. On the other hand, it can be a dictionary whose keys</span>
+<span class="sd">        are the documents to inherit metadata and the values are dictionary</span>
+<span class="sd">        with two keys; parent (for usual inheritance) or own_tags (to add a</span>
+<span class="sd">        new tag or modify an existing one). In order not to include an output</span>
+<span class="sd">        in the database, the name of the plug related to this output must be</span>
+<span class="sd">        an element of the list corresponding to the value of the optional key</span>
+<span class="sd">        &quot;notInDb&quot; of the self.outputs dictionary. To work properly this method</span>
+<span class="sd">        must return self.make_initResult() object.</span>
+
+<span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">MultipleRegressionDesign</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+
+        <span class="c1"># global_calc_values only if global_calc set to &quot;User&quot;</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_calc</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;User&quot;</span>
+            <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_cal_value</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">Undefined</span><span class="p">])</span>
+
+        <span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initialization failed... If global_cal set to User, &quot;</span>
+                  <span class="s2">&quot;required global_cal_value parameter&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
+
+        <span class="c1"># If threshold_masking set to Absoulte or Relative</span>
+        <span class="c1"># threshold_mask_value should be specified</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">threshold_masking</span> <span class="o">==</span> <span class="s2">&quot;Relative&quot;</span>
+             <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_masking</span> <span class="o">==</span> <span class="s2">&quot;Absolute&quot;</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">threshold_mask_value</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">Undefined</span><span class="p">])</span>
+
+        <span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initialization failed... If threshold_masking set to  &quot;</span>
+                  <span class="s2">&quot;Relative or Absoulte, required threshold_mask_value &quot;</span>
+                  <span class="s2">&quot;parameter&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
+
+        <span class="c1"># Check in_files lenght</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_files</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initialization failed... &quot;</span>
+                  <span class="s2">&quot;At least 2 files should be used for in_files&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
+
+        <span class="c1"># Check covariates</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_covariates_names</span><span class="p">:</span>
+            <span class="n">user_covariates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_covariates</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">user_covariates_names</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">user_covariates_vectors</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">user_covariates_centerings</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">user_covariates</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initialization failed... &quot;</span>
+                      <span class="s2">&quot;Name, vector, centering, intercation should be defined &quot;</span>
+                      <span class="s2">&quot;for each covariate&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">covariates_names</span><span class="p">:</span>
+            <span class="n">covariates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_covariates</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">covariates_names</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">covariates_vectors</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">covariates_centerings</span><span class="p">,</span>
+                <span class="n">interactions</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">covariates_interactions</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">covariates</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initialization failed... &quot;</span>
+                      <span class="s2">&quot;Name, vector, centering, intercation should be defined &quot;</span>
+                      <span class="s2">&quot;for each covariate&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
+
+        <span class="c1"># Outputs definition and tags inheritance (optional)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_files</span><span class="p">:</span>
+            <span class="c1"># The management of self.process.output_directory could be</span>
+            <span class="c1"># delegated to the</span>
+            <span class="c1"># populse_mia.user_interface.pipeline_manager.process_mia</span>
+            <span class="c1"># module. We can&#39;t do it at the moment because the</span>
+            <span class="c1"># sync_process_output_traits() of the</span>
+            <span class="c1"># capsul/process/nipype_process module raises an exception</span>
+            <span class="c1"># in nipype if the mandatory parameter are not yet defined!</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_dir_name</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">out_dir_name</span> <span class="o">=</span> <span class="s2">&quot;spm_stat_2ndLevel&quot;</span>
+            <span class="n">out_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_dir_name</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">:</span>
+                <span class="c1"># Create a directory for this analysis</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">out_directory</span><span class="p">):</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">out_directory</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">output_directory</span> <span class="o">=</span> <span class="n">out_directory</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;out_directory&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">out_directory</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No output_directory was found...!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;spm_mat_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="n">out_directory</span><span class="p">,</span> <span class="s2">&quot;SPM.mat&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="MultipleRegressionDesign.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.MultipleRegressionDesign.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">MultipleRegressionDesign</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">spm_mat_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;out_directory&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_files</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">include_intercept</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">include_intercept</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_covariates_names</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">covariates</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_get_covariates</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_covariates_names</span><span class="p">,</span>
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">user_covariates_vectors</span><span class="p">,</span>
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">user_covariates_centerings</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">covariates_names</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">covariates</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_get_covariates</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">covariates_names</span><span class="p">,</span>
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">covariates_vectors</span><span class="p">,</span>
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">covariates_centerings</span><span class="p">,</span>
+                                     <span class="n">interactions</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">covariates_interactions</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_masking</span> <span class="o">==</span> <span class="s2">&quot;None&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">threshold_mask_none</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_masking</span> <span class="o">==</span> <span class="s2">&quot;Relative&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">threshold_mask_relative</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_mask_value</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_masking</span> <span class="o">==</span> <span class="s2">&quot;Absolute&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">threshold_mask_absolute</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_mask_value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">use_implicit_threshold</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_implicit_mask</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">explicit_mask_file</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">explicit_mask_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">explicit_mask_file</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_calc</span> <span class="o">==</span> <span class="s2">&quot;Omit&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">global_calc_omit</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_calc</span> <span class="o">==</span> <span class="s2">&quot;Mean&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">global_calc_mean</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_calc</span> <span class="o">==</span> <span class="s2">&quot;User&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">global_calc_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_calc_values</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">no_grand_mean_scaling</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">no_grand_mean_scaling</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">global_normalization</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalisation</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
+
+
+<div class="viewcode-block" id="OneSampleTTestDesign"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.OneSampleTTestDesign">[docs]</a><span class="k">class</span> <span class="nc">OneSampleTTestDesign</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    *Create SPM design for one sample t-test*</span>
+
+<span class="sd">    Please, see the complete documentation for the `OneSampleTTestDesign brick</span>
+<span class="sd">    in the populse.mia_processes website</span>
+<span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/stats/spm/OneSampleTTestDesign.html&gt;`_</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="OneSampleTTestDesign.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.OneSampleTTestDesign.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+
+<span class="sd">        The input and output plugs are defined here. The special</span>
+<span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
+<span class="sd">        third-party products necessary for the running of the brick.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">OneSampleTTestDesign</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;spm&quot;</span><span class="p">,</span> <span class="s2">&quot;nipype&quot;</span><span class="p">]</span>
+
+        <span class="c1"># Inputs description</span>
+        <span class="n">in_files_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Input contrasts files (a list of at least 2 items which are a &quot;</span>
+            <span class="s2">&quot;string representing an existing file)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">out_dir_name_desc</span> <span class="o">=</span> <span class="s2">&quot;Name of the output directory&quot;</span>
+        <span class="n">covariates_vectors_desc</span> <span class="o">=</span> <span class="s2">&quot;Covariates vector (a list of list of float)&quot;</span>
+        <span class="n">covariates_names_desc</span> <span class="o">=</span> <span class="s2">&quot;Covariates names (a list of string)&quot;</span>
+        <span class="n">covariates_interactions_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Covariates interaction (a list of int among 1 (None), &quot;</span>
+            <span class="s2">&quot;2 (With factor 1), 3 (With factor 2),4 (With factor 3))&quot;</span>
+        <span class="p">)</span>
+        <span class="n">covariates_centerings_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Covariates centering (a list of string among 1 (Overall mean), &quot;</span>
+            <span class="s2">&quot;2 (Factor 1 mean), 3 (Factor 2 mean), 4 (Factor 3 mean), &quot;</span>
+            <span class="s2">&quot;5 (No centering), 6 (User specified value), &quot;</span>
+            <span class="s2">&quot;7 (As implied by ANCOVA), 8 (GM))&quot;</span>
+        <span class="p">)</span>
+        <span class="c1"># threshold_mask_absolute_desc = &quot;Use an absolute threshold (a boolean)&quot;</span>
+        <span class="c1"># threshold_mask_none_desc = &quot;Do not use threshold masking (a boolean)&quot;</span>
+        <span class="c1"># threshold_mask_relative_desc = &quot; (a boolean)&quot;</span>
+        <span class="n">threshold_masking_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Threshold mask (a string among none, &quot;</span>
+            <span class="s2">&quot;absolute, relative)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">threshold_mask_value_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;Threshold value (a float)&quot;</span><span class="p">)</span>
+        <span class="n">use_implicit_mask_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Use implicit mask NaNs or zeros to threshold. (a boolean)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">explicit_mask_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Mask file to applied (a string that represent &quot;</span>
+            <span class="s2">&quot;a path)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">global_calc_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Global calculation (a string among omit, mean, value)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">global_calc_values_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Vector of global value (only if global_cal is set &quot;</span>
+            <span class="s2">&quot;to User)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">normalisation_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Normalisation type (one of 1 (None) , 2 (proportional), &quot;</span>
+            <span class="s2">&quot;3 (ancova))&quot;</span>
+        <span class="p">)</span>
+        <span class="n">no_grand_mean_scaling_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Do not perform grand mean scaling. (a boolean) &quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Outputs description</span>
+        <span class="n">spm_mat_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;SPM.mat file (a pathlike object or string &quot;</span> <span class="s2">&quot;representing a file&quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Inputs traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;in_files&quot;</span><span class="p">,</span>
+            <span class="n">InputMultiPath</span><span class="p">(</span>
+                <span class="n">File</span><span class="p">(),</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">copyfile</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">in_files_desc</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;out_dir_name&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="s2">&quot;spm_stat_2ndLevel&quot;</span><span class="p">,</span>
+                          <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                          <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                          <span class="n">desc</span><span class="o">=</span><span class="n">out_dir_name_desc</span>
+                          <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;covariates_names&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">String</span><span class="p">(),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">covariates_names_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;covariates_vectors&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">()),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">covariates_vectors_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;covariates_interactions&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
+                              <span class="kc">None</span><span class="p">),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">value</span><span class="o">=</span><span class="p">[],</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">covariates_interactions_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;covariates_centerings&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="kc">None</span><span class="p">),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">value</span><span class="o">=</span><span class="p">[],</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">covariates_centerings_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;threshold_masking&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="s2">&quot;None&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;Absolute&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;Relative&quot;</span><span class="p">,</span>
+                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">desc</span><span class="o">=</span><span class="n">threshold_masking_desc</span><span class="p">,</span>
+                        <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;threshold_mask_value&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span><span class="n">Undefined</span><span class="p">,</span>
+                          <span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
+                          <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                          <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                          <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                          <span class="n">desc</span><span class="o">=</span><span class="n">threshold_mask_value_desc</span><span class="p">,</span>
+                          <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;use_implicit_mask&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">desc</span><span class="o">=</span><span class="n">use_implicit_mask_desc</span><span class="p">,</span>
+                        <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;explicit_mask_file&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">File</span><span class="p">(</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">explicit_mask_file_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;global_calc&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="s2">&quot;Omit&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;Mean&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;User&quot;</span><span class="p">,</span>
+                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">desc</span><span class="o">=</span><span class="n">global_calc_desc</span><span class="p">,</span>
+                        <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;global_calc_values&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span>
+                    <span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
+                <span class="p">),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">global_calc_values_desc</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;no_grand_mean_scaling&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">desc</span><span class="o">=</span><span class="n">no_grand_mean_scaling_desc</span><span class="p">,</span>
+                        <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;normalisation&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="s2">&quot;1&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;2&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;3&quot;</span><span class="p">,</span>
+                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">desc</span><span class="o">=</span><span class="n">normalisation_desc</span><span class="p">,</span>
+                        <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Output traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;spm_mat_file&quot;</span><span class="p">,</span> <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">spm_mat_file_desc</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Special parameter used as a messenger for the run_process_mia method</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;dict4runtime&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Dict</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">userlevel</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.spm.OneSampleTTestDesign&quot;</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_covariates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">vectors</span><span class="p">,</span> <span class="n">interactions</span><span class="p">,</span> <span class="n">centerings</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate the covariates list contaning dictionary</span>
+<span class="sd">        with the following key :</span>
+<span class="sd">        name, vector, interaction, centering</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">covariates</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="p">)):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">covariate</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="n">covariate</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">names</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">covariate</span><span class="p">[</span><span class="s2">&quot;vector&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vectors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">covariate</span><span class="p">[</span><span class="s2">&quot;interaction&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">interactions</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">covariate</span><span class="p">[</span><span class="s2">&quot;centering&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">centerings</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">covariates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">covariate</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="n">covariates</span>
+
+<div class="viewcode-block" id="OneSampleTTestDesign.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.OneSampleTTestDesign.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+
+<span class="sd">        The main objective of this method is to produce the outputs of the</span>
+<span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dict),</span>
+<span class="sd">        The optional self.inheritance_dict can have two structures. On the one</span>
+<span class="sd">        hand it can be a dictionary whose keys are the documents to inherit</span>
+<span class="sd">        metadata and the values the documents used for the inheritance of</span>
+<span class="sd">        these metadata. On the other hand, it can be a dictionary whose keys</span>
+<span class="sd">        are the documents to inherit metadata and the values are dictionary</span>
+<span class="sd">        with two keys; parent (for usual inheritance) or own_tags (to add a</span>
+<span class="sd">        new tag or modify an existing one). In order not to include an output</span>
+<span class="sd">        in the database, the name of the plug related to this output must be</span>
+<span class="sd">        an element of the list corresponding to the value of the optional key</span>
+<span class="sd">        &quot;notInDb&quot; of the self.outputs dictionary. To work properly this method</span>
+<span class="sd">        must return self.make_initResult() object.</span>
+
+<span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">OneSampleTTestDesign</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+
+        <span class="c1"># global_calc_values only if global_calc set to &quot;User&quot;</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_calc</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;User&quot;</span>
+            <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_cal_value</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">Undefined</span><span class="p">])</span>
+
+        <span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initialization failed... If global_cal set to User, &quot;</span>
+                  <span class="s2">&quot;required global_cal_value parameter&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
+
+        <span class="c1"># If threshold_masking set to Absoulte or Relative</span>
+        <span class="c1"># threshold_mask_value should be specified</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">threshold_masking</span> <span class="o">==</span> <span class="s2">&quot;Relative&quot;</span>
+             <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_masking</span> <span class="o">==</span> <span class="s2">&quot;Absolute&quot;</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">threshold_mask_value</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">Undefined</span><span class="p">])</span>
+
+        <span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initialization failed... If threshold_masking set to  &quot;</span>
+                  <span class="s2">&quot;Relative or Absoulte, required threshold_mask_value &quot;</span>
+                  <span class="s2">&quot;parameter&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
+
+        <span class="c1"># Check in_files lenght</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_files</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initialization failed... &quot;</span>
+                  <span class="s2">&quot;At least 2 files should be used for in_files&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
+
+        <span class="c1"># Check covariates</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">covariates_names</span><span class="p">:</span>
+            <span class="n">covariates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_covariates</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">covariates_names</span><span class="p">,</span>
+                                              <span class="bp">self</span><span class="o">.</span><span class="n">covariates_vectors</span><span class="p">,</span>
+                                              <span class="bp">self</span><span class="o">.</span><span class="n">covariates_interactions</span><span class="p">,</span>
+                                              <span class="bp">self</span><span class="o">.</span><span class="n">covariates_centerings</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">covariates</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initialization failed... &quot;</span>
+                      <span class="s2">&quot;Name, vector, centering, intercation should be defined &quot;</span>
+                      <span class="s2">&quot;for each covariate&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
+
+        <span class="c1"># Outputs definition and tags inheritance (optional)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_files</span><span class="p">:</span>
+            <span class="c1"># The management of self.process.output_directory could be</span>
+            <span class="c1"># delegated to the</span>
+            <span class="c1"># populse_mia.user_interface.pipeline_manager.process_mia</span>
+            <span class="c1"># module. We can&#39;t do it at the moment because the</span>
+            <span class="c1"># sync_process_output_traits() of the</span>
+            <span class="c1"># capsul/process/nipype_process module raises an exception</span>
+            <span class="c1"># in nipype if the mandatory parameter are not yet defined!</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_dir_name</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">out_dir_name</span> <span class="o">=</span> <span class="s2">&quot;spm_stat_2ndLevel&quot;</span>
+            <span class="n">out_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_dir_name</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">:</span>
+                <span class="c1"># Create a directory for this analysis</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">out_directory</span><span class="p">):</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">out_directory</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">output_directory</span> <span class="o">=</span> <span class="n">out_directory</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;out_directory&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">out_directory</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No output_directory was found...!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;spm_mat_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="n">out_directory</span><span class="p">,</span> <span class="s2">&quot;SPM.mat&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="OneSampleTTestDesign.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.OneSampleTTestDesign.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">OneSampleTTestDesign</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">spm_mat_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;out_directory&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_files</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">covariates_names</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">covariates</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_get_covariates</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">covariates_names</span><span class="p">,</span>
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">covariates_vectors</span><span class="p">,</span>
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">covariates_interactions</span><span class="p">,</span>
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">covariates_centerings</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_masking</span> <span class="o">==</span> <span class="s2">&quot;None&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">threshold_mask_none</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_masking</span> <span class="o">==</span> <span class="s2">&quot;Relative&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">threshold_mask_relative</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_mask_value</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_masking</span> <span class="o">==</span> <span class="s2">&quot;Absolute&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">threshold_mask_absolute</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_mask_value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">use_implicit_threshold</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_implicit_mask</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">explicit_mask_file</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">explicit_mask_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">explicit_mask_file</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_calc</span> <span class="o">==</span> <span class="s2">&quot;Omit&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">global_calc_omit</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_calc</span> <span class="o">==</span> <span class="s2">&quot;Mean&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">global_calc_mean</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_calc</span> <span class="o">==</span> <span class="s2">&quot;User&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">global_calc_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_calc_values</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">no_grand_mean_scaling</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">no_grand_mean_scaling</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">global_normalization</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalisation</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
+
+
+<div class="viewcode-block" id="PairedTTestDesign"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.PairedTTestDesign">[docs]</a><span class="k">class</span> <span class="nc">PairedTTestDesign</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    *Create SPM design for one sample t-test*</span>
+
+<span class="sd">    Please, see the complete documentation for the `OneSampleTTestDesign brick</span>
+<span class="sd">    in the populse.mia_processes website</span>
+<span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/stats/spm/OneSampleTTestDesign.html&gt;`_</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="PairedTTestDesign.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.PairedTTestDesign.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+
+<span class="sd">        The input and output plugs are defined here. The special</span>
+<span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
+<span class="sd">        third-party products necessary for the running of the brick.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">PairedTTestDesign</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;spm&quot;</span><span class="p">,</span> <span class="s2">&quot;nipype&quot;</span><span class="p">]</span>
+
+        <span class="c1"># Inputs description</span>
+        <span class="n">paired_files_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Input paired files (a list of list with 2 items which are a &quot;</span>
+            <span class="s2">&quot;string representing an existing file)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">out_dir_name_desc</span> <span class="o">=</span> <span class="s2">&quot;Name of the output directory&quot;</span>
+        <span class="n">covariates_vectors_desc</span> <span class="o">=</span> <span class="s2">&quot;Covariates vector (a list of list of float)&quot;</span>
+        <span class="n">covariates_names_desc</span> <span class="o">=</span> <span class="s2">&quot;Covariates names (a list of string)&quot;</span>
+        <span class="n">covariates_interactions_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Covariates interaction (a list of int among 1 (None), &quot;</span>
+            <span class="s2">&quot;2 (With factor 1), 3 (With factor 2),4 (With factor 3))&quot;</span>
+        <span class="p">)</span>
+        <span class="n">covariates_centerings_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Covariates centering (a list of string among 1 (Overall mean), &quot;</span>
+            <span class="s2">&quot;2 (Factor 1 mean), 3 (Factor 2 mean), 4 (Factor 3 mean), &quot;</span>
+            <span class="s2">&quot;5 (No centering), 6 (User specified value), &quot;</span>
+            <span class="s2">&quot;7 (As implied by ANCOVA), 8 (GM))&quot;</span>
+        <span class="p">)</span>
+        <span class="c1"># threshold_mask_absolute_desc = &quot;Use an absolute threshold (a boolean)&quot;</span>
+        <span class="c1"># threshold_mask_none_desc = &quot;Do not use threshold masking (a boolean)&quot;</span>
+        <span class="c1"># threshold_mask_relative_desc = &quot; (a boolean)&quot;</span>
+        <span class="n">threshold_masking_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Threshold mask (a string among none, &quot;</span>
+            <span class="s2">&quot;absolute, relative)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">threshold_mask_value_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;Threshold value (a float)&quot;</span><span class="p">)</span>
+        <span class="n">use_implicit_mask_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Use implicit mask NaNs or zeros to threshold. (a boolean)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">explicit_mask_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Mask file to applied (a string that represent &quot;</span>
+            <span class="s2">&quot;a path)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">global_calc_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Global calculation (a string among omit, mean, value)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">global_calc_values_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Vector of global value (only if global_cal is set &quot;</span>
+            <span class="s2">&quot;to User)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">normalisation_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Normalisation type (one of 1 (None) , 2 (proportional), &quot;</span>
+            <span class="s2">&quot;3 (ancova))&quot;</span>
+        <span class="p">)</span>
+        <span class="n">no_grand_mean_scaling_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Do not perform grand mean scaling. (a boolean) &quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Outputs description</span>
+        <span class="n">spm_mat_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;SPM.mat file (a pathlike object or string &quot;</span> <span class="s2">&quot;representing a file&quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Inputs traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;paired_files&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span>
+                <span class="n">InputMultiPath</span><span class="p">(</span>
+                    <span class="n">File</span><span class="p">(),</span>
+                <span class="p">),</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">copyfile</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">paired_files_desc</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;out_dir_name&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="s2">&quot;spm_stat_2ndLevel&quot;</span><span class="p">,</span>
+                          <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                          <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                          <span class="n">desc</span><span class="o">=</span><span class="n">out_dir_name_desc</span>
+                          <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;covariates_names&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">String</span><span class="p">(),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">covariates_names_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;covariates_vectors&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">()),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">covariates_vectors_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;covariates_interactions&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
+                              <span class="kc">None</span><span class="p">),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">value</span><span class="o">=</span><span class="p">[],</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">covariates_interactions_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;covariates_centerings&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="kc">None</span><span class="p">),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">value</span><span class="o">=</span><span class="p">[],</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">covariates_centerings_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;threshold_masking&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="s2">&quot;None&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;Absolute&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;Relative&quot;</span><span class="p">,</span>
+                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">desc</span><span class="o">=</span><span class="n">threshold_masking_desc</span><span class="p">,</span>
+                        <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;threshold_mask_value&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span><span class="n">Undefined</span><span class="p">,</span>
+                          <span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
+                          <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                          <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                          <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                          <span class="n">desc</span><span class="o">=</span><span class="n">threshold_mask_value_desc</span><span class="p">,</span>
+                          <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;use_implicit_mask&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">desc</span><span class="o">=</span><span class="n">use_implicit_mask_desc</span><span class="p">,</span>
+                        <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;explicit_mask_file&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">File</span><span class="p">(</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">explicit_mask_file_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;global_calc&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="s2">&quot;Omit&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;Mean&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;User&quot;</span><span class="p">,</span>
+                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">desc</span><span class="o">=</span><span class="n">global_calc_desc</span><span class="p">,</span>
+                        <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;global_calc_values&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span>
+                    <span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
+                <span class="p">),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">global_calc_values_desc</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;no_grand_mean_scaling&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">desc</span><span class="o">=</span><span class="n">no_grand_mean_scaling_desc</span><span class="p">,</span>
+                        <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;normalisation&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="s2">&quot;1&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;2&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;3&quot;</span><span class="p">,</span>
+                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">desc</span><span class="o">=</span><span class="n">normalisation_desc</span><span class="p">,</span>
+                        <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Output traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;spm_mat_file&quot;</span><span class="p">,</span> <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">spm_mat_file_desc</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Special parameter used as a messenger for the run_process_mia method</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;dict4runtime&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Dict</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">userlevel</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.spm.PairedTTestDesign&quot;</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_covariates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">vectors</span><span class="p">,</span> <span class="n">interactions</span><span class="p">,</span> <span class="n">centerings</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate the covariates list contaning dictionary</span>
+<span class="sd">        with the following key :</span>
+<span class="sd">        name, vector, interaction, centering</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">covariates</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="p">)):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">covariate</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="n">covariate</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">names</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">covariate</span><span class="p">[</span><span class="s2">&quot;vector&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vectors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">covariate</span><span class="p">[</span><span class="s2">&quot;interaction&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">interactions</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">covariate</span><span class="p">[</span><span class="s2">&quot;centering&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">centerings</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">covariates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">covariate</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="n">covariates</span>
+
+<div class="viewcode-block" id="PairedTTestDesign.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.PairedTTestDesign.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+
+<span class="sd">        The main objective of this method is to produce the outputs of the</span>
+<span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dict),</span>
+<span class="sd">        The optional self.inheritance_dict can have two structures. On the one</span>
+<span class="sd">        hand it can be a dictionary whose keys are the documents to inherit</span>
+<span class="sd">        metadata and the values the documents used for the inheritance of</span>
+<span class="sd">        these metadata. On the other hand, it can be a dictionary whose keys</span>
+<span class="sd">        are the documents to inherit metadata and the values are dictionary</span>
+<span class="sd">        with two keys; parent (for usual inheritance) or own_tags (to add a</span>
+<span class="sd">        new tag or modify an existing one). In order not to include an output</span>
+<span class="sd">        in the database, the name of the plug related to this output must be</span>
+<span class="sd">        an element of the list corresponding to the value of the optional key</span>
+<span class="sd">        &quot;notInDb&quot; of the self.outputs dictionary. To work properly this method</span>
+<span class="sd">        must return self.make_initResult() object.</span>
+
+<span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">PairedTTestDesign</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+
+        <span class="c1"># global_calc_values only if global_calc set to &quot;User&quot;</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_calc</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;User&quot;</span>
+            <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_cal_value</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">Undefined</span><span class="p">])</span>
+
+        <span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initialization failed... If global_cal set to User, &quot;</span>
+                  <span class="s2">&quot;required global_cal_value parameter&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
+
+        <span class="c1"># If threshold_masking set to Absoulte or Relative</span>
+        <span class="c1"># threshold_mask_value should be specified</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">threshold_masking</span> <span class="o">==</span> <span class="s2">&quot;Relative&quot;</span>
+             <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_masking</span> <span class="o">==</span> <span class="s2">&quot;Absolute&quot;</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">threshold_mask_value</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">Undefined</span><span class="p">])</span>
+
+        <span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initialization failed... If threshold_masking set to  &quot;</span>
+                  <span class="s2">&quot;Relative or Absoulte, required threshold_mask_value &quot;</span>
+                  <span class="s2">&quot;parameter&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
+
+        <span class="c1"># Check in_files lenght</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">paired_files</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initialization failed... &quot;</span>
+                  <span class="s2">&quot;At least 2 files should be used for paired_files&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
+
+        <span class="c1"># Check covariates</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">covariates_names</span><span class="p">:</span>
+            <span class="n">covariates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_covariates</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">covariates_names</span><span class="p">,</span>
+                                              <span class="bp">self</span><span class="o">.</span><span class="n">covariates_vectors</span><span class="p">,</span>
+                                              <span class="bp">self</span><span class="o">.</span><span class="n">covariates_interactions</span><span class="p">,</span>
+                                              <span class="bp">self</span><span class="o">.</span><span class="n">covariates_centerings</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">covariates</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initialization failed... &quot;</span>
+                      <span class="s2">&quot;Name, vector, centering, intercation should be defined &quot;</span>
+                      <span class="s2">&quot;for each covariate&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
+
+        <span class="c1"># Outputs definition and tags inheritance (optional)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_files</span><span class="p">:</span>
+            <span class="c1"># The management of self.process.output_directory could be</span>
+            <span class="c1"># delegated to the</span>
+            <span class="c1"># populse_mia.user_interface.pipeline_manager.process_mia</span>
+            <span class="c1"># module. We can&#39;t do it at the moment because the</span>
+            <span class="c1"># sync_process_output_traits() of the</span>
+            <span class="c1"># capsul/process/nipype_process module raises an exception</span>
+            <span class="c1"># in nipype if the mandatory parameter are not yet defined!</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_dir_name</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">out_dir_name</span> <span class="o">=</span> <span class="s2">&quot;spm_stat_2ndLevel&quot;</span>
+            <span class="n">out_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_dir_name</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">:</span>
+                <span class="c1"># Create a directory for this analysis</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">out_directory</span><span class="p">):</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">out_directory</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">output_directory</span> <span class="o">=</span> <span class="n">out_directory</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;out_directory&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">out_directory</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No output_directory was found...!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;spm_mat_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="n">out_directory</span><span class="p">,</span> <span class="s2">&quot;SPM.mat&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="PairedTTestDesign.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.PairedTTestDesign.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">PairedTTestDesign</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">spm_mat_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;out_directory&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">paired_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">paired_files</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">covariates_names</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">covariates</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_get_covariates</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">covariates_names</span><span class="p">,</span>
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">covariates_vectors</span><span class="p">,</span>
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">covariates_interactions</span><span class="p">,</span>
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">covariates_centerings</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_masking</span> <span class="o">==</span> <span class="s2">&quot;None&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">threshold_mask_none</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_masking</span> <span class="o">==</span> <span class="s2">&quot;Relative&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">threshold_mask_relative</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_mask_value</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_masking</span> <span class="o">==</span> <span class="s2">&quot;Absolute&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">threshold_mask_absolute</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_mask_value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">use_implicit_threshold</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_implicit_mask</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">explicit_mask_file</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">explicit_mask_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">explicit_mask_file</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_calc</span> <span class="o">==</span> <span class="s2">&quot;Omit&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">global_calc_omit</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_calc</span> <span class="o">==</span> <span class="s2">&quot;Mean&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">global_calc_mean</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_calc</span> <span class="o">==</span> <span class="s2">&quot;User&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">global_calc_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_calc_values</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">no_grand_mean_scaling</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">no_grand_mean_scaling</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">global_normalization</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalisation</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
+
+
+<div class="viewcode-block" id="TwoSampleTTestDesign"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.TwoSampleTTestDesign">[docs]</a><span class="k">class</span> <span class="nc">TwoSampleTTestDesign</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    *Create SPM design for two sample t-test*</span>
+
+<span class="sd">    Please, see the complete documentation for the `TwoSampleTTestDesign brick</span>
+<span class="sd">    in the populse.mia_processes website</span>
+<span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/stats/spm/TwoSampleTTestDesign.html&gt;`_</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TwoSampleTTestDesign.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.TwoSampleTTestDesign.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+
+<span class="sd">        The input and output plugs are defined here. The special</span>
+<span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
+<span class="sd">        third-party products necessary for the running of the brick.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">TwoSampleTTestDesign</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="c1"># Third party softwares required for the execution of the brick</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;spm&quot;</span><span class="p">,</span> <span class="s2">&quot;nipype&quot;</span><span class="p">]</span>
+
+        <span class="c1"># Inputs description</span>
+        <span class="n">group1_files_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot; Group 1 input files (a list of at least 2 items which are a &quot;</span>
+            <span class="s2">&quot;string representing an existing file)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">group2_files_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot; Group 2 input files (a list of at least 2 items which are a &quot;</span>
+            <span class="s2">&quot;string representing an existing file)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">out_dir_name_desc</span> <span class="o">=</span> <span class="s2">&quot;Name of the output directory&quot;</span>
+        <span class="n">independence_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Independence of the measurments between levels (a boolean)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">unequal_variance_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Are the variaces equal or unequal between &quot;</span>
+            <span class="s2">&quot;groups ? (a boolean)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">covariates_vectors_desc</span> <span class="o">=</span> <span class="s2">&quot;Covariates vector (a list of list of float)&quot;</span>
+        <span class="n">covariates_names_desc</span> <span class="o">=</span> <span class="s2">&quot;Covariates names (a list of string)&quot;</span>
+        <span class="n">covariates_interactions_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Covariates interaction (a list of int among 1 (None), &quot;</span>
+            <span class="s2">&quot;2 (With factor 1), 3 (With factor 2),4 (With factor 3))&quot;</span>
+        <span class="p">)</span>
+        <span class="n">covariates_centerings_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Covariates centering (a list of string among 1 (Overall mean), &quot;</span>
+            <span class="s2">&quot;2 (Factor 1 mean), 3 (Factor 2 mean), 4 (Factor 3 mean), &quot;</span>
+            <span class="s2">&quot;5 (No centering), 6 (User specified value), &quot;</span>
+            <span class="s2">&quot;7 (As implied by ANCOVA), 8 (GM))&quot;</span>
+        <span class="p">)</span>
+        <span class="c1"># threshold_mask_absolute_desc = &quot;Use an absolute threshold (a boolean)&quot;</span>
+        <span class="c1"># threshold_mask_none_desc = &quot;Do not use threshold masking (a boolean)&quot;</span>
+        <span class="c1"># threshold_mask_relative_desc = &quot; (a boolean)&quot;</span>
+        <span class="n">threshold_masking_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Threshold mask (a string among none, &quot;</span>
+            <span class="s2">&quot;absolute, relative)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">threshold_mask_value_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;Threshold value (a float)&quot;</span><span class="p">)</span>
+        <span class="n">use_implicit_mask_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Use implicit mask NaNs or zeros to threshold. (a boolean)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">explicit_mask_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Mask file to applied (a string that represent &quot;</span>
+            <span class="s2">&quot;a path)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">global_calc_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Global calculation (a string among omit, mean, value)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">global_calc_values_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Vector of global value (only if global_cal is set &quot;</span>
+            <span class="s2">&quot;to User)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">normalisation_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Normalisation type (one of 1 (None) , 2 (proportional), &quot;</span>
+            <span class="s2">&quot;3 (ancova))&quot;</span>
+        <span class="p">)</span>
+        <span class="n">no_grand_mean_scaling_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Do not perform grand mean scaling. (a boolean) &quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Outputs description</span>
+        <span class="n">spm_mat_file_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;SPM.mat file (a pathlike object or string &quot;</span> <span class="s2">&quot;representing a file&quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Inputs traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;group1_files&quot;</span><span class="p">,</span>
+            <span class="n">InputMultiPath</span><span class="p">(</span>
+                <span class="n">File</span><span class="p">(),</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">copyfile</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">group1_files_desc</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;group2_files&quot;</span><span class="p">,</span>
+            <span class="n">InputMultiPath</span><span class="p">(</span>
+                <span class="n">File</span><span class="p">(),</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">copyfile</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">group2_files_desc</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;out_dir_name&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="s2">&quot;spm_stat_2ndLevel&quot;</span><span class="p">,</span>
+                          <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                          <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                          <span class="n">desc</span><span class="o">=</span><span class="n">out_dir_name_desc</span>
+                          <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;independence&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">desc</span><span class="o">=</span><span class="n">independence_desc</span><span class="p">,</span>
+                        <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;unequal_variance&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">desc</span><span class="o">=</span><span class="n">unequal_variance_desc</span><span class="p">,</span>
+                        <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;covariates_names&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">String</span><span class="p">(),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">covariates_names_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;covariates_vectors&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">()),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">covariates_vectors_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;covariates_interactions&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
+                              <span class="kc">None</span><span class="p">),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">value</span><span class="o">=</span><span class="p">[],</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">covariates_interactions_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;covariates_centerings&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="kc">None</span><span class="p">),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">value</span><span class="o">=</span><span class="p">[],</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">covariates_centerings_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;threshold_masking&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="s2">&quot;None&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;Absolute&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;Relative&quot;</span><span class="p">,</span>
+                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">desc</span><span class="o">=</span><span class="n">threshold_masking_desc</span><span class="p">,</span>
+                        <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;threshold_mask_value&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span><span class="n">Undefined</span><span class="p">,</span>
+                          <span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
+                          <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                          <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                          <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                          <span class="n">desc</span><span class="o">=</span><span class="n">threshold_mask_value_desc</span><span class="p">,</span>
+                          <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;use_implicit_mask&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">desc</span><span class="o">=</span><span class="n">use_implicit_mask_desc</span><span class="p">,</span>
+                        <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;explicit_mask_file&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">File</span><span class="p">(</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">explicit_mask_file_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;global_calc&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="s2">&quot;Omit&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;Mean&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;User&quot;</span><span class="p">,</span>
+                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">desc</span><span class="o">=</span><span class="n">global_calc_desc</span><span class="p">,</span>
+                        <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;global_calc_values&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span>
+                    <span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
+                <span class="p">),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">global_calc_values_desc</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;no_grand_mean_scaling&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">desc</span><span class="o">=</span><span class="n">no_grand_mean_scaling_desc</span><span class="p">,</span>
+                        <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;normalisation&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="s2">&quot;1&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;2&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;3&quot;</span><span class="p">,</span>
+                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">desc</span><span class="o">=</span><span class="n">normalisation_desc</span><span class="p">,</span>
+                        <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Output traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;spm_mat_file&quot;</span><span class="p">,</span> <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">spm_mat_file_desc</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Special parameter used as a messenger for the run_process_mia method</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;dict4runtime&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Dict</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">userlevel</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.spm.TwoSampleTTestDesign&quot;</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_covariates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">vectors</span><span class="p">,</span> <span class="n">interactions</span><span class="p">,</span> <span class="n">centerings</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate the covariates list contaning dictionary</span>
+<span class="sd">        with the following key :</span>
+<span class="sd">        name, vector, interaction, centering</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">covariates</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="p">)):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">covariate</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="n">covariate</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">names</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">covariate</span><span class="p">[</span><span class="s2">&quot;vector&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vectors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">covariate</span><span class="p">[</span><span class="s2">&quot;interaction&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">interactions</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">covariate</span><span class="p">[</span><span class="s2">&quot;centering&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">centerings</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">covariates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">covariate</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="n">covariates</span>
+
+<div class="viewcode-block" id="TwoSampleTTestDesign.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.TwoSampleTTestDesign.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+
+<span class="sd">        The main objective of this method is to produce the outputs of the</span>
+<span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dict),</span>
+<span class="sd">        The optional self.inheritance_dict can have two structures. On the one</span>
+<span class="sd">        hand it can be a dictionary whose keys are the documents to inherit</span>
+<span class="sd">        metadata and the values the documents used for the inheritance of</span>
+<span class="sd">        these metadata. On the other hand, it can be a dictionary whose keys</span>
+<span class="sd">        are the documents to inherit metadata and the values are dictionary</span>
+<span class="sd">        with two keys; parent (for usual inheritance) or own_tags (to add a</span>
+<span class="sd">        new tag or modify an existing one). In order not to include an output</span>
+<span class="sd">        in the database, the name of the plug related to this output must be</span>
+<span class="sd">        an element of the list corresponding to the value of the optional key</span>
+<span class="sd">        &quot;notInDb&quot; of the self.outputs dictionary. To work properly this method</span>
+<span class="sd">        must return self.make_initResult() object.</span>
+
+<span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">TwoSampleTTestDesign</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+
+        <span class="c1"># global_calc_values only if global_calc set to &quot;User&quot;</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_calc</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;User&quot;</span>
+            <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_cal_value</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">Undefined</span><span class="p">])</span>
+
+        <span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initialization failed... If global_cal set to User, &quot;</span>
+                  <span class="s2">&quot;required global_cal_value parameter&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
+
+        <span class="c1"># If threshold_masking set to Absoulte or Relative</span>
+        <span class="c1"># threshold_mask_value should be specified</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">threshold_masking</span> <span class="o">==</span> <span class="s2">&quot;Relative&quot;</span>
+             <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_masking</span> <span class="o">==</span> <span class="s2">&quot;Absolute&quot;</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">threshold_mask_value</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">Undefined</span><span class="p">])</span>
+
+        <span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initialization failed... If threshold_masking set to  &quot;</span>
+                  <span class="s2">&quot;Relative or Absoulte, required threshold_mask_value &quot;</span>
+                  <span class="s2">&quot;parameter&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
+
+        <span class="c1"># Check in_files lenght</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">group1_files</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">group2_files</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initialization failed... &quot;</span>
+                  <span class="s2">&quot;At least 2 files should be used for group_files&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
+
+        <span class="c1"># Check covariates</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">covariates_names</span><span class="p">:</span>
+            <span class="n">covariates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_covariates</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">covariates_names</span><span class="p">,</span>
+                                              <span class="bp">self</span><span class="o">.</span><span class="n">covariates_vectors</span><span class="p">,</span>
+                                              <span class="bp">self</span><span class="o">.</span><span class="n">covariates_interactions</span><span class="p">,</span>
+                                              <span class="bp">self</span><span class="o">.</span><span class="n">covariates_centerings</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">covariates</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initialization failed... &quot;</span>
+                      <span class="s2">&quot;Name, vector, centering, intercation should be defined &quot;</span>
+                      <span class="s2">&quot;for each covariate&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
+
+        <span class="c1"># Outputs definition and tags inheritance (optional)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">group1_files</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">group2_files</span><span class="p">:</span>
+            <span class="c1"># The management of self.process.output_directory could be</span>
+            <span class="c1"># delegated to the</span>
+            <span class="c1"># populse_mia.user_interface.pipeline_manager.process_mia</span>
+            <span class="c1"># module. We can&#39;t do it at the moment because the</span>
+            <span class="c1"># sync_process_output_traits() of the</span>
+            <span class="c1"># capsul/process/nipype_process module raises an exception</span>
+            <span class="c1"># in nipype if the mandatory parameter are not yet defined!</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_dir_name</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">out_dir_name</span> <span class="o">=</span> <span class="s2">&quot;spm_stat_2ndLevel&quot;</span>
+            <span class="n">out_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_dir_name</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">:</span>
+                <span class="c1"># Create a directory for this analysis</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">out_directory</span><span class="p">):</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">out_directory</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">output_directory</span> <span class="o">=</span> <span class="n">out_directory</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;out_directory&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">out_directory</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No output_directory was found...!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;spm_mat_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="n">out_directory</span><span class="p">,</span> <span class="s2">&quot;SPM.mat&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="TwoSampleTTestDesign.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.TwoSampleTTestDesign.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">TwoSampleTTestDesign</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">spm_mat_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;out_directory&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">group1_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">group1_files</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">group2_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">group2_files</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">unequal_variance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">unequal_variance</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">dependent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">independence</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">covariates_names</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">covariates</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_get_covariates</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">covariates_names</span><span class="p">,</span>
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">covariates_vectors</span><span class="p">,</span>
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">covariates_interactions</span><span class="p">,</span>
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">covariates_centerings</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_masking</span> <span class="o">==</span> <span class="s2">&quot;None&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">threshold_mask_none</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_masking</span> <span class="o">==</span> <span class="s2">&quot;Relative&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">threshold_mask_relative</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_mask_value</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_masking</span> <span class="o">==</span> <span class="s2">&quot;Absolute&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">threshold_mask_absolute</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_mask_value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">use_implicit_threshold</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_implicit_mask</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">explicit_mask_file</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">explicit_mask_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">explicit_mask_file</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_calc</span> <span class="o">==</span> <span class="s2">&quot;Omit&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">global_calc_omit</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_calc</span> <span class="o">==</span> <span class="s2">&quot;Mean&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">global_calc_mean</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_calc</span> <span class="o">==</span> <span class="s2">&quot;User&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">global_calc_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_calc_values</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">no_grand_mean_scaling</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">no_grand_mean_scaling</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">global_normalization</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalisation</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
 </pre></div>

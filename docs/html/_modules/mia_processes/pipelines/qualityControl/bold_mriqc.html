@@ -186,18 +186,16 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;plot_iqms.out_file-&gt;mriqc_func_report.IQMs_plot&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;tsnr.out_stddev_file-&gt;mriqc_func_report.stddev_func&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;mean.out_file-&gt;mriqc_func_report.func_mean&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;automask.out_file-&gt;mriqc_func_report.brain_mask&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
             <span class="s2">&quot;mriqc_func_report&quot;</span><span class="p">,</span>
             <span class="s2">&quot;report&quot;</span><span class="p">,</span>
             <span class="n">pipeline_parameter</span><span class="o">=</span><span class="s2">&quot;func_report&quot;</span><span class="p">,</span>
             <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
-            <span class="s2">&quot;bold_iqms_pipeline&quot;</span><span class="p">,</span> <span class="s2">&quot;carpet_seg&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span>
-        <span class="p">)</span>
 
         <span class="c1"># parameters order</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">reorder_traits</span><span class="p">((</span><span class="s2">&quot;func_file&quot;</span><span class="p">,</span> <span class="s2">&quot;carpet_seg&quot;</span><span class="p">,</span> <span class="s2">&quot;func_report&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reorder_traits</span><span class="p">((</span><span class="s2">&quot;func_file&quot;</span><span class="p">,</span> <span class="s2">&quot;func_report&quot;</span><span class="p">))</span>
 
         <span class="c1"># nodes positions</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_position</span> <span class="o">=</span> <span class="p">{</span>

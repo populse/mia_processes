@@ -106,7 +106,10 @@ Mia_processes's documentation
 
       - `EstimateContrast <bricks/stats/spm/EstimateContrast.html>`_
       - `EstimateModel <bricks/stats/spm/EstimateModel.html>`_
+      - `MultipleRegressionDesign <bricks/stats/spm/MultipleRegressionDesign.html>`_
+      - `OneSampleTTestDesign <bricks/stats/spm/OneSampleTTestDesign.html>`_
       - `Level1Design <bricks/stats/spm/Level1Design.html>`_
+      - `TwoSampleTTestDesign <bricks/stats/spm/TwoSampleTTestDesign.html>`_
 
   - **tools**
 

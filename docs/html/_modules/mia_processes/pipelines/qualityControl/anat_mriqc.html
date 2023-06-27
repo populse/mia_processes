@@ -137,6 +137,10 @@
             <span class="s2">&quot;anat_airmask.in_mask&quot;</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span>
+            <span class="s2">&quot;anat_skullstrip_pipeline.out_mask_synthstrip-&gt;&quot;</span>
+            <span class="s2">&quot;mriqc_anat_report.brain_mask&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span>
             <span class="s2">&quot;anat_skullstrip_pipeline.out_corrected&quot;</span> <span class="s2">&quot;-&gt;harmonize.in_file&quot;</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span>
@@ -148,6 +152,9 @@
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;anat_skullstrip_pipeline.bias_image-&gt;anatiqms.in_inu&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;segment.tissue_class_map-&gt;anatiqms.segmentation&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span>
+            <span class="s2">&quot;segment.tissue_class_map-&gt;&quot;</span> <span class="s2">&quot;mriqc_anat_report.segmentation&quot;</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;segment.partial_volume_files-&gt;list_to_file.file_list&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;segment.partial_volume_files-&gt;anatiqms.pvms&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span>
@@ -169,6 +176,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;anat_airmask.out_art_mask-&gt;anatiqms.artmask&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;anat_airmask.out_air_mask-&gt;anatiqms.airmask&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;anat_airmask.out_rot_mask-&gt;anatiqms.rotmask&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span>
+            <span class="s2">&quot;anat_headmask.outskin_mask_file-&gt;&quot;</span> <span class="s2">&quot;mriqc_anat_report.head_mask&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;anat_airmask.out_art_mask-&gt;mriqc_anat_report.art_mask&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;anat_airmask.out_air_mask-&gt;mriqc_anat_report.air_mask&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;anat_mni_tpms_pipeline.mni_tpms-&gt;anatiqms.mni_tpms&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;anatiqms.out_file-&gt;mriqc_anat_report.IQMs_file&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;harmonize.out_file-&gt;anatiqms.in_noinu&quot;</span><span class="p">)</span>

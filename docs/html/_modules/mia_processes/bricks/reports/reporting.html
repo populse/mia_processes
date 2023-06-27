@@ -125,6 +125,14 @@
             <span class="s2">&quot;Gap between slices in anatomical slice planes &quot;</span> <span class="s2">&quot;plot&quot;</span>
         <span class="p">)</span>
 
+        <span class="n">air_mask_desc</span> <span class="o">=</span> <span class="s2">&quot;Air mask&quot;</span>
+
+        <span class="n">art_mask_desc</span> <span class="o">=</span> <span class="s2">&quot;Art mask&quot;</span>
+
+        <span class="n">brain_mask_desc</span> <span class="o">=</span> <span class="s2">&quot;Brain mask&quot;</span>
+
+        <span class="n">head_mask_desc</span> <span class="o">=</span> <span class="s2">&quot;Head mask&quot;</span>
+
         <span class="n">norm_anat_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;An existing, uncompressed normalised anatomical &quot;</span>
             <span class="s2">&quot;image file (valid extensions: .nii)&quot;</span>
@@ -149,6 +157,8 @@
         <span class="n">norm_anat_slices_gap_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;Gap between slices in normalised &quot;</span> <span class="s2">&quot;anatomical slice planes plot&quot;</span>
         <span class="p">)</span>
+
+        <span class="n">segmentation_desc</span> <span class="o">=</span> <span class="s2">&quot;Segmentation file&quot;</span>
 
         <span class="c1"># Outputs description</span>
         <span class="n">report_desc</span> <span class="o">=</span> <span class="s2">&quot;The generated report (pdf)&quot;</span>
@@ -206,6 +216,56 @@
                 <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                 <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                 <span class="n">desc</span><span class="o">=</span><span class="n">anat_slices_gap_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;brain_mask&quot;</span><span class="p">,</span>
+            <span class="n">ImageFileSPM</span><span class="p">(</span>
+                <span class="n">copyfile</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">brain_mask_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;segmentation&quot;</span><span class="p">,</span>
+            <span class="n">ImageFileSPM</span><span class="p">(</span>
+                <span class="n">copyfile</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">segmentation_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;head_mask&quot;</span><span class="p">,</span>
+            <span class="n">ImageFileSPM</span><span class="p">(</span>
+                <span class="n">copyfile</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">head_mask_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;art_mask&quot;</span><span class="p">,</span>
+            <span class="n">ImageFileSPM</span><span class="p">(</span>
+                <span class="n">copyfile</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">art_mask_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;air_mask&quot;</span><span class="p">,</span>
+            <span class="n">ImageFileSPM</span><span class="p">(</span>
+                <span class="n">copyfile</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">air_mask_desc</span><span class="p">,</span>
             <span class="p">),</span>
         <span class="p">)</span>
 
@@ -778,6 +838,11 @@
             <span class="n">anat_fig_cols</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">anat_fig_cols</span><span class="p">,</span>
             <span class="n">anat_inf_slice_start</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">anat_inf_slice_start</span><span class="p">,</span>
             <span class="n">anat_slices_gap</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">anat_slices_gap</span><span class="p">,</span>
+            <span class="n">brain_mask</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">brain_mask</span><span class="p">,</span>
+            <span class="n">segmentation</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">segmentation</span><span class="p">,</span>
+            <span class="n">air_mask</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">air_mask</span><span class="p">,</span>
+            <span class="n">art_mask</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">art_mask</span><span class="p">,</span>
+            <span class="n">head_mask</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">head_mask</span><span class="p">,</span>
             <span class="n">norm_anat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_anat</span><span class="p">,</span>
             <span class="n">norm_anat_fig_rows</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_anat_fig_rows</span><span class="p">,</span>
             <span class="n">norm_anat_fig_cols</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_anat_fig_cols</span><span class="p">,</span>
@@ -812,6 +877,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">requirement</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1"># Inputs description</span>
+        <span class="n">brain_mask_desc</span> <span class="o">=</span> <span class="s2">&quot;Brain mask&quot;</span>
 
         <span class="n">IQMs_file_desc</span> <span class="o">=</span> <span class="s2">&quot;A .JSON file containing the IQMs&quot;</span>
 
@@ -942,6 +1008,16 @@
                 <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                 <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                 <span class="n">desc</span><span class="o">=</span><span class="n">IQMs_plot_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;brain_mask&quot;</span><span class="p">,</span>
+            <span class="n">ImageFileSPM</span><span class="p">(</span>
+                <span class="n">copyfile</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">brain_mask_desc</span><span class="p">,</span>
             <span class="p">),</span>
         <span class="p">)</span>
 
@@ -1378,6 +1454,7 @@
             <span class="n">func_fig_cols</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">func_fig_cols</span><span class="p">,</span>
             <span class="n">func_inf_slice_start</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">func_inf_slice_start</span><span class="p">,</span>
             <span class="n">func_slices_gap</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">func_slices_gap</span><span class="p">,</span>
+            <span class="n">brain_mask</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">brain_mask</span><span class="p">,</span>
             <span class="n">norm_func</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_func</span><span class="p">,</span>
             <span class="n">norm_func_fig_rows</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_func_fig_rows</span><span class="p">,</span>
             <span class="n">norm_func_fig_cols</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_func_fig_cols</span><span class="p">,</span>
