@@ -119,6 +119,7 @@ Mia_processes's documentation
     - `Files_To_List <bricks/tools/Files_To_List.html>`_
     - `Filter_Files_List <bricks/tools/Filter_Files_List.html>`_
     - `Find_In_List <bricks/tools/Find_In_List.html>`_
+    - `Get_Conditions_From_csv <bricks/tools/Get_Conditions_From_csv.html>`_
     - `Import_Data <bricks/tools/Import_Data.html>`_
     - `Input_Filter <bricks/tools/Input_Filter.html>`_
     - `List_Duplicate <bricks/tools/List_Duplicate.html>`_
