@@ -53,6 +53,7 @@ needed to run other higher-level bricks.</p>
 <li><p>Files_To_List</p></li>
 <li><p>Filter_Files_List</p></li>
 <li><p>Find_In_List</p></li>
+<li><p>Get_Conditions_From_csv</p></li>
 <li><p>Import_Data</p></li>
 <li><p>Input_Filter</p></li>
 <li><p>List_Duplicate</p></li>
@@ -376,6 +377,60 @@ self.make_initResult() object.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.bricks.tools.tools.Find_In_List.run_process_mia">
 <span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/tools/tools.html#Find_In_List.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.tools.tools.Find_In_List.run_process_mia" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the process launch step of the brick.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="mia_processes.bricks.tools.tools.Get_Conditions_From_csv">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.tools.tools.</span></span><span class="sig-name descname"><span class="pre">Get_Conditions_From_csv</span></span><a class="reference internal" href="_modules/mia_processes/bricks/tools/tools.html#Get_Conditions_From_csv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.tools.tools.Get_Conditions_From_csv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">populse_mia.user_interface.pipeline_manager.process_mia.ProcessMIA</span></code></p>
+<p><em>Get conditions information (conditions names, onsets and durations)
+for Level1Design brick using csv files.</em></p>
+<p>Please, see the complete documentation for
+the <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/bricks/tools/Get_Conditions_From_csv.html">Get_Conditions_From_csv brick
+in the populse.mia_processes website</a></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Type ‘Get_Conditions_From_csv.help()’ for a full description of this process parameters.</p></li>
+<li><p>Type ‘&lt;Get_Conditions_From_csv&gt;.get_input_spec()’ for a full description of this process input trait types.</p></li>
+<li><p>Type ‘&lt;Get_Conditions_From_csv&gt;.get_output_spec()’ for a full description of this process output trait types.</p></li>
+</ul>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="mia_processes.bricks.tools.tools.Get_Conditions_From_csv.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/tools/tools.html#Get_Conditions_From_csv.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.tools.tools.Get_Conditions_From_csv.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the attributes initialisation/instantiation.</p>
+<p>The input and output plugs are defined here. The special
+‘self.requirement’ attribute (optional) is used to define the
+third-party products necessary for the running of the brick.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mia_processes.bricks.tools.tools.Get_Conditions_From_csv.list_outputs">
+<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/tools/tools.html#Get_Conditions_From_csv.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.tools.tools.Get_Conditions_From_csv.list_outputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dedicated to the initialisation step of the brick.</p>
+<p>The main objective of this method is to produce the outputs of the
+bricks (self.outputs) and the associated tags (self.inheritance_dic),
+if defined here. In order not to include an output in the database,
+this output must be a value of the optional key ‘notInDb’ of the
+self.outputs dictionary. To work properly this method must return
+self.make_initResult() object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mia_processes.bricks.tools.tools.Get_Conditions_From_csv.run_process_mia">
+<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/tools/tools.html#Get_Conditions_From_csv.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.tools.tools.Get_Conditions_From_csv.run_process_mia" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dedicated to the process launch step of the brick.</p>
 </dd></dl>
 

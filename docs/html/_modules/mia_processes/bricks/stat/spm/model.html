@@ -2448,8 +2448,8 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Create SPM design for multiple regression*</span>
 
-<span class="sd">    Please, see the complete documentation for the `MultipleRegressionDesign brick</span>
-<span class="sd">    in the populse.mia_processes website</span>
+<span class="sd">    Please, see the complete documentation for the `MultipleRegressionDesign</span>
+<span class="sd">    brick in the populse.mia_processes website</span>
 <span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/stats/spm/MultipleRegressionDesign.html&gt;`_</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -2495,23 +2495,20 @@
             <span class="s2">&quot;7 (As implied by ANCOVA), 8 (GM))&quot;</span>
         <span class="p">)</span>
         <span class="n">threshold_masking_desc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;Threshold mask (a string among none, &quot;</span>
-            <span class="s2">&quot;absolute, relative)&quot;</span>
+            <span class="s2">&quot;Threshold mask (a string among none, &quot;</span> <span class="s2">&quot;absolute, relative)&quot;</span>
         <span class="p">)</span>
-        <span class="n">threshold_mask_value_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;Threshold value (a float)&quot;</span><span class="p">)</span>
+        <span class="n">threshold_mask_value_desc</span> <span class="o">=</span> <span class="s2">&quot;Threshold value (a float)&quot;</span>
         <span class="n">use_implicit_mask_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;Use implicit mask NaNs or zeros to threshold. (a boolean)&quot;</span>
         <span class="p">)</span>
         <span class="n">explicit_mask_file_desc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;Mask file to applied (a string that represent &quot;</span>
-            <span class="s2">&quot;a path)&quot;</span>
+            <span class="s2">&quot;Mask file to applied (a string that represent &quot;</span> <span class="s2">&quot;a path)&quot;</span>
         <span class="p">)</span>
         <span class="n">global_calc_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;Global calculation (a string among omit, mean, value)&quot;</span>
         <span class="p">)</span>
         <span class="n">global_calc_values_desc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;Vector of global value (only if global_cal is set &quot;</span>
-            <span class="s2">&quot;to User)&quot;</span>
+            <span class="s2">&quot;Vector of global value (only if global_cal is set &quot;</span> <span class="s2">&quot;to User)&quot;</span>
         <span class="p">)</span>
         <span class="n">normalisation_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;Normalisation type (one of 1 (None) , 2 (proportional), &quot;</span>
@@ -2536,21 +2533,23 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;out_dir_name&quot;</span><span class="p">,</span>
-            <span class="n">traits</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="s2">&quot;spm_stat_2ndLevel&quot;</span><span class="p">,</span>
-                          <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                          <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                          <span class="n">desc</span><span class="o">=</span><span class="n">out_dir_name_desc</span>
-                          <span class="p">),</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">String</span><span class="p">(</span>
+                <span class="s2">&quot;spm_stat_2ndLevel&quot;</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">out_dir_name_desc</span><span class="p">,</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;include_intercept&quot;</span><span class="p">,</span>
-            <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">desc</span><span class="o">=</span><span class="n">include_intercept_desc</span><span class="p">,</span>
-                        <span class="p">),</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span>
+                <span class="kc">True</span><span class="p">,</span>
+                <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">include_intercept_desc</span><span class="p">,</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
@@ -2607,8 +2606,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;covariates_interactions&quot;</span><span class="p">,</span>
             <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span>
-                <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
-                              <span class="kc">None</span><span class="p">),</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="kc">None</span><span class="p">),</span>
                 <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                 <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                 <span class="n">value</span><span class="o">=</span><span class="p">[],</span>
@@ -2629,35 +2627,38 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;threshold_masking&quot;</span><span class="p">,</span>
-            <span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="s2">&quot;None&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;Absolute&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;Relative&quot;</span><span class="p">,</span>
-                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">desc</span><span class="o">=</span><span class="n">threshold_masking_desc</span><span class="p">,</span>
-                        <span class="p">),</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span>
+                <span class="s2">&quot;None&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Absolute&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Relative&quot;</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">threshold_masking_desc</span><span class="p">,</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;threshold_mask_value&quot;</span><span class="p">,</span>
-            <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span><span class="n">Undefined</span><span class="p">,</span>
-                          <span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
-                          <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                          <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                          <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                          <span class="n">desc</span><span class="o">=</span><span class="n">threshold_mask_value_desc</span><span class="p">,</span>
-                          <span class="p">),</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">threshold_mask_value_desc</span><span class="p">,</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;use_implicit_mask&quot;</span><span class="p">,</span>
-            <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">desc</span><span class="o">=</span><span class="n">use_implicit_mask_desc</span><span class="p">,</span>
-                        <span class="p">),</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span>
+                <span class="kc">True</span><span class="p">,</span>
+                <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">use_implicit_mask_desc</span><span class="p">,</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
@@ -2671,14 +2672,15 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;global_calc&quot;</span><span class="p">,</span>
-            <span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="s2">&quot;Omit&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;Mean&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;User&quot;</span><span class="p">,</span>
-                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">desc</span><span class="o">=</span><span class="n">global_calc_desc</span><span class="p">,</span>
-                        <span class="p">),</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span>
+                <span class="s2">&quot;Omit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Mean&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;User&quot;</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">global_calc_desc</span><span class="p">,</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
@@ -2691,29 +2693,31 @@
                 <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                 <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                 <span class="n">desc</span><span class="o">=</span><span class="n">global_calc_values_desc</span><span class="p">,</span>
-            <span class="p">)</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;no_grand_mean_scaling&quot;</span><span class="p">,</span>
-            <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">desc</span><span class="o">=</span><span class="n">no_grand_mean_scaling_desc</span><span class="p">,</span>
-                        <span class="p">),</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span>
+                <span class="kc">True</span><span class="p">,</span>
+                <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">no_grand_mean_scaling_desc</span><span class="p">,</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;normalisation&quot;</span><span class="p">,</span>
-            <span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="s2">&quot;1&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;2&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;3&quot;</span><span class="p">,</span>
-                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">desc</span><span class="o">=</span><span class="n">normalisation_desc</span><span class="p">,</span>
-                        <span class="p">),</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span>
+                <span class="mi">1</span><span class="p">,</span>
+                <span class="mi">2</span><span class="p">,</span>
+                <span class="mi">3</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">normalisation_desc</span><span class="p">,</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
         <span class="c1"># Output traits</span>
@@ -2729,27 +2733,6 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.spm.MultipleRegressionDesign&quot;</span><span class="p">)</span></div>
-
-    <span class="k">def</span> <span class="nf">_get_covariates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">vectors</span><span class="p">,</span> <span class="n">centerings</span><span class="p">,</span> <span class="n">interactions</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate the covariates list contaning dictionary</span>
-<span class="sd">        with the following key :</span>
-<span class="sd">        name, vector, interaction, centering</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">covariates</span> <span class="o">=</span> <span class="p">[]</span>
-
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="p">)):</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">covariate</span> <span class="o">=</span> <span class="p">{}</span>
-                <span class="n">covariate</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">names</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-                <span class="n">covariate</span><span class="p">[</span><span class="s2">&quot;vector&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vectors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-                <span class="k">if</span> <span class="n">interactions</span><span class="p">:</span>
-                    <span class="n">covariate</span><span class="p">[</span><span class="s2">&quot;interaction&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">interactions</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-                <span class="n">covariate</span><span class="p">[</span><span class="s2">&quot;centering&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">centerings</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-                <span class="n">covariates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">covariate</span><span class="p">)</span>
-            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-                <span class="k">return</span> <span class="kc">None</span>
-
-        <span class="k">return</span> <span class="n">covariates</span>
 
 <div class="viewcode-block" id="MultipleRegressionDesign.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.MultipleRegressionDesign.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
@@ -2775,56 +2758,63 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">MultipleRegressionDesign</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="c1"># global_calc_values only if global_calc set to &quot;User&quot;</span>
-        <span class="k">if</span> <span class="p">(</span>
-            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_calc</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;User&quot;</span>
-            <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_cal_value</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">Undefined</span><span class="p">])</span>
-
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_calc</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;User&quot;</span> <span class="ow">and</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">global_cal_value</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">Undefined</span><span class="p">]</span>
         <span class="p">):</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initialization failed... If global_cal set to User, &quot;</span>
-                  <span class="s2">&quot;required global_cal_value parameter&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;Initialization failed... If global_cal set to User, &quot;</span>
+                <span class="s2">&quot;required global_cal_value parameter&quot;</span>
+            <span class="p">)</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
 
         <span class="c1"># If threshold_masking set to Absoulte or Relative</span>
         <span class="c1"># threshold_mask_value should be specified</span>
         <span class="k">if</span> <span class="p">(</span>
-            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">threshold_masking</span> <span class="o">==</span> <span class="s2">&quot;Relative&quot;</span>
-             <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_masking</span> <span class="o">==</span> <span class="s2">&quot;Absolute&quot;</span><span class="p">)</span>
-            <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">threshold_mask_value</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">Undefined</span><span class="p">])</span>
-
-        <span class="p">):</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initialization failed... If threshold_masking set to  &quot;</span>
-                  <span class="s2">&quot;Relative or Absoulte, required threshold_mask_value &quot;</span>
-                  <span class="s2">&quot;parameter&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">threshold_masking</span> <span class="o">==</span> <span class="s2">&quot;Relative&quot;</span>
+            <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_masking</span> <span class="o">==</span> <span class="s2">&quot;Absolute&quot;</span>
+        <span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">threshold_mask_value</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">Undefined</span><span class="p">]):</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;Initialization failed... If threshold_masking set to  &quot;</span>
+                <span class="s2">&quot;Relative or Absoulte, required threshold_mask_value &quot;</span>
+                <span class="s2">&quot;parameter&quot;</span>
+            <span class="p">)</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
 
         <span class="c1"># Check in_files lenght</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_files</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initialization failed... &quot;</span>
-                  <span class="s2">&quot;At least 2 files should be used for in_files&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;Initialization failed... &quot;</span>
+                <span class="s2">&quot;At least 2 files should be used for in_files&quot;</span>
+            <span class="p">)</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
 
         <span class="c1"># Check covariates</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_covariates_names</span><span class="p">:</span>
-            <span class="n">user_covariates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_covariates</span><span class="p">(</span>
+            <span class="n">user_covariates</span> <span class="o">=</span> <span class="n">get_covariates</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">user_covariates_names</span><span class="p">,</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">user_covariates_vectors</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">user_covariates_centerings</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">user_covariates_centerings</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="k">if</span> <span class="n">user_covariates</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initialization failed... &quot;</span>
-                      <span class="s2">&quot;Name, vector, centering, intercation should be defined &quot;</span>
-                      <span class="s2">&quot;for each covariate&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s2">&quot;Initialization failed... &quot;</span>
+                    <span class="s2">&quot;Name, vector, centering should be defined &quot;</span>
+                    <span class="s2">&quot;for each covariate&quot;</span>
+                <span class="p">)</span>
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">covariates_names</span><span class="p">:</span>
-            <span class="n">covariates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_covariates</span><span class="p">(</span>
+            <span class="n">covariates</span> <span class="o">=</span> <span class="n">get_covariates</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">covariates_names</span><span class="p">,</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">covariates_vectors</span><span class="p">,</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">covariates_centerings</span><span class="p">,</span>
-                <span class="n">interactions</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">covariates_interactions</span><span class="p">)</span>
+                <span class="n">interactions</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">covariates_interactions</span><span class="p">,</span>
+            <span class="p">)</span>
             <span class="k">if</span> <span class="n">covariates</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initialization failed... &quot;</span>
-                      <span class="s2">&quot;Name, vector, centering, intercation should be defined &quot;</span>
-                      <span class="s2">&quot;for each covariate&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s2">&quot;Initialization failed... &quot;</span>
+                    <span class="s2">&quot;Name, vector, centering, intercation should be defined &quot;</span>
+                    <span class="s2">&quot;for each covariate&quot;</span>
+                <span class="p">)</span>
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
 
         <span class="c1"># Outputs definition and tags inheritance (optional)</span>
@@ -2867,17 +2857,18 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_files</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">include_intercept</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">include_intercept</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_covariates_names</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">covariates</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_get_covariates</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_covariates_names</span><span class="p">,</span>
-                                     <span class="bp">self</span><span class="o">.</span><span class="n">user_covariates_vectors</span><span class="p">,</span>
-                                     <span class="bp">self</span><span class="o">.</span><span class="n">user_covariates_centerings</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">user_covariates</span> <span class="o">=</span> <span class="n">get_covariates</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">user_covariates_names</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">user_covariates_vectors</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">user_covariates_centerings</span><span class="p">,</span>
             <span class="p">)</span>
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">covariates_names</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">covariates</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_get_covariates</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">covariates_names</span><span class="p">,</span>
-                                     <span class="bp">self</span><span class="o">.</span><span class="n">covariates_vectors</span><span class="p">,</span>
-                                     <span class="bp">self</span><span class="o">.</span><span class="n">covariates_centerings</span><span class="p">,</span>
-                                     <span class="n">interactions</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">covariates_interactions</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">covariates</span> <span class="o">=</span> <span class="n">get_covariates</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">covariates_names</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">covariates_vectors</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">covariates_centerings</span><span class="p">,</span>
+                <span class="n">interactions</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">covariates_interactions</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_masking</span> <span class="o">==</span> <span class="s2">&quot;None&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">threshold_mask_none</span> <span class="o">=</span> <span class="kc">True</span>
@@ -2941,27 +2932,21 @@
             <span class="s2">&quot;5 (No centering), 6 (User specified value), &quot;</span>
             <span class="s2">&quot;7 (As implied by ANCOVA), 8 (GM))&quot;</span>
         <span class="p">)</span>
-        <span class="c1"># threshold_mask_absolute_desc = &quot;Use an absolute threshold (a boolean)&quot;</span>
-        <span class="c1"># threshold_mask_none_desc = &quot;Do not use threshold masking (a boolean)&quot;</span>
-        <span class="c1"># threshold_mask_relative_desc = &quot; (a boolean)&quot;</span>
         <span class="n">threshold_masking_desc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;Threshold mask (a string among none, &quot;</span>
-            <span class="s2">&quot;absolute, relative)&quot;</span>
+            <span class="s2">&quot;Threshold mask (a string among none, &quot;</span> <span class="s2">&quot;absolute, relative)&quot;</span>
         <span class="p">)</span>
-        <span class="n">threshold_mask_value_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;Threshold value (a float)&quot;</span><span class="p">)</span>
+        <span class="n">threshold_mask_value_desc</span> <span class="o">=</span> <span class="s2">&quot;Threshold value (a float)&quot;</span>
         <span class="n">use_implicit_mask_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;Use implicit mask NaNs or zeros to threshold. (a boolean)&quot;</span>
         <span class="p">)</span>
         <span class="n">explicit_mask_file_desc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;Mask file to applied (a string that represent &quot;</span>
-            <span class="s2">&quot;a path)&quot;</span>
+            <span class="s2">&quot;Mask file to applied (a string that represent &quot;</span> <span class="s2">&quot;a path)&quot;</span>
         <span class="p">)</span>
         <span class="n">global_calc_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;Global calculation (a string among omit, mean, value)&quot;</span>
         <span class="p">)</span>
         <span class="n">global_calc_values_desc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;Vector of global value (only if global_cal is set &quot;</span>
-            <span class="s2">&quot;to User)&quot;</span>
+            <span class="s2">&quot;Vector of global value (only if global_cal is set &quot;</span> <span class="s2">&quot;to User)&quot;</span>
         <span class="p">)</span>
         <span class="n">normalisation_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;Normalisation type (one of 1 (None) , 2 (proportional), &quot;</span>
@@ -2986,11 +2971,12 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;out_dir_name&quot;</span><span class="p">,</span>
-            <span class="n">traits</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="s2">&quot;spm_stat_2ndLevel&quot;</span><span class="p">,</span>
-                          <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                          <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                          <span class="n">desc</span><span class="o">=</span><span class="n">out_dir_name_desc</span>
-                          <span class="p">),</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">String</span><span class="p">(</span>
+                <span class="s2">&quot;spm_stat_2ndLevel&quot;</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">out_dir_name_desc</span><span class="p">,</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
@@ -3016,8 +3002,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;covariates_interactions&quot;</span><span class="p">,</span>
             <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span>
-                <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
-                              <span class="kc">None</span><span class="p">),</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="kc">None</span><span class="p">),</span>
                 <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                 <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                 <span class="n">value</span><span class="o">=</span><span class="p">[],</span>
@@ -3038,35 +3023,38 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;threshold_masking&quot;</span><span class="p">,</span>
-            <span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="s2">&quot;None&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;Absolute&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;Relative&quot;</span><span class="p">,</span>
-                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">desc</span><span class="o">=</span><span class="n">threshold_masking_desc</span><span class="p">,</span>
-                        <span class="p">),</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span>
+                <span class="s2">&quot;None&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Absolute&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Relative&quot;</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">threshold_masking_desc</span><span class="p">,</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;threshold_mask_value&quot;</span><span class="p">,</span>
-            <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span><span class="n">Undefined</span><span class="p">,</span>
-                          <span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
-                          <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                          <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                          <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                          <span class="n">desc</span><span class="o">=</span><span class="n">threshold_mask_value_desc</span><span class="p">,</span>
-                          <span class="p">),</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">threshold_mask_value_desc</span><span class="p">,</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;use_implicit_mask&quot;</span><span class="p">,</span>
-            <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">desc</span><span class="o">=</span><span class="n">use_implicit_mask_desc</span><span class="p">,</span>
-                        <span class="p">),</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span>
+                <span class="kc">True</span><span class="p">,</span>
+                <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">use_implicit_mask_desc</span><span class="p">,</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
@@ -3080,14 +3068,15 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;global_calc&quot;</span><span class="p">,</span>
-            <span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="s2">&quot;Omit&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;Mean&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;User&quot;</span><span class="p">,</span>
-                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">desc</span><span class="o">=</span><span class="n">global_calc_desc</span><span class="p">,</span>
-                        <span class="p">),</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span>
+                <span class="s2">&quot;Omit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Mean&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;User&quot;</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">global_calc_desc</span><span class="p">,</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
@@ -3100,29 +3089,31 @@
                 <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                 <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                 <span class="n">desc</span><span class="o">=</span><span class="n">global_calc_values_desc</span><span class="p">,</span>
-            <span class="p">)</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;no_grand_mean_scaling&quot;</span><span class="p">,</span>
-            <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">desc</span><span class="o">=</span><span class="n">no_grand_mean_scaling_desc</span><span class="p">,</span>
-                        <span class="p">),</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span>
+                <span class="kc">True</span><span class="p">,</span>
+                <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">no_grand_mean_scaling_desc</span><span class="p">,</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;normalisation&quot;</span><span class="p">,</span>
-            <span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="s2">&quot;1&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;2&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;3&quot;</span><span class="p">,</span>
-                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">desc</span><span class="o">=</span><span class="n">normalisation_desc</span><span class="p">,</span>
-                        <span class="p">),</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span>
+                <span class="mi">1</span><span class="p">,</span>
+                <span class="mi">2</span><span class="p">,</span>
+                <span class="mi">3</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">normalisation_desc</span><span class="p">,</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
         <span class="c1"># Output traits</span>
@@ -3138,26 +3129,6 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.spm.OneSampleTTestDesign&quot;</span><span class="p">)</span></div>
-
-    <span class="k">def</span> <span class="nf">_get_covariates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">vectors</span><span class="p">,</span> <span class="n">interactions</span><span class="p">,</span> <span class="n">centerings</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate the covariates list contaning dictionary</span>
-<span class="sd">        with the following key :</span>
-<span class="sd">        name, vector, interaction, centering</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">covariates</span> <span class="o">=</span> <span class="p">[]</span>
-
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="p">)):</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">covariate</span> <span class="o">=</span> <span class="p">{}</span>
-                <span class="n">covariate</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">names</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-                <span class="n">covariate</span><span class="p">[</span><span class="s2">&quot;vector&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vectors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-                <span class="n">covariate</span><span class="p">[</span><span class="s2">&quot;interaction&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">interactions</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-                <span class="n">covariate</span><span class="p">[</span><span class="s2">&quot;centering&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">centerings</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-                <span class="n">covariates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">covariate</span><span class="p">)</span>
-            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-                <span class="k">return</span> <span class="kc">None</span>
-
-        <span class="k">return</span> <span class="n">covariates</span>
 
 <div class="viewcode-block" id="OneSampleTTestDesign.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.OneSampleTTestDesign.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
@@ -3183,44 +3154,50 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">OneSampleTTestDesign</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="c1"># global_calc_values only if global_calc set to &quot;User&quot;</span>
-        <span class="k">if</span> <span class="p">(</span>
-            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_calc</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;User&quot;</span>
-            <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_cal_value</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">Undefined</span><span class="p">])</span>
-
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_calc</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;User&quot;</span> <span class="ow">and</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">global_cal_value</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">Undefined</span><span class="p">]</span>
         <span class="p">):</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initialization failed... If global_cal set to User, &quot;</span>
-                  <span class="s2">&quot;required global_cal_value parameter&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;Initialization failed... If global_cal set to User, &quot;</span>
+                <span class="s2">&quot;required global_cal_value parameter&quot;</span>
+            <span class="p">)</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
 
         <span class="c1"># If threshold_masking set to Absoulte or Relative</span>
         <span class="c1"># threshold_mask_value should be specified</span>
         <span class="k">if</span> <span class="p">(</span>
-            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">threshold_masking</span> <span class="o">==</span> <span class="s2">&quot;Relative&quot;</span>
-             <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_masking</span> <span class="o">==</span> <span class="s2">&quot;Absolute&quot;</span><span class="p">)</span>
-            <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">threshold_mask_value</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">Undefined</span><span class="p">])</span>
-
-        <span class="p">):</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initialization failed... If threshold_masking set to  &quot;</span>
-                  <span class="s2">&quot;Relative or Absoulte, required threshold_mask_value &quot;</span>
-                  <span class="s2">&quot;parameter&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">threshold_masking</span> <span class="o">==</span> <span class="s2">&quot;Relative&quot;</span>
+            <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_masking</span> <span class="o">==</span> <span class="s2">&quot;Absolute&quot;</span>
+        <span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">threshold_mask_value</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">Undefined</span><span class="p">]):</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;Initialization failed... If threshold_masking set to  &quot;</span>
+                <span class="s2">&quot;Relative or Absoulte, required threshold_mask_value &quot;</span>
+                <span class="s2">&quot;parameter&quot;</span>
+            <span class="p">)</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
 
         <span class="c1"># Check in_files lenght</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_files</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initialization failed... &quot;</span>
-                  <span class="s2">&quot;At least 2 files should be used for in_files&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;Initialization failed... &quot;</span>
+                <span class="s2">&quot;At least 2 files should be used for in_files&quot;</span>
+            <span class="p">)</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
 
         <span class="c1"># Check covariates</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">covariates_names</span><span class="p">:</span>
-            <span class="n">covariates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_covariates</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">covariates_names</span><span class="p">,</span>
-                                              <span class="bp">self</span><span class="o">.</span><span class="n">covariates_vectors</span><span class="p">,</span>
-                                              <span class="bp">self</span><span class="o">.</span><span class="n">covariates_interactions</span><span class="p">,</span>
-                                              <span class="bp">self</span><span class="o">.</span><span class="n">covariates_centerings</span><span class="p">)</span>
+            <span class="n">covariates</span> <span class="o">=</span> <span class="n">get_covariates</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">covariates_names</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">covariates_vectors</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">covariates_centerings</span><span class="p">,</span>
+                <span class="n">interactions</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">covariates_interactions</span><span class="p">,</span>
+            <span class="p">)</span>
             <span class="k">if</span> <span class="n">covariates</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initialization failed... &quot;</span>
-                      <span class="s2">&quot;Name, vector, centering, intercation should be defined &quot;</span>
-                      <span class="s2">&quot;for each covariate&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s2">&quot;Initialization failed... &quot;</span>
+                    <span class="s2">&quot;Name, vector, centering, intercation should be defined &quot;</span>
+                    <span class="s2">&quot;for each covariate&quot;</span>
+                <span class="p">)</span>
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
 
         <span class="c1"># Outputs definition and tags inheritance (optional)</span>
@@ -3262,11 +3239,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">spm_mat_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;out_directory&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_files</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">covariates_names</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">covariates</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_get_covariates</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">covariates_names</span><span class="p">,</span>
-                                     <span class="bp">self</span><span class="o">.</span><span class="n">covariates_vectors</span><span class="p">,</span>
-                                     <span class="bp">self</span><span class="o">.</span><span class="n">covariates_interactions</span><span class="p">,</span>
-                                     <span class="bp">self</span><span class="o">.</span><span class="n">covariates_centerings</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">covariates</span> <span class="o">=</span> <span class="n">get_covariates</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">covariates_names</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">covariates_vectors</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">covariates_centerings</span><span class="p">,</span>
+                <span class="n">interactions</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">covariates_interactions</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_masking</span> <span class="o">==</span> <span class="s2">&quot;None&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">threshold_mask_none</span> <span class="o">=</span> <span class="kc">True</span>
@@ -3330,27 +3307,21 @@
             <span class="s2">&quot;5 (No centering), 6 (User specified value), &quot;</span>
             <span class="s2">&quot;7 (As implied by ANCOVA), 8 (GM))&quot;</span>
         <span class="p">)</span>
-        <span class="c1"># threshold_mask_absolute_desc = &quot;Use an absolute threshold (a boolean)&quot;</span>
-        <span class="c1"># threshold_mask_none_desc = &quot;Do not use threshold masking (a boolean)&quot;</span>
-        <span class="c1"># threshold_mask_relative_desc = &quot; (a boolean)&quot;</span>
         <span class="n">threshold_masking_desc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;Threshold mask (a string among none, &quot;</span>
-            <span class="s2">&quot;absolute, relative)&quot;</span>
+            <span class="s2">&quot;Threshold mask (a string among none, &quot;</span> <span class="s2">&quot;absolute, relative)&quot;</span>
         <span class="p">)</span>
-        <span class="n">threshold_mask_value_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;Threshold value (a float)&quot;</span><span class="p">)</span>
+        <span class="n">threshold_mask_value_desc</span> <span class="o">=</span> <span class="s2">&quot;Threshold value (a float)&quot;</span>
         <span class="n">use_implicit_mask_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;Use implicit mask NaNs or zeros to threshold. (a boolean)&quot;</span>
         <span class="p">)</span>
         <span class="n">explicit_mask_file_desc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;Mask file to applied (a string that represent &quot;</span>
-            <span class="s2">&quot;a path)&quot;</span>
+            <span class="s2">&quot;Mask file to applied (a string that represent &quot;</span> <span class="s2">&quot;a path)&quot;</span>
         <span class="p">)</span>
         <span class="n">global_calc_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;Global calculation (a string among omit, mean, value)&quot;</span>
         <span class="p">)</span>
         <span class="n">global_calc_values_desc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;Vector of global value (only if global_cal is set &quot;</span>
-            <span class="s2">&quot;to User)&quot;</span>
+            <span class="s2">&quot;Vector of global value (only if global_cal is set &quot;</span> <span class="s2">&quot;to User)&quot;</span>
         <span class="p">)</span>
         <span class="n">normalisation_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;Normalisation type (one of 1 (None) , 2 (proportional), &quot;</span>
@@ -3371,18 +3342,21 @@
             <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span>
                 <span class="n">InputMultiPath</span><span class="p">(</span>
                     <span class="n">File</span><span class="p">(),</span>
-                <span class="p">),</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                 <span class="n">copyfile</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                <span class="n">desc</span><span class="o">=</span><span class="n">paired_files_desc</span><span class="p">),</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">paired_files_desc</span><span class="p">,</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;out_dir_name&quot;</span><span class="p">,</span>
-            <span class="n">traits</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="s2">&quot;spm_stat_2ndLevel&quot;</span><span class="p">,</span>
-                          <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                          <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                          <span class="n">desc</span><span class="o">=</span><span class="n">out_dir_name_desc</span>
-                          <span class="p">),</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">String</span><span class="p">(</span>
+                <span class="s2">&quot;spm_stat_2ndLevel&quot;</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">out_dir_name_desc</span><span class="p">,</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
@@ -3408,8 +3382,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;covariates_interactions&quot;</span><span class="p">,</span>
             <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span>
-                <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
-                              <span class="kc">None</span><span class="p">),</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="kc">None</span><span class="p">),</span>
                 <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                 <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                 <span class="n">value</span><span class="o">=</span><span class="p">[],</span>
@@ -3430,35 +3403,38 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;threshold_masking&quot;</span><span class="p">,</span>
-            <span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="s2">&quot;None&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;Absolute&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;Relative&quot;</span><span class="p">,</span>
-                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">desc</span><span class="o">=</span><span class="n">threshold_masking_desc</span><span class="p">,</span>
-                        <span class="p">),</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span>
+                <span class="s2">&quot;None&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Absolute&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Relative&quot;</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">threshold_masking_desc</span><span class="p">,</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;threshold_mask_value&quot;</span><span class="p">,</span>
-            <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span><span class="n">Undefined</span><span class="p">,</span>
-                          <span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
-                          <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                          <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                          <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                          <span class="n">desc</span><span class="o">=</span><span class="n">threshold_mask_value_desc</span><span class="p">,</span>
-                          <span class="p">),</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">threshold_mask_value_desc</span><span class="p">,</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;use_implicit_mask&quot;</span><span class="p">,</span>
-            <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">desc</span><span class="o">=</span><span class="n">use_implicit_mask_desc</span><span class="p">,</span>
-                        <span class="p">),</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span>
+                <span class="kc">True</span><span class="p">,</span>
+                <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">use_implicit_mask_desc</span><span class="p">,</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
@@ -3472,14 +3448,15 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;global_calc&quot;</span><span class="p">,</span>
-            <span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="s2">&quot;Omit&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;Mean&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;User&quot;</span><span class="p">,</span>
-                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">desc</span><span class="o">=</span><span class="n">global_calc_desc</span><span class="p">,</span>
-                        <span class="p">),</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span>
+                <span class="s2">&quot;Omit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Mean&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;User&quot;</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">global_calc_desc</span><span class="p">,</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
@@ -3492,29 +3469,31 @@
                 <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                 <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                 <span class="n">desc</span><span class="o">=</span><span class="n">global_calc_values_desc</span><span class="p">,</span>
-            <span class="p">)</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;no_grand_mean_scaling&quot;</span><span class="p">,</span>
-            <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">desc</span><span class="o">=</span><span class="n">no_grand_mean_scaling_desc</span><span class="p">,</span>
-                        <span class="p">),</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span>
+                <span class="kc">True</span><span class="p">,</span>
+                <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">no_grand_mean_scaling_desc</span><span class="p">,</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;normalisation&quot;</span><span class="p">,</span>
-            <span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="s2">&quot;1&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;2&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;3&quot;</span><span class="p">,</span>
-                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">desc</span><span class="o">=</span><span class="n">normalisation_desc</span><span class="p">,</span>
-                        <span class="p">),</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span>
+                <span class="mi">1</span><span class="p">,</span>
+                <span class="mi">2</span><span class="p">,</span>
+                <span class="mi">3</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">normalisation_desc</span><span class="p">,</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
         <span class="c1"># Output traits</span>
@@ -3530,26 +3509,6 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.spm.PairedTTestDesign&quot;</span><span class="p">)</span></div>
-
-    <span class="k">def</span> <span class="nf">_get_covariates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">vectors</span><span class="p">,</span> <span class="n">interactions</span><span class="p">,</span> <span class="n">centerings</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate the covariates list contaning dictionary</span>
-<span class="sd">        with the following key :</span>
-<span class="sd">        name, vector, interaction, centering</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">covariates</span> <span class="o">=</span> <span class="p">[]</span>
-
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="p">)):</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">covariate</span> <span class="o">=</span> <span class="p">{}</span>
-                <span class="n">covariate</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">names</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-                <span class="n">covariate</span><span class="p">[</span><span class="s2">&quot;vector&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vectors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-                <span class="n">covariate</span><span class="p">[</span><span class="s2">&quot;interaction&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">interactions</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-                <span class="n">covariate</span><span class="p">[</span><span class="s2">&quot;centering&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">centerings</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-                <span class="n">covariates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">covariate</span><span class="p">)</span>
-            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-                <span class="k">return</span> <span class="kc">None</span>
-
-        <span class="k">return</span> <span class="n">covariates</span>
 
 <div class="viewcode-block" id="PairedTTestDesign.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.PairedTTestDesign.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
@@ -3575,44 +3534,50 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">PairedTTestDesign</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="c1"># global_calc_values only if global_calc set to &quot;User&quot;</span>
-        <span class="k">if</span> <span class="p">(</span>
-            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_calc</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;User&quot;</span>
-            <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_cal_value</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">Undefined</span><span class="p">])</span>
-
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_calc</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;User&quot;</span> <span class="ow">and</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">global_cal_value</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">Undefined</span><span class="p">]</span>
         <span class="p">):</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initialization failed... If global_cal set to User, &quot;</span>
-                  <span class="s2">&quot;required global_cal_value parameter&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;Initialization failed... If global_cal set to User, &quot;</span>
+                <span class="s2">&quot;required global_cal_value parameter&quot;</span>
+            <span class="p">)</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
 
         <span class="c1"># If threshold_masking set to Absoulte or Relative</span>
         <span class="c1"># threshold_mask_value should be specified</span>
         <span class="k">if</span> <span class="p">(</span>
-            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">threshold_masking</span> <span class="o">==</span> <span class="s2">&quot;Relative&quot;</span>
-             <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_masking</span> <span class="o">==</span> <span class="s2">&quot;Absolute&quot;</span><span class="p">)</span>
-            <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">threshold_mask_value</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">Undefined</span><span class="p">])</span>
-
-        <span class="p">):</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initialization failed... If threshold_masking set to  &quot;</span>
-                  <span class="s2">&quot;Relative or Absoulte, required threshold_mask_value &quot;</span>
-                  <span class="s2">&quot;parameter&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">threshold_masking</span> <span class="o">==</span> <span class="s2">&quot;Relative&quot;</span>
+            <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_masking</span> <span class="o">==</span> <span class="s2">&quot;Absolute&quot;</span>
+        <span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">threshold_mask_value</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">Undefined</span><span class="p">]):</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;Initialization failed... If threshold_masking set to  &quot;</span>
+                <span class="s2">&quot;Relative or Absoulte, required threshold_mask_value &quot;</span>
+                <span class="s2">&quot;parameter&quot;</span>
+            <span class="p">)</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
 
         <span class="c1"># Check in_files lenght</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">paired_files</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initialization failed... &quot;</span>
-                  <span class="s2">&quot;At least 2 files should be used for paired_files&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;Initialization failed... &quot;</span>
+                <span class="s2">&quot;At least 2 files should be used for paired_files&quot;</span>
+            <span class="p">)</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
 
         <span class="c1"># Check covariates</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">covariates_names</span><span class="p">:</span>
-            <span class="n">covariates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_covariates</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">covariates_names</span><span class="p">,</span>
-                                              <span class="bp">self</span><span class="o">.</span><span class="n">covariates_vectors</span><span class="p">,</span>
-                                              <span class="bp">self</span><span class="o">.</span><span class="n">covariates_interactions</span><span class="p">,</span>
-                                              <span class="bp">self</span><span class="o">.</span><span class="n">covariates_centerings</span><span class="p">)</span>
+            <span class="n">covariates</span> <span class="o">=</span> <span class="n">get_covariates</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">covariates_names</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">covariates_vectors</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">covariates_centerings</span><span class="p">,</span>
+                <span class="n">interactions</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">covariates_interactions</span><span class="p">,</span>
+            <span class="p">)</span>
             <span class="k">if</span> <span class="n">covariates</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initialization failed... &quot;</span>
-                      <span class="s2">&quot;Name, vector, centering, intercation should be defined &quot;</span>
-                      <span class="s2">&quot;for each covariate&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s2">&quot;Initialization failed... &quot;</span>
+                    <span class="s2">&quot;Name, vector, centering, intercation should be defined &quot;</span>
+                    <span class="s2">&quot;for each covariate&quot;</span>
+                <span class="p">)</span>
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
 
         <span class="c1"># Outputs definition and tags inheritance (optional)</span>
@@ -3654,11 +3619,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">spm_mat_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;out_directory&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">paired_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">paired_files</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">covariates_names</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">covariates</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_get_covariates</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">covariates_names</span><span class="p">,</span>
-                                     <span class="bp">self</span><span class="o">.</span><span class="n">covariates_vectors</span><span class="p">,</span>
-                                     <span class="bp">self</span><span class="o">.</span><span class="n">covariates_interactions</span><span class="p">,</span>
-                                     <span class="bp">self</span><span class="o">.</span><span class="n">covariates_centerings</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">covariates</span> <span class="o">=</span> <span class="n">get_covariates</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">covariates_names</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">covariates_vectors</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">covariates_centerings</span><span class="p">,</span>
+                <span class="n">interactions</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">covariates_interactions</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_masking</span> <span class="o">==</span> <span class="s2">&quot;None&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">threshold_mask_none</span> <span class="o">=</span> <span class="kc">True</span>
@@ -3718,8 +3683,7 @@
             <span class="s2">&quot;Independence of the measurments between levels (a boolean)&quot;</span>
         <span class="p">)</span>
         <span class="n">unequal_variance_desc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;Are the variaces equal or unequal between &quot;</span>
-            <span class="s2">&quot;groups ? (a boolean)&quot;</span>
+            <span class="s2">&quot;Are the variaces equal or unequal between &quot;</span> <span class="s2">&quot;groups ? (a boolean)&quot;</span>
         <span class="p">)</span>
         <span class="n">covariates_vectors_desc</span> <span class="o">=</span> <span class="s2">&quot;Covariates vector (a list of list of float)&quot;</span>
         <span class="n">covariates_names_desc</span> <span class="o">=</span> <span class="s2">&quot;Covariates names (a list of string)&quot;</span>
@@ -3733,27 +3697,21 @@
             <span class="s2">&quot;5 (No centering), 6 (User specified value), &quot;</span>
             <span class="s2">&quot;7 (As implied by ANCOVA), 8 (GM))&quot;</span>
         <span class="p">)</span>
-        <span class="c1"># threshold_mask_absolute_desc = &quot;Use an absolute threshold (a boolean)&quot;</span>
-        <span class="c1"># threshold_mask_none_desc = &quot;Do not use threshold masking (a boolean)&quot;</span>
-        <span class="c1"># threshold_mask_relative_desc = &quot; (a boolean)&quot;</span>
         <span class="n">threshold_masking_desc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;Threshold mask (a string among none, &quot;</span>
-            <span class="s2">&quot;absolute, relative)&quot;</span>
+            <span class="s2">&quot;Threshold mask (a string among none, &quot;</span> <span class="s2">&quot;absolute, relative)&quot;</span>
         <span class="p">)</span>
-        <span class="n">threshold_mask_value_desc</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;Threshold value (a float)&quot;</span><span class="p">)</span>
+        <span class="n">threshold_mask_value_desc</span> <span class="o">=</span> <span class="s2">&quot;Threshold value (a float)&quot;</span>
         <span class="n">use_implicit_mask_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;Use implicit mask NaNs or zeros to threshold. (a boolean)&quot;</span>
         <span class="p">)</span>
         <span class="n">explicit_mask_file_desc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;Mask file to applied (a string that represent &quot;</span>
-            <span class="s2">&quot;a path)&quot;</span>
+            <span class="s2">&quot;Mask file to applied (a string that represent &quot;</span> <span class="s2">&quot;a path)&quot;</span>
         <span class="p">)</span>
         <span class="n">global_calc_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;Global calculation (a string among omit, mean, value)&quot;</span>
         <span class="p">)</span>
         <span class="n">global_calc_values_desc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;Vector of global value (only if global_cal is set &quot;</span>
-            <span class="s2">&quot;to User)&quot;</span>
+            <span class="s2">&quot;Vector of global value (only if global_cal is set &quot;</span> <span class="s2">&quot;to User)&quot;</span>
         <span class="p">)</span>
         <span class="n">normalisation_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;Normalisation type (one of 1 (None) , 2 (proportional), &quot;</span>
@@ -3785,31 +3743,34 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;out_dir_name&quot;</span><span class="p">,</span>
-            <span class="n">traits</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="s2">&quot;spm_stat_2ndLevel&quot;</span><span class="p">,</span>
-                          <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                          <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                          <span class="n">desc</span><span class="o">=</span><span class="n">out_dir_name_desc</span>
-                          <span class="p">),</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">String</span><span class="p">(</span>
+                <span class="s2">&quot;spm_stat_2ndLevel&quot;</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">out_dir_name_desc</span><span class="p">,</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;independence&quot;</span><span class="p">,</span>
-            <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">desc</span><span class="o">=</span><span class="n">independence_desc</span><span class="p">,</span>
-                        <span class="p">),</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span>
+                <span class="kc">True</span><span class="p">,</span>
+                <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">independence_desc</span><span class="p">,</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;unequal_variance&quot;</span><span class="p">,</span>
-            <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">desc</span><span class="o">=</span><span class="n">unequal_variance_desc</span><span class="p">,</span>
-                        <span class="p">),</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span>
+                <span class="kc">True</span><span class="p">,</span>
+                <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">unequal_variance_desc</span><span class="p">,</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
@@ -3835,8 +3796,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;covariates_interactions&quot;</span><span class="p">,</span>
             <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span>
-                <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
-                              <span class="kc">None</span><span class="p">),</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="kc">None</span><span class="p">),</span>
                 <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                 <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                 <span class="n">value</span><span class="o">=</span><span class="p">[],</span>
@@ -3857,35 +3817,38 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;threshold_masking&quot;</span><span class="p">,</span>
-            <span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="s2">&quot;None&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;Absolute&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;Relative&quot;</span><span class="p">,</span>
-                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">desc</span><span class="o">=</span><span class="n">threshold_masking_desc</span><span class="p">,</span>
-                        <span class="p">),</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span>
+                <span class="s2">&quot;None&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Absolute&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Relative&quot;</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">threshold_masking_desc</span><span class="p">,</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;threshold_mask_value&quot;</span><span class="p">,</span>
-            <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span><span class="n">Undefined</span><span class="p">,</span>
-                          <span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
-                          <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                          <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                          <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                          <span class="n">desc</span><span class="o">=</span><span class="n">threshold_mask_value_desc</span><span class="p">,</span>
-                          <span class="p">),</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Either</span><span class="p">(</span>
+                <span class="n">Undefined</span><span class="p">,</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">(),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">threshold_mask_value_desc</span><span class="p">,</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;use_implicit_mask&quot;</span><span class="p">,</span>
-            <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">desc</span><span class="o">=</span><span class="n">use_implicit_mask_desc</span><span class="p">,</span>
-                        <span class="p">),</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span>
+                <span class="kc">True</span><span class="p">,</span>
+                <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">use_implicit_mask_desc</span><span class="p">,</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
@@ -3899,14 +3862,15 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;global_calc&quot;</span><span class="p">,</span>
-            <span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="s2">&quot;Omit&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;Mean&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;User&quot;</span><span class="p">,</span>
-                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">desc</span><span class="o">=</span><span class="n">global_calc_desc</span><span class="p">,</span>
-                        <span class="p">),</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span>
+                <span class="s2">&quot;Omit&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Mean&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;User&quot;</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">global_calc_desc</span><span class="p">,</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
@@ -3919,29 +3883,31 @@
                 <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                 <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                 <span class="n">desc</span><span class="o">=</span><span class="n">global_calc_values_desc</span><span class="p">,</span>
-            <span class="p">)</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;no_grand_mean_scaling&quot;</span><span class="p">,</span>
-            <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">desc</span><span class="o">=</span><span class="n">no_grand_mean_scaling_desc</span><span class="p">,</span>
-                        <span class="p">),</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Bool</span><span class="p">(</span>
+                <span class="kc">True</span><span class="p">,</span>
+                <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">no_grand_mean_scaling_desc</span><span class="p">,</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;normalisation&quot;</span><span class="p">,</span>
-            <span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="s2">&quot;1&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;2&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;3&quot;</span><span class="p">,</span>
-                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                        <span class="n">desc</span><span class="o">=</span><span class="n">normalisation_desc</span><span class="p">,</span>
-                        <span class="p">),</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span>
+                <span class="mi">1</span><span class="p">,</span>
+                <span class="mi">2</span><span class="p">,</span>
+                <span class="mi">3</span><span class="p">,</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">usedefault</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">normalisation_desc</span><span class="p">,</span>
+            <span class="p">),</span>
         <span class="p">)</span>
 
         <span class="c1"># Output traits</span>
@@ -3957,26 +3923,6 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.spm.TwoSampleTTestDesign&quot;</span><span class="p">)</span></div>
-
-    <span class="k">def</span> <span class="nf">_get_covariates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="n">vectors</span><span class="p">,</span> <span class="n">interactions</span><span class="p">,</span> <span class="n">centerings</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate the covariates list contaning dictionary</span>
-<span class="sd">        with the following key :</span>
-<span class="sd">        name, vector, interaction, centering</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">covariates</span> <span class="o">=</span> <span class="p">[]</span>
-
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">names</span><span class="p">)):</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">covariate</span> <span class="o">=</span> <span class="p">{}</span>
-                <span class="n">covariate</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">names</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-                <span class="n">covariate</span><span class="p">[</span><span class="s2">&quot;vector&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vectors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-                <span class="n">covariate</span><span class="p">[</span><span class="s2">&quot;interaction&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">interactions</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-                <span class="n">covariate</span><span class="p">[</span><span class="s2">&quot;centering&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">centerings</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-                <span class="n">covariates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">covariate</span><span class="p">)</span>
-            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-                <span class="k">return</span> <span class="kc">None</span>
-
-        <span class="k">return</span> <span class="n">covariates</span>
 
 <div class="viewcode-block" id="TwoSampleTTestDesign.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.TwoSampleTTestDesign.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
@@ -4002,44 +3948,50 @@
         <span class="nb">super</span><span class="p">(</span><span class="n">TwoSampleTTestDesign</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
 
         <span class="c1"># global_calc_values only if global_calc set to &quot;User&quot;</span>
-        <span class="k">if</span> <span class="p">(</span>
-            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_calc</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;User&quot;</span>
-            <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_cal_value</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">Undefined</span><span class="p">])</span>
-
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">global_calc</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;User&quot;</span> <span class="ow">and</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">global_cal_value</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">Undefined</span><span class="p">]</span>
         <span class="p">):</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initialization failed... If global_cal set to User, &quot;</span>
-                  <span class="s2">&quot;required global_cal_value parameter&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;Initialization failed... If global_cal set to User, &quot;</span>
+                <span class="s2">&quot;required global_cal_value parameter&quot;</span>
+            <span class="p">)</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
 
         <span class="c1"># If threshold_masking set to Absoulte or Relative</span>
         <span class="c1"># threshold_mask_value should be specified</span>
         <span class="k">if</span> <span class="p">(</span>
-            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">threshold_masking</span> <span class="o">==</span> <span class="s2">&quot;Relative&quot;</span>
-             <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_masking</span> <span class="o">==</span> <span class="s2">&quot;Absolute&quot;</span><span class="p">)</span>
-            <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">threshold_mask_value</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">Undefined</span><span class="p">])</span>
-
-        <span class="p">):</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initialization failed... If threshold_masking set to  &quot;</span>
-                  <span class="s2">&quot;Relative or Absoulte, required threshold_mask_value &quot;</span>
-                  <span class="s2">&quot;parameter&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">threshold_masking</span> <span class="o">==</span> <span class="s2">&quot;Relative&quot;</span>
+            <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_masking</span> <span class="o">==</span> <span class="s2">&quot;Absolute&quot;</span>
+        <span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">threshold_mask_value</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&lt;undefined&gt;&quot;</span><span class="p">,</span> <span class="n">Undefined</span><span class="p">]):</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;Initialization failed... If threshold_masking set to  &quot;</span>
+                <span class="s2">&quot;Relative or Absoulte, required threshold_mask_value &quot;</span>
+                <span class="s2">&quot;parameter&quot;</span>
+            <span class="p">)</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
 
         <span class="c1"># Check in_files lenght</span>
         <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">group1_files</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">group2_files</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">):</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initialization failed... &quot;</span>
-                  <span class="s2">&quot;At least 2 files should be used for group_files&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;Initialization failed... &quot;</span>
+                <span class="s2">&quot;At least 2 files should be used for group_files&quot;</span>
+            <span class="p">)</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
 
         <span class="c1"># Check covariates</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">covariates_names</span><span class="p">:</span>
-            <span class="n">covariates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_covariates</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">covariates_names</span><span class="p">,</span>
-                                              <span class="bp">self</span><span class="o">.</span><span class="n">covariates_vectors</span><span class="p">,</span>
-                                              <span class="bp">self</span><span class="o">.</span><span class="n">covariates_interactions</span><span class="p">,</span>
-                                              <span class="bp">self</span><span class="o">.</span><span class="n">covariates_centerings</span><span class="p">)</span>
+            <span class="n">covariates</span> <span class="o">=</span> <span class="n">get_covariates</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">covariates_names</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">covariates_vectors</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">covariates_centerings</span><span class="p">,</span>
+                <span class="n">interactions</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">covariates_interactions</span><span class="p">,</span>
+            <span class="p">)</span>
             <span class="k">if</span> <span class="n">covariates</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Initialization failed... &quot;</span>
-                      <span class="s2">&quot;Name, vector, centering, intercation should be defined &quot;</span>
-                      <span class="s2">&quot;for each covariate&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s2">&quot;Initialization failed... &quot;</span>
+                    <span class="s2">&quot;Name, vector, centering, intercation should be defined &quot;</span>
+                    <span class="s2">&quot;for each covariate&quot;</span>
+                <span class="p">)</span>
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
 
         <span class="c1"># Outputs definition and tags inheritance (optional)</span>
@@ -4084,12 +4036,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">unequal_variance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">unequal_variance</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">dependent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">independence</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">covariates_names</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">covariates</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_get_covariates</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">covariates_names</span><span class="p">,</span>
-                                     <span class="bp">self</span><span class="o">.</span><span class="n">covariates_vectors</span><span class="p">,</span>
-                                     <span class="bp">self</span><span class="o">.</span><span class="n">covariates_interactions</span><span class="p">,</span>
-                                     <span class="bp">self</span><span class="o">.</span><span class="n">covariates_centerings</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">covariates</span> <span class="o">=</span> <span class="n">get_covariates</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">covariates_names</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">covariates_vectors</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">covariates_centerings</span><span class="p">,</span>
+                <span class="n">interactions</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">covariates_interactions</span><span class="p">,</span>
             <span class="p">)</span>
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_masking</span> <span class="o">==</span> <span class="s2">&quot;None&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">threshold_mask_none</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">threshold_masking</span> <span class="o">==</span> <span class="s2">&quot;Relative&quot;</span><span class="p">:</span>
@@ -4109,6 +4062,28 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">global_normalization</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalisation</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
+
+
+<div class="viewcode-block" id="get_covariates"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.get_covariates">[docs]</a><span class="k">def</span> <span class="nf">get_covariates</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="n">vectors</span><span class="p">,</span> <span class="n">centerings</span><span class="p">,</span> <span class="n">interactions</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate the covariates list contaning dictionaries</span>
+<span class="sd">    with the following key :</span>
+<span class="sd">    name, vector, interaction, centering</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">covariates</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">names</span><span class="p">)):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">covariate</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">covariate</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">names</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">covariate</span><span class="p">[</span><span class="s2">&quot;vector&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vectors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">covariate</span><span class="p">[</span><span class="s2">&quot;centering&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">centerings</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">interactions</span><span class="p">:</span>
+                <span class="n">covariate</span><span class="p">[</span><span class="s2">&quot;interaction&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">interactions</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">covariates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">covariate</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">return</span> <span class="n">covariates</span></div>
 </pre></div>
 
       </div>

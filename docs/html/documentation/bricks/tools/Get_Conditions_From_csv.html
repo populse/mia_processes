@@ -1,0 +1,146 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Get_Conditions_From_csv brick &#8212; mia_processes 2.2.1-dev documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/haiku.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
+          <span>mia_processes 2.2.1-dev documentation</span></a></h1>
+        <h2 class="heading"><span>Get_Conditions_From_csv brick</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <div class="toctree-wrapper compound">
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 35%" />
+<col style="width: 42%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference external" href="../../../index.html">Home</a></p></td>
+<td><p><a class="reference external" href="../../documentation.html">Documentation</a></p></td>
+<td><p><a class="reference external" href="https://github.com/populse/mia_processes">GitHub</a></p></td>
+</tr>
+</tbody>
+</table>
+<section id="get-conditions-from-csv-brick">
+<h1>Get_Conditions_From_csv brick<a class="headerlink" href="#get-conditions-from-csv-brick" title="Permalink to this headline">¶</a></h1>
+<p>Get conditions information (conditions names, onsets and durations) for <a class="reference external" href="../../bricks/stats/spm/Level1Design.html">Level1Design</a> brick using csv files.
+One csv file should be used by session.</p>
+<p>For event-related design, the csv file should contains one column by conditions with the onsets and the first row should contains the name of the condition:</p>
+<a class="reference internal image-reference" href="../../../_images/getConditionsFromCSV_event_example.png"><img alt="csv example event-related design" src="../../../_images/getConditionsFromCSV_event_example.png" style="width: 300px;" /></a>
+<p>For bloc design, the csv file should contains two columns by conditions: one with the onset and one with the duration.
+The first row of the column with the onset should contains the name of the condition
+and the first row of the column with the duration should contain the name of the condition + ” duration”:</p>
+<a class="reference internal image-reference" href="../../../_images/getConditionsFromCSV_bloc_example.png"><img alt="csv example bloc design" src="../../../_images/getConditionsFromCSV_bloc_example.png" style="width: 300px;" /></a>
+<hr class="docutils" />
+<p><strong>Inputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>csv_files</em> (a list of existing csv files):</dt><dd><p>csv files contening the conditions information for each condition.
+One csv file by session.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;/home/username/MIA_projects/data/downloaded_data/sess01_bloc_onset.csv&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;/home/username/MIA_projects//data/downloaded_data/sess02_event_onset.csv&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>design_type</em> (a list of string which are bloc or event-related):</dt><dd><p>The type of design for each session (bloc design or event-related design).
+The order should be the same as for the csv_files parameter.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="s1">&#39;bloc&#39;</span><span class="p">,</span> <span class="s1">&#39;event-related&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Outputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>cond_names</em> (a list of string):</dt><dd><p>The list of the conditions names.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[[</span><span class="s1">&#39;Inc&#39;</span><span class="p">,</span> <span class="s1">&#39;Con&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;N1&#39;</span><span class="p">,</span> <span class="s1">&#39;N2&#39;</span><span class="p">,</span> <span class="s1">&#39;F1&#39;</span><span class="p">,</span> <span class="s1">&#39;F2&#39;</span><span class="p">]]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>cond_onsets</em> (a list of list of float):</dt><dd><p>The list of the conditions onsets.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span>
+  <span class="p">[</span>
+      <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">,</span> <span class="mf">52.0</span><span class="p">,</span> <span class="mf">88.0</span><span class="p">,</span> <span class="mf">130.0</span><span class="p">,</span> <span class="mf">144.0</span><span class="p">,</span> <span class="mf">174.0</span><span class="p">,</span> <span class="mf">236.0</span><span class="p">,</span> <span class="mf">248.0</span><span class="p">,</span> <span class="mf">260.0</span><span class="p">,</span> <span class="mf">274.0</span><span class="p">],</span>
+      <span class="p">[</span><span class="mf">32.0</span><span class="p">,</span> <span class="mf">42.0</span><span class="p">,</span> <span class="mf">64.0</span><span class="p">,</span> <span class="mf">76.0</span><span class="p">,</span> <span class="mf">102.0</span><span class="p">,</span> <span class="mf">116.0</span><span class="p">,</span> <span class="mf">154.0</span><span class="p">,</span> <span class="mf">164.0</span><span class="p">,</span> <span class="mf">184.0</span><span class="p">,</span> <span class="mf">196.0</span><span class="p">,</span> <span class="mf">208.0</span><span class="p">,</span> <span class="mf">222.0</span><span class="p">]</span>
+  <span class="p">],</span>
+  <span class="p">[</span>   <span class="p">[</span><span class="mf">6.74996667</span><span class="p">,</span> <span class="mf">15.74996667</span><span class="p">,</span> <span class="mf">17.99996667</span><span class="p">,</span> <span class="mf">26.99996667</span><span class="p">,</span> <span class="mf">29.24996667</span><span class="p">,</span> <span class="mf">31.49996667</span><span class="p">,</span> <span class="mf">35.99996667</span><span class="p">,</span> <span class="mf">42.74996667</span><span class="p">,</span> <span class="mf">65.24996667</span><span class="p">,</span> <span class="mf">67.49996667</span><span class="p">,</span> <span class="mf">74.24996667</span><span class="p">,</span> <span class="mf">92.24996667</span><span class="p">,</span> <span class="mf">112.49996667</span><span class="p">,</span> <span class="mf">119.24996667</span><span class="p">,</span> <span class="mf">123.74996667</span><span class="p">,</span> <span class="mf">125.99996667</span><span class="p">,</span> <span class="mf">137.24996667</span><span class="p">,</span> <span class="mf">141.74996667</span><span class="p">,</span> <span class="mf">143.99996667</span><span class="p">,</span> <span class="mf">146.24996667</span><span class="p">,</span> <span class="mf">155.24996667</span><span class="p">,</span> <span class="mf">159.74996667</span><span class="p">,</span> <span class="mf">161.99996667</span><span class="p">,</span> <span class="mf">164.24996667</span><span class="p">,</span> <span class="mf">204.74996667</span><span class="p">,</span> <span class="mf">238.49996667</span><span class="p">],</span>
+      <span class="p">[</span><span class="mf">13.49996667</span><span class="p">,</span> <span class="mf">40.49996667</span><span class="p">,</span> <span class="mf">47.24996667</span><span class="p">,</span> <span class="mf">56.24996667</span><span class="p">,</span> <span class="mf">89.99996667</span><span class="p">,</span> <span class="mf">94.49996667</span><span class="p">,</span> <span class="mf">96.74996667</span><span class="p">,</span> <span class="mf">134.99996667</span><span class="p">,</span> <span class="mf">148.49996667</span><span class="p">,</span> <span class="mf">184.49996667</span><span class="p">,</span> <span class="mf">191.24996667</span><span class="p">,</span> <span class="mf">202.49996667</span><span class="p">,</span> <span class="mf">215.99996667</span><span class="p">,</span> <span class="mf">233.99996667</span><span class="p">,</span> <span class="mf">236.24996667</span><span class="p">,</span> <span class="mf">242.99996667</span><span class="p">,</span> <span class="mf">245.24996667</span><span class="p">,</span> <span class="mf">256.49996667</span><span class="p">,</span> <span class="mf">260.99996667</span><span class="p">,</span> <span class="mf">281.24996667</span><span class="p">,</span> <span class="mf">290.24996667</span><span class="p">,</span> <span class="mf">303.74996667</span><span class="p">,</span> <span class="mf">310.49996667</span><span class="p">,</span> <span class="mf">319.49996667</span><span class="p">,</span> <span class="mf">339.74996667</span><span class="p">,</span> <span class="mf">341.99996667</span><span class="p">],</span>
+      <span class="p">[</span><span class="o">-</span><span class="mf">3.33333333e-05</span><span class="p">,</span> <span class="mf">2.24996667</span><span class="p">,</span> <span class="mf">8.99996667</span><span class="p">,</span> <span class="mf">11.2499667</span><span class="p">,</span> <span class="mf">22.4999667</span><span class="p">,</span> <span class="mf">44.9999667</span><span class="p">,</span> <span class="mf">51.7499667</span><span class="p">,</span> <span class="mf">60.7499667</span><span class="p">,</span> <span class="mf">62.9999667</span><span class="p">,</span> <span class="mf">76.4999667</span><span class="p">,</span> <span class="mf">78.7499667</span><span class="p">,</span> <span class="mf">85.4999667</span><span class="p">,</span> <span class="mf">98.9999667</span><span class="p">,</span> <span class="mf">101.249967</span><span class="p">,</span> <span class="mf">103.499967</span><span class="p">,</span> <span class="mf">116.999967</span><span class="p">,</span> <span class="mf">130.499967</span><span class="p">,</span> <span class="mf">150.749967</span><span class="p">,</span> <span class="mf">170.999967</span><span class="p">,</span> <span class="mf">188.999967</span><span class="p">,</span> <span class="mf">227.249967</span><span class="p">,</span> <span class="mf">265.499967</span><span class="p">,</span> <span class="mf">283.499967</span><span class="p">,</span> <span class="mf">285.749967</span><span class="p">,</span> <span class="mf">287.999967</span><span class="p">,</span> <span class="mf">344.249967</span><span class="p">],</span>
+      <span class="p">[</span><span class="mf">33.74996667</span><span class="p">,</span> <span class="mf">49.49996667</span><span class="p">,</span> <span class="mf">105.74996667</span><span class="p">,</span> <span class="mf">152.99996667</span><span class="p">,</span> <span class="mf">157.49996667</span><span class="p">,</span> <span class="mf">168.74996667</span><span class="p">,</span> <span class="mf">177.74996667</span><span class="p">,</span> <span class="mf">179.99996667</span><span class="p">,</span> <span class="mf">182.24996667</span><span class="p">,</span> <span class="mf">197.99996667</span><span class="p">,</span> <span class="mf">222.74996667</span><span class="p">,</span> <span class="mf">240.74996667</span><span class="p">,</span> <span class="mf">254.24996667</span><span class="p">,</span> <span class="mf">267.74996667</span><span class="p">,</span> <span class="mf">269.99996667</span><span class="p">,</span> <span class="mf">274.49996667</span><span class="p">,</span> <span class="mf">294.74996667</span><span class="p">,</span> <span class="mf">299.24996667</span><span class="p">,</span> <span class="mf">301.49996667</span><span class="p">,</span> <span class="mf">314.99996667</span><span class="p">,</span> <span class="mf">317.24996667</span><span class="p">,</span> <span class="mf">326.24996667</span><span class="p">,</span> <span class="mf">332.99996667</span><span class="p">,</span> <span class="mf">335.24996667</span><span class="p">,</span> <span class="mf">337.49996667</span><span class="p">,</span> <span class="mf">346.49996667</span><span class="p">]</span>
+  <span class="p">]</span>
+  <span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>cond_durations</em> (a list of string):</dt><dd><p>The list of the conditions duration.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span>
+      <span class="p">[</span>
+          <span class="p">[</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">],</span>
+          <span class="p">[</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">]</span>
+      <span class="p">],</span>
+      <span class="p">[</span>
+          <span class="p">[</span><span class="mf">0.0</span><span class="p">],</span>
+          <span class="p">[</span><span class="mf">0.0</span><span class="p">],</span>
+          <span class="p">[</span><span class="mf">0.0</span><span class="p">],</span>
+          <span class="p">[</span><span class="mf">0.0</span><span class="p">]</span>
+      <span class="p">]</span>
+      <span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </div>
+  </body>
+</html>

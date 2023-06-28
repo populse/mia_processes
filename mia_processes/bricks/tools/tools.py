@@ -13,6 +13,7 @@ needed to run other higher-level bricks.
         - Files_To_List
         - Filter_Files_List
         - Find_In_List
+        - Get_Conditions_From_csv
         - Import_Data
         - Input_Filter
         - List_Duplicate
@@ -35,6 +36,8 @@ import re
 import shutil
 import tempfile
 
+import pandas as pd
+
 # nipype import
 from nipype.interfaces.base import (
     File,
@@ -54,7 +57,7 @@ from populse_mia.data_manager.project import BRICK_OUTPUTS, COLLECTION_CURRENT
 from populse_mia.software_properties import Config
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 
-from mia_processes.utils import get_dbFieldValue
+from mia_processes.utils import checkFileExt, get_dbFieldValue
 
 
 class Concat_to_list(ProcessMIA):
@@ -725,6 +728,200 @@ class Find_In_List(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
+        return
+
+
+class Get_Conditions_From_csv(ProcessMIA):
+    """
+    *Get conditions information (conditions names, onsets and durations)
+    for Level1Design brick using csv files.*
+
+    Please, see the complete documentation for
+    the `Get_Conditions_From_csv brick
+    in the populse.mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/tools/Get_Conditions_From_csv.html>`_
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instantiation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(Get_Conditions_From_csv, self).__init__()
+
+        # Inputs description
+        csv_files_desc = (
+            ".csv files contening the onset, one for each session "
+            "(existing .csv files)"
+        )
+        design_type_desc = (
+            "Type of design for each session (List of string among "
+            "bloc or event-related)."
+        )
+
+        # Outputs description
+        cond_names_desc = ""
+        cond_onsets_desc = ""
+        cond_durations_desc = ""
+
+        # Input traits
+        self.add_trait(
+            "csv_files",
+            InputMultiPath(
+                traits.File(),
+                output=False,
+                optional=False,
+                desc=csv_files_desc,
+            ),
+        )
+
+        self.add_trait(
+            "design_type",
+            traits.List(
+                traits.Enum("bloc", "event-related"),
+                output=False,
+                optional=True,
+                desc=design_type_desc,
+            ),
+        )
+
+        # Output traits
+        self.add_trait(
+            "cond_names",
+            traits.List(
+                traits.List(traits.String()),
+                value=[[]],
+                output=True,
+                optional=True,
+                desc=cond_names_desc,
+            ),
+        )
+
+        self.add_trait(
+            "cond_onsets",
+            traits.List(
+                traits.List(traits.List(traits.Float())),
+                value=[[[]]],
+                output=True,
+                optional=True,
+                desc=cond_onsets_desc,
+            ),
+        )
+
+        self.add_trait(
+            "cond_durations",
+            traits.List(
+                traits.List(traits.List(traits.Float())),
+                value=[[[]]],
+                output=True,
+                optional=True,
+                desc=cond_durations_desc,
+            ),
+        )
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(Get_Conditions_From_csv, self).list_outputs()
+
+        if len(self.csv_files) != len(self.design_type):
+            print(
+                "\nInitialization failded... "
+                "Please precise design type for each csv file"
+            )
+            return self.make_initResult()
+
+        all_cond_names = []
+        all_cond_onsets = []
+        all_cond_durations = []
+
+        for i in range(len(self.csv_files)):
+            cond_names = []
+            cond_onsets = []
+            cond_durations = []
+
+            csv_file = self.csv_files[i]
+            design = self.design_type[i]
+            # Check extension
+            valid_bool, in_ext, file_name = checkFileExt(
+                csv_file, {"csv": "csv"}
+            )
+            if not valid_bool:
+                print(
+                    "\nInitialization failded... "
+                    "One of the file is not a .csv file ...!"
+                )
+                return self.make_initResult()
+
+            # Get infos into csv
+            df = pd.read_csv(csv_file)
+            col_names = list(df.columns)
+            if design == "bloc":
+                cond_names = []
+                for i in range(len(col_names)):
+                    if "duration" not in col_names[i]:
+                        # Check that we have duration for each condition
+                        try:
+                            df.loc[:, col_names[i] + " duration"]
+                            cond_names.append(col_names[i])
+                        except Exception:
+                            print(
+                                "\nInitialization failded... "
+                                "For bloc design, duration should be "
+                                "in the csv file ...!"
+                            )
+                            return self.make_initResult()
+            elif design == "event-related":
+                cond_names = col_names
+
+            for name in cond_names:
+                if design == "event-related":
+                    cond_onsets.append(df.loc[:, name].tolist())
+                    cond_durations.append([0])
+                elif design == "bloc":
+                    cond_onsets.append(df.loc[:, name].tolist())
+                    cond_durations.append(
+                        df.loc[:, name + " duration"].tolist()
+                    )
+
+            all_cond_names.append(cond_names)
+            all_cond_onsets.append(cond_onsets)
+            all_cond_durations.append(cond_durations)
+
+        # Outputs definition and tags inheritance (optional)
+        if all_cond_names:
+            self.outputs["cond_names"] = all_cond_names
+            self.outputs["cond_onsets"] = all_cond_onsets
+            self.outputs["cond_durations"] = all_cond_durations
+
+        if self.outputs:
+            self.outputs["notInDb"] = [
+                "cond_names",
+                "cond_onsets",
+                "cond_durations",
+            ]
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        # super(Get_Conditions_From_csv, self).run_process_mia()
         return
 
 
