@@ -45,6 +45,7 @@
 <span class="sd">        - Files_To_List</span>
 <span class="sd">        - Filter_Files_List</span>
 <span class="sd">        - Find_In_List</span>
+<span class="sd">        - Get_Conditions_From_csv</span>
 <span class="sd">        - Import_Data</span>
 <span class="sd">        - Input_Filter</span>
 <span class="sd">        - List_Duplicate</span>
@@ -63,6 +64,7 @@
 
 <span class="c1"># Other imports</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">import</span> <span class="nn">tempfile</span>
@@ -86,7 +88,10 @@
 <span class="kn">from</span> <span class="nn">populse_mia.software_properties</span> <span class="kn">import</span> <span class="n">Config</span>
 <span class="kn">from</span> <span class="nn">populse_mia.user_interface.pipeline_manager.process_mia</span> <span class="kn">import</span> <span class="n">ProcessMIA</span>
 
-<span class="kn">from</span> <span class="nn">mia_processes.utils</span> <span class="kn">import</span> <span class="n">get_dbFieldValue</span>
+<span class="kn">from</span> <span class="nn">mia_processes.utils</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">checkFileExt</span><span class="p">,</span>
+    <span class="n">get_dbFieldValue</span>
+<span class="p">)</span>
 
 
 <div class="viewcode-block" id="Concat_to_list"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Concat_to_list">[docs]</a><span class="k">class</span> <span class="nc">Concat_to_list</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
@@ -757,6 +762,187 @@
 
 <div class="viewcode-block" id="Find_In_List.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Find_In_List.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="k">return</span></div></div>
+
+
+<div class="viewcode-block" id="Get_Conditions_From_csv"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Get_Conditions_From_csv">[docs]</a><span class="k">class</span> <span class="nc">Get_Conditions_From_csv</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    *Get conditions information (conditions names, onsets and durations) </span>
+<span class="sd">    for Level1Design brick using csv files.*</span>
+
+<span class="sd">    Please, see the complete documentation for</span>
+<span class="sd">    the `Get_Conditions_From_csv brick</span>
+<span class="sd">    in the populse.mia_processes website</span>
+<span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/bricks/tools/Get_Conditions_From_csv.html&gt;`_</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Get_Conditions_From_csv.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Get_Conditions_From_csv.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
+
+<span class="sd">        The input and output plugs are defined here. The special</span>
+<span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
+<span class="sd">        third-party products necessary for the running of the brick.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Initialisation of the objects needed for the launch of the brick</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Get_Conditions_From_csv</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="c1"># Inputs description</span>
+        <span class="n">csv_files_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;.csv files contening the onset, one for each session &quot;</span>
+            <span class="s2">&quot;(existing .csv files)&quot;</span>
+        <span class="p">)</span>
+        <span class="n">design_type_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Type of design for each session (List of string among &quot;</span>
+            <span class="s2">&quot;bloc or event-related).&quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Outputs description</span>
+        <span class="n">cond_names_desc</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">cond_onsets_desc</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">cond_durations_desc</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="c1"># Input traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;csv_files&quot;</span><span class="p">,</span>
+            <span class="n">InputMultiPath</span><span class="p">(</span>
+                <span class="n">traits</span><span class="o">.</span><span class="n">File</span><span class="p">(),</span>
+                <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="n">csv_files_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;design_type&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Enum</span><span class="p">(</span><span class="s2">&quot;bloc&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;event-related&quot;</span><span class="p">),</span>
+                        <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">desc</span><span class="o">=</span><span class="n">design_type_desc</span>
+                        <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Output traits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;cond_names&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">String</span><span class="p">()),</span>
+                        <span class="n">value</span><span class="o">=</span><span class="p">[[]],</span>
+                        <span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">desc</span><span class="o">=</span><span class="n">cond_names_desc</span><span class="p">,</span>
+                        <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;cond_onsets&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">())),</span>
+                        <span class="n">value</span><span class="o">=</span><span class="p">[[[]]],</span>
+                        <span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">desc</span><span class="o">=</span><span class="n">cond_onsets_desc</span><span class="p">,</span>
+                        <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;cond_durations&quot;</span><span class="p">,</span>
+            <span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">List</span><span class="p">(</span><span class="n">traits</span><span class="o">.</span><span class="n">Float</span><span class="p">())),</span>
+                        <span class="n">value</span><span class="o">=</span><span class="p">[[[]]],</span>
+                        <span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">desc</span><span class="o">=</span><span class="n">cond_durations_desc</span><span class="p">,</span>
+                        <span class="p">),</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="Get_Conditions_From_csv.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Get_Conditions_From_csv.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+
+<span class="sd">        The main objective of this method is to produce the outputs of the</span>
+<span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
+<span class="sd">        if defined here. In order not to include an output in the database,</span>
+<span class="sd">        this output must be a value of the optional key &#39;notInDb&#39; of the</span>
+<span class="sd">        self.outputs dictionary. To work properly this method must return</span>
+<span class="sd">        self.make_initResult() object.</span>
+
+<span class="sd">        :param is_plugged: the state, linked or not, of the plugs.</span>
+<span class="sd">        :returns: a dictionary with requirement, outputs and inheritance_dict.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Using the inheritance to ProcessMIA class, list_outputs method</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Get_Conditions_From_csv</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">list_outputs</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">csv_files</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">design_type</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Initialization failded... &quot;</span>
+                  <span class="s2">&quot;Please precise design type for each csv file&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
+
+        <span class="n">all_cond_names</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">all_cond_onsets</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">all_cond_durations</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">csv_files</span><span class="p">)):</span>
+            <span class="n">cond_names</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">cond_onsets</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">cond_durations</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="n">csv_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">csv_files</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">design</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">design_type</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="c1"># Check extension</span>
+            <span class="n">valid_bool</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">file_name</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span><span class="n">csv_file</span><span class="p">,</span>
+                                                         <span class="p">{</span><span class="s2">&quot;csv&quot;</span><span class="p">:</span> <span class="s2">&quot;csv&quot;</span><span class="p">})</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_bool</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Initialization failded... &quot;</span>
+                      <span class="s2">&quot;One of the file is not a .csv file ...!&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
+
+            <span class="c1"># Get infos into csv</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">csv_file</span><span class="p">)</span>
+            <span class="n">col_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">design</span> <span class="o">==</span> <span class="s2">&quot;bloc&quot;</span><span class="p">:</span>
+                <span class="n">cond_names</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">col_names</span><span class="p">)):</span>
+                    <span class="k">if</span> <span class="s2">&quot;duration&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">col_names</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                        <span class="c1"># Check that we have duration for each condition</span>
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">col_names</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; duration&quot;</span><span class="p">]</span>
+                            <span class="n">cond_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">col_names</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Initialization failded... &quot;</span>
+                                  <span class="s2">&quot;For bloc design, duration should be &quot;</span>
+                                  <span class="s2">&quot;in the csv file ...!&quot;</span><span class="p">)</span>
+                            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="n">design</span> <span class="o">==</span> <span class="s2">&quot;event-related&quot;</span><span class="p">:</span>
+                <span class="n">cond_names</span> <span class="o">=</span> <span class="n">col_names</span>
+
+            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">cond_names</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">design</span> <span class="o">==</span> <span class="s2">&quot;event-related&quot;</span><span class="p">:</span>
+                    <span class="n">cond_onsets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+                    <span class="n">cond_durations</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="n">design</span> <span class="o">==</span> <span class="s2">&quot;bloc&quot;</span><span class="p">:</span>
+                    <span class="n">cond_onsets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+                    <span class="n">cond_durations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot; duration&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+
+            <span class="n">all_cond_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cond_names</span><span class="p">)</span>
+            <span class="n">all_cond_onsets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cond_onsets</span><span class="p">)</span>
+            <span class="n">all_cond_durations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cond_durations</span><span class="p">)</span>
+
+        <span class="c1"># Outputs definition and tags inheritance (optional)</span>
+        <span class="k">if</span> <span class="n">all_cond_names</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;cond_names&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">all_cond_names</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;cond_onsets&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">all_cond_onsets</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;cond_durations&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">all_cond_durations</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;notInDb&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;cond_names&quot;</span><span class="p">,</span>
+                                       <span class="s2">&quot;cond_onsets&quot;</span><span class="p">,</span>
+                                       <span class="s2">&quot;cond_durations&quot;</span><span class="p">]</span>
+
+        <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Get_Conditions_From_csv.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.tools.html#mia_processes.bricks.tools.tools.Get_Conditions_From_csv.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="c1"># super(Get_Conditions_From_csv, self).run_process_mia()</span>
         <span class="k">return</span></div></div>
 
 
