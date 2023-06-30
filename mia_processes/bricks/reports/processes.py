@@ -1203,7 +1203,7 @@ class BoldIQMsPlot(ProcessMIA):
             dataset,
             segments=segments,
             spikes_files=([self.in_spikes_file]),
-            tr=(self.tr),
+            tr=(self.tr) / 1000,
             confounds=dataframe,
             units={"outliers": "%", "FD": "mm"},
             vlines={"FD": [self.fd_thresh]},
@@ -1315,9 +1315,9 @@ class CarpetParcellation(ProcessMIA):
                 )
 
             if self.output_directory:
-                valid_ext, in_ext, fileName = checkFileExt(
-                    self.segmentation, EXT
-                )
+                # brainmask name used for carpetplot base name
+                # in order to get an unique path for each subject
+                valid_ext, in_ext, fileName = checkFileExt(self.brainmask, EXT)
 
                 if not valid_ext:
                     print("\nThe input image format is not recognized ...!")
@@ -1332,7 +1332,7 @@ class CarpetParcellation(ProcessMIA):
                 print("No output_directory was found...!\n")
                 return
 
-            self.inheritance_dict[self.outputs["out_file"]] = self.segmentation
+            self.inheritance_dict[self.outputs["out_file"]] = self.brainmask
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -1352,7 +1352,8 @@ class CarpetParcellation(ProcessMIA):
         )
 
         # Binary subtraction
-        brainmaskdata[np.bool_(dilated)] = False
+        subtraction = np.bool_(dilated)
+        subtraction[np.bool_(brainmaskdata)] = False
 
         # Carpet parcellation
         img = nb.load(self.segmentation)
@@ -1364,10 +1365,10 @@ class CarpetParcellation(ProcessMIA):
         lut[255] = 4  # Cerebellum
         # Apply lookup table
         seg = lut[np.asanyarray(img.dataobj, dtype="uint16")]
-        seg[np.asanyarray(brainmaskdata, dtype=int) > 0] = 5
+        seg[np.asanyarray(subtraction, dtype=int) > 0] = 5
 
         # Out file name
-        _, file_name = os.path.split(self.segmentation)
+        _, file_name = os.path.split(self.brainmask)
 
         file_out = os.path.join(
             self.output_directory, (self.out_prefix + file_name)

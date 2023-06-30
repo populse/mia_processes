@@ -1561,7 +1561,7 @@ class Report:
         self.report.append(Spacer(0 * mm, 10 * mm))
         self.report.append(
             Paragraph(
-                "<font size = 9 > <i>Summary plot,"
+                "<font size = 9 > <i>Summary plot, "
                 "showing the slice-wise signal intensity at the extremes for "
                 "the identification of spikes, the outliers metric, "
                 "the DVARS, the FD and the carpetplot. "
@@ -1570,7 +1570,8 @@ class Report:
                 "deep gray matter, white matter and cerebrospinal fluid, "
                 "cerebellum and the brain-edge or “crown”. The crown "
                 "corresponds to the voxels located on a closed "
-                "band around the brain </i></font>",
+                "band around the brain. Carpet plot done using the head "
+                "motion corrected functional image. </i></font>",
                 self.styles["Center"],
             )
         )
@@ -1798,7 +1799,7 @@ class Report:
         self.report.append(Spacer(0 * mm, 5 * mm))
         self.report.append(
             Paragraph(
-                "<font size = 14 > Anatomical "
+                "<font size = 14 > Mean unctional "
                 "image with segmentation</font>",
                 self.styles["Center"],
             )

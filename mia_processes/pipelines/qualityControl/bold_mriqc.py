@@ -150,7 +150,7 @@ class Bold_mriqc(Pipeline):
             "plot_iqms.drop_trs"
         )
         self.add_link("bold_iqms_pipeline.carpet_seg->plot_iqms.carpet_seg")
-        self.add_link("sanitize.out_file->plot_iqms.in_func")
+        self.add_link("volreg.out_file->plot_iqms.in_func")
         self.add_link("plot_iqms.out_file->mriqc_func_report.IQMs_plot")
         self.add_link("tsnr.out_stddev_file->mriqc_func_report.stddev_func")
         self.add_link("mean.out_file->mriqc_func_report.func_mean")
