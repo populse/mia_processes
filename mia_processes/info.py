@@ -19,8 +19,8 @@ import subprocess
 
 # Current version
 version_major = 2
-version_minor = 2
-version_micro = 1
+version_minor = 3
+version_micro = 0
 version_extra = "dev"  # leave empty for release
 # version_extra = ""
 
@@ -139,7 +139,7 @@ REQUIRES = [
     "numpy",
     "paramiko",
     "populse_db >=2.1.0",
-    "populse_mia >= 2.2.0",
+    "populse_mia >= 2.4.0",
     "pyxnat",
     "reportlab",
     "scipy",
