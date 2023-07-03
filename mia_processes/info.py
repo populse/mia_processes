@@ -47,7 +47,6 @@ def get_gitversion():
             os.path.join(
                 os.path.dirname(mia_processes.__file__),
                 os.path.pardir,
-                os.path.pardir,
             )
         )
 
