@@ -934,7 +934,7 @@ class EstimateModel(ProcessMIA):
         # Using the inheritance to ProcessMIA class, list_outputs method
         super(EstimateModel, self).list_outputs()
 
-        # We cannot directly called Nipype's method to get all the output
+        # We cannot directly call Nipype's method to get all the output
         # because we want to avoid to read in the SPM.mat file
         # (potentially not created yet)
         if (
