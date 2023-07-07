@@ -1497,7 +1497,7 @@ class Level1Design(ProcessMIA):
         self.add_trait(
             "sess_scans",
             InputMultiPath(
-                File(exists=True),
+                traits.Either(File(exists=True), traits.Undefined),
                 usedefault=True,
                 output=False,
                 desc=sess_scans_desc,
