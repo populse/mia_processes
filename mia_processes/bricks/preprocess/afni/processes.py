@@ -34,6 +34,8 @@ populse_mia.
 
 # Other import
 import os
+import shutil
+import uuid
 
 import nibabel as nib
 
@@ -1093,6 +1095,23 @@ voxel, over any given mask*
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
             if self.output_directory:
+                out_directory = os.path.join(
+                    self.output_directory,
+                    "_dataGCOR{}".format(uuid.uuid4().hex[:6].upper()),
+                )
+
+                try:
+                    os.makedirs(out_directory, exist_ok=False)
+
+                except FileExistsError:
+                    print(
+                        "GCOR brick: Generated temporary folder for "
+                        "calculation already exists, initialization falls...\n"
+                    )
+                    return
+
+                self.output_directory = out_directory
+
                 valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
 
                 if not valid_ext:
@@ -1114,8 +1133,9 @@ voxel, over any given mask*
         self.process.mask = self.mask_file
         self.process.nfirst = self.nfirst
         self.process.no_demean = self.no_demean
-
-        return self.process.run(configuration_dict={})
+        res_proc_run = self.process.run(configuration_dict={})
+        shutil.rmtree(self.output_directory)
+        return res_proc_run
 
 
 class OutlierCount(ProcessMIA):
