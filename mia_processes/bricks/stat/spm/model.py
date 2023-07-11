@@ -360,13 +360,11 @@ class EstimateContrast(ProcessMIA):
                 # Change output_directory for this process in order to
                 # use a specific directory for each analysis
 
-                if os.path.dirname(
-                    spm_mat_dir
-                ) == self.output_directory and "data" in os.path.basename(
-                    spm_mat_dir
-                ):
+                # We want spm.mat output in derived_data/subfolder
+                if self.output_directory in spm_mat_dir:
                     # if spm_mat already in a subfolder for a analysis
                     out_directory = spm_mat_dir
+
                 else:
                     # if spm_mat file not in a subfolder(for e.g spm_mat
                     # file in download data)
@@ -957,11 +955,8 @@ class EstimateModel(ProcessMIA):
                 # Change output_directory for this process in order to
                 # use a specific directory for each analysis
 
-                if os.path.dirname(
-                    spm_mat_dir
-                ) == self.output_directory and "data" in os.path.basename(
-                    spm_mat_dir
-                ):
+                # we want spm.mat output in derived_data/subfolder
+                if self.output_directory in spm_mat_dir:
                     # if spm_mat already in a subfolder for a analysis
                     out_directory = spm_mat_dir
                 else:
