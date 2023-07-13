@@ -468,11 +468,10 @@ class EstimateContrast(ProcessMIA):
             #        set_dbFieldValue() function !
             for key, value in self.outputs.items():
                 if key == "out_spm_mat_file":
-                    self.inheritance_dict[value] = self.spm_mat_file
-
+                    self.inheritance_dict[value] = dict()
+                    self.inheritance_dict[value]["parent"] = self.spm_mat_file
+                    self.inheritance_dict[value]["own_tags"] = []
                     # Update/add number of contrast
-                    # FIXME: if brick use in a pipeline, this tag is
-                    # not kept in the database (but the pipeline is working)
                     tag_to_add = dict()
                     tag_to_add["name"] = "Contrasts num"
                     tag_to_add["field_type"] = FIELD_TYPE_INTEGER
@@ -482,7 +481,18 @@ class EstimateContrast(ProcessMIA):
                     tag_to_add["unit"] = None
                     tag_to_add["default_value"] = None
                     tag_to_add["value"] = nb_contrasts
+                    self.inheritance_dict[value]["own_tags"].append(tag_to_add)
+                    # FIXME: In the latest version of mia, indexing of the
+                    #        database with particular tags defined in the
+                    #        processes is done only at the end of the
+                    #        initialisation of the whole pipeline. So we
+                    #        cannot use the value of these tags in other
+                    #        processes of the pipeline at the time of
+                    #        initialisation (see populse_mia #290). Unti
+                    #        better we use a quick and dirty hack with the
+                    #        set_dbFieldValue() function !
                     set_dbFieldValue(self.project, value, tag_to_add)
+
                 elif key in [
                     "con_images",
                     "spmT_images",
@@ -500,7 +510,6 @@ class EstimateContrast(ProcessMIA):
                     )
 
                     for fullname in value:
-                        self.inheritance_dict[fullname] = self.spm_mat_file
 
                         if patient_name is not None:
                             tag_to_add = dict()
@@ -545,9 +554,11 @@ class EstimateContrast(ProcessMIA):
                             )
 
                         # Update/add number of contrast
-                        # FIXME: if brick use in a pipeline, this tag is
-                        # not kept in the database
-                        # (but the pipeline is working)
+                        self.inheritance_dict[fullname] = dict()
+                        self.inheritance_dict[fullname][
+                            "parent"] = self.spm_mat_file
+                        self.inheritance_dict[fullname]["own_tags"] = []
+                        # Update/add number of contrast
                         tag_to_add = dict()
                         tag_to_add["name"] = "Contrasts num"
                         tag_to_add["field_type"] = FIELD_TYPE_INTEGER
@@ -557,6 +568,16 @@ class EstimateContrast(ProcessMIA):
                         tag_to_add["unit"] = None
                         tag_to_add["default_value"] = None
                         tag_to_add["value"] = nb_contrasts
+                        self.inheritance_dict[fullname]["own_tags"].append(tag_to_add)
+                        # FIXME: In the latest version of mia, indexing of the
+                        #        database with particular tags defined in the
+                        #        processes is done only at the end of the
+                        #        initialisation of the whole pipeline. So we
+                        #        cannot use the value of these tags in other
+                        #        processes of the pipeline at the time of
+                        #        initialisation (see populse_mia #290). Unti
+                        #        better we use a quick and dirty hack with the
+                        #        set_dbFieldValue() function !
                         set_dbFieldValue(self.project, fullname, tag_to_add)
 
         # Return the requirement, outputs and inheritance_dict
@@ -1158,31 +1179,45 @@ class EstimateModel(ProcessMIA):
                         ]
 
         if self.outputs:
+
             for key, value in self.outputs.items():
-                if key in [
+
+                if key == "out_spm_mat_file" and self.factor_info:
+                    self.inheritance_dict[value] = dict()
+                    self.inheritance_dict[value]["parent"] = self.spm_mat_file
+                    self.inheritance_dict[value]["own_tags"] = []
+                    # Add tag for number of contrast created in database
+                    tag_to_add = dict()
+                    tag_to_add["name"] = "Contrasts num"
+                    tag_to_add["field_type"] = FIELD_TYPE_INTEGER
+                    tag_to_add["description"] = "Total number of contrasts"
+                    tag_to_add["visibility"] = True
+                    tag_to_add["origin"] = TAG_ORIGIN_USER
+                    tag_to_add["unit"] = None
+                    tag_to_add["default_value"] = None
+                    tag_to_add["value"] = (
+                            number_t_contrast + number_f_contrast
+                    )
+                    self.inheritance_dict[value]["own_tags"].append(tag_to_add)
+                    # FIXME: In the latest version of mia, indexing of the
+                    #        database with particular tags defined in the
+                    #        processes is done only at the end of the
+                    #        initialisation of the whole pipeline. So we
+                    #        cannot use the value of these tags in other
+                    #        processes of the pipeline at the time of
+                    #        initialisation (see populse_mia #290). Unti
+                    #        better we use a quick and dirty hack with the
+                    #        set_dbFieldValue() function !
+                    set_dbFieldValue(self.project, value, tag_to_add)
+
+                elif key in [
                     "out_spm_mat_file",
                     "mask_image",
                     "residual_image",
                     "RPVimage",
                 ]:
                     self.inheritance_dict[value] = self.spm_mat_file
-                    if key == "out_spm_mat_file" and self.factor_info:
-                        # Add tag for number of contrast created in database
-                        # FIXME: if brick use in a pipeline, this tag is
-                        # not kept in the database
-                        # (but the pipeline is working)
-                        tag_to_add = dict()
-                        tag_to_add["name"] = "Contrasts num"
-                        tag_to_add["field_type"] = FIELD_TYPE_INTEGER
-                        tag_to_add["description"] = "Total number of contrasts"
-                        tag_to_add["visibility"] = True
-                        tag_to_add["origin"] = TAG_ORIGIN_USER
-                        tag_to_add["unit"] = None
-                        tag_to_add["default_value"] = None
-                        tag_to_add["value"] = (
-                            number_t_contrast + number_f_contrast
-                        )
-                        set_dbFieldValue(self.project, value, tag_to_add)
+
                 elif key in "residual_images":
                     for fullname in value:
                         self.inheritance_dict[fullname] = self.spm_mat_file
