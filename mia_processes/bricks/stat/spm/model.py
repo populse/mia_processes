@@ -510,7 +510,6 @@ class EstimateContrast(ProcessMIA):
                     )
 
                     for fullname in value:
-
                         if patient_name is not None:
                             tag_to_add = dict()
                             tag_to_add["name"] = "PatientName"
@@ -556,7 +555,8 @@ class EstimateContrast(ProcessMIA):
                         # Update/add number of contrast
                         self.inheritance_dict[fullname] = dict()
                         self.inheritance_dict[fullname][
-                            "parent"] = self.spm_mat_file
+                            "parent"
+                        ] = self.spm_mat_file
                         self.inheritance_dict[fullname]["own_tags"] = []
                         # Update/add number of contrast
                         tag_to_add = dict()
@@ -568,7 +568,9 @@ class EstimateContrast(ProcessMIA):
                         tag_to_add["unit"] = None
                         tag_to_add["default_value"] = None
                         tag_to_add["value"] = nb_contrasts
-                        self.inheritance_dict[fullname]["own_tags"].append(tag_to_add)
+                        self.inheritance_dict[fullname]["own_tags"].append(
+                            tag_to_add
+                        )
                         # FIXME: In the latest version of mia, indexing of the
                         #        database with particular tags defined in the
                         #        processes is done only at the end of the
@@ -1179,9 +1181,7 @@ class EstimateModel(ProcessMIA):
                         ]
 
         if self.outputs:
-
             for key, value in self.outputs.items():
-
                 if key == "out_spm_mat_file" and self.factor_info:
                     self.inheritance_dict[value] = dict()
                     self.inheritance_dict[value]["parent"] = self.spm_mat_file
@@ -1195,9 +1195,7 @@ class EstimateModel(ProcessMIA):
                     tag_to_add["origin"] = TAG_ORIGIN_USER
                     tag_to_add["unit"] = None
                     tag_to_add["default_value"] = None
-                    tag_to_add["value"] = (
-                            number_t_contrast + number_f_contrast
-                    )
+                    tag_to_add["value"] = number_t_contrast + number_f_contrast
                     self.inheritance_dict[value]["own_tags"].append(tag_to_add)
                     # FIXME: In the latest version of mia, indexing of the
                     #        database with particular tags defined in the
