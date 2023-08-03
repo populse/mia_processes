@@ -14,6 +14,7 @@ needed to run other higher-level bricks.
         - Filter_Files_List
         - Find_In_List
         - Get_Conditions_From_csv
+        - Get_Patient_Name
         - Import_Data
         - Input_Filter
         - List_Duplicate
@@ -922,6 +923,88 @@ class Get_Conditions_From_csv(ProcessMIA):
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
         # super(Get_Conditions_From_csv, self).run_process_mia()
+        return
+
+
+class Get_Patient_Name(ProcessMIA):
+    """
+    *Get patient name from a file *
+
+    Please, see the complete documentation for the `Get_Patient_Name brick
+    in the populse.mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/tools/Get_Patient_Name.html>`_
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instantiation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(Get_Patient_Name, self).__init__()
+
+        # Inputs description
+        in_file_desc = "In file"
+
+        # Outputs description
+        patient_name_desc = "Patient name."
+
+        # Input traits
+        self.add_trait(
+            "in_file",
+            File(
+                output=False,
+                copyfile=True,
+                optional=False,
+                desc=in_file_desc,
+            ),
+        )
+
+        # Output traits
+        self.add_trait(
+            "patient_name", traits.String(output=True, desc=patient_name_desc)
+        )
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(Get_Patient_Name, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.in_file:
+            sub_name = get_dbFieldValue(
+                self.project, self.in_file, "PatientName"
+            )
+            if sub_name is None:
+                print(
+                    "Please, fill 'PatientName' tag "
+                    "in the database for in file"
+                )
+                return self.make_initResult()
+            self.outputs["patient_name"] = sub_name
+
+            if self.outputs:
+                self.outputs["notInDb"] = ["patient_name"]
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
         return
 
 
