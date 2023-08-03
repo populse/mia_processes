@@ -3549,7 +3549,57 @@ class Smooth(ProcessMIA):
                             # fmt : on
 
                         if fileOvalNoPref == fileIval:
-                            self.inheritance_dict[out_val] = in_val
+                            # tests for issue #310 in populse_mia:
+                            # self.inheritance_dict[out_val] = in_val
+                            self.inheritance_dict[out_val] = dict()
+                            self.inheritance_dict[out_val]["parent"] = in_val
+                            self.inheritance_dict[out_val]["own_tags"] = []
+                            # Add a false tag in database
+                            tag_to_add = dict()
+                            tag_to_add["name"] = "False tag"
+                            tag_to_add["field_type"] = "int"
+                            tag_to_add["description"] = "A false tag"
+                            tag_to_add["visibility"] = True
+                            tag_to_add["origin"] = "user"
+                            tag_to_add["unit"] = None
+                            tag_to_add["default_value"] = None
+                            false_tag = get_dbFieldValue(
+                                self.project, in_val, "False tag"
+                            )
+                            if not false_tag:
+                                tag_to_add["value"] = 101
+                            else:
+                                tag_to_add["value"] = false_tag + 1
+
+                            self.inheritance_dict[out_val]["own_tags"].append(
+                                tag_to_add
+                            )
+                            # FIXME: In the latest version of mia, indexing of
+                            #        the database with particular tags defined
+                            #        in the processes is done only at the end
+                            #        of the initialisation of the whole
+                            #        pipeline. So we cannot use the value of
+                            #        these tags in other processes of the
+                            #        pipeline at the time of initialisation
+                            #        (see populse_mia #290). Until better we
+                            #        use a quick and dirty hack with the
+                            #        set_dbFieldValue() function !
+                            set_dbFieldValue(self.project, out_val, tag_to_add)
+
+                            if tag_to_add["value"] == 102:
+                                self.inheritance_dict[out_val]["tags2del"] = []
+                                self.inheritance_dict[out_val][
+                                    "tags2del"
+                                ].append("RepetitionTime")
+                                from mia_processes.utils import (
+                                    del_dbFieldValue,
+                                )
+
+                                del_dbFieldValue(
+                                    self.project,
+                                    out_val,
+                                    self.inheritance_dict[out_val]["tags2del"],
+                                )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()

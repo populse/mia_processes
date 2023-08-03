@@ -8,6 +8,7 @@ Module that contains multiple functions used across mia_processes
         - ReportLine
     :Functions:
         - checkFileExt
+        - del_dbFieldValue
         - dict4runtime_update
         - get_dbFieldValue
         - mriqc_get_all_run
@@ -129,6 +130,40 @@ def checkFileExt(in_file, ext_dic):
         valid_bool = True
 
     return valid_bool, in_ext, file_name
+
+
+def del_dbFieldValue(project, document, tags2del):
+    """Delete for a document, the value for a field in the db.
+
+    :param project: the project.
+    :param document: the absolute path of the document.
+    :param tag_to_del: a list of fields where values will be deleted
+    """
+
+    file_position = (
+        document.find(project.getName()) + len(project.getName()) + 1
+    )
+    database_filename = document[file_position:]
+
+    for tag_to_del in tags2del:
+        try:
+            project.session.remove_value(
+                COLLECTION_CURRENT, database_filename, tag_to_del
+            )
+        except ValueError:
+            # The collection does not exist
+            # or the field does not exist
+            # or the document does not exist
+            pass
+        try:
+            project.session.remove_value(
+                COLLECTION_INITIAL, database_filename, tag_to_del
+            )
+        except ValueError:
+            # The collection does not exist
+            # or the field does not exist
+            # or the document does not exist
+            pass
 
 
 def dict4runtime_update(dict4runtime, database, db_filename, *args):
