@@ -35,6 +35,10 @@ class Anat_mni_tpms(Pipeline):
         """Building the pipeline"""
         # nodes
         self.add_process(
+            "get_patient_name",
+            "mia_processes.bricks.tools." "Get_Patient_Name",
+        )
+        self.add_process(
             "template_CSF",
             "mia_processes.bricks.preprocess."
             "others.processing.TemplateFromTemplateFlow",
@@ -48,7 +52,6 @@ class Anat_mni_tpms(Pipeline):
             "mia_processes.bricks.preprocess."
             "ants.processes.ApplyTransforms",
         )
-        self.nodes["applytransforms_CSF"].process.out_prefix = "csf_"
         self.nodes["applytransforms_CSF"].process.float = True
         self.add_process(
             "template_GM",
@@ -64,7 +67,6 @@ class Anat_mni_tpms(Pipeline):
             "mia_processes.bricks.preprocess."
             "ants.processes.ApplyTransforms",
         )
-        self.nodes["applytransforms_GM"].process.out_prefix = "gm_"
         self.nodes["applytransforms_GM"].process.float = True
         self.add_process(
             "template_WM",
@@ -80,7 +82,6 @@ class Anat_mni_tpms(Pipeline):
             "mia_processes.bricks.preprocess."
             "ants.processes.ApplyTransforms",
         )
-        self.nodes["applytransforms_WM"].process.out_prefix = "wm_"
         self.nodes["applytransforms_WM"].process.float = True
         self.add_process(
             "files_to_list", "mia_processes.bricks.tools.tools.Files_To_List"
@@ -93,6 +94,7 @@ class Anat_mni_tpms(Pipeline):
             "in_ras",
             is_optional=False,
         )
+        self.add_link("in_ras->get_patient_name.in_file")
         self.add_link("in_ras->applytransforms_GM.reference_image")
         self.add_link("in_ras->applytransforms_WM.reference_image")
         self.export_parameter(
@@ -108,6 +110,15 @@ class Anat_mni_tpms(Pipeline):
             "inverse_composite_transform->" "applytransforms_GM.transforms"
         )
         self.add_link("template_CSF.template->applytransforms_CSF.input_image")
+        self.add_link(
+            "get_patient_name.patient_name->applytransforms_CSF.out_prefix"
+        )
+        self.add_link(
+            "get_patient_name.patient_name->applytransforms_WM.out_prefix"
+        )
+        self.add_link(
+            "get_patient_name.patient_name->applytransforms_GM.out_prefix"
+        )
         self.add_link("applytransforms_CSF.output_image->files_to_list.file1")
         self.add_link("template_GM.template->applytransforms_GM.input_image")
         self.add_link("template_WM.template->applytransforms_WM.input_image")
