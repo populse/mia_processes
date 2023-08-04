@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.pipelines.preprocess.anat_airmask &#8212; mia_processes 2.2.1-dev documentation</title>
+    <title>mia_processes.pipelines.preprocess.anat_airmask &#8212; mia_processes 2.3.1-dev+de9575e documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css" />
     <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
@@ -16,7 +16,7 @@
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.2.1-dev documentation</span></a></h1>
+          <span>mia_processes 2.3.1-dev+de9575e documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.pipelines.preprocess.anat_airmask</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -67,6 +67,10 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Building the pipeline&quot;&quot;&quot;</span>
         <span class="c1"># nodes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;get_patient_name&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.tools.&quot;</span> <span class="s2">&quot;Get_Patient_Name&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
             <span class="s2">&quot;rotationmask&quot;</span><span class="p">,</span>
             <span class="s2">&quot;mia_processes.bricks.preprocess.&quot;</span>
             <span class="s2">&quot;others.processing.RotationMask&quot;</span><span class="p">,</span>
@@ -98,6 +102,7 @@
 
         <span class="c1"># links</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;artifactmask&quot;</span><span class="p">,</span> <span class="s2">&quot;in_file&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;in_file-&gt;get_patient_name.in_file&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;in_file-&gt;rotationmask.in_file&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
             <span class="s2">&quot;applytransforms&quot;</span><span class="p">,</span> <span class="s2">&quot;reference_image&quot;</span><span class="p">,</span> <span class="s2">&quot;in_mask&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
@@ -126,6 +131,9 @@
             <span class="s2">&quot;artifactmask&quot;</span><span class="p">,</span> <span class="s2">&quot;out_air_mask&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;template.template-&gt;applytransforms.input_image&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span>
+            <span class="s2">&quot;get_patient_name.patient_name-&gt;applytransforms.out_prefix&quot;</span>
+        <span class="p">)</span>
 
         <span class="c1"># parameters order</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reorder_traits</span><span class="p">(</span>
@@ -151,6 +159,7 @@
             <span class="s2">&quot;artifactmask&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">69.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">133.0</span><span class="p">),</span>
             <span class="s2">&quot;template&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">694.6239999999999</span><span class="p">,</span> <span class="mf">126.00000000000011</span><span class="p">),</span>
             <span class="s2">&quot;inputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">1007.2956249999999</span><span class="p">,</span> <span class="o">-</span><span class="mf">146.15999999999985</span><span class="p">),</span>
+            <span class="s2">&quot;get_patient_name&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mi">700</span><span class="p">,</span> <span class="o">-</span><span class="mi">145</span><span class="p">),</span>
             <span class="s2">&quot;outputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">326.85625</span><span class="p">,</span> <span class="o">-</span><span class="mf">133.0</span><span class="p">),</span>
         <span class="p">}</span>
 
@@ -161,6 +170,7 @@
             <span class="s2">&quot;artifactmask&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">258.59375</span><span class="p">,</span> <span class="mf">215.0</span><span class="p">),</span>
             <span class="s2">&quot;template&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">183.640625</span><span class="p">,</span> <span class="mf">215.0</span><span class="p">),</span>
             <span class="s2">&quot;inputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">223.78125</span><span class="p">,</span> <span class="mf">250.0</span><span class="p">),</span>
+            <span class="s2">&quot;get_patient_name&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="mi">150</span><span class="p">),</span>
             <span class="s2">&quot;outputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">123.5625</span><span class="p">,</span> <span class="mf">106.0</span><span class="p">),</span>
         <span class="p">}</span>
 
