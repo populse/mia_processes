@@ -918,6 +918,39 @@ class ConformImage(ProcessMIA):
             )
             if file:
                 self.outputs["out_file"] = file
+                # FIXME: In the latest version of mia, indexing of the
+                #        database with particular tags defined in the
+                #        processes is done only at the end of the
+                #        initialisation of the whole pipeline. So we
+                #        cannot use the value of these tags in other
+                #        processes of the pipeline at the time of
+                #        initialisation (see populse_mia #290). Unti
+                #        better we use a quick and dirty hack with the
+                #        set_dbFieldValue() function !
+
+                # Get patient name
+                patient_name = get_dbFieldValue(
+                    self.project, self.in_file, "PatientName"
+                )
+                if patient_name is not None:
+                    tag_to_add = dict()
+                    tag_to_add["name"] = "PatientName"
+                    tag_to_add["field_type"] = "string"
+                    tag_to_add["description"] = ""
+                    tag_to_add["visibility"] = True
+                    tag_to_add["origin"] = "user"
+                    tag_to_add["unit"] = None
+                    tag_to_add["default_value"] = None
+                    tag_to_add["value"] = patient_name
+                    set_dbFieldValue(
+                        self.project, self.outputs["out_file"], tag_to_add
+                    )
+                else:
+                    print(
+                        "'PatientName' tag not in the database "
+                        "This may cause an issue during the rest of the "
+                        "process, if this brick is used in a pipeline"
+                    )
 
             else:
                 print(

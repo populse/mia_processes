@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.utils.report &#8212; mia_processes 2.2.1-dev documentation</title>
+    <title>mia_processes.utils.report &#8212; mia_processes 2.3.1-dev+de9575e documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/haiku.css" />
     <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
@@ -16,7 +16,7 @@
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
-          <span>mia_processes 2.2.1-dev documentation</span></a></h1>
+          <span>mia_processes 2.3.1-dev+de9575e documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.utils.report</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -1593,7 +1593,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
             <span class="n">Paragraph</span><span class="p">(</span>
-                <span class="s2">&quot;&lt;font size = 9 &gt; &lt;i&gt;Summary plot,&quot;</span>
+                <span class="s2">&quot;&lt;font size = 9 &gt; &lt;i&gt;Summary plot, &quot;</span>
                 <span class="s2">&quot;showing the slice-wise signal intensity at the extremes for &quot;</span>
                 <span class="s2">&quot;the identification of spikes, the outliers metric, &quot;</span>
                 <span class="s2">&quot;the DVARS, the FD and the carpetplot. &quot;</span>
@@ -1602,7 +1602,8 @@
                 <span class="s2">&quot;deep gray matter, white matter and cerebrospinal fluid, &quot;</span>
                 <span class="s2">&quot;cerebellum and the brain-edge or “crown”. The crown &quot;</span>
                 <span class="s2">&quot;corresponds to the voxels located on a closed &quot;</span>
-                <span class="s2">&quot;band around the brain &lt;/i&gt;&lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;band around the brain. Carpet plot done using the head &quot;</span>
+                <span class="s2">&quot;motion corrected functional image. &lt;/i&gt;&lt;/font&gt;&quot;</span><span class="p">,</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">],</span>
             <span class="p">)</span>
         <span class="p">)</span>
@@ -1830,7 +1831,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
             <span class="n">Paragraph</span><span class="p">(</span>
-                <span class="s2">&quot;&lt;font size = 14 &gt; Anatomical &quot;</span>
+                <span class="s2">&quot;&lt;font size = 14 &gt; Mean unctional &quot;</span>
                 <span class="s2">&quot;image with segmentation&lt;/font&gt;&quot;</span><span class="p">,</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">],</span>
             <span class="p">)</span>

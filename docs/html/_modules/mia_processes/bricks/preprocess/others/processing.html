@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.preprocess.others.processing &#8212; mia_processes 2.2.1-dev documentation</title>
+    <title>mia_processes.bricks.preprocess.others.processing &#8212; mia_processes 2.3.1-dev+de9575e documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/haiku.css" />
     <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
@@ -16,7 +16,7 @@
     <link rel="search" title="Search" href="../../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../../index.html">
-          <span>mia_processes 2.2.1-dev documentation</span></a></h1>
+          <span>mia_processes 2.3.1-dev+de9575e documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.preprocess.others.processing</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -950,6 +950,39 @@
             <span class="p">)</span>
             <span class="k">if</span> <span class="n">file</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;out_file&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">file</span>
+                <span class="c1"># FIXME: In the latest version of mia, indexing of the</span>
+                <span class="c1">#        database with particular tags defined in the</span>
+                <span class="c1">#        processes is done only at the end of the</span>
+                <span class="c1">#        initialisation of the whole pipeline. So we</span>
+                <span class="c1">#        cannot use the value of these tags in other</span>
+                <span class="c1">#        processes of the pipeline at the time of</span>
+                <span class="c1">#        initialisation (see populse_mia #290). Unti</span>
+                <span class="c1">#        better we use a quick and dirty hack with the</span>
+                <span class="c1">#        set_dbFieldValue() function !</span>
+
+                <span class="c1"># Get patient name</span>
+                <span class="n">patient_name</span> <span class="o">=</span> <span class="n">get_dbFieldValue</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">,</span> <span class="s2">&quot;PatientName&quot;</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="n">patient_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">tag_to_add</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;PatientName&quot;</span>
+                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;field_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;string&quot;</span>
+                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;visibility&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;origin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;user&quot;</span>
+                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;default_value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">patient_name</span>
+                    <span class="n">set_dbFieldValue</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;out_file&quot;</span><span class="p">],</span> <span class="n">tag_to_add</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span>
+                        <span class="s2">&quot;&#39;PatientName&#39; tag not in the database &quot;</span>
+                        <span class="s2">&quot;This may cause an issue during the rest of the &quot;</span>
+                        <span class="s2">&quot;process, if this brick is used in a pipeline&quot;</span>
+                    <span class="p">)</span>
 
             <span class="k">else</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span>
