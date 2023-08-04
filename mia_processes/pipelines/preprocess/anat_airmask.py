@@ -35,6 +35,10 @@ class Anat_airmask(Pipeline):
         """Building the pipeline"""
         # nodes
         self.add_process(
+            "get_patient_name",
+            "mia_processes.bricks.tools." "Get_Patient_Name",
+        )
+        self.add_process(
             "rotationmask",
             "mia_processes.bricks.preprocess."
             "others.processing.RotationMask",
@@ -66,6 +70,7 @@ class Anat_airmask(Pipeline):
 
         # links
         self.export_parameter("artifactmask", "in_file", is_optional=False)
+        self.add_link("in_file->get_patient_name.in_file")
         self.add_link("in_file->rotationmask.in_file")
         self.export_parameter(
             "applytransforms", "reference_image", "in_mask", is_optional=False
@@ -94,6 +99,9 @@ class Anat_airmask(Pipeline):
             "artifactmask", "out_air_mask", is_optional=False
         )
         self.add_link("template.template->applytransforms.input_image")
+        self.add_link(
+            "get_patient_name.patient_name->applytransforms.out_prefix"
+        )
 
         # parameters order
         self.reorder_traits(
@@ -119,6 +127,7 @@ class Anat_airmask(Pipeline):
             "artifactmask": (-69.0, -133.0),
             "template": (-694.6239999999999, 126.00000000000011),
             "inputs": (-1007.2956249999999, -146.15999999999985),
+            "get_patient_name": (-700, -145),
             "outputs": (326.85625, -133.0),
         }
 
@@ -129,6 +138,7 @@ class Anat_airmask(Pipeline):
             "artifactmask": (258.59375, 215.0),
             "template": (183.640625, 215.0),
             "inputs": (223.78125, 250.0),
+            "get_patient_name": (150, 150),
             "outputs": (123.5625, 106.0),
         }
 

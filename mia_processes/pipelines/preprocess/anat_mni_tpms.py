@@ -140,7 +140,8 @@ class Anat_mni_tpms(Pipeline):
 
         # nodes positions
         self.node_position = {
-            "inputs": (-1029.0321499999993, -164.47839999999997),
+            "inputs": (-1250.0321499999993, -164.47839999999997),
+            "get_patient_name": (-900, -160),
             "template_CSF": (-658.9776000000002, -507.5264),
             "applytransforms_CSF": (-384.7936, -512.6864),
             "template_GM": (-657.7967999999998, -230.95039999999992),
@@ -154,6 +155,7 @@ class Anat_mni_tpms(Pipeline):
         # nodes dimensions
         self.node_dimension = {
             "inputs": (244.08125, 215.0),
+            "get_patient_name": (150, 150),
             "template_CSF": (177.640625, 250.0),
             "applytransforms_CSF": (242.328125, 215.0),
             "template_GM": (177.640625, 250.0),
