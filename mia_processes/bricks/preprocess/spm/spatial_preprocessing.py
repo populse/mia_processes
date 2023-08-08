@@ -3588,7 +3588,7 @@ class Smooth(ProcessMIA):
                             tag_to_add = dict()
                             tag_to_add["name"] = "False tag 2"
                             tag_to_add["field_type"] = "int"
-                            tag_to_add["description"] = "A false tag"
+                            tag_to_add["description"] = "A false tag 2"
                             tag_to_add["visibility"] = True
                             tag_to_add["origin"] = "user"
                             tag_to_add["unit"] = None
@@ -3617,7 +3617,10 @@ class Smooth(ProcessMIA):
                             # smooth brick in a fake pipeline Smooth -> Smooth
                             if false_tag:
                                 all_tags_to_del = []
-                                all_tags_to_del.append["RepetitionTime"]
+                                all_tags_to_del.append("RepetitionTime")
+
+                            else:
+                                all_tags_to_del = None
                                 # self.inheritance_dict[
                                 #                     out_val]["tags2del"] = []
                                 # self.inheritance_dict[out_val][
@@ -3639,8 +3642,6 @@ class Smooth(ProcessMIA):
                                 out_val,
                                 own_tags=all_tags_to_add,
                                 tags2del=all_tags_to_del,
-                                now=True,
-                                end=True,
                             )
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
