@@ -402,12 +402,30 @@ class Coregister(ProcessMIA):
                             fileOvalNoPref = fileOval
 
                         if fileOvalNoPref == fileIval:
-                            self.inheritance_dict[out_val] = in_val
+                            if (
+                                get_dbFieldValue(
+                                    self.project, in_val, "PatientName"
+                                )
+                                is None
+                            ):
+                                print(
+                                    "\nCoregister brick:\nThe 'PatientName'"
+                                    " tag could not be added to the "
+                                    "database for the '{}' parameter. This "
+                                    "can lead to a subsequent issue during "
+                                    "initialization!!\n".format(out_val)
+                                )
+
+                            self.tags_inheritance(
+                                in_val,
+                                out_val,
+                            )
 
                             if self.jobtype == "estwrite":
-                                self.inheritance_dict[
-                                    os.path.join(pathOval, fileOvalNoPref)
-                                ] = in_val
+                                self.tags_inheritance(
+                                    in_val,
+                                    os.path.join(pathOval, fileOvalNoPref),
+                                )
                                 out_coregsource.append(out_val)
                                 out_coregsource.append(
                                     os.path.join(pathOval, fileOvalNoPref)
@@ -437,12 +455,30 @@ class Coregister(ProcessMIA):
                             fileOvalNoPref = fileOval
 
                         if fileOvalNoPref == fileIval:
-                            self.inheritance_dict[out_val] = in_val
+                            if (
+                                get_dbFieldValue(
+                                    self.project, in_val, "PatientName"
+                                )
+                                is None
+                            ):
+                                print(
+                                    "\nCoregister brick:\nThe 'PatientName'"
+                                    " tag could not be added to the "
+                                    "database for the '{}' parameter. This "
+                                    "can lead to a subsequent issue during "
+                                    "initialization!!\n".format(out_val)
+                                )
+
+                            self.tags_inheritance(
+                                in_val,
+                                out_val,
+                            )
 
                             if self.jobtype == "estwrite":
-                                self.inheritance_dict[
-                                    os.path.join(pathOval, fileOvalNoPref)
-                                ] = in_val
+                                self.tags_inheritance(
+                                    in_val,
+                                    os.path.join(pathOval, fileOvalNoPref),
+                                )
                                 out_coregfiles.append(out_val)
                                 out_coregfiles.append(
                                     os.path.join(pathOval, fileOvalNoPref)
@@ -453,136 +489,6 @@ class Coregister(ProcessMIA):
 
             if out_coregfiles:
                 self.outputs["coregistered_files"] = out_coregfiles
-
-                if not isinstance(out_coregfiles, list):
-                    out_coregfiles = [out_coregfiles]
-
-                # FIXME: In the latest version of mia, indexing of the
-                #        database with particular tags defined in the
-                #        processes is done only at the end of the
-                #        initialisation of the whole pipeline. So we
-                #        cannot use the value of these tags in other
-                #        processes of the pipeline at the time of
-                #        initialisation (see populse_mia #290). Until
-                #        better we use a quick and dirty hack with the
-                #        set_dbFieldValue() function !
-                for in_val, out_val in zip(
-                    self.apply_to_files, out_coregfiles
-                ):
-                    tag_to_add = dict()
-                    tag_to_add["name"] = "RepetitionTime"
-                    tag_to_add["field_type"] = "float"
-                    tag_to_add["description"] = (
-                        "The period of time "
-                        "in msec between the "
-                        "beginning of a pulse "
-                        "sequence and the "
-                        "beginning of the "
-                        "succeeding pulse "
-                        "sequence"
-                    )
-                    tag_to_add["visibility"] = True
-                    tag_to_add["origin"] = "user"
-                    tag_to_add["unit"] = "ms"
-                    tag_to_add["default_value"] = None
-                    tag_to_add["value"] = get_dbFieldValue(
-                        self.project, in_val, "RepetitionTime"
-                    )
-
-                    if tag_to_add["value"] is not None:
-                        set_dbFieldValue(self.project, out_val, tag_to_add)
-
-                    else:
-                        print(
-                            "\nCoregister:\n the 'RepetitionTime' tag could "
-                            "not be added to the database for the '{}' "
-                            "parameter. This can lead to a subsequent issue "
-                            "during initialization!!\n".format(out_val)
-                        )
-
-                    tag_to_add = dict()
-                    tag_to_add["name"] = (
-                        "Dataset dimensions " "(Count, X,Y,Z,T...)"
-                    )
-                    tag_to_add["field_type"] = "int"
-                    tag_to_add["description"] = (
-                        "data array dimensions" " (from Nifti header)"
-                    )
-                    tag_to_add["visibility"] = True
-                    tag_to_add["origin"] = "user"
-                    tag_to_add["unit"] = None
-                    tag_to_add["default_value"] = None
-                    tag_to_add["value"] = get_dbFieldValue(
-                        self.project,
-                        in_val,
-                        ("Dataset dimensions " "(Count, X,Y,Z,T...)"),
-                    )
-
-                    if tag_to_add["value"] is not None:
-                        set_dbFieldValue(self.project, out_val, tag_to_add)
-
-                    else:
-                        print(
-                            "\nCoregister:\nThe 'Dataset dimensions (Count, "
-                            "X,Y,Z,T...)' tag could not be added to the "
-                            "database for the '{}' parameter. This can lead to"
-                            " a subsequent issue during "
-                            "initialization!!\n".format(out_val)
-                        )
-
-                    tag_to_add = dict()
-                    tag_to_add["name"] = "PatientName"
-                    tag_to_add["field_type"] = "string"
-                    tag_to_add["description"] = ""
-                    tag_to_add["visibility"] = True
-                    tag_to_add["origin"] = "user"
-                    tag_to_add["unit"] = None
-                    tag_to_add["default_value"] = None
-                    tag_to_add["value"] = get_dbFieldValue(
-                        self.project, in_val, "PatientName"
-                    )
-
-                    if tag_to_add["value"] is not None:
-                        set_dbFieldValue(self.project, out_val, tag_to_add)
-
-                    else:
-                        print(
-                            "\nCoregister:\nThe 'PatientName' tag could not "
-                            "be added to the database for the '{}' "
-                            "parameter. This can lead to a subsequent "
-                            "issue during "
-                            "initialization!!\n".format(out_val)
-                        )
-
-                    age = get_dbFieldValue(self.project, in_val, "Age")
-
-                    if age is not None:
-                        tag_to_add = dict()
-                        tag_to_add["name"] = "Age"
-                        tag_to_add["field_type"] = "int"
-                        tag_to_add["description"] = ""
-                        tag_to_add["visibility"] = True
-                        tag_to_add["origin"] = "user"
-                        tag_to_add["unit"] = None
-                        tag_to_add["default_value"] = None
-                        tag_to_add["value"] = age
-                        set_dbFieldValue(self.project, out_val, tag_to_add)
-
-                    pathology = get_dbFieldValue(
-                        self.project, in_val, "Pathology"
-                    )
-
-                    if pathology is not None:
-                        tag_to_add = dict()
-                        tag_to_add["name"] = "Pathology"
-                        tag_to_add["field_type"] = "string"
-                        tag_to_add["description"] = ""
-                        tag_to_add["visibility"] = True
-                        tag_to_add["origin"] = "user"
-                        tag_to_add["unit"] = None
-                        tag_to_add["default_value"] = None
-                        tag_to_add["value"] = pathology
-                        set_dbFieldValue(self.project, out_val, tag_to_add)
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -3410,136 +3316,6 @@ class Smooth(ProcessMIA):
                         val = [val]
 
                     for in_val, out_val in zip(self.in_files, val):
-                        # FIXME: In the latest version of mia, indexing of the
-                        #        database with particular tags defined in the
-                        #        processes is done only at the end of the
-                        #        initialisation of the whole pipeline. So we
-                        #        cannot use the value of these tags in other
-                        #        processes of the pipeline at the time of
-                        #        initialisation (see populse_mia #290). Until
-                        #        better we use a quick and dirty hack with the
-                        #        set_dbFieldValue() function !
-                        # tag_to_add = dict()
-                        # tag_to_add["name"] = "RepetitionTime"
-                        # tag_to_add["field_type"] = "float"
-                        # tag_to_add["description"] = (
-                        #     "The period of time "
-                        #     "in msec between the "
-                        #     "beginning of a pulse "
-                        #     "sequence and the "
-                        #     "beginning of the "
-                        #     "succeeding pulse "
-                        #     "sequence"
-                        # )
-                        # tag_to_add["visibility"] = True
-                        # tag_to_add["origin"] = "user"
-                        # tag_to_add["unit"] = "ms"
-                        # tag_to_add["default_value"] = None
-                        # tag_to_add["value"] = get_dbFieldValue(
-                        #     self.project, in_val, "RepetitionTime"
-                        # )
-                        #
-                        # if tag_to_add["value"] is not None:
-                        #     set_dbFieldValue(self.project, out_val,
-                        #                      tag_to_add)
-                        #
-                        # else:
-                        #     print(
-                        #         "\nSmooth:\nThe 'RepetitionTime' tag could "
-                        #         "not be added to the database for the '{}' "
-                        #         "parameter. This can lead to a subsequent "
-                        #         "issue during "
-                        #         "initialization!!\n".format(out_val)
-                        #     )
-                        #
-                        # tag_to_add = dict()
-                        # tag_to_add["name"] = (
-                        #     "Dataset dimensions (Count, X,Y,Z,T...)"
-                        # )
-                        # tag_to_add["field_type"] = "int"
-                        # tag_to_add["description"] = (
-                        #     "data array dimensions (from Nifti header)"
-                        # )
-                        # tag_to_add["visibility"] = True
-                        # tag_to_add["origin"] = "user"
-                        # tag_to_add["unit"] = None
-                        # tag_to_add["default_value"] = None
-                        # tag_to_add["value"] = get_dbFieldValue(
-                        #     self.project,
-                        #     in_val,
-                        #     ("Dataset dimensions " "(Count, X,Y,Z,T...)"),
-                        # )
-                        #
-                        # if tag_to_add["value"] is not None:
-                        #     set_dbFieldValue(self.project,
-                        #                      out_val, tag_to_add)
-                        #
-                        # else:
-                        #     print(
-                        #         "\nSmooth:\nThe 'Dataset dimensions (Count, "
-                        #         "X,Y,Z,T...)' tag could not be added to the "
-                        #         "database for the '{}' parameter. This can "
-                        #         "lead to a subsequent issue during "
-                        #         "initialization!!\n".format(out_val)
-                        #     )
-                        #
-                        # tag_to_add = dict()
-                        # tag_to_add["name"] = "PatientName"
-                        # tag_to_add["field_type"] = "string"
-                        # tag_to_add["description"] = ""
-                        # tag_to_add["visibility"] = True
-                        # tag_to_add["origin"] = "user"
-                        # tag_to_add["unit"] = None
-                        # tag_to_add["default_value"] = None
-                        # tag_to_add["value"] = get_dbFieldValue(
-                        #     self.project, in_val, "PatientName"
-                        # )
-                        #
-                        # if tag_to_add["value"] is not None:
-                        #     set_dbFieldValue(self.project, out_val,
-                        #                      tag_to_add)
-                        #
-                        # else:
-                        #     print(
-                        #         "\nSmooth:\nThe 'PatientName' tag could not "
-                        #         "be added to the database for the '{}' "
-                        #         "parameter. This can lead to a subsequent "
-                        #         "issue during "
-                        #         "initialization!!\n".format(out_val)
-                        #     )
-                        #
-                        # age = get_dbFieldValue(self.project, in_val, "Age")
-                        #
-                        # if age is not None:
-                        #     tag_to_add = dict()
-                        #     tag_to_add["name"] = "Age"
-                        #     tag_to_add["field_type"] = "int"
-                        #     tag_to_add["description"] = ""
-                        #     tag_to_add["visibility"] = True
-                        #     tag_to_add["origin"] = "user"
-                        #     tag_to_add["unit"] = None
-                        #     tag_to_add["default_value"] = None
-                        #     tag_to_add["value"] = age
-                        #     set_dbFieldValue(self.project, out_val,
-                        #                      tag_to_add)
-                        #
-                        # pathology = get_dbFieldValue(
-                        #     self.project, in_val, "Pathology"
-                        # )
-                        #
-                        # if pathology is not None:
-                        #     tag_to_add = dict()
-                        #     tag_to_add["name"] = "Pathology"
-                        #     tag_to_add["field_type"] = "string"
-                        #     tag_to_add["description"] = ""
-                        #     tag_to_add["visibility"] = True
-                        #     tag_to_add["origin"] = "user"
-                        #     tag_to_add["unit"] = None
-                        #     tag_to_add["default_value"] = None
-                        #     tag_to_add["value"] = pathology
-                        #     set_dbFieldValue(self.project, out_val,
-                        #                      tag_to_add)
-
                         _, fileOval = os.path.split(out_val)
                         _, fileIval = os.path.split(in_val)
 
@@ -3554,94 +3330,9 @@ class Smooth(ProcessMIA):
                             # fmt : on
 
                         if fileOvalNoPref == fileIval:
-                            # tests for issue #310 in populse_mia:
-                            # self.inheritance_dict[out_val] = in_val
-
-                            # self.inheritance_dict[out_val] = dict()
-                            # self.inheritance_dict[out_val]["parent"] = in_val
-                            # self.inheritance_dict[out_val]["own_tags"] = []
-
-                            all_tags_to_add = []
-
-                            # Add a false tag in database
-                            tag_to_add = dict()
-                            tag_to_add["name"] = "False tag 1"
-                            tag_to_add["field_type"] = "int"
-                            tag_to_add["description"] = "A false tag"
-                            tag_to_add["visibility"] = True
-                            tag_to_add["origin"] = "user"
-                            tag_to_add["unit"] = None
-                            tag_to_add["default_value"] = None
-                            false_tag = get_dbFieldValue(
-                                self.project, in_val, "False tag 1"
-                            )
-
-                            if not false_tag:
-                                tag_to_add["value"] = 101
-
-                            else:
-                                tag_to_add["value"] = false_tag + 1
-
-                            all_tags_to_add.append(tag_to_add)
-
-                            # Add a second false tag in database
-                            tag_to_add = dict()
-                            tag_to_add["name"] = "False tag 2"
-                            tag_to_add["field_type"] = "int"
-                            tag_to_add["description"] = "A false tag 2"
-                            tag_to_add["visibility"] = True
-                            tag_to_add["origin"] = "user"
-                            tag_to_add["unit"] = None
-                            tag_to_add["default_value"] = None
-                            tag_to_add["value"] = 1000
-                            all_tags_to_add.append(tag_to_add)
-
-                            # self.inheritance_dict[out_val]["own_tags"].append(
-                            #     tag_to_add
-                            # )
-                            # FIXME: In the latest version of mia, indexing of
-                            #        the database with particular tags defined
-                            #        in the processes is done only at the end
-                            #        of the initialisation of the whole
-                            #        pipeline. So we cannot use the value of
-                            #        these tags in other processes of the
-                            #        pipeline at the time of initialisation
-                            #        (see populse_mia #290). Until better we
-                            #        use a quick and dirty hack with the
-                            #        set_dbFieldValue() function !
-                            # set_dbFieldValue(self.project, out_val,
-                            #                  tag_to_add)
-
-                            # Just to test tags2del argument:
-                            # We remove "RepetitionTime" value for the second
-                            # smooth brick in a fake pipeline Smooth -> Smooth
-                            if false_tag:
-                                all_tags_to_del = []
-                                all_tags_to_del.append("RepetitionTime")
-
-                            else:
-                                all_tags_to_del = None
-                                # self.inheritance_dict[
-                                #                     out_val]["tags2del"] = []
-                                # self.inheritance_dict[out_val][
-                                #     "tags2del"
-                                # ].append("RepetitionTime")
-                                # from mia_processes.utils import (
-                                #     del_dbFieldValue,
-                                # )
-                                #
-                                # del_dbFieldValue(
-                                #     self.project,
-                                #     out_val,
-                                #     self.inheritance_dict[out_val
-                                #                                ]["tags2del"],
-                                # )
-
                             self.tags_inheritance(
                                 in_val,
                                 out_val,
-                                own_tags=all_tags_to_add,
-                                tags2del=all_tags_to_del,
                             )
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()

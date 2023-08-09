@@ -213,9 +213,10 @@ class AffineInitializer(ProcessMIA):
                         self.out_prefix + fileName + ".mat",
                     )
 
-                    self.inheritance_dict[
-                        self.outputs["out_file"]
-                    ] = self.moving_image
+                    self.tags_inheritance(
+                        in_file=self.moving_image,
+                        out_file=self.outputs["out_file"],
+                    )
 
             else:
                 print("No output_directory was found...!\n")
@@ -489,10 +490,10 @@ class ApplyTransforms(ProcessMIA):
                         self.output_directory,
                         self.out_prefix + fileName + "." + in_ext,
                     )
-
-                    self.inheritance_dict[
-                        self.outputs["output_image"]
-                    ] = self.input_image
+                    self.tags_inheritance(
+                        in_file=self.input_image,
+                        out_file=self.outputs["output_image"],
+                    )
 
             else:
                 print("No output_directory was found...!\n")
@@ -827,13 +828,15 @@ class N4BiasFieldCorrection(ProcessMIA):
                             self.out_prefix + fileName + "_bias." + in_ext,
                         )
 
-                        self.inheritance_dict[
-                            self.outputs["out_file"]
-                        ] = self.in_file
+                        self.tags_inheritance(
+                            in_file=self.in_file,
+                            out_file=self.outputs["out_file"],
+                        )
 
-                    self.inheritance_dict[
-                        self.outputs["bias_image"]
-                    ] = self.in_file
+                    self.tags_inheritance(
+                        in_file=self.in_file,
+                        out_file=self.outputs["bias_image"],
+                    )
 
             else:
                 print("No output_directory was found...!\n")
@@ -1694,17 +1697,15 @@ class Registration(ProcessMIA):
                         fileName + "_InverseComposite.h5",
                     )
 
-                    self.inheritance_dict[
-                        self.outputs["warped_image"]
-                    ] = self.moving_image
-
-                    self.inheritance_dict[
-                        self.outputs["composite_transform"]
-                    ] = self.moving_image
-
-                    self.inheritance_dict[
-                        self.outputs["inverse_composite_transform"]
-                    ] = self.moving_image
+                    for k in (
+                        "warped_image",
+                        "composite_transform",
+                        "inverse_composite_transform",
+                    ):
+                        self.tags_inheritance(
+                            in_file=self.moving_image,
+                            out_file=self.outputs[k],
+                        )
 
                     if self.output_inverse_warped_image:
                         self.outputs["inverse_warped_image"] = os.path.join(
@@ -1715,9 +1716,10 @@ class Registration(ProcessMIA):
                             + "."
                             + in_ext,
                         )
-                        self.inheritance_dict[
-                            self.outputs["inverse_warped_image"]
-                        ] = self.moving_image
+                        self.tags_inheritance(
+                            in_file=self.moving_image,
+                            out_file=self.outputs["inverse_warped_image"],
+                        )
 
             else:
                 print("No output_directory was found...!\n")

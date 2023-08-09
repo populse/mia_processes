@@ -249,13 +249,11 @@ class Automask(ProcessMIA):
                         + EXT[self.output_type],
                     )
 
-                    self.inheritance_dict[
-                        self.outputs["out_file"]
-                    ] = self.in_file
-
-                    self.inheritance_dict[
-                        self.outputs["brain_file"]
-                    ] = self.in_file
+                    for k in ["out_file", "brain_file"]:
+                        self.tags_inheritance(
+                            in_file=self.in_file,
+                            out_file=self.outputs[k],
+                        )
 
             else:
                 print("No output_directory was found...!\n")
@@ -486,10 +484,10 @@ class Calc(ProcessMIA):
                         + "."
                         + EXT[self.output_type],
                     )
-
-                    self.inheritance_dict[
-                        self.outputs["out_file"]
-                    ] = self.in_file_a
+                    self.tags_inheritance(
+                        in_file=self.in_file_a,
+                        out_file=self.outputs["out_file"],
+                    )
 
             else:
                 print("No output_directory was found...!\n")
@@ -665,7 +663,10 @@ class CalcDropTRs(ProcessMIA):
                     print("No output_directory was found...!\n")
                     return
 
-            self.inheritance_dict[self.outputs["out_file"]] = self.in_file
+            self.tags_inheritance(
+                in_file=self.in_file,
+                out_file=self.outputs["out_file"],
+            )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -834,7 +835,10 @@ class Despike(ProcessMIA):
             else:
                 self.outputs["out_file"] = self.in_file
 
-            self.inheritance_dict[self.outputs["out_file"]] = self.in_file
+            self.tags_inheritance(
+                in_file=self.in_file,
+                out_file=self.outputs["out_file"],
+            )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -981,7 +985,10 @@ separately*
                 print("No output_directory was found...!\n")
                 return
 
-            self.inheritance_dict[self.outputs["out_file"]] = self.in_file
+            self.tags_inheritance(
+                in_file=self.in_file,
+                out_file=self.outputs["out_file"],
+            )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -1329,7 +1336,10 @@ separately*
                 print("No output_directory was found...!\n")
                 return
 
-            self.inheritance_dict[self.outputs["out_file"]] = self.in_file
+            self.tags_inheritance(
+                in_file=self.in_file,
+                out_file=self.outputs["out_file"],
+            )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -1520,7 +1530,10 @@ class QualityIndex(ProcessMIA):
                 print("No output_directory was found...!\n")
                 return
 
-            self.inheritance_dict[self.outputs["out_file"]] = self.in_file
+            self.tags_inheritance(
+                in_file=self.in_file,
+                out_file=self.outputs["out_file"],
+            )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -1618,7 +1631,10 @@ class RefitDeoblique(ProcessMIA):
         if self.in_file:
             self.outputs["out_file"] = self.in_file
 
-            self.inheritance_dict[self.outputs["out_file"]] = self.in_file
+            self.tags_inheritance(
+                in_file=self.in_file,
+                out_file=self.outputs["out_file"],
+            )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -1744,10 +1760,10 @@ class SkullStrip(ProcessMIA):
                         + "."
                         + EXT[self.output_type],
                     )
-
-                    self.inheritance_dict[
-                        self.outputs["out_file"]
-                    ] = self.in_file
+                    self.tags_inheritance(
+                        in_file=self.in_file,
+                        out_file=self.outputs["out_file"],
+                    )
 
             else:
                 print("No output_directory was found...!\n")
@@ -2076,7 +2092,10 @@ class TShift(ProcessMIA):
             else:
                 self.outputs["out_file"] = self.in_file
 
-            self.inheritance_dict[self.outputs["out_file"]] = self.in_file
+            self.tags_inheritance(
+                in_file=self.in_file,
+                out_file=self.outputs["out_file"],
+            )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -2223,10 +2242,10 @@ class TStatMean(ProcessMIA):
                         + "."
                         + EXT[self.output_type],
                     )
-
-                    self.inheritance_dict[
-                        self.outputs["out_file"]
-                    ] = self.in_file
+                    self.tags_inheritance(
+                        in_file=self.in_file,
+                        out_file=self.outputs["out_file"],
+                    )
 
             else:
                 print("No output_directory was found...!\n")
@@ -2480,13 +2499,11 @@ class Volreg(ProcessMIA):
                         self.out_prefix + fileName + "_oned.txt",
                     )
 
-                    self.inheritance_dict[
-                        self.outputs["out_file"]
-                    ] = self.in_file
-
-                    self.inheritance_dict[
-                        self.outputs["oned_file"]
-                    ] = self.in_file
+                    for k in ("out_file", "oned_file"):
+                        self.tags_inheritance(
+                            in_file=self.in_file,
+                            out_file=self.outputs[k],
+                        )
 
                     if self.save_oned_matrix:
                         self.outputs["oned_matrix"] = os.path.join(
@@ -2495,20 +2512,20 @@ class Volreg(ProcessMIA):
                             + fileName
                             + "_oned_matrix.aff12.1D",
                         )
-
-                        self.inheritance_dict[
-                            self.outputs["oned_matrix"]
-                        ] = self.in_file
+                        self.tags_inheritance(
+                            in_file=self.in_file,
+                            out_file=self.outputs["oned_matrix"],
+                        )
 
                     if self.save_md1d_file:
                         self.outputs["md1d_file"] = os.path.join(
                             self.output_directory,
                             self.out_prefix + fileName + "_md.1D",
                         )
-
-                        self.inheritance_dict[
-                            self.outputs["md1d_file"]
-                        ] = self.in_file
+                        self.tags_inheritance(
+                            in_file=self.in_file,
+                            out_file=self.outputs["md1d_file"],
+                        )
 
             else:
                 print("No output_directory was found...!\n")
