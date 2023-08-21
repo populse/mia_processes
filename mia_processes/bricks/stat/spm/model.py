@@ -337,9 +337,10 @@ class EstimateContrast(ProcessMIA):
 
         if self.use_derivs and self.group_contrast:
             print(
-                "\nInitialisation failed. Both input parameters 'use_derivs' "
-                "and 'group_contrast' are mutually exclusive. Please, define "
-                "only one of these two parameters to True...!"
+                "\nEstimateContrast brick initialisation failed. Both input "
+                "parameters 'use_derivs' and 'group_contrast' are mutually "
+                "exclusive. Please, define only one of these two parameters "
+                "to True...!"
             )
             return self.make_initResult()
 
@@ -362,19 +363,20 @@ class EstimateContrast(ProcessMIA):
 
                 # We want spm.mat output in derived_data/subfolder
                 if self.output_directory in spm_mat_dir:
-                    # if spm_mat already in a subfolder for a analysis
+                    # if spm_mat already in a subfolder for an analysis
                     out_directory = spm_mat_dir
 
                 else:
-                    # if spm_mat file not in a subfolder(for e.g spm_mat
+                    # if spm_mat file not in a subfolder (for e.g spm_mat
                     # file in download data)
                     sub_name = get_dbFieldValue(
                         self.project, self.spm_mat_file, "PatientName"
                     )
                     if sub_name is None:
                         print(
-                            "Please, fill 'PatientName' tag "
-                            "in the database for SPM file"
+                            "\nEstimateContrast brick initialisation failed. "
+                            "Please, fill 'PatientName' tag in the database "
+                            "for 'SPM.mat' file ..."
                         )
                         return self.make_initResult()
 
@@ -384,15 +386,25 @@ class EstimateContrast(ProcessMIA):
 
                     if not os.path.exists(out_directory):
                         os.mkdir(out_directory)
+
                 self.output_directory = out_directory
+
             else:
-                print("No output_directory was found...!\n")
+                print(
+                    "\nEstimateContrast brick initialisation failed. No "
+                    "output_directory was found...!\n"
+                )
                 return self.make_initResult()
 
             # Check that contrasts can be created
             contrasts = self._get_contrasts()
+
             if contrasts is None:
-                print("Contrast ca not be created, please check the inputs\n")
+                print(
+                    "\nEstimateContrast brick initialisation failed. "
+                    "Contrast can not be created, please check the "
+                    "inputs.\n"
+                )
                 return self.make_initResult()
 
             self.outputs["out_spm_mat_file"] = os.path.join(
@@ -452,25 +464,14 @@ class EstimateContrast(ProcessMIA):
             if spmT_files:
                 self.outputs["spmT_images"] = spmT_files
                 self.outputs["con_images"] = con_files
+
             if spmF_files:
                 self.outputs["spmF_images"] = spmF_files
                 self.outputs["ess_images"] = ess_files
 
         if self.outputs:
-            # FIXME: In the latest version of mia, indexing of the
-            #        database with particular tags defined in the
-            #        processes is done only at the end of the
-            #        initialisation of the whole pipeline. So we
-            #        cannot use the value of these tags in other
-            #        processes of the pipeline at the time of
-            #        initialisation (see populse_mia #290). Unti
-            #        better we use a quick and dirty hack with the
-            #        set_dbFieldValue() function !
             for key, value in self.outputs.items():
                 if key == "out_spm_mat_file":
-                    self.inheritance_dict[value] = dict()
-                    self.inheritance_dict[value]["parent"] = self.spm_mat_file
-                    self.inheritance_dict[value]["own_tags"] = []
                     # Update/add number of contrast
                     tag_to_add = dict()
                     tag_to_add["name"] = "Contrasts num"
@@ -481,17 +482,9 @@ class EstimateContrast(ProcessMIA):
                     tag_to_add["unit"] = None
                     tag_to_add["default_value"] = None
                     tag_to_add["value"] = nb_contrasts
-                    self.inheritance_dict[value]["own_tags"].append(tag_to_add)
-                    # FIXME: In the latest version of mia, indexing of the
-                    #        database with particular tags defined in the
-                    #        processes is done only at the end of the
-                    #        initialisation of the whole pipeline. So we
-                    #        cannot use the value of these tags in other
-                    #        processes of the pipeline at the time of
-                    #        initialisation (see populse_mia #290). Unti
-                    #        better we use a quick and dirty hack with the
-                    #        set_dbFieldValue() function !
-                    set_dbFieldValue(self.project, value, tag_to_add)
+                    self.tags_inheritance(
+                        self.spm_mat_file, value, own_tags=[tag_to_add]
+                    )
 
                 elif key in [
                     "con_images",
@@ -509,78 +502,62 @@ class EstimateContrast(ProcessMIA):
                         self.project, self.spm_mat_file, "PatientName"
                     )
 
-                    for fullname in value:
-                        if patient_name is not None:
-                            tag_to_add = dict()
-                            tag_to_add["name"] = "PatientName"
-                            tag_to_add["field_type"] = "string"
-                            tag_to_add["description"] = ""
-                            tag_to_add["visibility"] = True
-                            tag_to_add["origin"] = "user"
-                            tag_to_add["unit"] = None
-                            tag_to_add["default_value"] = None
-                            tag_to_add["value"] = patient_name
-                            set_dbFieldValue(
-                                self.project, fullname, tag_to_add
-                            )
+                    all_tags_to_add = []
 
-                        if age is not None:
-                            tag_to_add = dict()
-                            tag_to_add["name"] = "Age"
-                            tag_to_add["field_type"] = "int"
-                            tag_to_add["description"] = ""
-                            tag_to_add["visibility"] = True
-                            tag_to_add["origin"] = "user"
-                            tag_to_add["unit"] = None
-                            tag_to_add["default_value"] = None
-                            tag_to_add["value"] = age
-                            set_dbFieldValue(
-                                self.project, fullname, tag_to_add
-                            )
-
-                        if pathology is not None:
-                            tag_to_add = dict()
-                            tag_to_add["name"] = "Pathology"
-                            tag_to_add["field_type"] = "string"
-                            tag_to_add["description"] = ""
-                            tag_to_add["visibility"] = True
-                            tag_to_add["origin"] = "user"
-                            tag_to_add["unit"] = None
-                            tag_to_add["default_value"] = None
-                            tag_to_add["value"] = pathology
-                            set_dbFieldValue(
-                                self.project, fullname, tag_to_add
-                            )
-
-                        # Update/add number of contrast
-                        self.inheritance_dict[fullname] = dict()
-                        self.inheritance_dict[fullname][
-                            "parent"
-                        ] = self.spm_mat_file
-                        self.inheritance_dict[fullname]["own_tags"] = []
-                        # Update/add number of contrast
+                    if patient_name is not None:
                         tag_to_add = dict()
-                        tag_to_add["name"] = "Contrasts num"
-                        tag_to_add["field_type"] = FIELD_TYPE_INTEGER
-                        tag_to_add["description"] = "Total number of contrasts"
+                        tag_to_add["name"] = "PatientName"
+                        tag_to_add["field_type"] = "string"
+                        tag_to_add["description"] = ""
                         tag_to_add["visibility"] = True
-                        tag_to_add["origin"] = TAG_ORIGIN_USER
+                        tag_to_add["origin"] = "user"
                         tag_to_add["unit"] = None
                         tag_to_add["default_value"] = None
-                        tag_to_add["value"] = nb_contrasts
-                        self.inheritance_dict[fullname]["own_tags"].append(
-                            tag_to_add
+                        tag_to_add["value"] = patient_name
+                        all_tags_to_add.append(tag_to_add)
+
+                    if age is not None:
+                        tag_to_add = dict()
+                        tag_to_add["name"] = "Age"
+                        tag_to_add["field_type"] = "int"
+                        tag_to_add["description"] = ""
+                        tag_to_add["visibility"] = True
+                        tag_to_add["origin"] = "user"
+                        tag_to_add["unit"] = None
+                        tag_to_add["default_value"] = None
+                        tag_to_add["value"] = age
+                        all_tags_to_add.append(tag_to_add)
+
+                    if pathology is not None:
+                        tag_to_add = dict()
+                        tag_to_add["name"] = "Pathology"
+                        tag_to_add["field_type"] = "string"
+                        tag_to_add["description"] = ""
+                        tag_to_add["visibility"] = True
+                        tag_to_add["origin"] = "user"
+                        tag_to_add["unit"] = None
+                        tag_to_add["default_value"] = None
+                        tag_to_add["value"] = pathology
+                        all_tags_to_add.append(tag_to_add)
+
+                    # Update/add number of contrast
+                    tag_to_add = dict()
+                    tag_to_add["name"] = "Contrasts num"
+                    tag_to_add["field_type"] = FIELD_TYPE_INTEGER
+                    tag_to_add["description"] = "Total number of contrasts"
+                    tag_to_add["visibility"] = True
+                    tag_to_add["origin"] = TAG_ORIGIN_USER
+                    tag_to_add["unit"] = None
+                    tag_to_add["default_value"] = None
+                    tag_to_add["value"] = nb_contrasts
+                    all_tags_to_add.append(tag_to_add)
+
+                    for fullname in value:
+                        self.tags_inheritance(
+                            self.spm_mat_file,
+                            fullname,
+                            own_tags=all_tags_to_add,
                         )
-                        # FIXME: In the latest version of mia, indexing of the
-                        #        database with particular tags defined in the
-                        #        processes is done only at the end of the
-                        #        initialisation of the whole pipeline. So we
-                        #        cannot use the value of these tags in other
-                        #        processes of the pipeline at the time of
-                        #        initialisation (see populse_mia #290). Unti
-                        #        better we use a quick and dirty hack with the
-                        #        set_dbFieldValue() function !
-                        set_dbFieldValue(self.project, fullname, tag_to_add)
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
