@@ -21,6 +21,7 @@ from .tools import (  # noqa: F401
     Filter_Files_List,
     Find_In_List,
     Get_Conditions_From_csv,
+    Get_Patient_Name,
     Import_Data,
     Input_Filter,
     List_Duplicate,
