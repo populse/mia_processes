@@ -167,7 +167,17 @@ def del_dbFieldValue(project, document, tags2del):
 
 
 def dict4runtime_update(dict4runtime, database, db_filename, *args):
-    """blabla"""
+    """Update the dict4runtime dictionary object with tags values
+
+    :param dict4runtime: the dict used in mia_processes bricks to pass data
+                         from the list_outputs method to the run_process_mia
+                         method
+    :param database: the database object (for example: self.project.session)
+    :param db_filename: the name of the database file from which the tag value
+                        will be retrieved
+    args: the tags to be recovered
+
+    """
 
     for tag in args:
         if tag in database.get_fields_names(COLLECTION_CURRENT):
