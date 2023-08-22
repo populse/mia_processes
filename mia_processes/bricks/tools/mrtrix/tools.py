@@ -12,6 +12,8 @@ The mrtrix tools
 
 """
 
+import os
+
 ##########################################################################
 # mia_processes - Copyright (C) IRMaGe/CEA, 2018
 # Distributed under the terms of the CeCILL license, as published by
@@ -19,23 +21,12 @@ The mrtrix tools
 # http://www.cecill.info/licences/Licence_CeCILL_V2.1-en.html
 # for details.
 ##########################################################################
-import os
-
+from capsul.in_context import mrtrix
 from nipype.interfaces.base import File, InputMultiPath
 
 # populse_mia and mia_processes import
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
-from traits.api import (
-    Bool,
-    Either,
-    Enum,
-    Float,
-    Int,
-    List,
-    String,
-    Tuple,
-    Undefined,
-)
+from traits.api import Bool, Either, Enum, Float, Int, List, String, Undefined
 
 from mia_processes.utils import checkFileExt
 
@@ -62,8 +53,7 @@ class DWIExtract(ProcessMIA):
         super(DWIExtract, self).__init__()
 
         # Third party softwares required for the execution of the brick
-        # self.requirement = ["nipype", "mrtrix"]
-        self.requirement = ["nipype"]
+        self.requirement = ["nipype", "mrtrix"]
 
         # Mandatory inputs description
         in_file_desc = (
@@ -218,8 +208,7 @@ class MRCat(ProcessMIA):
         super(MRCat, self).__init__()
 
         # Third party softwares required for the execution of the brick
-        # self.requirement = ["nipype", "mrtrix"]
-        self.requirement = ["nipype"]
+        self.requirement = ["nipype", "mrtrix"]
 
         # Mandatory inputs description
         in_files_desc = (
@@ -363,8 +352,7 @@ class MRConvert(ProcessMIA):
         super(MRConvert, self).__init__()
 
         # Third party softwares required for the execution of the brick
-        # self.requirement = ["nipype", "mrtrix"]
-        self.requirement = ["nipype"]
+        self.requirement = ["nipype", "mrtrix"]
 
         # Mandatory inputs description
         in_file_desc = (
@@ -408,21 +396,21 @@ class MRConvert(ProcessMIA):
             "acquisition in a text file (MRTrix format) (a pathlike object "
             "or string representing an existing file) "
         )
-        grad_fsl_desc = (
-            "Provide the diffusion-weighted gradient scheme used in the "
-            "acquisition in FSL bvecs/bvals format files. (a tuple of "
-            "the form: (a pathlike object or string representing an "
-            "existing file, a pathlike object or string representing "
-            "an existing file), it should be (bvecs, bvals)) "
+        # grad_fsl_desc = (
+        #     "Provide the diffusion-weighted gradient scheme used in the "
+        #     "acquisition in FSL bvecs/bvals format files. (a tuple of "
+        #     "the form: (a pathlike object or string representing an "
+        #     "existing file, a pathlike object or string representing "
+        #     "an existing file), it should be (bvecs, bvals)) "
+        # )
+        in_bvec_desc = (
+            "Bvecs file in FSL format (a pathlike object or string "
+            "representing an existing file) "
         )
-        # in_bvec_desc = (
-        #     "Bvecs file in FSL format (a pathlike object or string "
-        #     "representing an existing file) "
-        # )
-        # in_bval_desc = (
-        #     "Bvals file in FSL format (a pathlike object or string "
-        #     "representing an existing file) "
-        # )
+        in_bval_desc = (
+            "Bvals file in FSL format (a pathlike object or string "
+            "representing an existing file) "
+        )
         export_bvec_bval_desc = (
             "Export bvec / bval files in FSL format (a boolean)"
         )
@@ -529,7 +517,7 @@ class MRConvert(ProcessMIA):
         self.add_trait(
             "bval_scale",
             Enum(
-                "yes", "no", output=False, optional=True, desc=bval_scale_desc
+                "no", "yes", output=False, optional=True, desc=bval_scale_desc
             ),
         )
 
@@ -537,21 +525,22 @@ class MRConvert(ProcessMIA):
             "grad_file", File(output=False, optional=True, desc=grad_file_desc)
         )
 
-        self.add_trait(
-            "grad_fsl",
-            Tuple(
-                File(), File(), output=False, optional=True, desc=grad_fsl_desc
-            ),
-        )
-
         # FIXME: in_bvec and in_bval already in grad-fsl ? (command -fslgrad)
         # self.add_trait(
-        #     "in_bvec", File(output=False, optional=True, desc=in_bvec_desc)
+        #     "grad_fsl",
+        #     Tuple(
+        #         File(), File(), output=False, optional=True,
+        #         desc=grad_fsl_desc
+        #     ),
         # )
 
-        # self.add_trait(
-        #     "in_bval", File(output=False, optional=True, desc=in_bval_desc)
-        # )
+        self.add_trait(
+            "in_bvec", File(output=False, optional=True, desc=in_bvec_desc)
+        )
+
+        self.add_trait(
+            "in_bval", File(output=False, optional=True, desc=in_bval_desc)
+        )
 
         # Outputs traits
         self.add_trait(
@@ -567,7 +556,10 @@ class MRConvert(ProcessMIA):
 
         self.init_default_traits()
 
-        self.init_process("nipype.interfaces.mrtrix3.MRConvert")
+        # Nipype command not used because only working
+        # for diffusion images (with bvec / bval)
+
+        # self.init_process("nipype.interfaces.mrtrix3.MRConvert")
 
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
@@ -583,8 +575,14 @@ class MRConvert(ProcessMIA):
         # Using the inheritance to ProcessMIA class, list_outputs method
         super(MRConvert, self).list_outputs()
 
-        if self.grad_file and self.grad_fsl:
-            print("\ngrad_file and grad_fsl are mutually exclusif!")
+        if (self.in_bval and not self.in_bvec) or (
+            not self.in_bval and self.in_bvec
+        ):
+            print("\nIf grad_file used, do not provied bvec or bval")
+            return self.make_initResult()
+
+        if self.grad_file and self.in_bvec:
+            print("\nIf grad_file used, do not provied bvec or bval")
             return self.make_initResult()
 
         # Outputs definition and tags inheritance (optional)
@@ -623,8 +621,9 @@ class MRConvert(ProcessMIA):
 
         if self.outputs:
             self.inheritance_dict[self.outputs["out_file"]] = self.in_file
-            self.inheritance_dict[self.outputs["out_bvec"]] = self.in_file
-            self.inheritance_dict[self.outputs["out_bval"]] = self.in_file
+            if self.export_bvec_bval:
+                self.inheritance_dict[self.outputs["out_bvec"]] = self.in_file
+                self.inheritance_dict[self.outputs["out_bval"]] = self.in_file
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -632,26 +631,52 @@ class MRConvert(ProcessMIA):
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
         super(MRConvert, self).run_process_mia()
-        self.process.in_file = self.in_file
-        self.process.out_file = self.out_file
-        if self.axes:
-            self.process.axes = self.axes
-        if self.coord:
-            self.process.coord = self.coord
-        if self.scaling:
-            self.process.scaling = self.scaling
-        if self.vox:
-            self.process.vox = self.vox
-        if self.grad_file:
-            self.process.grad_file = self.grad_file
-        if self.grad_fsl:
-            self.process.grad_fsl = self.grad_fsl
-        self.process.bval_scale = self.bval_scale
-        if self.export_bvec_bval:
-            self.process.out_bvec = self.out_bvec
-            self.process.out_bval = self.out_bval
+        # Nipype command not used because only working
+        # for diffusion images (with bvec / bval)
 
-        return self.process.run(configuration_dict={})
+        # self.process.in_file = self.in_file
+        # self.process.out_file = self.out_file
+        # if self.axes:
+        #     self.process.axes = self.axes
+        # if self.coord:
+        #     self.process.coord = self.coord
+        # if self.scaling:
+        #     self.process.scaling = self.scaling
+        # if self.vox:
+        #     self.process.vox = self.vox
+        # if self.grad_file:
+        #     self.process.grad_file = self.grad_file
+        # if self.in_bvec:
+        #     self.process.grad_fsl = (self.in_bvec, self.in_bval)
+        # self.process.bval_scale = self.bval_scale
+        # if self.export_bvec_bval:
+        #     self.process.out_bvec = self.out_bvec
+        #     self.process.out_bval = self.out_bval
+
+        # return self.process.run(configuration_dict={})
+
+        cmd = ["mrconvert", self.in_file]
+
+        if self.axes:
+            cmd += ["-axes", self.axes]
+        if self.coord:
+            cmd += ["-coord", self.coord]
+        if self.scaling:
+            cmd += ["-scaling", self.scaling]
+        if self.vox:
+            cmd += ["-vox", self.vox]
+        if self.grad_file:
+            cmd += ["-grad", self.axes]
+        if self.in_bvec:
+            cmd += ["-fslgrad", self.in_bvec, self.in_bval]
+        if self.bval_scale == "yes":
+            cmd += ["-bvalue_scaling", self.bval_scale]
+        if self.export_bvec_bval:
+            cmd += ["-export_grad_fsl", self.out_bvec, self.out_bval]
+
+        cmd += [self.out_file]
+
+        return mrtrix.mrtrix_call(cmd)
 
 
 class MRMath(ProcessMIA):
@@ -674,8 +699,7 @@ class MRMath(ProcessMIA):
         super(MRMath, self).__init__()
 
         # Third party softwares required for the execution of the brick
-        # self.requirement = ["nipype", "mrtrix"]
-        self.requirement = ["nipype"]
+        self.requirement = ["nipype", "mrtrix"]
 
         # Mandatory inputs description
         in_file_desc = (
@@ -705,7 +729,7 @@ class MRMath(ProcessMIA):
         )
 
         self.add_trait(
-            "operation_desc",
+            "operation",
             Enum(
                 "mean",
                 "median",

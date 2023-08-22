@@ -75,8 +75,7 @@ class BrainMask(ProcessMIA):
         super(BrainMask, self).__init__()
 
         # Third party softwares required for the execution of the brick
-        # self.requirement = ["nipype", "mrtrix"]
-        self.requirement = ["nipype"]
+        self.requirement = ["nipype", "mrtrix"]
 
         # Mandatory inputs description
         in_file_desc = (
@@ -165,8 +164,7 @@ class ConstrainedSphericalDeconvolution(ProcessMIA):
         super(ConstrainedSphericalDeconvolution, self).__init__()
 
         # Third party softwares required for the execution of the brick
-        # self.requirement = ["nipype", "mrtrix"]
-        self.requirement = ["nipype"]
+        self.requirement = ["nipype", "mrtrix"]
 
         # Mandatory inputs description
         in_file_desc = (
@@ -433,8 +431,7 @@ class DWIBiasCorrect(ProcessMIA):
         super(DWIBiasCorrect, self).__init__()
 
         # Third party softwares required for the execution of the brick
-        # self.requirement = ["nipype", "mrtrix"]
-        self.requirement = ["nipype"]
+        self.requirement = ["nipype", "mrtrix"]
 
         # Mandatory inputs description
         in_file_desc = (
@@ -606,8 +603,7 @@ class DWIDenoise(ProcessMIA):
         super(DWIDenoise, self).__init__()
 
         # Third party softwares required for the execution of the brick
-        # self.requirement = ["nipype", "mrtrix"]
-        self.requirement = ["nipype"]
+        self.requirement = ["nipype", "mrtrix"]
 
         # Mandatory inputs description
         in_file_desc = (
@@ -764,8 +760,7 @@ class DWIPreproc(ProcessMIA):
         super(DWIPreproc, self).__init__()
 
         # Third party softwares required for the execution of the brick
-        # self.requirement = ["nipype", "mrtrix", "fsl"]
-        self.requirement = ["nipype", "fsl"]
+        self.requirement = ["nipype", "mrtrix", "fsl"]
 
         # Mandatory inputs description
         in_file_desc = (
@@ -1038,8 +1033,7 @@ class FitTensor(ProcessMIA):
         super(FitTensor, self).__init__()
 
         # Third party softwares required for the execution of the brick
-        # self.requirement = ["nipype", "mrtrix"]
-        self.requirement = ["nipype"]
+        self.requirement = ["nipype", "mrtrix"]
 
         # Mandatory inputs description
         in_file_desc = (
@@ -1094,7 +1088,7 @@ class FitTensor(ProcessMIA):
         )
         self.add_trait(
             "predicted_signal_file",
-            File(output=True, optional=False, desc=predicted_signal_file_desc),
+            File(output=True, optional=True, desc=predicted_signal_file_desc),
         )
 
         self.init_default_traits()
@@ -1174,8 +1168,7 @@ class Generate5tt(ProcessMIA):
         super(Generate5tt, self).__init__()
 
         # Third party softwares required for the execution of the brick
-        # self.requirement = ["nipype", "mrtrix", "fsl", "freesurfer"]
-        self.requirement = ["nipype", "fsl", "freesurfer"]
+        self.requirement = ["nipype", "mrtrix", "fsl", "freesurfer"]
 
         # Mandatory inputs description
         in_file_desc = (
@@ -1276,8 +1269,7 @@ class MRDeGibbs(ProcessMIA):
         super(MRDeGibbs, self).__init__()
 
         # Third party softwares required for the execution of the brick
-        # self.requirement = ["nipype", "mrtrix"]
-        self.requirement = ["nipype"]
+        self.requirement = ["nipype", "mrtrix"]
 
         # Mandatory inputs description
         in_file_desc = (
@@ -1429,8 +1421,7 @@ class ResponseSDDhollander(ProcessMIA):
         super(ResponseSDDhollander, self).__init__()
 
         # Third party softwares required for the execution of the brick
-        # self.requirement = ["nipype", "mrtrix"]
-        self.requirement = ["nipype"]
+        self.requirement = ["nipype", "mrtrix"]
 
         # Mandatory inputs description
         in_file_desc = (
