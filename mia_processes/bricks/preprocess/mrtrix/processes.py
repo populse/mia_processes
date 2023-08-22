@@ -12,13 +12,18 @@ populse_mia.
         - ConstrainedSphericalDeconvolution
         - DWIBiasCorrect
         - DWIDenoise
+        - DWIExtract
         - DWIPreproc
         - FitTensor
         - Generate5tt
+        - MRCat
+        - MRConvert
         - MRDeGibbs
-        - MRTransform -to do
+        - MRMath
+        - MRTransform
+        - MTnormalise
         - ResponseSDDhollander
-        - TensorMetrics - to do
+        - TensorMetrics
         - Tractography - to do
 
 """
@@ -30,13 +35,10 @@ populse_mia.
 # http://www.cecill.info/licences/Licence_CeCILL_V2.1-en.html
 # for details.
 ##########################################################################
-
-# Other import
 import os
 
-from nipype.interfaces.base import File
-
-# populse_mia import
+from capsul.in_context import mrtrix
+from nipype.interfaces.base import File, InputMultiPath
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 from traits.api import (
     Bool,
@@ -52,7 +54,7 @@ from traits.api import (
 
 from mia_processes.utils import checkFileExt
 
-EXT = {"NIFTI_GZ": "nii.gz", "NIFTI": "nii"}
+EXT = {"NIFTI_GZ": "nii.gz", "NIFTI": "nii", "MIF": "mif"}
 
 
 class BrainMask(ProcessMIA):
@@ -739,6 +741,162 @@ class DWIDenoise(ProcessMIA):
         return self.process.run(configuration_dict={})
 
 
+class DWIExtract(ProcessMIA):
+    """
+    *Extract diffusion-weighted volumes, b=0 volumes,
+    or certain shells from a DWI dataset*
+
+    Please, see the complete documentation for the `DWIExtract brick
+    in the populse.mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/tools/mrtrix/DWIExtract.html>`_
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instantiation.
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(DWIExtract, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = ["nipype", "mrtrix"]
+
+        # Mandatory inputs description
+        in_file_desc = (
+            "Input image (a pathlike object"
+            "string representing an existing file)"
+        )
+        # Optional inputs description
+        bzero_desc = "Extract b=0 volume (a boolean)"
+        nobzero_desc = "Extract non b=0 volume (a boolean)"
+        shell_desc = (
+            "Specify one or more gradient shells "
+            "(a list of items which are a float)"
+        )
+        singleshell_desc = (
+            "Extract volumes with a specific shell" "(a boolean)"
+        )
+
+        # Output description
+        out_file_desc = (
+            "Output image (a pathlike object or string representing "
+            "an existing file)"
+        )
+
+        # Mandatory inputs traits
+        self.add_trait(
+            "in_file", File(output=False, optional=False, desc=in_file_desc)
+        )
+
+        # Optional inputs traits
+        self.add_trait(
+            "bzero",
+            Bool(
+                True,
+                output=False,
+                optional=True,
+                desc=bzero_desc,
+            ),
+        )
+
+        self.add_trait(
+            "nobzero",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=nobzero_desc,
+            ),
+        )
+
+        self.add_trait(
+            "shell",
+            Either(
+                Undefined,
+                List(Float()),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=shell_desc,
+            ),
+        )
+
+        self.add_trait(
+            "singleshell",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=singleshell_desc,
+            ),
+        )
+
+        # Outputs traits
+        self.add_trait(
+            "out_file", File(output=True, optional=False, desc=out_file_desc)
+        )
+
+        self.init_default_traits()
+
+        self.init_process("nipype.interfaces.mrtrix3.DWIExtract")
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(DWIExtract, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.in_file:
+            valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
+
+            if not valid_ext:
+                print("\nThe input image format is not recognized...!")
+                return self.make_initResult()
+
+            if self.output_directory:
+                if self.nobzero:
+                    fileName += "_nobzero"
+                if self.bzero:
+                    fileName += "_bzero"
+
+                self.outputs["out_file"] = os.path.join(
+                    self.output_directory, fileName + "." + in_ext
+                )
+
+        if self.outputs:
+            self.inheritance_dict[self.outputs["out_file"]] = self.in_file
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(DWIExtract, self).run_process_mia()
+        self.process.in_file = self.in_file
+        self.process.out_file = self.out_file
+        if self.bzero:
+            self.process.bzero = self.bzero
+        if self.nobzero:
+            self.process.nobzero = self.nobzero
+        if self.shell:
+            self.process.shell = self.shell
+        if self.singleshell:
+            self.process.singleshell = self.singleshell
+
+        return self.process.run(configuration_dict={})
+
+
 class DWIPreproc(ProcessMIA):
     """
     *Perform diffusion image pre-processing using FSL’s eddy tool;
@@ -1250,13 +1408,503 @@ class Generate5tt(ProcessMIA):
         return self.process.run(configuration_dict={})
 
 
+class MRCat(ProcessMIA):
+    """
+    *Concatenate several images into one*
+
+    Please, see the complete documentation for the `MRCat brick
+    in the populse.mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/tools/mrtrix/MRCat.html>`_
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instantiation.
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(MRCat, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = ["nipype", "mrtrix"]
+
+        # Mandatory inputs description
+        in_files_desc = (
+            "Input images to concatenate (a list of items which are "
+            "a pathlike object or a string representing an "
+            "existing file)"
+        )
+        # Optional inputs description
+        axis_desc = (
+            "Specify axis along which concatenation should be performed "
+            "(an integer, default is 3)"
+        )
+
+        out_file_name_desc = "Output file name (a string)"
+
+        # Output description
+        out_file_desc = (
+            "Output image (a pathlike object or string representing "
+            "an existing file)"
+        )
+
+        # Mandatory inputs traits
+        self.add_trait(
+            "in_files",
+            InputMultiPath(
+                Either(File(), List(File())),
+                output=False,
+                desc=in_files_desc,
+            ),
+        )
+
+        # Optional inputs traits
+        self.add_trait(
+            "axis",
+            Int(
+                3,
+                output=False,
+                optional=True,
+                desc=axis_desc,
+            ),
+        )
+
+        self.add_trait(
+            "out_file_name",
+            String(
+                "concatenated",
+                output=False,
+                optional=True,
+                desc=out_file_name_desc,
+            ),
+        )
+
+        # Outputs traits
+        self.add_trait(
+            "out_file", File(output=True, optional=False, desc=out_file_desc)
+        )
+
+        self.init_default_traits()
+
+        self.init_process("nipype.interfaces.mrtrix3.MRCat")
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(MRCat, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.in_files:
+            in_ext = ""
+            for in_file in self.in_files:
+                valid_ext, in_ext_file, fileName = checkFileExt(in_file, EXT)
+                if not in_ext:
+                    in_ext = in_ext_file
+                else:
+                    if in_ext != in_ext_file:
+                        print(
+                            "\nAll input files should have the same "
+                            "extension...!"
+                        )
+                        return self.make_initResult()
+
+                if not valid_ext:
+                    print("\nThe input image format is not recognized...!")
+                    return self.make_initResult()
+
+            if self.output_directory:
+                self.outputs["out_file"] = os.path.join(
+                    self.output_directory, self.out_file_name + "." + in_ext
+                )
+
+        if self.outputs:
+            # FIXME : out_file inherits only from first file
+            self.inheritance_dict[self.outputs["out_file"]] = self.in_files[0]
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(MRCat, self).run_process_mia()
+        self.process.in_file = self.in_file
+        self.process.out_file = self.out_file
+        if self.bzero:
+            self.process.bzero = self.bzero
+        if self.nobzero:
+            self.process.nobzero = self.nobzero
+        if self.shell:
+            self.process.shell = self.shell
+        if self.singleshell:
+            self.process.singleshell = self.singleshell
+
+        return self.process.run(configuration_dict={})
+
+
+class MRConvert(ProcessMIA):
+    """
+    *Perform conversion between different file types and optionally
+    extract a subset of the input image. (mrconvert command)*
+
+    Please, see the complete documentation for the `MRConvert brick
+    in the populse.mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/tools/mrtrix/MRConvert.html>`_
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instantiation.
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(MRConvert, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = ["nipype", "mrtrix"]
+
+        # Mandatory inputs description
+        in_file_desc = (
+            "Input image (a pathlike object"
+            "string representing an existing file)"
+        )
+        # Optional inputs description
+        axes_desc = (
+            "Specify the axes from the input image that will be used "
+            "to form the output image (a list of items which are an integer)"
+        )
+        coord_desc = (
+            "Extract data at the specified coordinates "
+            "(a list of items which are an integer)"
+        )
+        scaling_desc = (
+            "Specify the data scaling parameters used to rescale the "
+            "intensity values(a list of items which are a float)"
+        )
+        vox_desc = (
+            "Change the voxel dimensions reported in the output image header"
+            "(a list of items which are a float)"
+        )
+        out_file_format_desc = (
+            "Format of the output image (NIFTI, NIFTI_GZ or MIF )"
+        )
+        suffix_desc = "Output file suffix (a string, not mandatory)"
+        # FIXME: json import / export --> in mia it is not the same json as
+        #        used in BIDS, see if it is usefull/ possible to add
+        #        thoses option
+
+        # Optional base inputs description
+        bval_scale_desc = (
+            "Specifies whether the b - values should be scaled by the square "
+            "of the corresponding DW gradient norm, as often required for"
+            "multishell or DSI DW acquisition schemes. "
+            "(yes or no, default is yes)"
+        )
+        grad_file_desc = (
+            "Provide the diffusion-weighted gradient scheme used in the "
+            "acquisition in a text file (MRTrix format) (a pathlike object "
+            "or string representing an existing file) "
+        )
+        # grad_fsl_desc = (
+        #     "Provide the diffusion-weighted gradient scheme used in the "
+        #     "acquisition in FSL bvecs/bvals format files. (a tuple of "
+        #     "the form: (a pathlike object or string representing an "
+        #     "existing file, a pathlike object or string representing "
+        #     "an existing file), it should be (bvecs, bvals)) "
+        # )
+        in_bvec_desc = (
+            "Bvecs file in FSL format (a pathlike object or string "
+            "representing an existing file) "
+        )
+        in_bval_desc = (
+            "Bvals file in FSL format (a pathlike object or string "
+            "representing an existing file) "
+        )
+        export_bvec_bval_desc = (
+            "Export bvec / bval files in FSL format (a boolean)"
+        )
+
+        # Output description
+        out_file_desc = (
+            "Output image (a pathlike object or string representing "
+            "an existing file)"
+        )
+        out_bvec_desc = (
+            "bvec file in FSL format (a pathlike object or "
+            "string representing a file)"
+        )
+        out_bval_desc = (
+            "bval file in FSL format (a pathlike object or "
+            "string representing a file)"
+        )
+
+        # Mandatory inputs traits
+        self.add_trait(
+            "in_file", File(output=False, optional=False, desc=in_file_desc)
+        )
+
+        # Optional inputs traits
+        self.add_trait(
+            "axes",
+            Either(
+                Undefined,
+                List(Int()),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=axes_desc,
+            ),
+        )
+
+        self.add_trait(
+            "coord",
+            Either(
+                Undefined,
+                List(Int()),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=coord_desc,
+            ),
+        )
+
+        self.add_trait(
+            "scaling",
+            Either(
+                Undefined,
+                List(Float()),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=scaling_desc,
+            ),
+        )
+
+        self.add_trait(
+            "vox",
+            Either(
+                Undefined,
+                List(Float()),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=vox_desc,
+            ),
+        )
+
+        self.add_trait(
+            "out_file_format",
+            Enum(
+                "MIF",
+                "NIFTI",
+                "NIFTI_GZ",
+                output=False,
+                optional=True,
+                desc=out_file_format_desc,
+            ),
+        )
+
+        self.add_trait(
+            "export_bvec_bval",
+            Bool(
+                True, output=False, optional=True, desc=export_bvec_bval_desc
+            ),
+        )
+        self.add_trait(
+            "suffix",
+            Either(
+                Undefined,
+                String(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=suffix_desc,
+            ),
+        )
+
+        # Optional base inputs traits
+        self.add_trait(
+            "bval_scale",
+            Enum(
+                "no", "yes", output=False, optional=True, desc=bval_scale_desc
+            ),
+        )
+
+        self.add_trait(
+            "grad_file", File(output=False, optional=True, desc=grad_file_desc)
+        )
+
+        # FIXME: in_bvec and in_bval already in grad-fsl ? (command -fslgrad)
+        # self.add_trait(
+        #     "grad_fsl",
+        #     Tuple(
+        #         File(), File(), output=False, optional=True,
+        #         desc=grad_fsl_desc
+        #     ),
+        # )
+
+        self.add_trait(
+            "in_bvec", File(output=False, optional=True, desc=in_bvec_desc)
+        )
+
+        self.add_trait(
+            "in_bval", File(output=False, optional=True, desc=in_bval_desc)
+        )
+
+        # Outputs traits
+        self.add_trait(
+            "out_file", File(output=True, optional=False, desc=out_file_desc)
+        )
+        self.add_trait(
+            "out_bvec", File(output=True, optional=True, desc=out_bvec_desc)
+        )
+
+        self.add_trait(
+            "out_bval", File(output=True, optional=True, desc=out_bval_desc)
+        )
+
+        self.init_default_traits()
+
+        # Nipype command not used because only working
+        # for diffusion images (with bvec / bval)
+
+        # self.init_process("nipype.interfaces.mrtrix3.MRConvert")
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(MRConvert, self).list_outputs()
+
+        if (self.in_bval and not self.in_bvec) or (
+            not self.in_bval and self.in_bvec
+        ):
+            print("\nIf grad_file used, do not provied bvec or bval")
+            return self.make_initResult()
+
+        if self.grad_file and self.in_bvec:
+            print("\nIf grad_file used, do not provied bvec or bval")
+            return self.make_initResult()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.in_file:
+            valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
+
+            if not valid_ext:
+                print("\nThe input image format is not recognized...!")
+                return self.make_initResult()
+
+            if self.output_directory:
+                if self.suffix:
+                    fileName += "_" + self.sufix
+                else:
+                    if self.scaling:
+                        fileName += "_scaled"
+                    if self.vox:
+                        fileName += "_vox"
+                    if self.coord:
+                        fileName += "_coord"
+                    if self.axes:
+                        fileName += "_axes"
+
+                self.outputs["out_file"] = os.path.join(
+                    self.output_directory,
+                    fileName + "." + EXT[self.out_file_format],
+                )
+
+                if self.export_bvec_bval:
+                    self.outputs["out_bvec"] = os.path.join(
+                        self.output_directory, fileName + ".bvec"
+                    )
+                    self.outputs["out_bval"] = os.path.join(
+                        self.output_directory, fileName + ".bval"
+                    )
+
+        if self.outputs:
+            self.inheritance_dict[self.outputs["out_file"]] = self.in_file
+            if self.export_bvec_bval:
+                self.inheritance_dict[self.outputs["out_bvec"]] = self.in_file
+                self.inheritance_dict[self.outputs["out_bval"]] = self.in_file
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(MRConvert, self).run_process_mia()
+        # Nipype command not used because only working
+        # for diffusion images (with bvec / bval)
+
+        # self.process.in_file = self.in_file
+        # self.process.out_file = self.out_file
+        # if self.axes:
+        #     self.process.axes = self.axes
+        # if self.coord:
+        #     self.process.coord = self.coord
+        # if self.scaling:
+        #     self.process.scaling = self.scaling
+        # if self.vox:
+        #     self.process.vox = self.vox
+        # if self.grad_file:
+        #     self.process.grad_file = self.grad_file
+        # if self.in_bvec:
+        #     self.process.grad_fsl = (self.in_bvec, self.in_bval)
+        # self.process.bval_scale = self.bval_scale
+        # if self.export_bvec_bval:
+        #     self.process.out_bvec = self.out_bvec
+        #     self.process.out_bval = self.out_bval
+
+        # return self.process.run(configuration_dict={})
+
+        cmd = ["mrconvert", self.in_file]
+
+        if self.axes:
+            cmd += ["-axes", self.axes]
+        if self.coord:
+            cmd += ["-coord", self.coord]
+        if self.scaling:
+            cmd += ["-scaling", self.scaling]
+        if self.vox:
+            cmd += ["-vox", self.vox]
+        if self.grad_file:
+            cmd += ["-grad", self.axes]
+        if self.in_bvec:
+            cmd += ["-fslgrad", self.in_bvec, self.in_bval]
+        if self.bval_scale == "yes":
+            cmd += ["-bvalue_scaling", self.bval_scale]
+        if self.export_bvec_bval:
+            cmd += ["-export_grad_fsl", self.out_bvec, self.out_bval]
+
+        cmd += [self.out_file]
+
+        return mrtrix.mrtrix_call(cmd)
+
+
 class MRDeGibbs(ProcessMIA):
     """
     *Remove Gibbs ringing artifacts. (mrdegibbs command)*
 
     Please, see the complete documentation for the `MRDeGibbs brick
     in the populse.mia_processes website
-    <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/DWIDenoise.html>`_
+    <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/MRDeGibbs.html>`_
     """
 
     def __init__(self):
@@ -1352,7 +2000,7 @@ class MRDeGibbs(ProcessMIA):
 
         self.init_default_traits()
 
-        self.init_process("nipype.interfaces.mrtrix3.DWIDenoise")
+        self.init_process("nipype.interfaces.mrtrix3.MRDeGibbs")
 
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
@@ -1399,6 +2047,661 @@ class MRDeGibbs(ProcessMIA):
         self.process.nshifts = self.nshifts
 
         return self.process.run(configuration_dict={})
+
+
+class MRMath(ProcessMIA):
+    """
+    *Compute summary statistic on image intensities along a
+    specified axis of a single image*
+
+    Please, see the complete documentation for the `MRMath brick
+    in the populse.mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/tools/mrtrix/MRMath.html>`_
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instantiation.
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(MRMath, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = ["nipype", "mrtrix"]
+
+        # Mandatory inputs description
+        in_file_desc = (
+            "Input image (a pathlike object or a string representing an "
+            "existing file)"
+        )
+        operation_desc = (
+            "Operation to computer along a specified axis "
+            "(mean or median or sum or product or rms or norm or var or std "
+            "or min or max or absmax or magmax)"
+        )
+        # Optional inputs description
+        axis_desc = (
+            "Specify axis along which concatenation should be performed "
+            "(an integer, default is 3)"
+        )
+        out_file_name_desc = "Output file name (a string)"
+        # Output description
+        out_file_desc = (
+            "Output image (a pathlike object or string representing "
+            "an existing file)"
+        )
+
+        # Mandatory inputs traits
+        self.add_trait(
+            "in_file", File(output=False, optional=False, desc=in_file_desc)
+        )
+
+        self.add_trait(
+            "operation",
+            Enum(
+                "mean",
+                "median",
+                "sum",
+                "product",
+                "rms",
+                "norm",
+                "var",
+                "sdt",
+                "min",
+                "max",
+                "absmax",
+                "absmin",
+                "magmax",
+                output=False,
+                optional=False,
+                desc=operation_desc,
+            ),
+        )
+
+        # Optional inputs traits
+        self.add_trait(
+            "axis",
+            Int(
+                3,
+                output=False,
+                optional=True,
+                desc=axis_desc,
+            ),
+        )
+
+        self.add_trait(
+            "out_file_name",
+            Either(
+                Undefined,
+                String(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=out_file_name_desc,
+            ),
+        )
+
+        # Outputs traits
+        self.add_trait(
+            "out_file", File(output=True, optional=False, desc=out_file_desc)
+        )
+
+        self.init_default_traits()
+
+        self.init_process("nipype.interfaces.mrtrix3.MRMath")
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(MRMath, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.in_file:
+            valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
+
+            if not valid_ext:
+                print("\nThe input image format is not recognized...!")
+                return self.make_initResult()
+
+            if self.output_directory:
+                if self.out_file_name:
+                    name = self.out_file_name
+                else:
+                    name = fileName + "_" + self.operation
+
+                self.outputs["out_file"] = os.path.join(
+                    self.output_directory, name + "." + in_ext
+                )
+
+        if self.outputs:
+            self.inheritance_dict[self.outputs["out_file"]] = self.in_file
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(MRMath, self).run_process_mia()
+        self.process.in_file = self.in_file
+        self.process.operation = self.operation
+        self.process.out_file = self.out_file
+        self.process.axis = self.axis
+
+        return self.process.run(configuration_dict={})
+
+
+class MRTransform(ProcessMIA):
+    """
+    *Apply spatial transformations or reslice images (mrtransform command)*
+
+    Please, see the complete documentation for the `MRTransform brick
+    in the populse.mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/MRTransform.html>`_
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instantiation.
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(MRTransform, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = ["nipype", "mrtrix"]
+
+        # Nipype MRTransform process is not up to date for some option
+        # so the "args" input is used for several options
+
+        # Mandatory inputs description
+        in_file_desc = (
+            "Input images to be transformed (a "
+            "pathlike object or string representing an existing file)"
+        )
+        # Optionnal inputs description
+        linear_transform_desc = (
+            "Specify a linear transform to apply "
+            "(a pathlike object or string representing an existing file) "
+        )
+        inverse_desc = (
+            "Invert the specified transform before using it " "(a boolean)"
+        )
+        flip_axes_desc = (
+            "flip the specified axes " "(a list of int with 0:x, 1:y and 2:z)"
+        )
+        half_desc = (
+            "Apply the matrix square root of the transformation" "(a boolean)"
+        )
+        replace_file_desc = (
+            "Replace the linear transform of the original image by that "
+            "specified, rather than applying it to the original image "
+            "(a pathlike object or string representing an existing file)"
+        )
+        identity_desc = (
+            "Set the header transform of the image to the identity matrix"
+            "(a boolean)"
+        )
+        template_image_desc = (
+            "Reslice the input image to match the specified template image. "
+            "(a pathlike object or string representing an existing file)"
+        )
+        midway_space_desc = (
+            "Reslice the input image to the midway space. Requires either the "
+            "-template or -warp option. (a boolean)"
+        )
+        interpolation_desc = (
+            "Set the interpolation method to use when reslicing "
+            "(cubic, nearest, linear, sinc)"
+        )
+        oversample_factor_desc = (
+            "Set the amount of over-sampling (in the target space) to perform "
+            "when regridding (an integer or a list of 3 integers)"
+        )
+        warp_image_desc = (
+            "Apply a non-linear 4D deformation field to warp the input image"
+            "(a pathlike object or string representing an existing file)"
+        )
+        warp_full_image_desc = (
+            "Warp the input image using a 5D warp file output from mrregister"
+            "(a pathlike object or string representing an existing file)"
+        )
+        fod_modulate_desc = "Intensity modulation method for fod (fod or jac)"
+        fod_directions_file_desc = (
+            "Directions defining the number and orientation of the apodised"
+            "point spread functions used in FOD reorientation"
+            "(a pathlike object or string representing an existing file)"
+        )
+        fod_reorient_desc = (
+            "Specify whether to perform FOD reorientation" "(a boolean)"
+        )
+
+        # Outputs description
+        out_file_desc = (
+            " The output image of the transformation."
+            "(a pathlike object or string representing an existing file)"
+        )
+
+        # Mandatory inputs traits
+        self.add_trait(
+            "in_file", File(output=False, optional=False, desc=in_file_desc)
+        )
+
+        # Optional inputs traits
+        self.add_trait(
+            "linear_transform",
+            File(output=False, optional=True, desc=linear_transform_desc),
+        )
+
+        self.add_trait(
+            "inverse",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=inverse_desc,
+            ),
+        )
+
+        self.add_trait(
+            "half",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=half_desc,
+            ),
+        )
+
+        self.add_trait(
+            "identity",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=identity_desc,
+            ),
+        )
+
+        self.add_trait(
+            "flip_axes",
+            Either(
+                Undefined,
+                List(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=flip_axes_desc,
+            ),
+        )
+
+        self.add_trait(
+            "replace_file",
+            File(output=False, optional=True, desc=replace_file_desc),
+        )
+
+        self.add_trait(
+            "template_image",
+            File(output=False, optional=True, desc=template_image_desc),
+        )
+
+        self.add_trait(
+            "midway_space",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=midway_space_desc,
+            ),
+        )
+
+        self.add_trait(
+            "interpolation",
+            Enum(
+                "cubic",
+                "nearest",
+                "linear",
+                "sinc",
+                False,
+                output=False,
+                optional=True,
+                desc=interpolation_desc,
+            ),
+        )
+
+        self.add_trait(
+            "oversample_factor",
+            Either(
+                Undefined,
+                List(),
+                List(Int()),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=oversample_factor_desc,
+            ),
+        )
+
+        self.add_trait(
+            "warp_image",
+            File(output=False, optional=True, desc=warp_image_desc),
+        )
+
+        self.add_trait(
+            "warp_full_image",
+            File(output=False, optional=True, desc=warp_full_image_desc),
+        )
+
+        self.add_trait(
+            "fod_modulate",
+            Either(
+                Undefined,
+                Enum("fod", "jac"),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=fod_modulate_desc,
+            ),
+        )
+
+        self.add_trait(
+            "fod_directions_file",
+            File(output=False, optional=True, desc=fod_directions_file_desc),
+        )
+
+        self.add_trait(
+            "fod_reorient",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=fod_reorient_desc,
+            ),
+        )
+
+        # Outputs traits
+        self.add_trait(
+            "out_file", File(output=True, optional=True, desc=out_file_desc)
+        )
+
+        self.init_default_traits()
+
+        self.init_process("nipype.interfaces.mrtrix3.MRTransform")
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(MRTransform, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.in_file:
+            valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
+
+            if not valid_ext:
+                print("\nThe input image format is not recognized...!")
+                return self.make_initResult()
+                return
+
+            if self.output_directory:
+                self.outputs["out_file"] = os.path.join(
+                    self.output_directory, fileName + "_transformed." + in_ext
+                )
+
+        if self.outputs:
+            self.inheritance_dict[self.outputs["out_file"]] = self.in_file
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(MRTransform, self).run_process_mia()
+        self.process.in_files = self.in_file
+        self.process.out_file = self.out_file
+        if self.linear_transform:
+            self.process.linear_transform = self.linear_transform
+        if self.inverse:
+            self.process.invert = self.inverse
+        if self.template_image:
+            self.process.template_image = self.template_image
+        args = ""
+        if self.flip_axes:
+            args += "-flip " + self.flip_axes
+        if self.half:
+            args += "-half "
+        if self.replace_file:
+            args += "-replace " + self.replace_file + " "
+        if self.identify:
+            args += "-identity "
+        if self.midway_space:
+            args += "-midway_space "
+        if self.interpolation:
+            args += "-interp " + self.interpolation + " "
+        if self.oversample_factor:
+            args += "-oversample " + self.oversample_factor + " "
+        if self.warp_image:
+            args += "-warp " + self.warp_image + " "
+        if self.warp_full_image:
+            args += "-warp_full " + self.warp_full_image + " "
+        if self.fod_modulate:
+            args += "-modulate " + self.fod_modulate + " "
+        if self.fod_directions_file:
+            args += "-directions " + self.fod_directions_file + " "
+        if self.fod_reoriente:
+            args += "-reorient_fod "
+        if args:
+            self.process.args = args
+
+        return self.process.run(configuration_dict={})
+
+
+class MTnormalise(ProcessMIA):
+    """
+    *Multi-tissue informed log-domain intensity normalisation.
+    (mtnormalise command)*
+
+    Please, see the complete documentation for the `MTnormalise brick
+    in the populse.mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/MTnormalise.html>`_
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instantiation.
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(MTnormalise, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = ["mrtrix"]
+        # process nit in nipype
+
+        # Mandatory inputs description
+        in_files_desc = (
+            "Input tissue component (a list of items which are a pathlike "
+            "object or a string representing an existing file)"
+        )
+        mask_desc = (
+            "The mask defines the data used to compute the intensity "
+            "normalisation (a pathlike object or "
+            "string representing a file)"
+        )
+        # Optionnal inputs description
+        order_number_desc = (
+            "The maximum order of the polynomial basis used to fit the "
+            "normalisation field in the log-domain. "
+            "(an integer, default is 3)"
+        )
+        niter_number_desc = (
+            "Number of iteration (an integer or a list of integer, "
+            "default is [15, 7])"
+        )
+        reference_number_desc = (
+            "The (positive) reference value to which the summed tissue "
+            "compartments will be normalised (a float, default is 0.282095) "
+        )
+        balanced_desc = (
+            "Incorporate the per-tissue balancing factors into scaling of "
+            "the output images (a bollean)"
+        )
+
+        # Outputs description
+        out_files_desc = (
+            "Nomalised outputs images(a pathlike object or "
+            "string representing a file)"
+        )
+
+        # Mandatory inputs traits
+        self.add_trait(
+            "in_files",
+            InputMultiPath(
+                Either(File(), List(File())),
+                output=False,
+                desc=in_files_desc,
+            ),
+        )
+
+        self.add_trait("mask", File(output=False, desc=mask_desc))
+
+        # Optional inputs traits
+        self.add_trait(
+            "order_number",
+            Int(
+                3,
+                output=False,
+                optional=True,
+                desc=order_number_desc,
+            ),
+        )
+
+        self.add_trait(
+            "niter_number",
+            Either(
+                Int(),
+                List(Int()),
+                default=[15, 7],
+                output=False,
+                optional=True,
+                desc=niter_number_desc,
+            ),
+        )
+
+        self.add_trait(
+            "reference_number",
+            Float(
+                0.282095,
+                output=False,
+                optional=True,
+                desc=reference_number_desc,
+            ),
+        )
+
+        self.add_trait(
+            "balanced",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=balanced_desc,
+            ),
+        )
+
+        # Outputs traits
+        self.add_trait(
+            "out_files",
+            InputMultiPath(
+                Either(File(), List(File())),
+                output=False,
+                desc=out_files_desc,
+            ),
+        )
+
+        self.init_default_traits()
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(MTnormalise, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        out_files = []
+        if self.in_files:
+            for f in self.in_files:
+                valid_ext, in_ext, fileName = checkFileExt(f, EXT)
+
+                if not valid_ext:
+                    print("\nThe input image format is not recognized...!")
+                    return self.make_initResult()
+
+                if self.output_directory:
+                    out_file = os.path.join(
+                        self.output_directory, fileName + "_norm." + in_ext
+                    )
+                    out_files.append(out_file)
+
+        if out_files:
+            self.outputs["out_files"] = out_files
+
+        if self.outputs:
+            # FIXME: out_files inherits only from the first file
+            self.inheritance_dict[self.outputs["out_files"]] = self.in_files[0]
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(MTnormalise, self).run_process_mia()
+
+        cmd = ["mtnormalise"]
+        i = 0
+        for in_file in self.in_files:
+            cmd += [in_file, self.out_files[i]]
+            i += 1
+        if self.order_number:
+            cmd += ["-order", self.order_number]
+        if self.niter_number:
+            niter = ""
+            for n in self.niter_number:
+                niter += str(n) + ","
+            cmd += ["-niter", niter[:-1]]
+        if self.reference_number:
+            cmd += ["-reference", self.reference_number]
+        if self.balanced:
+            cmd += ["-balanced"]
+
+        return mrtrix.mrtrix_call(cmd)
 
 
 class ResponseSDDhollander(ProcessMIA):
@@ -1559,7 +2862,7 @@ class ResponseSDDhollander(ProcessMIA):
 
         self.init_default_traits()
 
-        self.init_process("nipype.interfaces.mrtrix3.DWIDenoise")
+        self.init_process("nipype.interfaces.mrtrix3.ResponseSD")
 
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
@@ -1636,5 +2939,651 @@ class ResponseSDDhollander(ProcessMIA):
             args += "-voxels " + self.voxels_image + " "
         if args:
             self.process.args = args
+
+        return self.process.run(configuration_dict={})
+
+
+class TensorMetrics(ProcessMIA):
+    """
+    *Compute metrics from tensors (tensor2metric command)*
+
+    Please, see the complete documentation for the `TensorMetrics brick
+    in the populse.mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/TensorMetrics.html>`_
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instantiation.
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(TensorMetrics, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = ["nipype", "mrtrix"]
+
+        # Mandatory inputs description
+        in_dti_desc = (
+            "Input DTI image (a pathlike object"
+            "string representing an existing file)"
+        )
+        # Optionnal inputs description
+        component_desc = (
+            "Specify the desired eigenvalue/eigenvector(s) "
+            "(a list of items which are any value)"
+        )
+
+        in_mask_desc = (
+            "Only perform computation within the specified binary brain mask "
+            "image.(a pathlike object or "
+            "string representing an existing file)"
+        )
+        modulate_desc = (
+            "Specify how to modulate the magnitude of the eigenvectors. "
+            "(FA, none or eigval)"
+        )
+        get_ad_desc = "Get AD file (a boolean, default is False)"
+        get_adc_desc = "Get ADC file (a boolean, default is True)"
+        get_cl_desc = "Get CL file (a boolean, default is False)"
+        get_cp_desc = "Get CP file (a boolean, default is False)"
+        get_cs_desc = "Get CS file (a boolean, default is False)"
+        get_value_desc = (
+            "Get selected eigenvalue(s) (a boolean, default is False)"
+        )
+        get_vector_desc = (
+            "Get selected eigenvector(s) (a boolean, default is True)"
+        )
+        get_fa_desc = "Get FA file (a boolean, default is True)"
+        get_rd_desc = "Get RD file (a boolean, default is False)"
+
+        # Outputs description
+        adc_file_desc = (
+            "Output ADC file (a pathlike object or "
+            "string representing a file) "
+        )
+        fa_file_desc = (
+            "Output FA file (a pathlike object or "
+            "string representing a file) "
+        )
+        ad_file_desc = (
+            "Output AD file (a pathlike object or "
+            "string representing a file) "
+        )
+        rd_file_desc = (
+            "Output RD file (a pathlike object or "
+            "string representing a file) "
+        )
+        cl_file_desc = (
+            "Output CL file (a pathlike object or "
+            "string representing a file) "
+        )
+        cp_file_desc = (
+            "Output CP file (a pathlike object or "
+            "string representing a file) "
+        )
+        cs_file_desc = (
+            "Output CS file (a pathlike object or "
+            "string representing a file) "
+        )
+        value_file_desc = (
+            "Output selected eigenvalue(s) file (a pathlike object or "
+            "string representing a file) "
+        )
+        vector_file_desc = (
+            "Output selected eigenvector(s) file (a pathlike object or "
+            "string representing a file) "
+        )
+
+        # Mandatory inputs traits
+        self.add_trait(
+            "in_dti", File(output=False, optional=False, desc=in_dti_desc)
+        )
+
+        # Optional inputs traits
+        self.add_trait(
+            "in_mask", File(output=False, optional=True, desc=in_mask_desc)
+        )
+        self.add_trait(
+            "component",
+            List(
+                [1],
+                output=False,
+                optional=True,
+                desc=component_desc,
+            ),
+        )
+
+        self.add_trait(
+            "modulate",
+            Enum(
+                "FA",
+                "none",
+                "eigval",
+                output=False,
+                optional=True,
+                desc=modulate_desc,
+            ),
+        )
+
+        self.add_trait(
+            "get_adc",
+            Bool(
+                True,
+                output=False,
+                optional=True,
+                desc=get_adc_desc,
+            ),
+        )
+
+        self.add_trait(
+            "get_fa",
+            Bool(
+                True,
+                output=False,
+                optional=True,
+                desc=get_fa_desc,
+            ),
+        )
+
+        self.add_trait(
+            "get_ad",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=get_ad_desc,
+            ),
+        )
+
+        self.add_trait(
+            "get_rd",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=get_rd_desc,
+            ),
+        )
+
+        self.add_trait(
+            "get_cl",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=get_cl_desc,
+            ),
+        )
+
+        self.add_trait(
+            "get_cp",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=get_cp_desc,
+            ),
+        )
+
+        self.add_trait(
+            "get_cl",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=get_cl_desc,
+            ),
+        )
+
+        self.add_trait(
+            "get_cs",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=get_cs_desc,
+            ),
+        )
+
+        self.add_trait(
+            "get_value",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=get_value_desc,
+            ),
+        )
+
+        self.add_trait(
+            "get_vevtor",
+            Bool(
+                True,
+                output=False,
+                optional=True,
+                desc=get_vector_desc,
+            ),
+        )
+
+        # Outputs traits
+        self.add_trait(
+            "adc_file", File(output=True, optional=True, desc=adc_file_desc)
+        )
+        self.add_trait(
+            "fa_file", File(output=True, optional=True, desc=fa_file_desc)
+        )
+        self.add_trait(
+            "ad_file", File(output=True, optional=True, desc=ad_file_desc)
+        )
+        self.add_trait(
+            "rd_file", File(output=True, optional=True, desc=rd_file_desc)
+        )
+        self.add_trait(
+            "cl_file", File(output=True, optional=True, desc=cl_file_desc)
+        )
+        self.add_trait(
+            "cp_file", File(output=True, optional=True, desc=cp_file_desc)
+        )
+        self.add_trait(
+            "cs_file", File(output=True, optional=True, desc=cs_file_desc)
+        )
+        self.add_trait(
+            "value_file",
+            File(output=True, optional=True, desc=value_file_desc),
+        )
+        self.add_trait(
+            "vector_file",
+            File(output=True, optional=True, desc=vector_file_desc),
+        )
+
+        self.init_default_traits()
+
+        self.init_process("nipype.interfaces.mrtrix3.TensorMetrics")
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(TensorMetrics, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.in_dti:
+            valid_ext, in_ext, fileName = checkFileExt(self.in_dti, EXT)
+
+            if not valid_ext:
+                print("\nThe input image format is not recognized...!")
+                return self.make_initResult()
+                return
+
+            if self.output_directory:
+                if self.get_adc:
+                    self.outputs["adc_file"] = self.in_dti.replace(
+                        "_dti", "_adc"
+                    )
+                if self.get_fa:
+                    self.outputs["fa_file"] = self.in_dti.replace(
+                        "_dti", "_fa"
+                    )
+                if self.get_ad:
+                    self.outputs["ad_file"] = self.in_dti.replace(
+                        "_dti", "_ad"
+                    )
+                if self.get_rd:
+                    self.outputs["rd_file"] = self.in_dti.replace(
+                        "_dti", "_rd"
+                    )
+                if self.get_cl:
+                    self.outputs["cl_file"] = self.in_dti.replace(
+                        "_dti", "_cl"
+                    )
+                if self.get_cp:
+                    self.outputs["cp_file"] = self.in_dti.replace(
+                        "_dti", "_cp"
+                    )
+                if self.get_cs:
+                    self.outputs["cs_file"] = self.in_dti.replace(
+                        "_dti", "_cs"
+                    )
+                if self.get_cp:
+                    self.outputs["cp_file"] = self.in_dti.replace(
+                        "_dti", "_cp"
+                    )
+                if self.get_value:
+                    self.outputs["value_file"] = self.in_dti.replace(
+                        "_dti", "_value"
+                    )
+                if self.get_vector:
+                    self.outputs["vector_file"] = self.in_dti.replace(
+                        "_dti", "_vector"
+                    )
+
+        if self.outputs:
+            if self.get_adc:
+                self.inheritance_dict[self.outputs["adc_file"]] = self.in_dti
+            if self.get_fa:
+                self.inheritance_dict[self.outputs["fa_file"]] = self.in_dti
+            if self.get_ad:
+                self.inheritance_dict[self.outputs["ad_file"]] = self.in_dti
+            if self.get_rd:
+                self.inheritance_dict[self.outputs["rd_file"]] = self.in_dti
+            if self.get_cl:
+                self.inheritance_dict[self.outputs["cl_file"]] = self.in_dti
+            if self.get_cp:
+                self.inheritance_dict[self.outputs["cp_file"]] = self.in_dti
+            if self.get_cs:
+                self.inheritance_dict[self.outputs["cs_file"]] = self.in_dti
+            if self.get_value:
+                self.inheritance_dict[self.outputs["value_file"]] = self.in_dti
+            if self.get_vector:
+                self.inheritance_dict[
+                    self.outputs["vector_file"]
+                ] = self.in_dti
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(TensorMetrics, self).run_process_mia()
+        self.process.in_file = self.in_dti
+        self.process.component = self.component
+        self.process.modulate = self.modulate
+        if self.in_mask:
+            self.process.in_mask = self.in_mask
+        if self.get_adc:
+            self.process.out_adc = self.adc_file
+        if self.get_fa:
+            self.process.out_fa = self.fa_file
+        if self.get_ad:
+            self.process.out_ad = self.ad_file
+        if self.get_rd:
+            self.process.out_rd = self.rd_file
+        if self.get_cl:
+            self.process.out_cl = self.cl_file
+        if self.get_cp:
+            self.process.out_cp = self.cp_file
+        if self.get_cs:
+            self.process.out_cs = self.cs_file
+        if self.get_value:
+            self.process.out_eval = self.value_file
+        if self.get_vector:
+            self.process.out_evec = self.vector_file
+
+        return self.process.run(configuration_dict={})
+
+
+class Tractography(ProcessMIA):
+    """
+    *Performs streamlines tractography after selecting the appropriate
+    algorithm. (tckgen command)*
+
+    Please, see the complete documentation for the `Tractography brick
+    in the populse.mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/Tractography.html>`_
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instantiation.
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(Tractography, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = ["nipype", "mrtrix"]
+
+        # Mandatory inputs description
+        in_file_desc = (
+            "Input file to be processed (a pathlike object"
+            "string representing an existing file)"
+        )
+        # Optionnal inputs description
+        algorithm_desc = (
+            "Tractography algorithm to be used (iFOD2, FACT, iFOD1, "
+            "Nulldist, SD_Stream, Tensor_Det or Tensor_Prob)"
+        )
+        angle_desc = "Set the maximum angle between successive steps (a float)"
+        cutoff_desc = (
+            "Set the FA or FOD amplitude cutoff for terminating tracks "
+        )
+        downsample_desc = (
+            "Downsample the generated streamlines to reduce output "
+            "file size (a float)"
+        )
+        max_length_desc = " Set the max length of any track in mm (a float)"
+        min_length_desc = (
+            " Set the minimum length of any track in mm (a float)"
+        )
+        noprecompt_desc = (
+            "Do NOT pre-compute legendre polynomial values (a boolean)"
+        )
+        select_desc = "Set the desired number of tracks. (an integer)"
+        step_size_desc = "Set the step size of the algorithm in mm (a float)"
+        trials_desc = (
+            "Set the maximum number of sampling trials at each point "
+            "(only used for probabilistic tracking) (an integer)"
+        )
+        stop_desc = (
+            "Stop propagating a streamline once it has traversed all include "
+            "regions (a boolean)"
+        )
+        use_rk4_desc = "Use 4th-order Runge-Kutta integration (a boolean)"
+        act_file_desc = (
+            " Use the Anatomically-Constrained Tractography "
+            "framework during tracking (provided image must be "
+            "in the 5TT ie five tissue type format(a pathlike object"
+            "string representing an existing file)"
+        )
+
+        # Outputs description
+        out_file_desc = (
+            "Output file containing tracks (a pathlike object or "
+            "string representing a file) "
+        )
+
+        # Mandatory inputs traits
+        self.add_trait(
+            "in_file", File(output=False, optional=False, desc=in_file_desc)
+        )
+
+        # Optional inputs traits
+        self.add_trait(
+            "algorithm",
+            Enum(
+                "iFOD2",
+                "FACT",
+                "iFOD1",
+                "Nulldist",
+                "SD_Stream",
+                "Tensor_Det",
+                "Tensor_Prob",
+                output=False,
+                optional=True,
+                desc=algorithm_desc,
+            ),
+        )
+
+        self.add_trait(
+            "angle",
+            Either(
+                Undefined,
+                Float(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=angle_desc,
+            ),
+        )
+
+        self.add_trait(
+            "cutoff",
+            Float(
+                0.1,
+                output=False,
+                optional=True,
+                desc=cutoff_desc,
+            ),
+        )
+
+        self.add_trait(
+            "downsample",
+            Either(
+                Undefined,
+                Float(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=downsample_desc,
+            ),
+        )
+
+        self.add_trait(
+            "max_length",
+            Either(
+                Undefined,
+                Float(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=max_length_desc,
+            ),
+        )
+
+        self.add_trait(
+            "min_length",
+            Either(
+                Undefined,
+                Float(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=min_length_desc,
+            ),
+        )
+
+        self.add_trait(
+            "noprecompt",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=noprecompt_desc,
+            ),
+        )
+
+        self.add_trait(
+            "select",
+            Int(
+                5000,
+                output=False,
+                optional=True,
+                desc=select_desc,
+            ),
+        )
+
+        self.add_trait(
+            "step_size",
+            Either(
+                Undefined,
+                Float(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=step_size_desc,
+            ),
+        )
+
+        self.add_trait(
+            "stop",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=stop_desc,
+            ),
+        )
+
+        self.add_trait(
+            "trials",
+            Either(
+                Undefined,
+                Int(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=trials_desc,
+            ),
+        )
+
+        self.add_trait(
+            "use_rk4",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=use_rk4_desc,
+            ),
+        )
+
+        self.add_trait(
+            "act_file", File(output=False, optional=True, desc=act_file_desc)
+        )
+
+        # Outputs traits
+        self.add_trait(
+            "out_file", File(output=True, optional=True, desc=out_file_desc)
+        )
+
+        self.init_default_traits()
+
+        self.init_process("nipype.interfaces.mrtrix3.Tractograohy")
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(Tractography, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.in_file:
+            valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
+
+            if not valid_ext:
+                print("\nThe input image format is not recognized...!")
+                return self.make_initResult()
+                return
+
+            if self.output_directory:
+                self.outputs["out_file"] = ""
+
+        if self.outputs:
+            self.inheritance_dict[self.outputs["out_file"]] = self.in_file
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(Tractography, self).run_process_mia()
 
         return self.process.run(configuration_dict={})
