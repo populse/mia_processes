@@ -5,18 +5,20 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.preprocess.spm.spatial_preprocessing &#8212; mia_processes 2.2.1-dev documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../../../_static/haiku.css" />
-    <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+    <title>mia_processes.bricks.preprocess.spm.spatial_preprocessing &#8212; mia_processes 2.3.1-dev+a7d0828 documentation</title>
+    <link rel="stylesheet" href="../../../../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
     <script src="../../../../../_static/jquery.js"></script>
     <script src="../../../../../_static/underscore.js"></script>
     <script src="../../../../../_static/doctools.js"></script>
+    <script src="../../../../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../../index.html">
-          <span>mia_processes 2.2.1-dev documentation</span></a></h1>
+          <span>mia_processes 2.3.1-dev+a7d0828 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.preprocess.spm.spatial_preprocessing</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -99,11 +101,11 @@
 <span class="p">)</span>
 
 <span class="c1"># mia_processes import</span>
-<span class="kn">from</span> <span class="nn">mia_processes.utils</span> <span class="kn">import</span> <span class="n">get_dbFieldValue</span><span class="p">,</span> <span class="n">set_dbFieldValue</span>
+<span class="kn">from</span> <span class="nn">mia_processes.utils</span> <span class="kn">import</span> <span class="n">get_dbFieldValue</span>
 
 
 <div class="viewcode-block" id="Coregister"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Coregister">[docs]</a><span class="k">class</span> <span class="nc">Coregister</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Align together scans of different modalities*</span>
 
 <span class="sd">    Please, see the complete documentation for the</span>
@@ -113,7 +115,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Coregister.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Coregister.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -352,7 +354,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.spm.Coregister&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Coregister.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Coregister.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -434,12 +436,30 @@
                             <span class="n">fileOvalNoPref</span> <span class="o">=</span> <span class="n">fileOval</span>
 
                         <span class="k">if</span> <span class="n">fileOvalNoPref</span> <span class="o">==</span> <span class="n">fileIval</span><span class="p">:</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="n">out_val</span><span class="p">]</span> <span class="o">=</span> <span class="n">in_val</span>
+                            <span class="k">if</span> <span class="p">(</span>
+                                <span class="n">get_dbFieldValue</span><span class="p">(</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">in_val</span><span class="p">,</span> <span class="s2">&quot;PatientName&quot;</span>
+                                <span class="p">)</span>
+                                <span class="ow">is</span> <span class="kc">None</span>
+                            <span class="p">):</span>
+                                <span class="nb">print</span><span class="p">(</span>
+                                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Coregister brick:</span><span class="se">\n</span><span class="s2">The &#39;PatientName&#39;&quot;</span>
+                                    <span class="s2">&quot; tag could not be added to the &quot;</span>
+                                    <span class="s2">&quot;database for the &#39;</span><span class="si">{}</span><span class="s2">&#39; parameter. This &quot;</span>
+                                    <span class="s2">&quot;can lead to a subsequent issue during &quot;</span>
+                                    <span class="s2">&quot;initialization!!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">out_val</span><span class="p">)</span>
+                                <span class="p">)</span>
+
+                            <span class="bp">self</span><span class="o">.</span><span class="n">tags_inheritance</span><span class="p">(</span>
+                                <span class="n">in_val</span><span class="p">,</span>
+                                <span class="n">out_val</span><span class="p">,</span>
+                            <span class="p">)</span>
 
                             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">==</span> <span class="s2">&quot;estwrite&quot;</span><span class="p">:</span>
-                                <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span>
-                                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pathOval</span><span class="p">,</span> <span class="n">fileOvalNoPref</span><span class="p">)</span>
-                                <span class="p">]</span> <span class="o">=</span> <span class="n">in_val</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">tags_inheritance</span><span class="p">(</span>
+                                    <span class="n">in_val</span><span class="p">,</span>
+                                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pathOval</span><span class="p">,</span> <span class="n">fileOvalNoPref</span><span class="p">),</span>
+                                <span class="p">)</span>
                                 <span class="n">out_coregsource</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">out_val</span><span class="p">)</span>
                                 <span class="n">out_coregsource</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                                     <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pathOval</span><span class="p">,</span> <span class="n">fileOvalNoPref</span><span class="p">)</span>
@@ -469,12 +489,30 @@
                             <span class="n">fileOvalNoPref</span> <span class="o">=</span> <span class="n">fileOval</span>
 
                         <span class="k">if</span> <span class="n">fileOvalNoPref</span> <span class="o">==</span> <span class="n">fileIval</span><span class="p">:</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="n">out_val</span><span class="p">]</span> <span class="o">=</span> <span class="n">in_val</span>
+                            <span class="k">if</span> <span class="p">(</span>
+                                <span class="n">get_dbFieldValue</span><span class="p">(</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">in_val</span><span class="p">,</span> <span class="s2">&quot;PatientName&quot;</span>
+                                <span class="p">)</span>
+                                <span class="ow">is</span> <span class="kc">None</span>
+                            <span class="p">):</span>
+                                <span class="nb">print</span><span class="p">(</span>
+                                    <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Coregister brick:</span><span class="se">\n</span><span class="s2">The &#39;PatientName&#39;&quot;</span>
+                                    <span class="s2">&quot; tag could not be added to the &quot;</span>
+                                    <span class="s2">&quot;database for the &#39;</span><span class="si">{}</span><span class="s2">&#39; parameter. This &quot;</span>
+                                    <span class="s2">&quot;can lead to a subsequent issue during &quot;</span>
+                                    <span class="s2">&quot;initialization!!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">out_val</span><span class="p">)</span>
+                                <span class="p">)</span>
+
+                            <span class="bp">self</span><span class="o">.</span><span class="n">tags_inheritance</span><span class="p">(</span>
+                                <span class="n">in_val</span><span class="p">,</span>
+                                <span class="n">out_val</span><span class="p">,</span>
+                            <span class="p">)</span>
 
                             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">==</span> <span class="s2">&quot;estwrite&quot;</span><span class="p">:</span>
-                                <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span>
-                                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pathOval</span><span class="p">,</span> <span class="n">fileOvalNoPref</span><span class="p">)</span>
-                                <span class="p">]</span> <span class="o">=</span> <span class="n">in_val</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">tags_inheritance</span><span class="p">(</span>
+                                    <span class="n">in_val</span><span class="p">,</span>
+                                    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pathOval</span><span class="p">,</span> <span class="n">fileOvalNoPref</span><span class="p">),</span>
+                                <span class="p">)</span>
                                 <span class="n">out_coregfiles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">out_val</span><span class="p">)</span>
                                 <span class="n">out_coregfiles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
                                     <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pathOval</span><span class="p">,</span> <span class="n">fileOvalNoPref</span><span class="p">)</span>
@@ -486,141 +524,11 @@
             <span class="k">if</span> <span class="n">out_coregfiles</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;coregistered_files&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">out_coregfiles</span>
 
-                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">out_coregfiles</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-                    <span class="n">out_coregfiles</span> <span class="o">=</span> <span class="p">[</span><span class="n">out_coregfiles</span><span class="p">]</span>
-
-                <span class="c1"># FIXME: In the latest version of mia, indexing of the</span>
-                <span class="c1">#        database with particular tags defined in the</span>
-                <span class="c1">#        processes is done only at the end of the</span>
-                <span class="c1">#        initialisation of the whole pipeline. So we</span>
-                <span class="c1">#        cannot use the value of these tags in other</span>
-                <span class="c1">#        processes of the pipeline at the time of</span>
-                <span class="c1">#        initialisation (see populse_mia #290). Until</span>
-                <span class="c1">#        better we use a quick and dirty hack with the</span>
-                <span class="c1">#        set_dbFieldValue() function !</span>
-                <span class="k">for</span> <span class="n">in_val</span><span class="p">,</span> <span class="n">out_val</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span><span class="p">,</span> <span class="n">out_coregfiles</span>
-                <span class="p">):</span>
-                    <span class="n">tag_to_add</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;RepetitionTime&quot;</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;field_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;float&quot;</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-                        <span class="s2">&quot;The period of time &quot;</span>
-                        <span class="s2">&quot;in msec between the &quot;</span>
-                        <span class="s2">&quot;beginning of a pulse &quot;</span>
-                        <span class="s2">&quot;sequence and the &quot;</span>
-                        <span class="s2">&quot;beginning of the &quot;</span>
-                        <span class="s2">&quot;succeeding pulse &quot;</span>
-                        <span class="s2">&quot;sequence&quot;</span>
-                    <span class="p">)</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;visibility&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;origin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;user&quot;</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;ms&quot;</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;default_value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_dbFieldValue</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">in_val</span><span class="p">,</span> <span class="s2">&quot;RepetitionTime&quot;</span>
-                    <span class="p">)</span>
-
-                    <span class="k">if</span> <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                        <span class="n">set_dbFieldValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">out_val</span><span class="p">,</span> <span class="n">tag_to_add</span><span class="p">)</span>
-
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="nb">print</span><span class="p">(</span>
-                            <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Coregister:</span><span class="se">\n</span><span class="s2"> the &#39;RepetitionTime&#39; tag could &quot;</span>
-                            <span class="s2">&quot;not be added to the database for the &#39;</span><span class="si">{}</span><span class="s2">&#39; &quot;</span>
-                            <span class="s2">&quot;parameter. This can lead to a subsequent issue &quot;</span>
-                            <span class="s2">&quot;during initialization!!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">out_val</span><span class="p">)</span>
-                        <span class="p">)</span>
-
-                    <span class="n">tag_to_add</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-                        <span class="s2">&quot;Dataset dimensions &quot;</span> <span class="s2">&quot;(Count, X,Y,Z,T...)&quot;</span>
-                    <span class="p">)</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;field_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;int&quot;</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-                        <span class="s2">&quot;data array dimensions&quot;</span> <span class="s2">&quot; (from Nifti header)&quot;</span>
-                    <span class="p">)</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;visibility&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;origin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;user&quot;</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;default_value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_dbFieldValue</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span>
-                        <span class="n">in_val</span><span class="p">,</span>
-                        <span class="p">(</span><span class="s2">&quot;Dataset dimensions &quot;</span> <span class="s2">&quot;(Count, X,Y,Z,T...)&quot;</span><span class="p">),</span>
-                    <span class="p">)</span>
-
-                    <span class="k">if</span> <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                        <span class="n">set_dbFieldValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">out_val</span><span class="p">,</span> <span class="n">tag_to_add</span><span class="p">)</span>
-
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="nb">print</span><span class="p">(</span>
-                            <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Coregister:</span><span class="se">\n</span><span class="s2">The &#39;Dataset dimensions (Count, &quot;</span>
-                            <span class="s2">&quot;X,Y,Z,T...)&#39; tag could not be added to the &quot;</span>
-                            <span class="s2">&quot;database for the &#39;</span><span class="si">{}</span><span class="s2">&#39; parameter. This can lead to&quot;</span>
-                            <span class="s2">&quot; a subsequent issue during &quot;</span>
-                            <span class="s2">&quot;initialization!!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">out_val</span><span class="p">)</span>
-                        <span class="p">)</span>
-
-                    <span class="n">tag_to_add</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;PatientName&quot;</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;field_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;string&quot;</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;visibility&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;origin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;user&quot;</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;default_value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_dbFieldValue</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">in_val</span><span class="p">,</span> <span class="s2">&quot;PatientName&quot;</span>
-                    <span class="p">)</span>
-
-                    <span class="k">if</span> <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                        <span class="n">set_dbFieldValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">out_val</span><span class="p">,</span> <span class="n">tag_to_add</span><span class="p">)</span>
-
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="nb">print</span><span class="p">(</span>
-                            <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Coregister:</span><span class="se">\n</span><span class="s2">The &#39;PatientName&#39; tag could not &quot;</span>
-                            <span class="s2">&quot;be added to the database for the &#39;</span><span class="si">{}</span><span class="s2">&#39; &quot;</span>
-                            <span class="s2">&quot;parameter. This can lead to a subsequent &quot;</span>
-                            <span class="s2">&quot;issue during &quot;</span>
-                            <span class="s2">&quot;initialization!!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">out_val</span><span class="p">)</span>
-                        <span class="p">)</span>
-
-                    <span class="n">age</span> <span class="o">=</span> <span class="n">get_dbFieldValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">in_val</span><span class="p">,</span> <span class="s2">&quot;Age&quot;</span><span class="p">)</span>
-
-                    <span class="k">if</span> <span class="n">age</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                        <span class="n">tag_to_add</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Age&quot;</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;field_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;int&quot;</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;visibility&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;origin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;user&quot;</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;default_value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">age</span>
-                        <span class="n">set_dbFieldValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">out_val</span><span class="p">,</span> <span class="n">tag_to_add</span><span class="p">)</span>
-
-                    <span class="n">pathology</span> <span class="o">=</span> <span class="n">get_dbFieldValue</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">in_val</span><span class="p">,</span> <span class="s2">&quot;Pathology&quot;</span>
-                    <span class="p">)</span>
-
-                    <span class="k">if</span> <span class="n">pathology</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                        <span class="n">tag_to_add</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Pathology&quot;</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;field_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;string&quot;</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;visibility&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;origin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;user&quot;</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;default_value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pathology</span>
-                        <span class="n">set_dbFieldValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">out_val</span><span class="p">,</span> <span class="n">tag_to_add</span><span class="p">)</span>
-
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Coregister.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Coregister.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Coregister</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span>
@@ -643,7 +551,7 @@
 
 
 <div class="viewcode-block" id="GM_WM_Normalize"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.GM_WM_Normalize">[docs]</a><span class="k">class</span> <span class="nc">GM_WM_Normalize</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Normalisation of the grey and/or white matter map(s)*</span>
 
 <span class="sd">    Please, see the complete documentation for the</span>
@@ -653,7 +561,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="GM_WM_Normalize.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.GM_WM_Normalize.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -798,7 +706,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.spm.Normalize12&quot;</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_namesFilter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Filtering of apply_to_files input parameter for GM, WM, etc.</span>
+        <span class="sd">&quot;&quot;&quot;Filtering of apply_to_files input parameter for GM, WM, etc.</span>
 
 <span class="sd">        :returns: from the apply_to_files input parameter, returns the selected</span>
 <span class="sd">                  mask(s).</span>
@@ -925,7 +833,7 @@
         <span class="k">return</span> <span class="n">files</span>
 
 <div class="viewcode-block" id="GM_WM_Normalize.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.GM_WM_Normalize.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -967,34 +875,14 @@
             <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;normalized_files&quot;</span><span class="p">:</span>
                     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_filter</span> <span class="o">==</span> <span class="s2">&quot;GM + WM&quot;</span><span class="p">:</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="n">val</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                        <span class="c1"># FIXME: In the latest version of mia, indexing of the</span>
-                        <span class="c1">#        database with particular tags defined in the</span>
-                        <span class="c1">#        processes is done only at the end of the</span>
-                        <span class="c1">#        initialisation of the whole pipeline. So we</span>
-                        <span class="c1">#        cannot use the value of these tags in other</span>
-                        <span class="c1">#        processes of the pipeline at the time of</span>
-                        <span class="c1">#        initialisation (see populse_mia #290). Until</span>
-                        <span class="c1">#        better we use a quick and dirty hack with the</span>
-                        <span class="c1">#        set_dbFieldValue() function !</span>
-                        <span class="n">tag_to_add</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;PatientName&quot;</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;field_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;string&quot;</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;visibility&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;origin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;user&quot;</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;default_value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_dbFieldValue</span><span class="p">(</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
-                            <span class="s2">&quot;PatientName&quot;</span><span class="p">,</span>
-                        <span class="p">)</span>
-
-                        <span class="k">if</span> <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                            <span class="n">set_dbFieldValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">tag_to_add</span><span class="p">)</span>
-
-                        <span class="k">else</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="p">(</span>
+                            <span class="n">get_dbFieldValue</span><span class="p">(</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                <span class="s2">&quot;PatientName&quot;</span><span class="p">,</span>
+                            <span class="p">)</span>
+                            <span class="ow">is</span> <span class="kc">None</span>
+                        <span class="p">):</span>
                             <span class="nb">print</span><span class="p">(</span>
                                 <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">GM_WM_Normalize brick:</span><span class="se">\n</span><span class="s2">The &#39;PatientName&#39;&quot;</span>
                                 <span class="s2">&quot; tag could not be added to the &quot;</span>
@@ -1002,6 +890,11 @@
                                 <span class="s2">&quot;can lead to a subsequent issue during &quot;</span>
                                 <span class="s2">&quot;initialization!!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
                             <span class="p">)</span>
+
+                        <span class="bp">self</span><span class="o">.</span><span class="n">tags_inheritance</span><span class="p">(</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                            <span class="n">val</span><span class="p">,</span>
+                        <span class="p">)</span>
 
                     <span class="k">else</span><span class="p">:</span>
                         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
@@ -1015,36 +908,12 @@
                             <span class="n">fileOvalNoPref</span> <span class="o">=</span> <span class="n">fileOval</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
 
                             <span class="k">if</span> <span class="n">fileOvalNoPref</span> <span class="o">==</span> <span class="n">fileIval</span><span class="p">:</span>
-                                <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="n">out_val</span><span class="p">]</span> <span class="o">=</span> <span class="n">in_val</span>
-                                <span class="c1"># FIXME: In the latest version of mia, indexing</span>
-                                <span class="c1">#        of the database with particular tags</span>
-                                <span class="c1">#        defined in the processes is done only</span>
-                                <span class="c1">#        at the end of the initialisation of</span>
-                                <span class="c1">#        the whole pipeline. So we cannot use</span>
-                                <span class="c1">#        the value of these tags in other</span>
-                                <span class="c1">#        processes of the pipeline at the time</span>
-                                <span class="c1">#        of initialisation (see populse_mia</span>
-                                <span class="c1">#        #290). Until better we use a quick and</span>
-                                <span class="c1">#        dirty hack with the set_dbFieldValue()</span>
-                                <span class="c1">#        function !</span>
-                                <span class="n">tag_to_add</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-                                <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;PatientName&quot;</span>
-                                <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;field_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;string&quot;</span>
-                                <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-                                <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;visibility&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-                                <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;origin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;user&quot;</span>
-                                <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                                <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;default_value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                                <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_dbFieldValue</span><span class="p">(</span>
-                                    <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">in_val</span><span class="p">,</span> <span class="s2">&quot;PatientName&quot;</span>
-                                <span class="p">)</span>
-
-                                <span class="k">if</span> <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                                    <span class="n">set_dbFieldValue</span><span class="p">(</span>
-                                        <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">out_val</span><span class="p">,</span> <span class="n">tag_to_add</span>
+                                <span class="k">if</span> <span class="p">(</span>
+                                    <span class="n">get_dbFieldValue</span><span class="p">(</span>
+                                        <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">in_val</span><span class="p">,</span> <span class="s2">&quot;PatientName&quot;</span>
                                     <span class="p">)</span>
-
-                                <span class="k">else</span><span class="p">:</span>
+                                    <span class="ow">is</span> <span class="kc">None</span>
+                                <span class="p">):</span>
                                     <span class="nb">print</span><span class="p">(</span>
                                         <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">GM_WM_Normalize brick:</span><span class="se">\n</span><span class="s2">The &quot;</span>
                                         <span class="s2">&quot;&#39;PatientName&#39; tag could not be added &quot;</span>
@@ -1054,11 +923,16 @@
                                         <span class="s2">&quot;initialization!!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">out_val</span><span class="p">)</span>
                                     <span class="p">)</span>
 
+                                <span class="bp">self</span><span class="o">.</span><span class="n">tags_inheritance</span><span class="p">(</span>
+                                    <span class="n">in_val</span><span class="p">,</span>
+                                    <span class="n">out_val</span><span class="p">,</span>
+                                <span class="p">)</span>
+
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="GM_WM_Normalize.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.GM_WM_Normalize.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">runFlag</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">=</span> <span class="s2">&quot;write&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">apply_to_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_namesFilter</span><span class="p">()</span>
@@ -1077,7 +951,7 @@
 
 
 <div class="viewcode-block" id="NewSegment"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.NewSegment">[docs]</a><span class="k">class</span> <span class="nc">NewSegment</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Segmentation: Segments, bias corrects and spatially normalises*</span>
 
 <span class="sd">    Please, see the complete documentation for the</span>
@@ -1087,7 +961,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="NewSegment.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.NewSegment.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -1404,7 +1278,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.spm.NewSegment&quot;</span><span class="p">)</span>
 
-<span class="w">        </span><span class="sd">&quot;&quot;&quot; To be removed for V2</span>
+        <span class="sd">&quot;&quot;&quot; To be removed for V2</span>
 <span class="sd">        # process instantiation</span>
 <span class="sd">        self.process = NewSegmentMia() # workaround to try to decrease the</span>
 <span class="sd">                                       # instantiation time of the NewSegment</span>
@@ -1413,7 +1287,7 @@
 <span class="sd">        &quot;&quot;&quot;</span></div>
 
 <div class="viewcode-block" id="NewSegment.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.NewSegment.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -1468,7 +1342,7 @@
             <span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">k</span><span class="p">)</span>
 
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        When there is only one image at the input, the tags inheritance is</span>
 <span class="sd">        directly managed in PipelineManagerTab.add_plug_value_to_database().</span>
 <span class="sd">        However the inheritance of 2 output parameters is defined below, as</span>
@@ -1487,36 +1361,12 @@
                             <span class="n">fileOvalNoPref</span> <span class="o">=</span> <span class="n">fileOval</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
 
                             <span class="k">if</span> <span class="n">fileOvalNoPref</span> <span class="o">==</span> <span class="n">fileIval</span><span class="p">:</span>
-                                <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="n">out_val</span><span class="p">]</span> <span class="o">=</span> <span class="n">in_val</span>
-                                <span class="c1"># FIXME: In the latest version of mia, indexing</span>
-                                <span class="c1">#        of the database with particular tags</span>
-                                <span class="c1">#        defined in the processes is done only</span>
-                                <span class="c1">#        at the end of the initialisation of</span>
-                                <span class="c1">#        the whole pipeline. So we cannot use</span>
-                                <span class="c1">#        the value of these tags in other</span>
-                                <span class="c1">#        processes of the pipeline at the time</span>
-                                <span class="c1">#        of initialisation (see populse_mia</span>
-                                <span class="c1">#        #290). Until better we use a quick</span>
-                                <span class="c1">#        and dirty hack with the</span>
-                                <span class="c1">#        set_dbFieldValue() function !</span>
-                                <span class="n">tag_to_add</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-                                <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;PatientName&quot;</span>
-                                <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;field_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;string&quot;</span>
-                                <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-                                <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;visibility&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-                                <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;origin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;user&quot;</span>
-                                <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                                <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;default_value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                                <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_dbFieldValue</span><span class="p">(</span>
-                                    <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">in_val</span><span class="p">,</span> <span class="s2">&quot;PatientName&quot;</span>
-                                <span class="p">)</span>
-
-                                <span class="k">if</span> <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                                    <span class="n">set_dbFieldValue</span><span class="p">(</span>
-                                        <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">out_val</span><span class="p">,</span> <span class="n">tag_to_add</span>
+                                <span class="k">if</span> <span class="p">(</span>
+                                    <span class="n">get_dbFieldValue</span><span class="p">(</span>
+                                        <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">in_val</span><span class="p">,</span> <span class="s2">&quot;PatientName&quot;</span>
                                     <span class="p">)</span>
-
-                                <span class="k">else</span><span class="p">:</span>
+                                    <span class="ow">is</span> <span class="kc">None</span>
+                                <span class="p">):</span>
                                     <span class="nb">print</span><span class="p">(</span>
                                         <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">NewSegment brick:</span><span class="se">\n</span><span class="s2">The &quot;</span>
                                         <span class="s2">&quot;&#39;PatientName&#39; tag could not be added &quot;</span>
@@ -1525,6 +1375,11 @@
                                         <span class="s2">&quot;subsequent issue during &quot;</span>
                                         <span class="s2">&quot;initialization!!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">out_val</span><span class="p">)</span>
                                     <span class="p">)</span>
+
+                                <span class="bp">self</span><span class="o">.</span><span class="n">tags_inheritance</span><span class="p">(</span>
+                                    <span class="n">in_val</span><span class="p">,</span>
+                                    <span class="n">out_val</span><span class="p">,</span>
+                                <span class="p">)</span>
 
                 <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;forward_deformation_field&quot;</span><span class="p">:</span>
                     <span class="k">if</span> <span class="n">val</span> <span class="o">!=</span> <span class="n">Undefined</span><span class="p">:</span>
@@ -1536,13 +1391,31 @@
                             <span class="n">fileOvalNoPref</span> <span class="o">=</span> <span class="n">fileOval</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
 
                             <span class="k">if</span> <span class="n">fileOvalNoPref</span> <span class="o">==</span> <span class="n">fileIval</span><span class="p">:</span>
-                                <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="n">out_val</span><span class="p">]</span> <span class="o">=</span> <span class="n">in_val</span>
+                                <span class="k">if</span> <span class="p">(</span>
+                                    <span class="n">get_dbFieldValue</span><span class="p">(</span>
+                                        <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">in_val</span><span class="p">,</span> <span class="s2">&quot;PatientName&quot;</span>
+                                    <span class="p">)</span>
+                                    <span class="ow">is</span> <span class="kc">None</span>
+                                <span class="p">):</span>
+                                    <span class="nb">print</span><span class="p">(</span>
+                                        <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">NewSegment brick:</span><span class="se">\n</span><span class="s2">The &quot;</span>
+                                        <span class="s2">&quot;&#39;PatientName&#39; tag could not be added &quot;</span>
+                                        <span class="s2">&quot;to the database for the &#39;</span><span class="si">{}</span><span class="s2">&#39; &quot;</span>
+                                        <span class="s2">&quot;parameter. This can lead to a &quot;</span>
+                                        <span class="s2">&quot;subsequent issue during &quot;</span>
+                                        <span class="s2">&quot;initialization!!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">out_val</span><span class="p">)</span>
+                                    <span class="p">)</span>
+
+                                <span class="bp">self</span><span class="o">.</span><span class="n">tags_inheritance</span><span class="p">(</span>
+                                    <span class="n">in_val</span><span class="p">,</span>
+                                    <span class="n">out_val</span><span class="p">,</span>
+                                <span class="p">)</span>
 
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="NewSegment.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.NewSegment.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">NewSegment</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">channel_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_files</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">channel_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_info</span>
@@ -1555,7 +1428,7 @@
 
 
 <div class="viewcode-block" id="Normalize12"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Normalize12">[docs]</a><span class="k">class</span> <span class="nc">Normalize12</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Computes the warp that best aligns the template (atlas) to the image*</span>
 
 <span class="sd">    Please, see the complete documentation for the</span>
@@ -1565,7 +1438,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Normalize12.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Normalize12.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -1873,7 +1746,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.spm.Normalize12&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Normalize12.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Normalize12.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -1975,137 +1848,60 @@
                         <span class="n">val</span> <span class="o">=</span> <span class="p">[</span><span class="n">val</span><span class="p">]</span>
 
                     <span class="k">for</span> <span class="n">in_val</span><span class="p">,</span> <span class="n">out_val</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-                        <span class="c1"># FIXME: In the latest version of mia, indexing of the</span>
-                        <span class="c1">#        database with particular tags defined in the</span>
-                        <span class="c1">#        processes is done only at the end of the</span>
-                        <span class="c1">#        initialisation of the whole pipeline. So we</span>
-                        <span class="c1">#        cannot use the value of these tags in other</span>
-                        <span class="c1">#        processes of the pipeline at the time of</span>
-                        <span class="c1">#        initialisation (see populse_mia #290). Until</span>
-                        <span class="c1">#        better we use a quick and dirty hack with the</span>
-                        <span class="c1">#        set_dbFieldValue() function !</span>
-                        <span class="n">tag_to_add</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;RepetitionTime&quot;</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;field_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;float&quot;</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-                            <span class="s2">&quot;The period of time &quot;</span>
-                            <span class="s2">&quot;in msec between the &quot;</span>
-                            <span class="s2">&quot;beginning of a pulse &quot;</span>
-                            <span class="s2">&quot;sequence and the &quot;</span>
-                            <span class="s2">&quot;beginning of the &quot;</span>
-                            <span class="s2">&quot;succeeding pulse &quot;</span>
-                            <span class="s2">&quot;sequence&quot;</span>
-                        <span class="p">)</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;visibility&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;origin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;user&quot;</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;ms&quot;</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;default_value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_dbFieldValue</span><span class="p">(</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">in_val</span><span class="p">,</span> <span class="s2">&quot;RepetitionTime&quot;</span>
-                        <span class="p">)</span>
-
-                        <span class="k">if</span> <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                            <span class="n">set_dbFieldValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">out_val</span><span class="p">,</span> <span class="n">tag_to_add</span><span class="p">)</span>
-
-                        <span class="k">else</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="p">(</span>
+                            <span class="n">get_dbFieldValue</span><span class="p">(</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">in_val</span><span class="p">,</span> <span class="s2">&quot;RepetitionTime&quot;</span>
+                            <span class="p">)</span>
+                            <span class="ow">is</span> <span class="kc">None</span>
+                        <span class="p">):</span>
                             <span class="nb">print</span><span class="p">(</span>
-                                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Normalize12:</span><span class="se">\n</span><span class="s2">The &#39;RepetitionTime&#39; tag &quot;</span>
-                                <span class="s2">&quot;could not be added to the database for the &quot;</span>
-                                <span class="s2">&quot;&#39;</span><span class="si">{}</span><span class="s2">&#39; parameter. This can lead to a &quot;</span>
-                                <span class="s2">&quot;subsequent issue during &quot;</span>
+                                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Normalize12 brick:</span><span class="se">\n</span><span class="s2">The &#39;RepetitionTime&#39;&quot;</span>
+                                <span class="s2">&quot; tag could not be added to the &quot;</span>
+                                <span class="s2">&quot;database for the &#39;</span><span class="si">{}</span><span class="s2">&#39; parameter. This &quot;</span>
+                                <span class="s2">&quot;can lead to a subsequent issue during &quot;</span>
                                 <span class="s2">&quot;initialization!!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">out_val</span><span class="p">)</span>
                             <span class="p">)</span>
 
-                        <span class="n">tag_to_add</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-                            <span class="s2">&quot;Dataset dimensions &quot;</span> <span class="s2">&quot;(Count, X,Y,Z,T...)&quot;</span>
-                        <span class="p">)</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;field_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;int&quot;</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-                            <span class="s2">&quot;data array dimensions&quot;</span> <span class="s2">&quot; (from Nifti header)&quot;</span>
-                        <span class="p">)</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;visibility&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;origin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;user&quot;</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;default_value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_dbFieldValue</span><span class="p">(</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span>
-                            <span class="n">in_val</span><span class="p">,</span>
-                            <span class="p">(</span><span class="s2">&quot;Dataset dimensions &quot;</span> <span class="s2">&quot;(Count, X,Y,Z,T...)&quot;</span><span class="p">),</span>
-                        <span class="p">)</span>
-
-                        <span class="k">if</span> <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                            <span class="n">set_dbFieldValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">out_val</span><span class="p">,</span> <span class="n">tag_to_add</span><span class="p">)</span>
-
-                        <span class="k">else</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="p">(</span>
+                            <span class="n">get_dbFieldValue</span><span class="p">(</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span>
+                                <span class="n">in_val</span><span class="p">,</span>
+                                <span class="s2">&quot;Dataset dimensions (Count, X,Y,Z,T...)&quot;</span><span class="p">,</span>
+                            <span class="p">)</span>
+                            <span class="ow">is</span> <span class="kc">None</span>
+                        <span class="p">):</span>
                             <span class="nb">print</span><span class="p">(</span>
-                                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Normalize12:</span><span class="se">\n</span><span class="s2">The &#39;Dataset dimensions &quot;</span>
-                                <span class="s2">&quot;(Count, X,Y,Z,T...)&#39; tag could not be added &quot;</span>
-                                <span class="s2">&quot;to the database for the &#39;</span><span class="si">{}</span><span class="s2">&#39; parameter. &quot;</span>
-                                <span class="s2">&quot;This can lead to a subsequent issue during &quot;</span>
+                                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Normalize12 brick:</span><span class="se">\n</span><span class="s2">The &quot;</span>
+                                <span class="s2">&quot;&#39;Dataset dimensions (Count, X,Y,Z,T...)&#39;&quot;</span>
+                                <span class="s2">&quot; tag could not be added to the &quot;</span>
+                                <span class="s2">&quot;database for the &#39;</span><span class="si">{}</span><span class="s2">&#39; parameter. This &quot;</span>
+                                <span class="s2">&quot;can lead to a subsequent issue during &quot;</span>
                                 <span class="s2">&quot;initialization!!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">out_val</span><span class="p">)</span>
                             <span class="p">)</span>
 
-                        <span class="n">tag_to_add</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;PatientName&quot;</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;field_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;string&quot;</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;visibility&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;origin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;user&quot;</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;default_value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_dbFieldValue</span><span class="p">(</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">in_val</span><span class="p">,</span> <span class="s2">&quot;PatientName&quot;</span>
-                        <span class="p">)</span>
-
-                        <span class="k">if</span> <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                            <span class="n">set_dbFieldValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">out_val</span><span class="p">,</span> <span class="n">tag_to_add</span><span class="p">)</span>
-
-                        <span class="k">else</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="p">(</span>
+                            <span class="n">get_dbFieldValue</span><span class="p">(</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">in_val</span><span class="p">,</span> <span class="s2">&quot;PatientName&quot;</span>
+                            <span class="p">)</span>
+                            <span class="ow">is</span> <span class="kc">None</span>
+                        <span class="p">):</span>
                             <span class="nb">print</span><span class="p">(</span>
-                                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Normalize12:</span><span class="se">\n</span><span class="s2">The &#39;PatientName&#39; tag could &quot;</span>
-                                <span class="s2">&quot;not be added to the database for the &#39;</span><span class="si">{}</span><span class="s2">&#39; &quot;</span>
-                                <span class="s2">&quot;parameter. This can lead to a subsequent &quot;</span>
-                                <span class="s2">&quot;issue during &quot;</span>
+                                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Normalize12 brick:</span><span class="se">\n</span><span class="s2">The &#39;PatientName&#39;&quot;</span>
+                                <span class="s2">&quot; tag could not be added to the &quot;</span>
+                                <span class="s2">&quot;database for the &#39;</span><span class="si">{}</span><span class="s2">&#39; parameter. This &quot;</span>
+                                <span class="s2">&quot;can lead to a subsequent issue during &quot;</span>
                                 <span class="s2">&quot;initialization!!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">out_val</span><span class="p">)</span>
                             <span class="p">)</span>
-
-                        <span class="n">age</span> <span class="o">=</span> <span class="n">get_dbFieldValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">in_val</span><span class="p">,</span> <span class="s2">&quot;Age&quot;</span><span class="p">)</span>
-
-                        <span class="k">if</span> <span class="n">age</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                            <span class="n">tag_to_add</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Age&quot;</span>
-                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;field_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;int&quot;</span>
-                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;visibility&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;origin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;user&quot;</span>
-                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;default_value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">age</span>
-                            <span class="n">set_dbFieldValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">out_val</span><span class="p">,</span> <span class="n">tag_to_add</span><span class="p">)</span>
-
-                        <span class="n">pathology</span> <span class="o">=</span> <span class="n">get_dbFieldValue</span><span class="p">(</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">in_val</span><span class="p">,</span> <span class="s2">&quot;Pathology&quot;</span>
-                        <span class="p">)</span>
-
-                        <span class="k">if</span> <span class="n">pathology</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                            <span class="n">tag_to_add</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Pathology&quot;</span>
-                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;field_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;string&quot;</span>
-                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;visibility&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;origin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;user&quot;</span>
-                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;default_value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pathology</span>
-                            <span class="n">set_dbFieldValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">out_val</span><span class="p">,</span> <span class="n">tag_to_add</span><span class="p">)</span>
 
                         <span class="n">pathOval</span><span class="p">,</span> <span class="n">fileOval</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">out_val</span><span class="p">)</span>
                         <span class="n">_</span><span class="p">,</span> <span class="n">fileIval</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">in_val</span><span class="p">)</span>
                         <span class="n">fileOvalNoPref</span> <span class="o">=</span> <span class="n">fileOval</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
 
                         <span class="k">if</span> <span class="n">fileOvalNoPref</span> <span class="o">==</span> <span class="n">fileIval</span><span class="p">:</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="n">out_val</span><span class="p">]</span> <span class="o">=</span> <span class="n">in_val</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">tags_inheritance</span><span class="p">(</span>
+                                <span class="n">in_val</span><span class="p">,</span>
+                                <span class="n">out_val</span><span class="p">,</span>
+                            <span class="p">)</span>
 
                 <span class="k">if</span> <span class="p">(</span><span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;deformation_field&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">val</span> <span class="o">!=</span> <span class="n">Undefined</span><span class="p">):</span>
                     <span class="n">pathOval</span><span class="p">,</span> <span class="n">fileOval</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
@@ -2113,7 +1909,10 @@
                     <span class="n">fileOvalNoPref</span> <span class="o">=</span> <span class="n">fileOval</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
 
                     <span class="k">if</span> <span class="n">fileOvalNoPref</span> <span class="o">==</span> <span class="n">fileIval</span><span class="p">:</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="n">val</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_to_align</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">tags_inheritance</span><span class="p">(</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">image_to_align</span><span class="p">,</span>
+                            <span class="n">val</span><span class="p">,</span>
+                        <span class="p">)</span>
 
                 <span class="c1"># if (key == &quot;normalized_image&quot;) and (val != Undefined):</span>
                 <span class="c1">#     if not isinstance(val, list):</span>
@@ -2132,7 +1931,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Normalize12.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Normalize12.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">trait</span><span class="p">(</span><span class="s2">&quot;image_to_align&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">optional</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">image_to_align</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_to_align</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span>
@@ -2170,7 +1969,7 @@
 
 
 <div class="viewcode-block" id="Realign"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Realign">[docs]</a><span class="k">class</span> <span class="nc">Realign</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Realigns a time-series of images acquired from the same subject*</span>
 
 <span class="sd">    Please, see the complete documentation for the</span>
@@ -2180,7 +1979,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Realign.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Realign.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -2481,7 +2280,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.spm.Realign&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Realign.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Realign.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -2557,133 +2356,54 @@
                         <span class="p">)</span>
 
                     <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;realigned_files&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">out_val</span><span class="p">)</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="n">out_val</span><span class="p">]</span> <span class="o">=</span> <span class="n">in_val</span>
-                    <span class="c1"># FIXME: In the latest version of mia, indexing of the</span>
-                    <span class="c1">#        database with particular tags defined in the</span>
-                    <span class="c1">#        processes is done only at the end of the</span>
-                    <span class="c1">#        initialisation of the whole pipeline. So we</span>
-                    <span class="c1">#        cannot use the value of these tags in other</span>
-                    <span class="c1">#        processes of the pipeline at the time of</span>
-                    <span class="c1">#        initialisation (see populse_mia #290). Until</span>
-                    <span class="c1">#        better we use a quick and dirty hack with the</span>
-                    <span class="c1">#        set_dbFieldValue() function !</span>
 
-                    <span class="c1"># Add RepetitionTime tag:</span>
-                    <span class="n">tag_to_add</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;RepetitionTime&quot;</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;field_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;float&quot;</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-                        <span class="s2">&quot;The period of time in msec between the &quot;</span>
-                        <span class="s2">&quot;beginning of a pulse sequence and the &quot;</span>
-                        <span class="s2">&quot;beginning of the succeeding pulse sequence&quot;</span>
-                    <span class="p">)</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;visibility&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;origin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;user&quot;</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;ms&quot;</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;default_value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_dbFieldValue</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">in_val</span><span class="p">,</span> <span class="s2">&quot;RepetitionTime&quot;</span>
-                    <span class="p">)</span>
-
-                    <span class="k">if</span> <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                        <span class="n">set_dbFieldValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">out_val</span><span class="p">,</span> <span class="n">tag_to_add</span><span class="p">)</span>
-
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="nb">print</span><span class="p">(</span>
-                            <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Realign brick:</span><span class="se">\n</span><span class="s2">The &#39;RepetitionTime&#39; tag &quot;</span>
-                            <span class="s2">&quot;could not be added to the database for &quot;</span>
-                            <span class="s2">&quot;the &#39;</span><span class="si">{}</span><span class="s2">&#39; parameter. This can lead to a &quot;</span>
-                            <span class="s2">&quot;subsequent issue during &quot;</span>
-                            <span class="s2">&quot;initialisation!!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">out_val</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="p">(</span>
+                        <span class="n">get_dbFieldValue</span><span class="p">(</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">in_val</span><span class="p">,</span> <span class="s2">&quot;RepetitionTime&quot;</span>
                         <span class="p">)</span>
-
-                    <span class="c1"># Add Dataset dimensions (Count, X,Y,Z,T...) tag:</span>
-                    <span class="n">tag_to_add</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span>
-                        <span class="s2">&quot;name&quot;</span>
-                    <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Dataset dimensions (Count, X,Y,Z,T...)&quot;</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;field_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;int&quot;</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-                        <span class="s2">&quot;data array dimensions&quot;</span> <span class="s2">&quot; (from Nifti header)&quot;</span>
-                    <span class="p">)</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;visibility&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;origin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;user&quot;</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;default_value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_dbFieldValue</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span>
-                        <span class="n">in_val</span><span class="p">,</span>
-                        <span class="p">(</span><span class="s2">&quot;Dataset dimensions &quot;</span> <span class="s2">&quot;(Count, X,Y,Z,T...)&quot;</span><span class="p">),</span>
-                    <span class="p">)</span>
-
-                    <span class="k">if</span> <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                        <span class="n">set_dbFieldValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">out_val</span><span class="p">,</span> <span class="n">tag_to_add</span><span class="p">)</span>
-
-                    <span class="k">else</span><span class="p">:</span>
+                        <span class="ow">is</span> <span class="kc">None</span>
+                    <span class="p">):</span>
                         <span class="nb">print</span><span class="p">(</span>
-                            <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Realign brick:</span><span class="se">\n</span><span class="s2">The &#39;Dataset dimensions &quot;</span>
-                            <span class="s2">&quot;(Count, X,Y,Z,T...)&#39; tag could not be &quot;</span>
-                            <span class="s2">&quot;added to the database for the &#39;</span><span class="si">{}</span><span class="s2">&#39; &quot;</span>
-                            <span class="s2">&quot;parameter. This can lead to a &quot;</span>
-                            <span class="s2">&quot;subsequent issue during &quot;</span>
+                            <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Realign brick:</span><span class="se">\n</span><span class="s2">The &#39;RepetitionTime&#39;&quot;</span>
+                            <span class="s2">&quot; tag could not be added to the &quot;</span>
+                            <span class="s2">&quot;database for the &#39;</span><span class="si">{}</span><span class="s2">&#39; parameter. This &quot;</span>
+                            <span class="s2">&quot;can lead to a subsequent issue during &quot;</span>
                             <span class="s2">&quot;initialization!!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">out_val</span><span class="p">)</span>
                         <span class="p">)</span>
 
-                    <span class="c1"># Add PatientName tag:</span>
-                    <span class="n">tag_to_add</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;PatientName&quot;</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;field_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;string&quot;</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;visibility&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;origin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;user&quot;</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;default_value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                    <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_dbFieldValue</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">in_val</span><span class="p">,</span> <span class="s2">&quot;PatientName&quot;</span>
-                    <span class="p">)</span>
-
-                    <span class="k">if</span> <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                        <span class="n">set_dbFieldValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">out_val</span><span class="p">,</span> <span class="n">tag_to_add</span><span class="p">)</span>
-
-                    <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="p">(</span>
+                        <span class="n">get_dbFieldValue</span><span class="p">(</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span>
+                            <span class="n">in_val</span><span class="p">,</span>
+                            <span class="s2">&quot;Dataset dimensions (Count, X,Y,Z,T...)&quot;</span><span class="p">,</span>
+                        <span class="p">)</span>
+                        <span class="ow">is</span> <span class="kc">None</span>
+                    <span class="p">):</span>
                         <span class="nb">print</span><span class="p">(</span>
-                            <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Realign brick:</span><span class="se">\n</span><span class="s2">The &#39;PatientName&#39; tag could &quot;</span>
-                            <span class="s2">&quot;not be added to the database for the &#39;</span><span class="si">{}</span><span class="s2">&#39; &quot;</span>
-                            <span class="s2">&quot;parameter. This can lead to a subsequent issue &quot;</span>
-                            <span class="s2">&quot;during initialization!!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">out_val</span><span class="p">)</span>
+                            <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Realign brick:</span><span class="se">\n</span><span class="s2">The &quot;</span>
+                            <span class="s2">&quot;&#39;Dataset dimensions (Count, X,Y,Z,T...)&#39;&quot;</span>
+                            <span class="s2">&quot; tag could not be added to the &quot;</span>
+                            <span class="s2">&quot;database for the &#39;</span><span class="si">{}</span><span class="s2">&#39; parameter. This &quot;</span>
+                            <span class="s2">&quot;can lead to a subsequent issue during &quot;</span>
+                            <span class="s2">&quot;initialization!!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">out_val</span><span class="p">)</span>
                         <span class="p">)</span>
 
-                    <span class="c1"># Add Age tag:</span>
-                    <span class="n">age</span> <span class="o">=</span> <span class="n">get_dbFieldValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">in_val</span><span class="p">,</span> <span class="s2">&quot;Age&quot;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="p">(</span>
+                        <span class="n">get_dbFieldValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">in_val</span><span class="p">,</span> <span class="s2">&quot;PatientName&quot;</span><span class="p">)</span>
+                        <span class="ow">is</span> <span class="kc">None</span>
+                    <span class="p">):</span>
+                        <span class="nb">print</span><span class="p">(</span>
+                            <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Realign brick:</span><span class="se">\n</span><span class="s2">The &#39;PatientName&#39;&quot;</span>
+                            <span class="s2">&quot; tag could not be added to the &quot;</span>
+                            <span class="s2">&quot;database for the &#39;</span><span class="si">{}</span><span class="s2">&#39; parameter. This &quot;</span>
+                            <span class="s2">&quot;can lead to a subsequent issue during &quot;</span>
+                            <span class="s2">&quot;initialization!!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">out_val</span><span class="p">)</span>
+                        <span class="p">)</span>
 
-                    <span class="k">if</span> <span class="n">age</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                        <span class="n">tag_to_add</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Age&quot;</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;field_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;int&quot;</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;visibility&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;origin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;user&quot;</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;default_value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">age</span>
-                        <span class="n">set_dbFieldValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">out_val</span><span class="p">,</span> <span class="n">tag_to_add</span><span class="p">)</span>
-
-                    <span class="c1"># Add Pathology tag:</span>
-                    <span class="n">pathology</span> <span class="o">=</span> <span class="n">get_dbFieldValue</span><span class="p">(</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">in_val</span><span class="p">,</span> <span class="s2">&quot;Pathology&quot;</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">tags_inheritance</span><span class="p">(</span>
+                        <span class="n">in_val</span><span class="p">,</span>
+                        <span class="n">out_val</span><span class="p">,</span>
                     <span class="p">)</span>
-
-                    <span class="k">if</span> <span class="n">pathology</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                        <span class="n">tag_to_add</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Pathology&quot;</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;field_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;string&quot;</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;visibility&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;origin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;user&quot;</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;default_value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pathology</span>
-                        <span class="n">set_dbFieldValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">out_val</span><span class="p">,</span> <span class="n">tag_to_add</span><span class="p">)</span>
 
             <span class="c1"># modified_in_files</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">==</span> <span class="s2">&quot;write&quot;</span><span class="p">:</span>
@@ -2696,7 +2416,10 @@
                     <span class="n">_</span><span class="p">,</span> <span class="n">fileIval</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">in_val</span><span class="p">)</span>
                     <span class="n">out_val</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="n">fileIval</span><span class="p">)</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;modified_in_files&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">out_val</span><span class="p">)</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="n">out_val</span><span class="p">]</span> <span class="o">=</span> <span class="n">in_val</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">tags_inheritance</span><span class="p">(</span>
+                        <span class="n">in_val</span><span class="p">,</span>
+                        <span class="n">out_val</span><span class="p">,</span>
+                    <span class="p">)</span>
 
             <span class="c1"># mean_image</span>
             <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">==</span> <span class="s2">&quot;estimate&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span>
@@ -2711,7 +2434,10 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span> <span class="o">+</span> <span class="n">fileIval</span>
                 <span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;mean_image&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">out_val</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="n">out_val</span><span class="p">]</span> <span class="o">=</span> <span class="n">in_val</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tags_inheritance</span><span class="p">(</span>
+                    <span class="n">in_val</span><span class="p">,</span>
+                    <span class="n">out_val</span><span class="p">,</span>
+                <span class="p">)</span>
 
             <span class="c1"># realignment_parameters</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">==</span> <span class="s2">&quot;write&quot;</span><span class="p">:</span>
@@ -2727,13 +2453,16 @@
                         <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span> <span class="s2">&quot;rp_&quot;</span> <span class="o">+</span> <span class="n">fileIval</span> <span class="o">+</span> <span class="s2">&quot;.txt&quot;</span>
                     <span class="p">)</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;realignment_parameters&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">out_val</span><span class="p">)</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="n">out_val</span><span class="p">]</span> <span class="o">=</span> <span class="n">in_val</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">tags_inheritance</span><span class="p">(</span>
+                        <span class="n">in_val</span><span class="p">,</span>
+                        <span class="n">out_val</span><span class="p">,</span>
+                    <span class="p">)</span>
 
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Realign.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Realign.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Realign</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_files</span>
 
@@ -2756,7 +2485,7 @@
 
 
 <div class="viewcode-block" id="SliceTiming"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.SliceTiming">[docs]</a><span class="k">class</span> <span class="nc">SliceTiming</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Temporal correction to get back every slice at the same acquisition time*</span>
 
 <span class="sd">    Please, see the complete documentation for the</span>
@@ -2766,7 +2495,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="SliceTiming.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.SliceTiming.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -2922,7 +2651,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.spm.SliceTiming&quot;</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_get_database_value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;sets default values for certain parameters.</span>
+        <span class="sd">&quot;&quot;&quot;sets default values for certain parameters.</span>
 
 <span class="sd">        If the following parameters are undefined, this method attempts to give</span>
 <span class="sd">        them a value from the database or by making a calculation from other</span>
@@ -2937,10 +2666,11 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># FIXME: If several data are entered in in_files parameter, we use the</span>
-        <span class="c1"># first element to determine, from the database, few calculation</span>
-        <span class="c1"># parameters. These calculation parameters must be identical for all</span>
-        <span class="c1"># data in in_files. Currently there is no verification to see if it&#39;s</span>
-        <span class="c1"># true (e.g. do all data have the same slice number?, etc.).</span>
+        <span class="c1">#        first element to determine, from the database, few</span>
+        <span class="c1">#        calculation parameters. These calculation parameters must be</span>
+        <span class="c1">#        identical for all data in in_files. Currently there is no</span>
+        <span class="c1">#        verification to see if it&#39;s true (e.g. do all data have the</span>
+        <span class="c1">#        same slice number?, etc.).</span>
         <span class="n">result</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="n">complete_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">file_position</span> <span class="o">=</span> <span class="p">(</span>
@@ -2958,7 +2688,7 @@
             <span class="n">temp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span>
                 <span class="n">COLLECTION_CURRENT</span><span class="p">,</span>
                 <span class="n">database_filename</span><span class="p">,</span>
-                <span class="p">(</span><span class="s2">&quot;Dataset dimensions &quot;</span> <span class="s2">&quot;(Count, X,Y,Z,T...)&quot;</span><span class="p">),</span>
+                <span class="p">(</span><span class="s2">&quot;Dataset dimensions (Count, X,Y,Z,T...)&quot;</span><span class="p">),</span>
             <span class="p">)[</span><span class="mi">3</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_slices</span> <span class="o">==</span> <span class="n">Undefined</span><span class="p">:</span>
@@ -2968,7 +2698,7 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">msg</span> <span class="o">=</span> <span class="n">QMessageBox</span><span class="p">()</span>
                 <span class="n">msg</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">Warning</span><span class="p">)</span>
-                <span class="n">msg</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;Mia_processes - &quot;</span> <span class="s2">&quot;SliceTiming Error!&quot;</span><span class="p">)</span>
+                <span class="n">msg</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;Mia_processes - SliceTiming Error!&quot;</span><span class="p">)</span>
                 <span class="n">msg</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span>
                     <span class="s2">&quot;Warning: the value of the num_slices parameter &quot;</span>
                     <span class="s2">&quot;was not found in the database. &quot;</span>
@@ -2984,7 +2714,7 @@
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_slices</span> <span class="o">!=</span> <span class="n">temp</span><span class="p">:</span>
                     <span class="n">msg</span> <span class="o">=</span> <span class="n">QMessageBox</span><span class="p">()</span>
                     <span class="n">msg</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">Warning</span><span class="p">)</span>
-                    <span class="n">msg</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;Mia_processes - &quot;</span> <span class="s2">&quot;SliceTiming Error!&quot;</span><span class="p">)</span>
+                    <span class="n">msg</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;Mia_processes - SliceTiming Error!&quot;</span><span class="p">)</span>
                     <span class="n">msg</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span>
                         <span class="s2">&quot;Warning: The value for the num_slices &quot;</span>
                         <span class="s2">&quot;parameter does not match the value in the &quot;</span>
@@ -3014,7 +2744,7 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">msg</span> <span class="o">=</span> <span class="n">QMessageBox</span><span class="p">()</span>
                 <span class="n">msg</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">Warning</span><span class="p">)</span>
-                <span class="n">msg</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;Mia_processes - &quot;</span> <span class="s2">&quot;SliceTiming Error!&quot;</span><span class="p">)</span>
+                <span class="n">msg</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;Mia_processes - SliceTiming Error!&quot;</span><span class="p">)</span>
                 <span class="n">msg</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span>
                     <span class="s2">&quot;Warning: the value of the TR parameter &quot;</span>
                     <span class="s2">&quot;was not found in the database. &quot;</span>
@@ -3030,7 +2760,7 @@
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">TR</span> <span class="o">!=</span> <span class="n">temp</span><span class="p">:</span>
                     <span class="n">msg</span> <span class="o">=</span> <span class="n">QMessageBox</span><span class="p">()</span>
                     <span class="n">msg</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">Warning</span><span class="p">)</span>
-                    <span class="n">msg</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;Mia_processes - &quot;</span> <span class="s2">&quot;SliceTiming Error!&quot;</span><span class="p">)</span>
+                    <span class="n">msg</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;Mia_processes - SliceTiming Error!&quot;</span><span class="p">)</span>
                     <span class="n">msg</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span>
                         <span class="s2">&quot;Warning: The value for the TR &quot;</span>
                         <span class="s2">&quot;parameter does not match the value in the &quot;</span>
@@ -3042,9 +2772,9 @@
                     <span class="n">result</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="c1"># FIXME: in SPM, TA can be egal to 0 (If slice_order and</span>
-        <span class="c1"># ref_slice are entered in milliseconds, TA will not be used and</span>
-        <span class="c1"># can be set to 0). Here we consider that slice_order and</span>
-        <span class="c1"># ref_slice paramters are only indices !</span>
+        <span class="c1">#        ref_slice are entered in milliseconds, TA will not be used</span>
+        <span class="c1">#        and can be set to 0). Here we consider that slice_order and</span>
+        <span class="c1">#        ref_slice parameters are only indices !</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">TA</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">TR</span> <span class="o">!=</span> <span class="n">Undefined</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_slices</span> <span class="o">!=</span> <span class="n">Undefined</span><span class="p">:</span>
@@ -3053,7 +2783,7 @@
                         <span class="n">msg</span> <span class="o">=</span> <span class="n">QMessageBox</span><span class="p">()</span>
                         <span class="n">msg</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">Warning</span><span class="p">)</span>
                         <span class="n">msg</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span>
-                            <span class="s2">&quot;Mia_processes - &quot;</span> <span class="s2">&quot;SliceTiming Error!&quot;</span>
+                            <span class="s2">&quot;Mia_processes - SliceTiming Error!&quot;</span>
                         <span class="p">)</span>
                         <span class="n">msg</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span>
                             <span class="s2">&quot;Warning: the value of the TA parameter &quot;</span>
@@ -3071,7 +2801,7 @@
             <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">TA</span> <span class="o">==</span> <span class="n">Undefined</span><span class="p">:</span>
                 <span class="n">msg</span> <span class="o">=</span> <span class="n">QMessageBox</span><span class="p">()</span>
                 <span class="n">msg</span><span class="o">.</span><span class="n">setIcon</span><span class="p">(</span><span class="n">QMessageBox</span><span class="o">.</span><span class="n">Warning</span><span class="p">)</span>
-                <span class="n">msg</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;Mia_processes - &quot;</span> <span class="s2">&quot;SliceTiming Error!&quot;</span><span class="p">)</span>
+                <span class="n">msg</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="s2">&quot;Mia_processes - SliceTiming Error!&quot;</span><span class="p">)</span>
                 <span class="n">msg</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span>
                     <span class="s2">&quot;The value of TR or num_slices parameters was not &quot;</span>
                     <span class="s2">&quot;found in the database, then the TA parameter &quot;</span>
@@ -3197,7 +2927,7 @@
         <span class="k">return</span> <span class="n">result</span>
 
 <div class="viewcode-block" id="SliceTiming.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.SliceTiming.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -3268,13 +2998,16 @@
                             <span class="c1"># fmt: on</span>
 
                         <span class="k">if</span> <span class="n">fileOvalNoPref</span> <span class="o">==</span> <span class="n">fileIval</span><span class="p">:</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="n">out_val</span><span class="p">]</span> <span class="o">=</span> <span class="n">in_val</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">tags_inheritance</span><span class="p">(</span>
+                                <span class="n">in_val</span><span class="p">,</span>
+                                <span class="n">out_val</span><span class="p">,</span>
+                            <span class="p">)</span>
 
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="SliceTiming.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.SliceTiming.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">SliceTiming</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
         <span class="c1"># in_files parameter are normally already in absolute path format.</span>
@@ -3297,7 +3030,7 @@
 
 
 <div class="viewcode-block" id="Smooth"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Smooth">[docs]</a><span class="k">class</span> <span class="nc">Smooth</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *3D Gaussian smoothing of image volumes*</span>
 
 <span class="sd">    Please, see the complete documentation for the</span>
@@ -3307,7 +3040,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Smooth.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Smooth.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -3398,7 +3131,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.spm.Smooth&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Smooth.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Smooth.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -3442,131 +3175,6 @@
                         <span class="n">val</span> <span class="o">=</span> <span class="p">[</span><span class="n">val</span><span class="p">]</span>
 
                     <span class="k">for</span> <span class="n">in_val</span><span class="p">,</span> <span class="n">out_val</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_files</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
-                        <span class="c1"># FIXME: In the latest version of mia, indexing of the</span>
-                        <span class="c1">#        database with particular tags defined in the</span>
-                        <span class="c1">#        processes is done only at the end of the</span>
-                        <span class="c1">#        initialisation of the whole pipeline. So we</span>
-                        <span class="c1">#        cannot use the value of these tags in other</span>
-                        <span class="c1">#        processes of the pipeline at the time of</span>
-                        <span class="c1">#        initialisation (see populse_mia #290). Until</span>
-                        <span class="c1">#        better we use a quick and dirty hack with the</span>
-                        <span class="c1">#        set_dbFieldValue() function !</span>
-                        <span class="n">tag_to_add</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;RepetitionTime&quot;</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;field_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;float&quot;</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-                            <span class="s2">&quot;The period of time &quot;</span>
-                            <span class="s2">&quot;in msec between the &quot;</span>
-                            <span class="s2">&quot;beginning of a pulse &quot;</span>
-                            <span class="s2">&quot;sequence and the &quot;</span>
-                            <span class="s2">&quot;beginning of the &quot;</span>
-                            <span class="s2">&quot;succeeding pulse &quot;</span>
-                            <span class="s2">&quot;sequence&quot;</span>
-                        <span class="p">)</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;visibility&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;origin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;user&quot;</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;ms&quot;</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;default_value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_dbFieldValue</span><span class="p">(</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">in_val</span><span class="p">,</span> <span class="s2">&quot;RepetitionTime&quot;</span>
-                        <span class="p">)</span>
-
-                        <span class="k">if</span> <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                            <span class="n">set_dbFieldValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">out_val</span><span class="p">,</span> <span class="n">tag_to_add</span><span class="p">)</span>
-
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="nb">print</span><span class="p">(</span>
-                                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Smooth:</span><span class="se">\n</span><span class="s2">The &#39;RepetitionTime&#39; tag could &quot;</span>
-                                <span class="s2">&quot;not be added to the database for the &#39;</span><span class="si">{}</span><span class="s2">&#39; &quot;</span>
-                                <span class="s2">&quot;parameter. This can lead to a subsequent &quot;</span>
-                                <span class="s2">&quot;issue during &quot;</span>
-                                <span class="s2">&quot;initialization!!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">out_val</span><span class="p">)</span>
-                            <span class="p">)</span>
-
-                        <span class="n">tag_to_add</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-                            <span class="s2">&quot;Dataset dimensions &quot;</span> <span class="s2">&quot;(Count, X,Y,Z,T...)&quot;</span>
-                        <span class="p">)</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;field_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;int&quot;</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-                            <span class="s2">&quot;data array dimensions&quot;</span> <span class="s2">&quot; (from Nifti header)&quot;</span>
-                        <span class="p">)</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;visibility&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;origin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;user&quot;</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;default_value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_dbFieldValue</span><span class="p">(</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span>
-                            <span class="n">in_val</span><span class="p">,</span>
-                            <span class="p">(</span><span class="s2">&quot;Dataset dimensions &quot;</span> <span class="s2">&quot;(Count, X,Y,Z,T...)&quot;</span><span class="p">),</span>
-                        <span class="p">)</span>
-
-                        <span class="k">if</span> <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                            <span class="n">set_dbFieldValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">out_val</span><span class="p">,</span> <span class="n">tag_to_add</span><span class="p">)</span>
-
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="nb">print</span><span class="p">(</span>
-                                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Smooth:</span><span class="se">\n</span><span class="s2">The &#39;Dataset dimensions (Count, &quot;</span>
-                                <span class="s2">&quot;X,Y,Z,T...)&#39; tag could not be added to the &quot;</span>
-                                <span class="s2">&quot;database for the &#39;</span><span class="si">{}</span><span class="s2">&#39; parameter. This can &quot;</span>
-                                <span class="s2">&quot;lead to a subsequent issue during &quot;</span>
-                                <span class="s2">&quot;initialization!!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">out_val</span><span class="p">)</span>
-                            <span class="p">)</span>
-
-                        <span class="n">tag_to_add</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;PatientName&quot;</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;field_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;string&quot;</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;visibility&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;origin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;user&quot;</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;default_value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                        <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_dbFieldValue</span><span class="p">(</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">in_val</span><span class="p">,</span> <span class="s2">&quot;PatientName&quot;</span>
-                        <span class="p">)</span>
-
-                        <span class="k">if</span> <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                            <span class="n">set_dbFieldValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">out_val</span><span class="p">,</span> <span class="n">tag_to_add</span><span class="p">)</span>
-
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="nb">print</span><span class="p">(</span>
-                                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Smooth:</span><span class="se">\n</span><span class="s2">The &#39;PatientName&#39; tag could not &quot;</span>
-                                <span class="s2">&quot;be added to the database for the &#39;</span><span class="si">{}</span><span class="s2">&#39; &quot;</span>
-                                <span class="s2">&quot;parameter. This can lead to a subsequent &quot;</span>
-                                <span class="s2">&quot;issue during &quot;</span>
-                                <span class="s2">&quot;initialization!!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">out_val</span><span class="p">)</span>
-                            <span class="p">)</span>
-
-                        <span class="n">age</span> <span class="o">=</span> <span class="n">get_dbFieldValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">in_val</span><span class="p">,</span> <span class="s2">&quot;Age&quot;</span><span class="p">)</span>
-
-                        <span class="k">if</span> <span class="n">age</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                            <span class="n">tag_to_add</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Age&quot;</span>
-                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;field_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;int&quot;</span>
-                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;visibility&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;origin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;user&quot;</span>
-                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;default_value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">age</span>
-                            <span class="n">set_dbFieldValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">out_val</span><span class="p">,</span> <span class="n">tag_to_add</span><span class="p">)</span>
-
-                        <span class="n">pathology</span> <span class="o">=</span> <span class="n">get_dbFieldValue</span><span class="p">(</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">in_val</span><span class="p">,</span> <span class="s2">&quot;Pathology&quot;</span>
-                        <span class="p">)</span>
-
-                        <span class="k">if</span> <span class="n">pathology</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                            <span class="n">tag_to_add</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Pathology&quot;</span>
-                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;field_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;string&quot;</span>
-                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;visibility&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;origin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;user&quot;</span>
-                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;default_value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-                            <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pathology</span>
-                            <span class="n">set_dbFieldValue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="p">,</span> <span class="n">out_val</span><span class="p">,</span> <span class="n">tag_to_add</span><span class="p">)</span>
-
                         <span class="n">_</span><span class="p">,</span> <span class="n">fileOval</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">out_val</span><span class="p">)</span>
                         <span class="n">_</span><span class="p">,</span> <span class="n">fileIval</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">in_val</span><span class="p">)</span>
 
@@ -3581,13 +3189,15 @@
                             <span class="c1"># fmt : on</span>
 
                         <span class="k">if</span> <span class="n">fileOvalNoPref</span> <span class="o">==</span> <span class="n">fileIval</span><span class="p">:</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">inheritance_dict</span><span class="p">[</span><span class="n">out_val</span><span class="p">]</span> <span class="o">=</span> <span class="n">in_val</span>
-
+                            <span class="bp">self</span><span class="o">.</span><span class="n">tags_inheritance</span><span class="p">(</span>
+                                <span class="n">in_val</span><span class="p">,</span>
+                                <span class="n">out_val</span><span class="p">,</span>
+                            <span class="p">)</span>
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Smooth.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Smooth.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Smooth</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
         <span class="c1"># in_files parameter are normally already in absolute path format.</span>
@@ -3618,7 +3228,7 @@
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
     </div>
   </body>
 </html>

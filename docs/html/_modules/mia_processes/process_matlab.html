@@ -5,18 +5,20 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.process_matlab &#8212; mia_processes 2.2.1-dev documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/haiku.css" />
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <title>mia_processes.process_matlab &#8212; mia_processes 2.3.1-dev+a7d0828 documentation</title>
+    <link rel="stylesheet" href="../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../index.html">
-          <span>mia_processes 2.2.1-dev documentation</span></a></h1>
+          <span>mia_processes 2.3.1-dev+a7d0828 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.process_matlab</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -61,7 +63,7 @@
 
 
 <div class="viewcode-block" id="ProcessMatlab"><a class="viewcode-back" href="../../mia_processes.html#mia_processes.process_matlab.ProcessMatlab">[docs]</a><span class="k">class</span> <span class="nc">ProcessMatlab</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class overriding the ProcessMIA class, in order to use Matlab.</span>
+    <span class="sd">&quot;&quot;&quot;Class overriding the ProcessMIA class, in order to use Matlab.</span>
 
 <span class="sd">    .. Methods:</span>
 <span class="sd">        - add_exit: Add an exit to the Matlab script</span>
@@ -79,46 +81,46 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">matlab_script</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span></div>
 
 <div class="viewcode-block" id="ProcessMatlab.add_exit"><a class="viewcode-back" href="../../mia_processes.html#mia_processes.process_matlab.ProcessMatlab.add_exit">[docs]</a>    <span class="k">def</span> <span class="nf">add_exit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds an exit to the Matlab script.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Adds an exit to the Matlab script.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">matlab_script</span> <span class="o">+=</span> <span class="s2">&quot;exit&quot;</span></div>
 
 <div class="viewcode-block" id="ProcessMatlab.add_path"><a class="viewcode-back" href="../../mia_processes.html#mia_processes.process_matlab.ProcessMatlab.add_path">[docs]</a>    <span class="k">def</span> <span class="nf">add_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds a Matlab path to the Matlab script.</span>
+        <span class="sd">&quot;&quot;&quot;Adds a Matlab path to the Matlab script.</span>
 
 <span class="sd">        :param path: Matlab path</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">matlab_script</span> <span class="o">+=</span> <span class="s1">&#39;addpath(&quot;</span><span class="si">{0}</span><span class="s1">&quot;);&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">path</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ProcessMatlab.change_directory"><a class="viewcode-back" href="../../mia_processes.html#mia_processes.process_matlab.ProcessMatlab.change_directory">[docs]</a>    <span class="k">def</span> <span class="nf">change_directory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">directory</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Changes the working directory in the Matlab script.</span>
+        <span class="sd">&quot;&quot;&quot;Changes the working directory in the Matlab script.</span>
 
 <span class="sd">        :param directory: directory</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">matlab_script</span> <span class="o">+=</span> <span class="s1">&#39;cd(&quot;</span><span class="si">{0}</span><span class="s1">&quot;);&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ProcessMatlab.display_parameter"><a class="viewcode-back" href="../../mia_processes.html#mia_processes.process_matlab.ProcessMatlab.display_parameter">[docs]</a>    <span class="k">def</span> <span class="nf">display_parameter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameter_name</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Displays a given parameter in the Matlab script.</span>
+        <span class="sd">&quot;&quot;&quot;Displays a given parameter in the Matlab script.</span>
 
 <span class="sd">        :param parameter_name: name of the parameter</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">matlab_script</span> <span class="o">+=</span> <span class="s2">&quot;disp(</span><span class="si">{0}</span><span class="s2">);&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">parameter_name</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ProcessMatlab.run"><a class="viewcode-back" href="../../mia_processes.html#mia_processes.process_matlab.ProcessMatlab.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Runs the Matlab script.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Runs the Matlab script.&quot;&quot;&quot;</span>
         <span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">()</span>
         <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
             <span class="p">[</span><span class="n">config</span><span class="o">.</span><span class="n">get_matlab_path</span><span class="p">(),</span> <span class="s2">&quot;-nodisplay&quot;</span><span class="p">,</span> <span class="s2">&quot;-r&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">matlab_script</span><span class="p">]</span>
         <span class="p">)</span></div>
 
 <div class="viewcode-block" id="ProcessMatlab.set_global_variable"><a class="viewcode-back" href="../../mia_processes.html#mia_processes.process_matlab.ProcessMatlab.set_global_variable">[docs]</a>    <span class="k">def</span> <span class="nf">set_global_variable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variable_name</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds a global variable to the Matlab script.</span>
+        <span class="sd">&quot;&quot;&quot;Adds a global variable to the Matlab script.</span>
 
 <span class="sd">        :param variable_name: name of the variable</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">matlab_script</span> <span class="o">+=</span> <span class="s2">&quot;global </span><span class="si">{0}</span><span class="s2">;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">variable_name</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ProcessMatlab.set_variable"><a class="viewcode-back" href="../../mia_processes.html#mia_processes.process_matlab.ProcessMatlab.set_variable">[docs]</a>    <span class="k">def</span> <span class="nf">set_variable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variable_name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Assign a value to a variable in the Matlab script.</span>
+        <span class="sd">&quot;&quot;&quot;Assign a value to a variable in the Matlab script.</span>
 
 <span class="sd">        :param variable_name: name of the variable</span>
 <span class="sd">        :param value: value of the variable</span>
@@ -140,7 +142,7 @@
 
     <div class="footer" role="contentinfo">
         &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
     </div>
   </body>
 </html>
