@@ -2657,7 +2657,7 @@ class MultipleRegressionDesign(ProcessMIA):
                     self.output_directory, self.out_dir_name
                 )
 
-                # Create a directory for this analysi
+                # Create a directory for this analysis
                 if not os.path.exists(out_directory):
                     os.mkdir(out_directory)
 
@@ -2965,18 +2965,11 @@ class OneSampleTTestDesign(ProcessMIA):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
-        bricks (self.outputs) and the associated tags (self.inheritance_dict),
-        The optional self.inheritance_dict can have two structures. On the one
-        hand it can be a dictionary whose keys are the documents to inherit
-        metadata and the values the documents used for the inheritance of
-        these metadata. On the other hand, it can be a dictionary whose keys
-        are the documents to inherit metadata and the values are dictionary
-        with two keys; parent (for usual inheritance) or own_tags (to add a
-        new tag or modify an existing one). In order not to include an output
-        in the database, the name of the plug related to this output must be
-        an element of the list corresponding to the value of the optional key
-        "notInDb" of the self.outputs dictionary. To work properly this method
-        must return self.make_initResult() object.
+        bricks (self.outputs) and the associated tags. In order not to include
+        an output in the database, the name of the plug related to this output
+        must be an element of the list corresponding to the value of the
+        optional key "notInDb" of the self.outputs dictionary. To work
+        properly this method must return self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
@@ -2989,29 +2982,30 @@ class OneSampleTTestDesign(ProcessMIA):
             self.global_cal_value in ["<undefined>", Undefined]
         ):
             print(
-                "Initialization failed... If global_cal set to User, "
-                "required global_cal_value parameter"
+                "OneSampleTTestDesign brick: Initialization failed... "
+                "If global_cal set to User, required global_cal_value "
+                "parameter."
             )
             return self.make_initResult()
 
-        # If threshold_masking set to Absoulte or Relative
+        # If threshold_masking set to Absolute or Relative
         # threshold_mask_value should be specified
         if (
             self.threshold_masking == "Relative"
             or self.threshold_masking == "Absolute"
         ) and (self.threshold_mask_value in ["<undefined>", Undefined]):
             print(
-                "Initialization failed... If threshold_masking set to  "
-                "Relative or Absoulte, required threshold_mask_value "
-                "parameter"
+                "OneSampleTTestDesign brick: Initialization failed... If "
+                "threshold_masking set to Relative or Absolute, required "
+                "threshold_mask_value parameter."
             )
             return self.make_initResult()
 
         # Check in_files lenght
         if len(self.in_files) < 2:
             print(
-                "Initialization failed... "
-                "At least 2 files should be used for in_files"
+                "OneSampleTTestDesign brick: Initialization failed... "
+                "At least 2 files should be used for in_files."
             )
             return self.make_initResult()
 
@@ -3025,8 +3019,8 @@ class OneSampleTTestDesign(ProcessMIA):
             )
             if covariates is None:
                 print(
-                    "Initialization failed... "
-                    "Name, vector, centering, intercation should be defined "
+                    "OneSampleTTestDesign brick: Initialization failed... "
+                    "Name, vector, centering, interaction should be defined "
                     "for each covariate"
                 )
                 return self.make_initResult()
@@ -3059,6 +3053,8 @@ class OneSampleTTestDesign(ProcessMIA):
             self.outputs["spm_mat_file"] = os.path.join(
                 out_directory, "SPM.mat"
             )
+
+        # FIXME: Do we need to manage tag inheritance?
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -3345,18 +3341,11 @@ class PairedTTestDesign(ProcessMIA):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
-        bricks (self.outputs) and the associated tags (self.inheritance_dict),
-        The optional self.inheritance_dict can have two structures. On the one
-        hand it can be a dictionary whose keys are the documents to inherit
-        metadata and the values the documents used for the inheritance of
-        these metadata. On the other hand, it can be a dictionary whose keys
-        are the documents to inherit metadata and the values are dictionary
-        with two keys; parent (for usual inheritance) or own_tags (to add a
-        new tag or modify an existing one). In order not to include an output
-        in the database, the name of the plug related to this output must be
-        an element of the list corresponding to the value of the optional key
-        "notInDb" of the self.outputs dictionary. To work properly this method
-        must return self.make_initResult() object.
+        bricks (self.outputs) and the associated tags. In order not to include
+        an output in the database, the name of the plug related to this output
+        must be an element of the list corresponding to the value of the
+        optional key "notInDb" of the self.outputs dictionary. To work
+        properly this method must return self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
@@ -3369,8 +3358,8 @@ class PairedTTestDesign(ProcessMIA):
             self.global_cal_value in ["<undefined>", Undefined]
         ):
             print(
-                "Initialization failed... If global_cal set to User, "
-                "required global_cal_value parameter"
+                "PairedTTestDesign brick: Initialization failed... If "
+                "global_cal set to User, required global_cal_value parameter."
             )
             return self.make_initResult()
 
@@ -3381,16 +3370,16 @@ class PairedTTestDesign(ProcessMIA):
             or self.threshold_masking == "Absolute"
         ) and (self.threshold_mask_value in ["<undefined>", Undefined]):
             print(
-                "Initialization failed... If threshold_masking set to  "
-                "Relative or Absoulte, required threshold_mask_value "
-                "parameter"
+                "PairedTTestDesign brick: Initialization failed... If "
+                "threshold_masking set to Relative or Absolute, required "
+                "threshold_mask_value parameter"
             )
             return self.make_initResult()
 
         # Check in_files lenght
         if len(self.paired_files[0]) < 2:
             print(
-                "Initialization failed... "
+                "PairedTTestDesign brick: Initialization failed... "
                 "At least 2 files should be used for paired_files"
             )
             return self.make_initResult()
@@ -3405,8 +3394,8 @@ class PairedTTestDesign(ProcessMIA):
             )
             if covariates is None:
                 print(
-                    "Initialization failed... "
-                    "Name, vector, centering, intercation should be defined "
+                    "PairedTTestDesign brick: Initialization failed... "
+                    "Name, vector, centering, interaction should be defined "
                     "for each covariate"
                 )
                 return self.make_initResult()
@@ -3439,6 +3428,8 @@ class PairedTTestDesign(ProcessMIA):
             self.outputs["spm_mat_file"] = os.path.join(
                 out_directory, "SPM.mat"
             )
+
+        # FIXME: Do we need to manage tag inheritance?
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -3759,18 +3750,11 @@ class TwoSampleTTestDesign(ProcessMIA):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
-        bricks (self.outputs) and the associated tags (self.inheritance_dict),
-        The optional self.inheritance_dict can have two structures. On the one
-        hand it can be a dictionary whose keys are the documents to inherit
-        metadata and the values the documents used for the inheritance of
-        these metadata. On the other hand, it can be a dictionary whose keys
-        are the documents to inherit metadata and the values are dictionary
-        with two keys; parent (for usual inheritance) or own_tags (to add a
-        new tag or modify an existing one). In order not to include an output
-        in the database, the name of the plug related to this output must be
-        an element of the list corresponding to the value of the optional key
-        "notInDb" of the self.outputs dictionary. To work properly this method
-        must return self.make_initResult() object.
+        bricks (self.outputs) and the associated tags. In order not to include
+        an output in the database, the name of the plug related to this output
+        must be an element of the list corresponding to the value of the
+        optional key "notInDb" of the self.outputs dictionary. To work
+        properly this method must return self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
@@ -3783,8 +3767,9 @@ class TwoSampleTTestDesign(ProcessMIA):
             self.global_cal_value in ["<undefined>", Undefined]
         ):
             print(
-                "Initialization failed... If global_cal set to User, "
-                "required global_cal_value parameter"
+                "TwoSampleTTestDesign brick: Initialization failed... "
+                "If global_cal set to User, required global_cal_value "
+                "parameter."
             )
             return self.make_initResult()
 
@@ -3795,16 +3780,16 @@ class TwoSampleTTestDesign(ProcessMIA):
             or self.threshold_masking == "Absolute"
         ) and (self.threshold_mask_value in ["<undefined>", Undefined]):
             print(
-                "Initialization failed... If threshold_masking set to  "
-                "Relative or Absoulte, required threshold_mask_value "
-                "parameter"
+                "TwoSampleTTestDesign brick: Initialization failed... If "
+                "threshold_masking set to Relative or Absolute, required "
+                "threshold_mask_value parameter"
             )
             return self.make_initResult()
 
         # Check in_files lenght
         if (len(self.group1_files) < 2) or (len(self.group2_files) < 2):
             print(
-                "Initialization failed... "
+                "TwoSampleTTestDesign brick: Initialization failed... "
                 "At least 2 files should be used for group_files"
             )
             return self.make_initResult()
@@ -3819,8 +3804,8 @@ class TwoSampleTTestDesign(ProcessMIA):
             )
             if covariates is None:
                 print(
-                    "Initialization failed... "
-                    "Name, vector, centering, intercation should be defined "
+                    "TwoSampleTTestDesign brick: Initialization failed... "
+                    "Name, vector, centering, interaction should be defined "
                     "for each covariate"
                 )
                 return self.make_initResult()
@@ -3847,12 +3832,17 @@ class TwoSampleTTestDesign(ProcessMIA):
                 self.process.output_directory = out_directory
                 self.dict4runtime["out_directory"] = out_directory
             else:
-                print("No output_directory was found...!\n")
+                print(
+                    "TwoSampleTTestDesign brick: No output_directory was "
+                    "found...!\n"
+                )
                 return self.make_initResult()
 
             self.outputs["spm_mat_file"] = os.path.join(
                 out_directory, "SPM.mat"
             )
+
+        # FIXME: Do we need to manage tag inheritance?
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -3896,7 +3886,7 @@ class TwoSampleTTestDesign(ProcessMIA):
 
 
 def get_covariates(names, vectors, centerings, interactions=None):
-    """Generate the covariates list contaning dictionaries
+    """Generate the covariates list containing dictionaries
     with the following key :
     name, vector, interaction, centering
     """
