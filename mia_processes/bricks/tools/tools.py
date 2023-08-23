@@ -281,13 +281,13 @@ class Delete_data(ProcessMIA):
             "A list of regex. Files that match those "
             "regex will be kept and the others files "
             "will be deleted. "
-            "Mutually exclusif with to_remove_filters"
+            "Mutually exclusive with to_remove_filters"
         )
         to_remove_filters_desc = (
             "A list of regex.  Files that match those "
             "regex will be deleted and the others files "
             "will be kept. "
-            "Mutually exclusif with to_keep_filters"
+            "Mutually exclusive with to_keep_filters"
         )
 
         # Outputs description
@@ -336,8 +336,8 @@ class Delete_data(ProcessMIA):
 
         if self.to_keep_filters and self.to_remove_filters:
             print(
-                "\nInitialisation failed. to_keep_filters and "
-                "to_remove_filter parameters are mutually exclusif...!"
+                "\nDelete_data brick: Initialisation failed. to_keep_filters "
+                "and to_remove_filter parameters are mutually exclusive...!"
             )
             return
 
@@ -588,10 +588,9 @@ class Filter_Files_List(ProcessMIA):
 
                 else:
                     print(
-                        "\nThe initialisation of the Filter_Files_List brick "
-                        "failed because the index_filter parameter is "
-                        "greater than the length of the in_list "
-                        "parameter ...\n"
+                        "\nFilter_Files_List brick: Initialisation failed "
+                        "because the index_filter parameter is greater than "
+                        "the length of the in_list parameter ...\n"
                     )
 
             if len(self.index_filter) == 2:
@@ -605,26 +604,25 @@ class Filter_Files_List(ProcessMIA):
                             # fmt: on
                         else:
                             print(
-                                "\nThe initialisation of the "
-                                "Filter_Files_List brick failed because the "
-                                "second value of the index_filter parameter "
-                                "is greater than the length of the in_list "
-                                "parameter ...\n"
+                                "\nFilter_Files_List brick: Initialisation "
+                                "failed because the second value of the "
+                                "index_filter parameter is greater than the "
+                                "length of the in_list parameter ...\n"
                             )
 
                     else:
                         print(
-                            "\nThe initialisation of the Filter_Files_List "
-                            "brick failed because the first value of the "
-                            "index_filter parameter is greater than the "
-                            "length of the in_list parameter ...\n"
+                            "\nFilter_Files_List brick: Initialisation failed"
+                            " because the first value of the index_filter "
+                            "parameter is greater than the length of the "
+                            "in_list parameter ...\n"
                         )
 
                 else:
                     print(
-                        "\nThe initialisation of the Filter_Files_List brick"
-                        " failed because the first value of the index_filter"
-                        " parameter is greater than the second ...\n"
+                        "\nFilter_Files_List brick: Initialisation failed "
+                        "because the first value of the index_filter parameter"
+                        " is greater than the second ...\n"
                     )
 
             if self.outputs:
@@ -842,7 +840,7 @@ class Get_Conditions_From_csv(ProcessMIA):
 
         if len(self.csv_files) != len(self.design_type):
             print(
-                "\nInitialization failded... "
+                "\nGet_Conditions_From_csv brick: Initialization failed... "
                 "Please precise design type for each csv file"
             )
             return self.make_initResult()
@@ -864,8 +862,8 @@ class Get_Conditions_From_csv(ProcessMIA):
             )
             if not valid_bool:
                 print(
-                    "\nInitialization failded... "
-                    "One of the file is not a .csv file ...!"
+                    "\nGet_Conditions_From_csv brick: Initialization "
+                    "failed... One of the file is not a .csv file ...!"
                 )
                 return self.make_initResult()
 
@@ -882,8 +880,9 @@ class Get_Conditions_From_csv(ProcessMIA):
                             cond_names.append(col_names[i])
                         except Exception:
                             print(
-                                "\nInitialization failded... "
-                                "For bloc design, duration should be "
+                                "\nGet_Conditions_From_csv brick: "
+                                "Initialization failed... "
+                                "For block design, duration should be "
                                 "in the csv file ...!"
                             )
                             return self.make_initResult()
@@ -928,7 +927,7 @@ class Get_Conditions_From_csv(ProcessMIA):
 
 class Get_Patient_Name(ProcessMIA):
     """
-    *Get patient name from a file *
+    *Get patient name from a file*
 
     Please, see the complete documentation for the `Get_Patient_Name brick
     in the populse.mia_processes website
@@ -991,7 +990,7 @@ class Get_Patient_Name(ProcessMIA):
             )
             if sub_name is None:
                 print(
-                    "Please, fill 'PatientName' tag "
+                    "(Get_Patient_Name brick: Please, fill 'PatientName' tag "
                     "in the database for in file"
                 )
                 return self.make_initResult()
@@ -1250,8 +1249,7 @@ class Import_Data(ProcessMIA):
 
 class Input_Filter(ProcessMIA):
     """
-    * | To filter the content of the Data Browser tab or the
-      | output data of another brick.
+    *To filter the Data Browser tab or the output data of another brick*
 
     Please, see the complete documentation for the
     `Input_Filter in the populse.mia_processes website
@@ -1315,7 +1313,7 @@ class Input_Filter(ProcessMIA):
         super(Input_Filter, self).list_outputs()
 
         # TODO: MAYBE WE DON'T NEED THAT, IT SHOULD BE DONE IN
-        # open_filter OF PipelineEditor?
+        #       open_filter of PipelineEditor?
 
         # Outputs definition and tags inheritance (optional)
 
@@ -1370,8 +1368,8 @@ class Input_Filter(ProcessMIA):
 
 class List_Duplicate(ProcessMIA):
     """
-    * | From a file name, generating a list containing this file name
-      | and the file name itself.
+    *From a file name, generate a list containing that file name and the
+    file name itself*
 
     Please, see the complete documentation for the
     `List_Duplicate in the populse.mia_processes website
@@ -1448,7 +1446,7 @@ class List_Duplicate(ProcessMIA):
 
 class List_To_File(ProcessMIA):
     """
-    * From several filenames, selects and generates a file.
+    *From several filenames, selects and generates a file*
 
     Please, see the complete documentation for the
     `List_To_File in the populse.mia_processes website
@@ -1532,10 +1530,9 @@ class List_To_File(ProcessMIA):
 
                 else:
                     print(
-                        "\nThe initialisation of the List_To_File brick "
-                        "failed because the index_filter parameter is "
-                        "greater than the length of file_list "
-                        "parameter ...\n"
+                        "\nList_To_File brick brick: Initialisation failed "
+                        "because the index_filter parameter is greater than "
+                        "the length of file_list parameter ...\n"
                     )
 
         if self.outputs:
