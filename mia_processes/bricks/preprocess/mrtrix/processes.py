@@ -16,6 +16,7 @@ populse_mia.
         - DWIPreproc
         - FitTensor
         - Generate5tt
+        - Generate5tt2gmwmi
         - MRCat
         - MRConvert
         - MRDeGibbs
@@ -24,8 +25,8 @@ populse_mia.
         - MTnormalise
         - ResponseSDDhollander
         - TensorMetrics
-        - Tractography - to do
-
+        - Tractography
+        - TransformFSLConvert
 """
 
 ##########################################################################
@@ -706,7 +707,6 @@ class DWIDenoise(ProcessMIA):
             if not valid_ext:
                 print("\nThe input image format is not recognized...!")
                 return self.make_initResult()
-                return
 
             if self.output_directory:
                 self.outputs["out_file"] = os.path.join(
@@ -1408,6 +1408,107 @@ class Generate5tt(ProcessMIA):
         return self.process.run(configuration_dict={})
 
 
+class Generate5tt2gmwmi(ProcessMIA):
+    """
+    *Generate a mask image appropriate for seeding streamlines 
+    on the grey matter-white matter interface (5tt2gmwmi command)*
+
+    Please, see the complete documentation for the `Generate5tt2gmwmi brick
+    in the populse.mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/Generate5tt2gmwmi.html>`_
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instantiation.
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(Generate5tt2gmwmi, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = ["nipype", "mrtrix", "fsl", "freesurfer"]
+
+        # Mandatory inputs description
+        in_file_desc = (
+            "The input 5TT segmented anatomical image (a pathlike object"
+            "string representing an existing file)"
+        )
+        # Optionnal inputs description
+        in_mask_desc = (
+            "Filter an input mask image according to those voxels that lie "
+            "upon the grey matter - white matter boundary (a pathlike object"
+            "string representing an existing file)"
+        )
+        # Outputs description
+        out_file_desc = (
+            "The output mask image (a pathlike object or "
+            "string representing a file)"
+        )
+
+        # Mandatory inputs traits
+        self.add_trait(
+            "in_file", File(output=False, optional=False, desc=in_file_desc)
+        )
+
+        # Optional inputs
+        self.add_trait(
+            "in_mask", File(output=False, optional=True, desc=in_mask_desc)
+        )
+
+        # Outputs traits
+        self.add_trait(
+            "out_file", File(output=True, optional=False, desc=out_file_desc)
+        )
+
+        # No nipype command for this process
+        self.init_default_traits()
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(Generate5tt2gmwmi, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.in_file:
+            valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
+
+            if not valid_ext:
+                print("\nThe input image format is not recognized...!")
+                return self.make_initResult()
+
+            if self.output_directory:
+                self.outputs["out_file"] = os.path.join(
+                    self.output_directory, fileName + "_gmwmSeed." + in_ext
+                )
+
+        if self.outputs:
+            self.inheritance_dict[self.outputs["out_file"]] = self.in_file
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(Generate5tt2gmwmi, self).run_process_mia()
+        cmd = ["5tt2gmwmi"]
+        if self.in_mask:
+            cmd += ["-mask_in", self.in_mask]
+        cmd += [self.in_file, self.out_file]
+
+        return mrtrix.mrtrix_call(cmd)
+
+
 class MRCat(ProcessMIA):
     """
     *Concatenate several images into one*
@@ -2023,7 +2124,6 @@ class MRDeGibbs(ProcessMIA):
             if not valid_ext:
                 print("\nThe input image format is not recognized...!")
                 return self.make_initResult()
-                return
 
             if self.output_directory:
                 self.outputs["out_file"] = os.path.join(
@@ -2460,7 +2560,6 @@ class MRTransform(ProcessMIA):
             if not valid_ext:
                 print("\nThe input image format is not recognized...!")
                 return self.make_initResult()
-                return
 
             if self.output_directory:
                 self.outputs["out_file"] = os.path.join(
@@ -2885,7 +2984,6 @@ class ResponseSDDhollander(ProcessMIA):
             if not valid_ext:
                 print("\nThe input image format is not recognized...!")
                 return self.make_initResult()
-                return
 
             if self.output_directory:
                 self.outputs["csf_file"] = os.path.join(
@@ -3223,7 +3321,6 @@ class TensorMetrics(ProcessMIA):
             if not valid_ext:
                 print("\nThe input image format is not recognized...!")
                 return self.make_initResult()
-                return
 
             if self.output_directory:
                 if self.get_adc:
@@ -3380,17 +3477,119 @@ class Tractography(ProcessMIA):
             "regions (a boolean)"
         )
         use_rk4_desc = "Use 4th-order Runge-Kutta integration (a boolean)"
-        act_file_desc = (
+        seed_dynamic_desc = (
+            "Determine seed points dynamically using the SIFT model "
+            "(must not provide any other seeding mechanism)."
+            "(a pathlike object string representing an existing file)"
+        )
+        seed_gmwmi_desc = (
+            "Seed from the grey matter - white matter interface "
+            "(only valid if using ACT framework)."
+            "(a pathlike object string representing an existing file)"
+        )
+        seed_grid_voxel_desc = (
+            "Seed a fixed number of streamlines per voxel in a mask image; "
+            "place seeds on a 3D mesh grid (a tuple of the form: (a pathlike "
+            "object or string representing an existing file, an integer)) "
+        )
+        seed_image_desc = (
+            "Seed streamlines entirely at random within a mask image"
+            "(a pathlike object string representing an existing file)"
+        )
+        seed_rejection_desc = (
+            " Seed from an image using rejection sampling "
+            "(a pathlike object string representing an existing file)"
+        )
+        seed_rnd_voxel_desc = (
+            "Seed a fixed number of streamlines per voxel in a mask image; "
+            "random placement of seeds in each voxel."
+            "(a tuple of the form: (a pathlike object or string representing "
+            "an existing file, an integer)) "
+        )
+        seed_sphere_desc = (
+            "Spherical seed. (a tuple of the form: (a float, a float, "
+            "a float, a float)) "
+        )
+        tracto_seeds_number_desc = (
+            "Set the number of seeds that tckgen will attempt to track from. "
+            "(an integer)"
+        )
+        tracto_max_attempts_per_seed_number_desc = (
+            "Set the maximum number of times that the tracking algorithm "
+            "should attempt to find an appropriate tracking direction from a "
+            "given seed point. (an integer, default is 1000) "
+        )
+        tracto_seed_cutoff_desc = (
+            "Set the minimum FA or FOD amplitude for seeding tracks "
+            "(an integer, default is 0.1)."
+        )
+        tracto_seed_unidirectional_desc = (
+            "Track from the seed point in one direction only"
+            "(a boolean)"
+
+        )
+        tracto_seed_direction_desc = (
+            "Specify a seeding direction for the tracking "
+            "(a tuple of the form: (a float, a float, a float))"
+        )
+        tracto_get_output_seeds_desc = (
+            "Get the seed location of all successful streamlines into a file"
+            "(a boolean)"
+        )
+        roi_excl_desc = (
+            "Specify an exclusion region of interest, streamlines that enter "
+            "ANY exclude region will be discarded. (a pathlike "
+            "object or string representing an existing file or a tuple of the "
+            "form: (a float, a float, a float, a float))"
+        )
+        roi_incl_desc = (
+            "Specify an inclusion region of interest, streamlines must "
+            "traverse ALL inclusion regions to be accepted. (a pathlike "
+            "object or string representing an existing file or a tuple of the "
+            "form: (a float, a float, a float, a float))"
+        )
+        roi_incl_ordered_desc = (
+            "Specify an inclusion region of interest, streamlines must "
+            "traverse ALL inclusion_ordered regions in the order "
+            "they are specified in order to be accepted. (a pathlike "
+            "object or string representing an existing file or a tuple of the "
+            "form: (a float, a float, a float, a float))"
+        )
+        roi_mask_desc = (
+            "Specify a masking region of interest. If defined,streamlines "
+            "exiting the mask will be truncated. (a pathlike "
+            "object or string representing an existing file or a tuple of the "
+            "form: (a float, a float, a float, a float))"
+        )
+        act_image_desc = (
             " Use the Anatomically-Constrained Tractography "
             "framework during tracking (provided image must be "
             "in the 5TT ie five tissue type format(a pathlike object"
             "string representing an existing file)"
+        )
+        backtrack_desc = (
+            "Allow tracks to be truncated.  (a boolean)"
+        )
+        crop_at_gmwmi_desc = (
+            "Crop streamline endpoints more precisely as they cross the "
+            "GM-WM interface (a boolean)"
+        )
+        iFOD_power_desc = (
+            "Raise the FOD to the power specified (default is 1/nsamples) "
+            "(an integer)"
+        )
+        iFOD2_n_samples_desc = (
+            " Set the number of FOD samples to take per step for the 2nd order (iFOD2) method. "
         )
 
         # Outputs description
         out_file_desc = (
             "Output file containing tracks (a pathlike object or "
             "string representing a file) "
+        )
+        output_seeds_desc = (
+            "Output the seed location of all successful streamlines to a file."
+            "(a pathlike object or string representing a file) "
         )
 
         # Mandatory inputs traits
@@ -3538,17 +3737,225 @@ class Tractography(ProcessMIA):
         )
 
         self.add_trait(
-            "act_file", File(output=False, optional=True, desc=act_file_desc)
+            "seed_dynamic",
+            File(output=False, optional=True, desc=seed_dynamic_desc)
+        )
+
+        self.add_trait(
+            "seed_gmwmi",
+            File(output=False, optional=True, desc=seed_gmwmi_desc)
+        )
+
+        self.add_trait(
+            "seed_grid_voxel",
+            Tuple(
+                File,
+                Int,
+                output=False,
+                optional=True,
+                desc=seed_grid_voxel_desc,
+            ),
+        )
+
+        self.add_trait(
+            "seed_image",
+            File(output=False, optional=True, desc=seed_image_desc)
+        )
+
+        self.add_trait(
+            "seed_rejection",
+            File(output=False, optional=True, desc=seed_rejection_desc)
+        )
+
+        self.add_trait(
+            "seed_rnd_voxel",
+            Tuple(
+                File,
+                Int,
+                output=False,
+                optional=True,
+                desc=seed_rnd_voxel_desc,
+            ),
+        )
+
+        self.add_trait(
+            "seed_sphere",
+            Tuple(
+                Float,
+                Float,
+                Float,
+                Float,
+                output=False,
+                optional=True,
+                desc=seed_sphere_desc,
+            ),
+        )
+
+        self.add_trait(
+            "tracto_seeds_number",
+            Either(
+                Undefined,
+                Int(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=tracto_seeds_number_desc,
+            ),
+        )
+
+        self.add_trait(
+            "tracto_max_attempts_per_seed_number",
+            Either(
+                Undefined,
+                Int(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=tracto_max_attempts_per_seed_number_desc,
+            ),
+        )
+
+        self.add_trait(
+            "tracto_seed_cutoff",
+            Float(
+                0.1,
+                output=False,
+                optional=True,
+                desc=tracto_seed_cutoff_desc,
+            ),
+        )
+
+        self.add_trait(
+            "tracto_seed_unidirectional",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=tracto_seed_unidirectional_desc,
+            ),
+        )
+
+        self.add_trait(
+            "tracto_seed_direction",
+            Tuple(
+                Float,
+                Float,
+                Float,
+                output=False,
+                optional=True,
+                desc=tracto_seed_direction_desc,
+            ),
+        )
+
+        self.add_trait(
+            "tracto_get_output_seeds",
+            Bool(
+                True,
+                output=False,
+                optional=True,
+                desc=tracto_get_output_seeds_desc,
+            ),
+        )
+
+        self.add_trait(
+            "roi_excl",
+            Either(
+                File(),
+                Tuple(Float, Float, Float, Float),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=roi_excl_desc,
+            ),
+        )
+
+        self.add_trait(
+            "roi_incl",
+            Either(
+                File(),
+                Tuple(Float, Float, Float, Float),
+                output=False,
+                optional=True,
+                desc=roi_incl_desc,
+            ),
+        )
+
+        self.add_trait(
+            "roi_incl_ordered",
+            Either(
+                File(),
+                Tuple(Float, Float, Float, Float),
+                output=False,
+                optional=True,
+                desc=roi_incl_ordered_desc,
+            ),
+        )
+
+        self.add_trait(
+            "roi_mask",
+            Either(
+                File(),
+                Tuple(Float, Float, Float, Float),
+                output=False,
+                optional=True,
+                desc=roi_mask_desc,
+            ),
+        )
+
+        self.add_trait(
+            "act_image", File(output=False, optional=True, desc=act_image_desc)
+        )
+
+        self.add_trait(
+            "backtrack",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=backtrack_desc,
+            ),
+        )
+
+        self.add_trait(
+            "crop_at_gmwmi",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=crop_at_gmwmi_desc,
+            ),
+        )
+
+        self.add_trait(
+            "iFOD_power",
+            Int(
+                output=False,
+                optional=True,
+                desc=iFOD_power_desc,
+            ),
+        )
+
+        self.add_trait(
+            "iFOD2_n_samples",
+            Int(
+                output=False,
+                optional=True,
+                desc=iFOD2_n_samples_desc,
+            ),
         )
 
         # Outputs traits
         self.add_trait(
-            "out_file", File(output=True, optional=True, desc=out_file_desc)
+            "out_file", File(output=True, optional=False, desc=out_file_desc)
+        )
+        self.add_trait(
+            "output_seeds",
+            File(output=True, optional=True, desc=output_seeds_desc)
         )
 
         self.init_default_traits()
 
-        self.init_process("nipype.interfaces.mrtrix3.Tractograohy")
+        self.init_process("nipype.interfaces.mrtrix3.Tractography")
 
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
@@ -3566,18 +3973,28 @@ class Tractography(ProcessMIA):
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
-            valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
-
+            valid_ext, in_ext, file_name = checkFileExt(self.in_file, EXT)
             if not valid_ext:
                 print("\nThe input image format is not recognized...!")
                 return self.make_initResult()
-                return
 
             if self.output_directory:
-                self.outputs["out_file"] = ""
+                # TODO: add number of streamline in name ?
+                out_file_name = file_name + + "_tracto.tck"
+                self.outputs["out_file"] = os.path.join(self.output_directory,
+                                                        out_file_name)
+                if self.tracto_get_output_seeds:
+                    out_seed_file_name = file_name + "_tracto_out_seeds" + in_ext
+                    self.outputs["output_seeds"] = os.path.join(
+                        self.output_directory,
+                        out_seed_file_name
+                        )
 
         if self.outputs:
             self.inheritance_dict[self.outputs["out_file"]] = self.in_file
+            if self.tracto_get_output_seeds:
+                self.inheritance_dict[
+                    self.outputs["output_seeds"]] = self.in_file
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -3585,5 +4002,185 @@ class Tractography(ProcessMIA):
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
         super(Tractography, self).run_process_mia()
+        # Nipype Tractoraphy process is not up to date for some option
+        # so the "args" input is used for several options
+        self.process.in_file = self.in_file
+        self.process.out_file = self.out_file
+        self.process.algorithm = self.algorithm
+        self.process.cutoff = self.cutoff
+        self.process.noprecompt = self.noprecompt
+        self.process.select = self.select
+        self.process.use_rk4 = self.use_rk4
+        self.process.backtrack = self.backtrack
+        self.process.crop_at_gmwmi = self.crop_at_gmwmi
+
+        if self.angle:
+            self.process.angle = self.angle
+        if self.downsample:
+            self.process.downsample = self.downsample
+        if self.max_length:
+            self.process.max_length = self.max_length
+        if self.min_length:
+            self.process.min_length = self.min_length
+        if self.trials:
+            self.process.trials = self.trials
+        if self.step_size:
+            self.process.step_size = self.step_size
+        if self.seed_grid_voxel:
+            self.process.seed_grid_voxel = self.seed_grid_voxel
+        if self.seed_dynamic:
+            self.process.seed_dynamic = self.seed_dynamic
+        if self.seed_gmwmi:
+            self.process.seed_gmwmi = self.seed_gmwmi
+        if self.seed_image:
+            self.process.seed_image = self.seed_image
+        if self.seed_rejection:
+            self.process.seed_rejection = self.seed_rejection
+        if self.seed_rnd_voxel:
+            self.process.seed_rnd_voxel = self.seed_rnd_voxel
+        if self.seed_sphere:
+            self.process.seed_sphere = self.seed_sphere
+        args = ""
+        if self.tracto_seeds_number:
+            args += "-seeds" + self.tracto_seeds_number + ""
+        if self.tracto_max_attempts_per_seed_number:
+            args += "-max_attempts_per_seed" + self.tracto_max_attempts_per_seed_number + ""
+        if self.tracto_seed_cutoff:
+            args += "-seed_cutoff" + self.tracto_seed_cutoff + ""
+        if self.tracto_seed_unidirectional:
+            args += "-seed_unidirectional"
+        if self.tracto_seed_direction:
+            args += "-seed_direction" + self.tracto_seed_direction + ""
+        if self.roi_excl:
+            self.process.roi_excl = self.roi_excl
+        if self.roi_incl:
+            self.process.roi_incl = self.roi_incl
+        if self.roi_incl_ordered:
+            args += "" + self.roi_incl + " "
+        if self.roi_mask:
+            self.process.roi_mask = self.roi_mask
+        if self.act_image:
+            self.process.act_file = self.act_image
+        if self.iFOD_power:
+            self.process.power = self.iFOD_power
+        if self.iFOD2_n_samples:
+            self.process.in_samples = self.iFOD2_n_samples
+        if self.tracto_get_output_seeds:
+            self.process.output_seeds = self.output_seeds
+
+        if args:
+            self.process.args = args
+
+        return self.process.run(configuration_dict={})
+
+
+class TransformFSLConvert(ProcessMIA):
+    """
+    *Perform conversion between FSL’s transformation matrix format 
+    to mrtrix3’s. (transformconvert command)*
+
+    Please, see the complete documentation for the `TransformFSLConvert brick
+    in the populse.mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/TransformFSLConvert.html>`_
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instantiation.
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(TransformFSLConvert, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = ["nipype", "mrtrix"]
+
+        # Mandatory inputs description
+        in_file_desc = (
+            "FLIRT input image (a pathlike object"
+            "string representing an existing file)"
+        )
+        reference_desc = (
+            "FLIRT reference image (a pathlike object"
+            "string representing an existing file)"
+        )
+        in_transform_desc = (
+            "FLIRT output transformation matrix (a pathlike object"
+            "string representing an existing file)"
+        )
+
+        # Outputs description
+        out_transform_desc = (
+            "Output transformed affine in mrtrix’s format.  (a pathlike object or "
+            "string representing a file) "
+        )
+
+        # Mandatory inputs traits
+        self.add_trait(
+            "in_file", File(output=False, optional=False, desc=in_file_desc)
+        )
+
+        self.add_trait(
+            "reference",
+            File(output=False, optional=False, desc=reference_desc)
+        )
+
+        self.add_trait(
+            "in_transform",
+            File(output=False, optional=False, desc=in_transform_desc)
+        )
+
+        # Outputs traits
+        self.add_trait(
+            "out_transform",
+            File(output=True, optional=False, desc=out_transform_desc)
+        )
+
+        self.init_default_traits()
+
+        self.init_process("nipype.interfaces.mrtrix3.TransformFSLConvert")
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(TransformFSLConvert, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.in_transform:
+            valid_ext, in_ext, file_name = checkFileExt(
+                self.in_file, {"MAT": "mat"})
+            if not valid_ext:
+                print("\nThe transform matrice format is not recognized...!")
+                return self.make_initResult()
+            if self.output_directory:
+                self.outputs["out_transform"] = os.path.join(
+                    self.output_directory,
+                    file_name + "_mrtrix.txt"
+                )
+
+        if self.outputs:
+            self.inheritance_dict[self.outputs["out_transform"]] = self.in_transform
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(TransformFSLConvert, self).run_process_mia()
+        self.process.flirt_import = True
+        self.process.in_file = self.in_file
+        self.process.in_transform = self.in_transform
+        self.process.reference = self.reference
+        self.process.out_transform = self.out_transform
 
         return self.process.run(configuration_dict={})

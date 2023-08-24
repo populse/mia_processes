@@ -21,6 +21,7 @@ from .processes import (  # noqa: F401
     DWIPreproc,
     FitTensor,
     Generate5tt,
+    Generate5tt2gmwmi,
     MRCat,
     MRConvert,
     MRDeGibbs,
@@ -30,4 +31,5 @@ from .processes import (  # noqa: F401
     ResponseSDDhollander,
     TensorMetrics,
     Tractography,
+    TransformFSLConvert
 )
