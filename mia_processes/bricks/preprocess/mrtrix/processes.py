@@ -132,7 +132,9 @@ class BrainMask(ProcessMIA):
                 )
 
         if self.outputs:
-            self.inheritance_dict[self.outputs["out_file"]] = self.in_file
+            self.tags_inheritance(
+                in_file=self.in_file, out_file=self.outputs["out_file"]
+            )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -370,16 +372,23 @@ class ConstrainedSphericalDeconvolution(ProcessMIA):
                     )
 
         if self.outputs:
-            self.inheritance_dict[self.outputs["csf_odf"]] = self.in_file
-            self.inheritance_dict[self.outputs["csf_txt"]] = self.in_file
-            self.inheritance_dict[self.outputs["gm_odf"]] = self.in_file
-            self.inheritance_dict[self.outputs["gm_txt"]] = self.in_file
-            self.inheritance_dict[self.outputs["wm_odf"]] = self.in_file
-            self.inheritance_dict[self.outputs["wm_txt"]] = self.in_file
+            for k in [
+                "csf_odf",
+                "csf_txt",
+                "gm_odf",
+                "gm_txt",
+                "wm_odf",
+                "wm_txt",
+            ]:
+                self.tags_inheritance(
+                    in_file=self.in_file, out_file=self.outputs[k]
+                )
+
             if self.get_predicted_signal:
-                self.inheritance_dict[
-                    self.outputs["predicted_signal_file"]
-                ] = self.in_file
+                self.tags_inheritance(
+                    in_file=self.in_file,
+                    out_file=self.outputs["predicted_signal_file"],
+                )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -559,12 +568,15 @@ class DWIBiasCorrect(ProcessMIA):
                     )
 
         if self.outputs:
-            self.inheritance_dict[self.outputs["out_file"]] = self.in_file
+            self.tags_inheritance(
+                in_file=self.in_file, out_file=self.outputs["out_file"]
+            )
 
             if self.bias:
-                self.inheritance_dict[
-                    self.outputs["bias_field_map"]
-                ] = self.in_file
+                self.tags_inheritance(
+                    in_file=self.in_file,
+                    out_file=self.outputs["bias_field_map"],
+                )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -719,10 +731,14 @@ class DWIDenoise(ProcessMIA):
                     )
 
         if self.outputs:
-            self.inheritance_dict[self.outputs["out_file"]] = self.in_file
+            self.tags_inheritance(
+                in_file=self.in_file, out_file=self.outputs["out_file"]
+            )
 
             if self.noise:
-                self.inheritance_dict[self.outputs["noise_map"]] = self.in_file
+                self.tags_inheritance(
+                    in_file=self.in_file, out_file=self.outputs["noise_map"]
+                )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -875,7 +891,9 @@ class DWIExtract(ProcessMIA):
                 )
 
         if self.outputs:
-            self.inheritance_dict[self.outputs["out_file"]] = self.in_file
+            self.tags_inheritance(
+                in_file=self.in_file, out_file=self.outputs["out_file"]
+            )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -1138,7 +1156,9 @@ class DWIPreproc(ProcessMIA):
                 )
 
         if self.outputs:
-            self.inheritance_dict[self.outputs["out_file"]] = self.in_file
+            self.tags_inheritance(
+                in_file=self.in_file, out_file=self.outputs["out_file"]
+            )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -1286,11 +1306,14 @@ class FitTensor(ProcessMIA):
                     )
 
         if self.outputs:
-            self.inheritance_dict[self.outputs["out_file"]] = self.in_file
+            self.tags_inheritance(
+                in_file=self.in_file, out_file=self.outputs["out_file"]
+            )
             if self.get_predicted_signal:
-                self.inheritance_dict[
-                    self.outputs["predicted_signal_file"]
-                ] = self.in_file
+                self.tags_inheritance(
+                    in_file=self.in_file,
+                    out_file=self.outputs["predicted_signal_file"],
+                )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -1393,7 +1416,9 @@ class Generate5tt(ProcessMIA):
                 )
 
         if self.outputs:
-            self.inheritance_dict[self.outputs["out_file"]] = self.in_file
+            self.tags_inheritance(
+                in_file=self.in_file, out_file=self.outputs["out_file"]
+            )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -1410,7 +1435,7 @@ class Generate5tt(ProcessMIA):
 
 class Generate5tt2gmwmi(ProcessMIA):
     """
-    *Generate a mask image appropriate for seeding streamlines 
+    *Generate a mask image appropriate for seeding streamlines
     on the grey matter-white matter interface (5tt2gmwmi command)*
 
     Please, see the complete documentation for the `Generate5tt2gmwmi brick
@@ -1493,8 +1518,9 @@ class Generate5tt2gmwmi(ProcessMIA):
                 )
 
         if self.outputs:
-            self.inheritance_dict[self.outputs["out_file"]] = self.in_file
-
+            self.tags_inheritance(
+                in_file=self.in_file, out_file=self.outputs["out_file"]
+            )
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
 
@@ -1630,7 +1656,9 @@ class MRCat(ProcessMIA):
 
         if self.outputs:
             # FIXME : out_file inherits only from first file
-            self.inheritance_dict[self.outputs["out_file"]] = self.in_files[0]
+            self.tags_inheritance(
+                in_file=self.in_files[0], out_file=self.outputs["out_file"]
+            )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -1716,13 +1744,6 @@ class MRConvert(ProcessMIA):
             "acquisition in a text file (MRTrix format) (a pathlike object "
             "or string representing an existing file) "
         )
-        # grad_fsl_desc = (
-        #     "Provide the diffusion-weighted gradient scheme used in the "
-        #     "acquisition in FSL bvecs/bvals format files. (a tuple of "
-        #     "the form: (a pathlike object or string representing an "
-        #     "existing file, a pathlike object or string representing "
-        #     "an existing file), it should be (bvecs, bvals)) "
-        # )
         in_bvec_desc = (
             "Bvecs file in FSL format (a pathlike object or string "
             "representing an existing file) "
@@ -1845,15 +1866,6 @@ class MRConvert(ProcessMIA):
             "grad_file", File(output=False, optional=True, desc=grad_file_desc)
         )
 
-        # FIXME: in_bvec and in_bval already in grad-fsl ? (command -fslgrad)
-        # self.add_trait(
-        #     "grad_fsl",
-        #     Tuple(
-        #         File(), File(), output=False, optional=True,
-        #         desc=grad_fsl_desc
-        #     ),
-        # )
-
         self.add_trait(
             "in_bvec", File(output=False, optional=True, desc=in_bvec_desc)
         )
@@ -1940,10 +1952,16 @@ class MRConvert(ProcessMIA):
                     )
 
         if self.outputs:
-            self.inheritance_dict[self.outputs["out_file"]] = self.in_file
+            self.tags_inheritance(
+                in_file=self.in_file, out_file=self.outputs["out_file"]
+            )
             if self.export_bvec_bval:
-                self.inheritance_dict[self.outputs["out_bvec"]] = self.in_file
-                self.inheritance_dict[self.outputs["out_bval"]] = self.in_file
+                self.tags_inheritance(
+                    in_file=self.in_file, out_file=self.outputs["out_bvec"]
+                )
+                self.tags_inheritance(
+                    in_file=self.in_file, out_file=self.outputs["out_bval"]
+                )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -2131,7 +2149,9 @@ class MRDeGibbs(ProcessMIA):
                 )
 
         if self.outputs:
-            self.inheritance_dict[self.outputs["out_file"]] = self.in_file
+            self.tags_inheritance(
+                in_file=self.in_file, out_file=self.outputs["out_file"]
+            )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -2285,7 +2305,9 @@ class MRMath(ProcessMIA):
                 )
 
         if self.outputs:
-            self.inheritance_dict[self.outputs["out_file"]] = self.in_file
+            self.tags_inheritance(
+                in_file=self.in_file, out_file=self.outputs["out_file"]
+            )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -2567,7 +2589,9 @@ class MRTransform(ProcessMIA):
                 )
 
         if self.outputs:
-            self.inheritance_dict[self.outputs["out_file"]] = self.in_file
+            self.tags_inheritance(
+                in_file=self.in_file, out_file=self.outputs["out_file"]
+            )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -2774,7 +2798,9 @@ class MTnormalise(ProcessMIA):
 
         if self.outputs:
             # FIXME: out_files inherits only from the first file
-            self.inheritance_dict[self.outputs["out_files"]] = self.in_files[0]
+            self.tags_inheritance(
+                in_file=self.in_files[0], out_file=self.outputs["out_files"]
+            )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -3002,13 +3028,14 @@ class ResponseSDDhollander(ProcessMIA):
                     )
 
         if self.outputs:
-            self.inheritance_dict[self.outputs["csf_file"]] = self.in_file
-            self.inheritance_dict[self.outputs["gm_file"]] = self.in_file
-            self.inheritance_dict[self.outputs["wm_file"]] = self.in_file
+            for k in ["csf_file", "gm_file", "wm_file"]:
+                self.tags_inheritance(
+                    in_file=self.in_file, out_file=self.outputs[k]
+                )
             if self.get_final_voxels:
-                self.inheritance_dict[
-                    self.outputs["voxels_image"]
-                ] = self.in_file
+                self.tags_inheritance(
+                    in_file=self.in_file, out_file=self.outputs["voxels_image"]
+                )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -3366,25 +3393,41 @@ class TensorMetrics(ProcessMIA):
 
         if self.outputs:
             if self.get_adc:
-                self.inheritance_dict[self.outputs["adc_file"]] = self.in_dti
+                self.tags_inheritance(
+                    in_file=self.in_dti, out_file=self.outputs["adc_file"]
+                )
             if self.get_fa:
-                self.inheritance_dict[self.outputs["fa_file"]] = self.in_dti
+                self.tags_inheritance(
+                    in_file=self.in_dti, out_file=self.outputs["fa_file"]
+                )
             if self.get_ad:
-                self.inheritance_dict[self.outputs["ad_file"]] = self.in_dti
+                self.tags_inheritance(
+                    in_file=self.in_dti, out_file=self.outputs["ad_file"]
+                )
             if self.get_rd:
-                self.inheritance_dict[self.outputs["rd_file"]] = self.in_dti
+                self.tags_inheritance(
+                    in_file=self.in_dti, out_file=self.outputs["rd_file"]
+                )
             if self.get_cl:
-                self.inheritance_dict[self.outputs["cl_file"]] = self.in_dti
+                self.tags_inheritance(
+                    in_file=self.in_dti, out_file=self.outputs["cl_file"]
+                )
             if self.get_cp:
-                self.inheritance_dict[self.outputs["cp_file"]] = self.in_dti
+                self.tags_inheritance(
+                    in_file=self.in_dti, out_file=self.outputs["cp_file"]
+                )
             if self.get_cs:
-                self.inheritance_dict[self.outputs["cs_file"]] = self.in_dti
+                self.tags_inheritance(
+                    in_file=self.in_dti, out_file=self.outputs["cs_file"]
+                )
             if self.get_value:
-                self.inheritance_dict[self.outputs["value_file"]] = self.in_dti
+                self.tags_inheritance(
+                    in_file=self.in_dti, out_file=self.outputs["value_file"]
+                )
             if self.get_vector:
-                self.inheritance_dict[
-                    self.outputs["vector_file"]
-                ] = self.in_dti
+                self.tags_inheritance(
+                    in_file=self.in_dti, out_file=self.outputs["vector_file"]
+                )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -3524,9 +3567,7 @@ class Tractography(ProcessMIA):
             "(an integer, default is 0.1)."
         )
         tracto_seed_unidirectional_desc = (
-            "Track from the seed point in one direction only"
-            "(a boolean)"
-
+            "Track from the seed point in one direction only" "(a boolean)"
         )
         tracto_seed_direction_desc = (
             "Specify a seeding direction for the tracking "
@@ -3567,9 +3608,7 @@ class Tractography(ProcessMIA):
             "in the 5TT ie five tissue type format(a pathlike object"
             "string representing an existing file)"
         )
-        backtrack_desc = (
-            "Allow tracks to be truncated.  (a boolean)"
-        )
+        backtrack_desc = "Allow tracks to be truncated. (a boolean)"
         crop_at_gmwmi_desc = (
             "Crop streamline endpoints more precisely as they cross the "
             "GM-WM interface (a boolean)"
@@ -3579,7 +3618,8 @@ class Tractography(ProcessMIA):
             "(an integer)"
         )
         iFOD2_n_samples_desc = (
-            " Set the number of FOD samples to take per step for the 2nd order (iFOD2) method. "
+            "Set the number of FOD samples to take per"
+            "step for the 2nd order (iFOD2) method. "
         )
 
         # Outputs description
@@ -3738,12 +3778,12 @@ class Tractography(ProcessMIA):
 
         self.add_trait(
             "seed_dynamic",
-            File(output=False, optional=True, desc=seed_dynamic_desc)
+            File(output=False, optional=True, desc=seed_dynamic_desc),
         )
 
         self.add_trait(
             "seed_gmwmi",
-            File(output=False, optional=True, desc=seed_gmwmi_desc)
+            File(output=False, optional=True, desc=seed_gmwmi_desc),
         )
 
         self.add_trait(
@@ -3759,12 +3799,12 @@ class Tractography(ProcessMIA):
 
         self.add_trait(
             "seed_image",
-            File(output=False, optional=True, desc=seed_image_desc)
+            File(output=False, optional=True, desc=seed_image_desc),
         )
 
         self.add_trait(
             "seed_rejection",
-            File(output=False, optional=True, desc=seed_rejection_desc)
+            File(output=False, optional=True, desc=seed_rejection_desc),
         )
 
         self.add_trait(
@@ -3950,7 +3990,7 @@ class Tractography(ProcessMIA):
         )
         self.add_trait(
             "output_seeds",
-            File(output=True, optional=True, desc=output_seeds_desc)
+            File(output=True, optional=True, desc=output_seeds_desc),
         )
 
         self.init_default_traits()
@@ -3980,21 +4020,26 @@ class Tractography(ProcessMIA):
 
             if self.output_directory:
                 # TODO: add number of streamline in name ?
-                out_file_name = file_name + + "_tracto.tck"
-                self.outputs["out_file"] = os.path.join(self.output_directory,
-                                                        out_file_name)
+                out_file_name = file_name + +"_tracto.tck"
+                self.outputs["out_file"] = os.path.join(
+                    self.output_directory, out_file_name
+                )
                 if self.tracto_get_output_seeds:
-                    out_seed_file_name = file_name + "_tracto_out_seeds" + in_ext
+                    out_seed_file_name = (
+                        file_name + "_tracto_out_seeds" + in_ext
+                    )
                     self.outputs["output_seeds"] = os.path.join(
-                        self.output_directory,
-                        out_seed_file_name
-                        )
+                        self.output_directory, out_seed_file_name
+                    )
 
         if self.outputs:
-            self.inheritance_dict[self.outputs["out_file"]] = self.in_file
+            self.tags_inheritance(
+                in_file=self.in_dti, out_file=self.outputs["out_file"]
+            )
             if self.tracto_get_output_seeds:
-                self.inheritance_dict[
-                    self.outputs["output_seeds"]] = self.in_file
+                self.tags_inheritance(
+                    in_file=self.in_dti, out_file=self.outputs["output_seeds"]
+                )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -4044,7 +4089,11 @@ class Tractography(ProcessMIA):
         if self.tracto_seeds_number:
             args += "-seeds" + self.tracto_seeds_number + ""
         if self.tracto_max_attempts_per_seed_number:
-            args += "-max_attempts_per_seed" + self.tracto_max_attempts_per_seed_number + ""
+            args += (
+                "-max_attempts_per_seed"
+                + self.tracto_max_attempts_per_seed_number
+                + ""
+            )
         if self.tracto_seed_cutoff:
             args += "-seed_cutoff" + self.tracto_seed_cutoff + ""
         if self.tracto_seed_unidirectional:
@@ -4076,7 +4125,7 @@ class Tractography(ProcessMIA):
 
 class TransformFSLConvert(ProcessMIA):
     """
-    *Perform conversion between FSL’s transformation matrix format 
+    *Perform conversion between FSL’s transformation matrix format
     to mrtrix3’s. (transformconvert command)*
 
     Please, see the complete documentation for the `TransformFSLConvert brick
@@ -4112,8 +4161,8 @@ class TransformFSLConvert(ProcessMIA):
 
         # Outputs description
         out_transform_desc = (
-            "Output transformed affine in mrtrix’s format.  (a pathlike object or "
-            "string representing a file) "
+            "Output transformed affine in mrtrix’s format (a pathlike object "
+            "or string representing a file) "
         )
 
         # Mandatory inputs traits
@@ -4123,18 +4172,18 @@ class TransformFSLConvert(ProcessMIA):
 
         self.add_trait(
             "reference",
-            File(output=False, optional=False, desc=reference_desc)
+            File(output=False, optional=False, desc=reference_desc),
         )
 
         self.add_trait(
             "in_transform",
-            File(output=False, optional=False, desc=in_transform_desc)
+            File(output=False, optional=False, desc=in_transform_desc),
         )
 
         # Outputs traits
         self.add_trait(
             "out_transform",
-            File(output=True, optional=False, desc=out_transform_desc)
+            File(output=True, optional=False, desc=out_transform_desc),
         )
 
         self.init_default_traits()
@@ -4158,18 +4207,20 @@ class TransformFSLConvert(ProcessMIA):
         # Outputs definition and tags inheritance (optional)
         if self.in_transform:
             valid_ext, in_ext, file_name = checkFileExt(
-                self.in_file, {"MAT": "mat"})
+                self.in_file, {"MAT": "mat"}
+            )
             if not valid_ext:
                 print("\nThe transform matrice format is not recognized...!")
                 return self.make_initResult()
             if self.output_directory:
                 self.outputs["out_transform"] = os.path.join(
-                    self.output_directory,
-                    file_name + "_mrtrix.txt"
+                    self.output_directory, file_name + "_mrtrix.txt"
                 )
 
         if self.outputs:
-            self.inheritance_dict[self.outputs["out_transform"]] = self.in_transform
+            self.tags_inheritance(
+                in_file=self.in_dti, out_file=self.outputs["out_transform"]
+            )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
