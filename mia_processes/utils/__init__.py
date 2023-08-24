@@ -22,6 +22,7 @@ from .tools import (  # noqa: F401
     PageNumCanvas,
     ReportLine,
     checkFileExt,
+    del_dbFieldValue,
     dict4runtime_update,
     get_dbFieldValue,
     mriqc_get_all_run,

@@ -384,10 +384,11 @@ FreeSurfer mri_binarize.
                             "." + in_ext, self.out_suffix + "_count.txt"
                         ),
                     )
+                    self.tags_inheritance(
+                        in_file=self.in_file,
+                        out_file=self.outputs["out_file"],
+                    )
 
-                    self.inheritance_dict[
-                        self.outputs["out_file"]
-                    ] = self.in_file
             else:
                 print("No output_directory was found...!\n")
                 return
@@ -546,8 +547,11 @@ class SynthStrip(ProcessMIA):
                 return
 
         if self.outputs:
-            self.inheritance_dict[self.outputs["out_file"]] = self.in_file
-            self.inheritance_dict[self.outputs["out_mask"]] = self.in_file
+            for k in ("out_file", "out_mask"):
+                self.tags_inheritance(
+                    in_file=self.in_file,
+                    out_file=self.outputs[k],
+                )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -960,8 +964,11 @@ class SynthStripMriqc(ProcessMIA):
                 return
 
         if self.outputs:
-            self.inheritance_dict[self.outputs["out_file"]] = self.in_file
-            self.inheritance_dict[self.outputs["out_mask"]] = self.in_file
+            for k in ("out_file", "out_mask"):
+                self.tags_inheritance(
+                    in_file=self.in_file,
+                    out_file=self.outputs[k],
+                )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()

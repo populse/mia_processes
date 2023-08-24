@@ -227,28 +227,20 @@ class BetSurfacesExtraction(ProcessMIA):
                     os.path.split(self.process._skull_mask_file)[1],
                 )
         if self.outputs:
-            self.inheritance_dict[self.outputs["out_file"]] = self.in_file
-            self.inheritance_dict[
-                self.outputs["outskin_mask_file"]
-            ] = self.in_file
-            self.inheritance_dict[
-                self.outputs["outskin_mesh_file"]
-            ] = self.in_file
-            self.inheritance_dict[
-                self.outputs["outskull_mask_file"]
-            ] = self.in_file
-            self.inheritance_dict[
-                self.outputs["outskull_mesh_file"]
-            ] = self.in_file
-            self.inheritance_dict[
-                self.outputs["inskull_mask_file"]
-            ] = self.in_file
-            self.inheritance_dict[
-                self.outputs["inskull_mesh_file"]
-            ] = self.in_file
-            self.inheritance_dict[
-                self.outputs["skull_mask_file"]
-            ] = self.in_file
+            for k in (
+                "out_file",
+                "outskin_mask_file",
+                "outskin_mesh_file",
+                "outskull_mask_file",
+                "outskull_mesh_file",
+                "inskull_mask_file",
+                "inskull_mesh_file",
+                "skull_mask_file",
+            ):
+                self.tags_inheritance(
+                    in_file=self.in_file,
+                    out_file=self.outputs[k],
+                )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -461,19 +453,25 @@ class FastSegment(ProcessMIA):
                 return
 
         if self.outputs:
-            self.inheritance_dict[
-                self.outputs["tissue_class_map"]
-            ] = self.in_file
-            self.inheritance_dict[
-                self.outputs["partial_volume_map"]
-            ] = self.in_file
-            self.inheritance_dict[self.outputs["mixeltype"]] = self.in_file
+            for k in ("tissue_class_map", "partial_volume_map", "mixeltype"):
+                self.tags_inheritance(
+                    in_file=self.in_file,
+                    out_file=self.outputs[k],
+                )
+
             if self.outputs["partial_volume_files"][0]:
                 for out_val in self.outputs["partial_volume_files"]:
-                    self.inheritance_dict[out_val] = self.in_file
+                    self.tags_inheritance(
+                        in_file=self.in_file,
+                        out_file=out_val,
+                    )
+
             if self.outputs["tissue_class_files"][0]:
                 for out_val in self.outputs["tissue_class_files"]:
-                    self.inheritance_dict[out_val] = self.in_file
+                    self.tags_inheritance(
+                        in_file=self.in_file,
+                        out_file=out_val,
+                    )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -659,10 +657,10 @@ class Smooth(ProcessMIA):
                         self.output_directory,
                         self.out_prefix + fileName + "." + EXT[output_type],
                     )
-
-                    self.inheritance_dict[
-                        self.outputs["out_file"]
-                    ] = self.in_file
+                    self.tags_inheritance(
+                        in_file=self.in_file,
+                        out_file=self.outputs["out_file"],
+                    )
 
             else:
                 print("No output_directory was found...!\n")

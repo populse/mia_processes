@@ -171,7 +171,10 @@ class ApplyBiasCorrection(ProcessMIA):
                 return
 
         if self.outputs:
-            self.inheritance_dict[self.outputs["out_file"]] = self.in_file
+            self.tags_inheritance(
+                in_file=self.in_file,
+                out_file=self.outputs["out_file"],
+            )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -350,15 +353,11 @@ class ArtifactMask(ProcessMIA):
 
             # tags inheritance (optional)
             if self.outputs:
-                self.inheritance_dict[
-                    self.outputs["out_hat_mask"]
-                ] = self.in_file
-                self.inheritance_dict[
-                    self.outputs["out_art_mask"]
-                ] = self.in_file
-                self.inheritance_dict[
-                    self.outputs["out_air_mask"]
-                ] = self.in_file
+                for k in ("out_hat_mask", "out_art_mask", "out_air_mask"):
+                    self.tags_inheritance(
+                        in_file=self.in_file,
+                        out_file=self.outputs[k],
+                    )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -717,7 +716,10 @@ class Binarize(ProcessMIA):
                             ]
 
                         if fileOval_no_ext == fileIval_no_ext:
-                            self.inheritance_dict[out_val] = in_val
+                            self.tags_inheritance(
+                                in_file=in_val,
+                                out_file=out_val,
+                            )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -961,7 +963,10 @@ class ConformImage(ProcessMIA):
 
             # tags inheritance (optional)
             if self.outputs["out_file"]:
-                self.inheritance_dict[self.outputs["out_file"]] = self.in_file
+                self.tags_inheritance(
+                    in_file=self.in_file,
+                    out_file=self.outputs["out_file"],
+                )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -1438,7 +1443,10 @@ class Enhance(ProcessMIA):
                             ]
 
                         if fileOval_no_ext == fileIval_no_ext:
-                            self.inheritance_dict[out_val] = in_val
+                            self.tags_inheritance(
+                                in_file=in_val,
+                                out_file=out_val,
+                            )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -1777,7 +1785,10 @@ class GradientThreshold(ProcessMIA):
 
             # tags inheritance (optional)
             if self.outputs["out_file"]:
-                self.inheritance_dict[self.outputs["out_file"]] = self.in_file
+                self.tags_inheritance(
+                    in_file=self.in_file,
+                    out_file=self.outputs["out_file"],
+                )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -2041,7 +2052,10 @@ class Harmonize(ProcessMIA):
 
             # tags inheritance (optional)
             if self.outputs["out_file"]:
-                self.inheritance_dict[self.outputs["out_file"]] = self.in_file
+                self.tags_inheritance(
+                    in_file=self.in_file,
+                    out_file=self.outputs["out_file"],
+                )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -2235,7 +2249,10 @@ class IntensityClip(ProcessMIA):
                 return
 
         if self.outputs:
-            self.inheritance_dict[self.outputs["out_file"]] = self.in_file
+            self.tags_inheritance(
+                in_file=self.in_file,
+                out_file=self.outputs["out_file"],
+            )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -2446,7 +2463,10 @@ class Mask(ProcessMIA):
 
         # tags inheritance (optional)
         if self.outputs["out_file"]:
-            self.inheritance_dict[self.outputs["out_file"]] = self.in_file
+            self.tags_inheritance(
+                in_file=self.in_file,
+                out_file=self.outputs["out_file"],
+            )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -2982,35 +3002,10 @@ class Resample1(ProcessMIA):
                             )
 
                         if fileOval_no_ext == fileIval_no_ext:
-                            self.inheritance_dict[out_val] = in_val
-                            # FIXME: In the latest version of mia, indexing of
-                            #        the database with particular tags defined
-                            #        in the processes is done only at the end
-                            #        of the initialisation of the whole
-                            #        pipeline. So we cannot use the value of
-                            #        these tags in other processes of the
-                            #        pipeline at the time of initialisation
-                            #        (see populse_mia #290). Until better we
-                            #        use a quick and dirty hack with the
-                            #        set_dbFieldValue() function !
-                            tag_to_add = dict()
-                            tag_to_add["name"] = "PatientName"
-                            tag_to_add["field_type"] = "string"
-                            tag_to_add["description"] = ""
-                            tag_to_add["visibility"] = True
-                            tag_to_add["origin"] = "user"
-                            tag_to_add["unit"] = None
-                            tag_to_add["default_value"] = None
-                            tag_to_add["value"] = get_dbFieldValue(
+
+                            if get_dbFieldValue(
                                 self.project, in_val, "PatientName"
-                            )
-
-                            if tag_to_add["value"] is not None:
-                                set_dbFieldValue(
-                                    self.project, out_val, tag_to_add
-                                )
-
-                            else:
+                            ) is None:
                                 print(
                                     "\nResample1 brick:\nThe 'PatientName' "
                                     "tag could not be added to the database "
@@ -3018,6 +3013,11 @@ class Resample1(ProcessMIA):
                                     "a subsequent issue during "
                                     "initialization!!\n".format(out_val)
                                 )
+
+                            self.tags_inheritance(
+                                in_val,
+                                out_val,
+                            )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -3513,7 +3513,10 @@ class RotationMask(ProcessMIA):
 
             # tags inheritance (optional)
             if self.outputs["out_file"]:
-                self.inheritance_dict[self.outputs["out_file"]] = self.in_file
+                self.tags_inheritance(
+                    in_file=self.in_file,
+                    out_file=self.outputs["out_file"],
+                )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -3811,7 +3814,10 @@ class Sanitize(ProcessMIA):
 
             # tags inheritance (optional)
             if self.outputs["out_file"]:
-                self.inheritance_dict[self.outputs["out_file"]] = self.in_file
+                self.tags_inheritance(
+                    in_file=self.in_file,
+                    out_file=self.outputs["out_file"],
+                )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -4197,13 +4203,16 @@ class TSNR(ProcessMIA):
 
             # tags inheritance (optional)
             if self.outputs["out_tsnr_file"]:
-                self.inheritance_dict[
-                    self.outputs["out_tsnr_file"]
-                ] = self.in_file
+                self.tags_inheritance(
+                    in_file=self.in_file,
+                    out_file=self.outputs["out_tsnr_file"],
+                )
+
             if self.outputs["out_stddev_file"]:
-                self.inheritance_dict[
-                    self.outputs["out_stddev_file"]
-                ] = self.in_file
+                self.tags_inheritance(
+                    in_file=self.in_file,
+                    out_file=self.outputs["out_stddev_file"],
+                )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -4698,35 +4707,12 @@ class Threshold(ProcessMIA):
                             ]
 
                         if fileOval_no_ext == fileIval_no_ext:
-                            self.inheritance_dict[out_val] = in_val
-                            # FIXME: In the latest version of mia, indexing of
-                            #        the database with particular tags defined
-                            #        in the processes is done only at the end
-                            #        of the initialisation of the whole
-                            #        pipeline. So we cannot use the value of
-                            #        these tags in other processes of the
-                            #        pipeline at the time of initialisation
-                            #        (see populse_mia #290). Until better we
-                            #        use a quick and dirty hack with the
-                            #        set_dbFieldValue() function !
-                            tag_to_add = dict()
-                            tag_to_add["name"] = "PatientName"
-                            tag_to_add["field_type"] = "string"
-                            tag_to_add["description"] = ""
-                            tag_to_add["visibility"] = True
-                            tag_to_add["origin"] = "user"
-                            tag_to_add["unit"] = None
-                            tag_to_add["default_value"] = None
-                            tag_to_add["value"] = get_dbFieldValue(
-                                self.project, in_val, "PatientName"
-                            )
-
-                            if tag_to_add["value"] is not None:
-                                set_dbFieldValue(
-                                    self.project, out_val, tag_to_add
+                            if (
+                                get_dbFieldValue(
+                                    self.project, in_val, "PatientName"
                                 )
-
-                            else:
+                                is None
+                            ):
                                 print(
                                     "\nThreshold brick:\nThe 'PatientName'"
                                     " tag could not be added to the "
@@ -4734,6 +4720,11 @@ class Threshold(ProcessMIA):
                                     "can lead to a subsequent issue during "
                                     "initialization!!\n".format(out_val)
                                 )
+
+                            self.tags_inheritance(
+                                in_val,
+                                out_val,
+                            )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()

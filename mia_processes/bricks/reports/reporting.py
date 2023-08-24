@@ -1401,7 +1401,10 @@ class ReportFuncMriqc(ProcessMIA):
         }
 
         # We force tags inheritance (see mia_processes issue #13)
-        self.inheritance_dict[self.outputs["report"]] = self.func
+        self.tags_inheritance(
+            self.func,
+            self.outputs["report"],
+        )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()

@@ -87,11 +87,7 @@ from scipy.stats import kurtosis  # pylint: disable=E0611
 from skimage.transform import resize
 
 # mia_processes import
-from mia_processes.utils import (
-    checkFileExt,
-    get_dbFieldValue,
-    set_dbFieldValue,
-)
+from mia_processes.utils import checkFileExt, get_dbFieldValue
 
 DIETRICH_FACTOR = 0.6551364  # 1.0 / sqrt(2 / (4 - pi))
 FSL_FAST_LABELS = {"csf": 1, "gm": 2, "wm": 3, "bg": 0}
@@ -258,7 +254,10 @@ class AnatIQMs(ProcessMIA):
 
             # tags inheritance (optional)
             if self.outputs:
-                self.inheritance_dict[self.outputs["out_file"]] = self.in_ras
+                self.tags_inheritance(
+                    self.in_ras,
+                    self.outputs["out_file"],
+                )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -759,13 +758,17 @@ class BoldIQMs(ProcessMIA):
 
             else:
                 print(
-                    "- There was no output file deducted during "
-                    "initialisation. Please check the input parameters...!"
+                    "- BoldIQMs brick: There was no output file deducted "
+                    "during initialisation. Please check the input "
+                    "parameters...!"
                 )
 
             # tags inheritance (optional)
             if self.outputs:
-                self.inheritance_dict[self.outputs["out_file"]] = self.in_epi
+                self.tags_inheritance(
+                    self.in_epi,
+                    self.outputs["out_file"],
+                )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -1031,8 +1034,8 @@ class BoldIQMs(ProcessMIA):
 class BoldIQMsPlot(ProcessMIA):
     """
     Plot a figure showing the slice-wise signal intensity at the extremes for
-    the identification of spikes,
-    the outliers metric, the DVARS, the FD and the carpetplot.
+    the identification of spikes, the outliers metric, the DVARS, the FD and
+    the carpetplot.
     """
 
     def __init__(self):
@@ -1167,7 +1170,10 @@ class BoldIQMsPlot(ProcessMIA):
                 print("No output_directory was found...!\n")
                 return
 
-            self.inheritance_dict[self.outputs["out_file"]] = self.in_func
+            self.tags_inheritance(
+                self.in_func,
+                self.outputs["out_file"],
+            )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -1310,13 +1316,13 @@ class CarpetParcellation(ProcessMIA):
             if self.out_prefix == Undefined:
                 self.out_prefix = "cseg_"
                 print(
-                    "The out_prefix parameter is undefined. Automatically "
-                    'set to "cseg" ...'
+                    "\nCarpetParcellation brick: The out_prefix parameter is "
+                    "undefined. Automatically set to 'cseg_' ..."
                 )
 
             if self.output_directory:
                 # brainmask name used for carpetplot base name
-                # in order to get an unique path for each subject
+                # in order to get a unique path for each subject
                 valid_ext, in_ext, fileName = checkFileExt(self.brainmask, EXT)
 
                 if not valid_ext:
@@ -1332,7 +1338,10 @@ class CarpetParcellation(ProcessMIA):
                 print("No output_directory was found...!\n")
                 return
 
-            self.inheritance_dict[self.outputs["out_file"]] = self.brainmask
+            self.tags_inheritance(
+                self.brainmask,
+                self.outputs["out_file"],
+            )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -1517,8 +1526,8 @@ class ComputeDVARS(ProcessMIA):
             if self.out_prefix == Undefined:
                 self.out_prefix = "dvars_"
                 print(
-                    "The out_prefix parameter is undefined. Automatically "
-                    'set to "dvars" ...'
+                    "ComputeDVARS brick: The out_prefix parameter is "
+                    "undefined. Automatically set to 'dvars_' ..."
                 )
 
             if self.output_directory:
@@ -1536,7 +1545,10 @@ class ComputeDVARS(ProcessMIA):
                 print("No output_directory was found...!\n")
                 return
 
-            self.inheritance_dict[self.outputs["out_file"]] = self.in_file
+            self.tags_inheritance(
+                self.in_file,
+                self.outputs["out_file"],
+            )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -1752,8 +1764,8 @@ class FramewiseDisplacement(ProcessMIA):
             if self.out_prefix == Undefined:
                 self.out_prefix = "fd_"
                 print(
-                    "The out_prefix parameter is undefined. Automatically "
-                    'set to "fd" ...'
+                    "FramewiseDisplacement brick: The out_prefix parameter is "
+                    "undefined. Automatically set to '_fd' ..."
                 )
 
             if self.output_directory:
@@ -1773,7 +1785,10 @@ class FramewiseDisplacement(ProcessMIA):
                 print("No output_directory was found...!\n")
                 return
 
-            self.inheritance_dict[self.outputs["out_file"]] = self.in_file
+            self.tags_inheritance(
+                self.in_file,
+                self.outputs["out_file"],
+            )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -1973,6 +1988,16 @@ class Mean_stdDev_calc(ProcessMIA):
             ):
                 self.prefix_to_delete = " "
 
+            tag_to_add = dict()
+            tag_to_add["name"] = "PatientName"
+            tag_to_add["field_type"] = "string"
+            tag_to_add["description"] = ""
+            tag_to_add["visibility"] = True
+            tag_to_add["origin"] = "user"
+            tag_to_add["unit"] = None
+            tag_to_add["default_value"] = None
+            tag_to_add["value"] = patient_name
+
             for parametric_map in self.parametric_maps:
                 param_file_name = os.path.basename(parametric_map)
 
@@ -2001,27 +2026,12 @@ class Mean_stdDev_calc(ProcessMIA):
                         + self.contrast_type
                         + ".txt",
                     )
-                    # FIXME: In the latest version of mia, indexing of the
-                    #        database with particular tags defined in the
-                    #        processes is done only at the end of the
-                    #        initialisation of the whole pipeline. So we
-                    #        cannot use the value of these tags in other
-                    #        processes of the pipeline at the time of
-                    #        initialisation (see populse_mia #290). Until
-                    #        better we use a quick and dirty hack with the
-                    #        set_dbFieldValue() function !
-                    tag_to_add = dict()
-                    tag_to_add["name"] = "PatientName"
-                    tag_to_add["field_type"] = "string"
-                    tag_to_add["description"] = ""
-                    tag_to_add["visibility"] = True
-                    tag_to_add["origin"] = "user"
-                    tag_to_add["unit"] = None
-                    tag_to_add["default_value"] = None
-                    tag_to_add["value"] = patient_name
-                    set_dbFieldValue(self.project, mean_out_file, tag_to_add)
                     mean_out_files.append(mean_out_file)
-                    self.inheritance_dict[mean_out_file] = parametric_map
+                    self.tags_inheritance(
+                        parametric_map,
+                        mean_out_file,
+                        own_tags=[tag_to_add],
+                    )
 
                     std_out_file = os.path.join(
                         analysis_dir,
@@ -2032,26 +2042,18 @@ class Mean_stdDev_calc(ProcessMIA):
                         + self.contrast_type
                         + ".txt",
                     )
-                    tag_to_add = dict()
-                    tag_to_add["name"] = "PatientName"
-                    tag_to_add["field_type"] = "string"
-                    tag_to_add["description"] = ""
-                    tag_to_add["visibility"] = True
-                    tag_to_add["origin"] = "user"
-                    tag_to_add["unit"] = None
-                    tag_to_add["default_value"] = None
-                    tag_to_add["value"] = patient_name
-                    set_dbFieldValue(self.project, std_out_file, tag_to_add)
                     std_out_files.append(std_out_file)
-                    self.inheritance_dict[std_out_file] = parametric_map
+                    self.tags_inheritance(
+                        parametric_map,
+                        std_out_file,
+                        own_tags=[tag_to_add],
+                    )
 
             if mean_out_files != []:
                 self.outputs["mean_out_files"] = mean_out_files
 
             if std_out_files != []:
                 self.outputs["std_out_files"] = std_out_files
-
-        # FIXME: What are we doing about the tags inheritance?
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -2323,9 +2325,7 @@ class Result_collector(ProcessMIA):
             res = dict()
 
             for data in self.parameter_files:
-                # FIXME 1: We need to protect the following command line. Case
-                #          where there are not 5 objects returned.
-                # FIXME 2: Ideally, we should also make sure that they are well
+                # FIXME: Ideally, we should make sure that they are well
                 #          roi, hemi, etc ... This is difficult to achieve for
                 #          this last point ...
                 # roi: region of interest (ex. ACA)
@@ -2778,8 +2778,8 @@ class Spikes(ProcessMIA):
             if self.out_prefix == Undefined:
                 self.out_prefix = "spikes_"
                 print(
-                    "The out_prefix parameter is undefined. Automatically "
-                    'set to "spikes" ...'
+                    "Spikes brick: The out_prefix parameter is undefined. "
+                    "Automatically set to 'spikes_' ..."
                 )
 
             if self.output_directory:
@@ -2797,7 +2797,10 @@ class Spikes(ProcessMIA):
                 print("No output_directory was found...!\n")
                 return
 
-            self.inheritance_dict[self.outputs["out_file"]] = self.in_file
+            self.tags_inheritance(
+                self.in_file,
+                self.outputs["out_file"],
+            )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()

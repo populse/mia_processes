@@ -41,7 +41,7 @@ from nipype.interfaces.base import (
     traits,
 )
 from nipype.interfaces.spm.base import ImageFileSPM
-from populse_db.database import FIELD_TYPE_INTEGER, FIELD_TYPE_STRING
+from populse_db.database import FIELD_TYPE_INTEGER
 from populse_mia.data_manager.database_mia import TAG_ORIGIN_USER
 
 # populse_db and populse_mia import
@@ -55,7 +55,7 @@ from soma.qt_gui.qt_backend.Qt import QMessageBox
 from traits.api import Undefined
 
 # mia_processes import
-from mia_processes.utils import get_dbFieldValue, set_dbFieldValue
+from mia_processes.utils import get_dbFieldValue
 
 
 class EstimateContrast(ProcessMIA):
@@ -337,9 +337,10 @@ class EstimateContrast(ProcessMIA):
 
         if self.use_derivs and self.group_contrast:
             print(
-                "\nInitialisation failed. Both input parameters 'use_derivs' "
-                "and 'group_contrast' are mutually exclusive. Please, define "
-                "only one of these two parameters to True...!"
+                "\nEstimateContrast brick initialisation failed. Both input "
+                "parameters 'use_derivs' and 'group_contrast' are mutually "
+                "exclusive. Please, define only one of these two parameters "
+                "to True...!"
             )
             return self.make_initResult()
 
@@ -353,7 +354,6 @@ class EstimateContrast(ProcessMIA):
             # sync_process_output_traits() of the
             # capsul/process/nipype_process module raises an exception
             # in nipype if the mandatory parameter are not yet defined!
-
             spm_mat_dir, spm_mat_file = os.path.split(self.spm_mat_file)
 
             if self.output_directory:
@@ -361,20 +361,32 @@ class EstimateContrast(ProcessMIA):
                 # use a specific directory for each analysis
 
                 # We want spm.mat output in derived_data/subfolder
+                # FIXME: I think the next "if condition" is sub-optimal:
+                #        self.output_directory is set to
+                #        project_folder/data/derived_data in
+                #        MIAProcessCompletionEngine.complete_nipype_common().
+                #        So, "self.output_directory in spm_mat_dir" is also
+                #        true if
+                #        spm_mat_dir == project_folder/data/derived_data
+                #        but we want
+                #        out_directory ==
+                #        project_folder/data/derived_data/sub_folder ?
                 if self.output_directory in spm_mat_dir:
-                    # if spm_mat already in a subfolder for a analysis
+                    # if spm_mat already in a subfolder for an analysis
                     out_directory = spm_mat_dir
 
                 else:
-                    # if spm_mat file not in a subfolder(for e.g spm_mat
+                    # if spm_mat file not in a subfolder (for e.g spm_mat
                     # file in download data)
                     sub_name = get_dbFieldValue(
                         self.project, self.spm_mat_file, "PatientName"
                     )
+
                     if sub_name is None:
                         print(
-                            "Please, fill 'PatientName' tag "
-                            "in the database for SPM file"
+                            "\nEstimateContrast brick initialisation failed. "
+                            "Please, fill 'PatientName' tag in the database "
+                            "for 'SPM.mat' file ..."
                         )
                         return self.make_initResult()
 
@@ -384,15 +396,25 @@ class EstimateContrast(ProcessMIA):
 
                     if not os.path.exists(out_directory):
                         os.mkdir(out_directory)
+
                 self.output_directory = out_directory
+
             else:
-                print("No output_directory was found...!\n")
+                print(
+                    "\nEstimateContrast brick initialisation failed. No "
+                    "output_directory was found...!\n"
+                )
                 return self.make_initResult()
 
             # Check that contrasts can be created
             contrasts = self._get_contrasts()
+
             if contrasts is None:
-                print("Contrast ca not be created, please check the inputs\n")
+                print(
+                    "\nEstimateContrast brick initialisation failed. "
+                    "Contrast can not be created, please check the "
+                    "inputs.\n"
+                )
                 return self.make_initResult()
 
             self.outputs["out_spm_mat_file"] = os.path.join(
@@ -452,46 +474,44 @@ class EstimateContrast(ProcessMIA):
             if spmT_files:
                 self.outputs["spmT_images"] = spmT_files
                 self.outputs["con_images"] = con_files
+
             if spmF_files:
                 self.outputs["spmF_images"] = spmF_files
                 self.outputs["ess_images"] = ess_files
 
         if self.outputs:
-            # FIXME: In the latest version of mia, indexing of the
-            #        database with particular tags defined in the
-            #        processes is done only at the end of the
-            #        initialisation of the whole pipeline. So we
-            #        cannot use the value of these tags in other
-            #        processes of the pipeline at the time of
-            #        initialisation (see populse_mia #290). Unti
-            #        better we use a quick and dirty hack with the
-            #        set_dbFieldValue() function !
+            # Update/add number of contrast
+            tag_to_add = dict()
+            tag_to_add["name"] = "Contrasts num"
+            tag_to_add["field_type"] = FIELD_TYPE_INTEGER
+            tag_to_add["description"] = "Total number of contrasts"
+            tag_to_add["visibility"] = True
+            tag_to_add["origin"] = TAG_ORIGIN_USER
+            tag_to_add["unit"] = None
+            tag_to_add["default_value"] = None
+            tag_to_add["value"] = nb_contrasts
+
             for key, value in self.outputs.items():
                 if key == "out_spm_mat_file":
-                    self.inheritance_dict[value] = dict()
-                    self.inheritance_dict[value]["parent"] = self.spm_mat_file
-                    self.inheritance_dict[value]["own_tags"] = []
-                    # Update/add number of contrast
-                    tag_to_add = dict()
-                    tag_to_add["name"] = "Contrasts num"
-                    tag_to_add["field_type"] = FIELD_TYPE_INTEGER
-                    tag_to_add["description"] = "Total number of contrasts"
-                    tag_to_add["visibility"] = True
-                    tag_to_add["origin"] = TAG_ORIGIN_USER
-                    tag_to_add["unit"] = None
-                    tag_to_add["default_value"] = None
-                    tag_to_add["value"] = nb_contrasts
-                    self.inheritance_dict[value]["own_tags"].append(tag_to_add)
-                    # FIXME: In the latest version of mia, indexing of the
-                    #        database with particular tags defined in the
-                    #        processes is done only at the end of the
-                    #        initialisation of the whole pipeline. So we
-                    #        cannot use the value of these tags in other
-                    #        processes of the pipeline at the time of
-                    #        initialisation (see populse_mia #290). Unti
-                    #        better we use a quick and dirty hack with the
-                    #        set_dbFieldValue() function !
-                    set_dbFieldValue(self.project, value, tag_to_add)
+                    if (
+                        get_dbFieldValue(
+                            self.project,
+                            self.spm_mat_file,
+                            "PatientName",
+                        )
+                        is None
+                    ):
+                        print(
+                            "\nEstimateContrast brick:\nThe 'PatientName'"
+                            " tag could not be added to the "
+                            "database for the '{}' parameter. This "
+                            "can lead to a subsequent issue during "
+                            "initialization!!\n".format(value)
+                        )
+
+                    self.tags_inheritance(
+                        self.spm_mat_file, value, own_tags=[tag_to_add]
+                    )
 
                 elif key in [
                     "con_images",
@@ -499,88 +519,28 @@ class EstimateContrast(ProcessMIA):
                     "ess_images",
                     "spmF_images",
                 ]:
-                    pathology = get_dbFieldValue(
-                        self.project, self.spm_mat_file, "Pathology"
-                    )
-                    age = get_dbFieldValue(
-                        self.project, self.spm_mat_file, "Age"
-                    )
-                    patient_name = get_dbFieldValue(
-                        self.project, self.spm_mat_file, "PatientName"
-                    )
-
                     for fullname in value:
-                        if patient_name is not None:
-                            tag_to_add = dict()
-                            tag_to_add["name"] = "PatientName"
-                            tag_to_add["field_type"] = "string"
-                            tag_to_add["description"] = ""
-                            tag_to_add["visibility"] = True
-                            tag_to_add["origin"] = "user"
-                            tag_to_add["unit"] = None
-                            tag_to_add["default_value"] = None
-                            tag_to_add["value"] = patient_name
-                            set_dbFieldValue(
-                                self.project, fullname, tag_to_add
+                        if (
+                            get_dbFieldValue(
+                                self.project,
+                                self.spm_mat_file,
+                                "PatientName",
+                            )
+                            is None
+                        ):
+                            print(
+                                "\nEstimateContrast brick:\nThe 'PatientName'"
+                                " tag could not be added to the "
+                                "database for the '{}' parameter. This "
+                                "can lead to a subsequent issue during "
+                                "initialization!!\n".format(fullname)
                             )
 
-                        if age is not None:
-                            tag_to_add = dict()
-                            tag_to_add["name"] = "Age"
-                            tag_to_add["field_type"] = "int"
-                            tag_to_add["description"] = ""
-                            tag_to_add["visibility"] = True
-                            tag_to_add["origin"] = "user"
-                            tag_to_add["unit"] = None
-                            tag_to_add["default_value"] = None
-                            tag_to_add["value"] = age
-                            set_dbFieldValue(
-                                self.project, fullname, tag_to_add
-                            )
-
-                        if pathology is not None:
-                            tag_to_add = dict()
-                            tag_to_add["name"] = "Pathology"
-                            tag_to_add["field_type"] = "string"
-                            tag_to_add["description"] = ""
-                            tag_to_add["visibility"] = True
-                            tag_to_add["origin"] = "user"
-                            tag_to_add["unit"] = None
-                            tag_to_add["default_value"] = None
-                            tag_to_add["value"] = pathology
-                            set_dbFieldValue(
-                                self.project, fullname, tag_to_add
-                            )
-
-                        # Update/add number of contrast
-                        self.inheritance_dict[fullname] = dict()
-                        self.inheritance_dict[fullname][
-                            "parent"
-                        ] = self.spm_mat_file
-                        self.inheritance_dict[fullname]["own_tags"] = []
-                        # Update/add number of contrast
-                        tag_to_add = dict()
-                        tag_to_add["name"] = "Contrasts num"
-                        tag_to_add["field_type"] = FIELD_TYPE_INTEGER
-                        tag_to_add["description"] = "Total number of contrasts"
-                        tag_to_add["visibility"] = True
-                        tag_to_add["origin"] = TAG_ORIGIN_USER
-                        tag_to_add["unit"] = None
-                        tag_to_add["default_value"] = None
-                        tag_to_add["value"] = nb_contrasts
-                        self.inheritance_dict[fullname]["own_tags"].append(
-                            tag_to_add
+                        self.tags_inheritance(
+                            self.spm_mat_file,
+                            fullname,
+                            own_tags=[tag_to_add],
                         )
-                        # FIXME: In the latest version of mia, indexing of the
-                        #        database with particular tags defined in the
-                        #        processes is done only at the end of the
-                        #        initialisation of the whole pipeline. So we
-                        #        cannot use the value of these tags in other
-                        #        processes of the pipeline at the time of
-                        #        initialisation (see populse_mia #290). Unti
-                        #        better we use a quick and dirty hack with the
-                        #        set_dbFieldValue() function !
-                        set_dbFieldValue(self.project, fullname, tag_to_add)
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -979,19 +939,31 @@ class EstimateModel(ProcessMIA):
                 # use a specific directory for each analysis
 
                 # we want spm.mat output in derived_data/subfolder
+                # FIXME: I think the next "if condition" is sub-optimal:
+                #        self.output_directory is set to
+                #        project_folder/data/derived_data in
+                #        MIAProcessCompletionEngine.complete_nipype_common().
+                #        So, "self.output_directory in spm_mat_dir" is also
+                #        true if
+                #        spm_mat_dir == project_folder/data/derived_data
+                #        but we want
+                #        out_directory ==
+                #        project_folder/data/derived_data/sub_folder ?
                 if self.output_directory in spm_mat_dir:
-                    # if spm_mat already in a subfolder for a analysis
+                    # if spm_mat already in a subfolder for an analysis
                     out_directory = spm_mat_dir
                 else:
-                    # if spm_mat file not in a subfolder(for e.g spm_mat
+                    # if spm_mat file not in a subfolder (for e.g spm_mat
                     # file in download data)
                     sub_name = get_dbFieldValue(
                         self.project, self.spm_mat_file, "PatientName"
                     )
                     if sub_name is None:
                         print(
-                            "Please, fill 'PatientName' tag "
-                            "in the database for SPM file"
+                            "EstimateModel brick: Please, fill 'PatientName' "
+                            "tag in the database for {} file".format(
+                                self.spm_mat_file
+                            )
                         )
                         return self.make_initResult()
 
@@ -1003,7 +975,10 @@ class EstimateModel(ProcessMIA):
                         os.mkdir(out_directory)
                 self.output_directory = out_directory
             else:
-                print("No output_directory was found...!\n")
+                print(
+                    "EstimateModel brick: No output_directory was "
+                    "found...!\n"
+                )
                 return self.make_initResult()
 
             self.outputs["out_spm_mat_file"] = os.path.join(
@@ -1128,8 +1103,9 @@ class EstimateModel(ProcessMIA):
                 else:
                     self.outputs = {}
                     print(
-                        "If factorial design have been specified in "
-                        "Level1Design brick, please fill the base parameter"
+                        "EstimateModel brick: If factorial design have been "
+                        "specified in Level1Design brick, please fill the "
+                        "base parameter ..."
                     )
                     return self.make_initResult()
                 # number of F contarst =
@@ -1183,9 +1159,6 @@ class EstimateModel(ProcessMIA):
         if self.outputs:
             for key, value in self.outputs.items():
                 if key == "out_spm_mat_file" and self.factor_info:
-                    self.inheritance_dict[value] = dict()
-                    self.inheritance_dict[value]["parent"] = self.spm_mat_file
-                    self.inheritance_dict[value]["own_tags"] = []
                     # Add tag for number of contrast created in database
                     tag_to_add = dict()
                     tag_to_add["name"] = "Contrasts num"
@@ -1196,17 +1169,9 @@ class EstimateModel(ProcessMIA):
                     tag_to_add["unit"] = None
                     tag_to_add["default_value"] = None
                     tag_to_add["value"] = number_t_contrast + number_f_contrast
-                    self.inheritance_dict[value]["own_tags"].append(tag_to_add)
-                    # FIXME: In the latest version of mia, indexing of the
-                    #        database with particular tags defined in the
-                    #        processes is done only at the end of the
-                    #        initialisation of the whole pipeline. So we
-                    #        cannot use the value of these tags in other
-                    #        processes of the pipeline at the time of
-                    #        initialisation (see populse_mia #290). Unti
-                    #        better we use a quick and dirty hack with the
-                    #        set_dbFieldValue() function !
-                    set_dbFieldValue(self.project, value, tag_to_add)
+                    self.tags_inheritance(
+                        self.spm_mat_file, value, own_tags=[tag_to_add]
+                    )
 
                 elif key in [
                     "out_spm_mat_file",
@@ -1214,11 +1179,17 @@ class EstimateModel(ProcessMIA):
                     "residual_image",
                     "RPVimage",
                 ]:
-                    self.inheritance_dict[value] = self.spm_mat_file
+                    self.tags_inheritance(
+                        self.spm_mat_file,
+                        value,
+                    )
 
                 elif key in "residual_images":
                     for fullname in value:
-                        self.inheritance_dict[fullname] = self.spm_mat_file
+                        self.tags_inheritance(
+                            self.spm_mat_file,
+                            fullname,
+                        )
 
                 elif key in [
                     "beta_images",
@@ -1231,76 +1202,20 @@ class EstimateModel(ProcessMIA):
                         self.project, self.spm_mat_file, "PatientName"
                     )
 
+                    if patient_name is None:
+                        print(
+                            "\nEstimateModel brick:\nThe 'PatientName' "
+                            "tag could not be found in the database for "
+                            "the '{}' parameter. This can lead to a "
+                            "subsequent issue during "
+                            "initialization!!\n".format(self.spm_mat_file)
+                        )
+
                     for fullname in value:
-                        self.inheritance_dict[fullname] = self.spm_mat_file
-                        # FIXME: In the latest version of mia, indexing of the
-                        #        database with particular tags defined in the
-                        #        processes is done only at the end of the
-                        #        initialisation of the whole pipeline. So we
-                        #        cannot use the value of these tags in other
-                        #        processes of the pipeline at the time of
-                        #        initialisation (see populse_mia #290). Unti
-                        #        better we use a quick and dirty hack with the
-                        #        set_dbFieldValue() function !
-
-                        if patient_name is not None:
-                            tag_to_add = dict()
-                            tag_to_add["name"] = "PatientName"
-                            tag_to_add["field_type"] = "string"
-                            tag_to_add["description"] = ""
-                            tag_to_add["visibility"] = True
-                            tag_to_add["origin"] = "user"
-                            tag_to_add["unit"] = None
-                            tag_to_add["default_value"] = None
-                            tag_to_add["value"] = patient_name
-                            set_dbFieldValue(
-                                self.project, fullname, tag_to_add
-                            )
-
-                        else:
-                            print(
-                                "\nEstimateModel brick:\nThe 'PatientName' "
-                                "tag could not be added to the database for "
-                                "the '{}' parameter. This can lead to a "
-                                "subsequent issue during "
-                                "initialization!!\n".format(fullname)
-                            )
-
-                        age = get_dbFieldValue(
-                            self.project, self.spm_mat_file, "Age"
+                        self.tags_inheritance(
+                            self.spm_mat_file,
+                            fullname,
                         )
-
-                        if age is not None:
-                            tag_to_add = dict()
-                            tag_to_add["name"] = "Age"
-                            tag_to_add["field_type"] = "int"
-                            tag_to_add["description"] = ""
-                            tag_to_add["visibility"] = True
-                            tag_to_add["origin"] = "user"
-                            tag_to_add["unit"] = None
-                            tag_to_add["default_value"] = None
-                            tag_to_add["value"] = age
-                            set_dbFieldValue(
-                                self.project, fullname, tag_to_add
-                            )
-
-                        pathology = get_dbFieldValue(
-                            self.project, self.spm_mat_file, "Pathology"
-                        )
-
-                        if pathology is not None:
-                            tag_to_add = dict()
-                            tag_to_add["name"] = "Pathology"
-                            tag_to_add["field_type"] = "string"
-                            tag_to_add["description"] = ""
-                            tag_to_add["visibility"] = True
-                            tag_to_add["origin"] = "user"
-                            tag_to_add["unit"] = None
-                            tag_to_add["default_value"] = None
-                            tag_to_add["value"] = pathology
-                            set_dbFieldValue(
-                                self.project, fullname, tag_to_add
-                            )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -2045,18 +1960,11 @@ class Level1Design(ProcessMIA):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
-        bricks (self.outputs) and the associated tags (self.inheritance_dict),
-        The optional self.inheritance_dict can have two structures. On the one
-        hand it can be a dictionary whose keys are the documents to inherit
-        metadata and the values the documents used for the inheritance of
-        these metadata. On the other hand, it can be a dictionary whose keys
-        are the documents to inherit metadata and the values are dictionary
-        with two keys; parent (for usual inheritance) or own_tags (to add a
-        new tag or modify an existing one). In order not to include an output
-        in the database, the name of the plug related to this output must be
-        an element of the list corresponding to the value of the optional key
-        "notInDb" of the self.outputs dictionary. To work properly this method
-        must return self.make_initResult() object.
+        bricks (self.outputs) and the associated tags. In order not to include
+        an output in the database, the name of the plug related to this output
+        must be an element of the list corresponding to the value of the
+        optional key "notInDb" of the self.outputs dictionary. To work
+        properly this method must return self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
@@ -2085,7 +1993,12 @@ class Level1Design(ProcessMIA):
                     self.project, self.sess_scans[idx_session], "PatientName"
                 )
                 if sub_name is None:
-                    print("Please, fill 'PatientName' tag " "in the database")
+                    print(
+                        "Level1Design brick: Please, fill 'PatientName' "
+                        "tag in the database for {} ...".format(
+                            self.sess_scans[idx_session]
+                        )
+                    )
                     return self.make_initResult()
                 if sub_name not in subjects_names:
                     subjects_names.append(sub_name)
@@ -2101,7 +2014,10 @@ class Level1Design(ProcessMIA):
                 self.process.output_directory = out_directory
                 self.dict4runtime["out_directory"] = out_directory
             else:
-                print("No output_directory was found...!\n")
+                print(
+                    "Level1Design brick: No output_directory was "
+                    "found...!\n"
+                )
                 return self.make_initResult()
 
             self.outputs["spm_mat_file"] = os.path.join(
@@ -2151,9 +2067,9 @@ class Level1Design(ProcessMIA):
                     check = False
                     self.outputs = {}
                     print(
-                        "\nThere seems to be a problem in the definition of "
-                        "session parameters. The initialisation failed, "
-                        "please, check your settings  ..."
+                        "\nLevel1Design brick: There seems to be a problem in"
+                        "the definition of session parameters. The"
+                        "initialisation failed, please check your settings ..."
                     )
 
             # - If sess_multi_reg is plugged and sessions have no multi_reg
@@ -2170,12 +2086,13 @@ class Level1Design(ProcessMIA):
                 if not any(init_res):
                     self.outputs = {}
                     print(
-                        "\nThe sess_multi_reg plug is linked to a node. "
-                        "However, no parameters for multi_reg have been "
-                        "defined in the nipype session_info during "
-                        "initialisation. This leads to an initialisation "
-                        "failure. Please, unplug the sess_multi_reg plug if "
-                        "not needed or check your settings ..."
+                        "\nLevel1Design brick: The sess_multi_reg plug is"
+                        "linked to a node. However, no parameters for "
+                        "multi_reg have been defined in the nipype "
+                        "session_info during initialisation. This leads to an "
+                        "initialisation failure. Please, unplug the "
+                        "sess_multi_reg plug if not needed or check your "
+                        "settings ..."
                     )
 
             # - If sess_multi is plugged and sessions have no multi key,
@@ -2193,26 +2110,20 @@ class Level1Design(ProcessMIA):
                 if not any(init_res):
                     self.outputs = {}
                     print(
-                        "\nThe sess_multi plug is linked to a node. However, "
-                        "no parameters for sess_multi have been defined in "
-                        "the nipype session_info during initialisation. This "
-                        "leads to an initialisation failure. Please, unplug "
-                        "the sess_multi plug if not needed or check your "
-                        "settings ..."
+                        "\nLevel1Design brick: The sess_multi plug is linked "
+                        "to a node. However, no parameters for sess_multi have"
+                        " been defined in the nipype session_info during "
+                        "initialisation. This leads to an initialisation "
+                        "failure. Please, unplug the sess_multi plug if not "
+                        "needed or check your settings ..."
                     )
 
         if self.outputs:
-            self.inheritance_dict[self.outputs["spm_mat_file"]] = dict()
-            # FIXME: Currently, spm_mat_file will only inherit the first scan
-            #        if there are several scans in self.sess_scans. This
-            #        requires some thought on how to operate in a more general
-            #        framework
-            self.inheritance_dict[self.outputs["spm_mat_file"]][
-                "parent"
-            ] = self.sess_scans[0]
-            self.inheritance_dict[self.outputs["spm_mat_file"]][
-                "own_tags"
-            ] = []
+            # FIXME: Currently, spm_mat_file will only inherit tags from the
+            #        first scan if there are several scans in self.sess_scans.
+            #        This requires some thought on how to operate in a more
+            #        general framework
+            all_tags_to_add = []
             # Add tag for number of regressors
             tag_to_add = dict()
             tag_to_add["name"] = "Regress num"
@@ -2223,95 +2134,27 @@ class Level1Design(ProcessMIA):
             tag_to_add["unit"] = None
             tag_to_add["default_value"] = None
             tag_to_add["value"] = beta
-            self.inheritance_dict[self.outputs["spm_mat_file"]][
-                "own_tags"
-            ].append(tag_to_add)
-            # FIXME: In the latest version of mia, indexing of the
-            #        database with particular tags defined in the
-            #        processes is done only at the end of the
-            #        initialisation of the whole pipeline. So we
-            #        cannot use the value of these tags in other
-            #        processes of the pipeline at the time of
-            #        initialisation (see populse_mia #290). Unti
-            #        better we use a quick and dirty hack with the
-            #        set_dbFieldValue() function !
-            set_dbFieldValue(
-                self.project, self.outputs["spm_mat_file"], tag_to_add
-            )
+            all_tags_to_add.append(tag_to_add)
+
+            if (
+                get_dbFieldValue(
+                    self.project,
+                    self.sess_scans[0],
+                    "PatientName",
+                )
+                is None
+            ):
+                print(
+                    "\nLevel1Design brick:\nThe 'PatientName'"
+                    " tag could not be added to the "
+                    "database for the '{}' parameter. This "
+                    "can lead to a subsequent issue during "
+                    "initialization!!\n".format(self.outputs["spm_mat_file"])
+                )
 
             dyn_num = 0
 
             for scan in self.sess_scans:
-                patient_name = get_dbFieldValue(
-                    self.project, scan, "PatientName"
-                )
-
-                if patient_name is not None:
-                    tag_to_add = dict()
-                    tag_to_add["name"] = "PatientName"
-                    tag_to_add["field_type"] = FIELD_TYPE_STRING
-                    tag_to_add["description"] = ""
-                    tag_to_add["visibility"] = True
-                    tag_to_add["origin"] = TAG_ORIGIN_USER
-                    tag_to_add["unit"] = None
-                    tag_to_add["default_value"] = None
-                    tag_to_add["value"] = patient_name
-                    self.inheritance_dict[self.outputs["spm_mat_file"]][
-                        "own_tags"
-                    ].append(tag_to_add)
-                    # FIXME: In the latest version of mia, indexing of the
-                    #        database with particular tags defined in the
-                    #        processes is done only at the end of the
-                    #        initialisation of the whole pipeline. So we
-                    #        cannot use the value of these tags in other
-                    #        processes of the pipeline at the time of
-                    #        initialisation (see populse_mia #290). Unti
-                    #        better we use a quick and dirty hack with the
-                    #        set_dbFieldValue() function !
-                    set_dbFieldValue(
-                        self.project, self.outputs["spm_mat_file"], tag_to_add
-                    )
-
-                else:
-                    print(
-                        "\nLevel1Design:\n The PatientName tag is not filled "
-                        "in the database for the {} file ...\nThis may cause "
-                        "issues in the further operation of the "
-                        "pipeline...\n".format(scan)
-                    )
-
-                age = get_dbFieldValue(self.project, scan, "Age")
-
-                if age is not None:
-                    tag_to_add = dict()
-                    tag_to_add["name"] = "Age"
-                    tag_to_add["field_type"] = "int"
-                    tag_to_add["description"] = ""
-                    tag_to_add["visibility"] = True
-                    tag_to_add["origin"] = "user"
-                    tag_to_add["unit"] = None
-                    tag_to_add["default_value"] = None
-                    tag_to_add["value"] = age
-                    set_dbFieldValue(
-                        self.project, self.outputs["spm_mat_file"], tag_to_add
-                    )
-
-                pathology = get_dbFieldValue(self.project, scan, "Pathology")
-
-                if pathology is not None:
-                    tag_to_add = dict()
-                    tag_to_add["name"] = "Pathology"
-                    tag_to_add["field_type"] = "string"
-                    tag_to_add["description"] = ""
-                    tag_to_add["visibility"] = True
-                    tag_to_add["origin"] = "user"
-                    tag_to_add["unit"] = None
-                    tag_to_add["default_value"] = None
-                    tag_to_add["value"] = pathology
-                    set_dbFieldValue(
-                        self.project, self.outputs["spm_mat_file"], tag_to_add
-                    )
-
                 dimensions = get_dbFieldValue(
                     self.project,
                     scan,
@@ -2324,49 +2167,34 @@ class Level1Design(ProcessMIA):
                     and (len(dimensions) == 5)
                 ):
                     dyn_num += dimensions[4]
-                    tag_to_add = dict()
-                    tag_to_add["name"] = "Dynamic Number"
-                    tag_to_add["field_type"] = FIELD_TYPE_INTEGER
-                    tag_to_add["description"] = (
-                        "Total number of dynamics in " "the functionals"
-                    )
-                    tag_to_add["visibility"] = True
-                    tag_to_add["origin"] = TAG_ORIGIN_USER
-                    tag_to_add["unit"] = None
-                    tag_to_add["default_value"] = None
-                    tag_to_add["value"] = dyn_num
-                    self.inheritance_dict[self.outputs["spm_mat_file"]][
-                        "own_tags"
-                    ].append(tag_to_add)
-                    # FIXME: In the latest version of mia, indexing of the
-                    #        database with particular tags defined in the
-                    #        processes is done only at the end of the
-                    #        initialisation of the whole pipeline. So we
-                    #        cannot use the value of these tags in other
-                    #        processes of the pipeline at the time of
-                    #        initialisation (see populse_mia #290). Unti
-                    #        better we use a quick and dirty hack with the
-                    #        set_dbFieldValue() function !
-                    set_dbFieldValue(
-                        self.project, self.outputs["spm_mat_file"], tag_to_add
-                    )
 
                 else:
                     print(
-                        '\nLevel1Design:\nThe "dynamics number" tag is not '
-                        "filled in the database for the {} file ...\nThis "
+                        "\nLevel1Design:\n"
+                        "The 'Dataset dimensions (Count, X,Y,Z,T...)' tag is "
+                        "not filled in the database for the {} file ...\nThis "
                         "may cause issues in the further operation of the "
                         "pipeline...\n".format(scan)
                     )
+
+            if dyn_num > 0:
+                tag_to_add = dict()
+                tag_to_add["name"] = "Dynamic Number"
+                tag_to_add["field_type"] = FIELD_TYPE_INTEGER
+                tag_to_add[
+                    "description"
+                ] = "Total number of dynamics in the functionals"
+                tag_to_add["visibility"] = True
+                tag_to_add["origin"] = TAG_ORIGIN_USER
+                tag_to_add["unit"] = None
+                tag_to_add["default_value"] = None
+                tag_to_add["value"] = dyn_num
+                all_tags_to_add.append(tag_to_add)
 
             if (self.interscan_interval is Undefined) and (
                 "RepetitionTime"
                 in self.project.session.get_fields_names(COLLECTION_CURRENT)
             ):
-                # FIXME: Currently, spm_mat_file will only inherit the first
-                #        scan if there are several scans in self.sess_scans.
-                #        This requires some thought on how to operate in a
-                #        more general framework
                 rep_time = get_dbFieldValue(
                     self.project, self.sess_scans[0], "RepetitionTime"
                 )
@@ -2392,6 +2220,11 @@ class Level1Design(ProcessMIA):
                     "calculation again!\n"
                 )
 
+            self.tags_inheritance(
+                self.sess_scans[0],
+                self.outputs["spm_mat_file"],
+                own_tags=all_tags_to_add,
+            )
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
 
@@ -2734,18 +2567,11 @@ class MultipleRegressionDesign(ProcessMIA):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
-        bricks (self.outputs) and the associated tags (self.inheritance_dict),
-        The optional self.inheritance_dict can have two structures. On the one
-        hand it can be a dictionary whose keys are the documents to inherit
-        metadata and the values the documents used for the inheritance of
-        these metadata. On the other hand, it can be a dictionary whose keys
-        are the documents to inherit metadata and the values are dictionary
-        with two keys; parent (for usual inheritance) or own_tags (to add a
-        new tag or modify an existing one). In order not to include an output
-        in the database, the name of the plug related to this output must be
-        an element of the list corresponding to the value of the optional key
-        "notInDb" of the self.outputs dictionary. To work properly this method
-        must return self.make_initResult() object.
+        bricks (self.outputs) and the associated tags. In order not to include
+        an output in the database, the name of the plug related to this output
+        must be an element of the list corresponding to the value of the
+        optional key "notInDb" of the self.outputs dictionary. To work
+        properly this method must return self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
@@ -2758,29 +2584,30 @@ class MultipleRegressionDesign(ProcessMIA):
             self.global_cal_value in ["<undefined>", Undefined]
         ):
             print(
-                "Initialization failed... If global_cal set to User, "
-                "required global_cal_value parameter"
+                "MultipleRegressionDesign brick: Initialization failed...\n"
+                "If global_cal set to User, required global_cal_value "
+                "parameter..."
             )
             return self.make_initResult()
 
-        # If threshold_masking set to Absoulte or Relative
+        # If threshold_masking set to Absolute or Relative
         # threshold_mask_value should be specified
         if (
             self.threshold_masking == "Relative"
             or self.threshold_masking == "Absolute"
         ) and (self.threshold_mask_value in ["<undefined>", Undefined]):
             print(
-                "Initialization failed... If threshold_masking set to  "
-                "Relative or Absoulte, required threshold_mask_value "
-                "parameter"
+                "MultipleRegressionDesign brick: Initialization failed...\n"
+                "If threshold_masking set to Relative or Absolute, required "
+                "threshold_mask_value parameter..."
             )
             return self.make_initResult()
 
         # Check in_files lenght
         if len(self.in_files) < 2:
             print(
-                "Initialization failed... "
-                "At least 2 files should be used for in_files"
+                "MultipleRegressionDesign brick: Initialization failed...\n"
+                "At least 2 files should be used for in_files..."
             )
             return self.make_initResult()
 
@@ -2793,8 +2620,8 @@ class MultipleRegressionDesign(ProcessMIA):
             )
             if user_covariates is None:
                 print(
-                    "Initialization failed... "
-                    "Name, vector, centering should be defined "
+                    "MultipleRegressionDesign brick: Initialization "
+                    "failed...\nName, vector, centering should be defined "
                     "for each covariate"
                 )
                 return self.make_initResult()
@@ -2807,9 +2634,9 @@ class MultipleRegressionDesign(ProcessMIA):
             )
             if covariates is None:
                 print(
-                    "Initialization failed... "
-                    "Name, vector, centering, intercation should be defined "
-                    "for each covariate"
+                    "MultipleRegressionDesign brick: Initialization "
+                    "failed...\nName, vector, centering, interactions should "
+                    "be defined for each covariate"
                 )
                 return self.make_initResult()
 
@@ -2824,23 +2651,31 @@ class MultipleRegressionDesign(ProcessMIA):
             # in nipype if the mandatory parameter are not yet defined!
             if not self.out_dir_name:
                 self.out_dir_name = "spm_stat_2ndLevel"
-            out_directory = os.path.join(
-                self.output_directory, self.out_dir_name
-            )
 
             if self.output_directory:
+                out_directory = os.path.join(
+                    self.output_directory, self.out_dir_name
+                )
+
                 # Create a directory for this analysis
                 if not os.path.exists(out_directory):
                     os.mkdir(out_directory)
+
                 self.process.output_directory = out_directory
                 self.dict4runtime["out_directory"] = out_directory
+
             else:
-                print("No output_directory was found...!\n")
+                print(
+                    "MultipleRegressionDesign brick: No output_directory "
+                    "was found...!\n"
+                )
                 return self.make_initResult()
 
             self.outputs["spm_mat_file"] = os.path.join(
                 out_directory, "SPM.mat"
             )
+
+        # FIXME: Do we need to manage tag inheritance?
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -3130,18 +2965,11 @@ class OneSampleTTestDesign(ProcessMIA):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
-        bricks (self.outputs) and the associated tags (self.inheritance_dict),
-        The optional self.inheritance_dict can have two structures. On the one
-        hand it can be a dictionary whose keys are the documents to inherit
-        metadata and the values the documents used for the inheritance of
-        these metadata. On the other hand, it can be a dictionary whose keys
-        are the documents to inherit metadata and the values are dictionary
-        with two keys; parent (for usual inheritance) or own_tags (to add a
-        new tag or modify an existing one). In order not to include an output
-        in the database, the name of the plug related to this output must be
-        an element of the list corresponding to the value of the optional key
-        "notInDb" of the self.outputs dictionary. To work properly this method
-        must return self.make_initResult() object.
+        bricks (self.outputs) and the associated tags. In order not to include
+        an output in the database, the name of the plug related to this output
+        must be an element of the list corresponding to the value of the
+        optional key "notInDb" of the self.outputs dictionary. To work
+        properly this method must return self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
@@ -3154,29 +2982,30 @@ class OneSampleTTestDesign(ProcessMIA):
             self.global_cal_value in ["<undefined>", Undefined]
         ):
             print(
-                "Initialization failed... If global_cal set to User, "
-                "required global_cal_value parameter"
+                "OneSampleTTestDesign brick: Initialization failed... "
+                "If global_cal set to User, required global_cal_value "
+                "parameter."
             )
             return self.make_initResult()
 
-        # If threshold_masking set to Absoulte or Relative
+        # If threshold_masking set to Absolute or Relative
         # threshold_mask_value should be specified
         if (
             self.threshold_masking == "Relative"
             or self.threshold_masking == "Absolute"
         ) and (self.threshold_mask_value in ["<undefined>", Undefined]):
             print(
-                "Initialization failed... If threshold_masking set to  "
-                "Relative or Absoulte, required threshold_mask_value "
-                "parameter"
+                "OneSampleTTestDesign brick: Initialization failed... If "
+                "threshold_masking set to Relative or Absolute, required "
+                "threshold_mask_value parameter."
             )
             return self.make_initResult()
 
         # Check in_files lenght
         if len(self.in_files) < 2:
             print(
-                "Initialization failed... "
-                "At least 2 files should be used for in_files"
+                "OneSampleTTestDesign brick: Initialization failed... "
+                "At least 2 files should be used for in_files."
             )
             return self.make_initResult()
 
@@ -3190,8 +3019,8 @@ class OneSampleTTestDesign(ProcessMIA):
             )
             if covariates is None:
                 print(
-                    "Initialization failed... "
-                    "Name, vector, centering, intercation should be defined "
+                    "OneSampleTTestDesign brick: Initialization failed... "
+                    "Name, vector, centering, interaction should be defined "
                     "for each covariate"
                 )
                 return self.make_initResult()
@@ -3224,6 +3053,8 @@ class OneSampleTTestDesign(ProcessMIA):
             self.outputs["spm_mat_file"] = os.path.join(
                 out_directory, "SPM.mat"
             )
+
+        # FIXME: Do we need to manage tag inheritance?
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -3510,18 +3341,11 @@ class PairedTTestDesign(ProcessMIA):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
-        bricks (self.outputs) and the associated tags (self.inheritance_dict),
-        The optional self.inheritance_dict can have two structures. On the one
-        hand it can be a dictionary whose keys are the documents to inherit
-        metadata and the values the documents used for the inheritance of
-        these metadata. On the other hand, it can be a dictionary whose keys
-        are the documents to inherit metadata and the values are dictionary
-        with two keys; parent (for usual inheritance) or own_tags (to add a
-        new tag or modify an existing one). In order not to include an output
-        in the database, the name of the plug related to this output must be
-        an element of the list corresponding to the value of the optional key
-        "notInDb" of the self.outputs dictionary. To work properly this method
-        must return self.make_initResult() object.
+        bricks (self.outputs) and the associated tags. In order not to include
+        an output in the database, the name of the plug related to this output
+        must be an element of the list corresponding to the value of the
+        optional key "notInDb" of the self.outputs dictionary. To work
+        properly this method must return self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
@@ -3534,8 +3358,8 @@ class PairedTTestDesign(ProcessMIA):
             self.global_cal_value in ["<undefined>", Undefined]
         ):
             print(
-                "Initialization failed... If global_cal set to User, "
-                "required global_cal_value parameter"
+                "PairedTTestDesign brick: Initialization failed... If "
+                "global_cal set to User, required global_cal_value parameter."
             )
             return self.make_initResult()
 
@@ -3546,16 +3370,16 @@ class PairedTTestDesign(ProcessMIA):
             or self.threshold_masking == "Absolute"
         ) and (self.threshold_mask_value in ["<undefined>", Undefined]):
             print(
-                "Initialization failed... If threshold_masking set to  "
-                "Relative or Absoulte, required threshold_mask_value "
-                "parameter"
+                "PairedTTestDesign brick: Initialization failed... If "
+                "threshold_masking set to Relative or Absolute, required "
+                "threshold_mask_value parameter"
             )
             return self.make_initResult()
 
         # Check in_files lenght
         if len(self.paired_files[0]) < 2:
             print(
-                "Initialization failed... "
+                "PairedTTestDesign brick: Initialization failed... "
                 "At least 2 files should be used for paired_files"
             )
             return self.make_initResult()
@@ -3570,8 +3394,8 @@ class PairedTTestDesign(ProcessMIA):
             )
             if covariates is None:
                 print(
-                    "Initialization failed... "
-                    "Name, vector, centering, intercation should be defined "
+                    "PairedTTestDesign brick: Initialization failed... "
+                    "Name, vector, centering, interaction should be defined "
                     "for each covariate"
                 )
                 return self.make_initResult()
@@ -3604,6 +3428,8 @@ class PairedTTestDesign(ProcessMIA):
             self.outputs["spm_mat_file"] = os.path.join(
                 out_directory, "SPM.mat"
             )
+
+        # FIXME: Do we need to manage tag inheritance?
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -3924,18 +3750,11 @@ class TwoSampleTTestDesign(ProcessMIA):
         """Dedicated to the initialisation step of the brick.
 
         The main objective of this method is to produce the outputs of the
-        bricks (self.outputs) and the associated tags (self.inheritance_dict),
-        The optional self.inheritance_dict can have two structures. On the one
-        hand it can be a dictionary whose keys are the documents to inherit
-        metadata and the values the documents used for the inheritance of
-        these metadata. On the other hand, it can be a dictionary whose keys
-        are the documents to inherit metadata and the values are dictionary
-        with two keys; parent (for usual inheritance) or own_tags (to add a
-        new tag or modify an existing one). In order not to include an output
-        in the database, the name of the plug related to this output must be
-        an element of the list corresponding to the value of the optional key
-        "notInDb" of the self.outputs dictionary. To work properly this method
-        must return self.make_initResult() object.
+        bricks (self.outputs) and the associated tags. In order not to include
+        an output in the database, the name of the plug related to this output
+        must be an element of the list corresponding to the value of the
+        optional key "notInDb" of the self.outputs dictionary. To work
+        properly this method must return self.make_initResult() object.
 
         :param is_plugged: the state, linked or not, of the plugs.
         :returns: a dictionary with requirement, outputs and inheritance_dict.
@@ -3948,8 +3767,9 @@ class TwoSampleTTestDesign(ProcessMIA):
             self.global_cal_value in ["<undefined>", Undefined]
         ):
             print(
-                "Initialization failed... If global_cal set to User, "
-                "required global_cal_value parameter"
+                "TwoSampleTTestDesign brick: Initialization failed... "
+                "If global_cal set to User, required global_cal_value "
+                "parameter."
             )
             return self.make_initResult()
 
@@ -3960,16 +3780,16 @@ class TwoSampleTTestDesign(ProcessMIA):
             or self.threshold_masking == "Absolute"
         ) and (self.threshold_mask_value in ["<undefined>", Undefined]):
             print(
-                "Initialization failed... If threshold_masking set to  "
-                "Relative or Absoulte, required threshold_mask_value "
-                "parameter"
+                "TwoSampleTTestDesign brick: Initialization failed... If "
+                "threshold_masking set to Relative or Absolute, required "
+                "threshold_mask_value parameter"
             )
             return self.make_initResult()
 
         # Check in_files lenght
         if (len(self.group1_files) < 2) or (len(self.group2_files) < 2):
             print(
-                "Initialization failed... "
+                "TwoSampleTTestDesign brick: Initialization failed... "
                 "At least 2 files should be used for group_files"
             )
             return self.make_initResult()
@@ -3984,8 +3804,8 @@ class TwoSampleTTestDesign(ProcessMIA):
             )
             if covariates is None:
                 print(
-                    "Initialization failed... "
-                    "Name, vector, centering, intercation should be defined "
+                    "TwoSampleTTestDesign brick: Initialization failed... "
+                    "Name, vector, centering, interaction should be defined "
                     "for each covariate"
                 )
                 return self.make_initResult()
@@ -4012,12 +3832,17 @@ class TwoSampleTTestDesign(ProcessMIA):
                 self.process.output_directory = out_directory
                 self.dict4runtime["out_directory"] = out_directory
             else:
-                print("No output_directory was found...!\n")
+                print(
+                    "TwoSampleTTestDesign brick: No output_directory was "
+                    "found...!\n"
+                )
                 return self.make_initResult()
 
             self.outputs["spm_mat_file"] = os.path.join(
                 out_directory, "SPM.mat"
             )
+
+        # FIXME: Do we need to manage tag inheritance?
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -4061,7 +3886,7 @@ class TwoSampleTTestDesign(ProcessMIA):
 
 
 def get_covariates(names, vectors, centerings, interactions=None):
-    """Generate the covariates list contaning dictionaries
+    """Generate the covariates list containing dictionaries
     with the following key :
     name, vector, interaction, centering
     """

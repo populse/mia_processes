@@ -9,7 +9,7 @@ Each package corresponds to a software encapsulated in mia_processes.
         - dipy: bricks from dipy
         - freesurfer: bricks from freesurfer
         - fsl: bricks from fsl
-        - other: bricks from other sources (usually home made bricks)
+        - other: bricks from other sources (usually homemade bricks)
         - spm: bricks from spm
 
 """

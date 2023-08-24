@@ -200,10 +200,10 @@ class Denoise(ProcessMIA):
                         self.output_directory,
                         self.out_prefix + fileName + "." + in_ext,
                     )
-
-                    self.inheritance_dict[
-                        self.outputs["out_file"]
-                    ] = self.in_file
+                    self.tags_inheritance(
+                        in_file=self.in_file,
+                        out_file=self.outputs["out_file"],
+                    )
 
             else:
                 print("No output_directory was found...!\n")
