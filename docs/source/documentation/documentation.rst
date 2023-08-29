@@ -74,6 +74,27 @@ Mia_processes's documentation
       - `TemplateFromTemplateFlow <bricks/preprocess/others/TemplateFromTemplateFlow.html>`_
       - `Threshold <bricks/preprocess/others/Threshold.html>`_
 
+    - **mrtrix**
+
+      - `ConstrainedSphericalDeconvolution <bricks/preprocess/mrtrix/ConstrainedSphericalDeconvolution.html>`_
+      - `DWIBiasCorrect <bricks/preprocess/mrtrix/DWIBiasCorrect.html>`_
+      - `DWIBrainMask <bricks/preprocess/mrtrix/DWIBrainMask.html>`_
+      - `DWIDenoise <bricks/preprocess/mrtrix/DWIDenoise.html>`_
+      - `DWIExtract <bricks/preprocess/mrtrix/DWIExtract.html>`_
+      - `DWIPreproc <bricks/preprocess/mrtrix/DWIPreproc.html>`_
+      - `FitTensor <bricks/preprocess/mrtrix/FitTensor.html>`_
+      - `Generate5tt2gmwmi <bricks/preprocess/mrtrix/Generate5tt2gmwmi.html>`_
+      - `Generate5ttfsl <bricks/preprocess/mrtrix/Generate5ttfsl.html>`_
+      - `MRCat <bricks/preprocess/mrtrix/MRCat.html>`_
+      - `MRConvert <bricks/preprocess/mrtrix/MRConvert.html>`_
+      - `MRDeGibbs <bricks/preprocess/mrtrix/MRDeGibbs.html>`_
+      - `MRMath <bricks/preprocess/mrtrix/MRMath.html>`_
+      - `MRTransform <bricks/preprocess/mrtrix/MRTransform.html>`_
+      - `MTnormalise <bricks/preprocess/mrtrix/MTnormalise.html>`_
+      - `ResponseSDDhollander <bricks/preprocess/mrtrix/ResponseSDDhollander.html>`_
+      - `TensorMetrics <bricks/preprocess/mrtrix/TensorMetrics.html>`_
+      - `Tractography <bricks/preprocess/mrtrix/Tractography.html>`_
+      - `TransformFSLConvert <bricks/preprocess/mrtrix/TransformFSLConvert.html>`_
 
     - **spm**
 
