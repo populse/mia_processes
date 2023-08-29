@@ -8,14 +8,14 @@ populse_mia.
 
 :Contains:
     :Class:
-        - BrainMask
         - ConstrainedSphericalDeconvolution
         - DWIBiasCorrect
+        - DWIBrainMask
         - DWIDenoise
         - DWIExtract
         - DWIPreproc
         - FitTensor
-        - Generate5tt
+        - Generate5ttfsl
         - Generate5tt2gmwmi
         - MRCat
         - MRConvert
@@ -58,96 +58,6 @@ from mia_processes.utils import checkFileExt
 EXT = {"NIFTI_GZ": "nii.gz", "NIFTI": "nii", "MIF": "mif"}
 
 
-class BrainMask(ProcessMIA):
-    """
-    *Generates a whole brain mask from a DWI image.
-    (dwi2mask command)*
-
-    Please, see the complete documentation for the `BrainMask brick
-    in the populse.mia_processes website
-    <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/BrainMask.html>`_
-    """
-
-    def __init__(self):
-        """Dedicated to the attributes initialisation/instantiation.
-        The input and output plugs are defined here. The special
-        'self.requirement' attribute (optional) is used to define the
-        third-party products necessary for the running of the brick.
-        """
-        # Initialisation of the objects needed for the launch of the brick
-        super(BrainMask, self).__init__()
-
-        # Third party softwares required for the execution of the brick
-        self.requirement = ["nipype", "mrtrix"]
-
-        # Mandatory inputs description
-        in_file_desc = (
-            "Input DWI image (a pathlike object"
-            "string representing an existing file)"
-        )
-        # Output descriptions
-        out_file_desc = (
-            "Output brain mask (a pathlike object or "
-            "string representing a file)"
-        )
-
-        # Mandatory inputs traits
-        self.add_trait(
-            "in_file", File(output=False, optional=False, desc=in_file_desc)
-        )
-
-        self.add_trait(
-            "out_file", File(output=True, optional=False, desc=out_file_desc)
-        )
-
-        self.init_default_traits()
-
-        self.init_process("nipype.interfaces.mrtrix3.BrainMask")
-
-    def list_outputs(self, is_plugged=None):
-        """Dedicated to the initialisation step of the brick.
-        The main objective of this method is to produce the outputs of the
-        bricks (self.outputs) and the associated tags (self.inheritance_dic),
-        if defined here. In order not to include an output in the database,
-        this output must be a value of the optional key 'notInDb' of the
-        self.outputs dictionary. To work properly this method must return
-        self.make_initResult() object.
-        :param is_plugged: the state, linked or not, of the plugs.
-        :returns: a dictionary with requirement, outputs and inheritance_dict.
-        """
-        # Using the inheritance to ProcessMIA class, list_outputs method
-        super(BrainMask, self).list_outputs()
-
-        # Outputs definition and tags inheritance (optional)
-        if self.in_file:
-            valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
-
-            if not valid_ext:
-                print("\nThe input image format is not recognized...!")
-                return self.make_initResult()
-
-            if self.output_directory:
-                self.outputs["out_file"] = os.path.join(
-                    self.output_directory, fileName + "_brainmask." + in_ext
-                )
-
-        if self.outputs:
-            self.tags_inheritance(
-                in_file=self.in_file, out_file=self.outputs["out_file"]
-            )
-
-        # Return the requirement, outputs and inheritance_dict
-        return self.make_initResult()
-
-    def run_process_mia(self):
-        """Dedicated to the process launch step of the brick."""
-        super(BrainMask, self).run_process_mia()
-        self.process.in_file = self.in_file
-        self.process.out_file = self.out_file
-
-        return self.process.run(configuration_dict={})
-
-
 class ConstrainedSphericalDeconvolution(ProcessMIA):
     """
     *Estimate fibre orientation distributions from diffusion data using
@@ -177,6 +87,18 @@ class ConstrainedSphericalDeconvolution(ProcessMIA):
             "string representing an existing file)"
         )
         # Optional inputs description
+        wm_txt_desc = (
+            "WM response text file."
+            "(a pathlike object or string representing an existing file)"
+        )
+        csf_txt_desc = (
+            "CSF response text file."
+            "(a pathlike object or string representing an existing file)"
+        )
+        gm_txt_desc = (
+            "GM response text file."
+            "(a pathlike object or string representing an existing file)"
+        )
         algorithm_desc = "FOD alogorithm (csd or msmt_csd)"
         in_directions_desc = (
             "Specify the directions over which to apply the non-negativity "
@@ -188,9 +110,8 @@ class ConstrainedSphericalDeconvolution(ProcessMIA):
             "image.(a pathlike object or string representing an existing file)"
         )
         max_sh_desc = (
-            "Maximum harmonic degree of response function (a single "
-            "value for single-shell response and a list for multi-shell "
-            "response. (a list of items which are an integer) "
+            "Maximum harmonic degree of response function (one by shell) "
+            "(a list of items which are an integer) "
         )
         get_predicted_signal_desc = (
             "Get a file with the predicted signal from the FOD "
@@ -210,24 +131,12 @@ class ConstrainedSphericalDeconvolution(ProcessMIA):
             "Output CSF ODF."
             "(a pathlike object or string representing a file)"
         )
-        csf_txt_desc = (
-            "CSF response text file."
-            "(a pathlike object or string representing a file)"
-        )
         gm_odf_desc = (
             "Output GM ODF."
             "(a pathlike object or string representing a file)"
         )
-        gm_txt_desc = (
-            "GM response text file."
-            "(a pathlike object or string representing a file)"
-        )
         wm_odf_desc = (
             "Output WM ODF."
-            "(a pathlike object or string representing a file)"
-        )
-        wm_txt_desc = (
-            "WM response text file."
             "(a pathlike object or string representing a file)"
         )
 
@@ -236,7 +145,19 @@ class ConstrainedSphericalDeconvolution(ProcessMIA):
             "in_file", File(output=False, optional=False, desc=in_file_desc)
         )
 
+        self.add_trait(
+            "wm_txt", File(output=False, optional=False, desc=wm_txt_desc)
+        )
+
         # Optionnal inouts traits
+        self.add_trait(
+            "gm_txt", File(output=False, optional=True, desc=gm_txt_desc)
+        )
+
+        self.add_trait(
+            "csf_txt", File(output=False, optional=True, desc=csf_txt_desc)
+        )
+
         self.add_trait(
             "algorithm",
             Enum(
@@ -293,23 +214,11 @@ class ConstrainedSphericalDeconvolution(ProcessMIA):
         )
 
         self.add_trait(
-            "csf_txt", File(output=True, optional=True, desc=csf_txt_desc)
-        )
-
-        self.add_trait(
             "gm_odf", File(output=True, optional=True, desc=gm_odf_desc)
         )
 
         self.add_trait(
-            "gm_txt", File(output=True, optional=True, desc=gm_txt_desc)
-        )
-
-        self.add_trait(
             "wm_odf", File(output=True, optional=False, desc=wm_odf_desc)
-        )
-
-        self.add_trait(
-            "wm_txt", File(output=True, optional=True, desc=wm_txt_desc)
         )
 
         self.add_trait(
@@ -349,22 +258,12 @@ class ConstrainedSphericalDeconvolution(ProcessMIA):
                 self.outputs["csf_odf"] = os.path.join(
                     self.output_directory, fileName + "_csf_odf." + in_ext
                 )
-                self.outputs["csf_txt"] = os.path.join(
-                    self.output_directory, fileName + "_csf_response.txt"
-                )
                 self.outputs["gm_odf"] = os.path.join(
                     self.output_directory, fileName + "_gm_odf." + in_ext
-                )
-                self.outputs["gm_txt"] = os.path.join(
-                    self.output_directory, fileName + "_gm_response.txt"
                 )
                 self.outputs["wm_odf"] = os.path.join(
                     self.output_directory, fileName + "_wm_odf." + in_ext
                 )
-                self.outputs["wm_txt"] = os.path.join(
-                    self.output_directory, fileName + "_wm_response.txt"
-                )
-
                 if self.get_predicted_signal:
                     self.outputs["predicted_signal_file"] = os.path.join(
                         self.output_directory,
@@ -372,14 +271,7 @@ class ConstrainedSphericalDeconvolution(ProcessMIA):
                     )
 
         if self.outputs:
-            for k in [
-                "csf_odf",
-                "csf_txt",
-                "gm_odf",
-                "gm_txt",
-                "wm_odf",
-                "wm_txt",
-            ]:
+            for k in ["csf_odf", "gm_odf", "wm_odf"]:
                 self.tags_inheritance(
                     in_file=self.in_file, out_file=self.outputs[k]
                 )
@@ -400,10 +292,12 @@ class ConstrainedSphericalDeconvolution(ProcessMIA):
         self.process.algorithm = self.algorithm
         self.process.wm_odf = self.wm_odf
         self.process.wm_txt = self.wm_txt
-        self.process.gm_odf = self.gm_odf
-        self.process.gm_txt = self.gm_txt
-        self.process.csf_odf = self.csf_odf
-        self.process.csf_txt = self.csf_txt
+        if self.gm_txt:
+            self.process.gm_odf = self.gm_odf
+            self.process.gm_txt = self.gm_txt
+        if self.csf_txt:
+            self.process.csf_odf = self.csf_odf
+            self.process.csf_txt = self.csf_txt
 
         if self.get_predicted_signal and self.algorithm == "msmt_csd":
             self.process.predicted_signal = self.predicted_signal_file
@@ -426,7 +320,7 @@ class ConstrainedSphericalDeconvolution(ProcessMIA):
 class DWIBiasCorrect(ProcessMIA):
     """
     *Perform B1 field inhomogeneity correction for a DWI volume series.
-    (dwibias correct command)*
+    (dwibiascorrect command)*
 
     Please, see the complete documentation for the `DWIBiasCorrect brick
     in the populse.mia_processes website
@@ -464,7 +358,7 @@ class DWIBiasCorrect(ProcessMIA):
         )
         # Output descriptions
         out_file_desc = (
-            "The output denoised DWI image (a pathlike object or "
+            "The output bias corrected DWI image (a pathlike object or "
             "string representing a file)"
         )
         bias_field_map_desc = (
@@ -594,6 +488,96 @@ class DWIBiasCorrect(ProcessMIA):
             self.process.mask = self.in_mask
         if self.bias:
             self.process.bias = self.bias_field_map
+
+        return self.process.run(configuration_dict={})
+
+
+class DWIBrainMask(ProcessMIA):
+    """
+    *Generates a whole brain mask from a DWI image.
+    (dwi2mask command)*
+
+    Please, see the complete documentation for the `DWIBrainMask brick
+    in the populse.mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/DWIBrainMask.html>`_
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instantiation.
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(DWIBrainMask, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = ["nipype", "mrtrix"]
+
+        # Mandatory inputs description
+        in_file_desc = (
+            "Input DWI image (a pathlike object"
+            "or a string representing an existing file)"
+        )
+        # Output descriptions
+        out_file_desc = (
+            "Output brain mask (a pathlike object or "
+            "string representing a file)"
+        )
+
+        # Mandatory inputs traits
+        self.add_trait(
+            "in_file", File(output=False, optional=False, desc=in_file_desc)
+        )
+
+        self.add_trait(
+            "out_file", File(output=True, optional=False, desc=out_file_desc)
+        )
+
+        self.init_default_traits()
+
+        self.init_process("nipype.interfaces.mrtrix3.BrainMask")
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(DWIBrainMask, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.in_file:
+            valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
+
+            if not valid_ext:
+                print("\nThe input image format is not recognized...!")
+                return self.make_initResult()
+
+            if self.output_directory:
+                self.outputs["out_file"] = os.path.join(
+                    self.output_directory, fileName + "_brainmask." + in_ext
+                )
+
+        if self.outputs:
+            self.tags_inheritance(
+                in_file=self.in_file, out_file=self.outputs["out_file"]
+            )
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(DWIBrainMask, self).run_process_mia()
+        self.process.in_file = self.in_file
+        self.process.out_file = self.out_file
 
         return self.process.run(configuration_dict={})
 
@@ -760,7 +744,7 @@ class DWIDenoise(ProcessMIA):
 class DWIExtract(ProcessMIA):
     """
     *Extract diffusion-weighted volumes, b=0 volumes,
-    or certain shells from a DWI dataset*
+    or certain shells from a DWI dataset (dwiextract command)*
 
     Please, see the complete documentation for the `DWIExtract brick
     in the populse.mia_processes website
@@ -919,7 +903,7 @@ class DWIPreproc(ProcessMIA):
     """
     *Perform diffusion image pre-processing using FSL’s eddy tool;
     including inhomogeneity distortion correction using FSL’s topup
-    tool if possible (dwifslpreproc correct command)*
+    tool if possible (dwifslpreproc command)*
 
     Please, see the complete documentation for the `DWIPreproc brick
     in the populse.mia_processes website
@@ -970,14 +954,14 @@ class DWIPreproc(ProcessMIA):
             "string representing a file) "
         )
         eddyqc_all_desc = (
-            "Copy ALL outputs generated by eddy (including images), and the "
-            "output of eddy_qc (if installed), into an output directory "
+            "Keep ALL outputs generated by eddy (including images), and the "
+            "output of eddy_qc (if installed)"
             "(a boolean)"
         )
-        eddyqc_all_desc = (
-            "Copy the various text-based statistical outputs generated "
+        eddyqc_text_desc = (
+            "Keep the various text-based statistical outputs generated "
             "by eddy, and the output of eddy_qc (if installed), "
-            "into an output directory. (a boolean)"
+            "(a boolean)"
         )
         epi_corr_desc = (
             "Provide an additional image series consisting of spin-echo EPI "
@@ -1013,7 +997,6 @@ class DWIPreproc(ProcessMIA):
                 "none",
                 "pair",
                 "all",
-                "header",
                 output=False,
                 optional=True,
                 desc=rpe_otions_desc,
@@ -1069,7 +1052,6 @@ class DWIPreproc(ProcessMIA):
         self.add_trait(
             "eddy_option",
             String(
-                "",
                 output=False,
                 optional=True,
                 desc=eddy_option_desc,
@@ -1104,7 +1086,7 @@ class DWIPreproc(ProcessMIA):
                 False,
                 output=False,
                 optional=True,
-                desc=eddyqc_all_desc,
+                desc=eddyqc_text_desc,
             ),
         )
 
@@ -1213,6 +1195,9 @@ class FitTensor(ProcessMIA):
         # Third party softwares required for the execution of the brick
         self.requirement = ["nipype", "mrtrix"]
 
+        # Nipype FitTransform process is not up to date for some option
+        # so the "args" input is used for several options
+
         # Mandatory inputs description
         in_file_desc = (
             "Input DWI image (a pathlike object"
@@ -1224,15 +1209,31 @@ class FitTensor(ProcessMIA):
             "mask image (a pathlike object or string representing an "
             "existing file)"
         )
+        estimate_dkt_desc = "Estimate diffusion kurtosis (a boolean)"
         get_predicted_signal_desc = (
-            "Get a file with the predicted signal from the FOD "
-            "estimates (only for msmt_csd algorithm)"
+            "Get a file with the predicted signal from the tensor fits "
             "(a boolean) "
+        )
+        get_output_b0_desc = "Get the output b0 (a boolean)"
+        ols_option_desc = (
+            "Perform initial fit using an ordinary least-squares (OLS) fit"
+            "(a boolean)"
+        )
+        number_of_iter_desc = (
+            "Number of iterative reweightings for IWLS algorithm"
+            "(an integer, default value is 2)"
         )
         # Output descriptions
         out_file_desc = (
             "Output tensor image (a pathlike object or "
             "string representing a file)"
+        )
+        out_dkt_desc = (
+            "Out diffusion kurtosis (a pathlike object or "
+            "string representing a file)"
+        )
+        out_b0_desc = (
+            "Out b0 image (a pathlike object or " "string representing a file)"
         )
         predicted_signal_file_desc = (
             "Out predicted signal "
@@ -1248,6 +1249,17 @@ class FitTensor(ProcessMIA):
         self.add_trait(
             "in_mask", File(output=False, optional=True, desc=in_mask_desc)
         )
+
+        self.add_trait(
+            "estimate_dkt",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=estimate_dkt_desc,
+            ),
+        )
+
         self.add_trait(
             "get_predicted_signal",
             Bool(
@@ -1258,12 +1270,51 @@ class FitTensor(ProcessMIA):
             ),
         )
 
-        # TODO: add option dkt for DKI
+        self.add_trait(
+            "get_output_b0",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=get_output_b0_desc,
+            ),
+        )
+
+        self.add_trait(
+            "ols_option",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=ols_option_desc,
+            ),
+        )
+
+        self.add_trait(
+            "number_of_iter",
+            Int(
+                2,
+                output=False,
+                optional=True,
+                desc=number_of_iter_desc,
+            ),
+        )
 
         # Outputs traits
         self.add_trait(
             "out_file", File(output=True, optional=False, desc=out_file_desc)
         )
+
+        self.add_trait(
+            "out_dkt",
+            File(output=True, optional=True, desc=out_dkt_desc),
+        )
+
+        self.add_trait(
+            "out_b0",
+            File(output=True, optional=True, desc=out_b0_desc),
+        )
+
         self.add_trait(
             "predicted_signal_file",
             File(output=True, optional=True, desc=predicted_signal_file_desc),
@@ -1304,6 +1355,16 @@ class FitTensor(ProcessMIA):
                         self.output_directory,
                         fileName + "_dti_predicted_signal." + in_ext,
                     )
+                if self.estimate_dkt:
+                    self.outputs["out_dkt"] = os.path.join(
+                        self.output_directory,
+                        fileName + "_dki." + in_ext,
+                    )
+                if self.get_output_b0:
+                    self.outputs["out_b0"] = os.path.join(
+                        self.output_directory,
+                        fileName + "_b0." + in_ext,
+                    )
 
         if self.outputs:
             self.tags_inheritance(
@@ -1314,6 +1375,16 @@ class FitTensor(ProcessMIA):
                     in_file=self.in_file,
                     out_file=self.outputs["predicted_signal_file"],
                 )
+            if self.estimate_dkt:
+                self.tags_inheritance(
+                    in_file=self.in_file,
+                    out_file=self.outputs["out_dkt"],
+                )
+            if self.get_output_b0:
+                self.tags_inheritance(
+                    in_file=self.in_file,
+                    out_file=self.outputs["out_b0"],
+                )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -1323,13 +1394,26 @@ class FitTensor(ProcessMIA):
         super(FitTensor, self).run_process_mia()
         self.process.in_file = self.in_file
         self.process.out_file = self.out_file
+        if self.in_mask:
+            self.process.in_mask = self.in_mask
         if self.get_predicted_signal:
             self.process.predicted_signal = self.predicted_signal_file
+        args = ""
+        if self.ols_option:
+            args += "-ols "
+        if self.number_of_iter:
+            args += "-iter " + self.number_of_iter + " "
+        if self.estimate_dkt:
+            args += "-dkt " + self.out_dkt + " "
+        if self.get_output_b0:
+            args += "-b0 " + self.out_b0 + " "
+        if args:
+            self.process.args = args
 
         return self.process.run(configuration_dict={})
 
 
-class Generate5tt(ProcessMIA):
+class Generate5ttfsl(ProcessMIA):
     """
     *Generate a 5TT image suitable for ACT using the selected algorithm.
     (5ttgen command)*
@@ -1346,20 +1430,41 @@ class Generate5tt(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(Generate5tt, self).__init__()
+        super(Generate5ttfsl, self).__init__()
 
         # Third party softwares required for the execution of the brick
-        self.requirement = ["nipype", "mrtrix", "fsl", "freesurfer"]
+        self.requirement = ["nipype", "mrtrix", "fsl"]
 
         # Mandatory inputs description
         in_file_desc = (
-            "Input image (a pathlike object"
+            "Input T1 image (a pathlike object"
             "string representing an existing file)"
         )
-        algorithm_desc = "Tissue segmentation algorithm (fsl or freesurfer)"
+        # Optionnal inputs description
+        in_mask_desc = (
+            "Manually provide a brain mask, rather than deriving one in the "
+            "script (a pathlike object string representing an existing file)"
+        )
+        t2_image_desc = (
+            "Provide a T2-weighted image in addition to T1w image"
+            "(a pathlike object string representing an existing file)"
+        )
+        no_crop_desc = (
+            "Do NOT crop the resulting 5TT image to reduce its size "
+            "(keep the same dimensions as the input image)"
+            "(a boolean)"
+        )
+        sgm_amyg_hipp_desc = (
+            "Represent the amygdalae and hippocampi as sub-cortical grey "
+            "matter in the 5TT image (a boolean)"
+        )
+        premasked_desc = (
+            "Indicate that brain masking has already been applied to the "
+            "input image(a boolean)"
+        )
         # Output descriptions
         out_file_desc = (
-            "Output image (a pathlike object or " "string representing a file)"
+            "Output image (a pathlike object or string representing a file)"
         )
 
         # Mandatory inputs traits
@@ -1369,13 +1474,40 @@ class Generate5tt(ProcessMIA):
 
         # Optional inputs
         self.add_trait(
-            "algorithm",
-            Enum(
-                "fsl",
-                "freesurfer",
+            "in_mask", File(output=False, optional=True, desc=in_mask_desc)
+        )
+
+        self.add_trait(
+            "t2_image", File(output=False, optional=True, desc=t2_image_desc)
+        )
+
+        self.add_trait(
+            "no_crop",
+            Bool(
+                False,
                 output=False,
                 optional=True,
-                desc=algorithm_desc,
+                desc=no_crop_desc,
+            ),
+        )
+
+        self.add_trait(
+            "sgm_amyg_hipp",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=sgm_amyg_hipp_desc,
+            ),
+        )
+
+        self.add_trait(
+            "premasked",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=premasked_desc,
             ),
         )
 
@@ -1386,7 +1518,7 @@ class Generate5tt(ProcessMIA):
 
         self.init_default_traits()
 
-        self.init_process("nipype.interfaces.mrtrix3.BrainMask")
+        self.init_process("nipype.interfaces.mrtrix3.Generate5tt")
 
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
@@ -1400,7 +1532,7 @@ class Generate5tt(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(Generate5tt, self).list_outputs()
+        super(Generate5ttfsl, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
@@ -1425,10 +1557,23 @@ class Generate5tt(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(Generate5tt, self).run_process_mia()
+        super(Generate5ttfsl, self).run_process_mia()
         self.process.in_file = self.in_file
-        self.process.algorithm = self.algorithm
+        self.process.algorithm = "fsl"
         self.process.out_file = self.out_file
+        args = ""
+        if self.in_mask:
+            args += "-mask " + self.in_mask + " "
+        if self.t2_image:
+            args += "-t2 " + self.t2_image + " "
+        if self.premasked:
+            args += "-premasked "
+        if self.no_crop:
+            args += "-nocrop "
+        if self.sgm_amyg_hipp:
+            args += "-sgm_amyg_hipp "
+        if args:
+            self.process.args = args
 
         return self.process.run(configuration_dict={})
 
@@ -1714,7 +1859,7 @@ class MRConvert(ProcessMIA):
         )
         coord_desc = (
             "Extract data at the specified coordinates "
-            "(a list of items which are an integer)"
+            "(a list of items which are a tuple of the form (axis, selection))"
         )
         scaling_desc = (
             "Specify the data scaling parameters used to rescale the "
@@ -1722,10 +1867,10 @@ class MRConvert(ProcessMIA):
         )
         vox_desc = (
             "Change the voxel dimensions reported in the output image header"
-            "(a list of items which are a float)"
+            "(a list of items which are a float or an integer)"
         )
         out_file_format_desc = (
-            "Format of the output image (NIFTI, NIFTI_GZ or MIF )"
+            "Format of the output image (NIFTI, NIFTI_GZ or MIF)"
         )
         suffix_desc = "Output file suffix (a string, not mandatory)"
         # FIXME: json import / export --> in mia it is not the same json as
@@ -1737,7 +1882,7 @@ class MRConvert(ProcessMIA):
             "Specifies whether the b - values should be scaled by the square "
             "of the corresponding DW gradient norm, as often required for"
             "multishell or DSI DW acquisition schemes. "
-            "(yes or no, default is yes)"
+            "(yes or no)"
         )
         grad_file_desc = (
             "Provide the diffusion-weighted gradient scheme used in the "
@@ -1777,6 +1922,17 @@ class MRConvert(ProcessMIA):
 
         # Optional inputs traits
         self.add_trait(
+            "out_file_format",
+            Enum(
+                "MIF",
+                "NIFTI",
+                "NIFTI_GZ",
+                output=False,
+                optional=True,
+                desc=out_file_format_desc,
+            ),
+        )
+        self.add_trait(
             "axes",
             Either(
                 Undefined,
@@ -1792,7 +1948,7 @@ class MRConvert(ProcessMIA):
             "coord",
             Either(
                 Undefined,
-                List(Int()),
+                Tuple(Int(), String()),
                 default=Undefined,
                 output=False,
                 optional=True,
@@ -1816,23 +1972,11 @@ class MRConvert(ProcessMIA):
             "vox",
             Either(
                 Undefined,
-                List(Float()),
+                List(),
                 default=Undefined,
                 output=False,
                 optional=True,
                 desc=vox_desc,
-            ),
-        )
-
-        self.add_trait(
-            "out_file_format",
-            Enum(
-                "MIF",
-                "NIFTI",
-                "NIFTI_GZ",
-                output=False,
-                optional=True,
-                desc=out_file_format_desc,
             ),
         )
 
@@ -1857,8 +2001,12 @@ class MRConvert(ProcessMIA):
         # Optional base inputs traits
         self.add_trait(
             "bval_scale",
-            Enum(
-                "no", "yes", output=False, optional=True, desc=bval_scale_desc
+            Either(
+                Undefined,
+                Enum("no", "yes"),
+                output=False,
+                optional=True,
+                desc=bval_scale_desc,
             ),
         )
 
@@ -1996,15 +2144,26 @@ class MRConvert(ProcessMIA):
         cmd = ["mrconvert", self.in_file]
 
         if self.axes:
-            cmd += ["-axes", self.axes]
+            axes = ""
+            for i in self.axes:
+                axes += str(i) + ","
+            cmd += ["-axes", axes[:-1]]
         if self.coord:
-            cmd += ["-coord", self.coord]
+            axis, selection = self.coord
+            coord = str(axis) + " " + str(selection)
+            cmd += ["-coord", coord]
         if self.scaling:
-            cmd += ["-scaling", self.scaling]
+            scaling = ""
+            for i in self.scaling:
+                scaling += str(i) + ","
+            cmd += ["-scaling", scaling[:-1]]
         if self.vox:
-            cmd += ["-vox", self.vox]
+            vox = ""
+            for i in self.vox:
+                vox += str(i) + ","
+            cmd += ["-vox", vox[:-1]]
         if self.grad_file:
-            cmd += ["-grad", self.axes]
+            cmd += ["-grad", self.grad_file]
         if self.in_bvec:
             cmd += ["-fslgrad", self.in_bvec, self.in_bval]
         if self.bval_scale == "yes":
@@ -2172,7 +2331,7 @@ class MRDeGibbs(ProcessMIA):
 class MRMath(ProcessMIA):
     """
     *Compute summary statistic on image intensities along a
-    specified axis of a single image*
+    specified axis of a single image (mrmath command)*
 
     Please, see the complete documentation for the `MRMath brick
     in the populse.mia_processes website
@@ -2358,13 +2517,13 @@ class MRTransform(ProcessMIA):
             "(a pathlike object or string representing an existing file) "
         )
         inverse_desc = (
-            "Invert the specified transform before using it " "(a boolean)"
+            "Invert the specified transform before using it (a boolean)"
         )
         flip_axes_desc = (
-            "flip the specified axes " "(a list of int with 0:x, 1:y and 2:z)"
+            "Flip the specified axes (a list of int with 0:x, 1:y and 2:z)"
         )
         half_desc = (
-            "Apply the matrix square root of the transformation" "(a boolean)"
+            "Apply the matrix square root of the transformation (a boolean)"
         )
         replace_file_desc = (
             "Replace the linear transform of the original image by that "
@@ -2406,12 +2565,12 @@ class MRTransform(ProcessMIA):
             "(a pathlike object or string representing an existing file)"
         )
         fod_reorient_desc = (
-            "Specify whether to perform FOD reorientation" "(a boolean)"
+            "Specify whether to perform FOD reorientation (a boolean)"
         )
 
         # Outputs description
         out_file_desc = (
-            " The output image of the transformation."
+            "The output image of the transformation."
             "(a pathlike object or string representing an existing file)"
         )
 
@@ -2609,7 +2768,10 @@ class MRTransform(ProcessMIA):
             self.process.template_image = self.template_image
         args = ""
         if self.flip_axes:
-            args += "-flip " + self.flip_axes
+            flip = ""
+            for i in self.flip_axes:
+                flip += str(i) + ","
+            args += "-flip " + flip[:-1]
         if self.half:
             args += "-half "
         if self.replace_file:
@@ -2687,13 +2849,13 @@ class MTnormalise(ProcessMIA):
         )
         balanced_desc = (
             "Incorporate the per-tissue balancing factors into scaling of "
-            "the output images (a bollean)"
+            "the output images (a boolean)"
         )
 
         # Outputs description
         out_files_desc = (
-            "Nomalised outputs images(a pathlike object or "
-            "string representing a file)"
+            "Nomalised outputs images (a list of items which are a pathlike "
+            "object or string representing a file)"
         )
 
         # Mandatory inputs traits
@@ -2861,7 +3023,7 @@ class ResponseSDDhollander(ProcessMIA):
             "Number of erosion passes to apply to initial (whole brain) mask. "
             "Set to 0 to not erode the brain mask. (an intefer, default is 3)"
         )
-        fa_desc = (
+        fa_thresh_desc = (
             "FA threshold for crude WM versus GM-CSF separation"
             "(a float, default is 0.2)"
         )
@@ -2917,12 +3079,12 @@ class ResponseSDDhollander(ProcessMIA):
         )
 
         self.add_trait(
-            "fa",
+            "fa_thresh",
             Float(
                 0.2,
                 output=False,
                 optional=True,
-                desc=fa_desc,
+                desc=fa_thresh_desc,
             ),
         )
 
@@ -3013,18 +3175,18 @@ class ResponseSDDhollander(ProcessMIA):
 
             if self.output_directory:
                 self.outputs["csf_file"] = os.path.join(
-                    self.output_directory, fileName + "_out_csf.txt"
+                    self.output_directory, fileName + "_response_csf.txt"
                 )
                 self.outputs["gm_file"] = os.path.join(
-                    self.output_directory, fileName + "_out_gm.txt"
+                    self.output_directory, fileName + "_response_gm.txt"
                 )
                 self.outputs["wm_file"] = os.path.join(
-                    self.output_directory, fileName + "_out_wm.txt"
+                    self.output_directory, fileName + "_response_wm.txt"
                 )
                 if self.get_final_voxels:
                     self.outputs["voxels_image"] = os.path.join(
                         self.output_directory,
-                        fileName + "response_voxels." + in_ext,
+                        fileName + "_response_voxels." + in_ext,
                     )
 
         if self.outputs:
@@ -3056,8 +3218,8 @@ class ResponseSDDhollander(ProcessMIA):
         args = ""
         if self.erode != 3:
             args += "-erode " + self.erode + " "
-        if self.fa != 0.2:
-            args += "-fa " + self.fa + " "
+        if self.fa_thresh != 0.2:
+            args += "-fa " + self.fa_thresh + " "
         if self.wm_algo:
             args += "-wm_algo " + self.wm_algo + " "
         if self.get_final_voxels:
@@ -3498,14 +3660,12 @@ class Tractography(ProcessMIA):
         cutoff_desc = (
             "Set the FA or FOD amplitude cutoff for terminating tracks "
         )
-        downsample_desc = (
+        downsample_factor_desc = (
             "Downsample the generated streamlines to reduce output "
             "file size (a float)"
         )
-        max_length_desc = " Set the max length of any track in mm (a float)"
-        min_length_desc = (
-            " Set the minimum length of any track in mm (a float)"
-        )
+        max_length_desc = "Set the max length of any track in mm (a float)"
+        min_length_desc = "Set the minimum length of any track in mm (a float)"
         noprecompt_desc = (
             "Do NOT pre-compute legendre polynomial values (a boolean)"
         )
@@ -3540,7 +3700,7 @@ class Tractography(ProcessMIA):
             "(a pathlike object string representing an existing file)"
         )
         seed_rejection_desc = (
-            " Seed from an image using rejection sampling "
+            "Seed from an image using rejection sampling "
             "(a pathlike object string representing an existing file)"
         )
         seed_rnd_voxel_desc = (
@@ -3628,7 +3788,7 @@ class Tractography(ProcessMIA):
             "string representing a file) "
         )
         output_seeds_desc = (
-            "Output the seed location of all successful streamlines to a file."
+            "Out seed location of all successful streamlines ."
             "(a pathlike object or string representing a file) "
         )
 
@@ -3677,14 +3837,14 @@ class Tractography(ProcessMIA):
         )
 
         self.add_trait(
-            "downsample",
+            "downsample_factor",
             Either(
                 Undefined,
                 Float(),
                 default=Undefined,
                 output=False,
                 optional=True,
-                desc=downsample_desc,
+                desc=downsample_factor_desc,
             ),
         )
 
@@ -3724,8 +3884,9 @@ class Tractography(ProcessMIA):
 
         self.add_trait(
             "select",
-            Int(
-                5000,
+            Either(
+                Undefined,
+                Int(),
                 output=False,
                 optional=True,
                 desc=select_desc,
@@ -3857,8 +4018,9 @@ class Tractography(ProcessMIA):
 
         self.add_trait(
             "tracto_seed_cutoff",
-            Float(
-                0.1,
+            Either(
+                Undefined,
+                Float(),
                 output=False,
                 optional=True,
                 desc=tracto_seed_cutoff_desc,
@@ -4061,8 +4223,8 @@ class Tractography(ProcessMIA):
 
         if self.angle:
             self.process.angle = self.angle
-        if self.downsample:
-            self.process.downsample = self.downsample
+        if self.downsample_factor:
+            self.process.downsample = self.downsample_factor
         if self.max_length:
             self.process.max_length = self.max_length
         if self.min_length:

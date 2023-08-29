@@ -20,8 +20,8 @@ from .processes import (  # noqa: F401
     DWIExtract,
     DWIPreproc,
     FitTensor,
-    Generate5tt,
     Generate5tt2gmwmi,
+    Generate5ttfsl,
     MRCat,
     MRConvert,
     MRDeGibbs,
@@ -31,5 +31,5 @@ from .processes import (  # noqa: F401
     ResponseSDDhollander,
     TensorMetrics,
     Tractography,
-    TransformFSLConvert
+    TransformFSLConvert,
 )
