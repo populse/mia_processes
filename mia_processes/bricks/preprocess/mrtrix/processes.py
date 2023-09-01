@@ -42,7 +42,7 @@ populse_mia.
 import os
 
 from capsul.in_context import mrtrix
-from nipype.interfaces.base import File, InputMultiPath
+from nipype.interfaces.base import File, InputMultiPath, OutputMultiPath
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 from traits.api import (
     Bool,
@@ -51,6 +51,7 @@ from traits.api import (
     Float,
     Int,
     List,
+    Range,
     String,
     Tuple,
     Undefined,
@@ -933,7 +934,7 @@ class DWIPreproc(ProcessMIA):
             "Input DWI image (a pathlike object"
             "string representing an existing file)"
         )
-        rpe_otions_desc = (
+        rpe_options_desc = (
             "Specify acquisition phase-encoding design. “none” for no "
             "reversed phase-encoding image, “all” for all DWIs have opposing "
             "phase-encoding acquisition, “pair” for using a pair of b0 "
@@ -951,7 +952,7 @@ class DWIPreproc(ProcessMIA):
             "dwifslpreproc generate one internally using dwi2mask "
             "(a pathlike object or string representing an existing file)"
         )
-        eddy_option_desc = (
+        eddy_options_desc = (
             "Additional command-line options to the eddy command (a string)"
         )
         eddy_slspec_desc = (
@@ -984,7 +985,7 @@ class DWIPreproc(ProcessMIA):
         ro_time_desc = (
             "Total readout time of input series (in seconds) (a float)"
         )
-        topup_option_desc = (
+        topup_options_desc = (
             "Additional command-line options to the topup command (a string)"
         )
         # Output descriptions
@@ -998,14 +999,14 @@ class DWIPreproc(ProcessMIA):
         )
 
         self.add_trait(
-            "rpe_otions",
+            "rpe_options",
             Enum(
                 "none",
                 "pair",
                 "all",
                 output=False,
                 optional=True,
-                desc=rpe_otions_desc,
+                desc=rpe_options_desc,
             ),
         )
 
@@ -1063,11 +1064,11 @@ class DWIPreproc(ProcessMIA):
         )
 
         self.add_trait(
-            "eddy_option",
+            "eddy_options",
             String(
                 output=False,
                 optional=True,
-                desc=eddy_option_desc,
+                desc=eddy_options_desc,
             ),
         )
 
@@ -1104,12 +1105,12 @@ class DWIPreproc(ProcessMIA):
         )
 
         self.add_trait(
-            "topup_option",
+            "topup_options",
             String(
                 "",
                 output=False,
                 optional=True,
-                desc=topup_option_desc,
+                desc=topup_options_desc,
             ),
         )
 
@@ -1160,13 +1161,13 @@ class DWIPreproc(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(DWIBiasCorrect, self).run_process_mia()
+        super(DWIPreproc, self).run_process_mia()
         self.process.in_file = self.in_file
         self.process.out_file = self.out_file
         self.process.rpe_options = self.rpe_options
         self.process.align_seepi = self.align_seepi
-        if self.epi_corr:
-            self.process.in_epi = self.epi_corr
+        if self.se_epi_corr:
+            self.process.in_epi = self.se_epi_corr
         self.process.pe_dir = self.pe_dir
         if self.ro_time:
             self.process.ro_time = self.ro_time
@@ -2588,16 +2589,9 @@ class MRCat(ProcessMIA):
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
         super(MRCat, self).run_process_mia()
-        self.process.in_file = self.in_file
+        self.process.in_files = self.in_files
         self.process.out_file = self.out_file
-        if self.bzero:
-            self.process.bzero = self.bzero
-        if self.nobzero:
-            self.process.nobzero = self.nobzero
-        if self.shell:
-            self.process.shell = self.shell
-        if self.singleshell:
-            self.process.singleshell = self.singleshell
+        self.process.axis = self.axis
 
         return self.process.run(configuration_dict={})
 
@@ -3010,8 +3004,10 @@ class MRDeGibbs(ProcessMIA):
         self.add_trait(
             "axes",
             List(
-                Int(),
-                default=[0, 1],
+                value=[0, 1],
+                trait=Range(low=0, high=None),
+                minlen=2,
+                maxlen=2,
                 output=False,
                 optional=True,
                 desc=axes_desc,
@@ -3693,8 +3689,8 @@ class MTnormalise(ProcessMIA):
         # Outputs traits
         self.add_trait(
             "out_files",
-            InputMultiPath(
-                Either(File(), List(File())),
+            OutputMultiPath(
+                Either(List(File()), File()),
                 output=True,
                 desc=out_files_desc,
             ),
@@ -3717,10 +3713,10 @@ class MTnormalise(ProcessMIA):
         super(MTnormalise, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
-        out_files = []
+        self.outputs["out_files"] = []
         if self.in_files:
-            for f in self.in_files:
-                valid_ext, in_ext, fileName = checkFileExt(f, EXT_DWI)
+            for in_file in self.in_files:
+                valid_ext, in_ext, fileName = checkFileExt(in_file, EXT_DWI)
 
                 if not valid_ext:
                     print("\nThe input image format is not recognized...!")
@@ -3730,16 +3726,12 @@ class MTnormalise(ProcessMIA):
                     out_file = os.path.join(
                         self.output_directory, fileName + "_norm." + in_ext
                     )
-                    out_files.append(out_file)
+                    self.outputs["out_files"].append(out_file)
 
-        if out_files:
-            self.outputs["out_files"] = out_files
-
-        if self.outputs:
-            # FIXME: out_files inherits only from the first file
-            self.tags_inheritance(
-                in_file=self.in_files[0], out_file=self.outputs["out_files"]
-            )
+                    self.tags_inheritance(
+                        in_file,
+                        out_file,
+                    )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
@@ -3753,15 +3745,16 @@ class MTnormalise(ProcessMIA):
         for in_file in self.in_files:
             cmd += [in_file, self.out_files[i]]
             i += 1
+        cmd += ["-mask", self.mask]
         if self.order_number:
-            cmd += ["-order", self.order_number]
+            cmd += ["-order", str(self.order_number)]
         if self.niter_number:
             niter = ""
             for n in self.niter_number:
                 niter += str(n) + ","
             cmd += ["-niter", niter[:-1]]
         if self.reference_number:
-            cmd += ["-reference", self.reference_number]
+            cmd += ["-reference", str(self.reference_number)]
         if self.balanced:
             cmd += ["-balanced"]
 

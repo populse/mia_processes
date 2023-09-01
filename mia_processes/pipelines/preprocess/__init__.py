@@ -28,4 +28,7 @@ from .bold_spatial_preprocessing1 import (  # noqa: F401
 from .bold_spatial_preprocessing2 import (  # noqa: F401
     Bold_spatial_preprocessing2,
 )
+from .dwi_fod import Dwi_fod  # noqa: F401
+from .dwi_preprocessing import Dwi_preprocessing  # noqa: F401
+from .dwi_tissue_boundaries import Dwi_tissue_boundaries  # noqa: F401
 from .spatial_mask import Spatial_mask  # noqa: F401

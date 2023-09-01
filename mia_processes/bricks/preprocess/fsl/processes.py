@@ -655,7 +655,6 @@ class Flirt(ProcessMIA):
                 return
 
             self.process.output_type = self.output_type
-            self.process.segments = self.segments
 
             if self.output_directory:
                 _, fileIval = os.path.split(self.in_file)
