@@ -24,7 +24,7 @@ the selected eigenvector(s) of the diffusion tensor
 **Mandatory inputs parameters:**
 
 - *in_file* (a pathlike object or a string representing an existing file)
-    Input tensor image (valid extensions: [.mif, .nii, .nii.gz]).
+    Input tensor image (valid extensions: [.mif]).
 
     ::
 

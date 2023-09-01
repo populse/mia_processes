@@ -20,7 +20,7 @@ Multi-tissue informed log-domain intensity normalisation
 **Mandatory inputs parameters:**
 
 - *in_files* (a list of items which are a pathlike object or a string representing an existing file)
-    Input tissue component image (valid extensions: [.mif, .nii, .nii.gz]).
+    Input tissue component image (valid extensions: [.mif]).
 
     ::
 

@@ -13,12 +13,14 @@ Mrtrix processes.
 ##########################################################################
 
 from .processes import (  # noqa: F401
-    BrainMask,
     ConstrainedSphericalDeconvolution,
     DWIBiasCorrect,
+    DWIBrainMask,
     DWIDenoise,
     DWIExtract,
     DWIPreproc,
+    EditingTrack,
+    FilteringTrack,
     FitTensor,
     Generate5tt2gmwmi,
     Generate5ttfsl,
@@ -29,6 +31,7 @@ from .processes import (  # noqa: F401
     MRTransform,
     MTnormalise,
     ResponseSDDhollander,
+    SphericalHarmonicExtraction,
     TensorMetrics,
     Tractography,
     TransformFSLConvert,

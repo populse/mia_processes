@@ -21,7 +21,7 @@ includes both brain tissue and CSF.
 **Mandatory nputs parameters:**
 
 - *in_file* (a pathlike object or a string representing an existing file)
-    Input DWI image (valid extensions: [.mif, .nii, .nii.gz]).
+    Input DWI image (valid extensions: [.mif]).
 
     ::
 

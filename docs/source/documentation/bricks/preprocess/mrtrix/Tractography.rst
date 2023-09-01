@@ -24,7 +24,7 @@ At least one tractography seeding mechanisms must be provided. The select and se
 **Mandatory inputs parameters:**
 
 - *in_file* (a pathlike object or a string representing an existing file)
-    Input DWI image (valid extensions: [.mif, .nii, .nii.gz]).
+    Input DWI image (valid extensions: [.mif]).
 
     ::
 

@@ -14,7 +14,9 @@ populse_mia.
         - DWIDenoise
         - DWIExtract
         - DWIPreproc
+        - EditingTrack
         - FitTensor
+        - FilteringTrack
         - Generate5ttfsl
         - Generate5tt2gmwmi
         - MRCat
@@ -24,6 +26,7 @@ populse_mia.
         - MRTransform
         - MTnormalise
         - ResponseSDDhollander
+        - SphericalHarmonicExtraction
         - TensorMetrics
         - Tractography
         - TransformFSLConvert
@@ -55,7 +58,11 @@ from traits.api import (
 
 from mia_processes.utils import checkFileExt
 
+# for diffusion, in order to simplify the bricks,
+# we only accept mif data (with bvec/bval inside the .mif)
+EXT_DWI = {"MIF": "mif"}
 EXT = {"NIFTI_GZ": "nii.gz", "NIFTI": "nii", "MIF": "mif"}
+EXT_TCK = {"TCK": "tck"}
 
 
 class ConstrainedSphericalDeconvolution(ProcessMIA):
@@ -223,7 +230,7 @@ class ConstrainedSphericalDeconvolution(ProcessMIA):
 
         self.add_trait(
             "predicted_signal_file",
-            File(output=True, optional=False, desc=predicted_signal_file_desc),
+            File(output=True, optional=True, desc=predicted_signal_file_desc),
         )
 
         self.init_default_traits()
@@ -248,7 +255,7 @@ class ConstrainedSphericalDeconvolution(ProcessMIA):
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
-            valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
+            valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT_DWI)
 
             if not valid_ext:
                 print("\nThe input image format is not recognized...!")
@@ -445,7 +452,7 @@ class DWIBiasCorrect(ProcessMIA):
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
-            valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
+            valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT_DWI)
 
             if not valid_ext:
                 print("\nThe input image format is not recognized...!")
@@ -554,7 +561,7 @@ class DWIBrainMask(ProcessMIA):
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
-            valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
+            valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT_DWI)
 
             if not valid_ext:
                 print("\nThe input image format is not recognized...!")
@@ -636,11 +643,10 @@ class DWIDenoise(ProcessMIA):
 
         self.add_trait(
             "extend",
-            Tuple(
-                Int,
-                Int,
-                Int,
-                default=(5, 5, 5),
+            Either(
+                Undefined,
+                Tuple(Int, Int, Int),
+                default=Undefined,
                 output=False,
                 optional=True,
                 desc=extend_desc,
@@ -698,7 +704,7 @@ class DWIDenoise(ProcessMIA):
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
-            valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
+            valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT_DWI)
 
             if not valid_ext:
                 print("\nThe input image format is not recognized...!")
@@ -858,7 +864,7 @@ class DWIExtract(ProcessMIA):
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
-            valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
+            valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT_DWI)
 
             if not valid_ext:
                 print("\nThe input image format is not recognized...!")
@@ -963,7 +969,7 @@ class DWIPreproc(ProcessMIA):
             "by eddy, and the output of eddy_qc (if installed), "
             "(a boolean)"
         )
-        epi_corr_desc = (
+        se_epi_corr_desc = (
             "Provide an additional image series consisting of spin-echo EPI "
             "images which is to be used exclusively by topup for estimating "
             "the  inhomogeneity field (i.e. it will not form part of the "
@@ -1005,7 +1011,8 @@ class DWIPreproc(ProcessMIA):
 
         # Optionnal inputs traits
         self.add_trait(
-            "epi_corr", File(output=False, optional=True, desc=epi_corr_desc)
+            "se_epi_corr",
+            File(output=False, optional=True, desc=se_epi_corr_desc),
         )
 
         self.add_trait(
@@ -1015,8 +1022,6 @@ class DWIPreproc(ProcessMIA):
                 "pa",
                 "lr",
                 "rl",
-                "is",
-                "si",
                 output=False,
                 optional=True,
                 desc=pe_dir_desc,
@@ -1024,7 +1029,15 @@ class DWIPreproc(ProcessMIA):
         )
 
         self.add_trait(
-            "ro_time", Float(output=False, optional=True, desc=ro_time_desc)
+            "ro_time",
+            Either(
+                Undefined,
+                Float(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=ro_time_desc,
+            ),
         )
 
         self.add_trait(
@@ -1125,7 +1138,7 @@ class DWIPreproc(ProcessMIA):
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
-            valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
+            valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT_DWI)
 
             if not valid_ext:
                 print("\nThe input image format is not recognized...!")
@@ -1171,6 +1184,770 @@ class DWIPreproc(ProcessMIA):
             self.process.topup_options = self.topup_options
 
         return self.process.run(configuration_dict={})
+
+
+class EditingTrack(ProcessMIA):
+    """
+    *Perform various editing operations on track files.
+    (tckedit command)*
+
+    Please, see the complete documentation for the `EditingTrack brick
+    in the populse.mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/EditingTrack.html>`_
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instantiation.
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(EditingTrack, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = ["mrtrix"]
+
+        # Mandatory inputs description
+        in_tracks_desc = (
+            "Inputs track file(s) (a list of items which are a pathlike "
+            "object or a string representing an existing file)"
+        )
+        suffix_desc = "Output file suffix (a string)"
+        roi_excl_desc = (
+            "Specify an exclusion region of interest, streamlines that enter "
+            "ANY exclude region will be discarded. (a pathlike "
+            "object or string representing an existing file or a tuple of the "
+            "form: (a float, a float, a float, a float))"
+        )
+        roi_incl_desc = (
+            "Specify an inclusion region of interest, streamlines must "
+            "traverse ALL inclusion regions to be accepted. (a pathlike "
+            "object or string representing an existing file or a tuple of the "
+            "form: (a float, a float, a float, a float))"
+        )
+        roi_incl_ordered_desc = (
+            "Specify an inclusion region of interest, streamlines must "
+            "traverse ALL inclusion_ordered regions in the order "
+            "they are specified in order to be accepted. (a pathlike "
+            "object or string representing an existing file or a tuple of the "
+            "form: (a float, a float, a float, a float))"
+        )
+        roi_mask_desc = (
+            "Specify a masking region of interest. If defined,streamlines "
+            "exiting the mask will be truncated. (a pathlike "
+            "object or string representing an existing file or a tuple of the "
+            "form: (a float, a float, a float, a float))"
+        )
+        maxlength_desc = "The maximum length of any streamline in mm (a float)"
+        minlength_desc = "The minimum length of any streamline in mm (a float)"
+        number_desc = (
+            "The desired number of selected streamlines to be propagated to "
+            "the output file (an integer)"
+        )
+        skip_desc = (
+            "Omit this number of selected streamlines before commencing "
+            "writing to the output file (an integer)"
+        )
+        maxweight_desc = "The maximum weight of any streamline (an integer)"
+        minweight_desc = "The minimum weight of any streamline (an integer)"
+        inverse_desc = (
+            "Output the inverse selection of streamlines based on the "
+            "criteria provided; i.e. only those streamlines that fail at "
+            "least one selection criterion, and/or vertices that are outside "
+            "masks if provided, will be written to file (a boolean)"
+        )
+        ends_only_desc = (
+            "Only test the ends of each streamline against the provided "
+            "include/exclude ROIs (a boolean)"
+        )
+        tck_weights_in_desc = (
+            "Specify a text scalar file containing the streamline weights"
+            "(a pathlike object or string representing an existing file)"
+        )
+        get_tck_weights_out_desc = (
+            "Get  an output text scalar file containing streamline weights "
+            "(a boolean)"
+        )
+        # Output descriptions
+        tracks_out_desc = (
+            "The output track file (a pathlike object or "
+            "string representing a file)"
+        )
+        tck_weights_out_desc = (
+            "Output text scalar file containing streamline weights"
+            "(a pathlike object or string representing a file)"
+        )
+
+        # Mandatory inputs traits
+        self.add_trait(
+            "in_tracks",
+            InputMultiPath(
+                Either(File(), List(File())),
+                output=False,
+                desc=in_tracks_desc,
+            ),
+        )
+
+        self.add_trait(
+            "suffix",
+            String(
+                "edited",
+                output=False,
+                optional=True,
+                desc=suffix_desc,
+            ),
+        )
+
+        self.add_trait(
+            "roi_excl",
+            Either(
+                File(),
+                Tuple(Float, Float, Float, Float),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=roi_excl_desc,
+            ),
+        )
+
+        self.add_trait(
+            "roi_incl",
+            Either(
+                File(),
+                Tuple(Float, Float, Float, Float),
+                output=False,
+                optional=True,
+                desc=roi_incl_desc,
+            ),
+        )
+
+        self.add_trait(
+            "roi_incl_ordered",
+            Either(
+                File(),
+                Tuple(Float, Float, Float, Float),
+                output=False,
+                optional=True,
+                desc=roi_incl_ordered_desc,
+            ),
+        )
+
+        self.add_trait(
+            "roi_mask",
+            Either(
+                File(),
+                Tuple(Float, Float, Float, Float),
+                output=False,
+                optional=True,
+                desc=roi_mask_desc,
+            ),
+        )
+
+        self.add_trait(
+            "maxlenght",
+            Either(
+                Undefined,
+                Float(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=maxlength_desc,
+            ),
+        )
+
+        self.add_trait(
+            "minlenght",
+            Either(
+                Undefined,
+                Float(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=minlength_desc,
+            ),
+        )
+
+        self.add_trait(
+            "number",
+            Either(
+                Undefined,
+                Int(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=number_desc,
+            ),
+        )
+
+        self.add_trait(
+            "skip",
+            Either(
+                Undefined,
+                Int(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=skip_desc,
+            ),
+        )
+
+        self.add_trait(
+            "maxweight",
+            Either(
+                Undefined,
+                Int(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=maxweight_desc,
+            ),
+        )
+
+        self.add_trait(
+            "minweight",
+            Either(
+                Undefined,
+                Int(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=minweight_desc,
+            ),
+        )
+
+        self.add_trait(
+            "inverse",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=inverse_desc,
+            ),
+        )
+
+        self.add_trait(
+            "ends_only",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=ends_only_desc,
+            ),
+        )
+
+        self.add_trait(
+            "tck_weights_in",
+            File(output=False, optional=True, desc=tck_weights_in_desc),
+        )
+
+        self.add_trait(
+            "get_tck_weights_out",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=get_tck_weights_out_desc,
+            ),
+        )
+
+        # Outputs
+        self.add_trait(
+            "tracks_out",
+            File(output=True, optional=False, desc=tracks_out_desc),
+        )
+
+        self.add_trait(
+            "tck_weights_out",
+            File(output=True, optional=True, desc=tck_weights_out_desc),
+        )
+
+        self.init_default_traits()
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(EditingTrack, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.in_tracks:
+            for in_file in self.in_tracks:
+                valid_ext, in_ext, fileName = checkFileExt(in_file, EXT_TCK)
+                if not valid_ext:
+                    print("\nThe input image format is not recognized...!")
+                    return self.make_initResult()
+
+            if self.output_directory:
+                # Name of the first track used for output name
+                valid_ext, in_ext, fileName = checkFileExt(
+                    self.in_tracks[0], EXT
+                )
+                self.outputs["tracks_out"] = os.path.join(
+                    self.output_directory,
+                    fileName + "_" + self.suffix + "." + in_ext,
+                )
+
+                self.outputs["tck_weights_out"] = os.path.join(
+                    self.output_directory, fileName + "_weight.txt"
+                )
+
+        if self.outputs:
+            # First track file used for inheritance
+            self.tags_inheritance(
+                in_file=self.in_tracks[0], out_file=self.outputs["tracks_out"]
+            )
+            self.tags_inheritance(
+                in_file=self.in_tracks[0],
+                out_file=self.outputs["tck_weights_out"],
+            )
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(EditingTrack, self).run_process_mia()
+        cmd = ["tckedit"]
+
+        for in_file in self.in_tracks:
+            cmd += [in_file]
+
+        cmd += [self.tracks_out]
+
+        if self.roi_excl:
+            cmd += ["-exclude", self.roi_excl]
+        if self.roi_incl:
+            cmd += ["-include", self.roi_incl]
+        if self.roi_incl_ordered:
+            cmd += ["-include_ordered", self.roi_incl_ordered]
+        if self.roi_mask:
+            cmd += ["-mask", self.roi_mask]
+        if self.maxlenght:
+            cmd += ["-maxlenght", self.maxlenght]
+        if self.minlength:
+            cmd += ["-minlength", self.minlength]
+        if self.number:
+            cmd += ["-number", self.number]
+        if self.skip:
+            cmd += ["-skip", self.skip]
+        if self.maxweight:
+            cmd += ["-maxweight", self.maxweight]
+        if self.minweight:
+            cmd += ["-minweight", self.minweight]
+        if self.inverse:
+            cmd += ["-inverse"]
+        if self.ends_only:
+            cmd += ["-minweight"]
+        if self.tck_weights_in:
+            cmd += ["-tck_weights_in", self.tck_weights_in]
+        if self.get_tck_weights_out:
+            cmd += ["-tck_weights_out", self.tck_weights_out]
+
+        return mrtrix.mrtrix_call(cmd)
+
+
+class FilteringTrack(ProcessMIA):
+    """
+    *Filter a whole-brain fibre-tracking data set such that the streamline
+    densities match the FOD lobe integrals.
+    (tcksift command)*
+
+    Please, see the complete documentation for the `FilteringTrack brick
+    in the populse.mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/FilteringTrack.html>`_
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instantiation.
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(FilteringTrack, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = ["mrtrix"]
+
+        # Mandatory inputs description
+        in_tracks_desc = (
+            "Input track file (a pathlike "
+            "object or a string representing an existing file)"
+        )
+        suffix_desc = "Output file suffix (a string)"
+        in_fod_desc = (
+            "Input image containing the spherical harmonics of the fibre "
+            "orientation distributions (a pathlike "
+            "object or a string representing an existing file)"
+        )
+        proc_mask_desc = (
+            "Provide an image containing the processing mask weights for "
+            "the model (a pathlike object or a string representing an "
+            "existing file)"
+        )
+        act_image_desc = (
+            "Provide an ACT five-tissue-type segmented anatomical image "
+            "to derive the processing mask (a pathlike object or a string "
+            "representing an existing file)"
+        )
+        fd_scale_gm_desc = (
+            "Provide this option (in conjunction with -act) to heuristically "
+            "downsize the fibre density estimates based on the presence of GM "
+            "in the vox (a boolean)"
+        )
+        no_dilate_lut_desc = (
+            "Do NOT dilate FOD lobe lookup tables; only map streamlines to "
+            "FOD lobes if the precise tangent lies within the angular spread "
+            "of that lobe (a boolean)"
+        )
+        make_null_lobes_desc = (
+            "Add an additional FOD lobe to each voxel, with zero integral, "
+            "that covers all directions with zero / negative FOD amplitudes "
+            "(a boolean)"
+        )
+        remove_untracked_desc = (
+            "Remove FOD lobes that do not have any streamline density "
+            "attributed to them (a boolean)"
+        )
+        fd_thresh_value_desc = "Fibre density threshold (an integer)"
+        term_number_value_desc = (
+            "Number of streamlines - continue filtering until this number "
+            "of streamlines remain (an integer)"
+        )
+        term_ratio_value_desc = (
+            "Termination ratio - defined as the ratio between reduction in "
+            "cost function, and reduction in density of streamlines. "
+            "(an integer)"
+        )
+        term_mu_value_desc = (
+            "Terminate filtering once the SIFT proportionality coefficient "
+            "reaches a given value (an integer)"
+        )
+        get_csv_file_desc = (
+            "Output statistics of execution per iteration to a .csv file "
+            "(a boolean)"
+        )
+        get_mu_file_desc = (
+            "Output the final value of SIFT proportionality coefficient mu "
+            "to a text file (a boolean)"
+        )
+        get_out_selection_file_desc = (
+            "Output a text file containing the binary selection of streamlines"
+            "(a boolean)"
+        )
+        # Output descriptions
+        tracks_out_desc = (
+            "The output filtered tracks file (a pathlike object or "
+            "string representing a file)"
+        )
+        csv_file_out_desc = (
+            "A csv file with the output statistics of execution per iteration "
+            "(a pathlike object or string representing a file)"
+        )
+        mu_file_out_desc = (
+            "The final value of SIFT proportionality coefficient mu in a text "
+            "file (a pathlike object or string representing a file)"
+        )
+        selection_file_out_desc = (
+            "A text file containing the binary selection of streamlines "
+            "(a pathlike object or string representing a file)"
+        )
+
+        # Mandatory inputs traits
+        self.add_trait(
+            "in_tracks",
+            InputMultiPath(
+                Either(File(), List(File())),
+                output=False,
+                desc=in_tracks_desc,
+            ),
+        )
+
+        self.add_trait(
+            "in_fod",
+            File(
+                output=False,
+                desc=in_fod_desc,
+            ),
+        )
+
+        # Optional inputs traits
+        self.add_trait(
+            "suffix",
+            String(
+                "sift",
+                output=False,
+                optional=True,
+                desc=suffix_desc,
+            ),
+        )
+
+        self.add_trait(
+            "proc_mask",
+            File(
+                output=False,
+                optional=True,
+                desc=proc_mask_desc,
+            ),
+        )
+
+        self.add_trait(
+            "act_image",
+            File(
+                output=False,
+                optional=True,
+                desc=act_image_desc,
+            ),
+        )
+
+        self.add_trait(
+            "fd_scale_gm",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=fd_scale_gm_desc,
+            ),
+        )
+
+        self.add_trait(
+            "no_dilate_lut",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=no_dilate_lut_desc,
+            ),
+        )
+
+        self.add_trait(
+            "make_null_lobes",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=make_null_lobes_desc,
+            ),
+        )
+
+        self.add_trait(
+            "remove_untracked",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=remove_untracked_desc,
+            ),
+        )
+
+        self.add_trait(
+            "fd_thresh_value",
+            Either(
+                Undefined,
+                Int(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=fd_thresh_value_desc,
+            ),
+        )
+
+        self.add_trait(
+            "term_number_value",
+            Either(
+                Undefined,
+                Int(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=term_number_value_desc,
+            ),
+        )
+
+        self.add_trait(
+            "term_ratio_value",
+            Either(
+                Undefined,
+                Int(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=term_ratio_value_desc,
+            ),
+        )
+
+        self.add_trait(
+            "term_mu_value",
+            Either(
+                Undefined,
+                Int(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=term_mu_value_desc,
+            ),
+        )
+
+        self.add_trait(
+            "get_csv_file",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=get_csv_file_desc,
+            ),
+        )
+
+        self.add_trait(
+            "get_mu_file",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=get_mu_file_desc,
+            ),
+        )
+
+        self.add_trait(
+            "get_out_selection_file",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=get_out_selection_file_desc,
+            ),
+        )
+
+        # Outputs
+        self.add_trait(
+            "tracks_out",
+            File(output=True, optional=False, desc=tracks_out_desc),
+        )
+
+        self.add_trait(
+            "csv_file_out",
+            File(output=True, optional=True, desc=csv_file_out_desc),
+        )
+
+        self.add_trait(
+            "mu_file_out",
+            File(output=True, optional=True, desc=mu_file_out_desc),
+        )
+
+        self.add_trait(
+            "selection_file_out",
+            File(output=True, optional=True, desc=selection_file_out_desc),
+        )
+
+        self.init_default_traits()
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(FilteringTrack, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.in_tracks:
+            valid_ext, in_ext, fileName = checkFileExt(self.in_tracks, EXT_TCK)
+            if not valid_ext:
+                print("\nThe input image format is not recognized...!")
+                return self.make_initResult()
+
+            if self.output_directory:
+                self.outputs["tracks_out"] = os.path.join(
+                    self.output_directory,
+                    fileName + "_" + self.suffix + "." + in_ext,
+                )
+                if self.get_csv_file:
+                    self.outputs["csv_file_out"] = os.path.join(
+                        self.output_directory, fileName + "_tcksift_stats.csv"
+                    )
+                if self.get_mu_file:
+                    self.outputs["mu_file_out"] = os.path.join(
+                        self.output_directory, fileName + "_tcksift_mu.txt"
+                    )
+                if self.get_out_selection_file:
+                    self.outputs["selection_file_out"] = os.path.join(
+                        self.output_directory,
+                        fileName + "_tcksift_selection.txt",
+                    )
+
+        if self.outputs:
+            self.tags_inheritance(
+                in_file=self.in_tracks, out_file=self.outputs["tracks_out"]
+            )
+            if self.get_csv_file:
+                self.tags_inheritance(
+                    in_file=self.in_tracks,
+                    out_file=self.outputs["csv_file_out"],
+                )
+            if self.get_mu_file:
+                self.tags_inheritance(
+                    in_file=self.in_tracks,
+                    out_file=self.outputs["mu_file_out"],
+                )
+            if self.get_out_selection_file:
+                self.tags_inheritance(
+                    in_file=self.in_tracks,
+                    out_file=self.outputs["selection_file_out"],
+                )
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(FilteringTrack, self).run_process_mia()
+        cmd = ["tcksift"]
+
+        if self.proc_mask:
+            cmd += ["-proc_mask", self.proc_mask]
+        if self.act_image:
+            cmd += ["-act", self.act_image]
+        if self.fd_scale_gm:
+            cmd += ["-fd_scale_gm"]
+        if self.no_dilate_lut:
+            cmd += ["-no_dilate_lut"]
+        if self.make_null_lobes:
+            cmd += ["-make_null_lobes"]
+        if self.remove_untracked:
+            cmd += ["-remove_untracked"]
+        if self.fd_thresh_value:
+            cmd += ["-fd_thresh", self.fd_thresh_value]
+        if self.term_number_value:
+            cmd += ["-term_number", self.term_number_value]
+        if self.term_ratio_value:
+            cmd += ["-term_ratio", self.term_ratio_value]
+        if self.term_mu_value:
+            cmd += ["-term_mu", self.term_mu_value]
+        if self.get_csv_file:
+            cmd += ["-csv", self.csv_file_out]
+        if self.get_mu_file:
+            cmd += ["-out_mu", self.mu_file_out]
+        if self.get_out_selection_file:
+            cmd += ["-out_selection", self.selection_file_out]
+
+        cmd += [self.in_tracks, self.in_fod, self.tracks_out]
+
+        return mrtrix.mrtrix_call(cmd)
 
 
 class FitTensor(ProcessMIA):
@@ -1340,7 +2117,7 @@ class FitTensor(ProcessMIA):
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
-            valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
+            valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT_DWI)
 
             if not valid_ext:
                 print("\nThe input image format is not recognized...!")
@@ -1983,7 +2760,7 @@ class MRConvert(ProcessMIA):
         self.add_trait(
             "export_bvec_bval",
             Bool(
-                True, output=False, optional=True, desc=export_bvec_bval_desc
+                False, output=False, optional=True, desc=export_bvec_bval_desc
             ),
         )
         self.add_trait(
@@ -2296,7 +3073,7 @@ class MRDeGibbs(ProcessMIA):
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
-            valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
+            valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT_DWI)
 
             if not valid_ext:
                 print("\nThe input image format is not recognized...!")
@@ -2394,7 +3171,7 @@ class MRMath(ProcessMIA):
                 "absmin",
                 "magmax",
                 output=False,
-                optional=False,
+                optional=True,
                 desc=operation_desc,
             ),
         )
@@ -2918,7 +3695,7 @@ class MTnormalise(ProcessMIA):
             "out_files",
             InputMultiPath(
                 Either(File(), List(File())),
-                output=False,
+                output=True,
                 desc=out_files_desc,
             ),
         )
@@ -2943,7 +3720,7 @@ class MTnormalise(ProcessMIA):
         out_files = []
         if self.in_files:
             for f in self.in_files:
-                valid_ext, in_ext, fileName = checkFileExt(f, EXT)
+                valid_ext, in_ext, fileName = checkFileExt(f, EXT_DWI)
 
                 if not valid_ext:
                     print("\nThe input image format is not recognized...!")
@@ -3134,17 +3911,17 @@ class ResponseSDDhollander(ProcessMIA):
 
         # Outputs traits
         self.add_trait(
-            "csf_file", File(output=True, optional=False, desc=csf_file_desc)
+            "csf_file", File(output=True, optional=True, desc=csf_file_desc)
         )
         self.add_trait(
-            "gm_file", File(output=True, optional=False, desc=gm_file_desc)
+            "gm_file", File(output=True, optional=True, desc=gm_file_desc)
         )
         self.add_trait(
-            "wm_file", File(output=True, optional=False, desc=wm_file_desc)
+            "wm_file", File(output=True, optional=True, desc=wm_file_desc)
         )
         self.add_trait(
             "voxels_image",
-            File(output=True, optional=False, desc=voxels_image_desc),
+            File(output=True, optional=True, desc=voxels_image_desc),
         )
 
         self.init_default_traits()
@@ -3167,7 +3944,7 @@ class ResponseSDDhollander(ProcessMIA):
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
-            valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
+            valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT_DWI)
 
             if not valid_ext:
                 print("\nThe input image format is not recognized...!")
@@ -3228,6 +4005,220 @@ class ResponseSDDhollander(ProcessMIA):
             self.process.args = args
 
         return self.process.run(configuration_dict={})
+
+
+class SphericalHarmonicExtraction(ProcessMIA):
+    """
+    *Extract the peaks of a spherical harmonic function in each voxel.
+    (sh2peaks command)*
+
+    Please, see the complete documentation for the
+    `SphericalHarmonicExtraction brick
+    in the populse.mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/SphericalHarmonicExtraction.html>`_
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instantiation.
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(SphericalHarmonicExtraction, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = ["mrtrix"]
+
+        # Mandatory inputs description
+        in_SH_coeff_desc = (
+            "The input image of SH coefficients (a pathlike "
+            "object or a string representing an existing file)"
+        )
+        suffix_desc = "Output file suffix (a string)"
+        num_desc = "The number of peaks to extract (an integer)"
+        direction_desc = (
+            "The direction of a peak to estimate (phi, theta) "
+            "(a tuple of the form (a Float, a Float)) "
+        )
+        peaks_image_desc = (
+            "The program will try to find the peaks that most closely match "
+            "those in the image provided.  (a pathlike "
+            "object or a string representing an existing file)"
+        )
+        thresh_value_desc = (
+            "Only peak amplitudes greater than the threshold will be "
+            "considered. (a float)"
+        )
+        seeds_file_desc = (
+            "Specify a set of directions from which to start the multiple "
+            "restarts of the optimisation (a pathlike object or a string "
+            "representing an existing file)"
+        )
+        mask_image_desc = (
+            "Only perform computation within the specified binary brain "
+            "mask image. (a pathlike object or a string representing "
+            "an existing file)"
+        )
+        fast_desc = (
+            "Use lookup table to compute associated Legendre polynomials "
+            "(faster, but approximate). (a boolean)"
+        )
+        # Output descriptions
+        output_image_desc = (
+            "The output image. Each volume corresponds to the x, y & z "
+            "component of each peak direction vector in turn. "
+            "(a pathlike object or string representing a file)"
+        )
+
+        # Mandatory inputs traits
+        self.add_trait(
+            "in_SH_coeff",
+            File(
+                output=False,
+                desc=in_SH_coeff_desc,
+            ),
+        )
+
+        # Optional inputs traits
+        self.add_trait(
+            "suffix",
+            String(
+                "peaks",
+                output=False,
+                optional=True,
+                desc=suffix_desc,
+            ),
+        )
+
+        self.add_trait(
+            "num",
+            Int(
+                3,
+                output=False,
+                optional=True,
+                desc=num_desc,
+            ),
+        )
+
+        self.add_trait(
+            "direction",
+            Either(
+                Undefined,
+                Tuple(Float, Float),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=direction_desc,
+            ),
+        )
+
+        self.add_trait(
+            "peaks_image",
+            File(output=False, optional=False, desc=peaks_image_desc),
+        )
+
+        self.add_trait(
+            "thresh_value",
+            Either(
+                Undefined,
+                Float(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=thresh_value_desc,
+            ),
+        )
+
+        self.add_trait(
+            "seeds_file",
+            File(output=False, optional=False, desc=seeds_file_desc),
+        )
+
+        self.add_trait(
+            "mask_image",
+            File(output=False, optional=False, desc=mask_image_desc),
+        )
+
+        self.add_trait(
+            "fast",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=fast_desc,
+            ),
+        )
+
+        # Outputs
+        self.add_trait(
+            "output_image",
+            File(output=True, optional=False, desc=output_image_desc),
+        )
+
+        self.init_default_traits()
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(SphericalHarmonicExtraction, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.in_tracks:
+            valid_ext, in_ext, fileName = checkFileExt(
+                self.in_SH_coeff, EXT_DWI
+            )
+            if not valid_ext:
+                print("\nThe input image format is not recognized...!")
+                return self.make_initResult()
+
+            if self.output_directory:
+                self.outputs["output_image"] = os.path.join(
+                    self.output_directory,
+                    fileName + "_" + self.suffix + "." + in_ext,
+                )
+
+        if self.outputs:
+            self.tags_inheritance(
+                in_file=self.in_SH_coeff, out_file=self.outputs["output_image"]
+            )
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(SphericalHarmonicExtraction, self).run_process_mia()
+        cmd = ["sh2peaks"]
+
+        if self.num:
+            cmd += ["-num", self.num]
+        if self.direction:
+            direction = str(self.direction[0]) + str(self.direction[1])
+            cmd += ["-direction", direction]
+        if self.peaks_image:
+            cmd += ["-peaks", self.peaks_image]
+        if self.thresh_value:
+            cmd += ["-threshold", self.thresh_value]
+        if self.seeds_file:
+            cmd += ["-seeds", self.seeds_file]
+        if self.mask_image:
+            cmd += ["-mask", self.mask_image]
+        if self.fast:
+            cmd += ["-fast"]
+
+        cmd += [self.in_SH_coeff, self.output_image]
+
+        return mrtrix.mrtrix_call(cmd)
 
 
 class TensorMetrics(ProcessMIA):
@@ -3505,7 +4496,7 @@ class TensorMetrics(ProcessMIA):
 
         # Outputs definition and tags inheritance (optional)
         if self.in_dti:
-            valid_ext, in_ext, fileName = checkFileExt(self.in_dti, EXT)
+            valid_ext, in_ext, fileName = checkFileExt(self.in_dti, EXT_DWI)
 
             if not valid_ext:
                 print("\nThe input image format is not recognized...!")
@@ -3970,9 +4961,10 @@ class Tractography(ProcessMIA):
 
         self.add_trait(
             "seed_rnd_voxel",
-            Tuple(
-                File,
-                Int,
+            Either(
+                Undefined,
+                Tuple(File, Int),
+                default=Undefined,
                 output=False,
                 optional=True,
                 desc=seed_rnd_voxel_desc,
@@ -3981,11 +4973,10 @@ class Tractography(ProcessMIA):
 
         self.add_trait(
             "seed_sphere",
-            Tuple(
-                Float,
-                Float,
-                Float,
-                Float,
+            Either(
+                Undefined,
+                Tuple(Float, Float, Float, Float),
+                default=Undefined,
                 output=False,
                 optional=True,
                 desc=seed_sphere_desc,
@@ -4039,10 +5030,10 @@ class Tractography(ProcessMIA):
 
         self.add_trait(
             "tracto_seed_direction",
-            Tuple(
-                Float,
-                Float,
-                Float,
+            Either(
+                Undefined,
+                Tuple(Float, Float, Float),
+                default=Undefined,
                 output=False,
                 optional=True,
                 desc=tracto_seed_direction_desc,
@@ -4130,7 +5121,10 @@ class Tractography(ProcessMIA):
 
         self.add_trait(
             "iFOD_power",
-            Int(
+            Either(
+                Undefined,
+                Int(),
+                default=Undefined,
                 output=False,
                 optional=True,
                 desc=iFOD_power_desc,
@@ -4139,7 +5133,10 @@ class Tractography(ProcessMIA):
 
         self.add_trait(
             "iFOD2_n_samples",
-            Int(
+            Either(
+                Undefined,
+                Int(),
+                default=Undefined,
                 output=False,
                 optional=True,
                 desc=iFOD2_n_samples_desc,
@@ -4175,7 +5172,7 @@ class Tractography(ProcessMIA):
 
         # Outputs definition and tags inheritance (optional)
         if self.in_file:
-            valid_ext, in_ext, file_name = checkFileExt(self.in_file, EXT)
+            valid_ext, in_ext, file_name = checkFileExt(self.in_file, EXT_DWI)
             if not valid_ext:
                 print("\nThe input image format is not recognized...!")
                 return self.make_initResult()

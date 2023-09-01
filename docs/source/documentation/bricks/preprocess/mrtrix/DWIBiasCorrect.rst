@@ -20,7 +20,7 @@ Perform B1 field inhomogeneity correction for a DWI image
 **Mandatory inputs parameters:**
 
 - *in_file* (a string representing an existing file)
-    Input DWI image (valid extensions: [.mif, .nii, .nii.gz]).
+    Input DWI image (valid extensions: [.mif]).
 
     ::
 

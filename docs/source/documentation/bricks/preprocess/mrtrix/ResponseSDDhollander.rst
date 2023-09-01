@@ -24,7 +24,7 @@ The aime is to decompose the diffusion signal into a set of smaller individual f
 **Mandatory inputs parameters:**
 
 - *in_file* (a pathlike object or a string representing an existing file)
-    Input DWI image (valid extensions: [.mif, .nii, .nii.gz]).
+    Input DWI image (valid extensions: [.mif]).
 
     ::
 

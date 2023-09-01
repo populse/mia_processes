@@ -26,7 +26,7 @@ directions. The FOD are estimated using spherical deconvolution.
 **Mandatory inputs parameters:**
 
 - *in_file* (a string representing an existing file)
-    Input DWI image (valid extensions: [.mif, .nii, .nii.gz]).
+    Input DWI image (valid extensions: [.mif]).
 
     ::
 

@@ -42,9 +42,13 @@ FSL should be configured in populse.
 
       ex. pair
 
-- *epi_corr* (a pathlike object or a string representing an existing file, optional)
+- *se_epi_corr* (a pathlike object or a string representing an existing file, optional)
     An additional image series consisting of spin-echo EPI images (typically b=0 volumes with opposing phase-direction)
     which is to be used exclusively by topup for estimating the inhomogeneity field (i.e. it will not form part of the output image series)
+
+    If rpe_option is set to pair, the se_epi_corr image series contains one or more pairs of b=0 images with reversed phase encoding,
+    the FIRST HALF of the volumes in the SE-EPI series must possess the same phase encoding as the input DWI series,
+    while the second half are assumed to contain the opposite phase encoding direction but identical total readout time.
 
     ::
 

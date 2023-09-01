@@ -24,7 +24,7 @@ This brick should be run before any interpolation and before motion correction (
 **Mandatory inputs parameters:**
 
 - *in_file* (a pathlike object or a string representing an existing file)
-    Input image (valid extensions: [.mif, .nii, .nii.gz]).
+    Input image (valid extensions: [.mif]).
 
     ::
 

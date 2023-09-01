@@ -491,6 +491,219 @@ class FastSegment(ProcessMIA):
         return self.process.run(configuration_dict={})
 
 
+class Flirt(ProcessMIA):
+    """
+    *Brain tissue segmentation using fsl.FAST*
+
+    Please, see the complete documentation for the `FastSegment brick
+    in the populse.mia_processes website
+    <https://populse.github.io/mia_processes/htmldocumentation/bricks/preprocess/fsl/FastSegment.html>`_
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instantiation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(Flirt, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = ["fsl", "nipype"]
+
+        # Mandatory inputs description
+        in_file_desc = (
+            "Input file (a pathlike object"
+            "string representing an existing file)"
+        )
+        in_reference_file_desc = (
+            "Reference file (a pathlike object"
+            "string representing an existing file)"
+        )
+        # Optional inputs with default value description
+        dof_desc = " Number of transform degrees of freedom (an integer) "
+        out_matrix_file_desc = (
+            "Output affine matrix in 4x4 asciii format. (a pathlike object"
+            "string representing an existing file)"
+        )
+        interp_desc = (
+            "Final interpolation method used in reslicing. "
+            "(trilinear or nearestneighbour or sinc or spline)"
+        )
+        output_type_desc = (
+            "Typecodes of the output NIfTI image formats (one "
+            "of NIFTI, NIFTI_GZ)."
+        )
+        # Outputs description
+        # out_file_desc = (
+        #     "Path/name of registered file (if generated)"
+        #     "(a pathlike object or string representing"
+        #     "a file)"
+        # )
+        out_log_desc = (
+            "Path/name of output log (if generated)"
+            "(a pathlike object or string representing"
+            "a file)"
+        )
+        out_matrix_file_desc = (
+            "Path/name of calculated affine transform (if generated)"
+            "(a pathlike object or string representing"
+            "a file)"
+        )
+
+        # Mandatory inputs traits
+        self.add_trait(
+            "in_file", File(output=False, optional=False, desc=in_file_desc)
+        )
+
+        self.add_trait(
+            "in_reference_file",
+            File(output=False, optional=False, desc=in_reference_file_desc),
+        )
+
+        # Optional inputs with default value traits
+        self.add_trait(
+            "dof",
+            Either(
+                Undefined,
+                Int(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=dof_desc,
+            ),
+        )
+
+        self.add_trait(
+            "out_matrix_file",
+            File(output=False, optional=True, desc=out_matrix_file_desc),
+        )
+
+        self.add_trait(
+            "interp",
+            Enum(
+                "nearestneighbour",
+                "trilinear",
+                "sinc",
+                "spline",
+                output=False,
+                optional=True,
+                desc=interp_desc,
+            ),
+        )
+
+        self.add_trait(
+            "output_type",
+            Enum(
+                "NIFTI",
+                "NIFTI_GZ",
+                output=False,
+                optional=True,
+                desc=output_type_desc,
+            ),
+        )
+
+        # Outputs traits
+        # self.add_trait(
+        #     "out_file", File(output=True, optional=True, desc=out_file_desc)
+        # )
+
+        self.add_trait(
+            "out_log",
+            File(output=True, optional=True, desc=out_log_desc),
+        )
+
+        self.add_trait(
+            "out_matrix_file",
+            File(output=True, optional=True, desc=out_matrix_file_desc),
+        )
+
+        self.init_default_traits()
+
+        # To suppress the "FSLOUTPUTTYPE environment
+        # variable is not set" nipype warning:
+        if "FSLOUTPUTTYPE" not in os.environ:
+            os.environ["FSLOUTPUTTYPE"] = self.output_type
+
+        self.init_process("nipype.interfaces.fsl.FLIRT")
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(Flirt, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.in_file:
+            valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
+
+            if not valid_ext:
+                print("\nThe input image format is" " not recognized...!")
+                return
+
+            self.process.output_type = self.output_type
+            self.process.segments = self.segments
+
+            if self.output_directory:
+                _, fileIval = os.path.split(self.in_file)
+                self.process.out_basename = os.path.join(
+                    self.output_directory, fileIval
+                )
+
+                # self.outputs["out_file"] = os.path.join(
+                #     self.output_directory,
+                #     os.path.split(self.process.out_file),
+                # )
+
+                self.outputs["out_log"] = os.path.join(
+                    self.output_directory,
+                    os.path.split(self.process.out_log),
+                )
+
+                self.outputs["out_matrix_file"] = os.path.join(
+                    self.output_directory,
+                    os.path.split(self.process.out_matrix_file),
+                )
+
+            else:
+                print("No output_directory was found...!\n")
+                return
+
+        if self.outputs:
+            for k in ("out_log", "out_matrix_file"):
+                self.tags_inheritance(
+                    in_file=self.in_file,
+                    out_file=self.outputs[k],
+                )
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(Flirt, self).run_process_mia()
+        self.process.in_file = self.in_file
+        self.process.reference = self.in_reference_file
+        self.process.dof = self.dof
+        self.process.out_matrix_file = self.out_matrix_file
+        self.process.output_type = self.output_type
+
+        return self.process.run(configuration_dict={})
+
+
 class Smooth(ProcessMIA):
     """
     *3D Gaussian smoothing of image volumes*
