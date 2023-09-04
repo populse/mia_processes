@@ -1488,6 +1488,8 @@ class Normalize12(ProcessMIA):
             "realigned fMRI, or segmentations)."
         )
 
+        out_prefix_desc = "Normalised output prefix (a string)."
+
         # Outputs description
         deformation_field_desc = (
             "File y_*.nii containing 3 deformation "
@@ -1554,7 +1556,6 @@ class Normalize12(ProcessMIA):
             "jobtype",
             Enum(
                 "write",
-                #                "estimate",
                 "est",
                 "estwrite",
                 output=False,
@@ -1685,6 +1686,13 @@ class Normalize12(ProcessMIA):
             ),
         )
 
+        self.add_trait(
+            "out_prefix",
+            String(
+                value="w", output=False, optional=True, desc=out_prefix_desc
+            ),
+        )
+
         # Outputs traits
         self.add_trait(
             "deformation_field",
@@ -1738,11 +1746,13 @@ class Normalize12(ProcessMIA):
             self.process.jobtype = self.jobtype
             self.process.apply_to_files = self.apply_to_files
             self.process.deformation_file = self.deformation_file
+            self.process.out_prefix = self.out_prefix
             _flag = True
 
+            # deformation_file is mutually exclusive with image_to_align
+            # and tpm
             if self.image_to_align:
                 self.image_to_align = Undefined
-                # self.process.image_to_align = self.image_to_align
 
             if self.tpm:
                 self.tpm = Undefined
@@ -1751,7 +1761,6 @@ class Normalize12(ProcessMIA):
             (self.image_to_align)
             and (self.image_to_align != Undefined)
             and (self.tpm)
-            # and (self.jobtype == "estimate")
             and (self.jobtype == "est")
         ):
             self.process.image_to_align = self.image_to_align
@@ -1760,8 +1769,7 @@ class Normalize12(ProcessMIA):
             _flag = True
 
             if self.apply_to_files and (self.apply_to_files != Undefined):
-                #    self.apply_to_files = [Undefined]
-                self.process.apply_to_files = self.apply_to_files
+                self.apply_to_files = Undefined
 
             if self.deformation_file:
                 self.deformation_file = Undefined
@@ -1775,11 +1783,11 @@ class Normalize12(ProcessMIA):
             self.process.image_to_align = self.image_to_align
             self.process.tpm = self.tpm
             self.process.jobtype = self.jobtype
+            self.process.out_prefix = self.out_prefix
             _flag = True
 
             if (self.apply_to_files) and (self.apply_to_files != Undefined):
                 self.process.apply_to_files = self.apply_to_files
-                # self.apply_to_files = Undefined
 
             if self.deformation_file:
                 self.deformation_file = Undefined
@@ -1800,7 +1808,7 @@ class Normalize12(ProcessMIA):
 
             for k in (
                 "deformation_field",
-                # "normalized_image",
+                "normalized_image",
                 "normalized_files",
             ):
                 self.outputs[k] = getattr(self.process, "_" + k)
@@ -1860,7 +1868,9 @@ class Normalize12(ProcessMIA):
 
                         pathOval, fileOval = os.path.split(out_val)
                         _, fileIval = os.path.split(in_val)
-                        fileOvalNoPref = fileOval[1:]
+                        # fmt: off
+                        fileOvalNoPref = fileOval[len(self.out_prefix):]
+                        # fmt: on
 
                         if fileOvalNoPref == fileIval:
                             self.tags_inheritance(
@@ -1879,20 +1889,20 @@ class Normalize12(ProcessMIA):
                             val,
                         )
 
-                # if (key == "normalized_image") and (val != Undefined):
-                #     if not isinstance(val, list):
-                #         val = [val]
-                #
-                #     for in_val, out_val in zip(self.image_to_align, val):
-                #         pathOval, fileOval = os.path.split(out_val)
-                #         _, fileIval = os.path.split(in_val)
-                #         # FIXME: I don't know exactly what is expected ...
-                #                  Need investigation ...
-                #         # fileOvalNoPref = fileOval[1:]  ???
-                #         # if fileOvalNoPref == fileIval:  ???
-                #         #    self.inheritance_dict[out_val] = in_val ???
+                if (key == "normalized_image") and (val != Undefined):
+                    pathOval, fileOval = os.path.split(val)
+                    _, fileIval = os.path.split(self.image_to_align)
+                    # fmt: off
+                    fileOvalNoPref = fileOval[len(self.out_prefix):]
+                    # fmt: on
 
-        # Return the requirement, outputs and inheritance_dict
+                    if fileOvalNoPref == fileIval:
+                        self.tags_inheritance(
+                            self.image_to_align,
+                            val,
+                        )
+
+        # Return the requirement and outputs
         return self.make_initResult()
 
     def run_process_mia(self):
