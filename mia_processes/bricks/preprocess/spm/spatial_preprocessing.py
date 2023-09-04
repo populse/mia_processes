@@ -1435,7 +1435,7 @@ class Normalize12(ProcessMIA):
             "items which are an existing, uncompressed file "
             "(valid extensions: [.img, .nii, .hdr])."
         )
-        jobtype_desc = 'One of "estwrite" or "estimate" or "write".'
+        jobtype_desc = 'One of "estwrite" or "est" or "write".'
         bias_regularization_desc = (
             "(For low-intensity non-uniformity artifacts"
             ", use a high bias regularization (a float "
@@ -1496,12 +1496,12 @@ class Normalize12(ProcessMIA):
             "representing a file, or a list of pathlike "
             "objects or strings representing a file)"
         )
-        #        normalized_image_desc = (
-        #            "Normalised file that needed to be aligned (a "
-        #            "pathlike object or string representing a "
-        #            "file, or a list of pathlike objects or "
-        #            "strings representing a file)."
-        #        )
+        normalized_image_desc = (
+            "Normalised file that needed to be aligned (a "
+            "pathlike object or string representing a "
+            "file, or a list of pathlike objects or "
+            "strings representing a file)."
+        )
         normalized_files_desc = (
             "Normalised other files (a pathlike object or "
             "string representing a file, or a list of "
@@ -1693,13 +1693,12 @@ class Normalize12(ProcessMIA):
             ),
         )
 
-        #        self.add_trait(
-        #            "normalized_image",
-        #            OutputMultiPath(
-        #                File(), output=True,
-        #                optional=True, desc=normalized_image_desc
-        #            ),
-        #        )
+        self.add_trait(
+            "normalized_image",
+            OutputMultiPath(
+                File(), output=True, optional=True, desc=normalized_image_desc
+            ),
+        )
 
         self.add_trait(
             "normalized_files",
