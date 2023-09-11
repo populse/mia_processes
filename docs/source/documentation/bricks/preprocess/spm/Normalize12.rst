@@ -38,8 +38,8 @@
 Normalize12 brick
 =================
 
-Computes the warp that best aligns the template (atlas) to the individual's image
----------------------------------------------------------------------------------
+Computes the deformation that best aligns the model (atlas) with an image, then if necessary, apply this deformation to spatially normalize images
+--------------------------------------------------------------------------------------------------------------------------------------------------
 
 **Inputs parameters:**
 
@@ -167,6 +167,13 @@ Computes the warp that best aligns the template (atlas) to the individual's imag
 
       ex. 1
 
+- *out_prefix <=> woptions.prefix* [#label]_
+    The prefix for the normalized outputs (a string).
+
+    ::
+
+      ex. w
+
 **Outputs parameters**
 
 
@@ -187,9 +194,6 @@ Computes the warp that best aligns the template (atlas) to the individual's imag
 -------------
 
 .. [#label] Syntax: mia_processes/nipype Normalize12 <=> SPM12 Normalise.
-
-	    NOTE:
-	        - Contrary to what is stated in the nipype documentation, this brick does not accept the out_prefix parameter which would allow to use a prefix other than "w" for the normalised image.
 
 	    Usefull links:
 	    `SPM12 Normalise <https://www.fil.ion.ucl.ac.uk/spm/doc/manual.pdf#page=51>`_,
