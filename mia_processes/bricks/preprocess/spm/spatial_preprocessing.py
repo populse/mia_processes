@@ -1567,9 +1567,9 @@ class Normalize12(ProcessMIA):
         self.add_trait(
             "bias_regularization",
             Enum(
+                0.0001,
                 0,
                 0.00001,
-                0.0001,
                 0.001,
                 0.01,
                 0.1,
@@ -1656,7 +1656,7 @@ class Normalize12(ProcessMIA):
             "write_bounding_box",
             List(
                 List(Float()),
-                value=[[-78, -112, -50], [78, 76, 85]],
+                value=[[-78, -112, -70], [78, 76, 85]],
                 output=False,
                 optional=True,
                 desc=write_bounding_box_desc,
@@ -1667,7 +1667,7 @@ class Normalize12(ProcessMIA):
             "write_voxel_sizes",
             List(
                 Float(),
-                value=[1, 1, 1],
+                value=[2, 2, 2],
                 output=False,
                 optional=True,
                 desc=write_voxel_sizes_desc,
@@ -1677,7 +1677,7 @@ class Normalize12(ProcessMIA):
         self.add_trait(
             "write_interp",
             Range(
-                value=1,
+                value=4,
                 low=0,
                 high=7,
                 output=False,
@@ -1903,10 +1903,13 @@ class Normalize12(ProcessMIA):
                         )
 
         # Return the requirement and outputs
+        else:
+            return
         return self.make_initResult()
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
+        super(Normalize12, self).run_process_mia()
         self.process.trait("image_to_align").optional = True
         self.process.image_to_align = self.image_to_align
         self.process.jobtype = self.jobtype
@@ -1934,12 +1937,8 @@ class Normalize12(ProcessMIA):
         self.process.write_bounding_box = self.write_bounding_box
         self.process.write_voxel_sizes = self.write_voxel_sizes
         self.process.write_interp = self.write_interp
+        self.process.out_prefix = self.out_prefix
 
-        # because the sync_process_output_traits() of the
-        # capsul/process/nipype_process  module raises an exception in nipype
-        # if the mandatory parameters are not yet defined, the next line
-        # can't be write before!
-        super(Normalize12, self).run_process_mia()
         return self.process.run(configuration_dict={})
 
 
