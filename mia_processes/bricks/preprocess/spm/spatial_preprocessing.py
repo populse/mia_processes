@@ -1903,8 +1903,6 @@ class Normalize12(ProcessMIA):
                         )
 
         # Return the requirement and outputs
-        else:
-            return
         return self.make_initResult()
 
     def run_process_mia(self):
