@@ -10,8 +10,8 @@
 Calc brick
 ============
 
-Voxel-by-voxel arithmetic on 3D datasets, using AFNI 3dcalc
------------------------------------------------------------
+Voxel-by-voxel arithmetic on **3D datasets** [#label]_, using AFNI 3dcalc
+-------------------------------------------------------------------------
 
 This bricks assumes that the voxel-by-voxel computations are being performed on datasets that occupy the same space and have the same orientations.
 
@@ -107,8 +107,8 @@ This bricks assumes that the voxel-by-voxel computations are being performed on 
 
 -------------
 
+.. [#label] Currently, if the input images are not in 3D, initialization may not crash and execution may not produce any results without error message...
+
 Usefull links:
-
 `AFNI 3dcalc <https://afni.nimh.nih.gov/pub/dist/doc/program_help/3dcalc.html>`_
-
 `AFNI Calc - nipype <https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.afni.utils.html#calc>`_
