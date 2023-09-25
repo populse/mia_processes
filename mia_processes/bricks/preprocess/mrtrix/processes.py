@@ -345,7 +345,9 @@ class DWIBiasCorrect(ProcessMIA):
         super(DWIBiasCorrect, self).__init__()
 
         # Third party softwares required for the execution of the brick
-        self.requirement = ["nipype", "mrtrix"]
+        # FIXME : ants and fsl in the requirement even if we use only
+        # one of them
+        self.requirement = ["nipype", "mrtrix", "ants", "fsl"]
 
         # Mandatory inputs description
         in_file_desc = (
@@ -430,7 +432,6 @@ class DWIBiasCorrect(ProcessMIA):
         )
 
         self.init_default_traits()
-
         self.init_process("nipype.interfaces.mrtrix3.DWIBiasCorrect")
 
     def list_outputs(self, is_plugged=None):
@@ -490,8 +491,10 @@ class DWIBiasCorrect(ProcessMIA):
         self.process.out_file = self.out_file
         if self.use_fsl:
             self.process.use_fsl = self.use_fsl
+            self.process.trait("use_ants").optional = True
         if self.use_ants:
             self.process.use_ants = self.use_ants
+            self.process.trait("use_fsl").optional = True
         if self.in_mask:
             self.process.mask = self.in_mask
         if self.bias:
@@ -1183,6 +1186,7 @@ class DWIPreproc(ProcessMIA):
             self.process.eddyqc_text = os.path.dirname(self.out_file)
         if self.topup_options:
             self.process.topup_options = self.topup_options
+        self.process.args = "-nocleanup"
 
         return self.process.run(configuration_dict={})
 
@@ -1358,7 +1362,7 @@ class EditingTrack(ProcessMIA):
         )
 
         self.add_trait(
-            "minlenght",
+            "minlength",
             Either(
                 Undefined,
                 Float(),
@@ -1525,29 +1529,29 @@ class EditingTrack(ProcessMIA):
         cmd += [self.tracks_out]
 
         if self.roi_excl:
-            cmd += ["-exclude", self.roi_excl]
+            cmd += ["-exclude", str(self.roi_excl)]
         if self.roi_incl:
-            cmd += ["-include", self.roi_incl]
+            cmd += ["-include", str(self.roi_incl)]
         if self.roi_incl_ordered:
-            cmd += ["-include_ordered", self.roi_incl_ordered]
+            cmd += ["-include_ordered", str(self.roi_incl_ordered)]
         if self.roi_mask:
-            cmd += ["-mask", self.roi_mask]
+            cmd += ["-mask", str(self.roi_mask)]
         if self.maxlenght:
-            cmd += ["-maxlenght", self.maxlenght]
+            cmd += ["-maxlenght", str(self.maxlenght)]
         if self.minlength:
-            cmd += ["-minlength", self.minlength]
+            cmd += ["-minlength", str(self.minlength)]
         if self.number:
-            cmd += ["-number", self.number]
+            cmd += ["-number", str(self.number)]
         if self.skip:
-            cmd += ["-skip", self.skip]
+            cmd += ["-skip", str(self.skip)]
         if self.maxweight:
-            cmd += ["-maxweight", self.maxweight]
+            cmd += ["-maxweight", str(self.maxweight)]
         if self.minweight:
-            cmd += ["-minweight", self.minweight]
+            cmd += ["-minweight", str(self.minweight)]
         if self.inverse:
             cmd += ["-inverse"]
         if self.ends_only:
-            cmd += ["-minweight"]
+            cmd += ["-ends_only"]
         if self.tck_weights_in:
             cmd += ["-tck_weights_in", self.tck_weights_in]
         if self.get_tck_weights_out:
@@ -1666,8 +1670,7 @@ class FilteringTrack(ProcessMIA):
         # Mandatory inputs traits
         self.add_trait(
             "in_tracks",
-            InputMultiPath(
-                Either(File(), List(File())),
+            File(
                 output=False,
                 desc=in_tracks_desc,
             ),
@@ -1868,6 +1871,7 @@ class FilteringTrack(ProcessMIA):
         # Outputs definition and tags inheritance (optional)
         if self.in_tracks:
             valid_ext, in_ext, fileName = checkFileExt(self.in_tracks, EXT_TCK)
+
             if not valid_ext:
                 print("\nThe input image format is not recognized...!")
                 return self.make_initResult()
@@ -1932,13 +1936,13 @@ class FilteringTrack(ProcessMIA):
         if self.remove_untracked:
             cmd += ["-remove_untracked"]
         if self.fd_thresh_value:
-            cmd += ["-fd_thresh", self.fd_thresh_value]
+            cmd += ["-fd_thresh", str(self.fd_thresh_value)]
         if self.term_number_value:
-            cmd += ["-term_number", self.term_number_value]
+            cmd += ["-term_number", str(self.term_number_value)]
         if self.term_ratio_value:
-            cmd += ["-term_ratio", self.term_ratio_value]
+            cmd += ["-term_ratio", str(self.term_ratio_value)]
         if self.term_mu_value:
-            cmd += ["-term_mu", self.term_mu_value]
+            cmd += ["-term_mu", str(self.term_mu_value)]
         if self.get_csv_file:
             cmd += ["-csv", self.csv_file_out]
         if self.get_mu_file:
@@ -2180,7 +2184,7 @@ class FitTensor(ProcessMIA):
         if self.ols_option:
             args += "-ols "
         if self.number_of_iter:
-            args += "-iter " + self.number_of_iter + " "
+            args += "-iter " + str(self.number_of_iter) + " "
         if self.estimate_dkt:
             args += "-dkt " + self.out_dkt + " "
         if self.get_output_b0:
@@ -2376,7 +2380,7 @@ class Generate5tt2gmwmi(ProcessMIA):
         super(Generate5tt2gmwmi, self).__init__()
 
         # Third party softwares required for the execution of the brick
-        self.requirement = ["nipype", "mrtrix", "fsl", "freesurfer"]
+        self.requirement = ["nipype", "mrtrix"]
 
         # Mandatory inputs description
         in_file_desc = (
@@ -3438,7 +3442,7 @@ class MRTransform(ProcessMIA):
             "oversample_factor",
             Either(
                 Undefined,
-                List(),
+                Int(),
                 List(Int()),
                 default=Undefined,
                 output=False,
@@ -3549,14 +3553,21 @@ class MRTransform(ProcessMIA):
             args += "-half "
         if self.replace_file:
             args += "-replace " + self.replace_file + " "
-        if self.identify:
+        if self.identity:
             args += "-identity "
         if self.midway_space:
             args += "-midway_space "
         if self.interpolation:
             args += "-interp " + self.interpolation + " "
         if self.oversample_factor:
-            args += "-oversample " + self.oversample_factor + " "
+            if isinstance(self.oversample_factor, list):
+                oversample_factor = ""
+                for i in self.oversample_factor:
+                    oversample_factor += str(i) + ","
+                oversample_factor = oversample_factor[:-1]
+            else:
+                oversample_factor = str(self.oversample_factor)
+            args += "-oversample " + oversample_factor + " "
         if self.warp_image:
             args += "-warp " + self.warp_image + " "
         if self.warp_full_image:
@@ -3565,7 +3576,7 @@ class MRTransform(ProcessMIA):
             args += "-modulate " + self.fod_modulate + " "
         if self.fod_directions_file:
             args += "-directions " + self.fod_directions_file + " "
-        if self.fod_reoriente:
+        if self.fod_reorient:
             args += "-reorient_fod "
         if args:
             self.process.args = args
@@ -3987,9 +3998,9 @@ class ResponseSDDhollander(ProcessMIA):
 
         args = ""
         if self.erode != 3:
-            args += "-erode " + self.erode + " "
+            args += "-erode " + str(self.erode) + " "
         if self.fa_thresh != 0.2:
-            args += "-fa " + self.fa_thresh + " "
+            args += "-fa " + str(self.fa_thresh) + " "
         if self.wm_algo:
             args += "-wm_algo " + self.wm_algo + " "
         if self.get_final_voxels:
@@ -4108,7 +4119,7 @@ class SphericalHarmonicExtraction(ProcessMIA):
 
         self.add_trait(
             "peaks_image",
-            File(output=False, optional=False, desc=peaks_image_desc),
+            File(output=False, optional=True, desc=peaks_image_desc),
         )
 
         self.add_trait(
@@ -4125,12 +4136,12 @@ class SphericalHarmonicExtraction(ProcessMIA):
 
         self.add_trait(
             "seeds_file",
-            File(output=False, optional=False, desc=seeds_file_desc),
+            File(output=False, optional=True, desc=seeds_file_desc),
         )
 
         self.add_trait(
             "mask_image",
-            File(output=False, optional=False, desc=mask_image_desc),
+            File(output=False, optional=True, desc=mask_image_desc),
         )
 
         self.add_trait(
@@ -4166,7 +4177,7 @@ class SphericalHarmonicExtraction(ProcessMIA):
         super(SphericalHarmonicExtraction, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
-        if self.in_tracks:
+        if self.in_SH_coeff:
             valid_ext, in_ext, fileName = checkFileExt(
                 self.in_SH_coeff, EXT_DWI
             )
@@ -4194,14 +4205,14 @@ class SphericalHarmonicExtraction(ProcessMIA):
         cmd = ["sh2peaks"]
 
         if self.num:
-            cmd += ["-num", self.num]
+            cmd += ["-num", str(self.num)]
         if self.direction:
             direction = str(self.direction[0]) + str(self.direction[1])
             cmd += ["-direction", direction]
         if self.peaks_image:
             cmd += ["-peaks", self.peaks_image]
         if self.thresh_value:
-            cmd += ["-threshold", self.thresh_value]
+            cmd += ["-threshold", str(self.thresh_value)]
         if self.seeds_file:
             cmd += ["-seeds", self.seeds_file]
         if self.mask_image:
@@ -5172,25 +5183,25 @@ class Tractography(ProcessMIA):
 
             if self.output_directory:
                 # TODO: add number of streamline in name ?
-                out_file_name = file_name + +"_tracto.tck"
+                out_file_name = file_name + "_tracto.tck"
                 self.outputs["out_file"] = os.path.join(
                     self.output_directory, out_file_name
                 )
                 if self.tracto_get_output_seeds:
-                    out_seed_file_name = (
-                        file_name + "_tracto_out_seeds" + in_ext
+                    out_seeds_file_name = (
+                        file_name + "_tracto_out_seeds." + in_ext
                     )
                     self.outputs["output_seeds"] = os.path.join(
-                        self.output_directory, out_seed_file_name
+                        self.output_directory, out_seeds_file_name
                     )
 
         if self.outputs:
             self.tags_inheritance(
-                in_file=self.in_dti, out_file=self.outputs["out_file"]
+                in_file=self.in_file, out_file=self.outputs["out_file"]
             )
             if self.tracto_get_output_seeds:
                 self.tags_inheritance(
-                    in_file=self.in_dti, out_file=self.outputs["output_seeds"]
+                    in_file=self.in_file, out_file=self.outputs["output_seeds"]
                 )
 
         # Return the requirement, outputs and inheritance_dict
@@ -5239,15 +5250,15 @@ class Tractography(ProcessMIA):
             self.process.seed_sphere = self.seed_sphere
         args = ""
         if self.tracto_seeds_number:
-            args += "-seeds" + self.tracto_seeds_number + ""
+            args += "-seeds" + str(self.tracto_seeds_number) + ""
         if self.tracto_max_attempts_per_seed_number:
             args += (
                 "-max_attempts_per_seed"
-                + self.tracto_max_attempts_per_seed_number
+                + str(self.tracto_max_attempts_per_seed_number)
                 + ""
             )
         if self.tracto_seed_cutoff:
-            args += "-seed_cutoff" + self.tracto_seed_cutoff + ""
+            args += "-seed_cutoff" + str(self.tracto_seed_cutoff) + ""
         if self.tracto_seed_unidirectional:
             args += "-seed_unidirectional"
         if self.tracto_seed_direction:
@@ -5257,7 +5268,7 @@ class Tractography(ProcessMIA):
         if self.roi_incl:
             self.process.roi_incl = self.roi_incl
         if self.roi_incl_ordered:
-            args += "" + self.roi_incl + " "
+            args += "" + str(self.roi_incl) + " "
         if self.roi_mask:
             self.process.roi_mask = self.roi_mask
         if self.act_image:
@@ -5267,7 +5278,7 @@ class Tractography(ProcessMIA):
         if self.iFOD2_n_samples:
             self.process.in_samples = self.iFOD2_n_samples
         if self.tracto_get_output_seeds:
-            self.process.output_seeds = self.output_seeds
+            self.process.out_seeds = self.output_seeds
 
         if args:
             self.process.args = args
@@ -5359,7 +5370,7 @@ class TransformFSLConvert(ProcessMIA):
         # Outputs definition and tags inheritance (optional)
         if self.in_transform:
             valid_ext, in_ext, file_name = checkFileExt(
-                self.in_file, {"MAT": "mat"}
+                self.in_transform, {"MAT": "mat"}
             )
             if not valid_ext:
                 print("\nThe transform matrice format is not recognized...!")
@@ -5371,7 +5382,8 @@ class TransformFSLConvert(ProcessMIA):
 
         if self.outputs:
             self.tags_inheritance(
-                in_file=self.in_dti, out_file=self.outputs["out_transform"]
+                in_file=self.in_transform,
+                out_file=self.outputs["out_transform"],
             )
 
         # Return the requirement, outputs and inheritance_dict

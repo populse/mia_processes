@@ -104,10 +104,10 @@ class Dwi_fod(Pipeline):
         )
         self.add_link("FilesToList.file_list->IntensityNormalization.in_files")
         self.export_parameter(
-            "ListToFile_1", "file", "csf_fod_norm", is_optional=False
+            "ListToFile_1", "file", "csf_fod_norm", is_optional=True
         )
         self.export_parameter(
-            "ListToFile_2", "file", "gm_fod_norm", is_optional=False
+            "ListToFile_2", "file", "gm_fod_norm", is_optional=True
         )
         self.export_parameter(
             "ListToFile_3", "file", "wm_fod_norm", is_optional=False

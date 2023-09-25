@@ -79,9 +79,6 @@ class Dwi_tissue_boundaries(Pipeline):
         )
         self.add_link("in_T1w->CoregistrationFlirt.in_reference_file")
         self.export_parameter(
-            "Generate5tt", "in_mask", "brain_mask", is_optional=True
-        )
-        self.export_parameter(
             "Extractb0", "in_file", "in_dwi", is_optional=False
         )
         self.export_parameter(
@@ -120,7 +117,6 @@ class Dwi_tissue_boundaries(Pipeline):
         self.reorder_traits(
             (
                 "in_T1w",
-                "brain_mask",
                 "in_dwi",
                 "T1w_coreg",
                 "5tt_coreg",

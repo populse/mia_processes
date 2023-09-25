@@ -32,6 +32,10 @@ class Dwi_preprocessing(Pipeline):
             "mia_processes.bricks.preprocess.mrtrix.processes.MRConvert",
         )
         self.add_process(
+            "Convert_b0",
+            "mia_processes.bricks.preprocess.mrtrix.processes.MRConvert",
+        )
+        self.add_process(
             "Denoising",
             "mia_processes.bricks.preprocess.mrtrix.processes.DWIDenoise",
         )
@@ -94,9 +98,10 @@ class Dwi_preprocessing(Pipeline):
             is_optional=True,
         )
         self.export_parameter(
-            "Meanb0Corr", "in_file", "in_b0_reverse", is_optional=False
+            "Convert_b0", "in_file", "in_b0_reverse", is_optional=False
         )
         self.add_link("Convert_dwi.out_file->Denoising.in_file")
+        self.add_link("Convert_b0.out_file->Meanb0Corr.in_file")
         self.add_link("Denoising.out_file->Unringing.in_file")
         self.add_link("Unringing.out_file->MotionDistortionCorrection.in_file")
         self.add_link("Unringing.out_file->Extractb0.in_file")
@@ -104,7 +109,7 @@ class Dwi_preprocessing(Pipeline):
             "MotionDistortionCorrection.out_file->BiasCorrection.in_file"
         )
         self.export_parameter(
-            "MotionDistortionCorrection",
+            "BiasCorrection",
             "out_file",
             "preproc_dwi",
             is_optional=False,
@@ -117,6 +122,7 @@ class Dwi_preprocessing(Pipeline):
             "Concatenateb0.out_file->MotionDistortionCorrection.se_epi_corr"
         )
         self.add_link("BiasCorrection.out_file->BrainMask.in_file")
+        # self.add_link("MotionDistortionCorrection.out_file->BrainMask.in_file")
         self.export_parameter(
             "BrainMask", "out_file", "brain_mask", is_optional=False
         )
@@ -139,6 +145,7 @@ class Dwi_preprocessing(Pipeline):
         # nodes positions
         self.node_position = {
             "Convert_dwi": (-1099.340793426031, -330.99389652344223),
+            "Convert_b0": (-1079.6856105700367, 223.28226001559904),
             "inputs": (-1291.3993894677506, 48.14750084237923),
             "Denoising": (-817.46266529709, -344.2197355246564),
             "Unringing": (-642.6747160934633, -204.01988374578806),
@@ -149,15 +156,17 @@ class Dwi_preprocessing(Pipeline):
             "Extractb0": (-451.7878747547151, -322.9089989467982),
             "Meanb0": (-259.73028467525273, -482.85714587016565),
             "Meanb0Corr": (-417.43894315496556, 209.10350773523913),
-            "Concatenateb0": (-66.06860491280008, -235.10620047684756),
+            "Concatenateb0": (-42.48238548560684, -207.5889444784554),
             "BiasCorrection": (220.9237026548114, -252.48423160549882),
             "BrainMask": (477.35300037914624, -69.03865707962856),
             "outputs": (526.6342301182356, 134.13224804042125),
+            "FilesToList": (-199.17352902019883, -158.55231307808265),
         }
 
         # nodes dimensions
         self.node_dimension = {
             "Convert_dwi": (222.28125, 440.0),
+            "Convert_b0": (222.28125, 440.0),
             "inputs": (147.046875, 250.0),
             "Denoising": (156.234375, 180.0),
             "Unringing": (135.75, 195.0),
@@ -169,6 +178,7 @@ class Dwi_preprocessing(Pipeline):
             "BiasCorrection": (201.328125, 195.0),
             "BrainMask": (130.6875, 55.0),
             "outputs": (111.046875, 110.0),
+            "FilesToList": (118.8125, 145.0),
         }
 
         self.do_autoexport_nodes_parameters = False
