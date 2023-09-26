@@ -16,7 +16,7 @@ from capsul.api import Pipeline
 class Dwi_preprocessing(Pipeline):
 
     """
-    *DWI preprocessing with reserve b0*
+    *DWI preprocessing with reverse b0*
 
     Please, see the complete documentation for the
     `Dwi_preprocessing pipeline in the populse.mia_processes website
@@ -50,7 +50,7 @@ class Dwi_preprocessing(Pipeline):
         self.nodes["MotionDistortionCorrection"].process.rpe_options = "pair"
         self.nodes[
             "MotionDistortionCorrection"
-        ].process.eddy_options = " --slm=linear"
+        ].process.eddy_options = " --slm=linear --data_is_shelled"
         self.add_process(
             "Extractb0",
             "mia_processes.bricks.preprocess.mrtrix.processes.DWIExtract",
@@ -122,7 +122,6 @@ class Dwi_preprocessing(Pipeline):
             "Concatenateb0.out_file->MotionDistortionCorrection.se_epi_corr"
         )
         self.add_link("BiasCorrection.out_file->BrainMask.in_file")
-        # self.add_link("MotionDistortionCorrection.out_file->BrainMask.in_file")
         self.export_parameter(
             "BrainMask", "out_file", "brain_mask", is_optional=False
         )

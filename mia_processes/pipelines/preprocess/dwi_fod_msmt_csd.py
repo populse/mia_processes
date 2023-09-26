@@ -7,21 +7,21 @@ or other pipelines provided in the mia_processes library.
 
 :Contains:
     :Class:
-        - Dwi_fod
+        - Dwi_fod_msmt_csd
 
 """
 
 from capsul.api import Pipeline
 
 
-class Dwi_fod(Pipeline):
+class Dwi_fod_msmt_csd(Pipeline):
 
     """
     *DWI fiber orientation distribution*
 
     Please, see the complete documentation for the
-    `Dwi_fod pipeline in the populse.mia_processes website
-    <https://populse.github.io/mia_processes/html/documentation/pipelines/preprocess/Dwi_fod.html>`_
+    `Dwi_fod_msmt_csd pipeline in the populse.mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/pipelines/preprocess/Dwi_fod_msmt_csd.html>`_
 
     """
 
@@ -84,7 +84,7 @@ class Dwi_fod(Pipeline):
         self.export_parameter(
             "ResponseFunctionEstimation",
             "voxels_image",
-            "voxels_fianl_selection",
+            "voxels_final_selection",
             is_optional=True,
         )
         self.add_link("FODEstimation.csf_odf->FilesToList.file1")
@@ -118,7 +118,7 @@ class Dwi_fod(Pipeline):
         self.reorder_traits(
             (
                 "in_dwi",
-                "voxels_fianl_selection",
+                "voxels_final_selection",
                 "brain_mask",
                 "predicted_signal_file",
                 "csf_fod_norm",

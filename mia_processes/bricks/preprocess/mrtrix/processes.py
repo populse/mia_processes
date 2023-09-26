@@ -2200,9 +2200,9 @@ class Generate5ttfsl(ProcessMIA):
     *Generate a 5TT image suitable for ACT using the selected algorithm.
     (5ttgen command)*
 
-    Please, see the complete documentation for the `Generate5tt brick
+    Please, see the complete documentation for the `Generate5ttfsl brick
     in the populse.mia_processes website
-    <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/Generate5tt.html>`_
+    <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/Generate5ttfsl.html>`_
     """
 
     def __init__(self):
