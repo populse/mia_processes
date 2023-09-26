@@ -85,7 +85,7 @@ class Dwi_whole_brain_tractography(Pipeline):
         }
         self.add_process(
             "tractography",
-            "mia_processes.bricks.preprocess." "mrtrix.processes.Tractography",
+            "mia_processes.bricks.preprocess.mrtrix.processes.Tractography",
         )
         self.nodes["tractography"].process.select = 10000000
         self.add_process(
