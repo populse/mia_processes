@@ -15,9 +15,13 @@ Compute metrics from tensors
 
 Generate maps of tensor-derived parameters as the mean apparent diffusion coefficient (ADC), the fractional anisotropy (FA), the axial diffusivity (AD),
 the radial diffusivity (RD), the linearity metric, the planarity metric, the sphericity metric, the selected eigenvalue(s) of the diffusion tensor or
-the selected eigenvector(s) of the diffusion tensor
-,
+the selected eigenvector(s) of the diffusion tensor.
+
 (mrtrix tensor2metric command)
+
+*Please note that, in mia_processes, MRtrix bricks required diffusion data in MRtrix .mif format.
+The MRConvert brick could be used to convert diffusion data in NIfTI format into MRtrix .mif format.
+In this case, bvec and bval file should be specified.*
 
 --------------------------------------
 

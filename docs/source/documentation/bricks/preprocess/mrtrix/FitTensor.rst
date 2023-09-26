@@ -22,6 +22,10 @@ Convert diffusion-weighted images to tensor images.
 
 (mrtrix dwi2tensor command)
 
+*Please note that, in mia_processes, MRtrix bricks required diffusion data in MRtrix .mif format.
+The MRConvert brick could be used to convert diffusion data in NIfTI format into MRtrix .mif format.
+In this case, bvec and bval file should be specified.*
+
 --------------------------------------
 
 **Mandatory inputs parameters:**

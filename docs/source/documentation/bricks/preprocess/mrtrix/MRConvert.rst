@@ -13,7 +13,9 @@ MRConvert brick
 Perform conversion between different file types and optionally extract a subset of the input image
 --------------------------------------------------------------------------------------------------
 
-
+*Please note that, in mia_processes, MRtrix bricks required diffusion data in MRtrix .mif format.
+This brick could be used to convert diffusion data in NIfTI format into MRtrix .mif format.
+In this case, bvec and bval file should be specified.*
 
 (mrtrix mrconvert command)
 

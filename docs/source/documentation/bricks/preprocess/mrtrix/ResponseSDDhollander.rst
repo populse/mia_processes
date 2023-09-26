@@ -19,6 +19,10 @@ The aime is to decompose the diffusion signal into a set of smaller individual f
 
 (mrtrix dwi2response dhollander command)
 
+*Please note that, in mia_processes, MRtrix bricks required diffusion data in MRtrix .mif format.
+The MRConvert brick could be used to convert diffusion data in NIfTI format into MRtrix .mif format.
+In this case, bvec and bval file should be specified.*
+
 --------------------------------------
 
 **Mandatory inputs parameters:**
@@ -106,7 +110,7 @@ The aime is to decompose the diffusion signal into a set of smaller individual f
       ex. '/home/username/data/derived_data/DWI_response_gm.txt'
 
 - *voxels_image* (a pathlike object or string representing a file)
-    Output CSF response text file
+    Image showing the final voxel selection
 
     ::
 

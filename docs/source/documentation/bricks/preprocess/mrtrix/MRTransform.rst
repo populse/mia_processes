@@ -18,8 +18,11 @@ If a linear transform is applied without a template image, the image header tran
 Fibre orientation distribution (FOD) reorientation (with apodised point spread functions) can be performed if the number of volumes in the 4th dimension equals the number of coefficients in an antipodally symmetric spherical harmonic series (e.g. 6, 15, 28 etc).
 The fod_reorient should be specified.
 
-
 (mrtrix mrtransform command)
+
+*Please note that, in mia_processes, MRtrix bricks required diffusion data in MRtrix .mif format.
+The MRConvert brick could be used to convert diffusion data in NIfTI format into MRtrix .mif format.
+In this case, bvec and bval file should be specified.*
 
 --------------------------------------
 

@@ -166,6 +166,9 @@ Mia_processes's documentation
     - `Bold_mni_align <pipelines/preprocess/Bold_mni_align.html>`_
     - `Bold_spatial_preprocessing1 <pipelines/preprocess/Bold_spatial_preprocessing1.html>`_
     - `Bold_spatial_preprocessing2 <pipelines/preprocess/Bold_spatial_preprocessing2.html>`_
+    - `Dwi_fod_msmt_csd <pipelines/preprocess/Dwi_fod_msmt_csd.html>`_
+    - `Dwi_preprocessing <pipelines/preprocess/Dwi_preprocessing.html>`_
+    - `Dwi_tissue_boundaries <pipelines/preprocess/Dwi_tissue_boundaries.html>`_
     - `Spatial_mask <pipelines/preprocess/Spatial_mask.html>`_
 
   - **qualityControl**
