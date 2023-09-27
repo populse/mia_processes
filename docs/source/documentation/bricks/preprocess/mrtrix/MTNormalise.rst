@@ -7,7 +7,7 @@
 +--------------------------------+----------------------------------------------+----------------------------------------------------+
 
 =================
-MTnormalise brick
+MTNormalise brick
 =================
 
 Multi-tissue informed log-domain intensity normalisation

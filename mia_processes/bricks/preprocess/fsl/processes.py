@@ -526,14 +526,12 @@ class Flirt(ProcessMIA):
         )
         # Optional inputs with default value description
         apply_xfm_desc = (
-            "Apply transformation supplied by in_matrix_file or uses_qform "
-            "to use the affine matrix stored in the reference header."
+            "Apply transformation supplied by in_matrix_file "
             "(a boolean). Mutually exclusive with apply_isoxfm. "
             "Required in_matrix_file"
         )
         apply_isoxfm_desc = (
-            "Apply transformation supplied by in_matrix_file or uses_qform "
-            "to use the affine matrix stored in the reference header but "
+            "Apply transformation supplied by in_matrix_file but "
             "forces isotropic resampling (a float). "
             "Mutually exclusive with apply_xfm."
             "Required in_matrix_file"
@@ -570,7 +568,7 @@ class Flirt(ProcessMIA):
         datatype_desc = (
             "Force output data type (char, short, int, float, double)"
         )
-        dof_desc = " Number of transform degrees of freedom (an integer) "
+        dof_desc = "Number of transform degrees of freedom (an integer) "
         echospacing_desc = (
             "Value of EPI echo spacing - units of seconds. (a float)"
         )
@@ -616,10 +614,10 @@ class Flirt(ProcessMIA):
             "For applyxfm: interpolates outside image by size (an integer)"
         )
         pedir_desc = (
-            "hase encode direction of EPI - 1/2/3=x/y/z & -1/-2/-3=-x/-y/-z "
+            "Phase encode direction of EPI - 1/2/3=x/y/z & -1/-2/-3=-x/-y/-z "
             "(an integer)"
         )
-        rigid2D_desc = "Use 2D rigid body mode ie ignores dof (a boolean)"
+        rigid2D_desc = "Use 2D rigid body mode ie ignore dof (a boolean)"
         ref_weight_desc = (
             "File for reference weighting volume (a pathlike "
             "object or string representing an existing file) "
@@ -642,7 +640,7 @@ class Flirt(ProcessMIA):
             "which are integer [min angle, max angle], default is [-90, 90])"
         )
         sinc_width_desc = "Full-width in voxels (an integer). Default is 7."
-        sinc_window_desc = "Sinc window (rectangulat, hanning, blackman)"
+        sinc_window_desc = "Sinc window (rectangular, hanning, blackman)"
         uses_qform_desc = "Initialize using sform or qform (a boolean)"
         wm_seg_desc = (
             "White matter segmentation volume needed by BBR cost function"
@@ -688,7 +686,7 @@ class Flirt(ProcessMIA):
         self.add_trait(
             "get_registered_file",
             Bool(
-                False,
+                True,
                 output=False,
                 optional=True,
                 desc=get_registered_file_desc,
@@ -886,21 +884,21 @@ class Flirt(ProcessMIA):
         )
 
         self.add_trait(
-            "in_weight",
-            File(output=False, optional=True, desc=in_weight_desc),
-        )
-
-        self.add_trait(
             "interp",
             Enum(
-                "nearestneighbour",
                 "trilinear",
+                "nearestneighbour",
                 "sinc",
                 "spline",
                 output=False,
                 optional=True,
                 desc=interp_desc,
             ),
+        )
+
+        self.add_trait(
+            "in_weight",
+            File(output=False, optional=True, desc=in_weight_desc),
         )
 
         self.add_trait(
@@ -1018,8 +1016,7 @@ class Flirt(ProcessMIA):
         self.add_trait(
             "searchr_x",
             List(
-                Int(),
-                default=[-90, 90],
+                [-90, 90],
                 output=False,
                 optional=True,
                 desc=searchr_x_desc,
@@ -1029,8 +1026,7 @@ class Flirt(ProcessMIA):
         self.add_trait(
             "searchr_y",
             List(
-                Int(),
-                default=[-90, 90],
+                [-90, 90],
                 output=False,
                 optional=True,
                 desc=searchr_y_desc,
@@ -1040,8 +1036,7 @@ class Flirt(ProcessMIA):
         self.add_trait(
             "searchr_z",
             List(
-                Int(),
-                default=[-90, 90],
+                [-90, 90],
                 output=False,
                 optional=True,
                 desc=searchr_z_desc,
@@ -1055,8 +1050,10 @@ class Flirt(ProcessMIA):
 
         self.add_trait(
             "sinc_width",
-            Int(
-                7,
+            Either(
+                Int(),
+                Undefined,
+                default=Undefined,
                 output=False,
                 optional=True,
                 desc=sinc_width_desc,
@@ -1182,7 +1179,7 @@ class Flirt(ProcessMIA):
                 if self.get_registered_file:
                     self.outputs["out_file"] = os.path.join(
                         self.output_directory,
-                        fileName + "_registered_with" + fileName_ref + in_ext,
+                        fileName + "_registered_with_" + fileName_ref + in_ext,
                     )
                 if not self.apply_xfm or not self.apply_isoxfm:
                     self.outputs["out_matrix_file"] = os.path.join(

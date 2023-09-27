@@ -50,6 +50,7 @@ Mia_processes's documentation
 
       - `BetSurfacesExtraction <bricks/preprocess/fsl/BetSurfacesExtraction.html>`_
       - `FastSegment <bricks/preprocess/fsl/FastSegment.html>`_
+      - `Flirt <bricks/preprocess/fsl/Flirt.html>`_
       - `Smooth <bricks/preprocess/fsl/Smooth.html>`__
 
     - **others**
@@ -90,7 +91,7 @@ Mia_processes's documentation
       - `MRDeGibbs <bricks/preprocess/mrtrix/MRDeGibbs.html>`_
       - `MRMath <bricks/preprocess/mrtrix/MRMath.html>`_
       - `MRTransform <bricks/preprocess/mrtrix/MRTransform.html>`_
-      - `MTnormalise <bricks/preprocess/mrtrix/MTnormalise.html>`_
+      - `MTNormalise <bricks/preprocess/mrtrix/MTNormalise.html>`_
       - `ResponseSDDhollander <bricks/preprocess/mrtrix/ResponseSDDhollander.html>`_
       - `TensorMetrics <bricks/preprocess/mrtrix/TensorMetrics.html>`_
       - `Tractography <bricks/preprocess/mrtrix/Tractography.html>`_

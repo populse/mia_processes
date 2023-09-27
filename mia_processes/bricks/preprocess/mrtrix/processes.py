@@ -24,7 +24,7 @@ populse_mia.
         - MRDeGibbs
         - MRMath
         - MRTransform
-        - MTnormalise
+        - MTNormalise
         - ResponseSDDhollander
         - SphericalHarmonicExtraction
         - TensorMetrics
@@ -3584,14 +3584,14 @@ class MRTransform(ProcessMIA):
         return self.process.run(configuration_dict={})
 
 
-class MTnormalise(ProcessMIA):
+class MTNormalise(ProcessMIA):
     """
     *Multi-tissue informed log-domain intensity normalisation.
     (mtnormalise command)*
 
-    Please, see the complete documentation for the `MTnormalise brick
+    Please, see the complete documentation for the `MTNormalise brick
     in the populse.mia_processes website
-    <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/MTnormalise.html>`_
+    <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/MTNormalise.html>`_
     """
 
     def __init__(self):
@@ -3601,7 +3601,7 @@ class MTnormalise(ProcessMIA):
         third-party products necessary for the running of the brick.
         """
         # Initialisation of the objects needed for the launch of the brick
-        super(MTnormalise, self).__init__()
+        super(MTNormalise, self).__init__()
 
         # Third party softwares required for the execution of the brick
         self.requirement = ["mrtrix"]
@@ -3721,7 +3721,7 @@ class MTnormalise(ProcessMIA):
         :returns: a dictionary with requirement, outputs and inheritance_dict.
         """
         # Using the inheritance to ProcessMIA class, list_outputs method
-        super(MTnormalise, self).list_outputs()
+        super(MTNormalise, self).list_outputs()
 
         # Outputs definition and tags inheritance (optional)
         self.outputs["out_files"] = []
@@ -3749,7 +3749,7 @@ class MTnormalise(ProcessMIA):
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
-        super(MTnormalise, self).run_process_mia()
+        super(MTNormalise, self).run_process_mia()
 
         cmd = ["mtnormalise"]
         i = 0

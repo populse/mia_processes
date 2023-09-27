@@ -42,7 +42,7 @@ class Dwi_fod_msmt_csd(Pipeline):
         self.nodes["FODEstimation"].process.get_predicted_signal = True
         self.add_process(
             "IntensityNormalization",
-            "mia_processes.bricks.preprocess.mrtrix.processes.MTnormalise",
+            "mia_processes.bricks.preprocess.mrtrix.processes.MTNormalise",
         )
         self.add_process(
             "FilesToList", "mia_processes.bricks.tools.tools.Files_To_List"

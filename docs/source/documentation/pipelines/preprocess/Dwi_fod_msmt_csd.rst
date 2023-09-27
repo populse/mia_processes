@@ -32,7 +32,7 @@ unique b-values to estimate three tissue compartments.**
 |   - `Response function estimation <../../bricks/preprocess/mrtrix/ResponseSDDhollander.html>`_
 |   - `Estimation of Fiber Orientation Distributions (FOD) <../../bricks/preprocess/mrtrix/ConstrainedSphericalDeconvolution.html>`_
        (default values: algorithm = "msmt_csd", get_predicted_signal = True)
-|   - `Intensity Normalization <../../bricks/preprocess/mrtrix/MTnormalise.html>`_
+|   - `Intensity Normalization <../../bricks/preprocess/mrtrix/MTNormalise.html>`_
 
 .. image:: ../../images/Dwi_fod_msmt_csd_pipeline.png
   :width: 800

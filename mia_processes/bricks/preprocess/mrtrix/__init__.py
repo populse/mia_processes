@@ -29,7 +29,7 @@ from .processes import (  # noqa: F401
     MRDeGibbs,
     MRMath,
     MRTransform,
-    MTnormalise,
+    MTNormalise,
     ResponseSDDhollander,
     SphericalHarmonicExtraction,
     TensorMetrics,
