@@ -66,6 +66,11 @@
         cd ..
         rm -r [mia_install_dir]
 
+# Third-party softwares
+
+Many mia_processes bricks (atomic processes) use third-party softwares. To use these bricks, the corresponding [third-party softwares must be installed](https://populse.github.io/populse_mia/html/installation/3rd-party_installations.html).
+
+
 # Requirements
 
 In order to get all the bricks and pipelines proposed by mia_processes some third libraries are required:
