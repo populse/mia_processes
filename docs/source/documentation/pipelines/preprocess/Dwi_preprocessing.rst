@@ -13,7 +13,7 @@ Dwi_preprocessing pipeline
 DWI preprocessing using a reverse-phase encoded b0
 --------------------------------------------------
 
-The aim of this pipeline is to preprocess the diffusion data before to analysed it.
+The aim of this pipeline is to preprocess a multishell diffusion data before to analysed it.
 In this pipeline, an image with b=0 volumes with opposite phase encoding should be provided for the purpose of EPI distortion correction.
 
 | The following steps are done:

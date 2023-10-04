@@ -30,7 +30,7 @@ The aim of this pipeline is to prepare Anatomically Constrained Tractography (AC
 |   - `b0 averaging <../../bricks/preprocess/mrtrix/MRMath.html>`_
 |   - `Generate a 5TT image  <../../bricks/preprocess/mrtrix/Generate5ttfsl.html>`_
 |   - `Coregistration using FLIRT <../../bricks/preprocess/fsl/Flirt.html>`_
-        (default values: dof = 6)
+        (default values: dof = 6, interp=nearestneighbour)
 |   - `Convert FSL's transfomation to mrtrix format  <../../bricks/preprocess/mrtrix/TransformFSLConvert.html>`_
 |   - `Apply spatial transfomation <../../bricks/preprocess/mrtrix/MRTransform.html>`_
         (default values: inverse = True)
@@ -44,7 +44,7 @@ The aim of this pipeline is to prepare Anatomically Constrained Tractography (AC
 **Mandatory inputs parameters**
 
 - *in_dwi* (a string representing an existing file)
-    Preprocessed diffusion image (valid extensions: [.nii, .nii.gz]).
+    Preprocessed diffusion image (valid extensions: [.mif]).
 
     ::
 

@@ -1179,7 +1179,11 @@ class Flirt(ProcessMIA):
                 if self.get_registered_file:
                     self.outputs["out_file"] = os.path.join(
                         self.output_directory,
-                        fileName + "_registered_with_" + fileName_ref + in_ext,
+                        fileName
+                        + "_registered_with_"
+                        + fileName_ref
+                        + "."
+                        + in_ext,
                     )
                 if not self.apply_xfm or not self.apply_isoxfm:
                     self.outputs["out_matrix_file"] = os.path.join(

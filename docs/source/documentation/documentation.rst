@@ -83,6 +83,8 @@ Mia_processes's documentation
       - `DWIDenoise <bricks/preprocess/mrtrix/DWIDenoise.html>`_
       - `DWIExtract <bricks/preprocess/mrtrix/DWIExtract.html>`_
       - `DWIPreproc <bricks/preprocess/mrtrix/DWIPreproc.html>`_
+      - `EditingTrack <bricks/preprocess/mrtrix/EditingTrack.html>`_
+      - `FilteringTrack <bricks/preprocess/mrtrix/FilteringTrack.html>`_
       - `FitTensor <bricks/preprocess/mrtrix/FitTensor.html>`_
       - `Generate5tt2gmwmi <bricks/preprocess/mrtrix/Generate5tt2gmwmi.html>`_
       - `Generate5ttfsl <bricks/preprocess/mrtrix/Generate5ttfsl.html>`_
@@ -93,6 +95,7 @@ Mia_processes's documentation
       - `MRTransform <bricks/preprocess/mrtrix/MRTransform.html>`_
       - `MTNormalise <bricks/preprocess/mrtrix/MTNormalise.html>`_
       - `ResponseSDDhollander <bricks/preprocess/mrtrix/ResponseSDDhollander.html>`_
+      - `SphericalHarmonicExtraction <bricks/preprocess/mrtrix/SphericalHarmonicExtraction.html>`_
       - `TensorMetrics <bricks/preprocess/mrtrix/TensorMetrics.html>`_
       - `Tractography <bricks/preprocess/mrtrix/Tractography.html>`_
       - `TransformFSLConvert <bricks/preprocess/mrtrix/TransformFSLConvert.html>`_
@@ -154,6 +157,10 @@ Mia_processes's documentation
   - **CerebVascularReact**
 
     - `CO2_inhalation <pipelines/CerebVascularReact/CO2_inhalation.html>`_  (in progress)
+
+  - **DWITractography**
+
+    - `DWI_whole_brain_tractograpy <pipelines/DWITractography/DWI_whole_brain_tractograpy.html>`_
 
   - **preprocess**
 

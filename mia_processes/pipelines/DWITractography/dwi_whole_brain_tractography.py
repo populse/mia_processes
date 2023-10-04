@@ -92,7 +92,7 @@ class Dwi_whole_brain_tractography(Pipeline):
             "editingtrack_1",
             "mia_processes.bricks.preprocess.mrtrix.processes.EditingTrack",
         )
-        self.nodes["editingtrack_1"].process.suffix = "smaller_200k"
+        self.nodes["editingtrack_1"].process.suffix = "_200k"
         self.nodes["editingtrack_1"].process.number = 200000
         self.add_process(
             "filteringtrack",
@@ -102,13 +102,13 @@ class Dwi_whole_brain_tractography(Pipeline):
             "editingtrack_2",
             "mia_processes.bricks.preprocess.mrtrix.processes.EditingTrack",
         )
-        self.nodes["editingtrack_2"].process.suffix = "superSmall_10k"
+        self.nodes["editingtrack_2"].process.suffix = "_10k"
         self.nodes["editingtrack_2"].process.number = 10000
         self.add_process(
             "editingtrack_3",
             "mia_processes.bricks.preprocess.mrtrix.processes.EditingTrack",
         )
-        self.nodes["editingtrack_3"].process.suffix = "superSmall_10k"
+        self.nodes["editingtrack_3"].process.suffix = "_10k"
         self.nodes["editingtrack_3"].process.number = 10000
 
         self.add_process(
@@ -165,7 +165,7 @@ class Dwi_whole_brain_tractography(Pipeline):
         self.export_parameter(
             "editingtrack_1",
             "tracks_out",
-            "tracks_out_200k",
+            "tracks_200k",
             is_optional=False,
         )
         self.export_parameter(
@@ -179,7 +179,7 @@ class Dwi_whole_brain_tractography(Pipeline):
             is_optional=False,
         )
         self.export_parameter(
-            "editingtrack_3", "tracks_out", "tracks_out_10k", is_optional=False
+            "editingtrack_3", "tracks_out", "tracks_10k", is_optional=False
         )
         self.export_parameter(
             "spherical_harmonic_extraction",

@@ -47,6 +47,7 @@ class Dwi_tissue_boundaries(Pipeline):
             "mia_processes.bricks.preprocess.fsl.processes.Flirt",
         )
         self.nodes["CoregistrationFlirt"].process.dof = 6
+        self.nodes["CoregistrationFlirt"].process.interp = "nearestneighbour"
         self.add_process(
             "Transformfslconvert",
             "mia_processes.bricks.preprocess."
