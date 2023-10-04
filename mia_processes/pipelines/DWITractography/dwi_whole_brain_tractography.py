@@ -151,8 +151,16 @@ class Dwi_whole_brain_tractography(Pipeline):
         self.add_link(
             "dwi_tissue_boundaries.gmwmSeed_coreg->tractography.seed_gmwmi"
         )
+        self.export_parameter(
+            "dwi_tissue_boundaries",
+            "T1w_coreg",
+            "T1w_coreg",
+            is_optional=True,
+        )
         self.add_link("dwi_fod.wm_fod_norm->tractography.in_file")
         self.add_link("dwi_fod.wm_fod_norm->filteringtrack.in_fod")
+        self.nodes["dwi_fod"].process.trait("csf_fod_norm").userlevel = 1
+        self.nodes["dwi_fod"].process.trait("gm_fod_norm").userlevel = 1
         self.add_link("tractography.out_file->editingtrack_1.in_tracks")
         self.add_link("tractography.out_file->filteringtrack.in_tracks")
         self.add_link(
@@ -203,8 +211,8 @@ class Dwi_whole_brain_tractography(Pipeline):
                 "tracks_10mio",
                 "tracks_sift",
                 "tracks_sift_10k",
-                "tracks_out_200k",
-                "tracks_out_10k",
+                "tracks_200k",
+                "tracks_10k",
             )
         )
 

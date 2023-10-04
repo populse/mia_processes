@@ -168,6 +168,13 @@ The pipeline is based on `B.A.T.M.A.N. tutorial <https://osf.io/fkyht/>`_ and `A
 
       ex. '/home/username/data/derived_data/DWI_denoised_unringed_dwifslpreproc_unbias_wm_odf_norm_tracto_10k.tck'
 
+- *T1w_coreg* (a string representing a file)
+    Anatomical image coregistered in DWI space.
+
+    ::
+
+      ex. '/home/username/data/derived_data/T1w_transformed.mif'
+
 -------------
 
 Usefull links:

@@ -90,6 +90,12 @@ In this case, bvec and bval file should be specified.*
 
       ex. False
 
+- *nocleanup* (a boolean, default value is False, optional)
+    Do not delete intermediate files during script execution, and do not delete scratch directory at script completion.
+
+    ::
+
+      ex. False
 
 
 **Optional inputs parameters:**

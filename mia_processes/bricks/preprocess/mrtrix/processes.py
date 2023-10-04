@@ -991,6 +991,10 @@ class DWIPreproc(ProcessMIA):
         topup_options_desc = (
             "Additional command-line options to the topup command (a string)"
         )
+        nocleanup_desc = (
+            "Do not delete intermediate files during script execution and do "
+            "not delete scratch directory at script completion"
+        )
         # Output descriptions
         out_file_desc = (
             "The output preprocessed DWI image (a pathlike object or "
@@ -1117,6 +1121,16 @@ class DWIPreproc(ProcessMIA):
             ),
         )
 
+        self.add_trait(
+            "nocleanup",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=nocleanup_desc,
+            ),
+        )
+
         # Outputs traits
         self.add_trait(
             "out_file", File(output=True, optional=False, desc=out_file_desc)
@@ -1186,7 +1200,8 @@ class DWIPreproc(ProcessMIA):
             self.process.eddyqc_text = os.path.dirname(self.out_file)
         if self.topup_options:
             self.process.topup_options = self.topup_options
-        self.process.args = "-nocleanup"
+        if self.nocleanup:
+            self.process.args = "-nocleanup"
 
         return self.process.run(configuration_dict={})
 
