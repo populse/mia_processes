@@ -92,7 +92,7 @@ class Dwi_whole_brain_tractography(Pipeline):
             "editingtrack_1",
             "mia_processes.bricks.preprocess.mrtrix.processes.EditingTrack",
         )
-        self.nodes["editingtrack_1"].process.suffix = "_200k"
+        self.nodes["editingtrack_1"].process.suffix = "200k"
         self.nodes["editingtrack_1"].process.number = 200000
         self.add_process(
             "filteringtrack",
@@ -102,13 +102,13 @@ class Dwi_whole_brain_tractography(Pipeline):
             "editingtrack_2",
             "mia_processes.bricks.preprocess.mrtrix.processes.EditingTrack",
         )
-        self.nodes["editingtrack_2"].process.suffix = "_10k"
+        self.nodes["editingtrack_2"].process.suffix = "10k"
         self.nodes["editingtrack_2"].process.number = 10000
         self.add_process(
             "editingtrack_3",
             "mia_processes.bricks.preprocess.mrtrix.processes.EditingTrack",
         )
-        self.nodes["editingtrack_3"].process.suffix = "_10k"
+        self.nodes["editingtrack_3"].process.suffix = "10k"
         self.nodes["editingtrack_3"].process.number = 10000
 
         self.add_process(
