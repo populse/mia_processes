@@ -2865,7 +2865,7 @@ class MRConvert(ProcessMIA):
 
             if self.output_directory:
                 if self.suffix:
-                    fileName += "_" + self.sufix
+                    fileName += "_" + self.suffix
                 else:
                     if self.scaling:
                         fileName += "_scaled"

@@ -48,6 +48,8 @@ An anatomical image is also required.
 
 The pipeline is based on `B.A.T.M.A.N. tutorial <https://osf.io/fkyht/>`_ and `Andy's brain book tutorial <https://andysbrainbook.readthedocs.io/en/latest/MRtrix/MRtrix_Introduction.html>`_
 
+Note that this pipeline used the FLIRT registration (FSL) to co-register diffusion and anatomical data as suggested in the `B.A.T.M.A.N. tutorial <https://osf.io/fkyht/>`_.
+However it seems to not work perfectly for some data.
 
 --------------------------------------
 

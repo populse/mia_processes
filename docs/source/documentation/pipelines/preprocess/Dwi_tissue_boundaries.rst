@@ -20,6 +20,9 @@ The aim of this pipeline is to prepare Anatomically Constrained Tractography (AC
 | - Co-registration of the 5tt-image to the diffusion image
 | - Create a mask of the gray-matter/white-matter-boundary in the diffusion space. It will allow to define where streamlines must start.
 
+Note that this pipeline used the FLIRT registration (FSL) to co-register diffusion and anatomical data as suggested in the `B.A.T.M.A.N. tutorial <https://osf.io/fkyht/>`_.
+However it seems to not work perfectly for some data. Please check the outputs data.
+
 --------------------------------------
 
 **Pipeline insight**
