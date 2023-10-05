@@ -1,0 +1,227 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>DWIPreproc brick &#8212; mia_processes 2.3.1-dev+64b4d57a documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
+          <span>mia_processes 2.3.1-dev+64b4d57a documentation</span></a></h1>
+        <h2 class="heading"><span>DWIPreproc brick</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <div class="toctree-wrapper compound">
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 35%" />
+<col style="width: 40%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference external" href="../../../../index.html">Home</a></p></td>
+<td><p><a class="reference external" href="../../../documentation.html">Documentation</a></p></td>
+<td><p><a class="reference external" href="https://github.com/populse/mia_processes">GitHub</a></p></td>
+</tr>
+</tbody>
+</table>
+<section id="dwipreproc-brick">
+<h1>DWIPreproc brick<a class="headerlink" href="#dwipreproc-brick" title="Permalink to this headline">¶</a></h1>
+<section id="perform-diffusion-image-pre-processing-using-fsls-topup-and-eddy-tool">
+<h2>Perform diffusion image pre-processing using FSL’s topup and eddy tool<a class="headerlink" href="#perform-diffusion-image-pre-processing-using-fsls-topup-and-eddy-tool" title="Permalink to this headline">¶</a></h2>
+<p>Run topup and Eddy to pre-processe DWI image ncluding inhomogeneity distortion correction using FSL’s topup tool if possible.</p>
+<p>FSL should be configured in populse.</p>
+<p>(mrtrix dwifslpreproc command)</p>
+<p><em>Please note that, in mia_processes, MRtrix bricks required diffusion data in MRtrix .mif format.
+The MRConvert brick could be used to convert diffusion data in NIfTI format into MRtrix .mif format.
+In this case, bvec and bval file should be specified.</em></p>
+<hr class="docutils" />
+<p><strong>Mandatory inputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>in_file</em> (a pathlike object or a string representing an existing file)</dt><dd><p>Input DWI image (valid extensions: [.mif, .nii, .nii.gz]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/DWI.mif&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Optional inputs with default value parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>rpe_option</em> (none, pair, all or header, default value is none, optional)</dt><dd><div class="line-block">
+<div class="line">Specify acquisition phase-encoding design:</div>
+<div class="line-block">
+<div class="line">- none: if no reversed phase-encoding image available</div>
+<div class="line">- all: if DWIs data have been acquired with opposing phase-encoding</div>
+<div class="line">- pair: if a set of image (typically b=0 volumes with opposing phase-direction) has been acquired for inhomogeneity field estimation only</div>
+</div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="n">pair</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>se_epi_corr</em> (a pathlike object or a string representing an existing file, optional)</dt><dd><p>An additional image series consisting of spin-echo EPI images (typically b=0 volumes with opposing phase-direction)
+which is to be used exclusively by topup for estimating the inhomogeneity field (i.e. it will not form part of the output image series)</p>
+<p>If rpe_option is set to pair, the se_epi_corr image series contains one or more pairs of b=0 images with reversed phase encoding,
+the FIRST HALF of the volumes in the SE-EPI series must possess the same phase encoding as the input DWI series,
+while the second half are assumed to contain the opposite phase encoding direction but identical total readout time.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/DWI_b0_inverse_phase.mif</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>pe_dir</em> (ap, pa, lr, rl, default value is ap, optional)</dt><dd><div class="line-block">
+<div class="line">Phase encoding direction of the input serie using an axis designator:</div>
+<div class="line-block">
+<div class="line">- ap : Anterior to posterior</div>
+<div class="line">- pa: Posterior to anterior</div>
+<div class="line">- lr: Left to right</div>
+<div class="line">- rl: Right toleft</div>
+</div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="n">ap</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>align_seepi</em> (a boolean, default value is False, optional)</dt><dd><p>Achieve alignment between the images used for inhomogeneity field estimation, and the input DWI</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>eddyqc_all</em> (a boolean, default value is False, optional)</dt><dd><p>Keep ALL outputs generated by eddy (including images), and the output of eddy_qc (if installed)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>eddyqc_text</em> (a boolean, default value is False, optional)</dt><dd><p>Keep the various text-based statistical outputs generated by eddy (including images), and the output of eddy_qc (if installed)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>nocleanup</em> (a boolean, default value is False, optional)</dt><dd><p>Do not delete intermediate files during script execution, and do not delete scratch directory at script completion.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Optional inputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>ro_time</em> (a float, optional)</dt><dd><p>Total readout time of input series (in seconds).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mf">2.0</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>eddy_mask</em> (a pathlike object or a string representing an existing file, optional)</dt><dd><p>A mask to use for eddy. If not used, a mask will be automaticcaly
+generated by this brick using mrtrix dwi2mask command</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/DWI_brain_mask.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>eddy_option</em> (a string, optional)</dt><dd><p>Additional command-line options to the eddy command.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;--slm=linear --repol --data_is_shelled&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>eddy_slspec</em> (a pathlike object or a string representing an existing file, optional)</dt><dd><p>A file containing slice groupings for eddy’s slice-to-volume registration</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/registration.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>topup_option</em> (a string, optional)</dt><dd><p>Additional command-line options to the topup command</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;--scale=1&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Outputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>out_file</em> (a pathlike object or string representing a file)</dt><dd><p>The output preprocessed DWI image</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/DWI_fslpreproc.mif&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<hr class="docutils" />
+<p>Usefull links:</p>
+<p><a class="reference external" href="https://mrtrix.readthedocs.io/en/latest/reference/commands/dwifslpreproc.html#dwifslpreproc">mrtrix dwipreproc</a></p>
+<p><a class="reference external" href="https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.mrtrix3.preprocess.html#dwipreproc">mrtrix dwipreproc - nipype</a></p>
+<p><a class="reference external" href="https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/topup/TopupUsersGuide">FSL Topup</a></p>
+<p><a class="reference external" href="https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/eddy/UsersGuide">FSL Eddy</a></p>
+</section>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </div>
+  </body>
+</html>

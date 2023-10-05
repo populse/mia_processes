@@ -1,0 +1,203 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>FitTensor brick &#8212; mia_processes 2.3.1-dev+64b4d57a documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
+          <span>mia_processes 2.3.1-dev+64b4d57a documentation</span></a></h1>
+        <h2 class="heading"><span>FitTensor brick</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <div class="toctree-wrapper compound">
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 35%" />
+<col style="width: 40%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference external" href="../../../../index.html">Home</a></p></td>
+<td><p><a class="reference external" href="../../../documentation.html">Documentation</a></p></td>
+<td><p><a class="reference external" href="https://github.com/populse/mia_processes">GitHub</a></p></td>
+</tr>
+</tbody>
+</table>
+<section id="fittensor-brick">
+<h1>FitTensor brick<a class="headerlink" href="#fittensor-brick" title="Permalink to this headline">¶</a></h1>
+<section id="diffusion-tensor-estimation">
+<h2>Diffusion tensor estimation<a class="headerlink" href="#diffusion-tensor-estimation" title="Permalink to this headline">¶</a></h2>
+<p>Convert diffusion-weighted images to tensor images.</p>
+<div class="line-block">
+<div class="line">By defaul, the diffusion tensor (and optionally the kurtosis) is fitted to the log-signal in two steps:</div>
+<div class="line-block">
+<div class="line">- first fit is done using weighted least-squares (WLS) with weights based on the empirical signal intensities (or using ordinary least-squares (OLS) is “ols_option” is used)</div>
+<div class="line">- second fit is done using iterated weighted least-squares (IWLS) with weights determined by the signal predictions from the previous iteration (numbr of iteration could be choose with the “number_of_iteration” option).</div>
+</div>
+</div>
+<p>(mrtrix dwi2tensor command)</p>
+<p><em>Please note that, in mia_processes, MRtrix bricks required diffusion data in MRtrix .mif format.
+The MRConvert brick could be used to convert diffusion data in NIfTI format into MRtrix .mif format.
+In this case, bvec and bval file should be specified.</em></p>
+<hr class="docutils" />
+<p><strong>Mandatory inputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>in_file</em> (a string representing an existing file)</dt><dd><p>Input DWI image (valid extensions: [.mif]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/DWI.mif&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Optional inputs with default value parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>estimate_dkt</em> (a boolean, default value is False, optional)</dt><dd><p>Estimate diffusion kurtosis</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>get_predicted_signal</em> (a boolean, default value is False, optional)</dt><dd><p>Get a file with the predicted signal from the tensor fits</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>get_output_b0</em> (a boolean, default value is False, optional)</dt><dd><p>Get the put b0 image</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>ols_option</em> (a boolean, default value is False, optional)</dt><dd><p>Perform initial fit using an ordinary least-squares (OLS) fit, that is, all measurements contribute equally to the fit (instead of using WLS)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>number_of_iter</em> (an integer, default value is 2, optional)</dt><dd><p>Number of iterative reweightings for IWLS algorithm.
+If 0 is set, only the first fitting will be done (WLS or OLS is ols_option is used).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">2</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Optional inputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>in_mask</em> (a string representing an existing file, optional)</dt><dd><p>Input mask image, only perform computation within the specified binary brain mas image (valid extensions: [.mif, .nii, .nii.gz]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/DWI_brainmask.mif&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Outputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>out_file</em> (a pathlike object or string representing a file)</dt><dd><div class="line-block">
+<div class="line">The output diffusion tensor image (DTI).</div>
+<div class="line">The tensor coefficients are stored in the output image as follows:</div>
+<div class="line-block">
+<div class="line">- volumes 0-5: D11, D22, D33, D12, D13, D23</div>
+</div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/DWI_dti.mif&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>out_dkt</em> (a pathlike object or string representing a file, optional)</dt><dd><div class="line-block">
+<div class="line">The output diffusion kurtosis image (DKI).</div>
+<div class="line">The coefficients  are stored as follows:</div>
+<div class="line-block">
+<div class="line">- volumes 0-2: W1111, W2222, W3333</div>
+<div class="line">- volumes 3-8: W1112, W1113, W1222, W1333, W2223, W2333</div>
+<div class="line">- volumes 9-11: W1122, W1133, W2233</div>
+<div class="line">- volumes 12-14: W1123, W1223, W1233</div>
+</div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/DWI_dki.mif&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>out_b0</em> (a pathlike object or string representing a file, optional)</dt><dd><p>The output b0 image</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/DWI_b0.mif&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>predicted_signal_file</em> (a pathlike object or string representing a file, optional)</dt><dd><p>The output predicted dwi image</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/DWI_dti_predicted_signal.mif&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<hr class="docutils" />
+<p>Usefull links:</p>
+<p><a class="reference external" href="https://mrtrix.readthedocs.io/en/latest/reference/commands/dwi2tensor.html">mrtrix dwi2tensor</a></p>
+<p><a class="reference external" href="https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.mrtrix3.reconst.html#fittensor">mrtrix dwi2tensor - nipype</a></p>
+</section>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </div>
+  </body>
+</html>

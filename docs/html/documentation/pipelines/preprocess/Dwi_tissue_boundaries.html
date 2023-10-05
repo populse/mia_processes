@@ -1,0 +1,143 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Dwi_tissue_boundaries pipeline &#8212; mia_processes 2.3.1-dev+64b4d57a documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/haiku.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
+          <span>mia_processes 2.3.1-dev+64b4d57a documentation</span></a></h1>
+        <h2 class="heading"><span>Dwi_tissue_boundaries pipeline</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <div class="toctree-wrapper compound">
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 35%" />
+<col style="width: 42%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference external" href="../../../index.html">Home</a></p></td>
+<td><p><a class="reference external" href="../../documentation.html">Documentation</a></p></td>
+<td><p><a class="reference external" href="https://github.com/populse/mia_processes">GitHub</a></p></td>
+</tr>
+</tbody>
+</table>
+<section id="dwi-tissue-boundaries-pipeline">
+<h1>Dwi_tissue_boundaries pipeline<a class="headerlink" href="#dwi-tissue-boundaries-pipeline" title="Permalink to this headline">¶</a></h1>
+<section id="create-tissue-boundaries-with-a-t1w-and-registratiojn-in-dwi-space">
+<h2>Create tissue boundaries with a T1w and registratiojn in DWI space<a class="headerlink" href="#create-tissue-boundaries-with-a-t1w-and-registratiojn-in-dwi-space" title="Permalink to this headline">¶</a></h2>
+<p>The aim of this pipeline is to prepare Anatomically Constrained Tractography (ACT) to increase the biological plausibility of streamline creation when tracking will be performed.</p>
+<div class="line-block">
+<div class="line">The following steps are done:</div>
+<div class="line">- Create a 5tt-image i.e a 4-dimensional preprocessed T1-weighted image with 5 different tissue types (cortical gray matter, subcortical gray matter, white matter, CSF and pathological tissue). It will allow to define where streamlines must not end.</div>
+<div class="line">- Co-registration of the 5tt-image to the diffusion image</div>
+<div class="line">- Create a mask of the gray-matter/white-matter-boundary in the diffusion space. It will allow to define where streamlines must start.</div>
+</div>
+<p>Note that this pipeline used the FLIRT registration (FSL) to co-register diffusion and anatomical data as suggested in the <a class="reference external" href="https://osf.io/fkyht/">B.A.T.M.A.N. tutorial</a>.
+However it seems to not work perfectly for some data. Please check the outputs data.</p>
+<hr class="docutils" />
+<p><strong>Pipeline insight</strong></p>
+<div class="line-block">
+<div class="line">Dwi_tissue_boundaries pipeline combines the following bricks:</div>
+<div class="line-block">
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/mrtrix/MRConvert.html">Conversion into MIF or NIfTI format</a> (if necessary)</div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/mrtrix/DWIExtract.html">b0 extraction</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/mrtrix/MRMath.html">b0 averaging</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/mrtrix/Generate5ttfsl.html">Generate a 5TT image</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/fsl/Flirt.html">Coregistration using FLIRT</a>
+(default values: dof = 6, interp=nearestneighbour)</div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/mrtrix/TransformFSLConvert.html">Convert FSL’s transfomation to mrtrix format</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/mrtrix/MRTransform.html">Apply spatial transfomation</a>
+(default values: inverse = True)</div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/mrtrix/Generate5tt2gmwmi.html">Preparing a mask of streamline seeding</a></div>
+</div>
+</div>
+<a class="reference internal image-reference" href="../../../_images/Dwi_tissue_boundaries_pipeline.png"><img alt="DWI tissue boundaries pipeline" src="../../../_images/Dwi_tissue_boundaries_pipeline.png" style="width: 800px;" /></a>
+<p><strong>Mandatory inputs parameters</strong></p>
+<ul>
+<li><dl>
+<dt><em>in_dwi</em> (a string representing an existing file)</dt><dd><p>Preprocessed diffusion image (valid extensions: [.mif]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/DWI_denoised_unringed_dwifslpreproc_unbias.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>in_T1w</em> (a string representing an existing file)</dt><dd><p>Anatomical image (valid extensions: [.nii, .nii.gz]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/T1w.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Outputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>T1w_coreg</em></dt><dd><p>Anatomical image coregistered in DWI space.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/T1w_transformed.mif&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>5tt_coreg</em></dt><dd><p>5tt image (a 4-dimensional preprocessed T1-weighted image with 5 different tissue types (cortical gray matter, subcortical gray matter, white matter, CSF and pathological tissue)) coregistered in DWI space.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/T1w_5tt_transformed.mif&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>gmwmSeed_coreg</em></dt><dd><p>A mask of the gray-matter/white-matter-boundary in DWI space.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/T1w_5tt_transformed_gmwmSeed.mif&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </div>
+  </body>
+</html>

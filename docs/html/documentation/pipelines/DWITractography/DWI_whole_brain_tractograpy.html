@@ -1,0 +1,258 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>DWI_whole_brain_tractograpy pipeline &#8212; mia_processes 2.3.1-dev+64b4d57a documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/haiku.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
+          <span>mia_processes 2.3.1-dev+64b4d57a documentation</span></a></h1>
+        <h2 class="heading"><span>DWI_whole_brain_tractograpy pipeline</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <div class="toctree-wrapper compound">
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 35%" />
+<col style="width: 42%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference external" href="../../../index.html">Home</a></p></td>
+<td><p><a class="reference external" href="../../documentation.html">Documentation</a></p></td>
+<td><p><a class="reference external" href="https://github.com/populse/mia_processes">GitHub</a></p></td>
+</tr>
+</tbody>
+</table>
+<section id="dwi-whole-brain-tractograpy-pipeline">
+<h1>DWI_whole_brain_tractograpy pipeline<a class="headerlink" href="#dwi-whole-brain-tractograpy-pipeline" title="Permalink to this headline">¶</a></h1>
+<section id="brain-tractography-with-mrtrix">
+<h2>Brain Tractography with MRTrix<a class="headerlink" href="#brain-tractography-with-mrtrix" title="Permalink to this headline">¶</a></h2>
+<p>The aim of this pipeline is to create a whole-brain tractogram for a multishell DWI using Constrained Spherical Deconvolution (CSD).
+In this pipeline, an image with b=0 volumes with opposite phase encoding should be provided for the purpose of EPI distortion correction.
+An anatomical image is also required.</p>
+<div class="line-block">
+<div class="line">This pipeline used several algorithms in order to improve the biological plausibility of fiber tracking :</div>
+<div class="line">- Anatomically Constrained Tractography (ACT) which rejects streamlines that end in biologically implausible tissue</div>
+<div class="line">- Spherical-deconvolution informed filtering of tractograms (SIFT) which corrects for the fact that longer streamlines tend to be overestimated in tractography</div>
+<div class="line">- Multi-shell multi-tissue (MSMTT) CSD which exploites the differences in b-value sensitivity of different tissue types to estimate fibre orientation distributions in each tissue</div>
+</div>
+<div class="line-block">
+<div class="line">The following steps are done:</div>
+<div class="line"><strong>1. Preprocessing</strong></div>
+<div class="line">- Denoising</div>
+<div class="line">- Unringing</div>
+<div class="line">- Motion and distortion correction</div>
+<div class="line">- Bias field correction</div>
+<div class="line">- Brain mask estimation</div>
+</div>
+<div class="line-block">
+<div class="line"><strong>2. Estimation of fiber orientation distribution (FOD)</strong></div>
+<div class="line">- Response function estimation</div>
+<div class="line">- Estimation of FOD</div>
+<div class="line">- Intensity Normalization</div>
+</div>
+<div class="line-block">
+<div class="line"><strong>3. Preparing ATC</strong></div>
+<div class="line">- Create a mask with 5 different tissue types (mask for streamline termination)</div>
+<div class="line">- Coregistration with DWI</div>
+<div class="line">- Create a mask of the gray-matter/white-matter-boundary (mask of streamline seeding)</div>
+</div>
+<div class="line-block">
+<div class="line"><strong>4. Create streamlines</strong></div>
+<div class="line">- Create tractography (10 million streamlines)</div>
+<div class="line">- Randomly choose a subset of the 10 million tracks and create a 200k tracks and a 10k tracks</div>
+<div class="line">- Filter the tractograms to reduce CSD-based bias in overestimation of longer tracks compared to shorter tracks, and reduce the number of streamlines</div>
+<div class="line">- Extract the peaks of a spherical harmonic function in each voxel (could be used for others softawres as <a class="reference external" href="https://github.com/MIC-DKFZ/TractSeg">TractSeg</a>)</div>
+</div>
+<p>The pipeline is based on <a class="reference external" href="https://osf.io/fkyht/">B.A.T.M.A.N. tutorial</a> and <a class="reference external" href="https://andysbrainbook.readthedocs.io/en/latest/MRtrix/MRtrix_Introduction.html">Andy’s brain book tutorial</a></p>
+<p>Note that this pipeline used the FLIRT registration (FSL) to co-register diffusion and anatomical data as suggested in the <a class="reference external" href="https://osf.io/fkyht/">B.A.T.M.A.N. tutorial</a>.
+However it seems to not work perfectly for some data.</p>
+<hr class="docutils" />
+<p><strong>Pipeline insight</strong></p>
+<div class="line-block">
+<div class="line">DWI_whole_brain_tractograpy pipeline combines the following pipelines and processes:</div>
+<div class="line-block">
+<div class="line">- <a class="reference external" href="../../pipelines/preprocess/Dwi_preprocessing.html">Dwi preprocessing</a></div>
+<div class="line">- <a class="reference external" href="../../pipelines/preprocess/Dwi_fod_msmt_csd.html">FOD estimation</a></div>
+<div class="line">- <a class="reference external" href="../../pipelines/preprocess/Dwi_tissue_boundaries.html">Create tissue boundaries</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/mrtrix/Tractography.html">Create tractography</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/mrtrix/EditingTrack.html">Editing tractography</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/mrtrix/FilteringTrack.html">Filtering tractography</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/mrtrix/SphericalHarmonicExtraction.html">Spherical harmonic extraction</a></div>
+</div>
+</div>
+<a class="reference internal image-reference" href="../../../_images/Dwi_whole_brain_tractography_pipeline.png"><img alt="DWI whole-brain tractograpy pipeline" src="../../../_images/Dwi_whole_brain_tractography_pipeline.png" style="width: 800px;" /></a>
+<p><strong>Mandatory inputs parameters</strong></p>
+<ul>
+<li><dl>
+<dt><em>in_dwi</em> (a string representing an existing file)</dt><dd><p>Diffusion image to preprocess (valid extensions: [.nii, .nii.gz]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/DWI.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>in_bvec</em> (a string representing an existing file)</dt><dd><p>Direction of the gradient (b-vectors) of the in_dwi image (bvec file, valid extensions: [.bvec]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/DWI.bvec&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>in_bval</em> (a string representing an existing file)</dt><dd><p>b values of the in_dwi image (bval file, valid extensions: [.bval]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/DWI.bval&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>in_dwi_pe_dir</em> (ap, pa, lr, rl, default value is ap, optional)</dt><dd><div class="line-block">
+<div class="line">Phase encoding direction of the in_diw image:</div>
+<div class="line-block">
+<div class="line">- ap : Anterior to posterior</div>
+<div class="line">- pa: Posterior to anterior</div>
+<div class="line">- lr: Left to right</div>
+<div class="line">- rl: Right toleft</div>
+</div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="n">ap</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>in_dwi_ro_time</em> (a float, optional)</dt><dd><p>Total readout time of in_dwi image (in seconds).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mf">2.0</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>in_b0_reverse</em> (a string representing an existing file)</dt><dd><p>b=0 volumes with opposing phase-direction which is to be used exclusively by topup for estimating the inhomogeneity field
+(valid extensions: [.nii, .nii.gz]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/b0_reverse.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>in_T1w</em> (a string representing an existing file)</dt><dd><p>Anatomical image (valid extensions: [.nii, .nii.gz]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/T1w.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Outputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>sh_peaks</em> (a string representing a file)</dt><dd><p>The peaks of a spherical harmonic function in each voxel
+Each volume corresponds to the x, y &amp; z component of each peak direction vector in turn.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/DWI_denoised_unringed_dwifslpreproc_unbias_wm_odf_norm_peaks.mif&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>tracks_10mio</em> (a string representing a file)</dt><dd><p>The tractography with 10 million streamlines</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/DWI_denoised_unringed_dwifslpreproc_unbias_wm_odf_norm_tracto.tck&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>tracks_200k</em> (a string representing a file)</dt><dd><p>The reduce tractography with 200k streamlines</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/DWI_denoised_unringed_dwifslpreproc_unbias_wm_odf_norm_tracto_200k.tck&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>tracks_10k</em> (a string representing a file)</dt><dd><p>The reduce tractography with 10k streamlines</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/DWI_denoised_unringed_dwifslpreproc_unbias_wm_odf_norm_tracto_10k.tck&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>tracks_sift</em> (a string representing a file)</dt><dd><p>The tractography filtered such that the streamline densities match the FOD lobe integrals</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/DWI_denoised_unringed_dwifslpreproc_unbias_wm_odf_norm_tracto_sift.tck&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>tracks_sift_10k</em> (a string representing a file)</dt><dd><p>The reduce sift tractography with 10k streamlines</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/DWI_denoised_unringed_dwifslpreproc_unbias_wm_odf_norm_tracto_10k.tck&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>T1w_coreg</em> (a string representing a file)</dt><dd><p>Anatomical image coregistered in DWI space.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/T1w_transformed.mif&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<hr class="docutils" />
+<p>Usefull links:
+<a class="reference external" href="https://mrtrix.readthedocs.io/en/latest/">MRTrix</a>
+<a class="reference external" href="https://osf.io/fkyht/">Tutorial B.A.T.M.A.N.: Basic and Advanced Tractography with MRtrix for All Neurophiles</a>
+<a class="reference external" href="https://andysbrainbook.readthedocs.io/en/latest/MRtrix/MRtrix_Introduction.html">Tutorial Andy’s brain book</a></p>
+</section>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </div>
+  </body>
+</html>

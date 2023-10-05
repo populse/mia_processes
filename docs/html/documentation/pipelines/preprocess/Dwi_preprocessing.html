@@ -1,0 +1,177 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Dwi_preprocessing pipeline &#8212; mia_processes 2.3.1-dev+64b4d57a documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/haiku.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
+          <span>mia_processes 2.3.1-dev+64b4d57a documentation</span></a></h1>
+        <h2 class="heading"><span>Dwi_preprocessing pipeline</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <div class="toctree-wrapper compound">
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 35%" />
+<col style="width: 42%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference external" href="../../../index.html">Home</a></p></td>
+<td><p><a class="reference external" href="../../documentation.html">Documentation</a></p></td>
+<td><p><a class="reference external" href="https://github.com/populse/mia_processes">GitHub</a></p></td>
+</tr>
+</tbody>
+</table>
+<section id="dwi-preprocessing-pipeline">
+<h1>Dwi_preprocessing pipeline<a class="headerlink" href="#dwi-preprocessing-pipeline" title="Permalink to this headline">¶</a></h1>
+<section id="dwi-preprocessing-using-a-reverse-phase-encoded-b0">
+<h2>DWI preprocessing using a reverse-phase encoded b0<a class="headerlink" href="#dwi-preprocessing-using-a-reverse-phase-encoded-b0" title="Permalink to this headline">¶</a></h2>
+<p>The aim of this pipeline is to preprocess a multishell diffusion data before to analysed it.
+In this pipeline, an image with b=0 volumes with opposite phase encoding should be provided for the purpose of EPI distortion correction.</p>
+<div class="line-block">
+<div class="line">The following steps are done:</div>
+<div class="line">- denoise the image and estimate the spatially varying noise map</div>
+<div class="line">- remove Gibb’s ringing artefacts</div>
+<div class="line">- motion and distortion correction (EPI-distrortion correction, B0-field inhomogeneity correction, Eddy-current and movement distortion correction )</div>
+<div class="line">- bias field correction</div>
+</div>
+<p>A binary mask of the brain is also estimated.</p>
+<hr class="docutils" />
+<p><strong>Pipeline insight</strong></p>
+<div class="line-block">
+<div class="line">Dwi_preprocessing pipeline combines the following bricks:</div>
+<div class="line-block">
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/mrtrix/MRConvert.html">Conversion into MIF format</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/mrtrix/DWIExtract.html">b0 extraction</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/mrtrix/MRMath.html">b0 averaging</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/mrtrix/MRCat.html">b0 concatenation</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/mrtrix/DWIDenoise.html">Denoising</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/mrtrix/MRDeGibbs.html">Unringing</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/mrtrix/DWIPreproc.html">Motion distorstion correction (Topup and eddy correction)</a>
+(default values: rpe_options = “pair”, eddy_options = ” –slm=linear –data_is_shelled”)</div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/mrtrix/DWIBiasCorrect.html">Bias correction</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/mrtrix/DWIBrainMask.html">Brain mask estimation</a></div>
+</div>
+</div>
+<a class="reference internal image-reference" href="../../../_images/Dwi_preprocessing_pipeline.png"><img alt="DWI preprocessing pipeline" src="../../../_images/Dwi_preprocessing_pipeline.png" style="width: 800px;" /></a>
+<p><strong>Mandatory inputs parameters</strong></p>
+<ul>
+<li><dl>
+<dt><em>in_dwi</em> (a string representing an existing file)</dt><dd><p>Diffusion image to preprocess (valid extensions: [.nii, .nii.gz]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/DWI.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>in_bvec</em> (a string representing an existing file)</dt><dd><p>Direction of the gradient (b-vectors) of the in_dwi image (bvec file, valid extensions: [.bvec]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/DWI.bvec&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>in_bval</em> (a string representing an existing file)</dt><dd><p>b values of the in_dwi image (bval file, valid extensions: [.bval]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/DWI.bval&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>in_dwi_pe_dir</em> (ap, pa, lr, rl, default value is ap, optional)</dt><dd><div class="line-block">
+<div class="line">Phase encoding direction of the in_diw image:</div>
+<div class="line-block">
+<div class="line">- ap : Anterior to posterior</div>
+<div class="line">- pa: Posterior to anterior</div>
+<div class="line">- lr: Left to right</div>
+<div class="line">- rl: Right toleft</div>
+</div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="n">ap</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>in_dwi_ro_time</em> (a float, optional)</dt><dd><p>Total readout time of in_dwi image (in seconds).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mf">2.0</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>in_b0_reverse</em> (a string representing an existing file)</dt><dd><p>b=0 volumes with opposing phase-direction which is to be used exclusively by topup for estimating the inhomogeneity field
+(valid extensions: [.nii, .nii.gz]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/b0_reverse.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Outputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>brain_mask</em></dt><dd><p>DWI brain mask image.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/DWI_denoised_unringed_dwifslpreproc_unbias_brain_mask.mif&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>preproc_dwi</em></dt><dd><p>DWI corrected image.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/DWI_denoised_unringed_dwifslpreproc_unbias.mif&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </div>
+  </body>
+</html>

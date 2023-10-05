@@ -1,0 +1,427 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Tractography brick &#8212; mia_processes 2.3.1-dev+64b4d57a documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
+          <span>mia_processes 2.3.1-dev+64b4d57a documentation</span></a></h1>
+        <h2 class="heading"><span>Tractography brick</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <div class="toctree-wrapper compound">
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 35%" />
+<col style="width: 40%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference external" href="../../../../index.html">Home</a></p></td>
+<td><p><a class="reference external" href="../../../documentation.html">Documentation</a></p></td>
+<td><p><a class="reference external" href="https://github.com/populse/mia_processes">GitHub</a></p></td>
+</tr>
+</tbody>
+</table>
+<section id="tractography-brick">
+<h1>Tractography brick<a class="headerlink" href="#tractography-brick" title="Permalink to this headline">¶</a></h1>
+<section id="performs-streamlines-tractography">
+<h2>Performs streamlines tractography<a class="headerlink" href="#performs-streamlines-tractography" title="Permalink to this headline">¶</a></h2>
+<p>Perform streamlines tractography  using tckgen mrtrix command.</p>
+<p>At least one tractography seeding mechanisms must be provided. The select and seed options allow to choose the number of desired streamlines.</p>
+<p>(mrtrix tckgen command)</p>
+<p><em>Please note that, in mia_processes, MRtrix bricks required diffusion data in MRtrix .mif format.
+The MRConvert brick could be used to convert diffusion data in NIfTI format into MRtrix .mif format.
+In this case, bvec and bval file should be specified.</em></p>
+<hr class="docutils" />
+<p><strong>Mandatory inputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>in_file</em> (a pathlike object or a string representing an existing file)</dt><dd><p>Input DWI image (valid extensions: [.mif]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/DWI.mif&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Optional inputs with default value parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>algorithm</em> (iFOD2, FACT, iFOD1, Nulldist, SD_Stream, Tensor_Det or Tensor_Prob default value is iFOD2, optional)</dt><dd><div class="line-block">
+<div class="line">Tractography algorithm to be used:</div>
+<div class="line-block">
+<div class="line">- iFOD2: Second-order Integration over Fiber Orientation Distributions</div>
+<div class="line">- iFOD1: First-order Integration over Fiber Orientation Distributions</div>
+<div class="line">- FACT: Fiber Assigned by Continuous Tracking</div>
+<div class="line">- NullDist: Null Distribution tracking algorithms</div>
+<div class="line">- SD_Stream: Streamlines tractography based on Spherical Deconvolution (SD)</div>
+<div class="line">- Tensor_Det: A deterministic algorithm that takes as input a 4D diffusion-weighted image (DWI) series.</div>
+<div class="line">- Tensor_Prob: A probabilistic algorithm that takes as input a 4D diffusion-weighted image (DWI) series</div>
+</div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="n">iFOD2</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>cutoff</em> (a float, default value is 0.1, optional)</dt><dd><p>Streamlines tractography options - The FA or FOD amplitude for terminating tracks</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mf">0.1</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>nopreselectcompt</em> (a boolean, default value is False, optional)</dt><dd><p>Streamlines tractography options - Do NOT pre-compute legendre polynomial values</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>stop</em> (a boolean, default value is False, optional)</dt><dd><p>Streamlines tractography options - Stop propagating a streamline once it has traversed all include regions</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>use_rk4</em> (a boolean, default value is False, optional)</dt><dd><p>Streamlines tractography options - Use 4th-order Runge-Kutta integration</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>tracto_seed_unidirectional</em> (a boolean, default value is False, optional)</dt><dd><p>Tractography seeding options and parameters - Track from the seed point in one direction only</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>tracto_get_output_seeds</em> (a boolean, default value is False, optional)</dt><dd><p>Tractography seeding options and parameters - Get the seed location of all successful streamlines into a file</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>backtrack</em> (a boolean, default value is False, optional)</dt><dd><p>Anatomically-Constrained Tractography options - Allow tracks to be truncated.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>crop_at_gmwmi</em> (a boolean, default value is False, optional)</dt><dd><p>Anatomically-Constrained Tractography options - Crop streamline endpoints more precisely as they cross the GM-WM interface</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Optional inputs:</strong></p>
+<ul>
+<li><dl>
+<dt><em>angle</em> (a float, optional)</dt><dd><p>Streamlines tractography options - Maximum angle between successive steps.</p>
+<p>If not set, default is 60 for deterministic algorithms, 15 for iFOD1 / nulldist1 and 45 for iFOD2 / nulldist2</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">45</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>downsample_factor</em> (a float, optional)</dt><dd><p>Streamlines tractography options - Downsample the generated streamlines to reduce output file size</p>
+<p>If not set, default is (samples-1) for iFOD2, no downsampling for all other algorithms.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mf">5.0</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>max_lenght</em> (a float, optional)</dt><dd><p>Streamlines tractography options - The max length of any track in mm</p>
+<p>If not set, default value is 100 x voxelsize</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mf">200.0</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>min_lenght</em> (a float, optional)</dt><dd><p>Streamlines tractography options - The minimum length of any track in mm</p>
+<p>If not set, default value is without ACT 5 x voxelsize and with ACT 2 x voxelsize</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">4</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>step_size</em> (a float, optional)</dt><dd><div class="line-block">
+<div class="line">Streamlines tractography options - Step size of the algorithm in mm</div>
+</div>
+<div class="line-block">
+<div class="line">If not set, default value is:</div>
+<div class="line">- for first-order algorithms, 0.1 x voxelsize;</div>
+<div class="line">- if using RK4, 0.25 x voxelsize</div>
+<div class="line">- for iFOD2: 0.5 x voxelsize</div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mf">0.32</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>trials</em> (a integer, optional)</dt><dd><p>Streamlines tractography options - Maximum number of sampling trials at each point (only used for probabilistic tracking)
+If not set, default value is 1000.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">1000</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>select</em> (an integer, optional)</dt><dd><p>Streamlines tractography options - Desired number of tracks after all selection criteria have been applied (i.e. inclusion/exclusion ROIs, min/max length, etc).
+If this option is not specified, by default, 5000 streamlines are to be selected.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">5000</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>seed_dynamic</em> (a string representing an existing file, optional)</dt><dd><p>Tractography seeding mechanisms - Determine seed points dynamically using the SIFT model (must not provide any other seeding mechanism).
+Note that while this seeding mechanism improves the distribution of reconstructed streamlines density,
+it should NOT be used as a substitute for the SIFT method itself.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/fod.mif&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>seed_gmwmi</em> (a string representing an existing file, optional)</dt><dd><p>Tractography seeding mechanisms - Seed from the grey matter - white matter interface (only valid if using ACT framework).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/gmwmSeed_coreg.mif&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>seed_grid_voxel</em> (a tuple of the form: (a pathlike object or string representing an existing file, an integer), optional)</dt><dd><p>Tractography seeding mechanisms - Seed a fixed number of streamlines per voxel in a mask image;
+place seeds on a 3D mesh grid (grid_size argument is per axis; so a grid_size of 3 results in 27 seeds per voxel)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">(</span><span class="s1">&#39;/home/username/data/derived_data/mesh_grid.mif&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>seed_image</em> (a string representing an existing file, optional)</dt><dd><p>Tractography seeding mechanisms - Seed streamlines entirely at random within a mask image.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/gmwmSeed_coreg.mif&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>seed_rejection</em> (a string representing an existing file, optional)</dt><dd><p>Tractography seeding mechanisms - Seed from an image using rejection sampling</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/gmwmSeed_coreg.mif&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>seed_rnd_voxel</em> (a tuple of the form: (a pathlike object or string representing an existing file, an integer), optional)</dt><dd><p>Tractography seeding mechanisms - Seed a fixed number of streamlines per voxel in a mask image; random placement of seeds in each voxel.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">()</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>seed_sphere</em> (a tuple of the form: (a float, a float, a float, a float), optional)</dt><dd><p>Tractography seeding mechanisms - Spherical seed coordinate XYZ position and radius (X, Y, Z, r)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">(</span><span class="mf">55.6</span><span class="p">,</span> <span class="mf">95.3</span><span class="p">,</span> <span class="mf">25.3</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>tracto_seeds_number</em> (a integer, optional)</dt><dd><p>Tractography seeding options and parameters - Number of seeds that the algorithm will attempt to track from.
+If this option is NOT provided, the default number of seeds is set to 1000 × the number of selected streamlines.</p>
+<p>If select option is NOT also specified: the tracking will continue  until this number of seeds has been attempted.
+If select option is also specified, the tracking will stop when the number of seeds attempted reaches the number specified here,
+OR when the number of streamlines selected reaches the number requested with the select option.</p>
+<p>If tracto_seeds_number option is set to zero, the algorithm will keep attempting seeds until the number specified by select option has been reached.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">2000</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>tracto_max_attempts_per_seed_number</em> (a integer, optional)</dt><dd><p>Tractography seeding options and parameters - Set the maximum number of times that the tracking algorithm should attempt to find an appropriate tracking direction from a given seed point.
+This should be set high enough to ensure that an actual plausible seed point is not discarded prematurely as being unable to initiate tracking from.</p>
+<p>If tracto_max_attempts_per_seed_number is not set, the maximum attempts is 1000.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">2000</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>tracto_seed_cutoff</em> (a float, optional)</dt><dd><p>Tractography seeding options and parameters - The minimum FA or FOD amplitude for seeding tracks.</p>
+<p>If tracto_seed_cutoff is not set, the cut off is set to the normal cut off (see cutoff option)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mf">0.2</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>tracto_seed_direction</em> (a tuple of the form: (a float, a float, a float), optional)</dt><dd><p>Tractography seeding options and parameters - Specify a seeding direction for the tracking.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">1.3</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>roi_excl</em> (string representing an existing file or a tuple of the form: (a float, a float, a float, a float), optional)</dt><dd><p>Region Of Interest processing options - Specify an exclusion region of interest, streamlines that enter ANY exclude region will be discarded.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/roi.mif&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>roi_incl</em> (string representing an existing file or a tuple of the form: (a float, a float, a float, a float), optional)</dt><dd><p>Region Of Interest processing options - Specify an inclusion region of interest, streamlines must traverse ALL inclusion regions to be accepted.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/roi.mif&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>roi_incl_ordered</em> (string representing an existing file or a tuple of the form: (a float, a float, a float, a float), optional)</dt><dd><p>Region Of Interest processing options - Specify an inclusion region of interest, streamlines must traverse ALL inclusion_ordered regions in the order
+they are specified in order to be accepted.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/roi.mif&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>roi_mask</em> (string representing an existing file or a tuple of the form: (a float, a float, a float, a float), optional)</dt><dd><p>Region Of Interest processing options - Specify a masking region of interest. If defined,streamlines exiting the mask will be truncated.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/mask.mif&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>act_image</em> (string representing an existing file, optional)</dt><dd><p>Anatomically-Constrained Tractography options - Use the Anatomically-Constrained Tractography framework during tracking.
+The provided image must be in the 5TT ie five tissue type format.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/T1w_5tt.mif&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>iFOD_power</em> (a integer, optional)</dt><dd><p>Options specific to the iFOD tracking algorithms - Raise the FOD to the power specified (default is 1/nsamples)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">2</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>iFOD2_n_samples</em> (a integer, optional)</dt><dd><p>Options specific to the iFOD2 tracking algorithm - Number of FOD samples to take per step for the 2nd order (iFOD2) method</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">2</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Outputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>out_file</em> (a pathlike object or string representing a file)</dt><dd><p>Output file containing tracks</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/DWI_tracto.tck&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>out_file</em> (a pathlike object or string representing a file)</dt><dd><p>Out seed location of all successful streamlines</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/DWI__tracto_out_seeds.mif&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<hr class="docutils" />
+<p>Usefull links:</p>
+<p><a class="reference external" href="https://mrtrix.readthedocs.io/en/latest/reference/commands/tckgen.html">mrtrix tckgen</a></p>
+<p><a class="reference external" href="https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.mrtrix3.tracking.html#tractography">mrtrix tckgen - nipype</a></p>
+</section>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </div>
+  </body>
+</html>

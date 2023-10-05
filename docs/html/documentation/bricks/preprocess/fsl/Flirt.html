@@ -1,0 +1,498 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Flirt brick &#8212; mia_processes 2.3.1-dev+64b4d57a documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
+          <span>mia_processes 2.3.1-dev+64b4d57a documentation</span></a></h1>
+        <h2 class="heading"><span>Flirt brick</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <div class="toctree-wrapper compound">
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 35%" />
+<col style="width: 40%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference external" href="../../../../index.html">Home</a></p></td>
+<td><p><a class="reference external" href="../../../documentation.html">Documentation</a></p></td>
+<td><p><a class="reference external" href="https://github.com/populse/mia_processes">GitHub</a></p></td>
+</tr>
+</tbody>
+</table>
+<section id="flirt-brick">
+<h1>Flirt brick<a class="headerlink" href="#flirt-brick" title="Permalink to this headline">¶</a></h1>
+<section id="linear-affine-intra-and-inter-modal-brain-image-registration-using-flirt-fsl">
+<h2>Linear (affine) intra- and inter-modal brain image registration using FLIRT (FSL)<a class="headerlink" href="#linear-affine-intra-and-inter-modal-brain-image-registration-using-flirt-fsl" title="Permalink to this headline">¶</a></h2>
+<p>FLIRT (FMRIB’s Linear Image Registration Tool) is a tool for linear (affine) intra and inter-modal brain image registration.</p>
+<p>This brick can be used to calculate the affine transformation that registers the input file to the reference file and to obtain
+an output volume where the transform is applied to the input volume to align it with the reference volume (use get_registered_file option).</p>
+<p>It is also possible to apply a saved transformation to a volume (apply_xfm or apply_isoxfm options).
+The reference volume must still be specified as this sets the voxel and image dimensions of the resulting volume.</p>
+<p>Note that the reference image determines the Field of View (FOV) and voxel size of the output registered image.</p>
+<hr class="docutils" />
+<p><strong>Mandatory inputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>in_file</em> (a string representing an existing file)</dt><dd><p>Input file (valid extensions: [.nii, .nii.gz]) to register to the reference file.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/b0mean.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>in_reference</em> (a string representing an existing file)</dt><dd><p>Reference volume (valid extensions: [.nii, .nii.gz]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/T1w.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Optional inputs:</strong></p>
+<ul>
+<li><dl>
+<dt><em>get_registered_file</em> (a boolean, optional, default value is True)</dt><dd><p>Obtain an output volume where the transform is applied to the input volume to align it with the reference volume.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">True</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>apply_xfm</em> (a boolean, optional, default value is False)</dt><dd><p>Apply transformation supplied by in_matrix_file
+Mutually exclusive with apply_isoxfm.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>apply_isoxfm</em> (a float, optional)</dt><dd><p>Apply transformation supplied by in_matrix_file but forces isotropic resampling (using the float provided)
+Mutually exclusive with apply_xfm.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mf">1.0</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>in_matrix_file</em> (a string representing an existing file, optional)</dt><dd><p>Input 4x4 affine matrix transformation. Matrix used if apply_isoxfm or apply_xfm are used.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/matrix_struct_to_diff.mat&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>angle_rep</em> (euler or quaternion, optional, default value is euler)</dt><dd><p>Representation of rotation angles.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;euler&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>bbrslope</em> (a float, optional)</dt><dd><p>Value of BBR slope, if BBR used for cost function.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mf">0.1</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>bbrtype</em> (signed, global_abs, local_abls, optional, default value is signed)</dt><dd><p>Type of BBR cost function, if BBR used for cost function.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;signed&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>bgvalue</em> (a float, optional)</dt><dd><p>Use specified background value for points outside FOV</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mf">5.2</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>bins</em> (an integer, optional, default value is 256)</dt><dd><p>Number of histogram bins</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">256</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>coarse_search</em> (an integer, optional, default value is 60)</dt><dd><p>Coarse search delta angle</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">60</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>cost</em> (mutualinfo, corratio, normcor, normi, leastsq, labeldiff or bbr, optional, default value is corratio)</dt><dd><div class="line-block">
+<div class="line">Cost function. There are two main types:</div>
+<div class="line">- intra-model (same modality): least squares and normalised correlation</div>
+<div class="line">- inter-model (different modalities): correlation ratio and mutual information-based</div>
+</div>
+<p>For image from the same modality, both intra and inter-model type can be used.
+The recommended options (to try first) are correlation ratio for inter-modal and normalised correlation for intra-modal.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;corratio&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>cost_func</em> (mutualinfo, corratio, normcor, normi, leastsq, labeldiff or bbr, optional, default value is corratio)</dt><dd><p>Cost function (maps to argument searchcost)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;corratio&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>data_type</em> (char, short, int, float or double, optional)</dt><dd><p>Force output data type</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;char&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>dof</em> (6,7, 9 or 12, optional, default is 12)</dt><dd><p>Number of transform degrees of freedom.
+The number of degrees of freedom depends on whether the images to be registered are intra/inter-subject and small/large FOV.
+| If the images are from the same subject:
+| - large FOV –&gt; 6 dof is appropriate (7 if the scanner voxel size may have changed)
+| - small FOV/single slice –&gt; 3 dof is appropriate  (4 if the scanner voxel size may have changed)
+| If the images are from the different subjects:
+| - large FOV –&gt; 12 dof is appropriate
+| - small FOV –&gt; 6 dof is appropriate</p>
+<p>For 2D-to-2D registration, used rigid2D option.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">6</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>echospacing</em> (a float, optional)</dt><dd><p>Value of EPI echo spacing - units of seconds.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mf">2.0</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>fine_search</em> (an integer, optional, default value is 18)</dt><dd><p>Fine search delta angle</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">18</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>fieldmap</em> (a string representing an existing file, optional)</dt><dd><p>Fieldmap image in rads/s - must be already registered to the reference image</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/field_map_registered.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>fieldmapmask</em> (a string representing an existing file, optional)</dt><dd><p>Mask for fieldmap image</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/field_map_registered_mask.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>force_scaling</em> (a boolean, optional, default value is False)</dt><dd><p>Force rescaling even for low-res images.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>interp</em> (trilinear, nearestneighbour, sinc,  or spline, optional, default value is trilinear),</dt><dd><p>Final interpolation method used in reslicing.
+The interpolation is only used for the final transformation (and in applyxfm), not in the registration calculations.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;trilinear&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>in_weight</em> (a string representing an existing file, optional)</dt><dd><p>File for input weighting volume.
+Cost function weighting volumes can be specified (either for input volume or for reference volume, see ref_weight option).
+This allows the cost function to have a different weighting at each voxel, which is useful for excluding areas (weight=0)
+of no interest, or increasing the weighting around important structures such as the ventricles.
+Note that this is different from masking the original images, as masking introduces artificial boundaries whereas weighting does not.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/in_weight.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>min_sampling</em> (a float, optional)</dt><dd><p>Set minimum voxel dimension for sampling</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mf">0.5</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>no_clamp</em> (a boolean, optional, default value is False)</dt><dd><p>Do not use intensity clampinp.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>no_resample</em> (a boolean, optional, default value is False)</dt><dd><p>Do not change input sampling.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>no_resample_blur</em> (a boolean, optional, default value is False)</dt><dd><p>Do not use blurring on downsampling.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>no_search</em> (a boolean, optional, default value is False)</dt><dd><p>Set all angular searches to ranges 0 to 0.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>output_type</em> (‘NIFTI’ or ‘NIFTI_GZ’, optional, default value is NIFTI)</dt><dd><div class="line-block">
+<div class="line">Format of the output image (one of NIFTI, NIFTI_GZ).</div>
+<div class="line-block">
+<div class="line">- NIFTI: *.nii</div>
+<div class="line">- NIFTI_GZ: *.nii.gz</div>
+</div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="n">NIFTI</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>padding_size</em> (an integer, optional)</dt><dd><p>For applyxfm: interpolates outside image by size</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">2</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>pedir</em> (an integer, optional)</dt><dd><p>Phase encode direction of EPI  with 1/2/3=x/y/z and -1/-2/-3=-x/-y/-z</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">2</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>rigid2D</em> (a boolean, optional, default value is False)</dt><dd><p>2D-to-2D registration mode. Use 2D rigid body mode and ignore dof</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>ref_weight</em> (a string representing an existing file, optional)</dt><dd><p>File for reference weighting volume.
+Cost function weighting volumes can be specified (either for input volume or for reference volume, see also in_weight option).
+This allows the cost function to have a different weighting at each voxel, which is useful for excluding areas (weight=0)
+of no interest, or increasing the weighting around important structures such as the ventricles.
+Note that this is different from masking the original images, as masking introduces artificial boundaries whereas weighting does not.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/in_weight.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>save_log</em> (a boolean, optional, default value is False)</dt><dd><p>Save fsl log</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>schedule</em> (a string representing an existing file, optional)</dt><dd><p>Replaces default schedule. The schedule file specifies what transformations/DOF are allowed and how the optimisation is performed.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;</span><span class="si">{FSLDIR}</span><span class="s1">/etc/flirtsch/sch2D_6dof&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>searchr_x</em> (a list of 2 integer, optional, default value is [-90, 90])</dt><dd><p>Search angles along x-axis, in degrees [min angle, max angle]</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>searchr_y</em> (a list of 2 integer, optional, default value is [-90, 90])</dt><dd><p>Search angles along y-axis, in degrees [min angle, max angle]</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>searchr_z</em> (a list of 2 integer, optional, default value is [-90, 90])</dt><dd><p>Search angles along z-axis, in degrees [min angle, max angle]</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="p">[</span><span class="o">-</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">]</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>sinc_width</em> (an integer, optional)</dt><dd><p>Full-width (window width) in voxels if sinc is used for final interpolation</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">7</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>sinc_window</em> (rectangular, hanning or blackman, optional)</dt><dd><p>Type of windowing function if sinc is used for final interpolation</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="mi">7</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>use_qform</em> (a boolean, optional, default value is False)</dt><dd><p>Initialize using sform or qform</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="kc">False</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>wm_seg</em> (a string representing an existing file, optional)</dt><dd><p>White matter segmentation volume needed by BBR cost function</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/wm_seg.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>wmcoords</em> (a string representing an existing file, optional)</dt><dd><p>White matter boundary coordinates for BBR cost function</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/wm_coors.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>wmnorms</em> (a string representing an existing file, optional)</dt><dd><p>“White matter boundary normals for BBR cost function</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/wm_norms.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Outputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>out_file</em> (a pathlike object or string representing a file, optional)</dt><dd><p>Registered file</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/b0mean_registered_with_T1w.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>out_log</em> (a pathlike object or string representing a file, optional)</dt><dd><p>Log file</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/b0mean_flirt_log.txt&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>out_matrix</em> (a pathlike object or string representing a file, optional)</dt><dd><p>Calculated affine transform</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/b0mean_T1w_flirt.mat&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<hr class="docutils" />
+<p>Usefull links:</p>
+<p><a class="reference external" href="https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FLIRT">FSL FLIRT</a></p>
+<p><a class="reference external" href="https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FLIRT/FAQ">FSL FLIRT FAQ</a></p>
+<p><a class="reference external" href="https://nipype.readthedocs.io/en/latest/api/generated/nipype.interfaces.fsl.preprocess.html#flirt">FSL FLIRT - nipype</a></p>
+</section>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </div>
+  </body>
+</html>

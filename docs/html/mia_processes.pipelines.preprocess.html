@@ -1,21 +1,23 @@
+
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="./">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>mia_processes.pipelines.preprocess package &#8212; mia_processes 2.3.1-dev+ed350944 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=f63d8bfa" />
-    <link rel="stylesheet" type="text/css" href="_static/haiku.css?v=e491ac2d" />
-    <script src="_static/documentation_options.js?v=107b606a"></script>
-    <script src="_static/doctools.js?v=888ff710"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <title>mia_processes.pipelines.preprocess package &#8212; mia_processes 2.3.1-dev+64b4d57a documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/haiku.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="index.html">
-          <span>mia_processes 2.3.1-dev+ed350944 documentation</span></a></h1>
+          <span>mia_processes 2.3.1-dev+64b4d57a documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.pipelines.preprocess package</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -29,18 +31,18 @@
         
         
   <section id="module-mia_processes.pipelines.preprocess">
-<span id="mia-processes-pipelines-preprocess-package"></span><h1>mia_processes.pipelines.preprocess package<a class="headerlink" href="#module-mia_processes.pipelines.preprocess" title="Link to this heading">¶</a></h1>
+<span id="mia-processes-pipelines-preprocess-package"></span><h1>mia_processes.pipelines.preprocess package<a class="headerlink" href="#module-mia_processes.pipelines.preprocess" title="Permalink to this headline">¶</a></h1>
 <p>The various pipelines used for the pre-treatment stage.</p>
 <section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </section>
 <section id="module-mia_processes.pipelines.preprocess.anat_airmask">
-<span id="mia-processes-pipelines-preprocess-anat-airmask-module"></span><h2>mia_processes.pipelines.preprocess.anat_airmask module<a class="headerlink" href="#module-mia_processes.pipelines.preprocess.anat_airmask" title="Link to this heading">¶</a></h2>
+<span id="mia-processes-pipelines-preprocess-anat-airmask-module"></span><h2>mia_processes.pipelines.preprocess.anat_airmask module<a class="headerlink" href="#module-mia_processes.pipelines.preprocess.anat_airmask" title="Permalink to this headline">¶</a></h2>
 <p>The Anat_airmask pipeline.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="mia_processes.pipelines.preprocess.anat_airmask.Anat_airmask">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.pipelines.preprocess.anat_airmask.</span></span><span class="sig-name descname"><span class="pre">Anat_airmask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">autoexport_nodes_parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/preprocess/anat_airmask.html#Anat_airmask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.pipelines.preprocess.anat_airmask.Anat_airmask" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.pipelines.preprocess.anat_airmask.</span></span><span class="sig-name descname"><span class="pre">Anat_airmask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">autoexport_nodes_parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/preprocess/anat_airmask.html#Anat_airmask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.pipelines.preprocess.anat_airmask.Anat_airmask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">capsul.pipeline.pipeline.Pipeline</span></code></p>
 <p><em>Compute rotation mask, air mask, artifact mask and hat mask for
 structural data</em></p>
 <p>Following step 1 from <a class="reference external" href="https://onlinelibrary.wiley.com/doi/10.1002/mrm.21992">[Mortamet2009]</a></p>
@@ -56,7 +58,7 @@ structural data</em></p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.pipelines.preprocess.anat_airmask.Anat_airmask.pipeline_definition">
-<span class="sig-name descname"><span class="pre">pipeline_definition</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/preprocess/anat_airmask.html#Anat_airmask.pipeline_definition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.pipelines.preprocess.anat_airmask.Anat_airmask.pipeline_definition" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">pipeline_definition</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/preprocess/anat_airmask.html#Anat_airmask.pipeline_definition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.pipelines.preprocess.anat_airmask.Anat_airmask.pipeline_definition" title="Permalink to this definition">¶</a></dt>
 <dd><p>Building the pipeline</p>
 </dd></dl>
 
@@ -64,12 +66,12 @@ structural data</em></p>
 
 </section>
 <section id="module-mia_processes.pipelines.preprocess.anat_headmask">
-<span id="mia-processes-pipelines-preprocess-anat-headmask-module"></span><h2>mia_processes.pipelines.preprocess.anat_headmask module<a class="headerlink" href="#module-mia_processes.pipelines.preprocess.anat_headmask" title="Link to this heading">¶</a></h2>
+<span id="mia-processes-pipelines-preprocess-anat-headmask-module"></span><h2>mia_processes.pipelines.preprocess.anat_headmask module<a class="headerlink" href="#module-mia_processes.pipelines.preprocess.anat_headmask" title="Permalink to this headline">¶</a></h2>
 <p>The Anat_headmask pipeline..</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="mia_processes.pipelines.preprocess.anat_headmask.Anat_headmask">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.pipelines.preprocess.anat_headmask.</span></span><span class="sig-name descname"><span class="pre">Anat_headmask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">autoexport_nodes_parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/preprocess/anat_headmask.html#Anat_headmask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.pipelines.preprocess.anat_headmask.Anat_headmask" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.pipelines.preprocess.anat_headmask.</span></span><span class="sig-name descname"><span class="pre">Anat_headmask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">autoexport_nodes_parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/preprocess/anat_headmask.html#Anat_headmask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.pipelines.preprocess.anat_headmask.Anat_headmask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">capsul.pipeline.pipeline.Pipeline</span></code></p>
 <p><em>Compute head mask from skull stripped structural image using “Denoise”
 from Dipy</em></p>
 <p>Please, see the complete documentation for the
@@ -84,7 +86,7 @@ from Dipy</em></p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.pipelines.preprocess.anat_headmask.Anat_headmask.pipeline_definition">
-<span class="sig-name descname"><span class="pre">pipeline_definition</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/preprocess/anat_headmask.html#Anat_headmask.pipeline_definition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.pipelines.preprocess.anat_headmask.Anat_headmask.pipeline_definition" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">pipeline_definition</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/preprocess/anat_headmask.html#Anat_headmask.pipeline_definition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.pipelines.preprocess.anat_headmask.Anat_headmask.pipeline_definition" title="Permalink to this definition">¶</a></dt>
 <dd><p>Building the pipeline</p>
 </dd></dl>
 
@@ -92,12 +94,12 @@ from Dipy</em></p>
 
 </section>
 <section id="module-mia_processes.pipelines.preprocess.anat_mni_tpms">
-<span id="mia-processes-pipelines-preprocess-anat-mni-tpms-module"></span><h2>mia_processes.pipelines.preprocess.anat_mni_tpms module<a class="headerlink" href="#module-mia_processes.pipelines.preprocess.anat_mni_tpms" title="Link to this heading">¶</a></h2>
+<span id="mia-processes-pipelines-preprocess-anat-mni-tpms-module"></span><h2>mia_processes.pipelines.preprocess.anat_mni_tpms module<a class="headerlink" href="#module-mia_processes.pipelines.preprocess.anat_mni_tpms" title="Permalink to this headline">¶</a></h2>
 <p>The Anat_mni_tpms pipeline.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="mia_processes.pipelines.preprocess.anat_mni_tpms.Anat_mni_tpms">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.pipelines.preprocess.anat_mni_tpms.</span></span><span class="sig-name descname"><span class="pre">Anat_mni_tpms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">autoexport_nodes_parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/preprocess/anat_mni_tpms.html#Anat_mni_tpms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.pipelines.preprocess.anat_mni_tpms.Anat_mni_tpms" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.pipelines.preprocess.anat_mni_tpms.</span></span><span class="sig-name descname"><span class="pre">Anat_mni_tpms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">autoexport_nodes_parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/preprocess/anat_mni_tpms.html#Anat_mni_tpms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.pipelines.preprocess.anat_mni_tpms.Anat_mni_tpms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">capsul.pipeline.pipeline.Pipeline</span></code></p>
 <p><em>Get templates tissues probability map (white matter - WM -,
 grey matter - GM - and cerebrospinal - CSF -)</em></p>
 <p>From ‘MNI152NLin2009cAsym’ template
@@ -116,7 +118,7 @@ anatomical workflow.</p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.pipelines.preprocess.anat_mni_tpms.Anat_mni_tpms.pipeline_definition">
-<span class="sig-name descname"><span class="pre">pipeline_definition</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/preprocess/anat_mni_tpms.html#Anat_mni_tpms.pipeline_definition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.pipelines.preprocess.anat_mni_tpms.Anat_mni_tpms.pipeline_definition" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">pipeline_definition</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/preprocess/anat_mni_tpms.html#Anat_mni_tpms.pipeline_definition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.pipelines.preprocess.anat_mni_tpms.Anat_mni_tpms.pipeline_definition" title="Permalink to this definition">¶</a></dt>
 <dd><p>Building the pipeline</p>
 </dd></dl>
 
@@ -124,12 +126,12 @@ anatomical workflow.</p>
 
 </section>
 <section id="module-mia_processes.pipelines.preprocess.anat_skullstrip">
-<span id="mia-processes-pipelines-preprocess-anat-skullstrip-module"></span><h2>mia_processes.pipelines.preprocess.anat_skullstrip module<a class="headerlink" href="#module-mia_processes.pipelines.preprocess.anat_skullstrip" title="Link to this heading">¶</a></h2>
+<span id="mia-processes-pipelines-preprocess-anat-skullstrip-module"></span><h2>mia_processes.pipelines.preprocess.anat_skullstrip module<a class="headerlink" href="#module-mia_processes.pipelines.preprocess.anat_skullstrip" title="Permalink to this headline">¶</a></h2>
 <p>The Anat_skullstrip pipeline.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="mia_processes.pipelines.preprocess.anat_skullstrip.Anat_skullstrip">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.pipelines.preprocess.anat_skullstrip.</span></span><span class="sig-name descname"><span class="pre">Anat_skullstrip</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">autoexport_nodes_parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/preprocess/anat_skullstrip.html#Anat_skullstrip"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.pipelines.preprocess.anat_skullstrip.Anat_skullstrip" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.pipelines.preprocess.anat_skullstrip.</span></span><span class="sig-name descname"><span class="pre">Anat_skullstrip</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">autoexport_nodes_parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/preprocess/anat_skullstrip.html#Anat_skullstrip"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.pipelines.preprocess.anat_skullstrip.Anat_skullstrip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">capsul.pipeline.pipeline.Pipeline</span></code></p>
 <p><em>Bias correction and skull stripping of a structural image</em></p>
 <p>Please, see the complete documentation for the
 <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/pipelines/preprocess/Anat_skullstrip.html">Anat_skullstrip pipeline in the populse.mia_processes website</a></p>
@@ -143,7 +145,7 @@ anatomical workflow.</p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.pipelines.preprocess.anat_skullstrip.Anat_skullstrip.pipeline_definition">
-<span class="sig-name descname"><span class="pre">pipeline_definition</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/preprocess/anat_skullstrip.html#Anat_skullstrip.pipeline_definition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.pipelines.preprocess.anat_skullstrip.Anat_skullstrip.pipeline_definition" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">pipeline_definition</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/preprocess/anat_skullstrip.html#Anat_skullstrip.pipeline_definition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.pipelines.preprocess.anat_skullstrip.Anat_skullstrip.pipeline_definition" title="Permalink to this definition">¶</a></dt>
 <dd><p>Building the pipeline</p>
 </dd></dl>
 
@@ -151,12 +153,12 @@ anatomical workflow.</p>
 
 </section>
 <section id="module-mia_processes.pipelines.preprocess.anat_skullstrip_synthstrip">
-<span id="mia-processes-pipelines-preprocess-anat-skullstrip-synthstrip-module"></span><h2>mia_processes.pipelines.preprocess.anat_skullstrip_synthstrip module<a class="headerlink" href="#module-mia_processes.pipelines.preprocess.anat_skullstrip_synthstrip" title="Link to this heading">¶</a></h2>
+<span id="mia-processes-pipelines-preprocess-anat-skullstrip-synthstrip-module"></span><h2>mia_processes.pipelines.preprocess.anat_skullstrip_synthstrip module<a class="headerlink" href="#module-mia_processes.pipelines.preprocess.anat_skullstrip_synthstrip" title="Permalink to this headline">¶</a></h2>
 <p>The .Anat_skullstrip_synthstrip pipeline.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="mia_processes.pipelines.preprocess.anat_skullstrip_synthstrip.Anat_skullstrip_synthstrip">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.pipelines.preprocess.anat_skullstrip_synthstrip.</span></span><span class="sig-name descname"><span class="pre">Anat_skullstrip_synthstrip</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">autoexport_nodes_parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/preprocess/anat_skullstrip_synthstrip.html#Anat_skullstrip_synthstrip"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.pipelines.preprocess.anat_skullstrip_synthstrip.Anat_skullstrip_synthstrip" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.pipelines.preprocess.anat_skullstrip_synthstrip.</span></span><span class="sig-name descname"><span class="pre">Anat_skullstrip_synthstrip</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">autoexport_nodes_parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/preprocess/anat_skullstrip_synthstrip.html#Anat_skullstrip_synthstrip"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.pipelines.preprocess.anat_skullstrip_synthstrip.Anat_skullstrip_synthstrip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">capsul.pipeline.pipeline.Pipeline</span></code></p>
 <p><em>Create a brain-extraction workflow using SynthStrip (Freesurfer)</em></p>
 <p>Adapted from <a class="reference external" href="https://github.com/nipreps/mriqc/blob/5a0f0408bd0c176dbc46088c6ffe279269180f3f/mriqc/workflows/anatomical.py#L849">mriqc v22.06 synthstrip workflow</a></p>
 <p>Please, see the complete documentation for the
@@ -171,7 +173,7 @@ anatomical workflow.</p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.pipelines.preprocess.anat_skullstrip_synthstrip.Anat_skullstrip_synthstrip.pipeline_definition">
-<span class="sig-name descname"><span class="pre">pipeline_definition</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/preprocess/anat_skullstrip_synthstrip.html#Anat_skullstrip_synthstrip.pipeline_definition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.pipelines.preprocess.anat_skullstrip_synthstrip.Anat_skullstrip_synthstrip.pipeline_definition" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">pipeline_definition</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/preprocess/anat_skullstrip_synthstrip.html#Anat_skullstrip_synthstrip.pipeline_definition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.pipelines.preprocess.anat_skullstrip_synthstrip.Anat_skullstrip_synthstrip.pipeline_definition" title="Permalink to this definition">¶</a></dt>
 <dd><p>Building the pipeline</p>
 </dd></dl>
 
@@ -179,12 +181,12 @@ anatomical workflow.</p>
 
 </section>
 <section id="module-mia_processes.pipelines.preprocess.anat_spatial_norm">
-<span id="mia-processes-pipelines-preprocess-anat-spatial-norm-module"></span><h2>mia_processes.pipelines.preprocess.anat_spatial_norm module<a class="headerlink" href="#module-mia_processes.pipelines.preprocess.anat_spatial_norm" title="Link to this heading">¶</a></h2>
+<span id="mia-processes-pipelines-preprocess-anat-spatial-norm-module"></span><h2>mia_processes.pipelines.preprocess.anat_spatial_norm module<a class="headerlink" href="#module-mia_processes.pipelines.preprocess.anat_spatial_norm" title="Permalink to this headline">¶</a></h2>
 <p>The Anat_spatial_norm pipeline.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="mia_processes.pipelines.preprocess.anat_spatial_norm.Anat_spatial_norm">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.pipelines.preprocess.anat_spatial_norm.</span></span><span class="sig-name descname"><span class="pre">Anat_spatial_norm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">autoexport_nodes_parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/preprocess/anat_spatial_norm.html#Anat_spatial_norm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.pipelines.preprocess.anat_spatial_norm.Anat_spatial_norm" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.pipelines.preprocess.anat_spatial_norm.</span></span><span class="sig-name descname"><span class="pre">Anat_spatial_norm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">autoexport_nodes_parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/preprocess/anat_spatial_norm.html#Anat_spatial_norm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.pipelines.preprocess.anat_spatial_norm.Anat_spatial_norm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">capsul.pipeline.pipeline.Pipeline</span></code></p>
 <p><em>Spatial normalization to MNI (using ‘MNI152NLin2009cAsym’ template)</em></p>
 <p>Adapted from <a class="reference external" href="https://github.com/nipreps/mriqc/blob/5a0f0408bd0c176dbc46088c6ffe279269180f3f/mriqc/workflows/anatomical.py#L282">mriqc 22.06 anatomical workflow</a></p>
 <p>Please, see the complete documentation for the
@@ -199,7 +201,7 @@ anatomical workflow.</p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.pipelines.preprocess.anat_spatial_norm.Anat_spatial_norm.pipeline_definition">
-<span class="sig-name descname"><span class="pre">pipeline_definition</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/preprocess/anat_spatial_norm.html#Anat_spatial_norm.pipeline_definition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.pipelines.preprocess.anat_spatial_norm.Anat_spatial_norm.pipeline_definition" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">pipeline_definition</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/preprocess/anat_spatial_norm.html#Anat_spatial_norm.pipeline_definition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.pipelines.preprocess.anat_spatial_norm.Anat_spatial_norm.pipeline_definition" title="Permalink to this definition">¶</a></dt>
 <dd><p>Building the pipeline</p>
 </dd></dl>
 
@@ -207,12 +209,12 @@ anatomical workflow.</p>
 
 </section>
 <section id="module-mia_processes.pipelines.preprocess.bold_hmc">
-<span id="mia-processes-pipelines-preprocess-bold-hmc-module"></span><h2>mia_processes.pipelines.preprocess.bold_hmc module<a class="headerlink" href="#module-mia_processes.pipelines.preprocess.bold_hmc" title="Link to this heading">¶</a></h2>
+<span id="mia-processes-pipelines-preprocess-bold-hmc-module"></span><h2>mia_processes.pipelines.preprocess.bold_hmc module<a class="headerlink" href="#module-mia_processes.pipelines.preprocess.bold_hmc" title="Permalink to this headline">¶</a></h2>
 <p>The Bold_hmc pipeline.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="mia_processes.pipelines.preprocess.bold_hmc.Bold_hmc">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.pipelines.preprocess.bold_hmc.</span></span><span class="sig-name descname"><span class="pre">Bold_hmc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">autoexport_nodes_parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/preprocess/bold_hmc.html#Bold_hmc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.pipelines.preprocess.bold_hmc.Bold_hmc" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.pipelines.preprocess.bold_hmc.</span></span><span class="sig-name descname"><span class="pre">Bold_hmc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">autoexport_nodes_parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/preprocess/bold_hmc.html#Bold_hmc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.pipelines.preprocess.bold_hmc.Bold_hmc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">capsul.pipeline.pipeline.Pipeline</span></code></p>
 <p><em>Head-motion correction based on 3dvolreg from AFNI</em></p>
 <p>Please, see the complete documentation for the
 <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/pipelines/preprocess/Bold_hmc.html">Bold_hmc pipeline in the populse.mia_processes website</a></p>
@@ -226,7 +228,7 @@ anatomical workflow.</p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.pipelines.preprocess.bold_hmc.Bold_hmc.pipeline_definition">
-<span class="sig-name descname"><span class="pre">pipeline_definition</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/preprocess/bold_hmc.html#Bold_hmc.pipeline_definition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.pipelines.preprocess.bold_hmc.Bold_hmc.pipeline_definition" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">pipeline_definition</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/preprocess/bold_hmc.html#Bold_hmc.pipeline_definition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.pipelines.preprocess.bold_hmc.Bold_hmc.pipeline_definition" title="Permalink to this definition">¶</a></dt>
 <dd><p>Building the pipeline</p>
 </dd></dl>
 
@@ -234,12 +236,12 @@ anatomical workflow.</p>
 
 </section>
 <section id="module-mia_processes.pipelines.preprocess.bold_mni_align">
-<span id="mia-processes-pipelines-preprocess-bold-mni-align-module"></span><h2>mia_processes.pipelines.preprocess.bold_mni_align module<a class="headerlink" href="#module-mia_processes.pipelines.preprocess.bold_mni_align" title="Link to this heading">¶</a></h2>
+<span id="mia-processes-pipelines-preprocess-bold-mni-align-module"></span><h2>mia_processes.pipelines.preprocess.bold_mni_align module<a class="headerlink" href="#module-mia_processes.pipelines.preprocess.bold_mni_align" title="Permalink to this headline">¶</a></h2>
 <p>The Bold_mni_align pipeline.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="mia_processes.pipelines.preprocess.bold_mni_align.Bold_mni_align">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.pipelines.preprocess.bold_mni_align.</span></span><span class="sig-name descname"><span class="pre">Bold_mni_align</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">autoexport_nodes_parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/preprocess/bold_mni_align.html#Bold_mni_align"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.pipelines.preprocess.bold_mni_align.Bold_mni_align" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.pipelines.preprocess.bold_mni_align.</span></span><span class="sig-name descname"><span class="pre">Bold_mni_align</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">autoexport_nodes_parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/preprocess/bold_mni_align.html#Bold_mni_align"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.pipelines.preprocess.bold_mni_align.Bold_mni_align" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">capsul.pipeline.pipeline.Pipeline</span></code></p>
 <p><em>Registered a mean functional image EPI in MNI space</em></p>
 <p>For checking out registration.</p>
 <p>Please, see the complete documentation for the
@@ -254,7 +256,7 @@ anatomical workflow.</p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.pipelines.preprocess.bold_mni_align.Bold_mni_align.pipeline_definition">
-<span class="sig-name descname"><span class="pre">pipeline_definition</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/preprocess/bold_mni_align.html#Bold_mni_align.pipeline_definition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.pipelines.preprocess.bold_mni_align.Bold_mni_align.pipeline_definition" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">pipeline_definition</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/preprocess/bold_mni_align.html#Bold_mni_align.pipeline_definition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.pipelines.preprocess.bold_mni_align.Bold_mni_align.pipeline_definition" title="Permalink to this definition">¶</a></dt>
 <dd><p>Building the pipeline</p>
 </dd></dl>
 
@@ -262,12 +264,12 @@ anatomical workflow.</p>
 
 </section>
 <section id="module-mia_processes.pipelines.preprocess.spatial_mask">
-<span id="mia-processes-pipelines-preprocess-spatial-mask-module"></span><h2>mia_processes.pipelines.preprocess.spatial_mask module<a class="headerlink" href="#module-mia_processes.pipelines.preprocess.spatial_mask" title="Link to this heading">¶</a></h2>
+<span id="mia-processes-pipelines-preprocess-spatial-mask-module"></span><h2>mia_processes.pipelines.preprocess.spatial_mask module<a class="headerlink" href="#module-mia_processes.pipelines.preprocess.spatial_mask" title="Permalink to this headline">¶</a></h2>
 <p>The module for the Spatial_mask pipeline.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Contains<span class="colon">:</span></dt>
+<dt class="field-odd">Contains</dt>
 <dd class="field-odd"><dl class="field-list simple">
-<dt class="field-odd">Class<span class="colon">:</span></dt>
+<dt class="field-odd">Class</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p>Spatial_mask</p></li>
 </ul>
@@ -277,8 +279,8 @@ anatomical workflow.</p>
 </dl>
 <dl class="py class">
 <dt class="sig sig-object py" id="mia_processes.pipelines.preprocess.spatial_mask.Spatial_mask">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.pipelines.preprocess.spatial_mask.</span></span><span class="sig-name descname"><span class="pre">Spatial_mask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">autoexport_nodes_parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/preprocess/spatial_mask.html#Spatial_mask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.pipelines.preprocess.spatial_mask.Spatial_mask" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.pipelines.preprocess.spatial_mask.</span></span><span class="sig-name descname"><span class="pre">Spatial_mask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">autoexport_nodes_parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/preprocess/spatial_mask.html#Spatial_mask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.pipelines.preprocess.spatial_mask.Spatial_mask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">capsul.pipeline.pipeline.Pipeline</span></code></p>
 <p><em>Makes the grey matter native mask for cerebrovascular reserve analyse</em></p>
 <p>Please, see the complete documentation for the <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/pipelines/preprocess/Spatial_mask.html">Spatial_mask brick in
 the populse.mia_processes website</a></p>
@@ -292,7 +294,7 @@ the populse.mia_processes website</a></p>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="mia_processes.pipelines.preprocess.spatial_mask.Spatial_mask.pipeline_definition">
-<span class="sig-name descname"><span class="pre">pipeline_definition</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/preprocess/spatial_mask.html#Spatial_mask.pipeline_definition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.pipelines.preprocess.spatial_mask.Spatial_mask.pipeline_definition" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">pipeline_definition</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/pipelines/preprocess/spatial_mask.html#Spatial_mask.pipeline_definition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.pipelines.preprocess.spatial_mask.Spatial_mask.pipeline_definition" title="Permalink to this definition">¶</a></dt>
 <dd><p>Building the pipeline</p>
 </dd></dl>
 
@@ -312,8 +314,8 @@ the populse.mia_processes website</a></p>
       </div>
 
     <div class="footer" role="contentinfo">
-    &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.5.
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
     </div>
   </body>
 </html>

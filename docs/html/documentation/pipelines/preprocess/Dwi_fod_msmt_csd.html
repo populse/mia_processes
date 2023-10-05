@@ -1,0 +1,154 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Dwi_fod_msmt_csd pipeline &#8212; mia_processes 2.3.1-dev+64b4d57a documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/haiku.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
+          <span>mia_processes 2.3.1-dev+64b4d57a documentation</span></a></h1>
+        <h2 class="heading"><span>Dwi_fod_msmt_csd pipeline</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <div class="toctree-wrapper compound">
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 35%" />
+<col style="width: 42%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference external" href="../../../index.html">Home</a></p></td>
+<td><p><a class="reference external" href="../../documentation.html">Documentation</a></p></td>
+<td><p><a class="reference external" href="https://github.com/populse/mia_processes">GitHub</a></p></td>
+</tr>
+</tbody>
+</table>
+<section id="dwi-fod-msmt-csd-pipeline">
+<h1>Dwi_fod_msmt_csd pipeline<a class="headerlink" href="#dwi-fod-msmt-csd-pipeline" title="Permalink to this headline">¶</a></h1>
+<section id="estimate-dwi-fiber-orientation-distribution-fod">
+<h2>Estimate DWI fiber orientation distribution (FOD)<a class="headerlink" href="#estimate-dwi-fiber-orientation-distribution-fod" title="Permalink to this headline">¶</a></h2>
+<p>The aim of this pipeline is to estimate the orientation of the fibers in each voxel using constrained spherical deconvolution (CSD).
+To perform CSD, it is necessary to first estimate a “response function” (RF) which will be used as a kernel for deconvolution.
+In this pipeline, we estimate a RF for each tissue type (using msmt_csd algorithm), so the input diffusion should contain <strong>at least three
+unique b-values to estimate three tissue compartments.</strong></p>
+<div class="line-block">
+<div class="line">The following steps are done:</div>
+<div class="line">- Estimate different response functions for the three different tissue types: white matter (WM), gray matter (GM), and cerebrospinal fluid (CSF)</div>
+<div class="line">- In every voxel, estimate the orientation of all fibers crossing that voxel.</div>
+<div class="line">- Correct the FOD for global intensity differences. This step helps to make the FODs comparable between several subjects (group study preparation)</div>
+</div>
+<hr class="docutils" />
+<p><strong>Pipeline insight</strong></p>
+<div class="line-block">
+<div class="line">Dwi_fod_msmt_csd pipeline combines the following bricks:</div>
+<div class="line-block">
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/mrtrix/ResponseSDDhollander.html">Response function estimation</a></div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/mrtrix/ConstrainedSphericalDeconvolution.html">Estimation of Fiber Orientation Distributions (FOD)</a>
+(default values: algorithm = “msmt_csd”, get_predicted_signal = True)</div>
+<div class="line">- <a class="reference external" href="../../bricks/preprocess/mrtrix/MTNormalise.html">Intensity Normalization</a></div>
+</div>
+</div>
+<a class="reference internal image-reference" href="../../../_images/Dwi_fod_msmt_csd_pipeline.png"><img alt="DWI fod msmt_csd pipeline" src="../../../_images/Dwi_fod_msmt_csd_pipeline.png" style="width: 800px;" /></a>
+<p><strong>Mandatory inputs parameters</strong></p>
+<ul>
+<li><dl>
+<dt><em>in_dwi</em> (a string representing an existing file)</dt><dd><p>Preprocessed diffusion image  (valid extensions: [.mif]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/DWI_denoised_unringed_dwifslpreproc_unbias.mif&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>brain_mask</em> (a string representing an existing file)</dt><dd><p>DWI brain mask image.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/DWI_denoised_unringed_dwifslpreproc_unbias_brain_mask.mif&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Outputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>voxel_final selection</em> (a pathlike object or string representing a file)</dt><dd><p>Image showing the final voxel selection for the estimate response functions</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/DWI_denoised_unringed_dwifslpreproc_unbias_response_voxels.mif&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>predicted_signal_file</em> (a pathlike object or string representing a file, optional)</dt><dd><p>Predicted signal following the estimation of the FOD.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/DWI_denoised_unringed_dwifslpreproc_unbias_odf_predicted_signal.mif&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>wm_odf_norm</em> (a pathlike object or string representing a file)</dt><dd><p>Normalized WM fibre orientation distributions</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/DWI_denoised_unringed_dwifslpreproc_unbias_wm_odf_norm.mif&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>gm_odf_norm</em> (a pathlike object or string representing a file, optional)</dt><dd><p>Normalized GM fibre orientation distributions</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/DWI_denoised_unringed_dwifslpreproc_unbias_gm_odf_norm.mif&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>csf_odf_norm</em> (a pathlike object or string representing a file, optional)</dt><dd><p>Normalized CSF fibre orientation distributions</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/DWI_denoised_unringed_dwifslpreproc_unbias_csf_odf_norm.mif&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </div>
+  </body>
+</html>
