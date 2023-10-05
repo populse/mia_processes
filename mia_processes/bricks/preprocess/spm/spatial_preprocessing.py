@@ -1435,7 +1435,7 @@ class Normalize12(ProcessMIA):
             "items which are an existing, uncompressed file "
             "(valid extensions: [.img, .nii, .hdr])."
         )
-        jobtype_desc = 'One of "estwrite" or "estimate" or "write".'
+        jobtype_desc = 'One of "estwrite" or "est" or "write".'
         bias_regularization_desc = (
             "(For low-intensity non-uniformity artifacts"
             ", use a high bias regularization (a float "
@@ -1488,6 +1488,8 @@ class Normalize12(ProcessMIA):
             "realigned fMRI, or segmentations)."
         )
 
+        out_prefix_desc = "Normalised output prefix (a string)."
+
         # Outputs description
         deformation_field_desc = (
             "File y_*.nii containing 3 deformation "
@@ -1496,12 +1498,12 @@ class Normalize12(ProcessMIA):
             "representing a file, or a list of pathlike "
             "objects or strings representing a file)"
         )
-        #        normalized_image_desc = (
-        #            "Normalised file that needed to be aligned (a "
-        #            "pathlike object or string representing a "
-        #            "file, or a list of pathlike objects or "
-        #            "strings representing a file)."
-        #        )
+        normalized_image_desc = (
+            "Normalised file that needed to be aligned (a "
+            "pathlike object or string representing a "
+            "file, or a list of pathlike objects or "
+            "strings representing a file)."
+        )
         normalized_files_desc = (
             "Normalised other files (a pathlike object or "
             "string representing a file, or a list of "
@@ -1554,7 +1556,6 @@ class Normalize12(ProcessMIA):
             "jobtype",
             Enum(
                 "write",
-                #                "estimate",
                 "est",
                 "estwrite",
                 output=False,
@@ -1566,9 +1567,9 @@ class Normalize12(ProcessMIA):
         self.add_trait(
             "bias_regularization",
             Enum(
+                0.0001,
                 0,
                 0.00001,
-                0.0001,
                 0.001,
                 0.01,
                 0.1,
@@ -1655,7 +1656,7 @@ class Normalize12(ProcessMIA):
             "write_bounding_box",
             List(
                 List(Float()),
-                value=[[-78, -112, -50], [78, 76, 85]],
+                value=[[-78, -112, -70], [78, 76, 85]],
                 output=False,
                 optional=True,
                 desc=write_bounding_box_desc,
@@ -1666,7 +1667,7 @@ class Normalize12(ProcessMIA):
             "write_voxel_sizes",
             List(
                 Float(),
-                value=[1, 1, 1],
+                value=[2, 2, 2],
                 output=False,
                 optional=True,
                 desc=write_voxel_sizes_desc,
@@ -1676,12 +1677,19 @@ class Normalize12(ProcessMIA):
         self.add_trait(
             "write_interp",
             Range(
-                value=1,
+                value=4,
                 low=0,
                 high=7,
                 output=False,
                 optional=True,
                 desc=write_interp_desc,
+            ),
+        )
+
+        self.add_trait(
+            "out_prefix",
+            String(
+                value="w", output=False, optional=True, desc=out_prefix_desc
             ),
         )
 
@@ -1693,13 +1701,12 @@ class Normalize12(ProcessMIA):
             ),
         )
 
-        #        self.add_trait(
-        #            "normalized_image",
-        #            OutputMultiPath(
-        #                File(), output=True,
-        #                optional=True, desc=normalized_image_desc
-        #            ),
-        #        )
+        self.add_trait(
+            "normalized_image",
+            OutputMultiPath(
+                File(), output=True, optional=True, desc=normalized_image_desc
+            ),
+        )
 
         self.add_trait(
             "normalized_files",
@@ -1739,11 +1746,13 @@ class Normalize12(ProcessMIA):
             self.process.jobtype = self.jobtype
             self.process.apply_to_files = self.apply_to_files
             self.process.deformation_file = self.deformation_file
+            self.process.out_prefix = self.out_prefix
             _flag = True
 
+            # deformation_file is mutually exclusive with image_to_align
+            # and tpm
             if self.image_to_align:
                 self.image_to_align = Undefined
-                # self.process.image_to_align = self.image_to_align
 
             if self.tpm:
                 self.tpm = Undefined
@@ -1752,7 +1761,6 @@ class Normalize12(ProcessMIA):
             (self.image_to_align)
             and (self.image_to_align != Undefined)
             and (self.tpm)
-            # and (self.jobtype == "estimate")
             and (self.jobtype == "est")
         ):
             self.process.image_to_align = self.image_to_align
@@ -1761,8 +1769,7 @@ class Normalize12(ProcessMIA):
             _flag = True
 
             if self.apply_to_files and (self.apply_to_files != Undefined):
-                #    self.apply_to_files = [Undefined]
-                self.process.apply_to_files = self.apply_to_files
+                self.apply_to_files = Undefined
 
             if self.deformation_file:
                 self.deformation_file = Undefined
@@ -1776,11 +1783,11 @@ class Normalize12(ProcessMIA):
             self.process.image_to_align = self.image_to_align
             self.process.tpm = self.tpm
             self.process.jobtype = self.jobtype
+            self.process.out_prefix = self.out_prefix
             _flag = True
 
             if (self.apply_to_files) and (self.apply_to_files != Undefined):
                 self.process.apply_to_files = self.apply_to_files
-                # self.apply_to_files = Undefined
 
             if self.deformation_file:
                 self.deformation_file = Undefined
@@ -1801,7 +1808,7 @@ class Normalize12(ProcessMIA):
 
             for k in (
                 "deformation_field",
-                # "normalized_image",
+                "normalized_image",
                 "normalized_files",
             ):
                 self.outputs[k] = getattr(self.process, "_" + k)
@@ -1861,7 +1868,9 @@ class Normalize12(ProcessMIA):
 
                         pathOval, fileOval = os.path.split(out_val)
                         _, fileIval = os.path.split(in_val)
-                        fileOvalNoPref = fileOval[1:]
+                        # fmt: off
+                        fileOvalNoPref = fileOval[len(self.out_prefix):]
+                        # fmt: on
 
                         if fileOvalNoPref == fileIval:
                             self.tags_inheritance(
@@ -1880,24 +1889,25 @@ class Normalize12(ProcessMIA):
                             val,
                         )
 
-                # if (key == "normalized_image") and (val != Undefined):
-                #     if not isinstance(val, list):
-                #         val = [val]
-                #
-                #     for in_val, out_val in zip(self.image_to_align, val):
-                #         pathOval, fileOval = os.path.split(out_val)
-                #         _, fileIval = os.path.split(in_val)
-                #         # FIXME: I don't know exactly what is expected ...
-                #                  Need investigation ...
-                #         # fileOvalNoPref = fileOval[1:]  ???
-                #         # if fileOvalNoPref == fileIval:  ???
-                #         #    self.inheritance_dict[out_val] = in_val ???
+                if (key == "normalized_image") and (val != Undefined):
+                    pathOval, fileOval = os.path.split(val)
+                    _, fileIval = os.path.split(self.image_to_align)
+                    # fmt: off
+                    fileOvalNoPref = fileOval[len(self.out_prefix):]
+                    # fmt: on
 
-        # Return the requirement, outputs and inheritance_dict
+                    if fileOvalNoPref == fileIval:
+                        self.tags_inheritance(
+                            self.image_to_align,
+                            val,
+                        )
+
+        # Return the requirement and outputs
         return self.make_initResult()
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
+        super(Normalize12, self).run_process_mia()
         self.process.trait("image_to_align").optional = True
         self.process.image_to_align = self.image_to_align
         self.process.jobtype = self.jobtype
@@ -1925,12 +1935,8 @@ class Normalize12(ProcessMIA):
         self.process.write_bounding_box = self.write_bounding_box
         self.process.write_voxel_sizes = self.write_voxel_sizes
         self.process.write_interp = self.write_interp
+        self.process.out_prefix = self.out_prefix
 
-        # because the sync_process_output_traits() of the
-        # capsul/process/nipype_process  module raises an exception in nipype
-        # if the mandatory parameters are not yet defined, the next line
-        # can't be write before!
-        super(Normalize12, self).run_process_mia()
         return self.process.run(configuration_dict={})
 
 

@@ -1,24 +1,20 @@
-
 <!DOCTYPE html>
 
-<html>
+<html lang="en" data-content_root="../../../../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.preprocess.spm.spatial_preprocessing &#8212; mia_processes 2.3.1-dev+a7d0828 documentation</title>
-    <link rel="stylesheet" href="../../../../../_static/haiku.css" type="text/css" />
-    <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
-    <script src="../../../../../_static/jquery.js"></script>
-    <script src="../../../../../_static/underscore.js"></script>
-    <script src="../../../../../_static/doctools.js"></script>
-    <script src="../../../../../_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <title>mia_processes.bricks.preprocess.spm.spatial_preprocessing &#8212; mia_processes 2.3.1-dev+8e2e396e documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=f63d8bfa" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/haiku.css?v=e491ac2d" />
+    <script src="../../../../../_static/documentation_options.js?v=3743ba46"></script>
+    <script src="../../../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../../index.html">
-          <span>mia_processes 2.3.1-dev+a7d0828 documentation</span></a></h1>
+          <span>mia_processes 2.3.1-dev+8e2e396e documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.preprocess.spm.spatial_preprocessing</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -104,8 +100,10 @@
 <span class="kn">from</span> <span class="nn">mia_processes.utils</span> <span class="kn">import</span> <span class="n">get_dbFieldValue</span>
 
 
-<div class="viewcode-block" id="Coregister"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Coregister">[docs]</a><span class="k">class</span> <span class="nc">Coregister</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Coregister">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Coregister">[docs]</a>
+<span class="k">class</span> <span class="nc">Coregister</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Align together scans of different modalities*</span>
 
 <span class="sd">    Please, see the complete documentation for the</span>
@@ -114,8 +112,10 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Coregister.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Coregister.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
+<div class="viewcode-block" id="Coregister.__init__">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Coregister.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -353,8 +353,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.spm.Coregister&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Coregister.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Coregister.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+
+<div class="viewcode-block" id="Coregister.list_outputs">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Coregister.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -527,8 +530,11 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Coregister.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Coregister.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Coregister.run_process_mia">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Coregister.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Coregister</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span>
@@ -547,11 +553,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">write_interp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_interp</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">write_wrap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_wrap</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">write_mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_mask</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div>
+</div>
 
 
-<div class="viewcode-block" id="GM_WM_Normalize"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.GM_WM_Normalize">[docs]</a><span class="k">class</span> <span class="nc">GM_WM_Normalize</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="GM_WM_Normalize">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.GM_WM_Normalize">[docs]</a>
+<span class="k">class</span> <span class="nc">GM_WM_Normalize</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Normalisation of the grey and/or white matter map(s)*</span>
 
 <span class="sd">    Please, see the complete documentation for the</span>
@@ -560,8 +570,10 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="GM_WM_Normalize.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.GM_WM_Normalize.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+<div class="viewcode-block" id="GM_WM_Normalize.__init__">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.GM_WM_Normalize.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -705,8 +717,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.spm.Normalize12&quot;</span><span class="p">)</span></div>
 
+
     <span class="k">def</span> <span class="nf">_namesFilter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Filtering of apply_to_files input parameter for GM, WM, etc.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Filtering of apply_to_files input parameter for GM, WM, etc.</span>
 
 <span class="sd">        :returns: from the apply_to_files input parameter, returns the selected</span>
 <span class="sd">                  mask(s).</span>
@@ -832,8 +845,10 @@
 
         <span class="k">return</span> <span class="n">files</span>
 
-<div class="viewcode-block" id="GM_WM_Normalize.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.GM_WM_Normalize.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+<div class="viewcode-block" id="GM_WM_Normalize.list_outputs">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.GM_WM_Normalize.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -931,8 +946,11 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="GM_WM_Normalize.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.GM_WM_Normalize.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="GM_WM_Normalize.run_process_mia">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.GM_WM_Normalize.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">runFlag</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">=</span> <span class="s2">&quot;write&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">apply_to_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_namesFilter</span><span class="p">()</span>
@@ -947,11 +965,15 @@
         <span class="c1"># if the mandatory parameters are not yet defined, the next line</span>
         <span class="c1"># can&#39;t be write before!</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">GM_WM_Normalize</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div>
+</div>
 
 
-<div class="viewcode-block" id="NewSegment"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.NewSegment">[docs]</a><span class="k">class</span> <span class="nc">NewSegment</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="NewSegment">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.NewSegment">[docs]</a>
+<span class="k">class</span> <span class="nc">NewSegment</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Segmentation: Segments, bias corrects and spatially normalises*</span>
 
 <span class="sd">    Please, see the complete documentation for the</span>
@@ -960,8 +982,10 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="NewSegment.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.NewSegment.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
+<div class="viewcode-block" id="NewSegment.__init__">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.NewSegment.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -1278,7 +1302,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.spm.NewSegment&quot;</span><span class="p">)</span>
 
-        <span class="sd">&quot;&quot;&quot; To be removed for V2</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; To be removed for V2</span>
 <span class="sd">        # process instantiation</span>
 <span class="sd">        self.process = NewSegmentMia() # workaround to try to decrease the</span>
 <span class="sd">                                       # instantiation time of the NewSegment</span>
@@ -1286,8 +1310,11 @@
 <span class="sd">        #self.process = spm.NewSegment()</span>
 <span class="sd">        &quot;&quot;&quot;</span></div>
 
-<div class="viewcode-block" id="NewSegment.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.NewSegment.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+
+<div class="viewcode-block" id="NewSegment.list_outputs">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.NewSegment.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -1342,7 +1369,7 @@
             <span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">k</span><span class="p">)</span>
 
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        When there is only one image at the input, the tags inheritance is</span>
 <span class="sd">        directly managed in PipelineManagerTab.add_plug_value_to_database().</span>
 <span class="sd">        However the inheritance of 2 output parameters is defined below, as</span>
@@ -1414,8 +1441,11 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="NewSegment.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.NewSegment.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="NewSegment.run_process_mia">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.NewSegment.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">NewSegment</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">channel_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_files</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">channel_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel_info</span>
@@ -1424,11 +1454,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">affine_regularization</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">affine_regularization</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">sampling_distance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sampling_distance</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">write_deformation_fields</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_deformation_fields</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div>
+</div>
 
 
-<div class="viewcode-block" id="Normalize12"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Normalize12">[docs]</a><span class="k">class</span> <span class="nc">Normalize12</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Normalize12">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Normalize12">[docs]</a>
+<span class="k">class</span> <span class="nc">Normalize12</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Computes the warp that best aligns the template (atlas) to the image*</span>
 
 <span class="sd">    Please, see the complete documentation for the</span>
@@ -1437,8 +1471,10 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Normalize12.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Normalize12.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
+<div class="viewcode-block" id="Normalize12.__init__">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Normalize12.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -1469,7 +1505,7 @@
             <span class="s2">&quot;items which are an existing, uncompressed file &quot;</span>
             <span class="s2">&quot;(valid extensions: [.img, .nii, .hdr]).&quot;</span>
         <span class="p">)</span>
-        <span class="n">jobtype_desc</span> <span class="o">=</span> <span class="s1">&#39;One of &quot;estwrite&quot; or &quot;estimate&quot; or &quot;write&quot;.&#39;</span>
+        <span class="n">jobtype_desc</span> <span class="o">=</span> <span class="s1">&#39;One of &quot;estwrite&quot; or &quot;est&quot; or &quot;write&quot;.&#39;</span>
         <span class="n">bias_regularization_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;(For low-intensity non-uniformity artifacts&quot;</span>
             <span class="s2">&quot;, use a high bias regularization (a float &quot;</span>
@@ -1522,6 +1558,8 @@
             <span class="s2">&quot;realigned fMRI, or segmentations).&quot;</span>
         <span class="p">)</span>
 
+        <span class="n">out_prefix_desc</span> <span class="o">=</span> <span class="s2">&quot;Normalised output prefix (a string).&quot;</span>
+
         <span class="c1"># Outputs description</span>
         <span class="n">deformation_field_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;File y_*.nii containing 3 deformation &quot;</span>
@@ -1530,12 +1568,12 @@
             <span class="s2">&quot;representing a file, or a list of pathlike &quot;</span>
             <span class="s2">&quot;objects or strings representing a file)&quot;</span>
         <span class="p">)</span>
-        <span class="c1">#        normalized_image_desc = (</span>
-        <span class="c1">#            &quot;Normalised file that needed to be aligned (a &quot;</span>
-        <span class="c1">#            &quot;pathlike object or string representing a &quot;</span>
-        <span class="c1">#            &quot;file, or a list of pathlike objects or &quot;</span>
-        <span class="c1">#            &quot;strings representing a file).&quot;</span>
-        <span class="c1">#        )</span>
+        <span class="n">normalized_image_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Normalised file that needed to be aligned (a &quot;</span>
+            <span class="s2">&quot;pathlike object or string representing a &quot;</span>
+            <span class="s2">&quot;file, or a list of pathlike objects or &quot;</span>
+            <span class="s2">&quot;strings representing a file).&quot;</span>
+        <span class="p">)</span>
         <span class="n">normalized_files_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;Normalised other files (a pathlike object or &quot;</span>
             <span class="s2">&quot;string representing a file, or a list of &quot;</span>
@@ -1588,7 +1626,6 @@
             <span class="s2">&quot;jobtype&quot;</span><span class="p">,</span>
             <span class="n">Enum</span><span class="p">(</span>
                 <span class="s2">&quot;write&quot;</span><span class="p">,</span>
-                <span class="c1">#                &quot;estimate&quot;,</span>
                 <span class="s2">&quot;est&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;estwrite&quot;</span><span class="p">,</span>
                 <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -1600,9 +1637,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;bias_regularization&quot;</span><span class="p">,</span>
             <span class="n">Enum</span><span class="p">(</span>
+                <span class="mf">0.0001</span><span class="p">,</span>
                 <span class="mi">0</span><span class="p">,</span>
                 <span class="mf">0.00001</span><span class="p">,</span>
-                <span class="mf">0.0001</span><span class="p">,</span>
                 <span class="mf">0.001</span><span class="p">,</span>
                 <span class="mf">0.01</span><span class="p">,</span>
                 <span class="mf">0.1</span><span class="p">,</span>
@@ -1689,7 +1726,7 @@
             <span class="s2">&quot;write_bounding_box&quot;</span><span class="p">,</span>
             <span class="n">List</span><span class="p">(</span>
                 <span class="n">List</span><span class="p">(</span><span class="n">Float</span><span class="p">()),</span>
-                <span class="n">value</span><span class="o">=</span><span class="p">[[</span><span class="o">-</span><span class="mi">78</span><span class="p">,</span> <span class="o">-</span><span class="mi">112</span><span class="p">,</span> <span class="o">-</span><span class="mi">50</span><span class="p">],</span> <span class="p">[</span><span class="mi">78</span><span class="p">,</span> <span class="mi">76</span><span class="p">,</span> <span class="mi">85</span><span class="p">]],</span>
+                <span class="n">value</span><span class="o">=</span><span class="p">[[</span><span class="o">-</span><span class="mi">78</span><span class="p">,</span> <span class="o">-</span><span class="mi">112</span><span class="p">,</span> <span class="o">-</span><span class="mi">70</span><span class="p">],</span> <span class="p">[</span><span class="mi">78</span><span class="p">,</span> <span class="mi">76</span><span class="p">,</span> <span class="mi">85</span><span class="p">]],</span>
                 <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                 <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                 <span class="n">desc</span><span class="o">=</span><span class="n">write_bounding_box_desc</span><span class="p">,</span>
@@ -1700,7 +1737,7 @@
             <span class="s2">&quot;write_voxel_sizes&quot;</span><span class="p">,</span>
             <span class="n">List</span><span class="p">(</span>
                 <span class="n">Float</span><span class="p">(),</span>
-                <span class="n">value</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+                <span class="n">value</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
                 <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                 <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                 <span class="n">desc</span><span class="o">=</span><span class="n">write_voxel_sizes_desc</span><span class="p">,</span>
@@ -1710,12 +1747,19 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;write_interp&quot;</span><span class="p">,</span>
             <span class="n">Range</span><span class="p">(</span>
-                <span class="n">value</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                <span class="n">value</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
                 <span class="n">low</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                 <span class="n">high</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span>
                 <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                 <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                 <span class="n">desc</span><span class="o">=</span><span class="n">write_interp_desc</span><span class="p">,</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;out_prefix&quot;</span><span class="p">,</span>
+            <span class="n">String</span><span class="p">(</span>
+                <span class="n">value</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">out_prefix_desc</span>
             <span class="p">),</span>
         <span class="p">)</span>
 
@@ -1727,13 +1771,12 @@
             <span class="p">),</span>
         <span class="p">)</span>
 
-        <span class="c1">#        self.add_trait(</span>
-        <span class="c1">#            &quot;normalized_image&quot;,</span>
-        <span class="c1">#            OutputMultiPath(</span>
-        <span class="c1">#                File(), output=True,</span>
-        <span class="c1">#                optional=True, desc=normalized_image_desc</span>
-        <span class="c1">#            ),</span>
-        <span class="c1">#        )</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;normalized_image&quot;</span><span class="p">,</span>
+            <span class="n">OutputMultiPath</span><span class="p">(</span>
+                <span class="n">File</span><span class="p">(),</span> <span class="n">output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">normalized_image_desc</span>
+            <span class="p">),</span>
+        <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;normalized_files&quot;</span><span class="p">,</span>
@@ -1745,8 +1788,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.spm.Normalize12&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Normalize12.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Normalize12.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+
+<div class="viewcode-block" id="Normalize12.list_outputs">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Normalize12.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -1773,11 +1819,13 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">apply_to_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">deformation_file</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">deformation_file</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">out_prefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span>
             <span class="n">_flag</span> <span class="o">=</span> <span class="kc">True</span>
 
+            <span class="c1"># deformation_file is mutually exclusive with image_to_align</span>
+            <span class="c1"># and tpm</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_to_align</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">image_to_align</span> <span class="o">=</span> <span class="n">Undefined</span>
-                <span class="c1"># self.process.image_to_align = self.image_to_align</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tpm</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">tpm</span> <span class="o">=</span> <span class="n">Undefined</span>
@@ -1786,7 +1834,6 @@
             <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image_to_align</span><span class="p">)</span>
             <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image_to_align</span> <span class="o">!=</span> <span class="n">Undefined</span><span class="p">)</span>
             <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tpm</span><span class="p">)</span>
-            <span class="c1"># and (self.jobtype == &quot;estimate&quot;)</span>
             <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">==</span> <span class="s2">&quot;est&quot;</span><span class="p">)</span>
         <span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">image_to_align</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_to_align</span>
@@ -1795,8 +1842,7 @@
             <span class="n">_flag</span> <span class="o">=</span> <span class="kc">True</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span> <span class="o">!=</span> <span class="n">Undefined</span><span class="p">):</span>
-                <span class="c1">#    self.apply_to_files = [Undefined]</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">apply_to_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span> <span class="o">=</span> <span class="n">Undefined</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">deformation_file</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">deformation_file</span> <span class="o">=</span> <span class="n">Undefined</span>
@@ -1810,11 +1856,11 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">image_to_align</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_to_align</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">tpm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tpm</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">out_prefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span>
             <span class="n">_flag</span> <span class="o">=</span> <span class="kc">True</span>
 
             <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span> <span class="o">!=</span> <span class="n">Undefined</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">apply_to_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">apply_to_files</span>
-                <span class="c1"># self.apply_to_files = Undefined</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">deformation_file</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">deformation_file</span> <span class="o">=</span> <span class="n">Undefined</span>
@@ -1835,7 +1881,7 @@
 
             <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">(</span>
                 <span class="s2">&quot;deformation_field&quot;</span><span class="p">,</span>
-                <span class="c1"># &quot;normalized_image&quot;,</span>
+                <span class="s2">&quot;normalized_image&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;normalized_files&quot;</span><span class="p">,</span>
             <span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">k</span><span class="p">)</span>
@@ -1895,7 +1941,9 @@
 
                         <span class="n">pathOval</span><span class="p">,</span> <span class="n">fileOval</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">out_val</span><span class="p">)</span>
                         <span class="n">_</span><span class="p">,</span> <span class="n">fileIval</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">in_val</span><span class="p">)</span>
-                        <span class="n">fileOvalNoPref</span> <span class="o">=</span> <span class="n">fileOval</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+                        <span class="c1"># fmt: off</span>
+                        <span class="n">fileOvalNoPref</span> <span class="o">=</span> <span class="n">fileOval</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span><span class="p">):]</span>
+                        <span class="c1"># fmt: on</span>
 
                         <span class="k">if</span> <span class="n">fileOvalNoPref</span> <span class="o">==</span> <span class="n">fileIval</span><span class="p">:</span>
                             <span class="bp">self</span><span class="o">.</span><span class="n">tags_inheritance</span><span class="p">(</span>
@@ -1914,24 +1962,28 @@
                             <span class="n">val</span><span class="p">,</span>
                         <span class="p">)</span>
 
-                <span class="c1"># if (key == &quot;normalized_image&quot;) and (val != Undefined):</span>
-                <span class="c1">#     if not isinstance(val, list):</span>
-                <span class="c1">#         val = [val]</span>
-                <span class="c1">#</span>
-                <span class="c1">#     for in_val, out_val in zip(self.image_to_align, val):</span>
-                <span class="c1">#         pathOval, fileOval = os.path.split(out_val)</span>
-                <span class="c1">#         _, fileIval = os.path.split(in_val)</span>
-                <span class="c1">#         # FIXME: I don&#39;t know exactly what is expected ...</span>
-                <span class="c1">#                  Need investigation ...</span>
-                <span class="c1">#         # fileOvalNoPref = fileOval[1:]  ???</span>
-                <span class="c1">#         # if fileOvalNoPref == fileIval:  ???</span>
-                <span class="c1">#         #    self.inheritance_dict[out_val] = in_val ???</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;normalized_image&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">val</span> <span class="o">!=</span> <span class="n">Undefined</span><span class="p">):</span>
+                    <span class="n">pathOval</span><span class="p">,</span> <span class="n">fileOval</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+                    <span class="n">_</span><span class="p">,</span> <span class="n">fileIval</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image_to_align</span><span class="p">)</span>
+                    <span class="c1"># fmt: off</span>
+                    <span class="n">fileOvalNoPref</span> <span class="o">=</span> <span class="n">fileOval</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span><span class="p">):]</span>
+                    <span class="c1"># fmt: on</span>
 
-        <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
+                    <span class="k">if</span> <span class="n">fileOvalNoPref</span> <span class="o">==</span> <span class="n">fileIval</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">tags_inheritance</span><span class="p">(</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">image_to_align</span><span class="p">,</span>
+                            <span class="n">val</span><span class="p">,</span>
+                        <span class="p">)</span>
+
+        <span class="c1"># Return the requirement and outputs</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Normalize12.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Normalize12.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Normalize12.run_process_mia">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Normalize12.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Normalize12</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">trait</span><span class="p">(</span><span class="s2">&quot;image_to_align&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">optional</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">image_to_align</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">image_to_align</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">jobtype</span>
@@ -1959,17 +2011,17 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">write_bounding_box</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_bounding_box</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">write_voxel_sizes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_voxel_sizes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">write_interp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_interp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">out_prefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span>
 
-        <span class="c1"># because the sync_process_output_traits() of the</span>
-        <span class="c1"># capsul/process/nipype_process  module raises an exception in nipype</span>
-        <span class="c1"># if the mandatory parameters are not yet defined, the next line</span>
-        <span class="c1"># can&#39;t be write before!</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Normalize12</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div>
+</div>
 
 
-<div class="viewcode-block" id="Realign"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Realign">[docs]</a><span class="k">class</span> <span class="nc">Realign</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Realign">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Realign">[docs]</a>
+<span class="k">class</span> <span class="nc">Realign</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Realigns a time-series of images acquired from the same subject*</span>
 
 <span class="sd">    Please, see the complete documentation for the</span>
@@ -1978,8 +2030,10 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Realign.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Realign.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
+<div class="viewcode-block" id="Realign.__init__">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Realign.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -2279,8 +2333,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.spm.Realign&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Realign.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Realign.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+
+<div class="viewcode-block" id="Realign.list_outputs">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Realign.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -2461,8 +2518,11 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Realign.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Realign.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Realign.run_process_mia">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Realign.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Realign</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">in_files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_files</span>
 
@@ -2481,11 +2541,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">write_interp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_interp</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">write_wrap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_wrap</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">write_mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_mask</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div>
+</div>
 
 
-<div class="viewcode-block" id="SliceTiming"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.SliceTiming">[docs]</a><span class="k">class</span> <span class="nc">SliceTiming</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SliceTiming">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.SliceTiming">[docs]</a>
+<span class="k">class</span> <span class="nc">SliceTiming</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Temporal correction to get back every slice at the same acquisition time*</span>
 
 <span class="sd">    Please, see the complete documentation for the</span>
@@ -2494,8 +2558,10 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="SliceTiming.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.SliceTiming.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+<div class="viewcode-block" id="SliceTiming.__init__">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.SliceTiming.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -2650,8 +2716,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.spm.SliceTiming&quot;</span><span class="p">)</span></div>
 
+
     <span class="k">def</span> <span class="nf">_get_database_value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;sets default values for certain parameters.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;sets default values for certain parameters.</span>
 
 <span class="sd">        If the following parameters are undefined, this method attempts to give</span>
 <span class="sd">        them a value from the database or by making a calculation from other</span>
@@ -2926,8 +2993,10 @@
 
         <span class="k">return</span> <span class="n">result</span>
 
-<div class="viewcode-block" id="SliceTiming.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.SliceTiming.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+<div class="viewcode-block" id="SliceTiming.list_outputs">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.SliceTiming.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -3006,8 +3075,11 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="SliceTiming.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.SliceTiming.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SliceTiming.run_process_mia">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.SliceTiming.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">SliceTiming</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
         <span class="c1"># in_files parameter are normally already in absolute path format.</span>
@@ -3026,11 +3098,15 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">out_prefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div>
+</div>
 
 
-<div class="viewcode-block" id="Smooth"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Smooth">[docs]</a><span class="k">class</span> <span class="nc">Smooth</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Smooth">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Smooth">[docs]</a>
+<span class="k">class</span> <span class="nc">Smooth</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *3D Gaussian smoothing of image volumes*</span>
 
 <span class="sd">    Please, see the complete documentation for the</span>
@@ -3039,8 +3115,10 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Smooth.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Smooth.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
+<div class="viewcode-block" id="Smooth.__init__">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Smooth.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -3130,8 +3208,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.spm.Smooth&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Smooth.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Smooth.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+
+<div class="viewcode-block" id="Smooth.list_outputs">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Smooth.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -3196,8 +3277,11 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Smooth.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Smooth.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Smooth.run_process_mia">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.spm.html#mia_processes.bricks.preprocess.spm.spatial_preprocessing.Smooth.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Smooth</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
         <span class="c1"># in_files parameter are normally already in absolute path format.</span>
@@ -3214,7 +3298,9 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">out_prefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out_prefix</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div>
+</div>
+
 </pre></div>
 
       </div>
@@ -3227,8 +3313,8 @@
       </div>
 
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
+    &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.5.
     </div>
   </body>
 </html>

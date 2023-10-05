@@ -1,24 +1,20 @@
-
 <!DOCTYPE html>
 
-<html>
+<html lang="en" data-content_root="../../../../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.stat.spm.model &#8212; mia_processes 2.3.1-dev+a7d0828 documentation</title>
-    <link rel="stylesheet" href="../../../../../_static/haiku.css" type="text/css" />
-    <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
-    <script src="../../../../../_static/jquery.js"></script>
-    <script src="../../../../../_static/underscore.js"></script>
-    <script src="../../../../../_static/doctools.js"></script>
-    <script src="../../../../../_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <title>mia_processes.bricks.stat.spm.model &#8212; mia_processes 2.3.1-dev+8e2e396e documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=f63d8bfa" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/haiku.css?v=e491ac2d" />
+    <script src="../../../../../_static/documentation_options.js?v=3743ba46"></script>
+    <script src="../../../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../../index.html">
-          <span>mia_processes 2.3.1-dev+a7d0828 documentation</span></a></h1>
+          <span>mia_processes 2.3.1-dev+8e2e396e documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.stat.spm.model</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -92,8 +88,10 @@
 <span class="kn">from</span> <span class="nn">mia_processes.utils</span> <span class="kn">import</span> <span class="n">get_dbFieldValue</span>
 
 
-<div class="viewcode-block" id="EstimateContrast"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.EstimateContrast">[docs]</a><span class="k">class</span> <span class="nc">EstimateContrast</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="EstimateContrast">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.EstimateContrast">[docs]</a>
+<span class="k">class</span> <span class="nc">EstimateContrast</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Estimate contrasts of interest*</span>
 
 <span class="sd">    Please, see the complete documentation for the `EstimateContrast brick in</span>
@@ -102,8 +100,10 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="EstimateContrast.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.EstimateContrast.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+<div class="viewcode-block" id="EstimateContrast.__init__">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.EstimateContrast.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -283,8 +283,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.spm.EstimateContrast&quot;</span><span class="p">)</span></div>
 
+
     <span class="k">def</span> <span class="nf">_get_contrasts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Get list of contrasts with each contrast being a list of the form:</span>
 <span class="sd">        - for T contrasts</span>
 <span class="sd">        [(&#39;contrast_name&#39;,</span>
@@ -350,8 +351,10 @@
 
         <span class="k">return</span> <span class="n">contrasts</span>
 
-<div class="viewcode-block" id="EstimateContrast.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.EstimateContrast.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+<div class="viewcode-block" id="EstimateContrast.list_outputs">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.EstimateContrast.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -579,8 +582,11 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="EstimateContrast.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.EstimateContrast.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EstimateContrast.run_process_mia">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.EstimateContrast.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
 
         <span class="nb">super</span><span class="p">(</span><span class="n">EstimateContrast</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
@@ -593,11 +599,15 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">group_contrast</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">group_contrast</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">group_contrast</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div>
+</div>
 
 
-<div class="viewcode-block" id="EstimateModel"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.EstimateModel">[docs]</a><span class="k">class</span> <span class="nc">EstimateModel</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EstimateModel">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.EstimateModel">[docs]</a>
+<span class="k">class</span> <span class="nc">EstimateModel</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Estimation of model parameters using classical method (ReML - Restricted</span>
 <span class="sd">    Maximum Likelihood)*</span>
 
@@ -607,8 +617,10 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="EstimateModel.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.EstimateModel.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+<div class="viewcode-block" id="EstimateModel.__init__">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.EstimateModel.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -933,8 +945,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.spm.EstimateModel&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="EstimateModel.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.EstimateModel.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+
+<div class="viewcode-block" id="EstimateModel.list_outputs">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.EstimateModel.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dict),</span>
@@ -1254,18 +1269,25 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="EstimateModel.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.EstimateModel.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="EstimateModel.run_process_mia">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.EstimateModel.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">EstimateModel</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">spm_mat_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spm_mat_file</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">estimation_method</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">estimation_method</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">write_residuals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">write_residuals</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div>
+</div>
 
 
-<div class="viewcode-block" id="Level1Design"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.Level1Design">[docs]</a><span class="k">class</span> <span class="nc">Level1Design</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Level1Design">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.Level1Design">[docs]</a>
+<span class="k">class</span> <span class="nc">Level1Design</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Specification of the GLM design matrix, fMRI data files and filtering*</span>
 
 <span class="sd">    Please, see the complete documentation for the `Level1Design brick</span>
@@ -1274,8 +1296,10 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Level1Design.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.Level1Design.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+<div class="viewcode-block" id="Level1Design.__init__">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.Level1Design.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -1757,8 +1781,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.spm.Level1Design&quot;</span><span class="p">)</span></div>
 
+
     <span class="k">def</span> <span class="nf">_get_conditions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx_session</span><span class="p">,</span> <span class="n">idx_cond</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Generate the condition dictionary.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate the condition dictionary.</span>
 
 <span class="sd">        One condition dictionary is generated for each condition.</span>
 <span class="sd">        The condition dictionary has the following keys:</span>
@@ -1880,7 +1905,7 @@
         <span class="k">return</span> <span class="n">cond</span>
 
     <span class="k">def</span> <span class="nf">_get_session_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx_session</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Generate the session_info parameter for each session.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate the session_info parameter for each session.</span>
 
 <span class="sd">        The &#39;session_info&#39; dictonary is equivalent to the &#39;sess&#39;</span>
 <span class="sd">        structure array spm parameter, for each session. It therefore includes</span>
@@ -1990,8 +2015,10 @@
         <span class="n">beta_sess</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="k">return</span> <span class="n">session_info</span><span class="p">,</span> <span class="n">beta_sess</span><span class="p">,</span> <span class="n">cond_nb</span>
 
-<div class="viewcode-block" id="Level1Design.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.Level1Design.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+<div class="viewcode-block" id="Level1Design.list_outputs">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.Level1Design.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags. In order not to include</span>
@@ -2262,8 +2289,11 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Level1Design.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.Level1Design.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Level1Design.run_process_mia">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.Level1Design.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Level1Design</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="c1"># Removing the spm_mat_file to avoid a bug (nipy/nipype Issues #2612)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">:</span>
@@ -2304,11 +2334,15 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">model_serial_correlations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_serial_correlations</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div>
+</div>
 
 
-<div class="viewcode-block" id="MultipleRegressionDesign"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.MultipleRegressionDesign">[docs]</a><span class="k">class</span> <span class="nc">MultipleRegressionDesign</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="MultipleRegressionDesign">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.MultipleRegressionDesign">[docs]</a>
+<span class="k">class</span> <span class="nc">MultipleRegressionDesign</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Create SPM design for multiple regression*</span>
 
 <span class="sd">    Please, see the complete documentation for the `MultipleRegressionDesign</span>
@@ -2317,8 +2351,10 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="MultipleRegressionDesign.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.MultipleRegressionDesign.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+<div class="viewcode-block" id="MultipleRegressionDesign.__init__">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.MultipleRegressionDesign.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -2597,8 +2633,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.spm.MultipleRegressionDesign&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="MultipleRegressionDesign.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.MultipleRegressionDesign.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+
+<div class="viewcode-block" id="MultipleRegressionDesign.list_outputs">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.MultipleRegressionDesign.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags. In order not to include</span>
@@ -2714,8 +2753,11 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="MultipleRegressionDesign.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.MultipleRegressionDesign.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="MultipleRegressionDesign.run_process_mia">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.MultipleRegressionDesign.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">MultipleRegressionDesign</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">spm_mat_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;out_directory&quot;</span><span class="p">]</span>
@@ -2753,11 +2795,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">no_grand_mean_scaling</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">no_grand_mean_scaling</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">global_normalization</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalisation</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div>
+</div>
 
 
-<div class="viewcode-block" id="OneSampleTTestDesign"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.OneSampleTTestDesign">[docs]</a><span class="k">class</span> <span class="nc">OneSampleTTestDesign</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="OneSampleTTestDesign">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.OneSampleTTestDesign">[docs]</a>
+<span class="k">class</span> <span class="nc">OneSampleTTestDesign</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Create SPM design for one sample t-test*</span>
 
 <span class="sd">    Please, see the complete documentation for the `OneSampleTTestDesign brick</span>
@@ -2766,8 +2812,10 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="OneSampleTTestDesign.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.OneSampleTTestDesign.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+<div class="viewcode-block" id="OneSampleTTestDesign.__init__">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.OneSampleTTestDesign.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -2995,8 +3043,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.spm.OneSampleTTestDesign&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="OneSampleTTestDesign.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.OneSampleTTestDesign.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+
+<div class="viewcode-block" id="OneSampleTTestDesign.list_outputs">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.OneSampleTTestDesign.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags. In order not to include</span>
@@ -3093,8 +3144,11 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="OneSampleTTestDesign.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.OneSampleTTestDesign.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="OneSampleTTestDesign.run_process_mia">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.OneSampleTTestDesign.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">OneSampleTTestDesign</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">spm_mat_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;out_directory&quot;</span><span class="p">]</span>
@@ -3124,11 +3178,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">no_grand_mean_scaling</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">no_grand_mean_scaling</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">global_normalization</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalisation</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div>
+</div>
 
 
-<div class="viewcode-block" id="PairedTTestDesign"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.PairedTTestDesign">[docs]</a><span class="k">class</span> <span class="nc">PairedTTestDesign</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="PairedTTestDesign">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.PairedTTestDesign">[docs]</a>
+<span class="k">class</span> <span class="nc">PairedTTestDesign</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Create SPM design for one sample t-test*</span>
 
 <span class="sd">    Please, see the complete documentation for the `OneSampleTTestDesign brick</span>
@@ -3137,8 +3195,10 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="PairedTTestDesign.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.PairedTTestDesign.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+<div class="viewcode-block" id="PairedTTestDesign.__init__">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.PairedTTestDesign.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -3371,8 +3431,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.spm.PairedTTestDesign&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="PairedTTestDesign.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.PairedTTestDesign.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+
+<div class="viewcode-block" id="PairedTTestDesign.list_outputs">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.PairedTTestDesign.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags. In order not to include</span>
@@ -3468,8 +3531,11 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="PairedTTestDesign.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.PairedTTestDesign.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="PairedTTestDesign.run_process_mia">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.PairedTTestDesign.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">PairedTTestDesign</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">spm_mat_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;out_directory&quot;</span><span class="p">]</span>
@@ -3499,11 +3565,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">no_grand_mean_scaling</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">no_grand_mean_scaling</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">global_normalization</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalisation</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div>
+</div>
 
 
-<div class="viewcode-block" id="TwoSampleTTestDesign"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.TwoSampleTTestDesign">[docs]</a><span class="k">class</span> <span class="nc">TwoSampleTTestDesign</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TwoSampleTTestDesign">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.TwoSampleTTestDesign">[docs]</a>
+<span class="k">class</span> <span class="nc">TwoSampleTTestDesign</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Create SPM design for two sample t-test*</span>
 
 <span class="sd">    Please, see the complete documentation for the `TwoSampleTTestDesign brick</span>
@@ -3512,8 +3582,10 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="TwoSampleTTestDesign.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.TwoSampleTTestDesign.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+<div class="viewcode-block" id="TwoSampleTTestDesign.__init__">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.TwoSampleTTestDesign.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -3780,8 +3852,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.spm.TwoSampleTTestDesign&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="TwoSampleTTestDesign.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.TwoSampleTTestDesign.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+
+<div class="viewcode-block" id="TwoSampleTTestDesign.list_outputs">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.TwoSampleTTestDesign.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags. In order not to include</span>
@@ -3881,8 +3956,11 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="TwoSampleTTestDesign.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.TwoSampleTTestDesign.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TwoSampleTTestDesign.run_process_mia">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.TwoSampleTTestDesign.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">TwoSampleTTestDesign</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">spm_mat_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;out_directory&quot;</span><span class="p">]</span>
@@ -3916,11 +3994,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">no_grand_mean_scaling</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">no_grand_mean_scaling</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">global_normalization</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalisation</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div>
+</div>
 
 
-<div class="viewcode-block" id="get_covariates"><a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.get_covariates">[docs]</a><span class="k">def</span> <span class="nf">get_covariates</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="n">vectors</span><span class="p">,</span> <span class="n">centerings</span><span class="p">,</span> <span class="n">interactions</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Generate the covariates list containing dictionaries</span>
+
+<div class="viewcode-block" id="get_covariates">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.stat.spm.html#mia_processes.bricks.stat.spm.model.get_covariates">[docs]</a>
+<span class="k">def</span> <span class="nf">get_covariates</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="n">vectors</span><span class="p">,</span> <span class="n">centerings</span><span class="p">,</span> <span class="n">interactions</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate the covariates list containing dictionaries</span>
 <span class="sd">    with the following key :</span>
 <span class="sd">    name, vector, interaction, centering</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -3939,6 +4021,7 @@
             <span class="k">return</span> <span class="kc">None</span>
 
     <span class="k">return</span> <span class="n">covariates</span></div>
+
 </pre></div>
 
       </div>
@@ -3951,8 +4034,8 @@
       </div>
 
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
+    &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.5.
     </div>
   </body>
 </html>

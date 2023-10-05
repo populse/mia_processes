@@ -1125,6 +1125,8 @@ voxel, over any given mask*
                     print("\nThe input image format is not recognized ...!")
                     return
 
+                self.outputs["notInDb"] = ["out"]
+
             else:
                 print("No output_directory was found...!\n")
                 return

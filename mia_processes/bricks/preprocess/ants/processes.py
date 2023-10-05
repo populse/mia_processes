@@ -1355,6 +1355,7 @@ class Registration(ProcessMIA):
                 desc=use_estimate_learning_rate_once_desc,
             ),
         )
+        self.use_estimate_learning_rate_once = Undefined
 
         self.add_trait(
             "use_histogram_matching",
@@ -1753,26 +1754,32 @@ class Registration(ProcessMIA):
         self.process.dimension = self.dimension
         self.process.fixed_image_masks = self.fixed_image_masks
         self.process.float = self.float
+
         if self.initial_moving_transform:
             self.process.initial_moving_transform = (
                 self.initial_moving_transform
             )
+
         if self.initial_moving_transform_com:
             self.process.initial_moving_transform_com = (
                 self.initial_moving_transform_com
             )
+
         self.process.initialize_transforms_per_stage = (
             self.initialize_transforms_per_stage
         )
         self.process.interpolation = self.interpolation
+
         if self.interpolation_parameters:
             self.process.interpolation_parameters = (
                 self.interpolation_parameters
             )
+
         if self.invert_initial_moving_transform:
             self.process.invert_initial_moving_transform = (
                 self.invert_initial_moving_transform
             )
+
         self.process.moving_image_masks = self.moving_image_masks
         self.process.number_of_iterations = self.number_of_iterations
         self.process.radius_bins_item_trait = self.radius_bins_item_trait
@@ -1780,23 +1787,26 @@ class Registration(ProcessMIA):
         self.process.random_seed = self.random_seed
         self.process.sampling_percentage = self.sampling_percentage
         self.process.sampling_strategy = self.sampling_strategy
+
         if self.sigma_units:
             self.process.sigma_units = self.sigma_units
+
         else:
             self.process.sigma_units = ["vox"] * len(self.metric)
-        if self.use_estimate_learning_rate_once:
+
+        if self.use_estimate_learning_rate_once is not Undefined:
             self.process.use_estimate_learning_rate_once = (
                 self.use_estimate_learning_rate_once
             )
-        else:
-            self.process.use_estimate_learning_rate_once = [True] * len(
-                self.metric
-            )
+
         self.process.transform_parameters = self.transform_parameters
+
         if self.use_histogram_matching:
             self.process.use_histogram_matching = self.use_histogram_matching
+
         else:
             self.process.use_histogram_matching = [True] * len(self.metric)
+
         self.process.winsorize_lower_quantile = self.winsorize_lower_quantile
         self.process.winsorize_upper_quantile = self.winsorize_upper_quantile
 
@@ -1805,6 +1815,7 @@ class Registration(ProcessMIA):
             self.process.output_inverse_warped_image = (
                 self.inverse_warped_image
             )
+
         ifile = os.path.split(self.moving_image)[-1]
         fileName, _ = ifile.rsplit(".", 1)
         self.process.output_transform_prefix = fileName + "_"

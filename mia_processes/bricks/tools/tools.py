@@ -112,6 +112,8 @@ class Concat_to_list(ProcessMIA):
         )
         self.out_list = traits.Undefined
 
+        self.init_default_traits()
+
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
 
@@ -211,6 +213,8 @@ class Concat_to_list_of_list(ProcessMIA):
             "listOflist", traits.List(output=True, desc=listOflist_desc)
         )
         self.listOflist = traits.Undefined
+
+        self.init_default_traits()
 
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
@@ -446,6 +450,8 @@ class Files_To_List(ProcessMIA):
         )
         self.file_list = traits.Undefined
 
+        self.init_default_traits()
+
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
 
@@ -555,6 +561,8 @@ class Filter_Files_List(ProcessMIA):
             "filtered_list", traits.List(output=True, desc=filtered_list_desc)
         )
         self.filtered_list = traits.Undefined
+
+        self.init_default_traits()
 
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
@@ -693,6 +701,8 @@ class Find_In_List(ProcessMIA):
             "out_file", ImageFileSPM(output=True, desc=out_file_desc)
         )
 
+        self.init_default_traits()
+
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
 
@@ -821,6 +831,8 @@ class Get_Conditions_From_csv(ProcessMIA):
                 desc=cond_durations_desc,
             ),
         )
+
+        self.init_default_traits()
 
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
@@ -966,6 +978,8 @@ class Get_Patient_Name(ProcessMIA):
         self.add_trait(
             "patient_name", traits.String(output=True, desc=patient_name_desc)
         )
+
+        self.init_default_traits()
 
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
@@ -1296,6 +1310,8 @@ class Input_Filter(ProcessMIA):
             None, [""], [""], [["FileName"]], [], ["CONTAINS"], ""
         )
 
+        self.init_default_traits()
+
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
 
@@ -1414,6 +1430,8 @@ class List_Duplicate(ProcessMIA):
         )
         self.out_list = traits.Undefined
 
+        self.init_default_traits()
+
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
 
@@ -1497,6 +1515,8 @@ class List_To_File(ProcessMIA):
         # Outputs traits
         self.add_trait("file", traits.File(output=True, desc=file_desc))
         self.file = traits.Undefined
+
+        self.init_default_traits()
 
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
@@ -1590,6 +1610,8 @@ class Make_A_List(ProcessMIA):
             "obj_list", traits.List(output=True, desc=obj_list_desc)
         )
         self.obj_list = traits.Undefined
+
+        self.init_default_traits()
 
     def list_outputs(self, is_plugged=None):
         """Dedicated to the initialisation step of the brick.
