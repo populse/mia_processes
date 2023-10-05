@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-The atomic calculations from fsl.
+Mrtrix processes.
 
 """
 
@@ -13,8 +13,26 @@ The atomic calculations from fsl.
 ##########################################################################
 
 from .processes import (  # noqa: F401
-    BetSurfacesExtraction,
-    FastSegment,
-    Flirt,
-    Smooth,
+    ConstrainedSphericalDeconvolution,
+    DWIBiasCorrect,
+    DWIBrainMask,
+    DWIDenoise,
+    DWIExtract,
+    DWIPreproc,
+    EditingTrack,
+    FilteringTrack,
+    FitTensor,
+    Generate5tt2gmwmi,
+    Generate5ttfsl,
+    MRCat,
+    MRConvert,
+    MRDeGibbs,
+    MRMath,
+    MRTransform,
+    MTNormalise,
+    ResponseSDDhollander,
+    SphericalHarmonicExtraction,
+    TensorMetrics,
+    Tractography,
+    TransformFSLConvert,
 )

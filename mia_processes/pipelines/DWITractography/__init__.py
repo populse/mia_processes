@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
+
+# -*- coding: utf-8 -*-
 """
-The atomic calculations from fsl.
+The pipelines used for the diffusion analysis
 
 """
 
@@ -12,9 +14,6 @@ The atomic calculations from fsl.
 # for details.
 ##########################################################################
 
-from .processes import (  # noqa: F401
-    BetSurfacesExtraction,
-    FastSegment,
-    Flirt,
-    Smooth,
+from .dwi_whole_brain_tractography import (  # noqa: F401
+    Dwi_whole_brain_tractography,
 )

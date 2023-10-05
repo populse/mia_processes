@@ -52,6 +52,7 @@ To use certain mia_processes bricks (atomic processes), `third-party softwares u
 
       - `BetSurfacesExtraction <bricks/preprocess/fsl/BetSurfacesExtraction.html>`_
       - `FastSegment <bricks/preprocess/fsl/FastSegment.html>`_
+      - `Flirt <bricks/preprocess/fsl/Flirt.html>`_
       - `Smooth <bricks/preprocess/fsl/Smooth.html>`__
 
     - **others**
@@ -76,6 +77,30 @@ To use certain mia_processes bricks (atomic processes), `third-party softwares u
       - `TemplateFromTemplateFlow <bricks/preprocess/others/TemplateFromTemplateFlow.html>`_
       - `Threshold <bricks/preprocess/others/Threshold.html>`_
 
+    - **mrtrix**
+
+      - `ConstrainedSphericalDeconvolution <bricks/preprocess/mrtrix/ConstrainedSphericalDeconvolution.html>`_
+      - `DWIBiasCorrect <bricks/preprocess/mrtrix/DWIBiasCorrect.html>`_
+      - `DWIBrainMask <bricks/preprocess/mrtrix/DWIBrainMask.html>`_
+      - `DWIDenoise <bricks/preprocess/mrtrix/DWIDenoise.html>`_
+      - `DWIExtract <bricks/preprocess/mrtrix/DWIExtract.html>`_
+      - `DWIPreproc <bricks/preprocess/mrtrix/DWIPreproc.html>`_
+      - `EditingTrack <bricks/preprocess/mrtrix/EditingTrack.html>`_
+      - `FilteringTrack <bricks/preprocess/mrtrix/FilteringTrack.html>`_
+      - `FitTensor <bricks/preprocess/mrtrix/FitTensor.html>`_
+      - `Generate5tt2gmwmi <bricks/preprocess/mrtrix/Generate5tt2gmwmi.html>`_
+      - `Generate5ttfsl <bricks/preprocess/mrtrix/Generate5ttfsl.html>`_
+      - `MRCat <bricks/preprocess/mrtrix/MRCat.html>`_
+      - `MRConvert <bricks/preprocess/mrtrix/MRConvert.html>`_
+      - `MRDeGibbs <bricks/preprocess/mrtrix/MRDeGibbs.html>`_
+      - `MRMath <bricks/preprocess/mrtrix/MRMath.html>`_
+      - `MRTransform <bricks/preprocess/mrtrix/MRTransform.html>`_
+      - `MTNormalise <bricks/preprocess/mrtrix/MTNormalise.html>`_
+      - `ResponseSDDhollander <bricks/preprocess/mrtrix/ResponseSDDhollander.html>`_
+      - `SphericalHarmonicExtraction <bricks/preprocess/mrtrix/SphericalHarmonicExtraction.html>`_
+      - `TensorMetrics <bricks/preprocess/mrtrix/TensorMetrics.html>`_
+      - `Tractography <bricks/preprocess/mrtrix/Tractography.html>`_
+      - `TransformFSLConvert <bricks/preprocess/mrtrix/TransformFSLConvert.html>`_
 
     - **spm**
 
@@ -135,6 +160,10 @@ To use certain mia_processes bricks (atomic processes), `third-party softwares u
 
     - `CO2_inhalation <pipelines/CerebVascularReact/CO2_inhalation.html>`_  (in progress)
 
+  - **DWITractography**
+
+    - `DWI_whole_brain_tractograpy <pipelines/DWITractography/DWI_whole_brain_tractograpy.html>`_
+
   - **preprocess**
 
     - `Anat_airmask <pipelines/preprocess/Anat_airmask.html>`_
@@ -147,6 +176,9 @@ To use certain mia_processes bricks (atomic processes), `third-party softwares u
     - `Bold_mni_align <pipelines/preprocess/Bold_mni_align.html>`_
     - `Bold_spatial_preprocessing1 <pipelines/preprocess/Bold_spatial_preprocessing1.html>`_
     - `Bold_spatial_preprocessing2 <pipelines/preprocess/Bold_spatial_preprocessing2.html>`_
+    - `Dwi_fod_msmt_csd <pipelines/preprocess/Dwi_fod_msmt_csd.html>`_
+    - `Dwi_preprocessing <pipelines/preprocess/Dwi_preprocessing.html>`_
+    - `Dwi_tissue_boundaries <pipelines/preprocess/Dwi_tissue_boundaries.html>`_
     - `Spatial_mask <pipelines/preprocess/Spatial_mask.html>`_
 
   - **qualityControl**

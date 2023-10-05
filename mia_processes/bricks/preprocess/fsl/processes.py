@@ -491,6 +491,810 @@ class FastSegment(ProcessMIA):
         return self.process.run(configuration_dict={})
 
 
+class Flirt(ProcessMIA):
+    """
+    *Linear (affine) intra and inter-modal brain image registration
+    using fsl FLIRT*
+
+    Please, see the complete documentation for the `Flirt brick
+    in the populse.mia_processes website
+    <https://populse.github.io/mia_processes/htmldocumentation/bricks/preprocess/fsl/Flirt.html>`_
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instantiation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(Flirt, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = ["fsl", "nipype"]
+
+        # Mandatory inputs description
+        in_file_desc = (
+            "Input file (a pathlike object"
+            "string representing an existing file)"
+        )
+        in_reference_file_desc = (
+            "Reference file (a pathlike object"
+            "string representing an existing file)"
+        )
+        # Optional inputs with default value description
+        apply_xfm_desc = (
+            "Apply transformation supplied by in_matrix_file "
+            "(a boolean). Mutually exclusive with apply_isoxfm. "
+            "Required in_matrix_file"
+        )
+        apply_isoxfm_desc = (
+            "Apply transformation supplied by in_matrix_file but "
+            "forces isotropic resampling (a float). "
+            "Mutually exclusive with apply_xfm."
+            "Required in_matrix_file"
+        )
+        in_matrix_file_desc = (
+            "Input 4x4 affine matrix. (a pathlike object or string "
+            "representing a file)"
+        )
+        get_registered_file_desc = "Get registered file (a boolean)"
+        angle_rep_desc = (
+            "Representation of rotation angles (quaternion or euler)"
+            "Default is euler"
+        )
+        bbrslope_desc = "Value of bbr slope. (a float)"
+        bbrtype_desc = (
+            "Type of bbr cost function (signed, global_abs orlocal_abs)"
+            "Default is signed"
+        )
+        bgvalue_desc = (
+            "Use specified background value for points outside FOV. (a float)"
+        )
+        bins_desc = "Number of histogram bins (an integer). Default is 256"
+        coarse_search_desc = (
+            "Coarse search delta angle (an integer). Default is 60"
+        )
+        cost_desc = (
+            "Cost function (mutualinfo or corratio or normcorr or normmi or "
+            "leastsq or labeldiff or bbr). Default is corratio"
+        )
+        cost_func_desc = (
+            "Cost function (searchcost) (mutualinfo or corratio or normcorr "
+            "or normmi or leastsq or labeldiff or bbr). Default is corratio"
+        )
+        datatype_desc = (
+            "Force output data type (char, short, int, float, double)"
+        )
+        dof_desc = "Number of transform degrees of freedom (an integer) "
+        echospacing_desc = (
+            "Value of EPI echo spacing - units of seconds. (a float)"
+        )
+        fine_search_desc = (
+            "Fine search delta angle (an integer, default is 18)"
+        )
+        filedmap_desc = (
+            "Fieldmap image in rads/s - must be already registered "
+            "to the reference image (a pathlike object or string "
+            "representing a file)"
+        )
+        filedmapmask_desc = (
+            "Mask for fieldmap image (a pathlike object or string "
+            "representing a file)"
+        )
+        force_scaling_desc = (
+            "Force rescaling even for low-res images. (a boolean)"
+        )
+        interp_desc = (
+            "Final interpolation method used in reslicing. "
+            "(trilinear or nearestneighbour or sinc or spline)"
+        )
+        in_weight_desc = (
+            "File for input weighting volume (a pathlike object or"
+            "string representing an existing file)"
+        )
+        min_sampling_desc = (
+            "Set minimum voxel dimension for sampling (a float)"
+        )
+        no_clamp_desc = "Do not use intensity clampinp (a boolean)"
+        no_resample_desc = "Do not change input sampling (a boolean)"
+        no_resample_blur_desc = (
+            "Do not use blurring on downsampling (a boolean)"
+        )
+        no_search_desc = (
+            "Set all angular searches to ranges 0 to 0 (a boolean)"
+        )
+        output_type_desc = (
+            "Typecodes of the output NIfTI image formats (one "
+            "of NIFTI, NIFTI_GZ)."
+        )
+        padding_size_desc = (
+            "For applyxfm: interpolates outside image by size (an integer)"
+        )
+        pedir_desc = (
+            "Phase encode direction of EPI - 1/2/3=x/y/z & -1/-2/-3=-x/-y/-z "
+            "(an integer)"
+        )
+        rigid2D_desc = "Use 2D rigid body mode ie ignore dof (a boolean)"
+        ref_weight_desc = (
+            "File for reference weighting volume (a pathlike "
+            "object or string representing an existing file) "
+        )
+        save_log_desc = "Save log (a boolean)"
+        schedule_desc = (
+            "Replaces default schedule (a pathlike object or "
+            "string representing an existing file) "
+        )
+        searchr_x_desc = (
+            "Search angles along x-axis, in degrees (a list of two items "
+            "which are integer [min angle, max angle], default is [-90, 90])"
+        )
+        searchr_y_desc = (
+            "Search angles along y-axis, in degrees (a list of two items "
+            "which are integer [min angle, max angle], default is [-90, 90])"
+        )
+        searchr_z_desc = (
+            "Search angles along z-axis, in degrees (a list of two items "
+            "which are integer [min angle, max angle], default is [-90, 90])"
+        )
+        sinc_width_desc = "Full-width in voxels (an integer). Default is 7."
+        sinc_window_desc = "Sinc window (rectangular, hanning, blackman)"
+        uses_qform_desc = "Initialize using sform or qform (a boolean)"
+        wm_seg_desc = (
+            "White matter segmentation volume needed by BBR cost function"
+            "(a pathlike object or string representing a file)"
+        )
+        wmcoords_desc = (
+            "White matter boundary coordinates for BBR cost function"
+            "(a pathlike object or string representing a file)"
+        )
+        wmnorms_desc = (
+            "White matter boundary normals for BBR cost function"
+            "(a pathlike object or string representing a file)"
+        )
+
+        # Outputs description
+        out_file_desc = (
+            "Path/name of registered file (if generated)"
+            "(a pathlike object or string representing"
+            "a file)"
+        )
+        out_log_desc = (
+            "Path/name of output log (if generated)"
+            "(a pathlike object or string representing"
+            "a file)"
+        )
+        out_matrix_file_desc = (
+            "Path/name of calculated affine transform (if generated)"
+            "(a pathlike object or string representing"
+            "a file)"
+        )
+
+        # Mandatory inputs traits
+        self.add_trait(
+            "in_file", File(output=False, optional=False, desc=in_file_desc)
+        )
+
+        self.add_trait(
+            "in_reference_file",
+            File(output=False, optional=False, desc=in_reference_file_desc),
+        )
+
+        # Optional inputs with default value traits
+        self.add_trait(
+            "get_registered_file",
+            Bool(
+                True,
+                output=False,
+                optional=True,
+                desc=get_registered_file_desc,
+            ),
+        )
+
+        self.add_trait(
+            "apply_xfm",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=apply_xfm_desc,
+            ),
+        )
+
+        self.add_trait(
+            "apply_isoxfm",
+            Either(
+                Undefined,
+                Float(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=apply_isoxfm_desc,
+            ),
+        )
+
+        self.add_trait(
+            "in_matrix_file",
+            File(output=False, optional=True, desc=in_matrix_file_desc),
+        )
+
+        self.add_trait(
+            "angle_rep",
+            Enum(
+                "euler",
+                "quaternion",
+                output=False,
+                optional=True,
+                desc=angle_rep_desc,
+            ),
+        )
+
+        self.add_trait(
+            "bbrslope",
+            Either(
+                Undefined,
+                Float(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=bbrslope_desc,
+            ),
+        )
+
+        self.add_trait(
+            "bbrtype",
+            Enum(
+                "signed",
+                "global_abs",
+                "local_abs",
+                output=False,
+                optional=True,
+                desc=bbrtype_desc,
+            ),
+        )
+
+        self.add_trait(
+            "bgvalue",
+            Either(
+                Undefined,
+                Float(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=bgvalue_desc,
+            ),
+        )
+
+        self.add_trait(
+            "bins",
+            Int(
+                256,
+                output=False,
+                optional=True,
+                desc=bins_desc,
+            ),
+        )
+
+        self.add_trait(
+            "coarse_search",
+            Int(
+                60,
+                output=False,
+                optional=True,
+                desc=coarse_search_desc,
+            ),
+        )
+
+        self.add_trait(
+            "cost",
+            Enum(
+                "corratio",
+                "mutualinfo",
+                "normcorr",
+                "normmi",
+                "leastsq",
+                "labeldiff",
+                "bbr",
+                output=False,
+                optional=True,
+                desc=cost_desc,
+            ),
+        )
+
+        self.add_trait(
+            "cost_func",
+            Enum(
+                "corratio",
+                "mutualinfo",
+                "normcorr",
+                "normmi",
+                "leastsq",
+                "labeldiff",
+                "bbr",
+                output=False,
+                optional=True,
+                desc=cost_func_desc,
+            ),
+        )
+
+        self.add_trait(
+            "datatype",
+            Either(
+                Enum("char", "short", "int", "float", "double"),
+                Undefined,
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=datatype_desc,
+            ),
+        )
+
+        self.add_trait(
+            "dof",
+            Int(
+                12,
+                output=False,
+                optional=True,
+                desc=dof_desc,
+            ),
+        )
+
+        self.add_trait(
+            "echospacing",
+            Either(
+                Undefined,
+                Float(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=echospacing_desc,
+            ),
+        )
+
+        self.add_trait(
+            "fieldmap",
+            File(output=False, optional=True, desc=filedmap_desc),
+        )
+
+        self.add_trait(
+            "fieldmapmask",
+            File(output=False, optional=True, desc=filedmapmask_desc),
+        )
+
+        self.add_trait(
+            "fine_search",
+            Int(
+                18,
+                output=False,
+                optional=True,
+                desc=fine_search_desc,
+            ),
+        )
+
+        self.add_trait(
+            "force_scaling",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=force_scaling_desc,
+            ),
+        )
+
+        self.add_trait(
+            "interp",
+            Enum(
+                "trilinear",
+                "nearestneighbour",
+                "sinc",
+                "spline",
+                output=False,
+                optional=True,
+                desc=interp_desc,
+            ),
+        )
+
+        self.add_trait(
+            "in_weight",
+            File(output=False, optional=True, desc=in_weight_desc),
+        )
+
+        self.add_trait(
+            "min_sampling",
+            Either(
+                Undefined,
+                Float(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=min_sampling_desc,
+            ),
+        )
+
+        self.add_trait(
+            "no_clamp",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=no_clamp_desc,
+            ),
+        )
+
+        self.add_trait(
+            "no_resample",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=no_resample_desc,
+            ),
+        )
+
+        self.add_trait(
+            "no_resample_blur",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=no_resample_blur_desc,
+            ),
+        )
+
+        self.add_trait(
+            "no_search",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=no_search_desc,
+            ),
+        )
+
+        self.add_trait(
+            "output_type",
+            Enum(
+                "NIFTI",
+                "NIFTI_GZ",
+                output=False,
+                optional=True,
+                desc=output_type_desc,
+            ),
+        )
+
+        self.add_trait(
+            "padding_size",
+            Either(
+                Undefined,
+                Int(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=padding_size_desc,
+            ),
+        )
+
+        self.add_trait(
+            "pedir",
+            Either(
+                Undefined,
+                Int(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=pedir_desc,
+            ),
+        )
+
+        self.add_trait(
+            "ref_weight",
+            File(output=False, optional=True, desc=ref_weight_desc),
+        )
+
+        self.add_trait(
+            "rigid2D",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=rigid2D_desc,
+            ),
+        )
+
+        self.add_trait(
+            "save_log",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=save_log_desc,
+            ),
+        )
+
+        self.add_trait(
+            "searchr_x",
+            List(
+                [-90, 90],
+                output=False,
+                optional=True,
+                desc=searchr_x_desc,
+            ),
+        )
+
+        self.add_trait(
+            "searchr_y",
+            List(
+                [-90, 90],
+                output=False,
+                optional=True,
+                desc=searchr_y_desc,
+            ),
+        )
+
+        self.add_trait(
+            "searchr_z",
+            List(
+                [-90, 90],
+                output=False,
+                optional=True,
+                desc=searchr_z_desc,
+            ),
+        )
+
+        self.add_trait(
+            "schedule",
+            File(output=False, optional=True, desc=schedule_desc),
+        )
+
+        self.add_trait(
+            "sinc_width",
+            Either(
+                Int(),
+                Undefined,
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=sinc_width_desc,
+            ),
+        )
+
+        self.add_trait(
+            "sinc_window",
+            Either(
+                Enum("rectangular", "hanning", "blackman"),
+                Undefined,
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=sinc_window_desc,
+            ),
+        )
+
+        self.add_trait(
+            "uses_qform",
+            Bool(
+                False,
+                output=False,
+                optional=True,
+                desc=uses_qform_desc,
+            ),
+        )
+
+        self.add_trait(
+            "wm_seg",
+            File(output=False, optional=True, desc=wm_seg_desc),
+        )
+
+        self.add_trait(
+            "wmcoords",
+            File(output=False, optional=True, desc=wmcoords_desc),
+        )
+
+        self.add_trait(
+            "wmnorms",
+            File(output=False, optional=True, desc=wmnorms_desc),
+        )
+
+        # Outputs traits
+        self.add_trait(
+            "out_file", File(output=True, optional=True, desc=out_file_desc)
+        )
+
+        self.add_trait(
+            "out_log",
+            File(output=True, optional=True, desc=out_log_desc),
+        )
+
+        self.add_trait(
+            "out_matrix_file",
+            File(output=True, optional=True, desc=out_matrix_file_desc),
+        )
+
+        self.init_default_traits()
+
+        # To suppress the "FSLOUTPUTTYPE environment
+        # variable is not set" nipype warning:
+        if "FSLOUTPUTTYPE" not in os.environ:
+            os.environ["FSLOUTPUTTYPE"] = self.output_type
+
+        self.init_process("nipype.interfaces.fsl.FLIRT")
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(Flirt, self).list_outputs()
+
+        if self.apply_isoxfm and self.apply_xfm:
+            print(
+                "\nInitialisation failed. Both input parameters apply_isoxfm "
+                "and apply_xfm are mutually exclusive. Please, define only "
+                "one of these two parameters...!"
+            )
+            return self.make_initResult()
+        if (self.apply_isoxfm or self.apply_xfm) and not self.in_matrix_file:
+            print(
+                "\nInitialisation failed. Parameters apply_isoxfm or "
+                "apply_xfm required in_matrix_file. Please, define "
+                "in_matrix_file "
+            )
+            return self.make_initResult()
+        if self.padding_size and not self.apply_xfm:
+            print(
+                "\nInitialisation failed. Parameters padding_size "
+                "required apply_xfm. "
+            )
+            return self.make_initResult()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.in_file and self.in_reference_file:
+            valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
+            if not valid_ext:
+                print("\nThe input image format is not recognized...!")
+                return
+
+            valid_ext_ref, in_ext_ref, fileName_ref = checkFileExt(
+                self.in_reference_file, EXT
+            )
+            if not valid_ext_ref:
+                print(
+                    "\nThe input reference image format is "
+                    "not recognized...!"
+                )
+                return
+
+            if self.output_directory:
+                if self.get_registered_file:
+                    self.outputs["out_file"] = os.path.join(
+                        self.output_directory,
+                        fileName
+                        + "_registered_with_"
+                        + fileName_ref
+                        + "."
+                        + in_ext,
+                    )
+                if not self.apply_xfm or not self.apply_isoxfm:
+                    self.outputs["out_matrix_file"] = os.path.join(
+                        self.output_directory,
+                        fileName + "_" + fileName_ref + "_flirt.mat",
+                    )
+                if self.save_log:
+                    self.outputs["out_log"] = os.path.join(
+                        self.output_directory,
+                        fileName + "_flirt_log.txt",
+                    )
+
+            else:
+                print("No output_directory was found...!\n")
+                return
+
+        if self.outputs:
+            if self.save_log:
+                self.tags_inheritance(
+                    in_file=self.in_file,
+                    out_file=self.outputs["out_log"],
+                )
+            if self.get_registered_file:
+                self.tags_inheritance(
+                    in_file=self.in_file,
+                    out_file=self.outputs["out_file"],
+                )
+
+            self.tags_inheritance(
+                in_file=self.in_file,
+                out_file=self.outputs["out_matrix_file"],
+            )
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(Flirt, self).run_process_mia()
+        self.process.in_file = self.in_file
+        self.process.reference = self.in_reference_file
+        if self.out_file:
+            self.process.out_file = self.out_file
+        if self.out_matrix_file:
+            self.process.out_matrix_file = self.out_matrix_file
+        if self.apply_xfm:
+            self.process.apply_xfm = self.apply_xfm
+        if self.apply_isoxfm:
+            self.process.apply_isoxfm = self.apply_isoxfm
+        if self.in_matrix_file:
+            self.process.in_matrix_file = self.in_matrix_file
+        self.process.angle_rep = self.angle_rep
+        if self.bbrslope:
+            self.process.bbrslope = self.bbrslope
+        self.process.bbrtype = self.bbrtype
+        if self.bgvalue:
+            self.process.bbrslope = self.bgvalue
+        self.process.bins = self.bins
+        self.process.coarse_search = self.coarse_search
+        self.process.cost = self.cost
+        self.process.cost_func = self.cost_func
+        if self.datatype:
+            self.process.datatype = self.datatype
+        self.process.dof = self.dof
+        if self.echospacing:
+            self.process.echospacing = self.echospacing
+        if self.fieldmap:
+            self.process.fieldmap = self.fieldmap
+        if self.fieldmapmask:
+            self.process.fieldmapmask = self.fieldmapmask
+        self.process.fine_search = self.fine_search
+        self.process.force_scaling = self.force_scaling
+        if self.in_weight:
+            self.process.in_weight = self.in_weight
+        self.process.interp = self.interp
+        if self.min_sampling:
+            self.process.min_sampling = self.min_sampling
+        self.process.no_clamp = self.no_clamp
+        self.process.no_resample = self.no_resample
+        self.process.no_resample_blur = self.no_resample_blur
+        self.process.no_search = self.no_search
+        self.process.output_type = self.output_type
+        if self.padding_size:
+            self.process.padding_size = self.padding_size
+        if self.pedir:
+            self.process.pedir = self.pedir
+        if self.ref_weight:
+            self.process.ref_weight = self.ref_weight
+        self.process.rigid2D = self.rigid2D
+        if self.save_log:
+            self.process.save_log = self.save_log
+            self.process.out_log = self.out_log
+        self.process.searchr_x = self.searchr_x
+        self.process.searchr_y = self.searchr_y
+        self.process.searchr_z = self.searchr_z
+        if self.schedule:
+            self.process.schedule = self.schedule
+        self.process.sinc_width = self.sinc_width
+        if self.sinc_window:
+            self.process.sinc_window = self.sinc_window
+        self.process.uses_qform = self.uses_qform
+        if self.wm_seg:
+            self.process.wm_seg = self.wm_seg
+        if self.wmcoords:
+            self.process.wmcoords = self.wmcoords
+        if self.wmnorms:
+            self.process.wmnorms = self.wmnorms
+
+        return self.process.run(configuration_dict={})
+
+
 class Smooth(ProcessMIA):
     """
     *3D Gaussian smoothing of image volumes*
