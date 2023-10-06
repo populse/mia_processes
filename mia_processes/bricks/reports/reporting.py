@@ -337,7 +337,7 @@ class ReportAnatMriqc(ProcessMIA):
             "Age",
         )
 
-        # FIXME: Currently, Site and Spectro data is hard-coded. A solution
+        # FIXME: Currently, Site and Spectro data are hard-coded. A solution
         #        should be found to retrieve them automatically or to put them
         #        in the input parameters of the brick:
         # Site
@@ -359,6 +359,9 @@ class ReportAnatMriqc(ProcessMIA):
                     datetime.now().strftime("%Y_%m_%d_" "%H_%M_%S_%f")[:22],
                 ),
             )
+
+        else:
+            return self.make_initResult()
 
         # Add additional information for report generation
         # {iqms parameter: [parameter header, parameter rounding,
@@ -789,7 +792,10 @@ class ReportAnatMriqc(ProcessMIA):
             ],
         }
 
-        # FIXME: Do we need tags inheritance ?
+        self.tags_inheritance(
+            self.anat,
+            self.outputs["report"],
+        )
 
         return self.make_initResult()
 
@@ -1400,7 +1406,6 @@ class ReportFuncMriqc(ProcessMIA):
             "aqi": ["AFNI's quality index", "{:.2e}", None],
         }
 
-        # We force tags inheritance (see mia_processes issue #13)
         self.tags_inheritance(
             self.func,
             self.outputs["report"],
@@ -1464,7 +1469,7 @@ class ReportGroupMriqc(ProcessMIA):
 
         # Outputs description
         report_pdf_desc = "The generated report (pdf)"
-        out_tsv_desc = "tsv file"
+        out_tsv_desc = "The tsv file"
 
         # Inputs traits
         self.add_trait(
@@ -1538,9 +1543,9 @@ class ReportGroupMriqc(ProcessMIA):
                 "Spectro",
                 "Age",
             )
-            # FIXME: Currently, Site and Spectro data is hard-coded. A solution
-            #        should be found to retrieve them automatically or to put
-            #        them in the input parameters of the brick:
+            # FIXME: Currently, Site and Spectro data are hard-coded.
+            #        A solution should be found to retrieve them automatically
+            #        or to put them in the input parameters of the brick:
             # Site
             if dict4runtime_file["Site"] in ("", "Undefined"):
                 dict4runtime_file["Site"] = (
@@ -1570,6 +1575,8 @@ class ReportGroupMriqc(ProcessMIA):
                 "No output_directory was found," "please select a project!\n"
             )
             return
+
+        # FIXME: Do we need tags inheritance ?
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
