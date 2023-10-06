@@ -9,6 +9,7 @@ populse_mia.
 :Contains:
     :Class:
         - BetSurfacesExtraction
+        - ExtractROI
         - FastSegment
         - Smooth
 
@@ -253,6 +254,251 @@ class BetSurfacesExtraction(ProcessMIA):
 
         # default inputs
         self.process.surfaces = True
+
+        return self.process.run(configuration_dict={})
+
+
+class ExtractROI(ProcessMIA):
+    """
+    *Extract region of interest (ROI) from an image using FslROI*
+
+    Please, see the complete documentation for the `ExtractROI brick
+    in the populse.mia_processes website
+    <https://populse.github.io/mia_processes/htmldocumentation/bricks/preprocess/fsl/ExtractROI.html>`_
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instantiation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(ExtractROI, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = ["fsl", "nipype"]
+
+        # Mandatory inputs description
+        in_file_desc = "Input file"
+        # Optional inputs with default value description
+        suffix_desc = "Output suffix (a string, default value is roi)"
+        output_type_desc = (
+            "Typecodes of the output NIfTI image formats (one "
+            "of NIFTI, NIFTI_GZ)."
+        )
+        t_min_desc = "t minimum index" "(an integer)."
+        t_size_desc = "t size" "(an integer)."
+        x_min_desc = "x minimum index" "(an integer)."
+        x_size_desc = "x size" "(an integer)."
+        y_min_desc = "y minimum index" "(an integer)."
+        y_size_desc = "y size" "(an integer)."
+        z_min_desc = "z minimum index" "(an integer)."
+        z_size_desc = "z size" "(an integer)."
+
+        # Outputs description
+        roi_file_desc = (
+            "Output file" "(a pathlike object or string representing" "a file)"
+        )
+
+        # Mandatory inputs traits
+        self.add_trait(
+            "in_file", File(output=False, optional=False, desc=in_file_desc)
+        )
+
+        # Optional inputs with default value traits
+
+        self.add_trait(
+            "suffix",
+            String("roi", output=False, optional=True, desc=suffix_desc),
+        )
+
+        self.add_trait(
+            "output_type",
+            Enum(
+                "NIFTI",
+                "NIFTI_GZ",
+                output=False,
+                optional=True,
+                desc=output_type_desc,
+            ),
+        )
+
+        self.add_trait(
+            "t_min",
+            Either(
+                Undefined,
+                Int(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=t_min_desc,
+            ),
+        )
+
+        self.add_trait(
+            "t_size",
+            Either(
+                Undefined,
+                Int(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=t_size_desc,
+            ),
+        )
+
+        self.add_trait(
+            "x_min",
+            Either(
+                Undefined,
+                Int(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=x_min_desc,
+            ),
+        )
+
+        self.add_trait(
+            "x_size",
+            Either(
+                Undefined,
+                Int(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=x_size_desc,
+            ),
+        )
+
+        self.add_trait(
+            "y_min",
+            Either(
+                Undefined,
+                Int(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=y_min_desc,
+            ),
+        )
+
+        self.add_trait(
+            "y_size",
+            Either(
+                Undefined,
+                Int(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=y_size_desc,
+            ),
+        )
+
+        self.add_trait(
+            "z_min",
+            Either(
+                Undefined,
+                Int(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=z_min_desc,
+            ),
+        )
+
+        self.add_trait(
+            "z_size",
+            Either(
+                Undefined,
+                Int(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=z_size_desc,
+            ),
+        )
+
+        # Outputs traits
+        self.add_trait("roi_file", File(output=True, desc=roi_file_desc))
+
+        self.init_default_traits()
+
+        # To suppress the "FSLOUTPUTTYPE environment
+        # variable is not set" nipype warning:
+        if "FSLOUTPUTTYPE" not in os.environ:
+            os.environ["FSLOUTPUTTYPE"] = self.output_type
+
+        self.init_process("nipype.interfaces.fsl.ExtractROI")
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(ExtractROI, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.in_file:
+            valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
+
+            if not valid_ext:
+                print("\nThe input image format is" " not recognized...!")
+                return
+
+            if self.output_directory:
+                self.outputs["roi_file"] = os.path.join(
+                    self.output_directory,
+                    fileName + "_" + self.suffix + "." + EXT[self.output_type],
+                )
+            else:
+                print("No output_directory was found...!\n")
+                return
+
+        if self.outputs:
+            if self.roi_file:
+                self.tags_inheritance(
+                    in_file=self.in_file,
+                    out_file=self.outputs["roi_file"],
+                )
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(ExtractROI, self).run_process_mia()
+        self.process.in_file = self.in_file
+        self.process.output_type = self.output_type
+        self.process.roi_file = self.roi_file
+        if self.t_min is not Undefined:
+            self.process.t_min = self.t_min
+        if self.t_size is not Undefined:
+            self.process.t_size = self.t_size
+        if self.x_min is not Undefined:
+            self.process.x_min = self.x_min
+        if self.x_size is not Undefined:
+            self.process.x_size = self.x_size
+        if self.y_min is not Undefined:
+            self.process.y_min = self.y_min
+        if self.y_size is not Undefined:
+            self.process.y_size = self.y_size
+        if self.z_min is not Undefined:
+            self.process.z_min = self.z_min
+        if self.z_size is not Undefined:
+            self.process.z_size = self.z_size
 
         return self.process.run(configuration_dict={})
 
