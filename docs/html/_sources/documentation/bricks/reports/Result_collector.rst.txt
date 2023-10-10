@@ -64,6 +64,7 @@ Generates files containing summary data for each region of interest
     A dictionary whose keys/values correspond to information about the patient.
 
     e.g. {
+
           | 'PatientName': 'ablair',
           | 'Pathology': 'ACMD',
           | 'Age': 64,
@@ -71,6 +72,7 @@ Generates files containing summary data for each region of interest
 	  | 'MR': '3T',
 	  | 'Gas': 'BACTAL',
 	  | 'GasAdmin': 'MASK'
+
 	 }
 
     ::

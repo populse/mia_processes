@@ -1,0 +1,217 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>mia_processes.pipelines.preprocess.bold_spatial_preprocessing2 &#8212; mia_processes 2.3.1-dev+ad6303dd documentation</title>
+    <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
+          <span>mia_processes 2.3.1-dev+ad6303dd documentation</span></a></h1>
+        <h2 class="heading"><span>mia_processes.pipelines.preprocess.bold_spatial_preprocessing2</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <h1>Source code for mia_processes.pipelines.preprocess.bold_spatial_preprocessing2</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="sd">&quot;&quot;&quot;The pipelines library of the mia_processes package.</span>
+
+<span class="sd">The objective of this module is to propose pipelines built from atomic bricks</span>
+<span class="sd">or other pipelines provided in the mia_processes library.</span>
+
+<span class="sd">:Contains:</span>
+<span class="sd">    :Class:</span>
+<span class="sd">        - Bold_spatial_preprocessing2</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1">##########################################################################</span>
+<span class="c1"># mia_processes - Copyright (C) IRMaGe/CEA, 2018</span>
+<span class="c1"># Distributed under the terms of the CeCILL license, as published by</span>
+<span class="c1"># the CEA-CNRS-INRIA. Refer to the LICENSE file or to</span>
+<span class="c1"># http://www.cecill.info/licences/Licence_CeCILL_V2.1-en.html</span>
+<span class="c1"># for details.</span>
+<span class="c1">##########################################################################</span>
+
+
+<span class="kn">from</span> <span class="nn">capsul.api</span> <span class="kn">import</span> <span class="n">Pipeline</span>
+
+
+<div class="viewcode-block" id="Bold_spatial_preprocessing2"><a class="viewcode-back" href="../../../../mia_processes.pipelines.preprocess.html#mia_processes.pipelines.preprocess.bold_spatial_preprocessing2.Bold_spatial_preprocessing2">[docs]</a><span class="k">class</span> <span class="nc">Bold_spatial_preprocessing2</span><span class="p">(</span><span class="n">Pipeline</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    *Bold data pre-processing*</span>
+
+<span class="sd">    Please, see the complete documentation for the</span>
+<span class="sd">    `Bold_spatial_preprocessing2 brick in the mia_processes website</span>
+<span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/pipelines/preprocess/Bold_spatial_preprocessing2.html&gt;`_</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Bold_spatial_preprocessing2.pipeline_definition"><a class="viewcode-back" href="../../../../mia_processes.pipelines.preprocess.html#mia_processes.pipelines.preprocess.bold_spatial_preprocessing2.Bold_spatial_preprocessing2.pipeline_definition">[docs]</a>    <span class="k">def</span> <span class="nf">pipeline_definition</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Building the pipeline&quot;&quot;&quot;</span>
+        <span class="c1"># nodes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;normalize12_T1_estwrite&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.preprocess.spm.spatial_preprocessing.&quot;</span>
+            <span class="s2">&quot;Normalize12&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;normalize12_T1_estwrite&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">jobtype</span> <span class="o">=</span> <span class="s2">&quot;estwrite&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span>
+            <span class="s2">&quot;normalize12_T1_estwrite&quot;</span>
+        <span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">bias_regularization</span> <span class="o">=</span> <span class="mf">0.0001</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;normalize12_T1_estwrite&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">bias_fwhm</span> <span class="o">=</span> <span class="mi">30</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;normalize12_T1_estwrite&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">write_interp</span> <span class="o">=</span> <span class="mi">4</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;realign&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.preprocess.spm.spatial_preprocessing.&quot;</span>
+            <span class="s2">&quot;Realign&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;coregister&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.preprocess.spm.spatial_preprocessing.&quot;</span>
+            <span class="s2">&quot;Coregister&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;normalize12_func&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.preprocess.spm.spatial_preprocessing.&quot;</span>
+            <span class="s2">&quot;Normalize12&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;normalize12_func&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">write_interp</span> <span class="o">=</span> <span class="mi">4</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;smooth&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.preprocess.spm.spatial_preprocessing.Smooth&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;slicetiming&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.preprocess.spm.spatial_preprocessing.&quot;</span>
+            <span class="s2">&quot;SliceTiming&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># links</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;slicetiming&quot;</span><span class="p">,</span> <span class="s2">&quot;in_files&quot;</span><span class="p">,</span> <span class="s2">&quot;func_files&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;coregister&quot;</span><span class="p">,</span> <span class="s2">&quot;source&quot;</span><span class="p">,</span> <span class="s2">&quot;anat_image&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;normalize12_func&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;write_voxel_sizes&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;write_voxel_sizes_irmf&quot;</span><span class="p">,</span>
+            <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;slicetiming&quot;</span><span class="p">,</span> <span class="s2">&quot;acquisition&quot;</span><span class="p">,</span> <span class="s2">&quot;acquisition_type&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span>
+            <span class="s2">&quot;normalize12_T1_estwrite.deformation_field-&gt;normalize12_func.&quot;</span>
+            <span class="s2">&quot;deformation_file&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;normalize12_T1_estwrite&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;normalized_files&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;normalized_anat&quot;</span><span class="p">,</span>
+            <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span>
+            <span class="s2">&quot;realign.realigned_files-&gt;normalize12_func.apply_to_files&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;realign.mean_image-&gt;coregister.target&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;realign&quot;</span><span class="p">,</span> <span class="s2">&quot;realignment_parameters&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span>
+            <span class="s2">&quot;coregister.coregistered_source-&gt;normalize12_T1_estwrite.&quot;</span>
+            <span class="s2">&quot;image_to_align&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;normalize12_func.normalized_files-&gt;smooth.in_files&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;smooth&quot;</span><span class="p">,</span> <span class="s2">&quot;smoothed_files&quot;</span><span class="p">,</span> <span class="s2">&quot;smoothed_func&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;slicetiming.timed_files-&gt;realign.in_files&quot;</span><span class="p">)</span>
+
+        <span class="c1"># parameters order</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reorder_traits</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;func_files&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;anat_image&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;write_voxel_sizes_irmf&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;smoothed_func&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;realignment_parameters&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;normalized_anat&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;acquisition_type&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c1"># nodes positions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_position</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;inputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">1330.6501789831684</span><span class="p">,</span> <span class="o">-</span><span class="mf">288.15260556753907</span><span class="p">),</span>
+            <span class="s2">&quot;normalize12_T1_estwrite&quot;</span><span class="p">:</span> <span class="p">(</span>
+                <span class="o">-</span><span class="mf">628.1150643192523</span><span class="p">,</span>
+                <span class="o">-</span><span class="mf">38.853194422614536</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="s2">&quot;realign&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">719.1690583940288</span><span class="p">,</span> <span class="o">-</span><span class="mf">645.6232551039974</span><span class="p">),</span>
+            <span class="s2">&quot;coregister&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">1051.81769119588</span><span class="p">,</span> <span class="mf">3.0859261395252133</span><span class="p">),</span>
+            <span class="s2">&quot;normalize12_func&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">95.96325602200594</span><span class="p">,</span> <span class="o">-</span><span class="mf">623.0809886962197</span><span class="p">),</span>
+            <span class="s2">&quot;smooth&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">399.6456470428327</span><span class="p">,</span> <span class="o">-</span><span class="mf">243.53983169313443</span><span class="p">),</span>
+            <span class="s2">&quot;outputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">829.5548202409861</span><span class="p">,</span> <span class="mf">109.14575051340813</span><span class="p">),</span>
+            <span class="s2">&quot;slicetiming&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">975.8860749597629</span><span class="p">,</span> <span class="o">-</span><span class="mf">612.2454479258214</span><span class="p">),</span>
+        <span class="p">}</span>
+
+        <span class="c1"># nodes dimensions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_dimension</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;slicetiming&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">188.25</span><span class="p">,</span> <span class="mf">320.0</span><span class="p">),</span>
+            <span class="s2">&quot;inputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">199.609375</span><span class="p">,</span> <span class="mf">140.0</span><span class="p">),</span>
+            <span class="s2">&quot;realign_1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">330.375</span><span class="p">,</span> <span class="mf">530.0</span><span class="p">),</span>
+            <span class="s2">&quot;coregister_1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">271.03125</span><span class="p">,</span> <span class="mf">460.0</span><span class="p">),</span>
+            <span class="s2">&quot;normalize12_func&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">351.109375</span><span class="p">,</span> <span class="mf">530.0</span><span class="p">),</span>
+            <span class="s2">&quot;normalize12_T1_estwrite&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">351.109375</span><span class="p">,</span> <span class="mf">530.0</span><span class="p">),</span>
+            <span class="s2">&quot;realign&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">330.375</span><span class="p">,</span> <span class="mf">530.0</span><span class="p">),</span>
+            <span class="s2">&quot;coregister&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">271.03125</span><span class="p">,</span> <span class="mf">460.0</span><span class="p">),</span>
+            <span class="s2">&quot;smooth&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">259.109375</span><span class="p">,</span> <span class="mf">215.0</span><span class="p">),</span>
+            <span class="s2">&quot;outputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">196.28125</span><span class="p">,</span> <span class="mf">145.0</span><span class="p">),</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_autoexport_nodes_parameters</span> <span class="o">=</span> <span class="kc">False</span></div></div>
+</pre></div>
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
+    </div>
+  </body>
+</html>

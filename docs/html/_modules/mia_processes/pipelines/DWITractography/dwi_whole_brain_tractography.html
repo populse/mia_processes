@@ -1,0 +1,303 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>mia_processes.pipelines.DWITractography.dwi_whole_brain_tractography &#8212; mia_processes 2.3.1-dev+ad6303dd documentation</title>
+    <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
+          <span>mia_processes 2.3.1-dev+ad6303dd documentation</span></a></h1>
+        <h2 class="heading"><span>mia_processes.pipelines.DWITractography.dwi_whole_brain_tractography</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <h1>Source code for mia_processes.pipelines.DWITractography.dwi_whole_brain_tractography</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="sd">&quot;&quot;&quot;The pipelines library of the mia_processes package.</span>
+
+
+<span class="sd">:Contains:</span>
+<span class="sd">    :Class:</span>
+<span class="sd">        - Dwi_whole_brain_tractography</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1">##########################################################################</span>
+<span class="c1"># mia_processes - Copyright (C) IRMaGe/CEA, 2018</span>
+<span class="c1"># Distributed under the terms of the CeCILL license, as published by</span>
+<span class="c1"># the CEA-CNRS-INRIA. Refer to the LICENSE file or to</span>
+<span class="c1"># http://www.cecill.info/licences/Licence_CeCILL_V2.1-en.html</span>
+<span class="c1"># for details.</span>
+<span class="c1">##########################################################################</span>
+
+<span class="kn">from</span> <span class="nn">capsul.api</span> <span class="kn">import</span> <span class="n">Pipeline</span>
+
+
+<div class="viewcode-block" id="Dwi_whole_brain_tractography"><a class="viewcode-back" href="../../../../mia_processes.pipelines.DWITractography.html#mia_processes.pipelines.DWITractography.dwi_whole_brain_tractography.Dwi_whole_brain_tractography">[docs]</a><span class="k">class</span> <span class="nc">Dwi_whole_brain_tractography</span><span class="p">(</span><span class="n">Pipeline</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    *DWI whole brain tractography*</span>
+
+<span class="sd">    Please, see the complete documentation for the</span>
+<span class="sd">    `Dwi_whole_brain_tractography pipeline in</span>
+<span class="sd">    the mia_processes website:</span>
+<span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/pipelines/DwiTractography/Dwi_whole_brain_tractography.html&gt;`_</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Dwi_whole_brain_tractography.pipeline_definition"><a class="viewcode-back" href="../../../../mia_processes.pipelines.DWITractography.html#mia_processes.pipelines.DWITractography.dwi_whole_brain_tractography.Dwi_whole_brain_tractography.pipeline_definition">[docs]</a>    <span class="k">def</span> <span class="nf">pipeline_definition</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Building the pipeline&quot;&quot;&quot;</span>
+        <span class="c1"># nodes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;dwi_preprocessing&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.pipelines.preprocess.&quot;</span>
+            <span class="s2">&quot;dwi_preprocessing.Dwi_preprocessing&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;dwi_preprocessing&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">nodes_activation</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;Convert_dwi&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;Convert_b0&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;Denoising&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;Unringing&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;MotionDistortionCorrection&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;Extractb0&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;Meanb0&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;Meanb0Corr&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;FilesToList&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;Concatenateb0&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;BiasCorrection&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;BrainMask&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;dwi_tissue_boundaries&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.pipelines.preprocess.&quot;</span>
+            <span class="s2">&quot;dwi_tissue_boundaries.Dwi_tissue_boundaries&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;dwi_tissue_boundaries&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">nodes_activation</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;ConvertT1w&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;Generate5tt&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;Extractb0&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;Meanb0&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;CoregistrationFlirt&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;Transformfslconvert&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;ConvertMeanb0NIfTI&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;Transform_1&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;Transform_2&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;Generate5ttseed&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;dwi_fod&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.pipelines.preprocess.&quot;</span>
+            <span class="s2">&quot;dwi_fod_msmt_csd.Dwi_fod_msmt_csd&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;dwi_fod&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">nodes_activation</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;ResponseFunctionEstimation&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;FODEstimation&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;IntensityNormalization&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;FilesToList&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;ListToFile_1&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;ListToFile_2&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;ListToFile_3&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;tractography&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.preprocess.mrtrix.processes.Tractography&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;tractography&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">select</span> <span class="o">=</span> <span class="mi">10000000</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;editingtrack_1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.preprocess.mrtrix.processes.EditingTrack&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;editingtrack_1&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">suffix</span> <span class="o">=</span> <span class="s2">&quot;200k&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;editingtrack_1&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">number</span> <span class="o">=</span> <span class="mi">200000</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;filteringtrack&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.preprocess.mrtrix.processes.FilteringTrack&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;editingtrack_2&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.preprocess.mrtrix.processes.EditingTrack&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;editingtrack_2&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">suffix</span> <span class="o">=</span> <span class="s2">&quot;10k&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;editingtrack_2&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">number</span> <span class="o">=</span> <span class="mi">10000</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;editingtrack_3&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.preprocess.mrtrix.processes.EditingTrack&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;editingtrack_3&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">suffix</span> <span class="o">=</span> <span class="s2">&quot;10k&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;editingtrack_3&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">number</span> <span class="o">=</span> <span class="mi">10000</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;spherical_harmonic_extraction&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.preprocess.&quot;</span>
+            <span class="s2">&quot;mrtrix.processes.SphericalHarmonicExtraction&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># links</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;dwi_preprocessing&quot;</span><span class="p">,</span> <span class="s2">&quot;in_dwi&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;dwi_preprocessing&quot;</span><span class="p">,</span> <span class="s2">&quot;in_bvec&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;dwi_preprocessing&quot;</span><span class="p">,</span> <span class="s2">&quot;in_bval&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;dwi_preprocessing&quot;</span><span class="p">,</span> <span class="s2">&quot;in_dwi_pe_dir&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;dwi_preprocessing&quot;</span><span class="p">,</span> <span class="s2">&quot;in_dwi_ro_time&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;dwi_preprocessing&quot;</span><span class="p">,</span> <span class="s2">&quot;in_b0_reverse&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;dwi_tissue_boundaries&quot;</span><span class="p">,</span> <span class="s2">&quot;in_T1w&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;dwi_preprocessing.brain_mask-&gt;dwi_fod.brain_mask&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;dwi_preprocessing.preproc_dwi-&gt;dwi_fod.in_dwi&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span>
+            <span class="s2">&quot;dwi_preprocessing.preproc_dwi-&gt;dwi_tissue_boundaries.in_dwi&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span>
+            <span class="s2">&quot;dwi_tissue_boundaries.5tt_coreg-&gt;tractography.act_image&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span>
+            <span class="s2">&quot;dwi_tissue_boundaries.5tt_coreg-&gt;filteringtrack.act_image&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span>
+            <span class="s2">&quot;dwi_tissue_boundaries.gmwmSeed_coreg-&gt;tractography.seed_gmwmi&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;dwi_tissue_boundaries&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;T1w_coreg&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;T1w_coreg&quot;</span><span class="p">,</span>
+            <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;dwi_fod.wm_fod_norm-&gt;tractography.in_file&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;dwi_fod.wm_fod_norm-&gt;filteringtrack.in_fod&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;dwi_fod&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">trait</span><span class="p">(</span><span class="s2">&quot;csf_fod_norm&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">userlevel</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;dwi_fod&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">trait</span><span class="p">(</span><span class="s2">&quot;gm_fod_norm&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">userlevel</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;tractography.out_file-&gt;editingtrack_1.in_tracks&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;tractography.out_file-&gt;filteringtrack.in_tracks&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span>
+            <span class="s2">&quot;dwi_fod.wm_fod_norm-&gt;spherical_harmonic_extraction.in_SH_coeff&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;tractography&quot;</span><span class="p">,</span> <span class="s2">&quot;out_file&quot;</span><span class="p">,</span> <span class="s2">&quot;tracks_10mio&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;tractography.out_file-&gt;editingtrack_3.in_tracks&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;editingtrack_1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;tracks_out&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;tracks_200k&quot;</span><span class="p">,</span>
+            <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;filteringtrack&quot;</span><span class="p">,</span> <span class="s2">&quot;tracks_out&quot;</span><span class="p">,</span> <span class="s2">&quot;tracks_sift&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;filteringtrack.tracks_out-&gt;editingtrack_2.in_tracks&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;editingtrack_2&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;tracks_out&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;tracks_sift_10k&quot;</span><span class="p">,</span>
+            <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;editingtrack_3&quot;</span><span class="p">,</span> <span class="s2">&quot;tracks_out&quot;</span><span class="p">,</span> <span class="s2">&quot;tracks_10k&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;spherical_harmonic_extraction&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;output_image&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;sh_peaks&quot;</span><span class="p">,</span>
+            <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># parameters order</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">reorder_traits</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;in_dwi&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;in_bvec&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;in_bval&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;in_dwi_pe_dir&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;in_dwi_ro_time&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;in_b0_reverse&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;in_T1w&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;sh_peaks&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;tracks_10mio&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;tracks_sift&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;tracks_sift_10k&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;tracks_200k&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;tracks_10k&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c1"># nodes positions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_position</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;dwi_preprocessing&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">1205.5599999999997</span><span class="p">,</span> <span class="o">-</span><span class="mf">55.80800000000008</span><span class="p">),</span>
+            <span class="s2">&quot;dwi_tissue_boundaries&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">921.1039999999998</span><span class="p">,</span> <span class="mf">261.61599999999993</span><span class="p">),</span>
+            <span class="s2">&quot;dwi_fod&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">866.376</span><span class="p">,</span> <span class="o">-</span><span class="mf">162.76</span><span class="p">),</span>
+            <span class="s2">&quot;tractography&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">577.1279999999999</span><span class="p">,</span> <span class="o">-</span><span class="mf">31.440000000000055</span><span class="p">),</span>
+            <span class="s2">&quot;inputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">1408.8198216389594</span><span class="p">,</span> <span class="mf">91.07199999999989</span><span class="p">),</span>
+            <span class="s2">&quot;editingtrack_1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">69.12</span><span class="p">,</span> <span class="o">-</span><span class="mf">205.63199999999995</span><span class="p">),</span>
+            <span class="s2">&quot;filteringtrack&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">32.83200000000001</span><span class="p">,</span> <span class="mf">513.2159999999998</span><span class="p">),</span>
+            <span class="s2">&quot;outputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">1326.8182808243942</span><span class="p">,</span> <span class="mf">536.9664559310762</span><span class="p">),</span>
+            <span class="s2">&quot;spherical_harmonic_extraction&quot;</span><span class="p">:</span> <span class="p">(</span>
+                <span class="mf">543.8188943836914</span><span class="p">,</span>
+                <span class="mf">486.26420974153626</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="s2">&quot;editingtrack_2&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">397.4399999999997</span><span class="p">,</span> <span class="mf">751.6799999999998</span><span class="p">),</span>
+            <span class="s2">&quot;editingtrack_3&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">461.37599999999986</span><span class="p">,</span> <span class="o">-</span><span class="mf">188.35199999999992</span><span class="p">),</span>
+        <span class="p">}</span>
+
+        <span class="c1"># nodes dimensions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_dimension</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;dwi_preprocessing&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">244.46875</span><span class="p">,</span> <span class="mf">250.0</span><span class="p">),</span>
+            <span class="s2">&quot;dwi_tissue_boundaries&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">214.59375</span><span class="p">,</span> <span class="mf">145.0</span><span class="p">),</span>
+            <span class="s2">&quot;dwi_fod&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">270.28125</span><span class="p">,</span> <span class="mf">215.0</span><span class="p">),</span>
+            <span class="s2">&quot;tractography&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">412.96875</span><span class="p">,</span> <span class="mf">1265.0</span><span class="p">),</span>
+            <span class="s2">&quot;inputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">130.421875</span><span class="p">,</span> <span class="mf">285.0</span><span class="p">),</span>
+            <span class="s2">&quot;editingtrack_1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">298.4375</span><span class="p">,</span> <span class="mf">600.0</span><span class="p">),</span>
+            <span class="s2">&quot;filteringtrack&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">318.765625</span><span class="p">,</span> <span class="mf">600.0</span><span class="p">),</span>
+            <span class="s2">&quot;outputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">142.578125</span><span class="p">,</span> <span class="mf">285.0</span><span class="p">),</span>
+            <span class="s2">&quot;editingtrack_2&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">298.4375</span><span class="p">,</span> <span class="mf">600.0</span><span class="p">),</span>
+            <span class="s2">&quot;editingtrack_3&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">301.4375</span><span class="p">,</span> <span class="mf">600.0</span><span class="p">),</span>
+            <span class="s2">&quot;spherical_harmonic_extraction&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">220.59375</span><span class="p">,</span> <span class="mf">355.0</span><span class="p">),</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_autoexport_nodes_parameters</span> <span class="o">=</span> <span class="kc">False</span></div></div>
+</pre></div>
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
+    </div>
+  </body>
+</html>

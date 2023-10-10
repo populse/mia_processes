@@ -9,8 +9,8 @@ mia\_processes.pipelines.stat package
 Submodules
 ----------
 
-mia\_processes.pipelines.stat.bold\_stat module
------------------------------------------------
+mia\_processes.pipelines.stat.bold\_stat\_cvr module
+----------------------------------------------------
 
 .. automodule:: mia_processes.pipelines.stat.bold_stat_cvr
    :members:

@@ -1,0 +1,234 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>mia_processes.pipelines.preprocess.dwi_preprocessing &#8212; mia_processes 2.3.1-dev+ad6303dd documentation</title>
+    <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
+          <span>mia_processes 2.3.1-dev+ad6303dd documentation</span></a></h1>
+        <h2 class="heading"><span>mia_processes.pipelines.preprocess.dwi_preprocessing</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <h1>Source code for mia_processes.pipelines.preprocess.dwi_preprocessing</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="sd">&quot;&quot;&quot;The pipelines library of the mia_processes package.</span>
+
+<span class="sd">The objective of this module is to propose pipelines built from atomic bricks</span>
+<span class="sd">or other pipelines provided in the mia_processes library.</span>
+
+<span class="sd">:Contains:</span>
+<span class="sd">    :Class:</span>
+<span class="sd">        - Dwi_preprocessing</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">capsul.api</span> <span class="kn">import</span> <span class="n">Pipeline</span>
+
+
+<div class="viewcode-block" id="Dwi_preprocessing"><a class="viewcode-back" href="../../../../mia_processes.pipelines.preprocess.html#mia_processes.pipelines.preprocess.dwi_preprocessing.Dwi_preprocessing">[docs]</a><span class="k">class</span> <span class="nc">Dwi_preprocessing</span><span class="p">(</span><span class="n">Pipeline</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    *DWI preprocessing with reverse b0*</span>
+
+<span class="sd">    Please, see the complete documentation for the</span>
+<span class="sd">    `Dwi_preprocessing pipeline in the mia_processes website</span>
+<span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/pipelines/preprocess/Dwi_preprocessing.html&gt;`_</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Dwi_preprocessing.pipeline_definition"><a class="viewcode-back" href="../../../../mia_processes.pipelines.preprocess.html#mia_processes.pipelines.preprocess.dwi_preprocessing.Dwi_preprocessing.pipeline_definition">[docs]</a>    <span class="k">def</span> <span class="nf">pipeline_definition</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Building the pipeline&quot;&quot;&quot;</span>
+        <span class="c1"># nodes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;Convert_dwi&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.preprocess.mrtrix.processes.MRConvert&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;Convert_b0&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.preprocess.mrtrix.processes.MRConvert&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;Denoising&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.preprocess.mrtrix.processes.DWIDenoise&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;Unringing&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.preprocess.mrtrix.processes.MRDeGibbs&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;MotionDistortionCorrection&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.preprocess.mrtrix.processes.DWIPreproc&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;MotionDistortionCorrection&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">rpe_options</span> <span class="o">=</span> <span class="s2">&quot;pair&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span>
+            <span class="s2">&quot;MotionDistortionCorrection&quot;</span>
+        <span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">eddy_options</span> <span class="o">=</span> <span class="s2">&quot; --slm=linear --data_is_shelled&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;Extractb0&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.preprocess.mrtrix.processes.DWIExtract&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;Meanb0&quot;</span><span class="p">,</span> <span class="s2">&quot;mia_processes.bricks.preprocess.mrtrix.processes.MRMath&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;Meanb0Corr&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.preprocess.mrtrix.processes.MRMath&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;FilesToList&quot;</span><span class="p">,</span> <span class="s2">&quot;mia_processes.bricks.tools.tools.Files_To_List&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;Concatenateb0&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.preprocess.mrtrix.processes.MRCat&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;Concatenateb0&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">out_file_name</span> <span class="o">=</span> <span class="s2">&quot;mean_b0_pair&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;BiasCorrection&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.preprocess.mrtrix.processes.DWIBiasCorrect&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;BrainMask&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.preprocess.mrtrix.processes.DWIBrainMask&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># links</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;Convert_dwi&quot;</span><span class="p">,</span> <span class="s2">&quot;in_file&quot;</span><span class="p">,</span> <span class="s2">&quot;in_dwi&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;Convert_dwi&quot;</span><span class="p">,</span> <span class="s2">&quot;in_bvec&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;Convert_dwi&quot;</span><span class="p">,</span> <span class="s2">&quot;in_bval&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;MotionDistortionCorrection&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;pe_dir&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;in_dwi_pe_dir&quot;</span><span class="p">,</span>
+            <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;MotionDistortionCorrection&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;ro_time&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;in_dwi_ro_time&quot;</span><span class="p">,</span>
+            <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;Convert_b0&quot;</span><span class="p">,</span> <span class="s2">&quot;in_file&quot;</span><span class="p">,</span> <span class="s2">&quot;in_b0_reverse&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;Convert_dwi.out_file-&gt;Denoising.in_file&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;Convert_b0.out_file-&gt;Meanb0Corr.in_file&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;Denoising.out_file-&gt;Unringing.in_file&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;Unringing.out_file-&gt;MotionDistortionCorrection.in_file&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;Unringing.out_file-&gt;Extractb0.in_file&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span>
+            <span class="s2">&quot;MotionDistortionCorrection.out_file-&gt;BiasCorrection.in_file&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;BiasCorrection&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;out_file&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;preproc_dwi&quot;</span><span class="p">,</span>
+            <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;Extractb0.out_file-&gt;Meanb0.in_file&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;Meanb0.out_file-&gt;FilesToList.file1&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;Meanb0Corr.out_file-&gt;FilesToList.file2&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;FilesToList.file_list-&gt;Concatenateb0.in_files&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span>
+            <span class="s2">&quot;Concatenateb0.out_file-&gt;MotionDistortionCorrection.se_epi_corr&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;BiasCorrection.out_file-&gt;BrainMask.in_file&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;BrainMask&quot;</span><span class="p">,</span> <span class="s2">&quot;out_file&quot;</span><span class="p">,</span> <span class="s2">&quot;brain_mask&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+
+        <span class="c1"># parameters order</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">reorder_traits</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;in_dwi&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;in_bvec&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;in_bval&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;in_dwi_pe_dir&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;in_dwi_ro_time&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;in_b0_reverse&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;brain_mask&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;preproc_dwi&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c1"># nodes positions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_position</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;Convert_dwi&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">1099.340793426031</span><span class="p">,</span> <span class="o">-</span><span class="mf">330.99389652344223</span><span class="p">),</span>
+            <span class="s2">&quot;Convert_b0&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">1079.6856105700367</span><span class="p">,</span> <span class="mf">223.28226001559904</span><span class="p">),</span>
+            <span class="s2">&quot;inputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">1291.3993894677506</span><span class="p">,</span> <span class="mf">48.14750084237923</span><span class="p">),</span>
+            <span class="s2">&quot;Denoising&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">817.46266529709</span><span class="p">,</span> <span class="o">-</span><span class="mf">344.2197355246564</span><span class="p">),</span>
+            <span class="s2">&quot;Unringing&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">642.6747160934633</span><span class="p">,</span> <span class="o">-</span><span class="mf">204.01988374578806</span><span class="p">),</span>
+            <span class="s2">&quot;MotionDistortionCorrection&quot;</span><span class="p">:</span> <span class="p">(</span>
+                <span class="mf">57.996932626461074</span><span class="p">,</span>
+                <span class="mf">66.21320749222957</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="s2">&quot;Extractb0&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">451.7878747547151</span><span class="p">,</span> <span class="o">-</span><span class="mf">322.9089989467982</span><span class="p">),</span>
+            <span class="s2">&quot;Meanb0&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">259.73028467525273</span><span class="p">,</span> <span class="o">-</span><span class="mf">482.85714587016565</span><span class="p">),</span>
+            <span class="s2">&quot;Meanb0Corr&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">417.43894315496556</span><span class="p">,</span> <span class="mf">209.10350773523913</span><span class="p">),</span>
+            <span class="s2">&quot;Concatenateb0&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">42.48238548560684</span><span class="p">,</span> <span class="o">-</span><span class="mf">207.5889444784554</span><span class="p">),</span>
+            <span class="s2">&quot;BiasCorrection&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">220.9237026548114</span><span class="p">,</span> <span class="o">-</span><span class="mf">252.48423160549882</span><span class="p">),</span>
+            <span class="s2">&quot;BrainMask&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">477.35300037914624</span><span class="p">,</span> <span class="o">-</span><span class="mf">69.03865707962856</span><span class="p">),</span>
+            <span class="s2">&quot;outputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">526.6342301182356</span><span class="p">,</span> <span class="mf">134.13224804042125</span><span class="p">),</span>
+            <span class="s2">&quot;FilesToList&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">199.17352902019883</span><span class="p">,</span> <span class="o">-</span><span class="mf">158.55231307808265</span><span class="p">),</span>
+        <span class="p">}</span>
+
+        <span class="c1"># nodes dimensions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_dimension</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;Convert_dwi&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">222.28125</span><span class="p">,</span> <span class="mf">440.0</span><span class="p">),</span>
+            <span class="s2">&quot;Convert_b0&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">222.28125</span><span class="p">,</span> <span class="mf">440.0</span><span class="p">),</span>
+            <span class="s2">&quot;inputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">147.046875</span><span class="p">,</span> <span class="mf">250.0</span><span class="p">),</span>
+            <span class="s2">&quot;Denoising&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">156.234375</span><span class="p">,</span> <span class="mf">180.0</span><span class="p">),</span>
+            <span class="s2">&quot;Unringing&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">135.75</span><span class="p">,</span> <span class="mf">195.0</span><span class="p">),</span>
+            <span class="s2">&quot;MotionDistortionCorrection&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">180.265625</span><span class="p">,</span> <span class="mf">460.0</span><span class="p">),</span>
+            <span class="s2">&quot;Extractb0&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">163.375</span><span class="p">,</span> <span class="mf">195.0</span><span class="p">),</span>
+            <span class="s2">&quot;Meanb0&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">186.96875</span><span class="p">,</span> <span class="mf">160.0</span><span class="p">),</span>
+            <span class="s2">&quot;Meanb0Corr&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">186.96875</span><span class="p">,</span> <span class="mf">180.0</span><span class="p">),</span>
+            <span class="s2">&quot;Concatenateb0&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">188.703125</span><span class="p">,</span> <span class="mf">125.27466940582039</span><span class="p">),</span>
+            <span class="s2">&quot;BiasCorrection&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">201.328125</span><span class="p">,</span> <span class="mf">195.0</span><span class="p">),</span>
+            <span class="s2">&quot;BrainMask&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">130.6875</span><span class="p">,</span> <span class="mf">55.0</span><span class="p">),</span>
+            <span class="s2">&quot;outputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">111.046875</span><span class="p">,</span> <span class="mf">110.0</span><span class="p">),</span>
+            <span class="s2">&quot;FilesToList&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">118.8125</span><span class="p">,</span> <span class="mf">145.0</span><span class="p">),</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_autoexport_nodes_parameters</span> <span class="o">=</span> <span class="kc">False</span></div></div>
+</pre></div>
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
+    </div>
+  </body>
+</html>

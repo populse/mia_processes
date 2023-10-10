@@ -17,5 +17,6 @@ Subpackages
    mia_processes.bricks.preprocess.dipy
    mia_processes.bricks.preprocess.freesurfer
    mia_processes.bricks.preprocess.fsl
+   mia_processes.bricks.preprocess.mrtrix
    mia_processes.bricks.preprocess.others
    mia_processes.bricks.preprocess.spm

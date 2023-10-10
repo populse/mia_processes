@@ -1,0 +1,214 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>mia_processes.pipelines.preprocess.dwi_fod_msmt_csd &#8212; mia_processes 2.3.1-dev+ad6303dd documentation</title>
+    <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
+          <span>mia_processes 2.3.1-dev+ad6303dd documentation</span></a></h1>
+        <h2 class="heading"><span>mia_processes.pipelines.preprocess.dwi_fod_msmt_csd</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <h1>Source code for mia_processes.pipelines.preprocess.dwi_fod_msmt_csd</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="sd">&quot;&quot;&quot;The pipelines library of the mia_processes package.</span>
+
+<span class="sd">The objective of this module is to propose pipelines built from atomic bricks</span>
+<span class="sd">or other pipelines provided in the mia_processes library.</span>
+
+<span class="sd">:Contains:</span>
+<span class="sd">    :Class:</span>
+<span class="sd">        - Dwi_fod_msmt_csd</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">capsul.api</span> <span class="kn">import</span> <span class="n">Pipeline</span>
+
+
+<div class="viewcode-block" id="Dwi_fod_msmt_csd"><a class="viewcode-back" href="../../../../mia_processes.pipelines.preprocess.html#mia_processes.pipelines.preprocess.dwi_fod_msmt_csd.Dwi_fod_msmt_csd">[docs]</a><span class="k">class</span> <span class="nc">Dwi_fod_msmt_csd</span><span class="p">(</span><span class="n">Pipeline</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    *DWI fiber orientation distribution*</span>
+
+<span class="sd">    Please, see the complete documentation for the</span>
+<span class="sd">    `Dwi_fod_msmt_csd pipeline in the mia_processes website</span>
+<span class="sd">    &lt;https://populse.github.io/mia_processes/html/documentation/pipelines/preprocess/Dwi_fod_msmt_csd.html&gt;`_</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Dwi_fod_msmt_csd.pipeline_definition"><a class="viewcode-back" href="../../../../mia_processes.pipelines.preprocess.html#mia_processes.pipelines.preprocess.dwi_fod_msmt_csd.Dwi_fod_msmt_csd.pipeline_definition">[docs]</a>    <span class="k">def</span> <span class="nf">pipeline_definition</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Building the pipeline&quot;&quot;&quot;</span>
+        <span class="c1"># nodes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;ResponseFunctionEstimation&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.preprocess.&quot;</span>
+            <span class="s2">&quot;mrtrix.processes.ResponseSDDhollander&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;FODEstimation&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.preprocess.&quot;</span>
+            <span class="s2">&quot;mrtrix.processes.ConstrainedSphericalDeconvolution&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;FODEstimation&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">algorithm</span> <span class="o">=</span> <span class="s2">&quot;msmt_csd&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;FODEstimation&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">get_predicted_signal</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;IntensityNormalization&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.preprocess.mrtrix.processes.MTNormalise&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;FilesToList&quot;</span><span class="p">,</span> <span class="s2">&quot;mia_processes.bricks.tools.tools.Files_To_List&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;ListToFile_1&quot;</span><span class="p">,</span> <span class="s2">&quot;mia_processes.bricks.tools.tools.List_To_File&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;ListToFile_1&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">index_filter</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;ListToFile_2&quot;</span><span class="p">,</span> <span class="s2">&quot;mia_processes.bricks.tools.tools.List_To_File&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;ListToFile_2&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">index_filter</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;ListToFile_3&quot;</span><span class="p">,</span> <span class="s2">&quot;mia_processes.bricks.tools.tools.List_To_File&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;ListToFile_3&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">index_filter</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+
+        <span class="c1"># links</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;ResponseFunctionEstimation&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;in_file&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;in_dwi&quot;</span><span class="p">,</span>
+            <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;in_dwi-&gt;FODEstimation.in_file&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;FODEstimation&quot;</span><span class="p">,</span> <span class="s2">&quot;in_mask&quot;</span><span class="p">,</span> <span class="s2">&quot;brain_mask&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;brain_mask-&gt;IntensityNormalization.mask&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span>
+            <span class="s2">&quot;ResponseFunctionEstimation.csf_file-&gt;FODEstimation.csf_txt&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span>
+            <span class="s2">&quot;ResponseFunctionEstimation.gm_file-&gt;FODEstimation.gm_txt&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span>
+            <span class="s2">&quot;ResponseFunctionEstimation.wm_file-&gt;FODEstimation.wm_txt&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;ResponseFunctionEstimation&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;voxels_image&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;voxels_final_selection&quot;</span><span class="p">,</span>
+            <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;FODEstimation.csf_odf-&gt;FilesToList.file1&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;FODEstimation.gm_odf-&gt;FilesToList.file2&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;FODEstimation.wm_odf-&gt;FilesToList.file3&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;FODEstimation&quot;</span><span class="p">,</span> <span class="s2">&quot;predicted_signal_file&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span>
+            <span class="s2">&quot;IntensityNormalization.out_files-&gt;ListToFile_1.file_list&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span>
+            <span class="s2">&quot;IntensityNormalization.out_files-&gt;ListToFile_2.file_list&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span>
+            <span class="s2">&quot;IntensityNormalization.out_files-&gt;ListToFile_3.file_list&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;FilesToList.file_list-&gt;IntensityNormalization.in_files&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;ListToFile_1&quot;</span><span class="p">,</span> <span class="s2">&quot;file&quot;</span><span class="p">,</span> <span class="s2">&quot;csf_fod_norm&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;ListToFile_2&quot;</span><span class="p">,</span> <span class="s2">&quot;file&quot;</span><span class="p">,</span> <span class="s2">&quot;gm_fod_norm&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
+            <span class="s2">&quot;ListToFile_3&quot;</span><span class="p">,</span> <span class="s2">&quot;file&quot;</span><span class="p">,</span> <span class="s2">&quot;wm_fod_norm&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+
+        <span class="c1"># parameters order</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">reorder_traits</span><span class="p">(</span>
+            <span class="p">(</span>
+                <span class="s2">&quot;in_dwi&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;voxels_final_selection&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;brain_mask&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;predicted_signal_file&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;csf_fod_norm&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;gm_fod_norm&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;wm_fod_norm&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c1"># nodes positions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_position</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;ResponseFunctionEstimation&quot;</span><span class="p">:</span> <span class="p">(</span>
+                <span class="o">-</span><span class="mf">1262.912368640373</span><span class="p">,</span>
+                <span class="mf">152.4026270677166</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="s2">&quot;FODEstimation&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">933.6347733561715</span><span class="p">,</span> <span class="o">-</span><span class="mf">153.54350458013056</span><span class="p">),</span>
+            <span class="s2">&quot;IntensityNormalization&quot;</span><span class="p">:</span> <span class="p">(</span>
+                <span class="o">-</span><span class="mf">385.88257304070976</span><span class="p">,</span>
+                <span class="o">-</span><span class="mf">94.08005523992625</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="s2">&quot;FilesToList&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">561.7630640303614</span><span class="p">,</span> <span class="o">-</span><span class="mf">71.30995697733732</span><span class="p">),</span>
+            <span class="s2">&quot;inputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">1358.4880421537448</span><span class="p">,</span> <span class="o">-</span><span class="mf">98.81792065248086</span><span class="p">),</span>
+            <span class="s2">&quot;outputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">198.02645870077032</span><span class="p">,</span> <span class="mf">57.60027545906087</span><span class="p">),</span>
+            <span class="s2">&quot;ListToFile_1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">79.00017223905586</span><span class="p">,</span> <span class="o">-</span><span class="mf">104.28022735555368</span><span class="p">),</span>
+            <span class="s2">&quot;ListToFile_2&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">82.16017912861807</span><span class="p">,</span> <span class="mf">47.40010334343346</span><span class="p">),</span>
+            <span class="s2">&quot;ListToFile_3&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">82.16017912861801</span><span class="p">,</span> <span class="mf">210.14045815588844</span><span class="p">),</span>
+        <span class="p">}</span>
+
+        <span class="c1"># nodes dimensions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_dimension</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;dwidenoise_1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">156.234375</span><span class="p">,</span> <span class="mf">180.0</span><span class="p">),</span>
+            <span class="s2">&quot;ResponseFunctionEstimation&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">252.125</span><span class="p">,</span> <span class="mf">285.0</span><span class="p">),</span>
+            <span class="s2">&quot;FODEstimation&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">334.625</span><span class="p">,</span> <span class="mf">390.0</span><span class="p">),</span>
+            <span class="s2">&quot;IntensityNormalization&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">229.1875</span><span class="p">,</span> <span class="mf">250.0</span><span class="p">),</span>
+            <span class="s2">&quot;FilesToList&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">118.8125</span><span class="p">,</span> <span class="mf">145.0</span><span class="p">),</span>
+            <span class="s2">&quot;inputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">106.984375</span><span class="p">,</span> <span class="mf">110.0</span><span class="p">),</span>
+            <span class="s2">&quot;outputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">178.296875</span><span class="p">,</span> <span class="mf">215.0</span><span class="p">),</span>
+            <span class="s2">&quot;ListToFile_1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">139.703125</span><span class="p">,</span> <span class="mf">110.0</span><span class="p">),</span>
+            <span class="s2">&quot;ListToFile_2&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">139.703125</span><span class="p">,</span> <span class="mf">110.0</span><span class="p">),</span>
+            <span class="s2">&quot;ListToFile_3&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">139.703125</span><span class="p">,</span> <span class="mf">110.0</span><span class="p">),</span>
+        <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_autoexport_nodes_parameters</span> <span class="o">=</span> <span class="kc">False</span></div></div>
+</pre></div>
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
+    </div>
+  </body>
+</html>
