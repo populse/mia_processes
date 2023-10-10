@@ -21,7 +21,7 @@ class Anat_headmask(Pipeline):
     from Dipy*
 
     Please, see the complete documentation for the
-    `Anat_headmask pipeline in the populse.mia_processes website
+    `Anat_headmask pipeline in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/pipelines/preprocess/Anat_headmask.html>`_
 
     """

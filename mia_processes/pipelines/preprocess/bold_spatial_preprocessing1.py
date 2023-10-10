@@ -31,7 +31,7 @@ class Bold_spatial_preprocessing1(Pipeline):
     *Data pre-processing for cerebrovascular reserve analysis (CVR)*
 
     Please, see the complete documentation for the
-    `Bold_spatial_preprocessing1 brick in the populse.mia_processes website
+    `Bold_spatial_preprocessing1 brick in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/pipelines/preprocess/Bold_spatial_preprocessing1.html>`_
     """
 

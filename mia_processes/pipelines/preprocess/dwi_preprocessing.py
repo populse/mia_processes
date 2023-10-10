@@ -19,7 +19,7 @@ class Dwi_preprocessing(Pipeline):
     *DWI preprocessing with reverse b0*
 
     Please, see the complete documentation for the
-    `Dwi_preprocessing pipeline in the populse.mia_processes website
+    `Dwi_preprocessing pipeline in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/pipelines/preprocess/Dwi_preprocessing.html>`_
 
     """

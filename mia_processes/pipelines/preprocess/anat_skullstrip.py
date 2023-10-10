@@ -20,7 +20,7 @@ class Anat_skullstrip(Pipeline):
     *Bias correction and skull stripping of a structural image*
 
     Please, see the complete documentation for the
-    `Anat_skullstrip pipeline in the populse.mia_processes website
+    `Anat_skullstrip pipeline in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/pipelines/preprocess/Anat_skullstrip.html>`_
 
     """

@@ -22,7 +22,7 @@ class Anat_mriqc(Pipeline):
     T2w) data using mriqc anatomical workflow (mriqc v22.06)*
 
     Please, see the complete documentation for the `Anat_mriqc_pipeline brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/pipelines/qualiTyControl/Anat_mriqc.html>`_
 
     """

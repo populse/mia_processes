@@ -28,7 +28,7 @@ class Spatial_mask(Pipeline):
     *Makes the grey matter native mask for cerebrovascular reserve analyse*
 
     Please, see the complete documentation for the `Spatial_mask brick in
-    the populse.mia_processes website
+    the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/pipelines/preprocess/Spatial_mask.html>`_
 
     """

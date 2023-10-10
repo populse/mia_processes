@@ -25,7 +25,7 @@ class Bold_mni_align(Pipeline):
     For checking out registration.
 
     Please, see the complete documentation for the
-    `Bold_mni_align pipeline in the populse.mia_processes website
+    `Bold_mni_align pipeline in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/pipelines/preprocess/Bold_mni_align.html>`_
 
 

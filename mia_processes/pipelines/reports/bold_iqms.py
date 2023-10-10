@@ -21,7 +21,7 @@ class Bold_iqms(Pipeline):
     *Extraction of IQMs*
 
     Please, see the complete documentation for the `Bold_iqms brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/pipelines/reports/Bold_iqms.html>`_
 
     """

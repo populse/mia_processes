@@ -23,7 +23,7 @@ class Bold_mriqc(Pipeline):
     using mriqc functional workflow (mriqc v22.06)*
 
     Please, see the complete documentation for the `Bold_mriqc brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/pipelines/qualiTyControl/Bold_mriqc.html>`_
 
     """

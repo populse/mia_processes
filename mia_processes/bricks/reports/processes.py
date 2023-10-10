@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-"""The report preprocess library of the mia_processes package.
+r"""
+The report preprocess library of the mia_processes package.
 
 The purpose of this module is to provide bricks and functions to
 compute necessary values for reporting.
@@ -40,6 +41,41 @@ compute necessary values for reporting.
         - _flatten_dict
         - _prepare_mask
         - _robust_zscore
+
+.. topic:: References
+
+  .. [Atkinson1997] Atkinson et al., *Automatic correction of motion artifacts
+    in magnetic resonance images using an entropy
+    focus criterion*, IEEE Trans Med Imag 16(6):903-910, 1997.
+    doi:`10.1109/42.650886 <https://doi.org/10.1109/42.650886>`_.
+
+  .. [Dietrich2007] Dietrich et al., *Measurement of SNRs in MR images:
+    influence of multichannel coils, parallel imaging and reconstruction
+    filters*, JMRI 26(2):375--385. 2007.
+    doi:`10.1002/jmri.20969 <https://doi.org/10.1002/jmri.20969>`_.
+
+  .. [Ganzetti2016] Ganzetti et al., *Intensity inhomogeneity correction of
+    structural MR images: a data-driven approach to define input algorithm
+    parameters*. Front Neuroinform 10:10. 2016.
+    doi:`10.3389/fninf.2016.00010 <https://doi.org/10.3389/fninf.2016.00010>`_.
+
+  .. [Giannelli2010] Giannelli et al., *Characterization of Nyquist ghost in
+    EPI-fMRI acquisition sequences implemented on two clinical 1.5 T MR scanner
+    systems: effect of readout bandwidth and echo spacing*. J App Clin Med Phy,
+    11(4). 2010.
+    doi:`10.1120/jacmp.v11i4.3237 <https://doi.org/10.1120/jacmp.v11i4.3237>`_.
+
+  .. [Magnota2006] Magnotta, VA., & Friedman, L., *Measurement of
+    signal-to-noise and contrast-to-noise in the fBIRN multicenter imaging
+    study*. J Dig Imag 19(2):140-147, 2006.
+    doi:`10.1007/s10278-006-0264-x
+    <https://doi.org/10.1007/s10278-006-0264-x>`_.
+
+  .. [Shehzad2015] Shehzad Z et al., *The Preprocessed Connectomes Project
+     Quality Assessment Protocol - a resource for measuring the quality of MRI
+     data*, Front. Neurosci. Conference Abstract: Neuroinformatics 2015.
+     doi:`10.3389/conf.fnins.2015.91.00047
+     <https://doi.org/10.3389/conf.fnins.2015.91.00047>`_.
 
 
 """
@@ -100,11 +136,11 @@ class AnatIQMs(ProcessMIA):
     *Computes the anatomical IQMs*
 
     Please, see the complete documentation for the `AnatIQMs brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/reports/AnatIQMs.html>`_
 
     adapted from `mriqc
-    <https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/anatomical.py#L332>`_
+    <https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/anatomical.py#L332>`__
 
     """
 
@@ -606,11 +642,11 @@ class BoldIQMs(ProcessMIA):
     *Computes the functional IQMs*
 
     Please, see the complete documentation for the `BoldIQMs brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/reports/BoldIQMs.html>`_
 
     adapted from `mriqc
-    <https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/functional.py#L243>`_
+    <https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/functional.py#L243>`__
 
     """
 
@@ -1224,7 +1260,7 @@ class CarpetParcellation(ProcessMIA):
     of the obtained crown mask and the EPI parcellation*
 
     Please, see the complete documentation for the `CarpetParcellation brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/reports/CarpetParcellation.html>`_
 
     Adapted from
@@ -1233,7 +1269,7 @@ class CarpetParcellation(ProcessMIA):
     `niworkflows binary subtraction
     <https://github.com/nipreps/niworkflows/blob/45ab13e1bf6fdbf5e29c90cef44055b0b9cf391b/niworkflows/interfaces/morphology.py#L79>`_,
     `mriqc
-    <https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/functional.py#L1022>`_
+    <https://github.com/nipreps/mriqc/blob/e021008da0a2ef1c48e882baf932139a673349f9/mriqc/workflows/functional.py#L1022>`__
 
     """
 
@@ -1393,11 +1429,11 @@ class ComputeDVARS(ProcessMIA):
     *Computes the DVARS*
 
     Please, see the complete documentation for the `ComputeDVARS brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/reports/ComputeDVARS.html>`_
 
     adapted from `nipype
-    <https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5de5913b31/nipype/algorithms/confounds.py#L100>`_
+    <https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5de5913b31/nipype/algorithms/confounds.py#L100>`__
 
     """
 
@@ -1656,11 +1692,11 @@ class FramewiseDisplacement(ProcessMIA):
     MRI networks arise from subject motion, NeuroImage 59(3).
 
     Please, see the complete documentation for the `FramewiseDisplacement
-    brick in the populse.mia_processes website
+    brick in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/reports/FramewiseDisplacement.html>`_
 
     adapted from `nipype
-    <https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5de5913b31/nipype/algorithms/confounds.py#L298>`_
+    <https://github.com/nipy/nipype/blob/f662acfce8def4717e0c3414618f3a5de5913b31/nipype/algorithms/confounds.py#L298>`__
 
     """
 
@@ -1843,7 +1879,7 @@ class Mean_stdDev_calc(ProcessMIA):
       parametric_maps must have the PatientName tag filled in.
 
     Please, see the complete documentation for the `Mean_stdDev_calc
-    brick in the populse.mia_processes website
+    brick in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/reports/Mean_stdDev_calc.html>`_
 
     """
@@ -2172,7 +2208,7 @@ class Mean_stdDev_calc(ProcessMIA):
 
 
 class Result_collector(ProcessMIA):
-    """
+    r"""
     *Save a file.xlm with the data collection for a patient*
 
     - To work correctly, the database entry for the first element of
@@ -2181,15 +2217,19 @@ class Result_collector(ProcessMIA):
       receive the results. If this directory exists at runtime, new results
       can overwrite old results with the same name.
     - To work correctly, the name of each file in parameter_files must be
-      exactly like this: roi_hemi_calcul_param_contrast.txt, where
-        - roi: region of interest (ex. ACA)
-        - hemi: hemisphere (ex. L)
-        - calcul: type of calcul (ex. mean)
-        - param: the parameter studied (ex. spmT)
-        - contrast: the type of contrast/effect used (ex. BOLD)
+      exactly like this:
+
+          ``roi`` _ ``hemi`` _ ``calcul`` _ ``param`` _ ``contrast`` .txt,
+          where:
+
+              - roi: region of interest (ex. ACA)
+              - hemi: hemisphere (ex. L)
+              - calcul: type of calcul (ex. mean)
+              - param: the parameter studied (ex. spmT)
+              - contrast: the type of contrast/effect used (ex. BOLD)
 
     Please, see the complete documentation for the `Result_collector
-    brick in the populse.mia_processes website
+    brick in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/reports/Result_collector.html>`_
 
     """
@@ -2670,7 +2710,7 @@ class Spikes(ProcessMIA):
     *Computes the number of spikes*
 
     Please, see the complete documentation for the `Spikes brick in the
-    populse.mia_processes website
+    mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/reports/Spikes.html>`_
 
     adapted from `mriqc spikes_mask function
@@ -2873,12 +2913,16 @@ class Spikes(ProcessMIA):
 def art_qi1(airmask, artmask):
     r"""
     Detect artifacts in the image using the method described in [Mortamet2009].
+
     Caculates :math:`\text{QI}_1`, as the proportion of voxels with intensity
     corrupted by artifacts normalized by the number of voxels in the
     background:
+
     .. math ::
         \text{QI}_1 = \frac{1}{N} \sum\limits_{x\in X_\text{art}} 1
+
     Lower values are better.
+
     :param numpy.ndarray airmask: input air mask, without artifacts
     :param numpy.ndarray artmask: input artifacts mask
     """
@@ -2896,10 +2940,13 @@ def art_qi2(img, airmask, min_voxels=int(1e3), max_voxels=int(3e5)):
     Calculates :math:`\text{QI}_2`, based on the goodness-of-fit of a centered
     :math:`\chi^2` distribution onto the intensity distribution of
     non-artifactual background (within the "hat" mask):
+
     .. math ::
         \chi^2_n = \frac{2}{(\sigma \sqrt{2})^{2n} \,
                             (n - 1)!}x^{2n - 1}\, e^{-\frac{x}{2}}
+
     where :math:`n` is the number of coil elements.
+
     :param numpy.ndarray img: input data
     :param numpy.ndarray airmask: input air mask without artifacts
     """
@@ -2956,11 +3003,14 @@ def cjv(mu_wm, mu_gm, sigma_wm, sigma_gm):
     related to :abbr:`SNR (Signal-to-Noise Ratio)` and
     :abbr:`CNR (Contrast-to-Noise Ratio)` that is presented as a proxy for
     the :abbr:`INU (intensity non-uniformity)` artifact [Ganzetti2016]_.
+
     Lower is better.
+
     .. math::
         \text{CJV} = \frac{\sigma_\text{WM} +
                            \sigma_\text{GM}}{|\mu_\text{WM} -
                            \mu_\text{GM}|}.
+
     :param float mu_wm: mean of signal within white-matter mask.
     :param float mu_gm: mean of signal within gray-matter mask.
     :param float sigma_wm: standard deviation of signal within
@@ -2975,14 +3025,17 @@ def cjv(mu_wm, mu_gm, sigma_wm, sigma_gm):
 def cnr(mu_wm, mu_gm, sigma_air):
     r"""
     Calculate the :abbr:`CNR (Contrast-to-Noise Ratio)` [Magnota2006]_.
+
     Higher values are better.
+
     .. math::
         \text{CNR} = \frac{|\mu_\text{GM} -
                            \mu_\text{WM} |}{\sqrt{\sigma_B^2 +
                            \sigma_\text{WM}^2 +
-                           \sigma_\text{GM}^2}},
+                           \sigma_\text{GM}^2}}
+
     where :math:`\sigma_B` is the standard deviation of the noise distribution
-    withinmthe air (background) mask.
+    within the air (background) mask.
 
     :param float mu_wm: mean of signal within white-matter mask.
     :param float mu_gm: mean of signal within gray-matter mask.
@@ -2997,19 +3050,25 @@ def cnr(mu_wm, mu_gm, sigma_air):
 def efc(img, framemask=None):
     r"""
     Calculate the :abbr:`EFC (Entropy Focus Criterion)` [Atkinson1997]_.
+
     Uses the Shannon entropy of voxel intensities as an indication of ghosting
     and blurring induced by head motion. A range of low values is better,
     with EFC = 0 for all the energy concentrated in one pixel.
+
     .. math::
         \text{E} = - \sum_{j=1}^N \frac{x_j}{x_\text{max}}
         \ln \left[\frac{x_j}{x_\text{max}}\right]
+
     with :math:`x_\text{max} = \sqrt{\sum_{j=1}^N x^2_j}`.
+
     The original equation is normalized by the maximum entropy, so that the
     :abbr:`EFC (Entropy Focus Criterion)` can be compared across images with
     different dimensions:
+
     .. math::
         \text{EFC} =
         \left( \frac{N}{\sqrt{N}} \, \log{\sqrt{N}^{-1}} \right) \text{E}
+
     :param numpy.ndarray img: input data
     :param numpy.ndarray framemask: a mask of empty voxels inserted after
                                     a rotation of data
@@ -3040,12 +3099,15 @@ def efc(img, framemask=None):
 
 def fber(img, headmask, rotmask=None):
     r"""
-    Calculate the
-    :abbr:`FBER (Foreground-Background Energy Ratio)` [Shehzad2015]_,
-    defined as the mean energy of image values within the head relative
-    to outside the head. Higher values are better.
+    Calculate the :abbr:`FBER (Foreground-Background Energy Ratio)`
+    [Shehzad2015]_, defined as the mean energy of image values within the
+    head relative to outside the head.
+
+    Higher values are better.
+
     .. math::
         \text{FBER} = \frac{E[|F|^2]}{E[|B|^2]}
+
     :param numpy.ndarray img: input data
     :param numpy.ndarray headmask: a mask of the head (including skull,
                                    skin, etc.)
@@ -3112,6 +3174,7 @@ def fuzzy_jaccard(in_tpms, in_mni_tpms):
 def gsr(epi_data, mask, direction="y", ref_file=None, out_file=None):
     """
     Compute the :abbr:`GSR (ghost to signal ratio)` [Giannelli2010]_.
+
     The procedure is as follows:
       #. Create a Nyquist ghost mask by circle-shifting the original
          mask by :math:`N/2`.
@@ -3119,11 +3182,13 @@ def gsr(epi_data, mask, direction="y", ref_file=None, out_file=None):
       #. Remove the intersection with the original mask
       #. Generate a non-ghost background
       #. Calculate the :abbr:`GSR (ghost to signal ratio)`
+
     .. warning ::
       This should be used with EPI images for which the phase
       encoding direction is known.
-    :param str epi_file: path to epi file
-    :param str mask_file: path to brain mask
+
+    :param str epi_data: path to epi file
+    :param str mask: path to brain mask
     :param str direction: the direction of phase encoding (x, y, all)
     :return: the computed gsr
     """
@@ -3169,12 +3234,10 @@ def gsr(epi_data, mask, direction="y", ref_file=None, out_file=None):
 def image_binary_dilation(in_mask, radius=2):
     """
     Dilate the input binary mask.
-    Parameters
-    ----------
-    in_mask: :obj:`numpy.ndarray`
-        A 3D binary array.
-    radius: :obj:`int`, optional
-        The radius of the ball-shaped footprint for dilation of the mask.
+
+    :param numpy.ndarray in_mask: a 3D binary array
+    :param int radius: the radius of the ball-shaped footprint for
+                       dilation of the mask (optional)
     """
     from scipy import ndimage as ndi
     from skimage.morphology import ball
@@ -3185,13 +3248,14 @@ def image_binary_dilation(in_mask, radius=2):
 def normalize_mc_params(params, source):
     """
     Normalize a single row of motion parameters to the SPM format.
+
     SPM saves motion parameters as:
-        x   Right-Left          (mm)
-        y   Anterior-Posterior  (mm)
-        z   Superior-Inferior   (mm)
-        rx  Pitch               (rad)
-        ry  Roll                (rad)
-        rz  Yaw                 (rad)
+      - x   Right-Left          (mm)
+      - y   Anterior-Posterior  (mm)
+      - z   Superior-Inferior   (mm)
+      - rx  Pitch               (rad)
+      - ry  Roll                (rad)
+      - rz  Yaw                 (rad)
     """
     if source.upper() == "FSL":
         params = params[[3, 4, 5, 0, 1, 2]]
@@ -3279,12 +3343,17 @@ def rpve(pvms, seg):
 def snr(mu_fg, sigma_fg, n):
     r"""
     Calculate the :abbr:`SNR (Signal-to-Noise Ratio)`.
+
     The estimation may be provided with only one foreground region in
     which the noise is computed as follows:
+
     .. math::
-        \text{SNR} = \frac{\mu_F}{\sigma_F\sqrt{n/(n-1)}},
-    where :math:`\mu_F` is the mean intensity of the foreground and
-    :math:`\sigma_F` is the standard deviation of the same region.
+        \text{SNR} = \frac{\mu_F}{\sigma_F\sqrt{n/(n-1)}}
+
+    where:
+     - :math:`\mu_F` is the mean intensity of the foreground
+     - :math:`\sigma_F` is the standard deviation of the same region
+
     :param float mu_fg: mean of foreground.
     :param float sigma_fg: standard deviation of foreground.
     :param int n: number of voxels in foreground mask.
@@ -3327,12 +3396,14 @@ def summary_stats(img, pvms, airmask=None, erode=True):
     r"""
     Estimates the mean, the standard deviation, the 95\%
     and the 5\% percentiles of each tissue distribution.
+
     .. warning ::
         Sometimes (with datasets that have been partially processed), the air
         mask will be empty. In those cases, the background stats will be zero
         for the mean, median, percentiles and kurtosis, the sum of voxels in
         the other remaining labels for ``n``, and finally the MAD and the
         :math:`\sigma` will be calculated as:
+
         .. math ::
             \sigma_\text{BG} = \sqrt{\sum \sigma_\text{i}^2}
     """
@@ -3405,9 +3476,11 @@ def volume_fraction(pvms):
     r"""
     Computes the :abbr:`ICV (intracranial volume)` fractions corresponding to
     the (partial volume maps).
+
     .. math ::
         \text{ICV}^k =
         \frac{\sum_i p^k_i}{\sum\limits_{x \in X_\text{brain}} 1}
+
     :param list pvms: list of :code:`numpy.ndarray` of partial volume maps.
     """
     tissue_vfs = {}
@@ -3429,6 +3502,7 @@ def wm2max(img, mu_wm):
     defined as the maximum intensity found in the volume w.r.t. the
     mean value of the white matter tissue. Values close to 1.0 are
     better:
+
     .. math ::
         \text{WM2MAX} = \frac{\mu_\text{WM}}{P_{99.95}(X)}
     """

@@ -95,7 +95,7 @@ class ApplyBiasCorrection(ProcessMIA):
     *Apply bias field correction to an input file using the bias image*
 
     Please, see the complete documentation for the 'ApplyBiasCorrection brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/ApplyMask.html>`_
 
     """
@@ -208,7 +208,7 @@ class ArtifactMask(ProcessMIA):
     *Computes the artifact mask*
 
     Please, see the complete documentation for the `ArtifactMask brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/ArtifactMask.html>`_
 
     adapted from
@@ -486,7 +486,7 @@ class Binarize(ProcessMIA):
     *Image binarization*
 
     Please, see the complete documentation for the `Binarize brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/Binarize.html>`_
 
     adapted from:
@@ -784,7 +784,7 @@ class ConformImage(ProcessMIA):
     *Conform T1w image to standard*
 
     Please, see the complete documentation for the `ConformImage brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/ConformImage.html>`_
 
     adapted from:
@@ -1034,7 +1034,7 @@ class ConvROI(ProcessMIA):
       parameter must have the "PatientName" tag filled in.
 
     Please, see the complete documentation for the `ConvROI brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/ConvROI.html>`_
     """
 
@@ -1216,7 +1216,7 @@ class Enhance(ProcessMIA):
     *Image enhancing*
 
     Please, see the complete documentation for the `Enhance brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/Enhance.html>`_
 
     adapted from:
@@ -1516,7 +1516,7 @@ class EstimateSNR(ProcessMIA):
     *Estimate SNR using a segmentation file*
 
     Please, see the complete documentation for the `EstimateSNR brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/EstimateSNR.html>`_
 
     adapted from:
@@ -1628,7 +1628,7 @@ class GradientThreshold(ProcessMIA):
     *Computes a threshold from the histogram of the magnitude gradient image*
 
     Please, see the complete documentation for the `GradientThreshold brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/GradientThreshold.html>`_
 
     adapted from:
@@ -1888,7 +1888,7 @@ class Harmonize(ProcessMIA):
     *Harmonize input image using a white matter mask*
 
     Please, see the complete documentation for the `Harmonize brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/Harmonize.html>`_
 
     adapted from:
@@ -2127,7 +2127,7 @@ class IntensityClip(ProcessMIA):
     *Clip the intensity range as prescribed by the percentiles*
 
     Please, see the complete documentation for the `IntensityClip brick in
-    the populse.mia_processes website
+    the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/IntensityClip.html>`_
 
     """
@@ -2307,7 +2307,7 @@ class Mask(ProcessMIA):
     *Apply a binary mask to an image*
 
     Please, see the complete documentation for the `Mask brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/Mask.html>`_
 
     adapted from:
@@ -2528,7 +2528,7 @@ class NonSteadyStateDetector(ProcessMIA):
     *Detect non-steady-state at the beginning of a bold 4D image*
 
     Please, see the complete documentation for the
-    `NonSteadyStateDetector brick in the populse.mia_processes website
+    `NonSteadyStateDetector brick in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/NonSteadyStateDetector.html>`_
 
     adapted from:
@@ -2627,7 +2627,7 @@ class Resample1(ProcessMIA):
     - Uses nibabel.processing.resample_from_to().
 
     Please, see the complete documentation for the
-    `Resample1 brick in the populse.mia_processes website
+    `Resample1 brick in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/Resample1.html>`_
 
     """
@@ -3173,7 +3173,7 @@ class Resample2(ProcessMIA):
       must have the "PatientName" tag filled in.
 
     Please, see the complete documentation for the
-    `Resample2 brick in the populse.mia_processes website
+    `Resample2 brick in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/Resample2.html>`_
     """
 
@@ -3360,7 +3360,7 @@ class RotationMask(ProcessMIA):
     *Compute the rotation mask image*
 
     Please, see the complete documentation for the
-    `RotationMask brick in the populse.mia_processes website
+    `RotationMask brick in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/RotationMask.html>`_
 
     adapted from:
@@ -3604,7 +3604,7 @@ class Sanitize(ProcessMIA):
     *Sanitize input bold image*
 
     Please, see the complete documentation for the
-    `Sanitize brick in the populse.mia_processes website
+    `Sanitize brick in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/Sanitize.html>`_
 
     adapted from:
@@ -3966,7 +3966,7 @@ class TSNR(ProcessMIA):
     *Computes the time-course SNR for a time series*
 
     Please, see the complete documentation for the
-    `TSNR brick in the populse.mia_processes website
+    `TSNR brick in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/TSNR.html>`_
 
     adapted from:
@@ -4296,7 +4296,7 @@ class TemplateFromTemplateFlow(ProcessMIA):
     *Get template image from templateflow*
 
     Please, see the complete documentation for the
-    `TemplateFromTemplateFlow brick in the populse.mia_processes website
+    `TemplateFromTemplateFlow brick in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/TemplateFromTemplateFlow.html>`_
 
     """
@@ -4444,7 +4444,7 @@ class Threshold(ProcessMIA):
     *Makes a binary mask image at a given threshold*
 
     Please, see the complete documentation for the
-    `Threshold brick in the populse.mia_processes website
+    `Threshold brick in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/Threshold.html>`_
 
     """
@@ -4793,15 +4793,17 @@ def artifact_mask(imdata, airdata, distance, zscore=10.0):
 
 def is_outlier(points, thresh=3.5):
     """
-    Returns a boolean array with True if points are outliers and False
-    otherwise.
+    *Returns a boolean array with True if points are outliers and False
+    otherwise*
+
     :param nparray points: an numobservations by numdimensions numpy array
         of observations
     :param float thresh: the modified z-score to use as a threshold.
         Observations with a modified z-score (based on the median absolute
         deviation) greater than this value will be classified as outliers.
     :return: A bolean mask, of size numobservations-length array.
-    .. note:: References
+
+    .. note::
         Boris Iglewicz and David Hoaglin (1993), "Volume 16: How to Detect and
         Handle Outliers", The ASQC Basic References in Quality Control:
         Statistical Techniques, Edward F. Mykytka, Ph.D., Editor.

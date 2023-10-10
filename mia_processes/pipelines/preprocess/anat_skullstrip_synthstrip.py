@@ -24,7 +24,7 @@ class Anat_skullstrip_synthstrip(Pipeline):
     <https://github.com/nipreps/mriqc/blob/5a0f0408bd0c176dbc46088c6ffe279269180f3f/mriqc/workflows/anatomical.py#L849>`_
 
     Please, see the complete documentation for the
-    `Anat_skullstrip_synthstrip pipeline in the populse.mia_processes website
+    `Anat_skullstrip_synthstrip pipeline in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/pipelines/preprocess/Anat_skullstrip_synthstrip.html>`_
 
 

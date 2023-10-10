@@ -20,7 +20,7 @@ class Bold_hmc(Pipeline):
     *Head-motion correction based on 3dvolreg from AFNI*
 
     Please, see the complete documentation for the
-    `Bold_hmc pipeline in the populse.mia_processes website
+    `Bold_hmc pipeline in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/pipelines/preprocess/Bold_hmc.html>`_
 
     """

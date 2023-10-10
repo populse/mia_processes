@@ -48,13 +48,13 @@ EXT = {"NIFTI_GZ": "nii.gz", "NIFTI": "nii", "MGZ": "mgz"}
 
 class Binarize(ProcessMIA):
     """
-    *Binarize a volume (or volume-encoded surface file) using \
-FreeSurfer mri_binarize.
+    *Binarize a volume (or volume-encoded surface file) using FreeSurfer
+    mri_binarize*
 
     Binarization can be done based on threshold or on matched values.
 
     Please, see the complete documentation for the `Binarize brick in
-    the populse.mia_processes website
+    the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/freesurfer/Binarize.html>`_
 
     """
@@ -433,7 +433,7 @@ class SynthStrip(ProcessMIA):
     *Skull stripping using SynthStrip*
 
     Please, see the complete documentation for the 'SynthStrip brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/freesurfer/SynthStrip.html>`_
 
     """
@@ -602,7 +602,7 @@ class SynthStripMriqc(ProcessMIA):
     https://github.com/freesurfer/freesurfer/blob/2995ded957961a7f3704de57eee88eb6cc30d52d/mri_synthstrip/mri_synthstrip
 
     Please, see the complete documentation for the 'SynthStripMriqc brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/freesurfer/SynthStripMriqc.html>`_
 
     """

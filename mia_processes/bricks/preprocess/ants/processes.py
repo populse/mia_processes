@@ -56,7 +56,7 @@ class AffineInitializer(ProcessMIA):
     *A multi-start optimizer for affine registration*
 
     Please, see the complete documentation for the `AffineInitializer brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/ants/AffineInitializer.html>`_
 
     """
@@ -252,7 +252,7 @@ class ApplyTransforms(ProcessMIA):
     (or set of transformation)*
 
     Please, see the complete documentation for the `ApplyTransforms brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/ants/ApplyTransforms.html>`_
 
     """
@@ -536,7 +536,7 @@ class N4BiasFieldCorrection(ProcessMIA):
     *N4 Bias field correction*
 
     Please, see the complete documentation for the `N4BiasFieldCorrection
-    brick in the populse.mia_processes website
+    brick in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/ants/N4BiasFieldCorrection.html>`_
 
     """
@@ -906,7 +906,7 @@ class Registration(ProcessMIA):
     *Registers a moving image to a fixed image*
 
     Please, see the complete documentation for the `Registration brick in
-    the populse.mia_processes website
+    the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/ants/Registration.html>`
 
     Here can be found some of classical registration parameters

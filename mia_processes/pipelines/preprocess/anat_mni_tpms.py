@@ -27,7 +27,7 @@ class Anat_mni_tpms(Pipeline):
     anatomical workflow.
 
     Please, see the complete documentation for the
-    `Anat_mni_tpms pipeline in the populse.mia_processes website
+    `Anat_mni_tpms pipeline in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/pipelines/preprocess/Anat_mni_tpms.html>`_
     """
 

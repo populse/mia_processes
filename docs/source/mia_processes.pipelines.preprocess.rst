@@ -73,6 +73,38 @@ mia\_processes.pipelines.preprocess.bold\_mni\_align module
    :undoc-members:
    :show-inheritance:
 
+mia\_processes.pipelines.preprocess.bold\_spatial\_preprocessing1 module
+------------------------------------------------------------------------
+
+.. automodule:: mia_processes.pipelines.preprocess.bold_spatial_preprocessing1
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+mia\_processes.pipelines.preprocess.bold\_spatial\_preprocessing2 module
+------------------------------------------------------------------------
+
+.. automodule:: mia_processes.pipelines.preprocess.bold_spatial_preprocessing2
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+mia\_processes.pipelines.preprocess.dwi\_fod\_msmt\_csd module
+--------------------------------------------------------------
+
+.. automodule:: mia_processes.pipelines.preprocess.dwi_fod_msmt_csd
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+mia\_processes.pipelines.preprocess.dwi\preprocessing module
+------------------------------------------------------------
+
+.. automodule:: mia_processes.pipelines.preprocess.dwi_preprocessing
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 mia\_processes.pipelines.preprocess.spatial\_mask module
 --------------------------------------------------------
 

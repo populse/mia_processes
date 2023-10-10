@@ -73,7 +73,7 @@ class ConstrainedSphericalDeconvolution(ProcessMIA):
 
     Please, see the complete documentation for the
     `ConstrainedSphericalDeconvolution brick in the
-    populse.mia_processes website
+    mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/ConstrainedSphericalDeconvolution.html>`_
     """
 
@@ -331,7 +331,7 @@ class DWIBiasCorrect(ProcessMIA):
     (dwibiascorrect command)*
 
     Please, see the complete documentation for the `DWIBiasCorrect brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/DWIBiasCorrect.html>`_
     """
 
@@ -509,7 +509,7 @@ class DWIBrainMask(ProcessMIA):
     (dwi2mask command)*
 
     Please, see the complete documentation for the `DWIBrainMask brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/DWIBrainMask.html>`_
     """
 
@@ -599,7 +599,7 @@ class DWIDenoise(ProcessMIA):
     threshold for PCA. (dwi denoise command)*
 
     Please, see the complete documentation for the `DWIDenoise brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/DWIDenoise.html>`_
     """
 
@@ -757,7 +757,7 @@ class DWIExtract(ProcessMIA):
     or certain shells from a DWI dataset (dwiextract command)*
 
     Please, see the complete documentation for the `DWIExtract brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/tools/mrtrix/DWIExtract.html>`_
     """
 
@@ -916,7 +916,7 @@ class DWIPreproc(ProcessMIA):
     tool if possible (dwifslpreproc command)*
 
     Please, see the complete documentation for the `DWIPreproc brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/DWIPreproc.html>`_
     """
 
@@ -1212,7 +1212,7 @@ class EditingTrack(ProcessMIA):
     (tckedit command)*
 
     Please, see the complete documentation for the `EditingTrack brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/EditingTrack.html>`_
     """
 
@@ -1582,7 +1582,7 @@ class FilteringTrack(ProcessMIA):
     (tcksift command)*
 
     Please, see the complete documentation for the `FilteringTrack brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/FilteringTrack.html>`_
     """
 
@@ -1976,7 +1976,7 @@ class FitTensor(ProcessMIA):
     (dwi2tensor command)*
 
     Please, see the complete documentation for the `FitTensor brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/FitTensor.html>`_
     """
 
@@ -2216,7 +2216,7 @@ class Generate5ttfsl(ProcessMIA):
     (5ttgen command)*
 
     Please, see the complete documentation for the `Generate5ttfsl brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/Generate5ttfsl.html>`_
     """
 
@@ -2381,7 +2381,7 @@ class Generate5tt2gmwmi(ProcessMIA):
     on the grey matter-white matter interface (5tt2gmwmi command)*
 
     Please, see the complete documentation for the `Generate5tt2gmwmi brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/Generate5tt2gmwmi.html>`_
     """
 
@@ -2482,7 +2482,7 @@ class MRCat(ProcessMIA):
     *Concatenate several images into one*
 
     Please, see the complete documentation for the `MRCat brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/tools/mrtrix/MRCat.html>`_
     """
 
@@ -2621,7 +2621,7 @@ class MRConvert(ProcessMIA):
     extract a subset of the input image. (mrconvert command)*
 
     Please, see the complete documentation for the `MRConvert brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/tools/mrtrix/MRConvert.html>`_
     """
 
@@ -2971,7 +2971,7 @@ class MRDeGibbs(ProcessMIA):
     *Remove Gibbs ringing artifacts. (mrdegibbs command)*
 
     Please, see the complete documentation for the `MRDeGibbs brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/MRDeGibbs.html>`_
     """
 
@@ -3126,7 +3126,7 @@ class MRMath(ProcessMIA):
     specified axis of a single image (mrmath command)*
 
     Please, see the complete documentation for the `MRMath brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/tools/mrtrix/MRMath.html>`_
     """
 
@@ -3279,7 +3279,7 @@ class MRTransform(ProcessMIA):
     *Apply spatial transformations or reslice images (mrtransform command)*
 
     Please, see the complete documentation for the `MRTransform brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/MRTransform.html>`_
     """
 
@@ -3605,7 +3605,7 @@ class MTNormalise(ProcessMIA):
     (mtnormalise command)*
 
     Please, see the complete documentation for the `MTNormalise brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/MTNormalise.html>`_
     """
 
@@ -3793,7 +3793,7 @@ class ResponseSDDhollander(ProcessMIA):
     the Dhollander algorithm (dwi2response command)*
 
     Please, see the complete documentation for the `ResponseSDDhollander brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/ResponseSDDhollander.html>`_
     """
 
@@ -4033,7 +4033,7 @@ class SphericalHarmonicExtraction(ProcessMIA):
 
     Please, see the complete documentation for the
     `SphericalHarmonicExtraction brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/SphericalHarmonicExtraction.html>`_
     """
 
@@ -4245,7 +4245,7 @@ class TensorMetrics(ProcessMIA):
     *Compute metrics from tensors (tensor2metric command)*
 
     Please, see the complete documentation for the `TensorMetrics brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/TensorMetrics.html>`_
     """
 
@@ -4640,7 +4640,7 @@ class Tractography(ProcessMIA):
     algorithm. (tckgen command)*
 
     Please, see the complete documentation for the `Tractography brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/Tractography.html>`_
     """
 
@@ -5307,7 +5307,7 @@ class TransformFSLConvert(ProcessMIA):
     to mrtrix3’s. (transformconvert command)*
 
     Please, see the complete documentation for the `TransformFSLConvert brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/mrtrix/TransformFSLConvert.html>`_
     """
 

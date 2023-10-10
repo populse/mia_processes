@@ -28,7 +28,7 @@ class Bold_spatial_preprocessing2(Pipeline):
     *Bold data pre-processing*
 
     Please, see the complete documentation for the
-    `Bold_spatial_preprocessing2 brick in the populse.mia_processes website
+    `Bold_spatial_preprocessing2 brick in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/pipelines/preprocess/Bold_spatial_preprocessing2.html>`_
 
     """

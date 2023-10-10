@@ -175,7 +175,7 @@ def dict4runtime_update(dict4runtime, database, db_filename, *args):
     :param database: the database object (for example: self.project.session)
     :param db_filename: the name of the database file from which the tag value
                         will be retrieved
-    args: the tags to be recovered
+    :param args: the tags to be recovered
 
     """
 
@@ -200,7 +200,7 @@ def get_dbFieldValue(project, document, field):
 
     :param project: the project.
     :param document: the absolute path of the document.
-    :param : the field name.
+    :param field: the field name.
     :returns: the value of the field for the document in the database.
     """
     file_position = (

@@ -26,7 +26,7 @@ class Anat_airmask(Pipeline):
     <https://onlinelibrary.wiley.com/doi/10.1002/mrm.21992>`_
 
     Please, see the complete documentation for the
-    `Anat_airmask pipeline in the populse.mia_processes website
+    `Anat_airmask pipeline in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/pipelines/preprocess/Anat_airmask.html>`_
 
     """

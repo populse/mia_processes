@@ -42,7 +42,7 @@ class BetSurfacesExtraction(ProcessMIA):
     *Surfaces (skull, inskull, outskull, outskin) extraction using BET (FSL)*
 
     Please, see the complete documentation for the `SurfacesExtraction brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/fsl/SurfacesExtraction.html>`_
     """
 
@@ -263,7 +263,7 @@ class ExtractROI(ProcessMIA):
     *Extract region of interest (ROI) from an image using FslROI*
 
     Please, see the complete documentation for the `ExtractROI brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/htmldocumentation/bricks/preprocess/fsl/ExtractROI.html>`_
 
     """
@@ -508,7 +508,7 @@ class FastSegment(ProcessMIA):
     *Brain tissue segmentation using fsl.FAST*
 
     Please, see the complete documentation for the `FastSegment brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/htmldocumentation/bricks/preprocess/fsl/FastSegment.html>`_
 
     """
@@ -743,7 +743,7 @@ class Flirt(ProcessMIA):
     using fsl FLIRT*
 
     Please, see the complete documentation for the `Flirt brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/htmldocumentation/bricks/preprocess/fsl/Flirt.html>`_
 
     """
@@ -1546,7 +1546,7 @@ class Smooth(ProcessMIA):
     *3D Gaussian smoothing of image volumes*
 
     Please, see the complete documentation for the `Smooth' brick in
-    the populse.mia_processes website
+    the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/fsl/Smooth.html>`_
 
     """

@@ -31,7 +31,7 @@ class Extract_roi_param(Pipeline):
     deviations, laterality indexes for beta and spmT values in these ROIs*
 
     Please, see the complete documentation for the `Extract_roi_param brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/pipelines/reports/Extract_roi_param.html>`_
 
     """

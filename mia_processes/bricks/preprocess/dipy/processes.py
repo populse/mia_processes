@@ -40,7 +40,7 @@ class Denoise(ProcessMIA):
     *Non-local means for denoising 3D images*
 
     Please, see the complete documentation for the `Denoise brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/dipy/Denoise.html>`_
 
     """

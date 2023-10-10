@@ -69,7 +69,7 @@ class Concat_to_list(ProcessMIA):
         ['a', 'b', 'c', 'd', 'e']
 
     Please, see the complete documentation for the `Concat_to_list brick in the
-    populse.mia_processes website
+    mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/tools/Concat_to_list.html>`_
 
     """
@@ -158,7 +158,7 @@ class Concat_to_list_of_list(ProcessMIA):
          ['c', '1'], ['c', '2']
 
     Please, see the complete documentation for the `Concat_to_list_of_list
-    brick in the populse.mia_processes website
+    brick in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/tools/Concat_to_list_of_list.html>`_
 
     """
@@ -257,7 +257,7 @@ class Delete_data(ProcessMIA):
     *Delete from database data*
 
     Please, see the complete documentation for the `Delete_data brick in the
-    populse.mia_processes website
+    mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/tools/Delete_data.html>`_
 
     """
@@ -400,7 +400,7 @@ class Files_To_List(ProcessMIA):
     *From 3 file names, generating a list containing all these file names*
 
     Please, see the complete documentation for the `Files_To_List brick in
-    the populse.mia_processes website
+    the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/tools/Files_To_List.html>`_
 
     """
@@ -511,7 +511,7 @@ class Filter_Files_List(ProcessMIA):
     *Selects one or more (slicing) element(s) from a list*
 
     Please, see the complete documentation for the `Filter_Files_List brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/tools/Filter_Files_List.html>`_
 
     """
@@ -649,7 +649,7 @@ class Find_In_List(ProcessMIA):
     *From a list of files, select the 1rst element that contains a pattern*
 
     Please, see the complete documentation for the `Find_In_List brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/tools/Find_In_List.html>`_
 
     """
@@ -747,7 +747,7 @@ class Get_Conditions_From_csv(ProcessMIA):
 
     Please, see the complete documentation for
     the `Get_Conditions_From_csv brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/tools/Get_Conditions_From_csv.html>`_
 
     """
@@ -942,7 +942,7 @@ class Get_Patient_Name(ProcessMIA):
     *Get patient name from a file*
 
     Please, see the complete documentation for the `Get_Patient_Name brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/tools/Get_Patient_Name.html>`_
 
     """
@@ -1266,7 +1266,7 @@ class Input_Filter(ProcessMIA):
     *To filter the Data Browser tab or the output data of another brick*
 
     Please, see the complete documentation for the
-    `Input_Filter in the populse.mia_processes website
+    `Input_Filter in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/tools/Input_Filter.html>`_
 
     """
@@ -1388,7 +1388,7 @@ class List_Duplicate(ProcessMIA):
     file name itself*
 
     Please, see the complete documentation for the
-    `List_Duplicate in the populse.mia_processes website
+    `List_Duplicate in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/tools/List_Duplicate.html>`_
 
     """
@@ -1467,7 +1467,7 @@ class List_To_File(ProcessMIA):
     *From several filenames, selects and generates a file*
 
     Please, see the complete documentation for the
-    `List_To_File in the populse.mia_processes website
+    `List_To_File in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/tools/List_To_File.html>`_
 
     """
@@ -1571,7 +1571,7 @@ class Make_A_List(ProcessMIA):
     *From 2 objects, generating a list containing all these objects*
 
     Please, see the complete documentation for the
-    `Make_A_List in the populse.mia_processes website
+    `Make_A_List in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/tools/Make_A_List.html>`_
 
     """

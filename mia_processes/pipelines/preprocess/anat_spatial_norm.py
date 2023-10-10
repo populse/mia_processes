@@ -25,7 +25,7 @@ class Anat_spatial_norm(Pipeline):
     <https://github.com/nipreps/mriqc/blob/5a0f0408bd0c176dbc46088c6ffe279269180f3f/mriqc/workflows/anatomical.py#L282>`_
 
     Please, see the complete documentation for the
-    `Anat_spatial_norm pipeline in the populse.mia_processes website
+    `Anat_spatial_norm pipeline in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/pipelines/preprocess/Anat_spatial_norm.html>`_
 
     """

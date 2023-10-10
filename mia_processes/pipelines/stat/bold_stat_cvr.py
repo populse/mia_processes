@@ -28,7 +28,7 @@ class Bold_stat_cvr(Pipeline):
     *GLM-based statistical calculation pipeline used in the CVR evaluation*
 
     Please, see the complete documentation for the `Bold_stat_cvr pipeline
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/pipelines/stat/Bold_stat_cvr.html>`_
 
     """

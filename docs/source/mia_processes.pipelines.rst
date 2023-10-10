@@ -12,6 +12,8 @@ Subpackages
 .. toctree::
    :maxdepth: 4
 
+   mia_processes.pipelines.CerebVascularReact
+   mia_processes.pipelines.DWITractography
    mia_processes.pipelines.preprocess
    mia_processes.pipelines.qualityControl
    mia_processes.pipelines.reports

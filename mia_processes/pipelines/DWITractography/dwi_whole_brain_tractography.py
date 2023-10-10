@@ -26,7 +26,7 @@ class Dwi_whole_brain_tractography(Pipeline):
 
     Please, see the complete documentation for the
     `Dwi_whole_brain_tractography pipeline in
-    the populse.mia_processes website:
+    the mia_processes website:
     <https://populse.github.io/mia_processes/html/documentation/pipelines/DwiTractography/Dwi_whole_brain_tractography.html>`_
     """
 

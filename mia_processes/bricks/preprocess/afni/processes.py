@@ -66,7 +66,7 @@ class Automask(ProcessMIA):
     *Create a brain-only mask of the image using AFNI 3dAutomask command*
 
     Please, see the complete documentation for the `Automask brick in
-    the populse.mia_processes website
+    the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/afni/Automask.html>`_
 
     """
@@ -283,7 +283,7 @@ class Calc(ProcessMIA):
     *Voxel-by-voxel arithmetic on 3D datasets*
 
     Please, see the complete documentation for the `Calc brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/afni/Calc.html>`_
 
     """
@@ -520,7 +520,7 @@ class CalcDropTRs(ProcessMIA):
     *DropTRs of bold datasets (using AFNI 3dCalc command)*
 
     Please, see the complete documentation for the `CalcDropTRs brick in
-    the populse.mia_processes website
+    the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/afni/CalcDropTRs.html>`_
 
     """
@@ -711,7 +711,7 @@ class Despike(ProcessMIA):
     *Removes ‘spikes’ from the 3D+time input dataset*
 
     Please, see the complete documentation for the `Despike brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/afni/Despike.html>`_
 
     """
@@ -862,7 +862,7 @@ class FWHMx(ProcessMIA):
 separately*
 
     Please, see the complete documentation for the `FWHMx brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/afni/FWHMx.html>`_
     """
 
@@ -1015,7 +1015,7 @@ class GCOR(ProcessMIA):
 voxel, over any given mask*
 
     Please, see the complete documentation for the `GCOR brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/afni/GCOR.html>`_
 
     """
@@ -1153,7 +1153,7 @@ class OutlierCount(ProcessMIA):
 separately*
 
     Please, see the complete documentation for the `OutlierCount brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/afni/OutlierCount.html>`_
 
     """
@@ -1374,7 +1374,7 @@ class QualityIndex(ProcessMIA):
     *Computes a quality index for each sub-brick in a 3D+time dataset*
 
     Please, see the complete documentation for the `QualityIndex brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/afni/QualityIndex.html>`_
 
     """
@@ -1566,7 +1566,7 @@ class RefitDeoblique(ProcessMIA):
     *Deoblique dataset*
 
     Please, see the complete documentation for the `RefitDeoblique brick in
-    the populse.mia_processes website
+    the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/afni/RefitDeoblique.html>`_
 
     """
@@ -1656,7 +1656,7 @@ class SkullStrip(ProcessMIA):
     *From MRI T1-weighted images, extract the brain from surrounding tissue*
 
     Please, see the complete documentation for the `SkullStrip brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/afni/SkullStrip.html>`_
 
     """
@@ -1792,7 +1792,7 @@ class TShift(ProcessMIA):
     *Slice-time correction of bold images*
 
     Please, see the complete documentation for the `TShift brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/afni/TShift.html>`_
 
     """
@@ -2138,7 +2138,7 @@ class TStatMean(ProcessMIA):
     *Mean of bold images (using AFNI 3dTstat)*
 
     Please, see the complete documentation for the `TStatMean brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/afni/TStatMean.html>`_
 
     """
@@ -2276,7 +2276,7 @@ class Volreg(ProcessMIA):
     *Register an input volume to a base volume using AFNI 3dvolreg*
 
     Please, see the complete documentation for the `Volreg brick in
-    the populse.mia_processes website
+    the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/afni/Volreg.html>`_
 
     """

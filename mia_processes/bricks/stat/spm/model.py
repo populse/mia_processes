@@ -63,7 +63,7 @@ class EstimateContrast(ProcessMIA):
     *Estimate contrasts of interest*
 
     Please, see the complete documentation for the `EstimateContrast brick in
-    the populse.mia_processes website
+    the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/stats/spm/EstimateContrast.html>`_
 
     """
@@ -568,7 +568,7 @@ class EstimateModel(ProcessMIA):
     Maximum Likelihood)*
 
     Please, see the complete documentation for the `EstimateModel brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/stats/spm/EstimateModel.html>`_
 
     """
@@ -1235,7 +1235,7 @@ class Level1Design(ProcessMIA):
     *Specification of the GLM design matrix, fMRI data files and filtering*
 
     Please, see the complete documentation for the `Level1Design brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/stats/spm/LevelDesign.html>`_
 
     """
@@ -2278,7 +2278,7 @@ class MultipleRegressionDesign(ProcessMIA):
     *Create SPM design for multiple regression*
 
     Please, see the complete documentation for the `MultipleRegressionDesign
-    brick in the populse.mia_processes website
+    brick in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/stats/spm/MultipleRegressionDesign.html>`_
 
     """
@@ -2727,7 +2727,7 @@ class OneSampleTTestDesign(ProcessMIA):
     *Create SPM design for one sample t-test*
 
     Please, see the complete documentation for the `OneSampleTTestDesign brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/stats/spm/OneSampleTTestDesign.html>`_
 
     """
@@ -3098,7 +3098,7 @@ class PairedTTestDesign(ProcessMIA):
     *Create SPM design for one sample t-test*
 
     Please, see the complete documentation for the `OneSampleTTestDesign brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/stats/spm/OneSampleTTestDesign.html>`_
 
     """
@@ -3473,7 +3473,7 @@ class TwoSampleTTestDesign(ProcessMIA):
     *Create SPM design for two sample t-test*
 
     Please, see the complete documentation for the `TwoSampleTTestDesign brick
-    in the populse.mia_processes website
+    in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/bricks/stats/spm/TwoSampleTTestDesign.html>`_
 
     """

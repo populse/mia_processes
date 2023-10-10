@@ -27,7 +27,7 @@ class CO2_inhalation(Pipeline):
     *CVR measurement under hypercapnia challenge*
 
     Please, see the complete documentation for the
-    `CO2_inhalation pipeline in the populse.mia_processes website:
+    `CO2_inhalation pipeline in the mia_processes website:
     <https://populse.github.io/mia_processes/html/documentation/pipelines/CerebVascularReact/CO2_inhalation.html>`_
     """
 
