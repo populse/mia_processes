@@ -1,0 +1,194 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>ComputeDKI brick &#8212; mia_processes 2.3.1-dev+f9b09e87 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+  </head><body>
+      <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
+          <span>mia_processes 2.3.1-dev+f9b09e87 documentation</span></a></h1>
+        <h2 class="heading"><span>ComputeDKI brick</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content" role="main">
+        
+        
+  <div class="toctree-wrapper compound">
+</div>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 35%" />
+<col style="width: 40%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference external" href="../../../../index.html">Home</a></p></td>
+<td><p><a class="reference external" href="../../../documentation.html">Documentation</a></p></td>
+<td><p><a class="reference external" href="https://github.com/populse/mia_processes">GitHub</a></p></td>
+</tr>
+</tbody>
+</table>
+<section id="computedki-brick">
+<h1>ComputeDKI brick<a class="headerlink" href="#computedki-brick" title="Permalink to this headline">¶</a></h1>
+<section id="reconstruction-of-the-diffusion-signal-with-the-kurtosis-tensor-model">
+<h2>Reconstruction of the diffusion signal with the kurtosis tensor model<a class="headerlink" href="#reconstruction-of-the-diffusion-signal-with-the-kurtosis-tensor-model" title="Permalink to this headline">¶</a></h2>
+<p>The diffusion kurtosis imaging (DKI) model is an expansion of the diffusion tensor imaging (DTI) model
+that allows quantification of the degree to which water diffusion in biological tissues is non-Gaussian.</p>
+<p>This brick used functions proposed by Dipy to reconstruct the diffusion signal with the kurtosis tensor model.</p>
+<p>Since the diffusion kurtosis model estimates the diffusion tensor, all standard diffusion tensor statistics can be computed:
+the fractional anisotropy (FA), the mean diffusivity (MD), the axial diffusivity (AD) and the radial diffusivity (RD).</p>
+<p>In addition to the standard diffusion statistics, this brick can be used to estimate the non-Gaussian measures of mean kurtosis (MK),
+the axial kurtosis (AK) and the radial kurtosis (RK).</p>
+<p>The mean of the kurtosis tensor (mKT) and the kurtosis fractional anisotropy (kFA) are also computed. These measures only depend on the kurtosis tensor.</p>
+<hr class="docutils" />
+<p><strong>Mandatory inputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>in_dwi</em> (a string representing an existing file)</dt><dd><p>Diffusion file (valid extensions: [.nii, .nii.gz]).
+It should be multi-shell data, i.e. data acquired from more than one non-zero b-value.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/dwi.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>dwi_bvec</em> (a string representing an existing file)</dt><dd><p>Bvec file (valid extensions: [.bvec]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/dwi.bvec&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>dwi_bval</em> (a string representing an existing file)</dt><dd><p>Bval file (valid extensions: [.bval]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/dwi.bval&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>in_mask</em> (a string representing an existing file)</dt><dd><p>Brain mask file (valid extensions: [.nii, .nii.gz]).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/dwi_brainmask.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Outputs parameters:</strong></p>
+<ul>
+<li><dl>
+<dt><em>out_FA</em> (a strings representing a file)</dt><dd><p>The fractional anisotropy (FA) image</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/dwi_dki_FA.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>out_MD</em> (a strings representing a file)</dt><dd><p>The mean diffusivity (MD) image</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/dwi_dki_MD.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>out_RD</em> (a strings representing a file)</dt><dd><p>The radial diffusivity (RD) image</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/dwi_dki_RD.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>out_AD</em> (a strings representing a file)</dt><dd><p>The axial diffusivity (AD) image</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/dwi_dki_AD.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>out_MK</em> (a strings representing a file)</dt><dd><p>The mean kurtosis (MK) image</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/dwi_dki_MK.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>out_RK</em> (a strings representing a file)</dt><dd><p>The radial kurtosis (RK) image</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/dwi_dki_RK.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>out_AK</em> (a strings representing a file)</dt><dd><p>The axial kurtosis (AK) image</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/dwi_dki_AK.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>out_mKT</em> (a strings representing a file)</dt><dd><p>The mean of the kurtosis tensor (mKT) image</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/dwi_dki_mKT.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt><em>out_kFA</em> (a strings representing a file)</dt><dd><p>The kurtosis fractional anisotropy (kFA) image</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/derived_data/dwi_dki_kFA.nii&#39;</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+</ul>
+<hr class="docutils" />
+<p>Usefull links:</p>
+<p><a class="reference external" href="https://dipy.org/documentation/1.7.0/examples_built/07_reconstruction/reconst_dki/#sphx-glr-examples-built-07-reconstruction-reconst-dki-py">Dipy Reconstruction of the diffusion signal with the kurtosis tensor model</a></p>
+<p><a class="reference external" href="https://pubmed.ncbi.nlm.nih.gov/15906300/">Jensen JH 2005</a></p>
+</section>
+</section>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        <a class="uplink" href="../../../../index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </div>
+  </body>
+</html>
