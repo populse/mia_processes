@@ -19,7 +19,7 @@ class Dwi_tissue_boundaries(Pipeline):
     *DWI create tissue boudadiries with a T1w*
 
     Please, see the complete documentation for the
-    `Dwi_tissue_boundaries pipeline in the populse.mia_processes website
+    `Dwi_tissue_boundaries pipeline in the mia_processes website
     <https://populse.github.io/mia_processes/html/documentation/pipelines/preprocess/Dwi_tissue_boundaries.html>`_
 
     """
