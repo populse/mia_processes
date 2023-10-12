@@ -41,6 +41,7 @@ To use certain mia_processes bricks (atomic processes), `third-party softwares u
     - **dipy**
 
       - `Denoise <bricks/preprocess/dipy/Denoise.html>`_
+      - `ComputeDKI <bricks/preprocess/dipy/ComputeDKI.html>`_
 
     - **freesurfer**
 
