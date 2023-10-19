@@ -785,9 +785,7 @@ class DWIExtract(ProcessMIA):
             "Specify one or more gradient shells "
             "(a list of items which are a float)"
         )
-        singleshell_desc = (
-            "Extract volumes with a specific shell" "(a boolean)"
-        )
+        singleshell_desc = "Extract volumes with a specific shell (a boolean)"
 
         # Output description
         out_file_desc = (
@@ -2030,7 +2028,7 @@ class FitTensor(ProcessMIA):
             "string representing a file)"
         )
         out_b0_desc = (
-            "Out b0 image (a pathlike object or " "string representing a file)"
+            "Out b0 image (a pathlike object or string representing a file)"
         )
         predicted_signal_file_desc = (
             "Out predicted signal "
@@ -4737,7 +4735,7 @@ class Tractography(ProcessMIA):
             "(an integer, default is 0.1)."
         )
         tracto_seed_unidirectional_desc = (
-            "Track from the seed point in one direction only" "(a boolean)"
+            "Track from the seed point in one direction only (a boolean)"
         )
         tracto_seed_direction_desc = (
             "Specify a seeding direction for the tracking "

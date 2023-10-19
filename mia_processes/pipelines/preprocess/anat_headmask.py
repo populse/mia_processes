@@ -31,15 +31,15 @@ class Anat_headmask(Pipeline):
         # nodes
         self.add_process(
             "estimateSNR",
-            "mia_processes.bricks.preprocess." "others.processing.EstimateSNR",
+            "mia_processes.bricks.preprocess.others.processing.EstimateSNR",
         )
         self.add_process(
             "denoise",
-            "mia_processes.bricks.preprocess." "dipy.processes.Denoise",
+            "mia_processes.bricks.preprocess.dipy.processes.Denoise",
         )
         self.add_process(
             "enhance",
-            "mia_processes.bricks.preprocess." "others.processing.Enhance",
+            "mia_processes.bricks.preprocess.others.processing.Enhance",
         )
         self.add_process(
             "gradient_threshold",

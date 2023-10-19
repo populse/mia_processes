@@ -90,7 +90,7 @@ class Concat_to_list(ProcessMIA):
 
         # Outputs description
         out_list_desc = (
-            "A list corresponding to the concatenation of list1 " "and list2"
+            "A list corresponding to the concatenation of list1 and list2"
         )
 
         # Inputs traits

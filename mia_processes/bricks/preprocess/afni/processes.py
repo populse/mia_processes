@@ -86,7 +86,7 @@ class Automask(ProcessMIA):
 
         # Mandatory inputs description
         in_file_desc = (
-            "Input file (a pathlike object or string " "representing a file)."
+            "Input file (a pathlike object or string representing a file)."
         )
         # Optional inputs with default value description
         clfrac_desc = (
@@ -315,7 +315,7 @@ class Calc(ProcessMIA):
             "representing a file)."
         )
         expr_desc = (
-            "Arithmetic expression to apply between a, b and c " "(a string)."
+            "Arithmetic expression to apply between a, b and c (a string)."
         )
         output_type_desc = (
             "Typecodes of the output image formats (one "
@@ -327,11 +327,11 @@ class Calc(ProcessMIA):
             "(a string)."
         )
         single_idx_desc = (
-            "Volume index for in_file_a." "(an integer or Undefined)"
+            "Volume index for in_file_a (an integer or Undefined)."
         )
         start_idx_desc = (
             "Start index for in_file_a (an integer"
-            "or Undefined). Requires inputs: stop_idx"
+            "or Undefined). Requires inputs: stop_idx."
         )
         stop_idx_desc = (
             "Stop index for in_file_a (an integer or Undefined)."
@@ -647,9 +647,7 @@ class CalcDropTRs(ProcessMIA):
                     )
 
                     if not valid_ext:
-                        print(
-                            "\nThe input image format is" " not recognized...!"
-                        )
+                        print("\nThe input image format is not recognized...!")
                         return
                     else:
                         self.outputs["out_file"] = os.path.join(
@@ -687,7 +685,7 @@ class CalcDropTRs(ProcessMIA):
             FileNotFoundError,
             TypeError,
         ) as e:
-            print("\nError while opening input file" ": ", e)
+            print("\nError while opening input file: ", e)
             return
 
         self.process.in_file_a = self.in_file
@@ -816,9 +814,7 @@ class Despike(ProcessMIA):
                     )
 
                     if not valid_ext:
-                        print(
-                            "\nThe input image format is" " not recognized...!"
-                        )
+                        print("\nThe input image format is not recognized...!")
                         return
                     else:
                         self.outputs["out_file"] = os.path.join(
@@ -1035,10 +1031,10 @@ voxel, over any given mask*
 
         # Inputs description
         in_file_desc = (
-            "Input image (a pathlike object or string " "representing a file)."
+            "Input image (a pathlike object or string representing a file)."
         )
         mask_file_desc = (
-            "Mask image (a pathlike object or string " "representing a file)."
+            "Mask image (a pathlike object or string representing a file)."
         )
         nfirst_desc = "Specify number of initial TRs to ignore"
         no_demean_desc = "Do not (need to) demean as first step."
@@ -1173,7 +1169,7 @@ separately*
 
         # Inputs description
         in_file_desc = (
-            "Input image (a pathlike object or string " "representing a file)."
+            "Input image (a pathlike object or string representing a file)."
         )
         automask_desc = (
             "Clip off small voxels (a boolean). "
@@ -1194,7 +1190,7 @@ separately*
             "with automask and autoclip"
         )
         fraction_desc = (
-            "Combine the final measurements " "along each axis (a bool)."
+            "Combine the final measurements along each axis (a bool)."
         )
         interval_desc = (
             "Write out the median + 3.5 MAD of outlier "
@@ -1394,7 +1390,7 @@ class QualityIndex(ProcessMIA):
 
         # Inputs description
         in_file_desc = (
-            "A bold file (a pathlike object or string " "representing a file)."
+            "A bold file (a pathlike object or string representing a file)."
         )
         automask_desc = (
             "Clip off small voxels (a boolean). "
@@ -1586,7 +1582,7 @@ class RefitDeoblique(ProcessMIA):
 
         # Inputs description
         in_file_desc = (
-            "Input file (a pathlike object or string " "representing a file)."
+            "Input file (a pathlike object or string representing a file)."
         )
         deoblique_desc = "Deoblique dataset only if true (boolean)."
 
@@ -1752,7 +1748,7 @@ class SkullStrip(ProcessMIA):
                 valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
 
                 if not valid_ext:
-                    print("\nThe input image format is" " not recognized...!")
+                    print("\nThe input image format is not recognized...!")
                     return
                 else:
                     self.outputs["out_file"] = os.path.join(
@@ -1829,7 +1825,7 @@ class TShift(ProcessMIA):
             "output filename (a string)."
         )
         rlt_desc = (
-            "Before shifting, remove the mean and linear trend" "(a boolean)"
+            "Before shifting, remove the mean and linear trend (a boolean)"
         )
         rltplus_desc = (
             "Before shifting, remove the mean and linear trend "
@@ -1845,9 +1841,7 @@ class TShift(ProcessMIA):
             "corresponds to slice index zero."
         )
         # Optional inputs description
-        ignore_desc = (
-            "Ignore the first set of points specified." "(an integer)"
-        )
+        ignore_desc = "Ignore the first set of points specified (an integer)."
         slice_timing_desc = (
             "Time offsets from the volume acquisition onset"
             "for each slice. (a string representing an"
@@ -2075,9 +2069,7 @@ class TShift(ProcessMIA):
                     )
 
                     if not valid_ext:
-                        print(
-                            "\nThe input image format is" " not recognized...!"
-                        )
+                        print("\nThe input image format is not recognized...!")
                         return
                     else:
                         self.outputs["out_file"] = os.path.join(
@@ -2234,7 +2226,7 @@ class TStatMean(ProcessMIA):
                 valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
 
                 if not valid_ext:
-                    print("\nThe input image format is" " not recognized...!")
+                    print("\nThe input image format is not recognized...!")
                     return
                 else:
                     self.outputs["out_file"] = os.path.join(
@@ -2485,7 +2477,7 @@ class Volreg(ProcessMIA):
                 valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
 
                 if not valid_ext:
-                    print("\nThe input image format is" " not recognized...!")
+                    print("\nThe input image format is not recognized...!")
                     return
                 else:
                     self.outputs["out_file"] = os.path.join(

@@ -85,7 +85,7 @@ class Denoise(ProcessMIA):
         patch_radius_desc = "Patch radius (an integer). Default is 1."
         # Optional inputs description
         in_mask_desc = (
-            "Brain mask (a pathlike " "object or string representing a file)."
+            "Brain mask (a pathlike object or string representing a file)."
         )
         noise_mask_desc = (
             "Mask in which the mean signal will"
@@ -201,7 +201,7 @@ class Denoise(ProcessMIA):
                 valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
 
                 if not valid_ext:
-                    print("\nThe input image format is" " not recognized...!")
+                    print("\nThe input image format is not recognized...!")
                     return
                 else:
                     self.outputs["out_file"] = os.path.join(
@@ -269,10 +269,10 @@ class ComputeDKI(ProcessMIA):
             "representing a file)."
         )
         dwi_bvec_desc = (
-            "Bvec file (a pathlike object or string " "representing a file)."
+            "Bvec file (a pathlike object or string representing a file)."
         )
         dwi_bval_desc = (
-            "Bval file (a pathlike object or string " "representing a file)."
+            "Bval file (a pathlike object or string representing a file)."
         )
         in_mask_desc = (
             "Brain mask (a pathlike object or string representing a file)."
@@ -280,31 +280,31 @@ class ComputeDKI(ProcessMIA):
 
         # Outputs description
         out_FA_desc = (
-            "FA file (a pathlike object or a " "string representing a file)."
+            "FA file (a pathlike object or a string representing a file)."
         )
         out_MD_desc = (
-            "MD file (a pathlike object or a " "string representing a file)."
+            "MD file (a pathlike object or a string representing a file)."
         )
         out_AD_desc = (
-            "AD file (a pathlike object or a " "string representing a file)."
+            "AD file (a pathlike object or a string representing a file)."
         )
         out_RD_desc = (
-            "RD file (a pathlike object or a " "string representing a file)."
+            "RD file (a pathlike object or a string representing a file)."
         )
         out_MK_desc = (
-            "MK file (a pathlike object or a " "string representing a file)."
+            "MK file (a pathlike object or a string representing a file)."
         )
         out_AK_desc = (
-            "AK file (a pathlike object or a " "string representing a file)."
+            "AK file (a pathlike object or a string representing a file)."
         )
         out_RK_desc = (
-            "AK file (a pathlike object or a " "string representing a file)."
+            "AK file (a pathlike object or a string representing a file)."
         )
         out_kFA_desc = (
-            "kFA file (a pathlike object or a " "string representing a file)."
+            "kFA file (a pathlike object or a string representing a file)."
         )
         out_mKT_desc = (
-            "mKT file (a pathlike object or a " "string representing a file)."
+            "mKT file (a pathlike object or a string representing a file)."
         )
 
         # Mandatory inputs traits

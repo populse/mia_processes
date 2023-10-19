@@ -330,7 +330,7 @@ class ApplyTransforms(ProcessMIA):
             "(a float, a float))"
         )
         invert_transform_flags_desc = (
-            "Invert transform flags " "(a list of boolean)"
+            "Invert transform flags (a list of boolean)"
         )
 
         # Outputs description
@@ -394,7 +394,7 @@ class ApplyTransforms(ProcessMIA):
                 "HammingWindowedSinc",
                 "LanczosWindowedSinc",
                 "MultiLabel",
-                "Gaussian" "BSpline",
+                "Gaussian BSpline",
                 default="Linear",
                 output=False,
                 optional=True,
@@ -577,11 +577,11 @@ class N4BiasFieldCorrection(ProcessMIA):
             "user-specified mask (a boolean)."
         )
         save_bias_desc = (
-            "Save the estimated bias in a file (a boolean). " "Default is True"
+            "Save the estimated bias in a file (a boolean). Default is True"
         )
         # Optional inputs description
         bspline_fitting_distance_desc = (
-            "Set bspline fitting distance " "(a float)"
+            "Set bspline fitting distance (a float)"
         )
         bspline_order_desc = (
             "bspline order (an integer). "
@@ -604,7 +604,7 @@ class N4BiasFieldCorrection(ProcessMIA):
             "object or string representing a file)"
         )
         n_iterations_desc = (
-            "Number of iterations (convergence option) " "(a list of integer)"
+            "Number of iterations (convergence option) (a list of integer)"
         )
         shrink_factor_desc = "Shrink factor (an integer)."
         weight_image_desc = (
@@ -619,7 +619,7 @@ class N4BiasFieldCorrection(ProcessMIA):
             "string representing a file)."
         )
         negative_values_desc = (
-            "True if negative values are present in" "False otherwise."
+            "True if negative values are present in in_file, False otherwise."
         )
         out_file_desc = (
             "The corrected file (a pathlike object or a "
@@ -941,7 +941,7 @@ class Registration(ProcessMIA):
         )
         # Optional inputs  whith default value description
         collapse_output_transforms_desc = (
-            "Collapse output transforms " "(a boolean). Default is True"
+            "Collapse output transforms (a boolean). Default is True"
         )
         dimension_desc = "Image dimension (3 or 2). Default is 3."
         float_desc = (
@@ -983,7 +983,7 @@ class Registration(ProcessMIA):
             "(A list of floats)."
         )
         output_inverse_warped_image_desc = (
-            "Get inverse_warped image " "(a boolean). Default is False"
+            "Get inverse_warped image (a boolean). Default is False"
         )
         out_prefix_desc = (
             "Specify the string to be prepended to the "
@@ -991,7 +991,7 @@ class Registration(ProcessMIA):
             "(a string)."
         )
         radius_bins_item_trait_desc = (
-            "Radius bins item (an interger). " "Default is 5"
+            "Radius bins item (an interger). Default is 5"
         )
         sigma_units_desc = (
             "Units for smoothing sigmas (mm or vox). "
@@ -1035,7 +1035,7 @@ class Registration(ProcessMIA):
             "1.0). Default is 0.995."
         )
         write_composite_transform_desc = (
-            "Write composite transform (a " "boolean). Default is True"
+            "Write composite transform (a boolean). Default is True"
         )
         # Optional inputs description
         convergence_threshold_desc = (
@@ -1044,7 +1044,7 @@ class Registration(ProcessMIA):
             "Requires inputs: number_of_iterations"
         )
         convergence_window_size_desc = (
-            "Convergence window size " "(a list of integer)"
+            "Convergence window size (a list of integer)"
         )
         fixed_image_masks_desc = (
             "Mask used to limit metric sampling region "
@@ -1132,7 +1132,7 @@ class Registration(ProcessMIA):
             "(a list of integers)"
         )
         random_seed_desc = (
-            "Fixed seed for random number generation. " "(an integer)"
+            "Fixed seed for random number generation. (an integer)"
         )
 
         # Outputs description

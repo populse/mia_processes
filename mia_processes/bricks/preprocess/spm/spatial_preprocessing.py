@@ -112,7 +112,7 @@ class Coregister(ProcessMIA):
         jobtype_desc = "One of 'estwrite' or 'estimate' or 'write'."
         cost_function_desc = "One of 'mi' or 'nmi' or 'ecc' or 'ncc'."
         separation_desc = (
-            "Sampling separation in mm (a list of items which" " are a float)."
+            "Sampling separation in mm (a list of items which are a float)."
         )
         tolerance_desc = (
             "The acceptable tolerance for each of 12 params (a"
@@ -2873,7 +2873,7 @@ class SliceTiming(ProcessMIA):
                 else:
                     msg = QMessageBox()
                     msg.setIcon(QMessageBox.Warning)
-                    msg.setWindowTitle("Mia_processes - SliceTiming " "Error!")
+                    msg.setWindowTitle("Mia_processes - SliceTiming Error!")
                     msg.setText(
                         "Warning: It was not possible to determine the "
                         "ref_slice parameter automatically. Please "
@@ -3036,10 +3036,10 @@ class Smooth(ProcessMIA):
             "which are a float)."
         )
         data_type_desc = (
-            "Data type of the output images " "(an integer [int or long])."
+            "Data type of the output images (an integer [int or long])."
         )
         implicit_masking_desc = (
-            "A mask implied by a particular voxel value " "(a boolean)."
+            "A mask implied by a particular voxel value (a boolean)."
         )
         out_prefix_desc = (
             "Specify the string to be prepended to the "

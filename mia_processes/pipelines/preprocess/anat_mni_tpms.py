@@ -36,7 +36,7 @@ class Anat_mni_tpms(Pipeline):
         # nodes
         self.add_process(
             "get_patient_name",
-            "mia_processes.bricks.tools." "Get_Patient_Name",
+            "mia_processes.bricks.tools.Get_Patient_Name",
         )
         self.add_process(
             "template_CSF",
@@ -104,10 +104,10 @@ class Anat_mni_tpms(Pipeline):
             is_optional=False,
         )
         self.add_link(
-            "inverse_composite_transform->" "applytransforms_CSF.transforms"
+            "inverse_composite_transform->applytransforms_CSF.transforms"
         )
         self.add_link(
-            "inverse_composite_transform->" "applytransforms_GM.transforms"
+            "inverse_composite_transform->applytransforms_GM.transforms"
         )
         self.add_link("template_CSF.template->applytransforms_CSF.input_image")
         self.add_link(

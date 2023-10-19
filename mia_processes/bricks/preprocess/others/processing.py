@@ -608,7 +608,7 @@ class Binarize(ProcessMIA):
                     msg = QMessageBox()
                     msg.setIcon(QMessageBox.Warning)
                     msg.setWindowTitle(
-                        "mia_processes - " "Binarize brick Warning!"
+                        "mia_processes - Binarize brick Warning!"
                     )
                     msg.setText(
                         "Suffix and prefix input parameters are not "
@@ -1539,7 +1539,7 @@ class EstimateSNR(ProcessMIA):
 
         # Inputs description
         in_file_desc = (
-            "Input file (a pathlike object or string " "representing a file)."
+            "Input file (a pathlike object or string representing a file)."
         )
         seg_file_desc = (
             "A segmentation file to calculate SNR (a pathlike "
@@ -1547,7 +1547,7 @@ class EstimateSNR(ProcessMIA):
         )
         # Outputs description
         out_snr_desc = (
-            "Estimated SNR" "(a pathlike object or string representing a file"
+            "Estimated SNR (a pathlike object or string representing a file"
         )
 
         # Inputs traits
@@ -1735,7 +1735,7 @@ class GradientThreshold(ProcessMIA):
                 msg = QMessageBox()
                 msg.setIcon(QMessageBox.Warning)
                 msg.setWindowTitle(
-                    "mia_processes - " "GradientThreshold brick Warning!"
+                    "mia_processes - GradientThreshold brick Warning!"
                 )
                 msg.setText(
                     "Suffix and prefix input parameters are not "
@@ -2001,9 +2001,7 @@ class Harmonize(ProcessMIA):
             ):
                 msg = QMessageBox()
                 msg.setIcon(QMessageBox.Warning)
-                msg.setWindowTitle(
-                    "mia_processes - " "Harmonize brick Warning!"
-                )
+                msg.setWindowTitle("mia_processes - Harmonize brick Warning!")
                 msg.setText(
                     "Suffix and prefix input parameters are not "
                     "defined or consist only of one or more white "
@@ -2415,7 +2413,7 @@ class Mask(ProcessMIA):
             ):
                 msg = QMessageBox()
                 msg.setIcon(QMessageBox.Warning)
-                msg.setWindowTitle("mia_processes - " "Mask brick Warning!")
+                msg.setWindowTitle("mia_processes - Mask brick Warning!")
                 msg.setText(
                     "Suffix and prefix input parameters are not "
                     "defined or consist only of one or more white "
@@ -2489,7 +2487,7 @@ class Mask(ProcessMIA):
             TypeError,
         ) as e:
             print(
-                "\nMask brick: Error with files to mask, during " "the run: ",
+                "\nMask brick: Error with files to mask, during the run: ",
                 e,
             )
             img = None
@@ -2553,7 +2551,7 @@ class NonSteadyStateDetector(ProcessMIA):
         in_file_desc = "An existing path file."
 
         # Outputs description
-        n_volumes_to_discard_desc = "Number of non steady" "state volumes"
+        n_volumes_to_discard_desc = "Number of non steady state volumes"
 
         # Inputs traits
         self.add_trait(
@@ -3631,7 +3629,7 @@ class Sanitize(ProcessMIA):
         suffix_desc = "Suffix of the output image (a string)."
         n_volumes_to_discard_desc = "number of non steady-state volumes"
         max_32bit_desc = (
-            "cast data to float32 if higher precision is " "encountered"
+            "cast data to float32 if higher precision is encountered"
         )
         # Outputs description
         out_file_desc = (
@@ -3723,9 +3721,7 @@ class Sanitize(ProcessMIA):
             ):
                 msg = QMessageBox()
                 msg.setIcon(QMessageBox.Warning)
-                msg.setWindowTitle(
-                    "mia_processes - " "Sanitize brick Warning!"
-                )
+                msg.setWindowTitle("mia_processes - Sanitize brick Warning!")
                 msg.setText(
                     "Suffix and prefix input parameters are not "
                     "defined or consist only of one or more white "
@@ -4231,7 +4227,7 @@ class TSNR(ProcessMIA):
             TypeError,
         ) as e:
             print(
-                "\nTSNR brick: Error with files to mask, during the " "run: ",
+                "\nTSNR brick: Error with files to mask, during the run: ",
                 e,
             )
             img = None
@@ -4468,7 +4464,7 @@ class Threshold(ProcessMIA):
             "to existing path files."
         )
         threshold_desc = (
-            "Value for the applied threshold (a float between 0 " "and 1)."
+            "Value for the applied threshold (a float between 0 and 1)."
         )
         GM_filtering_desc = (
             "Filtering (based on the keyword c1) to keep only "
@@ -4621,7 +4617,7 @@ class Threshold(ProcessMIA):
                     msg = QMessageBox()
                     msg.setIcon(QMessageBox.Warning)
                     msg.setWindowTitle(
-                        "mia_processes - " "Threshold brick Warning!"
+                        "mia_processes - Threshold brick Warning!"
                     )
                     msg.setText(
                         "Suffix and prefix input parameters are not "

@@ -78,19 +78,19 @@ class ReportAnatMriqc(ProcessMIA):
         )
 
         anat_fig_rows_desc = (
-            "The number of lines for the anatomical slice " "planes plot"
+            "The number of lines for the anatomical slice planes plot"
         )
 
         anat_fig_cols_desc = (
-            "The number of columns for the anatomical slice " "planes plot"
+            "The number of columns for the anatomical slice planes plot"
         )
 
         anat_inf_slice_start_desc = (
-            "The first index displayed in anatomical " "slice planes plot"
+            "The first index displayed in anatomical slice planes plot"
         )
 
         anat_slices_gap_desc = (
-            "Gap between slices in anatomical slice planes " "plot"
+            "Gap between slices in anatomical slice planes plot"
         )
 
         air_mask_desc = "Air mask"
@@ -123,7 +123,7 @@ class ReportAnatMriqc(ProcessMIA):
         )
 
         norm_anat_slices_gap_desc = (
-            "Gap between slices in normalised " "anatomical slice planes plot"
+            "Gap between slices in normalised anatomical slice planes plot"
         )
 
         segmentation_desc = "Segmentation file"
@@ -356,7 +356,7 @@ class ReportAnatMriqc(ProcessMIA):
                     self.dict4runtime["PatientName"]
                     if self.dict4runtime["PatientName"] != "Undefined"
                     else "Undefined_name_ref",
-                    datetime.now().strftime("%Y_%m_%d_" "%H_%M_%S_%f")[:22],
+                    datetime.now().strftime("%Y_%m_%d_%H_%M_%S_%f")[:22],
                 ),
             )
 
@@ -499,7 +499,7 @@ class ReportAnatMriqc(ProcessMIA):
                 "closer to 0 are better.",
             ],
             "summary_csf_mean": [
-                "Mean of the distribution of cerebrospinal " "fluid",
+                "Mean of the distribution of cerebrospinal fluid",
                 2,
                 None,
             ],
@@ -510,7 +510,7 @@ class ReportAnatMriqc(ProcessMIA):
                 None,
             ],
             "summary_csf_median": [
-                "Median of the distribution of " "cerebrospinal fluid",
+                "Median of the distribution of cerebrospinal fluid",
                 2,
                 None,
             ],
@@ -521,17 +521,17 @@ class ReportAnatMriqc(ProcessMIA):
                 None,
             ],
             "summary_csf_p95": [
-                "95% percentile of the distribution of " "cerebrospinal fluid",
+                "95% percentile of the distribution of cerebrospinal fluid",
                 2,
                 None,
             ],
             "summary_csf_p05": [
-                "5% percentile of the distribution of " "cerebrospinal fluid",
+                "5% percentile of the distribution of cerebrospinal fluid",
                 2,
                 None,
             ],
             "summary_csf_k": [
-                "Kurtosis of the distribution of " "cerebrospinal fluid",
+                "Kurtosis of the distribution of cerebrospinal fluid",
                 2,
                 "*",
                 "K is always ≥ -2. If the distribution is "
@@ -553,7 +553,7 @@ class ReportAnatMriqc(ProcessMIA):
                 None,
             ],
             "summary_gm_stdv": [
-                "Standard deviation of the distribution of " "gray matter",
+                "Standard deviation of the distribution of gray matter",
                 2,
                 None,
             ],
@@ -563,22 +563,22 @@ class ReportAnatMriqc(ProcessMIA):
                 None,
             ],
             "summary_gm_mad": [
-                "Median absolute deviation of the distribution" " gray matter",
+                "Median absolute deviation of the distribution gray matter",
                 2,
                 None,
             ],
             "summary_gm_p95": [
-                "95% percentile of the distribution of " "gray matter",
+                "95% percentile of the distribution of gray matter",
                 2,
                 None,
             ],
             "summary_gm_p05": [
-                "5% percentile of the distribution of " "gray matter",
+                "5% percentile of the distribution of gray matter",
                 2,
                 None,
             ],
             "summary_gm_k": [
-                "Kurtosis of the distribution of " "gray matter",
+                "Kurtosis of the distribution of gray matter",
                 2,
                 "*",
                 "K is always ≥ -2. If the distribution is "
@@ -589,7 +589,7 @@ class ReportAnatMriqc(ProcessMIA):
                 "center and tails, then K > 0.",
             ],
             "summary_gm_n": [
-                "Number of voxels in the distribution of gray " "matter",
+                "Number of voxels in the distribution of gray matter",
                 "{:.2e}",
                 None,
             ],
@@ -599,7 +599,7 @@ class ReportAnatMriqc(ProcessMIA):
                 None,
             ],
             "summary_wm_stdv": [
-                "Standard deviation of the distribution of " "white matter",
+                "Standard deviation of the distribution of white matter",
                 2,
                 None,
             ],
@@ -615,12 +615,12 @@ class ReportAnatMriqc(ProcessMIA):
                 None,
             ],
             "summary_wm_p95": [
-                "95% percentile of the distribution of " "white matter",
+                "95% percentile of the distribution of white matter",
                 2,
                 None,
             ],
             "summary_wm_p05": [
-                "5% percentile of the distribution of white " "matter",
+                "5% percentile of the distribution of white matter",
                 2,
                 None,
             ],
@@ -636,7 +636,7 @@ class ReportAnatMriqc(ProcessMIA):
                 "center and tails, then K > 0.",
             ],
             "summary_wm_n": [
-                "Number of voxels in the distribution of white " "matter",
+                "Number of voxels in the distribution of white matter",
                 "{:.2e}",
                 None,
             ],
@@ -646,7 +646,7 @@ class ReportAnatMriqc(ProcessMIA):
                 None,
             ],
             "summary_bg_stdv": [
-                "Standard deviation of the distribution of " "background",
+                "Standard deviation of the distribution of background",
                 2,
                 None,
             ],
@@ -656,17 +656,17 @@ class ReportAnatMriqc(ProcessMIA):
                 None,
             ],
             "summary_bg_mad": [
-                "Median absolute deviation of the distribution" " background",
+                "Median absolute deviation of the distribution background",
                 2,
                 None,
             ],
             "summary_bg_p95": [
-                "95% percentile of the distribution of " "background",
+                "95% percentile of the distribution of background",
                 2,
                 None,
             ],
             "summary_bg_p05": [
-                "5% percentile of the distribution of " "background",
+                "5% percentile of the distribution of background",
                 2,
                 None,
             ],
@@ -682,7 +682,7 @@ class ReportAnatMriqc(ProcessMIA):
                 "center and tails, then K > 0.",
             ],
             "summary_bg_n": [
-                "Number of voxels in the distribution of " "background",
+                "Number of voxels in the distribution of background",
                 "{:.2e}",
                 None,
             ],
@@ -749,7 +749,7 @@ class ReportAnatMriqc(ProcessMIA):
                 None,
             ],
             "rpve_csf": [
-                "Residual partial voluming error for cerebrospinal " "fluid",
+                "Residual partial voluming error for cerebrospinal fluid",
                 2,
                 "%",
                 "Lower values are better.",
@@ -856,7 +856,7 @@ class ReportFuncMriqc(ProcessMIA):
         IQMs_file_desc = "A .JSON file containing the IQMs"
 
         IQMs_plot_desc = (
-            "A figure with carpet and " "outliers/dvars/FD/spikes plot"
+            "A figure with carpet and outliers/dvars/FD/spikes plot"
         )
 
         func_desc = "An existing, functional image file"
@@ -864,19 +864,19 @@ class ReportFuncMriqc(ProcessMIA):
         func_mean_desc = "An existing, mean functional image file"
 
         func_fig_rows_desc = (
-            "The number of lines for the functional slice " "planes plot"
+            "The number of lines for the functional slice planes plot"
         )
 
         func_fig_cols_desc = (
-            "The number of columns for the functional slice " "planes plot"
+            "The number of columns for the functional slice planes plot"
         )
 
         func_inf_slice_start_desc = (
-            "The first index displayed in functional " "slice planes plot"
+            "The first index displayed in functional slice planes plot"
         )
 
         func_slices_gap_desc = (
-            "Gap between slices in functional slice planes " "plot"
+            "Gap between slices in functional slice planes plot"
         )
 
         norm_func_desc = (
@@ -901,7 +901,7 @@ class ReportFuncMriqc(ProcessMIA):
         )
 
         norm_func_slices_gap_desc = (
-            "Gap between slices in normalised " "functional slice planes plot"
+            "Gap between slices in normalised functional slice planes plot"
         )
 
         stddev_func_desc = "Functional standard deviation image"
@@ -1124,7 +1124,7 @@ class ReportFuncMriqc(ProcessMIA):
                     self.dict4runtime["PatientName"]
                     if self.dict4runtime["PatientName"] != "Undefined"
                     else "Undefined_name_ref",
-                    datetime.now().strftime("%Y_%m_%d_" "%H_%M_%S_%f")[:22],
+                    datetime.now().strftime("%Y_%m_%d_%H_%M_%S_%f")[:22],
                 ),
             )
 
@@ -1201,7 +1201,7 @@ class ReportFuncMriqc(ProcessMIA):
                 None,
             ],
             "summary_bg_stdv": [
-                "Standard deviation of the distribution of " "background",
+                "Standard deviation of the distribution of background",
                 "{:.2e}",
                 None,
             ],
@@ -1217,12 +1217,12 @@ class ReportFuncMriqc(ProcessMIA):
                 None,
             ],
             "summary_bg_p95": [
-                "95% percentile of the distribution of " "background",
+                "95% percentile of the distribution of background",
                 "{:.2e}",
                 None,
             ],
             "summary_bg_p05": [
-                "5% percentile of the distribution of " "background",
+                "5% percentile of the distribution of background",
                 2,
                 None,
             ],
@@ -1238,7 +1238,7 @@ class ReportFuncMriqc(ProcessMIA):
                 "center and tails, then K > 0.",
             ],
             "summary_bg_n": [
-                "Number of voxels in the distribution " "of background",
+                "Number of voxels in the distribution of background",
                 "{:.2e}",
                 None,
             ],
@@ -1248,7 +1248,7 @@ class ReportFuncMriqc(ProcessMIA):
                 None,
             ],
             "summary_fg_stdv": [
-                "Standard deviation of the distribution of " "foreground",
+                "Standard deviation of the distribution of foreground",
                 "{:.2e}",
                 None,
             ],
@@ -1264,12 +1264,12 @@ class ReportFuncMriqc(ProcessMIA):
                 None,
             ],
             "summary_fg_p95": [
-                "95% percentile of the distribution of " "foreground",
+                "95% percentile of the distribution of foreground",
                 "{:.2e}",
                 None,
             ],
             "summary_fg_p05": [
-                "5% percentile of the distribution of " "foreground",
+                "5% percentile of the distribution of foreground",
                 "{:.2e}",
                 None,
             ],
@@ -1285,7 +1285,7 @@ class ReportFuncMriqc(ProcessMIA):
                 "center and tails, then K > 0.",
             ],
             "summary_fg_n": [
-                "Number of voxels in the distribution " "of foreground",
+                "Number of voxels in the distribution of foreground",
                 "{:.2e}",
                 None,
             ],
@@ -1548,9 +1548,9 @@ class ReportGroupMriqc(ProcessMIA):
             #        or to put them in the input parameters of the brick:
             # Site
             if dict4runtime_file["Site"] in ("", "Undefined"):
-                dict4runtime_file["Site"] = (
-                    "Grenoble University Hospital" "- CLUNI"
-                )
+                dict4runtime_file[
+                    "Site"
+                ] = "Grenoble University Hospital - CLUNI"
 
             # MriScanner
             if dict4runtime_file["Spectro"] in ("", "Undefined"):
@@ -1571,9 +1571,7 @@ class ReportGroupMriqc(ProcessMIA):
                 "mriqc_group_report_" + self.modality + date + ".tsv",
             )
         else:
-            print(
-                "No output_directory was found," "please select a project!\n"
-            )
+            print("No output_directory was found, please select a project!\n")
             return
 
         # FIXME: Do we need tags inheritance ?

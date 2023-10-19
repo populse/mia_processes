@@ -44,7 +44,7 @@ class Bold_mni_align(Pipeline):
         )
         self.add_process(
             "registration",
-            "mia_processes.bricks.preprocess." "ants.processes.Registration",
+            "mia_processes.bricks.preprocess.ants.processes.Registration",
         )
         self.nodes["registration"].process.fixed_image_masks = traits.Undefined
         self.nodes["registration"].process.convergence_threshold = [
@@ -249,10 +249,10 @@ class Bold_mni_align(Pipeline):
             "registration", "warped_image", "epi_mni", is_optional=False
         )
         self.add_link(
-            "n4biasfieldcorrection.out_file->" "registration.moving_image"
+            "n4biasfieldcorrection.out_file->registration.moving_image"
         )
         self.add_link(
-            "n4biasfieldcorrection.out_file->" "affineinitializer.moving_image"
+            "n4biasfieldcorrection.out_file->affineinitializer.moving_image"
         )
         self.export_parameter(
             "n4biasfieldcorrection", "bias_image", is_optional=True

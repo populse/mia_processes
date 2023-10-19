@@ -43,7 +43,7 @@ class Anat_mriqc(Pipeline):
         )
         self.add_process(
             "segment",
-            "mia_processes.bricks.preprocess." "fsl.processes.FastSegment",
+            "mia_processes.bricks.preprocess.fsl.processes.FastSegment",
         )
         self.add_process(
             "anat_spatial_norm",
@@ -52,11 +52,11 @@ class Anat_mriqc(Pipeline):
         )
         self.add_process(
             "anat_headmask",
-            "mia_processes.bricks.preprocess" ".fsl.BetSurfacesExtraction",
+            "mia_processes.bricks.preprocess.fsl.BetSurfacesExtraction",
         )
         self.add_process(
             "anat_airmask",
-            "mia_processes.pipelines.preprocess." "anat_airmask.Anat_airmask",
+            "mia_processes.pipelines.preprocess.anat_airmask.Anat_airmask",
         )
         self.add_process(
             "anat_mni_tpms_pipeline",
@@ -68,7 +68,7 @@ class Anat_mriqc(Pipeline):
         )
         self.add_process(
             "harmonize",
-            "mia_processes.bricks.preprocess." "others.processing.Harmonize",
+            "mia_processes.bricks.preprocess.others.processing.Harmonize",
         )
         self.add_process("fwhmx", "mia_processes.bricks.preprocess.afni.FWHMx")
         self.nodes["fwhmx"].plugs["detrend"].optional = True
@@ -77,7 +77,7 @@ class Anat_mriqc(Pipeline):
         )
         self.add_process(
             "mriqc_anat_report",
-            "mia_processes.bricks.reports." "reporting.ReportAnatMriqc",
+            "mia_processes.bricks.reports.reporting.ReportAnatMriqc",
         )
 
         # links
@@ -86,7 +86,7 @@ class Anat_mriqc(Pipeline):
         )
         self.add_link("anat_file->mriqc_anat_report.anat")
         self.add_link(
-            "conformimage.out_file->" "anat_skullstrip_pipeline.in_file"
+            "conformimage.out_file->anat_skullstrip_pipeline.in_file"
         )
         self.add_link("conformimage.out_file->anatiqms.in_ras")
         self.add_link("conformimage.out_file->fwhmx.in_file")
@@ -94,7 +94,7 @@ class Anat_mriqc(Pipeline):
         self.add_link("conformimage.out_file->anat_airmask.in_file")
         self.add_link("anat_skullstrip_pipeline.out_brain->segment.in_file")
         self.add_link(
-            "anat_skullstrip_pipeline.out_mask_synthstrip->" "fwhmx.mask_file"
+            "anat_skullstrip_pipeline.out_mask_synthstrip->fwhmx.mask_file"
         )
         self.add_link(
             "anat_skullstrip_pipeline.out_mask_synthstrip->"
@@ -109,10 +109,10 @@ class Anat_mriqc(Pipeline):
             "mriqc_anat_report.brain_mask"
         )
         self.add_link(
-            "anat_skullstrip_pipeline.out_corrected" "->harmonize.in_file"
+            "anat_skullstrip_pipeline.out_corrected->harmonize.in_file"
         )
         self.add_link(
-            "anat_skullstrip_pipeline.out_corrected->" "anat_headmask.in_file"
+            "anat_skullstrip_pipeline.out_corrected->anat_headmask.in_file"
         )
         self.add_link(
             "anat_skullstrip_pipeline.out_corrected->"
@@ -121,7 +121,7 @@ class Anat_mriqc(Pipeline):
         self.add_link("anat_skullstrip_pipeline.bias_image->anatiqms.in_inu")
         self.add_link("segment.tissue_class_map->anatiqms.segmentation")
         self.add_link(
-            "segment.tissue_class_map->" "mriqc_anat_report.segmentation"
+            "segment.tissue_class_map->mriqc_anat_report.segmentation"
         )
         self.add_link("segment.partial_volume_files->list_to_file.file_list")
         self.add_link("segment.partial_volume_files->anatiqms.pvms")
@@ -134,10 +134,10 @@ class Anat_mriqc(Pipeline):
             "anat_airmask.inverse_composite_transform"
         )
         self.add_link(
-            "anat_spatial_norm.warped_image->" "mriqc_anat_report.norm_anat"
+            "anat_spatial_norm.warped_image->mriqc_anat_report.norm_anat"
         )
         self.add_link(
-            "anat_headmask.outskin_mask_file->" "anat_airmask.head_mask"
+            "anat_headmask.outskin_mask_file->anat_airmask.head_mask"
         )
         self.add_link("anat_headmask.outskin_mask_file->anatiqms.headmask")
         self.add_link("anat_airmask.out_hat_mask->anatiqms.hatmask")
@@ -145,7 +145,7 @@ class Anat_mriqc(Pipeline):
         self.add_link("anat_airmask.out_air_mask->anatiqms.airmask")
         self.add_link("anat_airmask.out_rot_mask->anatiqms.rotmask")
         self.add_link(
-            "anat_headmask.outskin_mask_file->" "mriqc_anat_report.head_mask"
+            "anat_headmask.outskin_mask_file->mriqc_anat_report.head_mask"
         )
         self.add_link("anat_airmask.out_art_mask->mriqc_anat_report.art_mask")
         self.add_link("anat_airmask.out_air_mask->mriqc_anat_report.air_mask")

@@ -54,7 +54,7 @@ class Anat_skullstrip_synthstrip(Pipeline):
             "ants.processes.N4BiasFieldCorrection",
         )
         self.add_process(
-            "mask", "mia_processes.bricks.preprocess." "others.processing.Mask"
+            "mask", "mia_processes.bricks.preprocess.others.processing.Mask"
         )
 
         self.nodes["pre_n4biasfieldcor"].process.dimension = 3
@@ -77,9 +77,7 @@ class Anat_skullstrip_synthstrip(Pipeline):
         self.add_link("pre_n4biasfieldcor.out_file->synthstrip.in_file")
         self.add_link("pre_clip.out_file->pre_n4biasfieldcor.in_file")
         self.add_link("pre_clip.out_file->post_n4biasfieldcor.in_file")
-        self.add_link(
-            "synthstrip.out_mask->" "post_n4biasfieldcor.weight_image"
-        )
+        self.add_link("synthstrip.out_mask->post_n4biasfieldcor.weight_image")
         self.add_link("synthstrip.out_mask->mask.mask_file")
         self.add_link("post_n4biasfieldcor.out_file->mask.in_file")
         self.export_parameter(

@@ -36,7 +36,7 @@ class Anat_airmask(Pipeline):
         # nodes
         self.add_process(
             "get_patient_name",
-            "mia_processes.bricks.tools." "Get_Patient_Name",
+            "mia_processes.bricks.tools.Get_Patient_Name",
         )
         self.add_process(
             "rotationmask",
@@ -85,9 +85,9 @@ class Anat_airmask(Pipeline):
         self.export_parameter(
             "rotationmask", "out_file", "out_rot_mask", is_optional=False
         )
-        self.add_link("rotationmask.out_file->" "artifactmask.rot_mask")
+        self.add_link("rotationmask.out_file->artifactmask.rot_mask")
         self.add_link(
-            "applytransforms.output_image->" "artifactmask.nasion_post_mask"
+            "applytransforms.output_image->artifactmask.nasion_post_mask"
         )
         self.export_parameter(
             "artifactmask", "out_hat_mask", is_optional=False

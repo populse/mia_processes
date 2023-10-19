@@ -116,7 +116,7 @@ class Report:
 
         elif "mriqc_group" in kwargs:
             self.make_report = self.mriqc_group_make_report
-            self.title = "<font size=18><b>MRIQc" "group report</b></font>"
+            self.title = "<font size=18><b>MRIQc group report</b></font>"
 
             self.header_title = (
                 "<sup rise=20 size=9>$</sup>"
@@ -471,7 +471,7 @@ class Report:
         #######################################################################
         self.report.append(
             Paragraph(
-                "<font size = 18 ><b>Image parameters" "</b></font>",
+                "<font size = 18 ><b>Image parameters </b></font>",
                 self.styles["Center"],
             )
         )
@@ -582,7 +582,7 @@ class Report:
         #######################################################################
         self.report.append(
             Paragraph(
-                "<font size = 18 ><b>Image parameters" "</b></font>",
+                "<font size = 18 ><b>Image parameters </b></font>",
                 self.styles["Center"],
             )
         )
@@ -594,7 +594,7 @@ class Report:
         # Spatial distribution ##############################################
         self.report.append(
             Paragraph(
-                "<font size = 15 ><b>SPATIAL DISTRIBUTION" "</b></font>",
+                "<font size = 15 ><b>SPATIAL DISTRIBUTION </b></font>",
                 self.styles["Bullet1"],
             )
         )
@@ -616,7 +616,7 @@ class Report:
         # Artifacts #########################################################
         self.report.append(
             Paragraph(
-                "<font size = 15 ><b>ARTIFACTS" "</b></font>",
+                "<font size = 15 ><b>ARTIFACTS </b></font>",
                 self.styles["Bullet1"],
             )
         )
@@ -667,7 +667,7 @@ class Report:
         #######################################################################
         self.report.append(
             Paragraph(
-                "<font size = 18 ><b>Image parameters" "</b></font>",
+                "<font size = 18 ><b>Image parameters </b></font>",
                 self.styles["Center"],
             )
         )
@@ -679,7 +679,7 @@ class Report:
         # Tissues Quality ###################################################
         self.report.append(
             Paragraph(
-                "<font size = 15 ><b>TISSUES QUALITY" "</b></font>",
+                "<font size = 15 ><b>TISSUES QUALITY </b></font>",
                 self.styles["Bullet1"],
             )
         )
@@ -827,7 +827,7 @@ class Report:
         #######################################################################
         self.report.append(
             Paragraph(
-                "<font size = 18 ><b>Image parameters</b>" "</font>",
+                "<font size = 18 ><b>Image parameters</b> </font>",
                 self.styles["Center"],
             )
         )
@@ -839,7 +839,7 @@ class Report:
         # Tissues Quality ###################################################
         self.report.append(
             Paragraph(
-                "<font size = 15 ><b>TISSUES QUALITY</b>" "</font>",
+                "<font size = 15 ><b>TISSUES QUALITY</b> </font>",
                 self.styles["Bullet1"],
             )
         )
@@ -917,7 +917,7 @@ class Report:
         self.report.append(Spacer(0 * mm, 10 * mm))
         self.report.append(
             Paragraph(
-                "<font size = 14 >Raw anatomic " "images</font>",
+                "<font size = 14 >Raw anatomic images</font>",
                 self.styles["Center"],
             )
         )
@@ -966,7 +966,7 @@ class Report:
         self.report.append(Spacer(0 * mm, 10 * mm))
         self.report.append(
             Paragraph(
-                "<font size = 14 >Normalised anatomic " "(MNI)</font>",
+                "<font size = 14 >Normalised anatomic (MNI)</font>",
                 self.styles["Center"],
             )
         )
@@ -1279,7 +1279,7 @@ class Report:
         #######################################################################
         self.report.append(
             Paragraph(
-                "<font size = 18 ><b>Image parameters" "</b></font>",
+                "<font size = 18 ><b>Image parameters </b></font>",
                 self.styles["Center"],
             )
         )
@@ -1381,7 +1381,7 @@ class Report:
         #######################################################################
         self.report.append(
             Paragraph(
-                "<font size = 18 ><b>Image parameters" "</b></font>",
+                "<font size = 18 ><b>Image parameters </b></font>",
                 self.styles["Center"],
             )
         )
@@ -1493,7 +1493,7 @@ class Report:
         #######################################################################
         self.report.append(
             Paragraph(
-                "<font size = 18 ><b>Image parameters" "</b></font>",
+                "<font size = 18 ><b>Image parameters </b></font>",
                 self.styles["Center"],
             )
         )
@@ -1550,7 +1550,7 @@ class Report:
         #######################################################################
         self.report.append(
             Paragraph(
-                "<font size = 18 > <b>Summary plot " "</b> </font>",
+                "<font size = 18 > <b>Summary plot </b> </font>",
                 self.styles["Center"],
             )
         )
@@ -1651,7 +1651,7 @@ class Report:
         self.report.append(Spacer(0 * mm, 10 * mm))
         self.report.append(
             Paragraph(
-                "<font size = 14 >Normalised mean " "functional (MNI)</font>",
+                "<font size = 14 >Normalised mean functional (MNI)</font>",
                 self.styles["Center"],
             )
         )
@@ -1788,7 +1788,7 @@ class Report:
         #######################################################################
         self.report.append(
             Paragraph(
-                "<font size = 18 > <b>MRI " "display</b> </font>",
+                "<font size = 18 > <b>MRI display</b> </font>",
                 self.styles["Center"],
             )
         )

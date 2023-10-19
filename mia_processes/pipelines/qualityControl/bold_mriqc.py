@@ -33,7 +33,7 @@ class Bold_mriqc(Pipeline):
         # nodes
         self.add_process(
             "bold_iqms_pipeline",
-            "mia_processes.pipelines.reports.bold_iqms." "Bold_iqms",
+            "mia_processes.pipelines.reports.bold_iqms.Bold_iqms",
         )
         self.nodes["bold_iqms_pipeline"].process.nodes_activation = {
             "outliercount": True,
@@ -53,22 +53,22 @@ class Bold_mriqc(Pipeline):
         )
         self.add_process(
             "sanitize",
-            "mia_processes.bricks.preprocess.others.processing." "Sanitize",
+            "mia_processes.bricks.preprocess.others.processing.Sanitize",
         )
         self.add_process(
-            "tsnr", "mia_processes.bricks.preprocess.others.processing." "TSNR"
+            "tsnr", "mia_processes.bricks.preprocess.others.processing.TSNR"
         )
         self.add_process(
             "mean",
-            "mia_processes.bricks.preprocess.afni.processes." "TStatMean",
+            "mia_processes.bricks.preprocess.afni.processes.TStatMean",
         )
         self.add_process(
             "automask",
-            "mia_processes.bricks.preprocess.afni.processes." "Automask",
+            "mia_processes.bricks.preprocess.afni.processes.Automask",
         )
         self.add_process(
             "volreg",
-            "mia_processes.bricks.preprocess.afni.processes." "Volreg",
+            "mia_processes.bricks.preprocess.afni.processes.Volreg",
         )
         self.nodes["volreg"].process.twopass = True
         self.nodes["volreg"].process.interpolation = "Fourier"
@@ -95,7 +95,7 @@ class Bold_mriqc(Pipeline):
         self.nodes["bold_mni_align"].process.epi_mask = traits.Undefined
         self.add_process(
             "mriqc_func_report",
-            "mia_processes.bricks.reports.reporting." "ReportFuncMriqc",
+            "mia_processes.bricks.reports.reporting.ReportFuncMriqc",
         )
         self.add_process(
             "plot_iqms", "mia_processes.bricks.reports.processes.BoldIQMsPlot"
@@ -133,7 +133,7 @@ class Bold_mriqc(Pipeline):
         self.add_link("volreg.out_file->tsnr.in_file")
         self.add_link("volreg.out_file->mean.in_file")
         self.add_link("volreg.out_file->bold_iqms_pipeline.hmc_epi")
-        self.add_link("volreg.oned_file->" "bold_iqms_pipeline.hmc_motion")
+        self.add_link("volreg.oned_file->bold_iqms_pipeline.hmc_motion")
         self.add_link("bold_mni_align.epi_parc->bold_iqms_pipeline.epi_parc")
         self.add_link("bold_mni_align.epi_mni->mriqc_func_report.norm_func")
         self.add_link(
@@ -143,7 +143,7 @@ class Bold_mriqc(Pipeline):
         self.add_link("bold_iqms_pipeline.fd_file->plot_iqms.in_fd_file")
         self.add_link("bold_iqms_pipeline.dvars_file->plot_iqms.in_dvars_file")
         self.add_link(
-            "bold_iqms_pipeline.spike_file->" "plot_iqms.in_spikes_file"
+            "bold_iqms_pipeline.spike_file->plot_iqms.in_spikes_file"
         )
         self.add_link(
             "nonsteadystatedetector.n_volumes_to_discard->"

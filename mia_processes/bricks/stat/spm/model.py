@@ -107,7 +107,7 @@ class EstimateContrast(ProcessMIA):
             "Mutually exclusive group_contrast parameter."
         )
         group_contrast_desc = (
-            "Higher level contrast. " "Mutually exclusive use_derivs prameter."
+            "Higher level contrast. Mutually exclusive use_derivs prameter."
         )
 
         # Outputs description
@@ -1366,7 +1366,7 @@ class Level1Design(ProcessMIA):
             "'none' or 'scaling')"
         )
         mask_threshold_desc = (
-            "Masking threshold, defined as proportion of " "globals (a float)"
+            "Masking threshold, defined as proportion of globals (a float)"
         )
         mask_image_desc = (
             "Image for explicitly masking the analysis (a "
@@ -1382,7 +1382,7 @@ class Level1Design(ProcessMIA):
 
         # Outputs description
         spm_mat_file_desc = (
-            "SPM.mat file (a pathlike object or string " "representing a file"
+            "SPM.mat file (a pathlike object or string representing a file"
         )
 
         # Inputs traits
@@ -2324,20 +2324,20 @@ class MultipleRegressionDesign(ProcessMIA):
             "7 (As implied by ANCOVA), 8 (GM))"
         )
         threshold_masking_desc = (
-            "Threshold mask (a string among none, " "absolute, relative)"
+            "Threshold mask (a string among none, absolute, relative)"
         )
         threshold_mask_value_desc = "Threshold value (a float)"
         use_implicit_mask_desc = (
             "Use implicit mask NaNs or zeros to threshold. (a boolean)"
         )
         explicit_mask_file_desc = (
-            "Mask file to applied (a string that represent " "a path)"
+            "Mask file to applied (a string that represent a path)"
         )
         global_calc_desc = (
             "Global calculation (a string among omit, mean, value)"
         )
         global_calc_values_desc = (
-            "Vector of global value (only if global_cal is set " "to User)"
+            "Vector of global value (only if global_cal is set to User)"
         )
         normalisation_desc = (
             "Normalisation type (one of 1 (None) , 2 (proportional), "
@@ -2349,7 +2349,7 @@ class MultipleRegressionDesign(ProcessMIA):
 
         # Outputs description
         spm_mat_file_desc = (
-            "SPM.mat file (a pathlike object or string " "representing a file"
+            "SPM.mat file (a pathlike object or string representing a file"
         )
 
         # Inputs traits
@@ -2764,20 +2764,20 @@ class OneSampleTTestDesign(ProcessMIA):
             "7 (As implied by ANCOVA), 8 (GM))"
         )
         threshold_masking_desc = (
-            "Threshold mask (a string among none, " "absolute, relative)"
+            "Threshold mask (a string among none, absolute, relative)"
         )
         threshold_mask_value_desc = "Threshold value (a float)"
         use_implicit_mask_desc = (
             "Use implicit mask NaNs or zeros to threshold. (a boolean)"
         )
         explicit_mask_file_desc = (
-            "Mask file to applied (a string that represent " "a path)"
+            "Mask file to applied (a string that represent a path)"
         )
         global_calc_desc = (
-            "Global calculation (a string among omit, mean, value)"
+            "Global calculation (a string among Omit, Mean, User)"
         )
         global_calc_values_desc = (
-            "Vector of global value (only if global_cal is set " "to User)"
+            "Vector of global value (only if global_calc is set to User)"
         )
         normalisation_desc = (
             "Normalisation type (one of 1 (None) , 2 (proportional), "
@@ -2789,7 +2789,7 @@ class OneSampleTTestDesign(ProcessMIA):
 
         # Outputs description
         spm_mat_file_desc = (
-            "SPM.mat file (a pathlike object or string " "representing a file"
+            "SPM.mat file (a pathlike object or string representing a file"
         )
 
         # Inputs traits
@@ -3135,20 +3135,20 @@ class PairedTTestDesign(ProcessMIA):
             "7 (As implied by ANCOVA), 8 (GM))"
         )
         threshold_masking_desc = (
-            "Threshold mask (a string among none, " "absolute, relative)"
+            "Threshold mask (a string among none, absolute, relative)"
         )
         threshold_mask_value_desc = "Threshold value (a float)"
         use_implicit_mask_desc = (
             "Use implicit mask NaNs or zeros to threshold. (a boolean)"
         )
         explicit_mask_file_desc = (
-            "Mask file to applied (a string that represent " "a path)"
+            "Mask file to applied (a string that represent a path)"
         )
         global_calc_desc = (
             "Global calculation (a string among omit, mean, value)"
         )
         global_calc_values_desc = (
-            "Vector of global value (only if global_cal is set " "to User)"
+            "Vector of global value (only if global_cal is set to User)"
         )
         normalisation_desc = (
             "Normalisation type (one of 1 (None) , 2 (proportional), "
@@ -3160,7 +3160,7 @@ class PairedTTestDesign(ProcessMIA):
 
         # Outputs description
         spm_mat_file_desc = (
-            "SPM.mat file (a pathlike object or string " "representing a file"
+            "SPM.mat file (a pathlike object or string representing a file"
         )
 
         # Inputs traits
@@ -3505,7 +3505,7 @@ class TwoSampleTTestDesign(ProcessMIA):
             "Independence of the measurments between levels (a boolean)"
         )
         unequal_variance_desc = (
-            "Are the variaces equal or unequal between " "groups ? (a boolean)"
+            "Are the variaces equal or unequal between groups ? (a boolean)"
         )
         covariates_vectors_desc = "Covariates vector (a list of list of float)"
         covariates_names_desc = "Covariates names (a list of string)"
@@ -3520,20 +3520,20 @@ class TwoSampleTTestDesign(ProcessMIA):
             "7 (As implied by ANCOVA), 8 (GM))"
         )
         threshold_masking_desc = (
-            "Threshold mask (a string among none, " "absolute, relative)"
+            "Threshold mask (a string among none, absolute, relative)"
         )
         threshold_mask_value_desc = "Threshold value (a float)"
         use_implicit_mask_desc = (
             "Use implicit mask NaNs or zeros to threshold. (a boolean)"
         )
         explicit_mask_file_desc = (
-            "Mask file to applied (a string that represent " "a path)"
+            "Mask file to applied (a string that represent a path)"
         )
         global_calc_desc = (
             "Global calculation (a string among omit, mean, value)"
         )
         global_calc_values_desc = (
-            "Vector of global value (only if global_cal is set " "to User)"
+            "Vector of global value (only if global_cal is set to User)"
         )
         normalisation_desc = (
             "Normalisation type (one of 1 (None) , 2 (proportional), "
@@ -3545,7 +3545,7 @@ class TwoSampleTTestDesign(ProcessMIA):
 
         # Outputs description
         spm_mat_file_desc = (
-            "SPM.mat file (a pathlike object or string " "representing a file"
+            "SPM.mat file (a pathlike object or string representing a file"
         )
 
         # Inputs traits

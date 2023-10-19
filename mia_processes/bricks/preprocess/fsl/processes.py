@@ -187,7 +187,7 @@ class BetSurfacesExtraction(ProcessMIA):
             valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
 
             if not valid_ext:
-                print("\nThe input image format is" " not recognized...!")
+                print("\nThe input image format is not recognized...!")
                 return
 
             self.process.output_type = self.output_type
@@ -289,18 +289,18 @@ class ExtractROI(ProcessMIA):
             "Typecodes of the output NIfTI image formats (one "
             "of NIFTI, NIFTI_GZ)."
         )
-        t_min_desc = "t minimum index" "(an integer)."
-        t_size_desc = "t size" "(an integer)."
-        x_min_desc = "x minimum index" "(an integer)."
-        x_size_desc = "x size" "(an integer)."
-        y_min_desc = "y minimum index" "(an integer)."
-        y_size_desc = "y size" "(an integer)."
-        z_min_desc = "z minimum index" "(an integer)."
-        z_size_desc = "z size" "(an integer)."
+        t_min_desc = "t minimum index (an integer)."
+        t_size_desc = "t size (an integer)."
+        x_min_desc = "x minimum index (an integer)."
+        x_size_desc = "x size (an integer)."
+        y_min_desc = "y minimum index (an integer)."
+        y_size_desc = "y size (an integer)."
+        z_min_desc = "z minimum index (an integer)."
+        z_size_desc = "z size (an integer)."
 
         # Outputs description
         roi_file_desc = (
-            "Output file" "(a pathlike object or string representing" "a file)"
+            "Output file (a pathlike object or string representing a file)"
         )
 
         # Mandatory inputs traits
@@ -455,7 +455,7 @@ class ExtractROI(ProcessMIA):
             valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
 
             if not valid_ext:
-                print("\nThe input image format is" " not recognized...!")
+                print("\nThe input image format is not recognized...!")
                 return
 
             if self.output_directory:
@@ -530,7 +530,7 @@ class FastSegment(ProcessMIA):
         in_file_desc = "File to Segment"
         # Optional inputs with default value description
         img_type_desc = (
-            "Int specifying type of image:" "(1 = T1, 2 = T2, 3 = PD). "
+            "Int specifying type of image: (1 = T1, 2 = T2, 3 = PD). "
         )
         output_type_desc = (
             "Typecodes of the output NIfTI image formats (one "
@@ -552,7 +552,7 @@ class FastSegment(ProcessMIA):
             "a file)"
         )
         partial_volume_files_desc = (
-            "Partial volume files (a list of items " "which are file names."
+            "Partial volume files (a list of items which are file names."
         )
         tissue_class_files_desc = (
             "Binary segmented volume files, one image"
@@ -650,7 +650,7 @@ class FastSegment(ProcessMIA):
             valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
 
             if not valid_ext:
-                print("\nThe input image format is" " not recognized...!")
+                print("\nThe input image format is not recognized...!")
                 return
 
             self.process.output_type = self.output_type
@@ -1700,7 +1700,7 @@ class Smooth(ProcessMIA):
                 valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
 
                 if not valid_ext:
-                    print("\nThe input image format is" " not recognized...!")
+                    print("\nThe input image format is not recognized...!")
                     return
                 else:
                     self.outputs["out_file"] = os.path.join(

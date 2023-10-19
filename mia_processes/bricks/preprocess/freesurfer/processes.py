@@ -74,13 +74,13 @@ class Binarize(ProcessMIA):
 
         # Mandatory inputs description
         in_file_desc = (
-            "Input file (a pathlike object or string " "representing a file)."
+            "Input file (a pathlike object or string representing a file)."
         )
         # Optional inputs with default value description
         abs_desc = "take abs of invol first (ie, make unsigned)"
         bin_col_num_desc = "set binarized voxel value to its column number"
         get_count_file_desc = (
-            "save number of hits in ascii file" "(hits, ntotvox, pct)"
+            "save number of hits in ascii file (hits, ntotvox, pct)"
         )
         invert_desc = "set binval=0, binvalnot=1"
         max_desc = "Maximum voxel threshold(float)."
@@ -96,9 +96,9 @@ class Binarize(ProcessMIA):
         bin_val_desc = "set vox outside range to val (default is 0)"
         bin_val_not_desc = "set vox outside range to val (default is 0)"
         dilate_desc = "niters: dilate binarization in 3D"
-        erode_desc = "nerode: erode binarization in 3D " "(after any dilation)"
+        erode_desc = "nerode: erode binarization in 3D (after any dilation)"
         erode2d_desc = (
-            "nerode2d: erode binarization in 2D " "(after any 3D erosion)"
+            "nerode2d: erode binarization in 2D (after any 3D erosion)"
         )
         frame_no_desc = "use 0-based frame of input (default is 0)"
         match_desc = "Match instead of threshold"
@@ -107,7 +107,7 @@ class Binarize(ProcessMIA):
         rmin_desc = "Compute min based on rmin*globalmean."
         # Outputs description
         count_file_desc = (
-            "File that contains number of hits" "(hits, ntotvox, pct)"
+            "File that contains number of hits (hits, ntotvox, pct)"
         )
         out_file_desc = (
             "The binanized file (a pathlike object or a "
@@ -366,7 +366,7 @@ class Binarize(ProcessMIA):
                 valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
 
                 if not valid_ext:
-                    print("\nThe input image format is" " not recognized...!")
+                    print("\nThe input image format is not recognized...!")
                     return
                 else:
                     output_type = self.output_type
@@ -523,7 +523,7 @@ class SynthStrip(ProcessMIA):
                 valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
 
                 if not valid_ext:
-                    print("\nThe input image format is" " not recognized...!")
+                    print("\nThe input image format is not recognized...!")
                     return
                 else:
                     output_type = self.output_type
@@ -939,7 +939,7 @@ class SynthStripMriqc(ProcessMIA):
                 valid_ext, in_ext, fileName = checkFileExt(self.in_file, EXT)
 
                 if not valid_ext:
-                    print("\nThe input image format is" " not recognized...!")
+                    print("\nThe input image format is not recognized...!")
                     return
 
                 else:

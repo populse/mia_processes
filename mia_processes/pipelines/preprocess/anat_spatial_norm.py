@@ -35,11 +35,11 @@ class Anat_spatial_norm(Pipeline):
         # nodes
         self.add_process(
             "mask_moving_image",
-            "mia_processes.bricks.preprocess." "others.processing.Mask",
+            "mia_processes.bricks.preprocess.others.processing.Mask",
         )
         self.add_process(
             "mask_fixed_image",
-            "mia_processes.bricks.preprocess." "others.processing.Mask",
+            "mia_processes.bricks.preprocess.others.processing.Mask",
         )
         self.add_process(
             "affine_initializer",
@@ -48,7 +48,7 @@ class Anat_spatial_norm(Pipeline):
         )
         self.add_process(
             "registration",
-            "mia_processes.bricks.preprocess." "ants.processes.Registration",
+            "mia_processes.bricks.preprocess.ants.processes.Registration",
         )
         self.nodes["registration"].process.convergence_threshold = [
             1e-07,
@@ -110,11 +110,11 @@ class Anat_spatial_norm(Pipeline):
             "mask_moving_image", "mask_file", "moving_mask", is_optional=False
         )
         self.add_link(
-            "mask_moving_image.out_file->" "affine_initializer.moving_image"
+            "mask_moving_image.out_file->affine_initializer.moving_image"
         )
         self.add_link("mask_moving_image.out_file->registration.moving_image")
         self.add_link(
-            "mask_fixed_image.out_file->" "affine_initializer.fixed_image"
+            "mask_fixed_image.out_file->affine_initializer.fixed_image"
         )
         self.add_link("mask_fixed_image.out_file->registration.fixed_image")
         self.add_link(

@@ -195,7 +195,7 @@ class AnatIQMs(ProcessMIA):
             "representing a file)."
         )
         pvms_desc = (
-            "PVMS image (a pathlike object or string " "representing a file)."
+            "PVMS image (a pathlike object or string representing a file)."
         )
         mni_tpms_desc = (
             "MNI TPMS file (a pathlike "
@@ -690,16 +690,16 @@ class BoldIQMs(ProcessMIA):
             "representing a file)."
         )
         in_fwhm_file_desc = (
-            "FWHM file (a pathlike object or string " "representing a file)."
+            "FWHM file (a pathlike object or string representing a file)."
         )
         in_dvars_file_desc = (
-            "DVARS file (a pathlike object or string " "representing a file)."
+            "DVARS file (a pathlike object or string representing a file)."
         )
         in_fd_file_desc = (
-            "FD file (a pathlike object or string " "representing a file)."
+            "FD file (a pathlike object or string representing a file)."
         )
         in_spikes_file_desc = (
-            "Spikes file (a pathlike object or string " "representing a file)."
+            "Spikes file (a pathlike object or string representing a file)."
         )
         in_gcor_desc = "Global correlation value (a float)"
         in_dummy_TRs_desc = "Number of dummy scans (an int)"
@@ -1292,7 +1292,7 @@ class CarpetParcellation(ProcessMIA):
             "representing a file)."
         )
         brainmask_desc = (
-            "Brain mask (a pathlike object or string " "representing a file)."
+            "Brain mask (a pathlike object or string representing a file)."
         )
 
         out_prefix_desc = (
@@ -1456,10 +1456,10 @@ class ComputeDVARS(ProcessMIA):
             "representing a file)."
         )
         in_mask_desc = (
-            "Brain mask (a pathlike object or string " "representing a file)."
+            "Brain mask (a pathlike object or string representing a file)."
         )
         remove_zero_variance_desc = (
-            "Remove voxels with zero variance" "(a bool)."
+            "Remove voxels with zero variance (a bool)."
         )
         intensity_normalization_desc = (
             "Divide value in each voxel at each"
@@ -1902,7 +1902,7 @@ class Mean_stdDev_calc(ProcessMIA):
         )
         contrast_type_desc = "The Contrast used (a string, ex. BOLD)"
         prefix_to_delete_desc = (
-            "The prefix to delete from the " "deduced ROI name (a string)"
+            "The prefix to delete from the deduced ROI name (a string)"
         )
 
         # Outputs description
@@ -2737,7 +2737,7 @@ class Spikes(ProcessMIA):
 
         # Inputs description
         in_file_desc = (
-            "A bold file (a pathlike object or string " "representing a file)."
+            "A bold file (a pathlike object or string representing a file)."
         )
         no_zscore_desc = "Do not zscore (a boolean)"
         detrend_desc = "Do detrend (a boolean)."
