@@ -47,7 +47,9 @@ class Dwi_preprocessing(Pipeline):
             "MotionDistortionCorrection",
             "mia_processes.bricks.preprocess.mrtrix.processes.DWIPreproc",
         )
-        self.nodes["MotionDistortionCorrection"].process.rpe_options = "pair"
+        self.nodes[
+            "MotionDistortionCorrection"
+        ].process.rpe_options = "rpe_pair"
         self.nodes[
             "MotionDistortionCorrection"
         ].process.eddy_options = " --slm=linear --data_is_shelled"
@@ -69,7 +71,6 @@ class Dwi_preprocessing(Pipeline):
             "Concatenateb0",
             "mia_processes.bricks.preprocess.mrtrix.processes.MRCat",
         )
-        self.nodes["Concatenateb0"].process.out_file_name = "mean_b0_pair"
         self.add_process(
             "BiasCorrection",
             "mia_processes.bricks.preprocess.mrtrix.processes.DWIBiasCorrect",

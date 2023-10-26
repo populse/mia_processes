@@ -1006,9 +1006,9 @@ class DWIPreproc(ProcessMIA):
         self.add_trait(
             "rpe_options",
             Enum(
-                "none",
-                "pair",
-                "all",
+                "rpe_none",
+                "rpe_pair",
+                "rpe_all",
                 output=False,
                 optional=True,
                 desc=rpe_options_desc,
@@ -1179,7 +1179,12 @@ class DWIPreproc(ProcessMIA):
         super(DWIPreproc, self).run_process_mia()
         self.process.in_file = self.in_file
         self.process.out_file = self.out_file
-        self.process.rpe_options = self.rpe_options
+        rpe_options = {
+            "rpe_all": "all",
+            "rpe_pair": "pair",
+            "rpe_none": "none",
+        }
+        self.process.rpe_options = rpe_options[self.rpe_options]
         self.process.align_seepi = self.align_seepi
         if self.se_epi_corr:
             self.process.in_epi = self.se_epi_corr
@@ -1192,10 +1197,14 @@ class DWIPreproc(ProcessMIA):
             self.process.eddy_options = self.eddy_options
         if self.eddy_slspec:
             self.process.eddy_slspec = self.eddy_slspec
+        eddyqc_path = os.path.join(
+            os.path.dirname(self.out_file),
+            self.in_file.split(".")[0] + "_eddyqc",
+        )
         if self.eddyqc_all:
-            self.process.eddyqc_all = os.path.dirname(self.out_file)
+            self.process.eddyqc_all = eddyqc_path
         if self.eddyqc_text:
-            self.process.eddyqc_text = os.path.dirname(self.out_file)
+            self.process.eddyqc_text = eddyqc_path
         if self.topup_options:
             self.process.topup_options = self.topup_options
         if self.nocleanup:
@@ -2539,8 +2548,10 @@ class MRCat(ProcessMIA):
 
         self.add_trait(
             "out_file_name",
-            String(
-                "concatenated",
+            Either(
+                Undefined,
+                String(),
+                default=Undefined,
                 output=False,
                 optional=True,
                 desc=out_file_name_desc,
@@ -2573,8 +2584,10 @@ class MRCat(ProcessMIA):
         # Outputs definition and tags inheritance (optional)
         if self.in_files:
             in_ext = ""
+            out_file_name = ""
             for in_file in self.in_files:
                 valid_ext, in_ext_file, fileName = checkFileExt(in_file, EXT)
+                out_file_name += fileName + "_"
                 if not in_ext:
                     in_ext = in_ext_file
                 else:
@@ -2588,10 +2601,12 @@ class MRCat(ProcessMIA):
                 if not valid_ext:
                     print("\nThe input image format is not recognized...!")
                     return self.make_initResult()
-
+            out_file_name += "concatenated"
             if self.output_directory:
+                if self.out_file_name != Undefined:
+                    out_file_name = self.out_file_name
                 self.outputs["out_file"] = os.path.join(
-                    self.output_directory, self.out_file_name + "." + in_ext
+                    self.output_directory, out_file_name + "." + in_ext
                 )
 
         if self.outputs:
@@ -4453,7 +4468,7 @@ class TensorMetrics(ProcessMIA):
         )
 
         self.add_trait(
-            "get_vevtor",
+            "get_vector",
             Bool(
                 True,
                 output=False,

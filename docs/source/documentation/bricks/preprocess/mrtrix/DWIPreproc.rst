@@ -13,7 +13,7 @@ DWIPreproc brick
 Perform diffusion image pre-processing using FSL’s topup and eddy tool
 ----------------------------------------------------------------------
 
-Run topup and Eddy to pre-processe DWI image ncluding inhomogeneity distortion correction using FSL’s topup tool if possible.
+Run topup and Eddy to pre-processe DWI image including inhomogeneity distortion correction using FSL’s topup tool if possible.
 
 FSL should be configured in populse.
 
@@ -38,19 +38,19 @@ In this case, bvec and bval file should be specified.*
 
 - *rpe_option* (none, pair, all or header, default value is none, optional)
     | Specify acquisition phase-encoding design:
-    |   - none: if no reversed phase-encoding image available
-    |   - all: if DWIs data have been acquired with opposing phase-encoding
-    |   - pair: if a set of image (typically b=0 volumes with opposing phase-direction) has been acquired for inhomogeneity field estimation only
+    |   - rpe_none: if no reversed phase-encoding image available
+    |   - rpe_all: if DWIs data have been acquired with opposing phase-encoding. The in_file parametre should be filled with the two acquisition protocols concatenated into a single DWI series.
+    |   - rpe_pair: if a set of image (typically b=0 volumes with opposing phase-direction) has been acquired for inhomogeneity field estimation only. In this case, se_epi_corr parameter should be filled.
 
     ::
 
-      ex. pair
+      ex. rpe_pair
 
 - *se_epi_corr* (a pathlike object or a string representing an existing file, optional)
     An additional image series consisting of spin-echo EPI images (typically b=0 volumes with opposing phase-direction)
     which is to be used exclusively by topup for estimating the inhomogeneity field (i.e. it will not form part of the output image series)
 
-    If rpe_option is set to pair, the se_epi_corr image series contains one or more pairs of b=0 images with reversed phase encoding,
+    If rpe_option is set to rpe_air, the se_epi_corr image series contains one or more pairs of b=0 images with reversed phase encoding,
     the FIRST HALF of the volumes in the SE-EPI series must possess the same phase encoding as the input DWI series,
     while the second half are assumed to contain the opposite phase encoding direction but identical total readout time.
 
@@ -64,6 +64,8 @@ In this case, bvec and bval file should be specified.*
     |   - pa: Posterior to anterior
     |   - lr: Left to right
     |   - rl: Right toleft
+
+    If rpe_all option is used, the direction indicated should be the direction of phase encoding used in acquisition of the FIRST HALF of volumes in the input DWI series.
 
     ::
 
