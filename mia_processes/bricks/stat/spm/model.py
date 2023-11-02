@@ -519,6 +519,12 @@ class EstimateContrast(ProcessMIA):
                     "ess_images",
                     "spmF_images",
                 ]:
+                    all_tag_to_del = ["Contrasts num"]
+                    regress_num = get_dbFieldValue(
+                        self.project, self.spm_mat_file, "Regress num"
+                    )
+                    if regress_num:
+                        all_tag_to_del.append("Regress num")
                     for fullname in value:
                         if (
                             get_dbFieldValue(
@@ -539,7 +545,7 @@ class EstimateContrast(ProcessMIA):
                         self.tags_inheritance(
                             self.spm_mat_file,
                             fullname,
-                            own_tags=[tag_to_add],
+                            tags2del=all_tag_to_del,
                         )
 
         # Return the requirement, outputs and inheritance_dict
@@ -1157,6 +1163,13 @@ class EstimateModel(ProcessMIA):
                         ]
 
         if self.outputs:
+            all_tag_to_del = ["Contrasts num"]
+            regress_num = get_dbFieldValue(
+                self.project, self.spm_mat_file, "Regress num"
+            )
+            if regress_num:
+                all_tag_to_del.append("Regress num")
+
             for key, value in self.outputs.items():
                 if key == "out_spm_mat_file" and self.factor_info:
                     # Add tag for number of contrast created in database
@@ -1174,22 +1187,13 @@ class EstimateModel(ProcessMIA):
                     )
 
                 elif key in [
-                    "out_spm_mat_file",
                     "mask_image",
                     "residual_image",
                     "RPVimage",
                 ]:
                     self.tags_inheritance(
-                        self.spm_mat_file,
-                        value,
+                        self.spm_mat_file, value, tags2del=all_tag_to_del
                     )
-
-                elif key in "residual_images":
-                    for fullname in value:
-                        self.tags_inheritance(
-                            self.spm_mat_file,
-                            fullname,
-                        )
 
                 elif key in [
                     "beta_images",
@@ -1197,6 +1201,7 @@ class EstimateModel(ProcessMIA):
                     "spmT_images",
                     "ess_images",
                     "spmF_images",
+                    "residual_images",
                 ]:
                     patient_name = get_dbFieldValue(
                         self.project, self.spm_mat_file, "PatientName"
@@ -1210,11 +1215,11 @@ class EstimateModel(ProcessMIA):
                             "subsequent issue during "
                             "initialization!!\n".format(self.spm_mat_file)
                         )
-
                     for fullname in value:
                         self.tags_inheritance(
                             self.spm_mat_file,
                             fullname,
+                            tags2del=all_tag_to_del,
                         )
 
         # Return the requirement, outputs and inheritance_dict
