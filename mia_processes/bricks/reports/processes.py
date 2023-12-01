@@ -962,7 +962,7 @@ class BoldIQMs(ProcessMIA):
             else:
                 results_dict["vec_fd"] = list(fd_data)
                 if self.in_fd_thresh:
-                    num_fd = np.float((fd_data > self.in_fd_thresh).sum())
+                    num_fd = float((fd_data > self.in_fd_thresh).sum())
                     results_dict["fd"] = {
                         "mean": float(fd_data.mean()),
                         "num": int(num_fd),
