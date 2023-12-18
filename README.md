@@ -74,6 +74,9 @@ Many mia_processes bricks (atomic processes) use third-party softwares. To use t
 # Requirements
 
 In order to get all the bricks and pipelines proposed by mia_processes some third libraries are required:
+* boto
+* cmp
+* cfflib
 * dipy
 * nibabel
 * nilearn
@@ -82,13 +85,16 @@ In order to get all the bricks and pipelines proposed by mia_processes some thir
 * nitime
 * nitransforms
 * numpy
-* populse_db >=2.1.0
-* populse_mia >= 2.2.0
+* paramiko
+* populse-db >= 2.5.0, < 3.0.0
+* populse_mia >= 2.5.0, < 3.0.0
+* pyxnat
 * reportlab
 * scipy
 * statsmodels
 * templateflow
 * torch
+* vtk
 
 # License
 
