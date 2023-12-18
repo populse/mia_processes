@@ -19,10 +19,10 @@ import subprocess
 
 # Current version
 version_major = 2
-version_minor = 3
-version_micro = 1
-version_extra = "dev"  # leave empty for release
-# version_extra = ""
+version_minor = 5
+version_micro = 0
+# version_extra = "dev"  # leave empty for release
+version_extra = ""
 
 # Expected by setup.py: string of form "X.Y.Z"
 if version_extra:
@@ -87,14 +87,13 @@ if __version__.endswith("-dev"):
 CLASSIFIERS = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: CEA CNRS Inria Logiciel Libre "
-    "License, version 2.1 (CeCILL-2.1)",
+    "License :: OSI Approved :: CEA CNRS Inria "
+    "Logiciel Libre License, version 2.1 (CeCILL-2.1)",
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3.5",
-    "Programming Language :: Python :: 3.6",
-    "Programming Language :: Python :: 3.7",
-    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3 :: Only",
     "Topic :: Scientific/Engineering",
     "Topic :: Utilities",
@@ -137,8 +136,8 @@ REQUIRES = [
     "nitransforms",
     "numpy",
     "paramiko",
-    "populse_db >=2.2.0",
-    "populse_mia >= 2.4.0",
+    "populse-db >= 2.5.0, < 3.0.0",
+    "populse_mia >= 2.5.0, < 3.0.0",
     "pyxnat",
     "reportlab",
     "scipy",

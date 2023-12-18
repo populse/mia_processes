@@ -1,3 +1,59 @@
+[project]
+name = "mia_processes"
+version = "2.5.0"
+authors = [
+    {name = "Populse team", email = "populse-support@univ-grenoble-alpes.fr"},
+]
+description = "mia_processes"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "CeCILL-B"}
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "boto",
+    "cmp",
+    "cfflib",
+    "dipy",
+    "nibabel",
+    "nilearn",
+    "nipy",
+    "nipype",
+    "nitime",
+    "nitransforms",
+    "numpy",
+    "paramiko",
+    "populse-db >= 2.5.0, < 3.0.0",
+    "populse_mia >= 2.5.0, < 3.0.0",
+    "pyxnat",
+    "reportlab",
+    "scipy",
+    "statsmodels",
+    "templateflow",
+    "torch",
+    "vtk",
+]
+
+[project.optional-dependencies]
+doc = [
+    "sphinx >=1.0",
+]
+
+[project.urls]
+homepage = "http://populse.github.io/mia_processes/"
+repository = "https://github.com/populse/mia_processes"
+
 [tool.black]
 line-length = 79
 include = '\.pyi?$'

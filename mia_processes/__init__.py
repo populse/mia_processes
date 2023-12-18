@@ -21,3 +21,13 @@ calculations).
 ##########################################################################
 
 from .info import __version__  # noqa: F401
+
+# import importlib.metadata
+
+# try:
+#    __version__ = importlib.metadata.__version__ = importlib.metadata.version(
+#        "populse_mia"
+#    )
+
+# except importlib.metadata.PackageNotFoundError:
+#    __version__ = None
