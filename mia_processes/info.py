@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""The module dedicated to the main informations on mia_processes.
+"""The module dedicated to the main information on mia_processes.
 
 The info.py module is mainly used by the setup.py module.
 
