@@ -1,24 +1,20 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../../../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.preprocess.freesurfer.processes &#8212; mia_processes 2.3.1-dev+ad6303dd documentation</title>
-    <link rel="stylesheet" href="../../../../../_static/haiku.css" type="text/css" />
-    <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../../../../../" src="../../../../../_static/documentation_options.js"></script>
-    <script src="../../../../../_static/jquery.js"></script>
-    <script src="../../../../../_static/underscore.js"></script>
-    <script src="../../../../../_static/doctools.js"></script>
-    <script src="../../../../../_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <title>mia_processes.bricks.preprocess.freesurfer.processes &#8212; mia_processes 2.5.1-dev+753b3f76 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=f63d8bfa" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/haiku.css?v=e491ac2d" />
+    <script src="../../../../../_static/documentation_options.js?v=7be2cb86"></script>
+    <script src="../../../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../../index.html">
-          <span>mia_processes 2.3.1-dev+ad6303dd documentation</span></a></h1>
+          <span>mia_processes 2.5.1-dev+753b3f76 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.preprocess.freesurfer.processes</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -80,8 +76,10 @@
 <span class="n">EXT</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;NIFTI_GZ&quot;</span><span class="p">:</span> <span class="s2">&quot;nii.gz&quot;</span><span class="p">,</span> <span class="s2">&quot;NIFTI&quot;</span><span class="p">:</span> <span class="s2">&quot;nii&quot;</span><span class="p">,</span> <span class="s2">&quot;MGZ&quot;</span><span class="p">:</span> <span class="s2">&quot;mgz&quot;</span><span class="p">}</span>
 
 
-<div class="viewcode-block" id="Binarize"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.Binarize">[docs]</a><span class="k">class</span> <span class="nc">Binarize</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Binarize">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.Binarize">[docs]</a>
+<span class="k">class</span> <span class="nc">Binarize</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Binarize a volume (or volume-encoded surface file) using FreeSurfer</span>
 <span class="sd">    mri_binarize*</span>
 
@@ -93,8 +91,10 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Binarize.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.Binarize.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
+<div class="viewcode-block" id="Binarize.__init__">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.Binarize.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -108,13 +108,13 @@
 
         <span class="c1"># Mandatory inputs description</span>
         <span class="n">in_file_desc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;Input file (a pathlike object or string &quot;</span> <span class="s2">&quot;representing a file).&quot;</span>
+            <span class="s2">&quot;Input file (a pathlike object or string representing a file).&quot;</span>
         <span class="p">)</span>
         <span class="c1"># Optional inputs with default value description</span>
         <span class="n">abs_desc</span> <span class="o">=</span> <span class="s2">&quot;take abs of invol first (ie, make unsigned)&quot;</span>
         <span class="n">bin_col_num_desc</span> <span class="o">=</span> <span class="s2">&quot;set binarized voxel value to its column number&quot;</span>
         <span class="n">get_count_file_desc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;save number of hits in ascii file&quot;</span> <span class="s2">&quot;(hits, ntotvox, pct)&quot;</span>
+            <span class="s2">&quot;save number of hits in ascii file (hits, ntotvox, pct)&quot;</span>
         <span class="p">)</span>
         <span class="n">invert_desc</span> <span class="o">=</span> <span class="s2">&quot;set binval=0, binvalnot=1&quot;</span>
         <span class="n">max_desc</span> <span class="o">=</span> <span class="s2">&quot;Maximum voxel threshold(float).&quot;</span>
@@ -130,9 +130,9 @@
         <span class="n">bin_val_desc</span> <span class="o">=</span> <span class="s2">&quot;set vox outside range to val (default is 0)&quot;</span>
         <span class="n">bin_val_not_desc</span> <span class="o">=</span> <span class="s2">&quot;set vox outside range to val (default is 0)&quot;</span>
         <span class="n">dilate_desc</span> <span class="o">=</span> <span class="s2">&quot;niters: dilate binarization in 3D&quot;</span>
-        <span class="n">erode_desc</span> <span class="o">=</span> <span class="s2">&quot;nerode: erode binarization in 3D &quot;</span> <span class="s2">&quot;(after any dilation)&quot;</span>
+        <span class="n">erode_desc</span> <span class="o">=</span> <span class="s2">&quot;nerode: erode binarization in 3D (after any dilation)&quot;</span>
         <span class="n">erode2d_desc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;nerode2d: erode binarization in 2D &quot;</span> <span class="s2">&quot;(after any 3D erosion)&quot;</span>
+            <span class="s2">&quot;nerode2d: erode binarization in 2D (after any 3D erosion)&quot;</span>
         <span class="p">)</span>
         <span class="n">frame_no_desc</span> <span class="o">=</span> <span class="s2">&quot;use 0-based frame of input (default is 0)&quot;</span>
         <span class="n">match_desc</span> <span class="o">=</span> <span class="s2">&quot;Match instead of threshold&quot;</span>
@@ -141,7 +141,7 @@
         <span class="n">rmin_desc</span> <span class="o">=</span> <span class="s2">&quot;Compute min based on rmin*globalmean.&quot;</span>
         <span class="c1"># Outputs description</span>
         <span class="n">count_file_desc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;File that contains number of hits&quot;</span> <span class="s2">&quot;(hits, ntotvox, pct)&quot;</span>
+            <span class="s2">&quot;File that contains number of hits (hits, ntotvox, pct)&quot;</span>
         <span class="p">)</span>
         <span class="n">out_file_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;The binanized file (a pathlike object or a &quot;</span>
@@ -364,8 +364,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">init_process</span><span class="p">(</span><span class="s2">&quot;nipype.interfaces.freesurfer.Binarize&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Binarize.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.Binarize.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+
+<div class="viewcode-block" id="Binarize.list_outputs">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.Binarize.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -400,7 +403,7 @@
                 <span class="n">valid_ext</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">fileName</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">,</span> <span class="n">EXT</span><span class="p">)</span>
 
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_ext</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The input image format is&quot;</span> <span class="s2">&quot; not recognized...!&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The input image format is not recognized...!&quot;</span><span class="p">)</span>
                     <span class="k">return</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">output_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_type</span>
@@ -430,8 +433,11 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="Binarize.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.Binarize.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Binarize.run_process_mia">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.Binarize.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Binarize</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
         <span class="c1"># madatory inputs / outputs</span>
@@ -459,11 +465,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">zero_edges</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">zero_edges</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">zero_slice_edge</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">zero_slice_edge</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">configuration_dict</span><span class="o">=</span><span class="p">{})</span></div>
+</div>
 
 
-<div class="viewcode-block" id="SynthStrip"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStrip">[docs]</a><span class="k">class</span> <span class="nc">SynthStrip</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SynthStrip">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStrip">[docs]</a>
+<span class="k">class</span> <span class="nc">SynthStrip</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Skull stripping using SynthStrip*</span>
 
 <span class="sd">    Please, see the complete documentation for the &#39;SynthStrip brick</span>
@@ -472,8 +482,10 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="SynthStrip.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStrip.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
+<div class="viewcode-block" id="SynthStrip.__init__">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStrip.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -535,8 +547,11 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="SynthStrip.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStrip.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+
+<div class="viewcode-block" id="SynthStrip.list_outputs">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStrip.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -557,7 +572,7 @@
                 <span class="n">valid_ext</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">fileName</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">,</span> <span class="n">EXT</span><span class="p">)</span>
 
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_ext</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The input image format is&quot;</span> <span class="s2">&quot; not recognized...!&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The input image format is not recognized...!&quot;</span><span class="p">)</span>
                     <span class="k">return</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">output_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_type</span>
@@ -590,8 +605,11 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="SynthStrip.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStrip.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SynthStrip.run_process_mia">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStrip.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">SynthStrip</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
         <span class="c1"># default input</span>
@@ -619,11 +637,15 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">no_csf</span><span class="p">:</span>
             <span class="n">cmd</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;--no-csf&quot;</span><span class="p">]</span>
 
-        <span class="k">return</span> <span class="n">freesurfer</span><span class="o">.</span><span class="n">freesurfer_call</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="n">freesurfer</span><span class="o">.</span><span class="n">freesurfer_call</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span></div>
+</div>
 
 
-<div class="viewcode-block" id="SynthStripMriqc"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStripMriqc">[docs]</a><span class="k">class</span> <span class="nc">SynthStripMriqc</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SynthStripMriqc">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStripMriqc">[docs]</a>
+<span class="k">class</span> <span class="nc">SynthStripMriqc</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Skull stripping using SynthStrip*</span>
 
 <span class="sd">    STATEMENT OF CHANGES: This class is derived from the work done by</span>
@@ -641,10 +663,14 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="SynthStripMriqc.StripModel"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStripMriqc.StripModel">[docs]</a>    <span class="k">class</span> <span class="nc">StripModel</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;blabla&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="SynthStripMriqc.StripModel">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStripMriqc.StripModel">[docs]</a>
+    <span class="k">class</span> <span class="nc">StripModel</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;blabla&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="SynthStripMriqc.StripModel.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStripMriqc.StripModel.__init__">[docs]</a>        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<div class="viewcode-block" id="SynthStripMriqc.StripModel.__init__">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStripMriqc.StripModel.__init__">[docs]</a>
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span>
             <span class="n">nb_features</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
             <span class="n">nb_levels</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span>
@@ -654,7 +680,7 @@
             <span class="n">max_pool</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
             <span class="n">return_mask</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="p">):</span>
-            <span class="sd">&quot;&quot;&quot;blabla&quot;&quot;&quot;</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;blabla&quot;&quot;&quot;</span>
             <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
             <span class="c1"># dimensionality</span>
             <span class="n">ndims</span> <span class="o">=</span> <span class="mi">3</span>
@@ -757,8 +783,11 @@
                     <span class="p">)</span>
                 <span class="p">)</span></div>
 
-<div class="viewcode-block" id="SynthStripMriqc.StripModel.forward"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStripMriqc.StripModel.forward">[docs]</a>        <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-            <span class="sd">&quot;&quot;&quot;blabla&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SynthStripMriqc.StripModel.forward">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStripMriqc.StripModel.forward">[docs]</a>
+        <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;blabla&quot;&quot;&quot;</span>
             <span class="c1"># encoder forward pass</span>
             <span class="n">x_history</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">]</span>
 
@@ -782,15 +811,21 @@
             <span class="k">for</span> <span class="n">conv</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">remaining</span><span class="p">:</span>
                 <span class="n">x</span> <span class="o">=</span> <span class="n">conv</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
-            <span class="k">return</span> <span class="n">x</span></div></div>
+            <span class="k">return</span> <span class="n">x</span></div>
+</div>
 
-<div class="viewcode-block" id="SynthStripMriqc.ConvBlock"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStripMriqc.ConvBlock">[docs]</a>    <span class="k">class</span> <span class="nc">ConvBlock</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SynthStripMriqc.ConvBlock">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStripMriqc.ConvBlock">[docs]</a>
+    <span class="k">class</span> <span class="nc">ConvBlock</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        *Specific convolutional block followed by leakyrelu for unet*</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="SynthStripMriqc.ConvBlock.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStripMriqc.ConvBlock.__init__">[docs]</a>        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<div class="viewcode-block" id="SynthStripMriqc.ConvBlock.__init__">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStripMriqc.ConvBlock.__init__">[docs]</a>
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span>
             <span class="n">ndims</span><span class="p">,</span>
             <span class="n">in_channels</span><span class="p">,</span>
@@ -798,7 +833,7 @@
             <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
             <span class="n">activation</span><span class="o">=</span><span class="s2">&quot;leaky&quot;</span><span class="p">,</span>
         <span class="p">):</span>
-            <span class="sd">&quot;&quot;&quot;blabla&quot;&quot;&quot;</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;blabla&quot;&quot;&quot;</span>
             <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
             <span class="n">Conv</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="p">,</span> <span class="s2">&quot;Conv</span><span class="si">%d</span><span class="s2">d&quot;</span> <span class="o">%</span> <span class="n">ndims</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">conv</span> <span class="o">=</span> <span class="n">Conv</span><span class="p">(</span><span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">stride</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
@@ -812,17 +847,24 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown activation: </span><span class="si">{</span><span class="n">activation</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="SynthStripMriqc.ConvBlock.forward"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStripMriqc.ConvBlock.forward">[docs]</a>        <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-            <span class="sd">&quot;&quot;&quot;blabla&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SynthStripMriqc.ConvBlock.forward">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStripMriqc.ConvBlock.forward">[docs]</a>
+        <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;blabla&quot;&quot;&quot;</span>
             <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">activation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">activation</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
 
-            <span class="k">return</span> <span class="n">out</span></div></div>
+            <span class="k">return</span> <span class="n">out</span></div>
+</div>
 
-<div class="viewcode-block" id="SynthStripMriqc.__init__"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStripMriqc.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
+
+<div class="viewcode-block" id="SynthStripMriqc.__init__">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStripMriqc.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation/instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -889,8 +931,11 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="SynthStripMriqc.conform"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStripMriqc.conform">[docs]</a>    <span class="k">def</span> <span class="nf">conform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_nii</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Resample image as SynthStrip likes it.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SynthStripMriqc.conform">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStripMriqc.conform">[docs]</a>
+    <span class="k">def</span> <span class="nf">conform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_nii</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Resample image as SynthStrip likes it.&quot;&quot;&quot;</span>
         <span class="n">shape</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">input_nii</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">3</span><span class="p">])</span>
         <span class="n">affine</span> <span class="o">=</span> <span class="n">input_nii</span><span class="o">.</span><span class="n">affine</span>
 
@@ -910,7 +955,9 @@
         <span class="c1"># Get corner voxel centers in mm</span>
         <span class="n">corners_xyz</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">affine</span>
-<div class="viewcode-block" id="SynthStripMriqc.resample_like"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStripMriqc.resample_like">[docs]</a>            <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span>
+<div class="viewcode-block" id="SynthStripMriqc.resample_like">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStripMriqc.resample_like">[docs]</a>
+            <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span>
                 <span class="p">(</span><span class="n">corner_centers_ijk</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">corner_centers_ijk</span><span class="p">),</span> <span class="mi">1</span><span class="p">)))</span>
             <span class="p">)</span><span class="o">.</span><span class="n">T</span>
         <span class="p">)</span>
@@ -944,15 +991,19 @@
         <span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">input_nii</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">nii</span></div>
 
+
     <span class="k">def</span> <span class="nf">resample_like</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">output_dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cval</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Resample the input image to be in the target&#39;s grid via identity</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Resample the input image to be in the target&#39;s grid via identity</span>
 <span class="sd">        transform.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">Affine</span><span class="p">(</span><span class="n">reference</span><span class="o">=</span><span class="n">target</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
             <span class="n">image</span><span class="p">,</span> <span class="n">output_dtype</span><span class="o">=</span><span class="n">output_dtype</span><span class="p">,</span> <span class="n">cval</span><span class="o">=</span><span class="n">cval</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="SynthStripMriqc.list_outputs"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStripMriqc.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+
+<div class="viewcode-block" id="SynthStripMriqc.list_outputs">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStripMriqc.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -973,7 +1024,7 @@
                 <span class="n">valid_ext</span><span class="p">,</span> <span class="n">in_ext</span><span class="p">,</span> <span class="n">fileName</span> <span class="o">=</span> <span class="n">checkFileExt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_file</span><span class="p">,</span> <span class="n">EXT</span><span class="p">)</span>
 
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">valid_ext</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The input image format is&quot;</span> <span class="s2">&quot; not recognized...!&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">The input image format is not recognized...!&quot;</span><span class="p">)</span>
                     <span class="k">return</span>
 
                 <span class="k">else</span><span class="p">:</span>
@@ -1007,8 +1058,11 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="SynthStripMriqc.run_process_mia"><a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStripMriqc.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SynthStripMriqc.run_process_mia">
+<a class="viewcode-back" href="../../../../../mia_processes.bricks.preprocess.freesurfer.html#mia_processes.bricks.preprocess.freesurfer.processes.SynthStripMriqc.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">SynthStripMriqc</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
         <span class="c1"># necessary for speed gains (I think)</span>
@@ -1118,7 +1172,9 @@
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;If you use SynthStripMriqc in your analysis, please cite:&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;----------------------------------------------------&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;SynthStrip: Skull-Stripping for Any Brain Image.&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;A Hoopes, JS Mora, AV Dalca, B Fischl, M Hoffmann.&quot;</span><span class="p">)</span></div></div>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;A Hoopes, JS Mora, AV Dalca, B Fischl, M Hoffmann.&quot;</span><span class="p">)</span></div>
+</div>
+
 </pre></div>
 
       </div>
@@ -1131,8 +1187,8 @@
       </div>
 
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
+    &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     </div>
   </body>
 </html>

@@ -1,24 +1,20 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.info &#8212; mia_processes 2.3.1-dev+ad6303dd documentation</title>
-    <link rel="stylesheet" href="../../_static/haiku.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <title>mia_processes.info &#8212; mia_processes 2.5.1-dev+753b3f76 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=f63d8bfa" />
+    <link rel="stylesheet" type="text/css" href="../../_static/haiku.css?v=e491ac2d" />
+    <script src="../../_static/documentation_options.js?v=7be2cb86"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../index.html">
-          <span>mia_processes 2.3.1-dev+ad6303dd documentation</span></a></h1>
+          <span>mia_processes 2.5.1-dev+753b3f76 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.info</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -53,7 +49,7 @@
 
 <span class="c1"># Current version</span>
 <span class="n">version_major</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="n">version_minor</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">version_minor</span> <span class="o">=</span> <span class="mi">5</span>
 <span class="n">version_micro</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="n">version_extra</span> <span class="o">=</span> <span class="s2">&quot;dev&quot;</span>  <span class="c1"># leave empty for release</span>
 <span class="c1"># version_extra = &quot;&quot;</span>
@@ -70,8 +66,10 @@
     <span class="p">)</span>
 
 
-<div class="viewcode-block" id="get_gitversion"><a class="viewcode-back" href="../../mia_processes.html#mia_processes.info.get_gitversion">[docs]</a><span class="k">def</span> <span class="nf">get_gitversion</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Mia_processes version as reported by the last commit in git</span>
+<div class="viewcode-block" id="get_gitversion">
+<a class="viewcode-back" href="../../mia_processes.html#mia_processes.info.get_gitversion">[docs]</a>
+<span class="k">def</span> <span class="nf">get_gitversion</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Mia_processes version as reported by the last commit in git</span>
 <span class="sd">    Returns the version or None if nothing was found</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
@@ -111,6 +109,7 @@
     <span class="k">return</span> <span class="n">ver</span></div>
 
 
+
 <span class="k">if</span> <span class="n">__version__</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;-dev&quot;</span><span class="p">):</span>
     <span class="n">gitversion</span> <span class="o">=</span> <span class="n">get_gitversion</span><span class="p">()</span>
 
@@ -121,14 +120,13 @@
 <span class="n">CLASSIFIERS</span> <span class="o">=</span> <span class="p">[</span>
     <span class="s2">&quot;Development Status :: 5 - Production/Stable&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Intended Audience :: Developers&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;License :: OSI Approved :: CEA CNRS Inria Logiciel Libre &quot;</span>
-    <span class="s2">&quot;License, version 2.1 (CeCILL-2.1)&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;License :: OSI Approved :: CEA CNRS Inria &quot;</span>
+    <span class="s2">&quot;Logiciel Libre License, version 2.1 (CeCILL-2.1)&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Topic :: Software Development :: Libraries :: Python Modules&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Operating System :: OS Independent&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Programming Language :: Python :: 3.5&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Programming Language :: Python :: 3.6&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Programming Language :: Python :: 3.7&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Programming Language :: Python :: 3.8&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Programming Language :: Python :: 3.9&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Programming Language :: Python :: 3.10&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Programming Language :: Python :: 3.11&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Programming Language :: Python :: 3 :: Only&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Topic :: Scientific/Engineering&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Topic :: Utilities&quot;</span><span class="p">,</span>
@@ -171,8 +169,8 @@
     <span class="s2">&quot;nitransforms&quot;</span><span class="p">,</span>
     <span class="s2">&quot;numpy&quot;</span><span class="p">,</span>
     <span class="s2">&quot;paramiko&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;populse_db &gt;=2.2.0&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;populse_mia &gt;= 2.4.0&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;populse-db &gt;= 2.5.0, &lt; 3.0.0&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;populse_mia &gt;= 2.5.0, &lt; 3.0.0&quot;</span><span class="p">,</span>
     <span class="s2">&quot;pyxnat&quot;</span><span class="p">,</span>
     <span class="s2">&quot;reportlab&quot;</span><span class="p">,</span>
     <span class="s2">&quot;scipy&quot;</span><span class="p">,</span>
@@ -200,8 +198,8 @@
       </div>
 
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
+    &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     </div>
   </body>
 </html>

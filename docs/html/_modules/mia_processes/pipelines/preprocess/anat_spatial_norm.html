@@ -1,24 +1,20 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.pipelines.preprocess.anat_spatial_norm &#8212; mia_processes 2.3.1-dev+ad6303dd documentation</title>
-    <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
-    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
-    <script src="../../../../_static/jquery.js"></script>
-    <script src="../../../../_static/underscore.js"></script>
-    <script src="../../../../_static/doctools.js"></script>
-    <script src="../../../../_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <title>mia_processes.pipelines.preprocess.anat_spatial_norm &#8212; mia_processes 2.5.1-dev+753b3f76 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=f63d8bfa" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css?v=e491ac2d" />
+    <script src="../../../../_static/documentation_options.js?v=7be2cb86"></script>
+    <script src="../../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.3.1-dev+ad6303dd documentation</span></a></h1>
+          <span>mia_processes 2.5.1-dev+753b3f76 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.pipelines.preprocess.anat_spatial_norm</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -51,8 +47,10 @@
 <span class="kn">from</span> <span class="nn">capsul.api</span> <span class="kn">import</span> <span class="n">Pipeline</span>
 
 
-<div class="viewcode-block" id="Anat_spatial_norm"><a class="viewcode-back" href="../../../../mia_processes.pipelines.preprocess.html#mia_processes.pipelines.preprocess.anat_spatial_norm.Anat_spatial_norm">[docs]</a><span class="k">class</span> <span class="nc">Anat_spatial_norm</span><span class="p">(</span><span class="n">Pipeline</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Anat_spatial_norm">
+<a class="viewcode-back" href="../../../../mia_processes.pipelines.preprocess.html#mia_processes.pipelines.preprocess.anat_spatial_norm.Anat_spatial_norm">[docs]</a>
+<span class="k">class</span> <span class="nc">Anat_spatial_norm</span><span class="p">(</span><span class="n">Pipeline</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Spatial normalization to MNI (using &#39;MNI152NLin2009cAsym&#39; template)*</span>
 
 <span class="sd">    Adapted from `mriqc 22.06 anatomical workflow</span>
@@ -64,16 +62,18 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Anat_spatial_norm.pipeline_definition"><a class="viewcode-back" href="../../../../mia_processes.pipelines.preprocess.html#mia_processes.pipelines.preprocess.anat_spatial_norm.Anat_spatial_norm.pipeline_definition">[docs]</a>    <span class="k">def</span> <span class="nf">pipeline_definition</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Building the pipeline&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Anat_spatial_norm.pipeline_definition">
+<a class="viewcode-back" href="../../../../mia_processes.pipelines.preprocess.html#mia_processes.pipelines.preprocess.anat_spatial_norm.Anat_spatial_norm.pipeline_definition">[docs]</a>
+    <span class="k">def</span> <span class="nf">pipeline_definition</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Building the pipeline&quot;&quot;&quot;</span>
         <span class="c1"># nodes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
             <span class="s2">&quot;mask_moving_image&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;mia_processes.bricks.preprocess.&quot;</span> <span class="s2">&quot;others.processing.Mask&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.preprocess.others.processing.Mask&quot;</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
             <span class="s2">&quot;mask_fixed_image&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;mia_processes.bricks.preprocess.&quot;</span> <span class="s2">&quot;others.processing.Mask&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.preprocess.others.processing.Mask&quot;</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
             <span class="s2">&quot;affine_initializer&quot;</span><span class="p">,</span>
@@ -82,7 +82,7 @@
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
             <span class="s2">&quot;registration&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;mia_processes.bricks.preprocess.&quot;</span> <span class="s2">&quot;ants.processes.Registration&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mia_processes.bricks.preprocess.ants.processes.Registration&quot;</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;registration&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">convergence_threshold</span> <span class="o">=</span> <span class="p">[</span>
             <span class="mf">1e-07</span><span class="p">,</span>
@@ -144,11 +144,11 @@
             <span class="s2">&quot;mask_moving_image&quot;</span><span class="p">,</span> <span class="s2">&quot;mask_file&quot;</span><span class="p">,</span> <span class="s2">&quot;moving_mask&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span>
-            <span class="s2">&quot;mask_moving_image.out_file-&gt;&quot;</span> <span class="s2">&quot;affine_initializer.moving_image&quot;</span>
+            <span class="s2">&quot;mask_moving_image.out_file-&gt;affine_initializer.moving_image&quot;</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;mask_moving_image.out_file-&gt;registration.moving_image&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span>
-            <span class="s2">&quot;mask_fixed_image.out_file-&gt;&quot;</span> <span class="s2">&quot;affine_initializer.fixed_image&quot;</span>
+            <span class="s2">&quot;mask_fixed_image.out_file-&gt;affine_initializer.fixed_image&quot;</span>
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;mask_fixed_image.out_file-&gt;registration.fixed_image&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span>
@@ -206,7 +206,9 @@
             <span class="s2">&quot;outputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">226.78125</span><span class="p">,</span> <span class="mf">145.0</span><span class="p">),</span>
         <span class="p">}</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">do_autoexport_nodes_parameters</span> <span class="o">=</span> <span class="kc">False</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_autoexport_nodes_parameters</span> <span class="o">=</span> <span class="kc">False</span></div>
+</div>
+
 </pre></div>
 
       </div>
@@ -219,8 +221,8 @@
       </div>
 
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
+    &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     </div>
   </body>
 </html>

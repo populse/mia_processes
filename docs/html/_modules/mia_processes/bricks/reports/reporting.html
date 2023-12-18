@@ -1,24 +1,20 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.reports.reporting &#8212; mia_processes 2.3.1-dev+ad6303dd documentation</title>
-    <link rel="stylesheet" href="../../../../_static/haiku.css" type="text/css" />
-    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
-    <script src="../../../../_static/jquery.js"></script>
-    <script src="../../../../_static/underscore.js"></script>
-    <script src="../../../../_static/doctools.js"></script>
-    <script src="../../../../_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <title>mia_processes.bricks.reports.reporting &#8212; mia_processes 2.5.1-dev+753b3f76 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=f63d8bfa" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css?v=e491ac2d" />
+    <script src="../../../../_static/documentation_options.js?v=7be2cb86"></script>
+    <script src="../../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.3.1-dev+ad6303dd documentation</span></a></h1>
+          <span>mia_processes 2.5.1-dev+753b3f76 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.reports.reporting</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -79,8 +75,10 @@
 <span class="p">)</span>
 
 
-<div class="viewcode-block" id="ReportAnatMriqc"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportAnatMriqc">[docs]</a><span class="k">class</span> <span class="nc">ReportAnatMriqc</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="ReportAnatMriqc">
+<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportAnatMriqc">[docs]</a>
+<span class="k">class</span> <span class="nc">ReportAnatMriqc</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Generates the report for anatomical data in MRIQC pipeline*</span>
 
 <span class="sd">    Please, see the complete documentation for the `ReportAnatMriqc brick</span>
@@ -89,8 +87,10 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="ReportAnatMriqc.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportAnatMriqc.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+<div class="viewcode-block" id="ReportAnatMriqc.__init__">
+<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportAnatMriqc.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -112,19 +112,19 @@
         <span class="p">)</span>
 
         <span class="n">anat_fig_rows_desc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;The number of lines for the anatomical slice &quot;</span> <span class="s2">&quot;planes plot&quot;</span>
+            <span class="s2">&quot;The number of lines for the anatomical slice planes plot&quot;</span>
         <span class="p">)</span>
 
         <span class="n">anat_fig_cols_desc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;The number of columns for the anatomical slice &quot;</span> <span class="s2">&quot;planes plot&quot;</span>
+            <span class="s2">&quot;The number of columns for the anatomical slice planes plot&quot;</span>
         <span class="p">)</span>
 
         <span class="n">anat_inf_slice_start_desc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;The first index displayed in anatomical &quot;</span> <span class="s2">&quot;slice planes plot&quot;</span>
+            <span class="s2">&quot;The first index displayed in anatomical slice planes plot&quot;</span>
         <span class="p">)</span>
 
         <span class="n">anat_slices_gap_desc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;Gap between slices in anatomical slice planes &quot;</span> <span class="s2">&quot;plot&quot;</span>
+            <span class="s2">&quot;Gap between slices in anatomical slice planes plot&quot;</span>
         <span class="p">)</span>
 
         <span class="n">air_mask_desc</span> <span class="o">=</span> <span class="s2">&quot;Air mask&quot;</span>
@@ -157,7 +157,7 @@
         <span class="p">)</span>
 
         <span class="n">norm_anat_slices_gap_desc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;Gap between slices in normalised &quot;</span> <span class="s2">&quot;anatomical slice planes plot&quot;</span>
+            <span class="s2">&quot;Gap between slices in normalised anatomical slice planes plot&quot;</span>
         <span class="p">)</span>
 
         <span class="n">segmentation_desc</span> <span class="o">=</span> <span class="s2">&quot;Segmentation file&quot;</span>
@@ -334,8 +334,11 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="ReportAnatMriqc.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportAnatMriqc.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+
+<div class="viewcode-block" id="ReportAnatMriqc.list_outputs">
+<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportAnatMriqc.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -390,7 +393,7 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;PatientName&quot;</span><span class="p">]</span>
                     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;PatientName&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;Undefined&quot;</span>
                     <span class="k">else</span> <span class="s2">&quot;Undefined_name_ref&quot;</span><span class="p">,</span>
-                    <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y_%m_</span><span class="si">%d</span><span class="s2">_&quot;</span> <span class="s2">&quot;%H_%M_%S_</span><span class="si">%f</span><span class="s2">&quot;</span><span class="p">)[:</span><span class="mi">22</span><span class="p">],</span>
+                    <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y_%m_</span><span class="si">%d</span><span class="s2">_%H_%M_%S_</span><span class="si">%f</span><span class="s2">&quot;</span><span class="p">)[:</span><span class="mi">22</span><span class="p">],</span>
                 <span class="p">),</span>
             <span class="p">)</span>
 
@@ -533,7 +536,7 @@
                 <span class="s2">&quot;closer to 0 are better.&quot;</span><span class="p">,</span>
             <span class="p">],</span>
             <span class="s2">&quot;summary_csf_mean&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="s2">&quot;Mean of the distribution of cerebrospinal &quot;</span> <span class="s2">&quot;fluid&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Mean of the distribution of cerebrospinal fluid&quot;</span><span class="p">,</span>
                 <span class="mi">2</span><span class="p">,</span>
                 <span class="kc">None</span><span class="p">,</span>
             <span class="p">],</span>
@@ -544,7 +547,7 @@
                 <span class="kc">None</span><span class="p">,</span>
             <span class="p">],</span>
             <span class="s2">&quot;summary_csf_median&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="s2">&quot;Median of the distribution of &quot;</span> <span class="s2">&quot;cerebrospinal fluid&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Median of the distribution of cerebrospinal fluid&quot;</span><span class="p">,</span>
                 <span class="mi">2</span><span class="p">,</span>
                 <span class="kc">None</span><span class="p">,</span>
             <span class="p">],</span>
@@ -555,17 +558,17 @@
                 <span class="kc">None</span><span class="p">,</span>
             <span class="p">],</span>
             <span class="s2">&quot;summary_csf_p95&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="s2">&quot;95% percentile of the distribution of &quot;</span> <span class="s2">&quot;cerebrospinal fluid&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;95% percentile of the distribution of cerebrospinal fluid&quot;</span><span class="p">,</span>
                 <span class="mi">2</span><span class="p">,</span>
                 <span class="kc">None</span><span class="p">,</span>
             <span class="p">],</span>
             <span class="s2">&quot;summary_csf_p05&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="s2">&quot;5% percentile of the distribution of &quot;</span> <span class="s2">&quot;cerebrospinal fluid&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;5% percentile of the distribution of cerebrospinal fluid&quot;</span><span class="p">,</span>
                 <span class="mi">2</span><span class="p">,</span>
                 <span class="kc">None</span><span class="p">,</span>
             <span class="p">],</span>
             <span class="s2">&quot;summary_csf_k&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="s2">&quot;Kurtosis of the distribution of &quot;</span> <span class="s2">&quot;cerebrospinal fluid&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Kurtosis of the distribution of cerebrospinal fluid&quot;</span><span class="p">,</span>
                 <span class="mi">2</span><span class="p">,</span>
                 <span class="s2">&quot;*&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;K is always ≥ -2. If the distribution is &quot;</span>
@@ -587,7 +590,7 @@
                 <span class="kc">None</span><span class="p">,</span>
             <span class="p">],</span>
             <span class="s2">&quot;summary_gm_stdv&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="s2">&quot;Standard deviation of the distribution of &quot;</span> <span class="s2">&quot;gray matter&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Standard deviation of the distribution of gray matter&quot;</span><span class="p">,</span>
                 <span class="mi">2</span><span class="p">,</span>
                 <span class="kc">None</span><span class="p">,</span>
             <span class="p">],</span>
@@ -597,22 +600,22 @@
                 <span class="kc">None</span><span class="p">,</span>
             <span class="p">],</span>
             <span class="s2">&quot;summary_gm_mad&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="s2">&quot;Median absolute deviation of the distribution&quot;</span> <span class="s2">&quot; gray matter&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Median absolute deviation of the distribution gray matter&quot;</span><span class="p">,</span>
                 <span class="mi">2</span><span class="p">,</span>
                 <span class="kc">None</span><span class="p">,</span>
             <span class="p">],</span>
             <span class="s2">&quot;summary_gm_p95&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="s2">&quot;95% percentile of the distribution of &quot;</span> <span class="s2">&quot;gray matter&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;95% percentile of the distribution of gray matter&quot;</span><span class="p">,</span>
                 <span class="mi">2</span><span class="p">,</span>
                 <span class="kc">None</span><span class="p">,</span>
             <span class="p">],</span>
             <span class="s2">&quot;summary_gm_p05&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="s2">&quot;5% percentile of the distribution of &quot;</span> <span class="s2">&quot;gray matter&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;5% percentile of the distribution of gray matter&quot;</span><span class="p">,</span>
                 <span class="mi">2</span><span class="p">,</span>
                 <span class="kc">None</span><span class="p">,</span>
             <span class="p">],</span>
             <span class="s2">&quot;summary_gm_k&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="s2">&quot;Kurtosis of the distribution of &quot;</span> <span class="s2">&quot;gray matter&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Kurtosis of the distribution of gray matter&quot;</span><span class="p">,</span>
                 <span class="mi">2</span><span class="p">,</span>
                 <span class="s2">&quot;*&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;K is always ≥ -2. If the distribution is &quot;</span>
@@ -623,7 +626,7 @@
                 <span class="s2">&quot;center and tails, then K &gt; 0.&quot;</span><span class="p">,</span>
             <span class="p">],</span>
             <span class="s2">&quot;summary_gm_n&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="s2">&quot;Number of voxels in the distribution of gray &quot;</span> <span class="s2">&quot;matter&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Number of voxels in the distribution of gray matter&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;</span><span class="si">{:.2e}</span><span class="s2">&quot;</span><span class="p">,</span>
                 <span class="kc">None</span><span class="p">,</span>
             <span class="p">],</span>
@@ -633,7 +636,7 @@
                 <span class="kc">None</span><span class="p">,</span>
             <span class="p">],</span>
             <span class="s2">&quot;summary_wm_stdv&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="s2">&quot;Standard deviation of the distribution of &quot;</span> <span class="s2">&quot;white matter&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Standard deviation of the distribution of white matter&quot;</span><span class="p">,</span>
                 <span class="mi">2</span><span class="p">,</span>
                 <span class="kc">None</span><span class="p">,</span>
             <span class="p">],</span>
@@ -649,12 +652,12 @@
                 <span class="kc">None</span><span class="p">,</span>
             <span class="p">],</span>
             <span class="s2">&quot;summary_wm_p95&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="s2">&quot;95% percentile of the distribution of &quot;</span> <span class="s2">&quot;white matter&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;95% percentile of the distribution of white matter&quot;</span><span class="p">,</span>
                 <span class="mi">2</span><span class="p">,</span>
                 <span class="kc">None</span><span class="p">,</span>
             <span class="p">],</span>
             <span class="s2">&quot;summary_wm_p05&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="s2">&quot;5% percentile of the distribution of white &quot;</span> <span class="s2">&quot;matter&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;5% percentile of the distribution of white matter&quot;</span><span class="p">,</span>
                 <span class="mi">2</span><span class="p">,</span>
                 <span class="kc">None</span><span class="p">,</span>
             <span class="p">],</span>
@@ -670,7 +673,7 @@
                 <span class="s2">&quot;center and tails, then K &gt; 0.&quot;</span><span class="p">,</span>
             <span class="p">],</span>
             <span class="s2">&quot;summary_wm_n&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="s2">&quot;Number of voxels in the distribution of white &quot;</span> <span class="s2">&quot;matter&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Number of voxels in the distribution of white matter&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;</span><span class="si">{:.2e}</span><span class="s2">&quot;</span><span class="p">,</span>
                 <span class="kc">None</span><span class="p">,</span>
             <span class="p">],</span>
@@ -680,7 +683,7 @@
                 <span class="kc">None</span><span class="p">,</span>
             <span class="p">],</span>
             <span class="s2">&quot;summary_bg_stdv&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="s2">&quot;Standard deviation of the distribution of &quot;</span> <span class="s2">&quot;background&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Standard deviation of the distribution of background&quot;</span><span class="p">,</span>
                 <span class="mi">2</span><span class="p">,</span>
                 <span class="kc">None</span><span class="p">,</span>
             <span class="p">],</span>
@@ -690,17 +693,17 @@
                 <span class="kc">None</span><span class="p">,</span>
             <span class="p">],</span>
             <span class="s2">&quot;summary_bg_mad&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="s2">&quot;Median absolute deviation of the distribution&quot;</span> <span class="s2">&quot; background&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Median absolute deviation of the distribution background&quot;</span><span class="p">,</span>
                 <span class="mi">2</span><span class="p">,</span>
                 <span class="kc">None</span><span class="p">,</span>
             <span class="p">],</span>
             <span class="s2">&quot;summary_bg_p95&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="s2">&quot;95% percentile of the distribution of &quot;</span> <span class="s2">&quot;background&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;95% percentile of the distribution of background&quot;</span><span class="p">,</span>
                 <span class="mi">2</span><span class="p">,</span>
                 <span class="kc">None</span><span class="p">,</span>
             <span class="p">],</span>
             <span class="s2">&quot;summary_bg_p05&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="s2">&quot;5% percentile of the distribution of &quot;</span> <span class="s2">&quot;background&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;5% percentile of the distribution of background&quot;</span><span class="p">,</span>
                 <span class="mi">2</span><span class="p">,</span>
                 <span class="kc">None</span><span class="p">,</span>
             <span class="p">],</span>
@@ -716,7 +719,7 @@
                 <span class="s2">&quot;center and tails, then K &gt; 0.&quot;</span><span class="p">,</span>
             <span class="p">],</span>
             <span class="s2">&quot;summary_bg_n&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="s2">&quot;Number of voxels in the distribution of &quot;</span> <span class="s2">&quot;background&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Number of voxels in the distribution of background&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;</span><span class="si">{:.2e}</span><span class="s2">&quot;</span><span class="p">,</span>
                 <span class="kc">None</span><span class="p">,</span>
             <span class="p">],</span>
@@ -783,7 +786,7 @@
                 <span class="kc">None</span><span class="p">,</span>
             <span class="p">],</span>
             <span class="s2">&quot;rpve_csf&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="s2">&quot;Residual partial voluming error for cerebrospinal &quot;</span> <span class="s2">&quot;fluid&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Residual partial voluming error for cerebrospinal fluid&quot;</span><span class="p">,</span>
                 <span class="mi">2</span><span class="p">,</span>
                 <span class="s2">&quot;%&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;Lower values are better.&quot;</span><span class="p">,</span>
@@ -833,8 +836,11 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="ReportAnatMriqc.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportAnatMriqc.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ReportAnatMriqc.run_process_mia">
+<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportAnatMriqc.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ReportAnatMriqc</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
         <span class="n">report</span> <span class="o">=</span> <span class="n">Report</span><span class="p">(</span>
@@ -858,11 +864,15 @@
             <span class="n">norm_anat_slices_gap</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_anat_slices_gap</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="n">report</span><span class="o">.</span><span class="n">make_report</span><span class="p">()</span></div></div>
+        <span class="n">report</span><span class="o">.</span><span class="n">make_report</span><span class="p">()</span></div>
+</div>
 
 
-<div class="viewcode-block" id="ReportFuncMriqc"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportFuncMriqc">[docs]</a><span class="k">class</span> <span class="nc">ReportFuncMriqc</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ReportFuncMriqc">
+<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportFuncMriqc">[docs]</a>
+<span class="k">class</span> <span class="nc">ReportFuncMriqc</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Generates the report for functional data in MRIQC pipeline*</span>
 
 <span class="sd">    Please, see the complete documentation for the `ReportFuncMriqc</span>
@@ -871,8 +881,10 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="ReportFuncMriqc.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportFuncMriqc.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+<div class="viewcode-block" id="ReportFuncMriqc.__init__">
+<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportFuncMriqc.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -890,7 +902,7 @@
         <span class="n">IQMs_file_desc</span> <span class="o">=</span> <span class="s2">&quot;A .JSON file containing the IQMs&quot;</span>
 
         <span class="n">IQMs_plot_desc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;A figure with carpet and &quot;</span> <span class="s2">&quot;outliers/dvars/FD/spikes plot&quot;</span>
+            <span class="s2">&quot;A figure with carpet and outliers/dvars/FD/spikes plot&quot;</span>
         <span class="p">)</span>
 
         <span class="n">func_desc</span> <span class="o">=</span> <span class="s2">&quot;An existing, functional image file&quot;</span>
@@ -898,19 +910,19 @@
         <span class="n">func_mean_desc</span> <span class="o">=</span> <span class="s2">&quot;An existing, mean functional image file&quot;</span>
 
         <span class="n">func_fig_rows_desc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;The number of lines for the functional slice &quot;</span> <span class="s2">&quot;planes plot&quot;</span>
+            <span class="s2">&quot;The number of lines for the functional slice planes plot&quot;</span>
         <span class="p">)</span>
 
         <span class="n">func_fig_cols_desc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;The number of columns for the functional slice &quot;</span> <span class="s2">&quot;planes plot&quot;</span>
+            <span class="s2">&quot;The number of columns for the functional slice planes plot&quot;</span>
         <span class="p">)</span>
 
         <span class="n">func_inf_slice_start_desc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;The first index displayed in functional &quot;</span> <span class="s2">&quot;slice planes plot&quot;</span>
+            <span class="s2">&quot;The first index displayed in functional slice planes plot&quot;</span>
         <span class="p">)</span>
 
         <span class="n">func_slices_gap_desc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;Gap between slices in functional slice planes &quot;</span> <span class="s2">&quot;plot&quot;</span>
+            <span class="s2">&quot;Gap between slices in functional slice planes plot&quot;</span>
         <span class="p">)</span>
 
         <span class="n">norm_func_desc</span> <span class="o">=</span> <span class="p">(</span>
@@ -935,7 +947,7 @@
         <span class="p">)</span>
 
         <span class="n">norm_func_slices_gap_desc</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;Gap between slices in normalised &quot;</span> <span class="s2">&quot;functional slice planes plot&quot;</span>
+            <span class="s2">&quot;Gap between slices in normalised functional slice planes plot&quot;</span>
         <span class="p">)</span>
 
         <span class="n">stddev_func_desc</span> <span class="o">=</span> <span class="s2">&quot;Functional standard deviation image&quot;</span>
@@ -1102,8 +1114,11 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="ReportFuncMriqc.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportFuncMriqc.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+
+<div class="viewcode-block" id="ReportFuncMriqc.list_outputs">
+<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportFuncMriqc.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -1158,7 +1173,7 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;PatientName&quot;</span><span class="p">]</span>
                     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;PatientName&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;Undefined&quot;</span>
                     <span class="k">else</span> <span class="s2">&quot;Undefined_name_ref&quot;</span><span class="p">,</span>
-                    <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y_%m_</span><span class="si">%d</span><span class="s2">_&quot;</span> <span class="s2">&quot;%H_%M_%S_</span><span class="si">%f</span><span class="s2">&quot;</span><span class="p">)[:</span><span class="mi">22</span><span class="p">],</span>
+                    <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y_%m_</span><span class="si">%d</span><span class="s2">_%H_%M_%S_</span><span class="si">%f</span><span class="s2">&quot;</span><span class="p">)[:</span><span class="mi">22</span><span class="p">],</span>
                 <span class="p">),</span>
             <span class="p">)</span>
 
@@ -1235,7 +1250,7 @@
                 <span class="kc">None</span><span class="p">,</span>
             <span class="p">],</span>
             <span class="s2">&quot;summary_bg_stdv&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="s2">&quot;Standard deviation of the distribution of &quot;</span> <span class="s2">&quot;background&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Standard deviation of the distribution of background&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;</span><span class="si">{:.2e}</span><span class="s2">&quot;</span><span class="p">,</span>
                 <span class="kc">None</span><span class="p">,</span>
             <span class="p">],</span>
@@ -1251,12 +1266,12 @@
                 <span class="kc">None</span><span class="p">,</span>
             <span class="p">],</span>
             <span class="s2">&quot;summary_bg_p95&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="s2">&quot;95% percentile of the distribution of &quot;</span> <span class="s2">&quot;background&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;95% percentile of the distribution of background&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;</span><span class="si">{:.2e}</span><span class="s2">&quot;</span><span class="p">,</span>
                 <span class="kc">None</span><span class="p">,</span>
             <span class="p">],</span>
             <span class="s2">&quot;summary_bg_p05&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="s2">&quot;5% percentile of the distribution of &quot;</span> <span class="s2">&quot;background&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;5% percentile of the distribution of background&quot;</span><span class="p">,</span>
                 <span class="mi">2</span><span class="p">,</span>
                 <span class="kc">None</span><span class="p">,</span>
             <span class="p">],</span>
@@ -1272,7 +1287,7 @@
                 <span class="s2">&quot;center and tails, then K &gt; 0.&quot;</span><span class="p">,</span>
             <span class="p">],</span>
             <span class="s2">&quot;summary_bg_n&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="s2">&quot;Number of voxels in the distribution &quot;</span> <span class="s2">&quot;of background&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Number of voxels in the distribution of background&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;</span><span class="si">{:.2e}</span><span class="s2">&quot;</span><span class="p">,</span>
                 <span class="kc">None</span><span class="p">,</span>
             <span class="p">],</span>
@@ -1282,7 +1297,7 @@
                 <span class="kc">None</span><span class="p">,</span>
             <span class="p">],</span>
             <span class="s2">&quot;summary_fg_stdv&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="s2">&quot;Standard deviation of the distribution of &quot;</span> <span class="s2">&quot;foreground&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Standard deviation of the distribution of foreground&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;</span><span class="si">{:.2e}</span><span class="s2">&quot;</span><span class="p">,</span>
                 <span class="kc">None</span><span class="p">,</span>
             <span class="p">],</span>
@@ -1298,12 +1313,12 @@
                 <span class="kc">None</span><span class="p">,</span>
             <span class="p">],</span>
             <span class="s2">&quot;summary_fg_p95&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="s2">&quot;95% percentile of the distribution of &quot;</span> <span class="s2">&quot;foreground&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;95% percentile of the distribution of foreground&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;</span><span class="si">{:.2e}</span><span class="s2">&quot;</span><span class="p">,</span>
                 <span class="kc">None</span><span class="p">,</span>
             <span class="p">],</span>
             <span class="s2">&quot;summary_fg_p05&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="s2">&quot;5% percentile of the distribution of &quot;</span> <span class="s2">&quot;foreground&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;5% percentile of the distribution of foreground&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;</span><span class="si">{:.2e}</span><span class="s2">&quot;</span><span class="p">,</span>
                 <span class="kc">None</span><span class="p">,</span>
             <span class="p">],</span>
@@ -1319,7 +1334,7 @@
                 <span class="s2">&quot;center and tails, then K &gt; 0.&quot;</span><span class="p">,</span>
             <span class="p">],</span>
             <span class="s2">&quot;summary_fg_n&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="s2">&quot;Number of voxels in the distribution &quot;</span> <span class="s2">&quot;of foreground&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Number of voxels in the distribution of foreground&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;</span><span class="si">{:.2e}</span><span class="s2">&quot;</span><span class="p">,</span>
                 <span class="kc">None</span><span class="p">,</span>
             <span class="p">],</span>
@@ -1448,8 +1463,11 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="ReportFuncMriqc.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportFuncMriqc.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ReportFuncMriqc.run_process_mia">
+<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportFuncMriqc.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ReportFuncMriqc</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
 
         <span class="n">report</span> <span class="o">=</span> <span class="n">Report</span><span class="p">(</span>
@@ -1472,11 +1490,15 @@
             <span class="n">norm_func_slices_gap</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_func_slices_gap</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="n">report</span><span class="o">.</span><span class="n">make_report</span><span class="p">()</span></div></div>
+        <span class="n">report</span><span class="o">.</span><span class="n">make_report</span><span class="p">()</span></div>
+</div>
 
 
-<div class="viewcode-block" id="ReportGroupMriqc"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportGroupMriqc">[docs]</a><span class="k">class</span> <span class="nc">ReportGroupMriqc</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ReportGroupMriqc">
+<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportGroupMriqc">[docs]</a>
+<span class="k">class</span> <span class="nc">ReportGroupMriqc</span><span class="p">(</span><span class="n">ProcessMIA</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    *Generates a group report for mriqc pipelines*</span>
 
 <span class="sd">    Please, see the complete documentation for the `ReportGroupMriqc brick</span>
@@ -1485,8 +1507,10 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="ReportGroupMriqc.__init__"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportGroupMriqc.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
+<div class="viewcode-block" id="ReportGroupMriqc.__init__">
+<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportGroupMriqc.__init__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the attributes initialisation / instantiation.</span>
 
 <span class="sd">        The input and output plugs are defined here. The special</span>
 <span class="sd">        &#39;self.requirement&#39; attribute (optional) is used to define the</span>
@@ -1524,8 +1548,11 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">init_default_traits</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="ReportGroupMriqc.list_outputs"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportGroupMriqc.list_outputs">[docs]</a>    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
+
+<div class="viewcode-block" id="ReportGroupMriqc.list_outputs">
+<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportGroupMriqc.list_outputs">[docs]</a>
+    <span class="k">def</span> <span class="nf">list_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">is_plugged</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the initialisation step of the brick.</span>
 
 <span class="sd">        The main objective of this method is to produce the outputs of the</span>
 <span class="sd">        bricks (self.outputs) and the associated tags (self.inheritance_dic),</span>
@@ -1582,9 +1609,9 @@
             <span class="c1">#        or to put them in the input parameters of the brick:</span>
             <span class="c1"># Site</span>
             <span class="k">if</span> <span class="n">dict4runtime_file</span><span class="p">[</span><span class="s2">&quot;Site&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">):</span>
-                <span class="n">dict4runtime_file</span><span class="p">[</span><span class="s2">&quot;Site&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="s2">&quot;Grenoble University Hospital&quot;</span> <span class="s2">&quot;- CLUNI&quot;</span>
-                <span class="p">)</span>
+                <span class="n">dict4runtime_file</span><span class="p">[</span>
+                    <span class="s2">&quot;Site&quot;</span>
+                <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Grenoble University Hospital - CLUNI&quot;</span>
 
             <span class="c1"># MriScanner</span>
             <span class="k">if</span> <span class="n">dict4runtime_file</span><span class="p">[</span><span class="s2">&quot;Spectro&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">):</span>
@@ -1605,9 +1632,7 @@
                 <span class="s2">&quot;mriqc_group_report_&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">modality</span> <span class="o">+</span> <span class="n">date</span> <span class="o">+</span> <span class="s2">&quot;.tsv&quot;</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span>
-                <span class="s2">&quot;No output_directory was found,&quot;</span> <span class="s2">&quot;please select a project!</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No output_directory was found, please select a project!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="k">return</span>
 
         <span class="c1"># FIXME: Do we need tags inheritance ?</span>
@@ -1615,8 +1640,11 @@
         <span class="c1"># Return the requirement, outputs and inheritance_dict</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="ReportGroupMriqc.run_process_mia"><a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportGroupMriqc.run_process_mia">[docs]</a>    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ReportGroupMriqc.run_process_mia">
+<a class="viewcode-back" href="../../../../mia_processes.bricks.reports.html#mia_processes.bricks.reports.reporting.ReportGroupMriqc.run_process_mia">[docs]</a>
+    <span class="k">def</span> <span class="nf">run_process_mia</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Dedicated to the process launch step of the brick.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">ReportGroupMriqc</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">run_process_mia</span><span class="p">()</span>
         <span class="c1"># Get all info in a tsv file and in a panda dataframe</span>
         <span class="n">df</span><span class="p">,</span> <span class="n">out_tsv</span> <span class="o">=</span> <span class="n">mriqc_group_iqms_tsv</span><span class="p">(</span>
@@ -1751,7 +1779,9 @@
 
         <span class="n">report</span><span class="o">.</span><span class="n">make_report</span><span class="p">()</span>
 
-        <span class="n">tpm_dir</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span></div></div>
+        <span class="n">tpm_dir</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span></div>
+</div>
+
 </pre></div>
 
       </div>
@@ -1764,8 +1794,8 @@
       </div>
 
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
+    &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     </div>
   </body>
 </html>
