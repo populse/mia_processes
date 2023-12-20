@@ -40,8 +40,8 @@ To use certain mia_processes bricks (atomic processes), `third-party softwares u
 
     - **dipy**
 
-      - `Denoise <bricks/preprocess/dipy/Denoise.html>`_
       - `ComputeDKI <bricks/preprocess/dipy/ComputeDKI.html>`_
+      - `Denoise <bricks/preprocess/dipy/Denoise.html>`_
 
     - **freesurfer**
 
@@ -135,9 +135,10 @@ To use certain mia_processes bricks (atomic processes), `third-party softwares u
 
       - `EstimateContrast <bricks/stats/spm/EstimateContrast.html>`_
       - `EstimateModel <bricks/stats/spm/EstimateModel.html>`_
+      - `Level1Design <bricks/stats/spm/Level1Design.html>`_
       - `MultipleRegressionDesign <bricks/stats/spm/MultipleRegressionDesign.html>`_
       - `OneSampleTTestDesign <bricks/stats/spm/OneSampleTTestDesign.html>`_
-      - `Level1Design <bricks/stats/spm/Level1Design.html>`_
+      - `PairedTTestDesign <bricks/stats/spm/PairedTTestDesign.html>`_
       - `TwoSampleTTestDesign <bricks/stats/spm/TwoSampleTTestDesign.html>`_
 
   - **tools**
