@@ -57,28 +57,6 @@ To use certain mia_processes bricks (atomic processes), `third-party softwares u
       - `Flirt <bricks/preprocess/fsl/Flirt.html>`_
       - `Smooth <bricks/preprocess/fsl/Smooth.html>`__
 
-    - **others**
-
-      - `ApplyBiasCorrection <bricks/preprocess/others/ApplyBiasCorrection.html>`_
-      - `ArtifactMask <bricks/preprocess/others/ArtifactMask.html>`_
-      - `Binarize <bricks/preprocess/others/Binarize.html>`__
-      - `ConformImage <bricks/preprocess/others/ConformImage.html>`_
-      - `ConvROI <bricks/preprocess/others/ConvROI.html>`_
-      - `Enhance <bricks/preprocess/others/Enhance.html>`_
-      - `EstimateSNR <bricks/preprocess/others/EstimateSNR.html>`_
-      - `GradientThreshold <bricks/preprocess/others/GradientThreshold.html>`_
-      - `Harmonize <bricks/preprocess/others/Harmonize.html>`_
-      - `IntensityClip <bricks/preprocess/others/IntensityClip.html>`_
-      - `Mask <bricks/preprocess/others/Mask.html>`_
-      - `NonSteadyDetector <bricks/preprocess/others/NonSteadyDetector.html>`_
-      - `Resample1 <bricks/preprocess/others/Resample1.html>`_
-      - `Resample2 <bricks/preprocess/others/Resample2.html>`_
-      - `RotationMask <bricks/preprocess/others/RotationMask.html>`_
-      - `Sanitize <bricks/preprocess/others/Sanitize.html>`_
-      - `TSNR <bricks/preprocess/others/TSNR.html>`_
-      - `TemplateFromTemplateFlow <bricks/preprocess/others/TemplateFromTemplateFlow.html>`_
-      - `Threshold <bricks/preprocess/others/Threshold.html>`_
-
     - **mrtrix**
 
       - `ConstrainedSphericalDeconvolution <bricks/preprocess/mrtrix/ConstrainedSphericalDeconvolution.html>`_
@@ -103,6 +81,28 @@ To use certain mia_processes bricks (atomic processes), `third-party softwares u
       - `TensorMetrics <bricks/preprocess/mrtrix/TensorMetrics.html>`_
       - `Tractography <bricks/preprocess/mrtrix/Tractography.html>`_
       - `TransformFSLConvert <bricks/preprocess/mrtrix/TransformFSLConvert.html>`_
+
+    - **others**
+
+      - `ApplyBiasCorrection <bricks/preprocess/others/ApplyBiasCorrection.html>`_
+      - `ArtifactMask <bricks/preprocess/others/ArtifactMask.html>`_
+      - `Binarize <bricks/preprocess/others/Binarize.html>`__
+      - `ConformImage <bricks/preprocess/others/ConformImage.html>`_
+      - `ConvROI <bricks/preprocess/others/ConvROI.html>`_
+      - `Enhance <bricks/preprocess/others/Enhance.html>`_
+      - `EstimateSNR <bricks/preprocess/others/EstimateSNR.html>`_
+      - `GradientThreshold <bricks/preprocess/others/GradientThreshold.html>`_
+      - `Harmonize <bricks/preprocess/others/Harmonize.html>`_
+      - `IntensityClip <bricks/preprocess/others/IntensityClip.html>`_
+      - `Mask <bricks/preprocess/others/Mask.html>`_
+      - `NonSteadyDetector <bricks/preprocess/others/NonSteadyDetector.html>`_
+      - `Resample1 <bricks/preprocess/others/Resample1.html>`_
+      - `Resample2 <bricks/preprocess/others/Resample2.html>`_
+      - `RotationMask <bricks/preprocess/others/RotationMask.html>`_
+      - `Sanitize <bricks/preprocess/others/Sanitize.html>`_
+      - `TSNR <bricks/preprocess/others/TSNR.html>`_
+      - `TemplateFromTemplateFlow <bricks/preprocess/others/TemplateFromTemplateFlow.html>`_
+      - `Threshold <bricks/preprocess/others/Threshold.html>`_
 
     - **spm**
 
