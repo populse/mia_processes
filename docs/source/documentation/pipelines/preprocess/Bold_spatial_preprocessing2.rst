@@ -16,7 +16,7 @@ An example of fMRI data pre-processing
 **Pipeline insight**
 
 - Spatial_preprocessing pipeline combines the following bricks:
-    - `Slice timing  <../../bricks/tools/List_Duplicate.html>`_
+    - `Slice timing  <../../bricks/preprocess/spm/SliceTiming.html>`_
     - `Realign <../../bricks/preprocess/spm/Realign.html>`_
     - `Normalize12 Estimate & write <../../bricks/preprocess/spm/Normalize12.html>`_
         - (default values: jobtype = 'estwrite', bias_regularization = 0.0001, bias_fwhm = 30, write_interp = 4)
