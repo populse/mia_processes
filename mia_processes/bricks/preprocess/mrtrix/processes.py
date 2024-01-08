@@ -877,6 +877,9 @@ class DWIExtract(ProcessMIA):
                     fileName += "_nobzero"
                 if self.bzero:
                     fileName += "_bzero"
+                if self.shell:
+                    shells = "_".join(str(int(s)) for s in self.shell)
+                    fileName += "_" + shells
 
                 self.outputs["out_file"] = os.path.join(
                     self.output_directory, fileName + "." + in_ext
