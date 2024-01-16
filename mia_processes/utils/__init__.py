@@ -30,8 +30,8 @@ from .tools import (  # noqa: F401
     plot_boxplot_points,
     plot_qi2,
     plot_segmentation,
+    plot_slice_planes,
     set_dbFieldValue,
-    slice_planes_plot,
 )
 
 # Prevent circular import (PageNumCanvas)

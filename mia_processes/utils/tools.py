@@ -15,8 +15,9 @@ Module that contains multiple functions used across mia_processes
         - mriqc_group_iqms_tsv
         - plot_boxplot_points
         - plot_qi2
+        - plot_segmentation
+        - plot_slice_planes
         - set_dbFieldValue
-        - slice_planes_plot
 """
 
 ##########################################################################
@@ -98,7 +99,7 @@ class ReportLine(Flowable):
         return "Line(w=%s)" % self.width
 
     def draw(self):
-        "Draw the line"
+        """Draw the line"""
         self.canv.line(0, self.height, self.width, self.height)
 
 
@@ -524,7 +525,7 @@ def set_dbFieldValue(project, document, tag_to_add):
     )
 
 
-def slice_planes_plot(
+def plot_slice_planes(
     data,
     fig_rows,
     fig_cols,
@@ -536,7 +537,19 @@ def slice_planes_plot(
     only_noise=False,
     out_name=None,
 ):
-    "blablabla"
+    """blablabla
+
+    :param data:
+    :param fig_rows:
+    :param fig_cols:
+    :param inf_slice_start:
+    :param slices_gap:
+    :param dyn:
+    :param cmap:
+    :param out_dir:
+    :param only_noise:
+    :param out_name:
+    """
 
     brain_img = nib.as_closest_canonical(nib.load(data))
     brain_data = brain_img.get_fdata()

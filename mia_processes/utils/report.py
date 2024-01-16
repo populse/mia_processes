@@ -59,7 +59,7 @@ from mia_processes.utils import (
     ReportLine,
     plot_qi2,
     plot_segmentation,
-    slice_planes_plot,
+    plot_slice_planes,
 )
 
 
@@ -933,7 +933,7 @@ class Report:
         )
         self.report.append(Spacer(0 * mm, 1 * mm))
         tmpdir = tempfile.TemporaryDirectory()
-        slices_image = slice_planes_plot(
+        slices_image = plot_slice_planes(
             self.anat,
             self.anat_fig_rows,
             self.anat_fig_cols,
@@ -982,7 +982,7 @@ class Report:
             )
         )
         self.report.append(Spacer(0 * mm, 1 * mm))
-        slices_image = slice_planes_plot(
+        slices_image = plot_slice_planes(
             self.norm_anat,
             self.norm_anat_fig_rows,
             self.norm_anat_fig_cols,
@@ -1032,7 +1032,7 @@ class Report:
             )
         )
         self.report.append(Spacer(0 * mm, 1 * mm))
-        slices_image = slice_planes_plot(
+        slices_image = plot_slice_planes(
             self.anat,
             self.anat_fig_rows,
             self.anat_fig_cols,
@@ -1618,7 +1618,7 @@ class Report:
         )
         self.report.append(Spacer(0 * mm, 1 * mm))
         tmpdir = tempfile.TemporaryDirectory()
-        slices_image = slice_planes_plot(
+        slices_image = plot_slice_planes(
             self.func,
             self.func_fig_rows,
             self.func_fig_cols,
@@ -1667,7 +1667,7 @@ class Report:
             )
         )
         self.report.append(Spacer(0 * mm, 1 * mm))
-        slices_image = slice_planes_plot(
+        slices_image = plot_slice_planes(
             self.norm_func,
             self.norm_func_fig_rows,
             self.norm_func_fig_cols,
@@ -1716,7 +1716,7 @@ class Report:
             )
         )
         self.report.append(Spacer(0 * mm, 1 * mm))
-        slices_image = slice_planes_plot(
+        slices_image = plot_slice_planes(
             self.stddev,
             self.func_fig_rows,
             self.func_fig_cols,
@@ -1766,7 +1766,7 @@ class Report:
             )
         )
         self.report.append(Spacer(0 * mm, 1 * mm))
-        slices_image = slice_planes_plot(
+        slices_image = plot_slice_planes(
             self.func_mean,
             self.func_fig_rows,
             self.func_fig_cols,
