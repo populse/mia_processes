@@ -7,6 +7,7 @@ generate automatic report at the end of a pipeline calculation.
 :Contains:
     :Class:
         - ReportAnatMriqc
+        - ReportCO2inhalCvr
         - ReportFuncMriqc
         - ReportGroupMriqc
 
@@ -822,6 +823,308 @@ class ReportAnatMriqc(ProcessMIA):
             norm_anat_fig_cols=self.norm_anat_fig_cols,
             norm_anat_inf_slice_start=self.norm_anat_inf_slice_start,
             norm_anat_slices_gap=self.norm_anat_slices_gap,
+        )
+
+        report.make_report()
+
+
+class ReportCO2inhalCvr(ProcessMIA):
+    """
+    *Generates report for CVR study by CO2 inhalation task*
+
+    Please, see the complete documentation for the `ReportCO2inhalCvr brick
+    in the mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/reports/ReportCO2inhalCvr.html>`_
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation / instantiation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(ReportCO2inhalCvr, self).__init__()
+
+        # Third party software required for the execution of the brick
+        self.requirement = []
+
+        # Inputs description
+        norm_anat_desc = (
+            "An existing, uncompressed normalised anatomical "
+            "image file (valid extensions: .nii)"
+        )
+
+        norm_anat_fig_rows_desc = (
+            "The number of lines for the normalised "
+            "anatomical slice planes plot"
+        )
+
+        norm_anat_fig_cols_desc = (
+            "The number of columns for the normalised "
+            "anatomical slice planes plot"
+        )
+
+        norm_anat_inf_slice_start_desc = (
+            "The first index displayed in "
+            "normalised anatomical slice planes "
+            "plot"
+        )
+
+        norm_anat_slices_gap_desc = (
+            "Gap between slices in normalised anatomical slice planes plot"
+        )
+
+        norm_func_desc = (
+            "An existing, uncompressed normalised functional image file "
+            "(valid extensions: .nii, .nii.gz)"
+        )
+
+        norm_func_fig_rows_desc = (
+            "The number of lines for the normalised functional slice "
+            "planes plot"
+        )
+
+        norm_func_fig_cols_desc = (
+            "The number of columns for the normalised functional slice "
+            "planes plot"
+        )
+
+        norm_func_inf_slice_start_desc = (
+            "The first index displayed in the normalised functional slice "
+            "planes plot"
+        )
+
+        norm_func_slices_gap_desc = (
+            "Gap between slices in the normalised functional slice planes plot"
+        )
+
+        realignment_parameters_desc = (
+            "Estimation of translation and rotation parameters when "
+            "realigning functional data (a pathlike object or a"
+            "string representing a file, or a list "
+            "of pathlike objects or strings "
+            "representing a file)"
+        )
+
+        # Outputs description
+        report_desc = "The generated report (pdf)"
+
+        # Inputs traits
+        self.add_trait(
+            "norm_anat",
+            ImageFileSPM(
+                copyfile=False,
+                output=False,
+                optional=False,
+                desc=norm_anat_desc,
+            ),
+        )
+
+        self.add_trait(
+            "norm_anat_fig_rows",
+            traits.Int(
+                5, output=False, optional=True, desc=norm_anat_fig_rows_desc
+            ),
+        )
+
+        self.add_trait(
+            "norm_anat_fig_cols",
+            traits.Int(
+                5, output=False, optional=True, desc=norm_anat_fig_cols_desc
+            ),
+        )
+
+        self.add_trait(
+            "norm_anat_inf_slice_start",
+            traits.Either(
+                Undefined,
+                traits.Int,
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=norm_anat_inf_slice_start_desc,
+            ),
+        )
+
+        self.add_trait(
+            "norm_anat_slices_gap",
+            traits.Either(
+                Undefined,
+                traits.Int,
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=norm_anat_slices_gap_desc,
+            ),
+        )
+
+        self.add_trait(
+            "norm_func",
+            ImageFileSPM(
+                copyfile=False,
+                output=False,
+                optional=False,
+                desc=norm_func_desc,
+            ),
+        )
+
+        self.add_trait(
+            "norm_func_fig_rows",
+            traits.Int(
+                5, output=False, optional=True, desc=norm_func_fig_rows_desc
+            ),
+        )
+
+        self.add_trait(
+            "norm_func_fig_cols",
+            traits.Int(
+                5, output=False, optional=True, desc=norm_func_fig_cols_desc
+            ),
+        )
+
+        self.add_trait(
+            "norm_func_inf_slice_start",
+            traits.Either(
+                Undefined,
+                traits.Int,
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=norm_func_inf_slice_start_desc,
+            ),
+        )
+
+        self.add_trait(
+            "norm_func_slices_gap",
+            traits.Either(
+                Undefined,
+                traits.Int,
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=norm_func_slices_gap_desc,
+            ),
+        )
+
+        self.add_trait(
+            "realignment_parameters",
+            File(
+                output=False, optional=False, desc=realignment_parameters_desc
+            ),
+        )
+
+        # Outputs traits
+        self.add_trait(
+            "report",
+            OutputMultiPath(
+                File(), output=True, optional=True, desc=report_desc
+            ),
+        )
+        # Special parameter used as a messenger for the run_process_mia method
+        self.add_trait(
+            "dict4runtime",
+            traits.Dict(output=False, optional=True, userlevel=1),
+        )
+
+        self.init_default_traits()
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(ReportCO2inhalCvr, self).list_outputs()
+
+        file_position = (
+            self.norm_anat.find(self.project.getName())
+            + len(self.project.getName())
+            + 1
+        )
+        database_filename = self.norm_anat[file_position:]
+
+        # As we do not have access to the database at the runtime (see #272),
+        # we prepare here the data that the run_process_mia method will need
+        # via dict4runtime parameter:
+        dict4runtime_update(
+            self.dict4runtime,
+            self.project.session,
+            database_filename,
+            "PatientName",
+            "StudyName",
+            "AcquisitionDate",
+            "Sex",
+            "Site",
+            "Spectro",
+            "Age",
+        )
+
+        # FIXME: Currently, Site and Spectro data are hard-coded. A solution
+        #        should be found to retrieve them automatically or to put them
+        #        in the input parameters of the brick:
+        # Site
+        if self.dict4runtime["Site"] in ("", "Undefined"):
+            self.dict4runtime["Site"] = "Grenoble University Hospital - CLUNI"
+
+        # MriScanner
+        if self.dict4runtime["Spectro"] in ("", "Undefined"):
+            self.dict4runtime["Spectro"] = "Philips Achieva 3.0T TX"
+
+        # Generate an output name
+        if (
+            self.norm_anat
+            and self.norm_anat not in ["<undefined>", traits.Undefined]
+        ) and (
+            self.norm_func
+            and self.norm_func not in ["<undefined>", traits.Undefined]
+        ):
+            self.outputs["report"] = os.path.join(
+                self.output_directory,
+                "{0}_CO2_inhal_CVR_Report_{1}.pdf".format(
+                    self.dict4runtime["PatientName"]
+                    if self.dict4runtime["PatientName"] != "Undefined"
+                    else "Undefined_name_ref",
+                    datetime.now().strftime("%Y_%m_%d_%H_%M_%S_%f")[:22],
+                ),
+            )
+
+        else:
+            return self.make_initResult()
+
+        self.tags_inheritance(
+            self.norm_anat,
+            self.outputs["report"],
+        )
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(ReportCO2inhalCvr, self).run_process_mia()
+
+        report = Report(
+            self.report,
+            self.dict4runtime,
+            CVR=True,
+            norm_anat=self.norm_anat,
+            norm_anat_fig_rows=self.norm_anat_fig_rows,
+            norm_anat_fig_cols=self.norm_anat_fig_cols,
+            norm_anat_inf_slice_start=self.norm_anat_inf_slice_start,
+            norm_anat_slices_gap=self.norm_anat_slices_gap,
+            norm_func=self.norm_func,
+            norm_func_fig_rows=self.norm_func_fig_rows,
+            norm_func_fig_cols=self.norm_func_fig_cols,
+            norm_func_inf_slice_start=self.norm_func_inf_slice_start,
+            norm_func_slices_gap=self.norm_func_slices_gap,
+            realignment_parameters=self.realignment_parameters,
         )
 
         report.make_report()

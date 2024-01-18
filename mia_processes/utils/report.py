@@ -80,6 +80,7 @@ class Report:
     def __init__(self, report_file, dict4runtime, **kwargs):
         """Create Canvas , create cover and make report"""
 
+        today_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.dict4runtime = dict4runtime
         ref_exp = "Undefined"
 
@@ -113,6 +114,33 @@ class Report:
                 "<font size=30><b>C</b></font>"
                 "<font size=11>ontrol</font>"
             )
+            infos = [
+                self.dict4runtime[i]
+                for i in (
+                    "Site",
+                    "Spectro",
+                    "StudyName",
+                    "AcquisitionDate",
+                    "PatientName",
+                    "Sex",
+                    "Age",
+                )
+            ]
+            infos.insert(4, today_date)
+            infos.insert(5, ref_exp)
+
+            headers = [
+                "SITE",
+                "MRI SCANNER",
+                "STUDY NAME",
+                "EXAMINATION DATE",
+                "MRIQC CALCULATION DATE",
+                "NAME OF THE INPUT DATA",
+                "PATIENT REFERENCE",
+                "PATIENT SEX",
+                "PATIENT AGE",
+                "SOFTWARES",
+            ]
 
         elif "mriqc_group" in kwargs:
             self.make_report = self.mriqc_group_make_report
@@ -125,7 +153,59 @@ class Report:
                 "<font size=30><b>C</b></font>"
                 "<font size=11>ontrol</font>"
             )
+            infos = [today_date]
+            headers = [
+                "MRIQC GROUPS CALCULATION DATE",
+                "SOFTWARES",
+            ]
 
+        elif "CVR" in kwargs:
+            self.make_report = self.co2_inhal_cvr_make_report
+            ref_exp = {
+                "norm_anat": self.norm_anat,
+                "norm_func": self.norm_func,
+            }
+            self.title = (
+                "<font size=18><b>Functional Image-Quality "
+                "Metrics summary report</b></font>"
+            )
+
+            self.header_title = (
+                "<font size=30><b>C</b></font>"
+                "<font size=11>erebro</font>"
+                "<font size=30><b>V</b></font>"
+                "<font size=11>ascular</font>"
+                "<font size=30><b> R</b></font>"
+                "<font size=11>reactivity with CO2 inhalation "
+                "as a physiological challenge</font>"
+            )
+            infos = [
+                self.dict4runtime[i]
+                for i in (
+                    "Site",
+                    "Spectro",
+                    "StudyName",
+                    "AcquisitionDate",
+                    "PatientName",
+                    "Sex",
+                    "Age",
+                )
+            ]
+            infos.insert(4, today_date)
+            infos.insert(5, ref_exp)
+
+            headers = [
+                "SITE",
+                "MRI SCANNER",
+                "STUDY NAME",
+                "EXAMINATION DATE",
+                "MRIQC CALCULATION DATE",
+                "NAME OF THE INPUT DATA",
+                "PATIENT REFERENCE",
+                "PATIENT SEX",
+                "PATIENT AGE",
+                "SOFTWARES",
+            ]
         # Initialises stylesheet with few basic heading and text styles,
         # return a stylesheet object
         self.styles = getSampleStyleSheet()
@@ -187,43 +267,6 @@ class Report:
                 ]
             )
         )
-
-        today_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-        if "IQMs_file" in kwargs:
-            infos = [
-                self.dict4runtime[i]
-                for i in (
-                    "Site",
-                    "Spectro",
-                    "StudyName",
-                    "AcquisitionDate",
-                    "PatientName",
-                    "Sex",
-                    "Age",
-                )
-            ]
-            infos.insert(4, today_date)
-            infos.insert(5, ref_exp)
-
-            headers = [
-                "SITE",
-                "MRI SCANNER",
-                "STUDY NAME",
-                "EXAMINATION DATE",
-                "MRIQC CALCULATION DATE",
-                "NAME OF THE INPUT DATA",
-                "PATIENT REFERENCE",
-                "PATIENT SEX",
-                "PATIENT AGE",
-                "SOFTWARES",
-            ]
-        elif "mriqc_group" in kwargs:
-            infos = [today_date]
-            headers = [
-                "MRIQC GROUPS CALCULATION DATE",
-                "SOFTWARES",
-            ]
         infos.extend(
             (
                 "Python " + version.split()[0],
@@ -424,6 +467,49 @@ class Report:
                     ),
                     self.styles["Bullet2"],
                 )
+
+    def co2_inhal_cvr_make_report(self):
+        """Make CVR under CO2 challenge report"""
+
+        # First page - cover ##################################################
+        #######################################################################
+
+        self.report.append(self.image_cov)
+        # width, height
+        self.report.append(Spacer(0 * mm, 8 * mm))
+        self.report.append(Paragraph(self.header_title, self.styles["Center"]))
+        self.report.append(Spacer(0 * mm, 10 * mm))
+        line = ReportLine(150)
+        line.hAlign = "CENTER"
+        self.report.append(line)
+        self.report.append(Spacer(0 * mm, 10 * mm))
+        self.report.append(Paragraph(self.title, self.styles["Center"]))
+        self.report.append(Spacer(0 * mm, 10 * mm))
+        self.report.append(self.cover_data)
+        self.report.append(Spacer(0 * mm, 6 * mm))
+        self.report.append(
+            Paragraph(self.textDisclaimer, self.styles["Justify"])
+        )
+        self.report.append(Spacer(0 * mm, 6 * mm))
+        # Footnote
+        line = ReportLine(500)
+        line.hAlign = "CENTER"
+        self.report.append(line)
+        self.report.append(Spacer(0 * mm, 2.5 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size = 8><sup>$</sup>Esteban O et "
+                "al., <i>MRIQC: Advancing the Automatic "
+                "Prediction of Image Quality in MRI from"
+                " Unseen Sites</i>, PLOS ONE 12(9)"
+                ":e0184661.</font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(PageBreak())
+
+        self.page.build(self.report, canvasmaker=PageNumCanvas)
+        # tmpdir.cleanup()
 
     def mriqc_anat_make_report(
         self,

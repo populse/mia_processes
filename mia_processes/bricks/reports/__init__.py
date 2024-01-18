@@ -26,6 +26,7 @@ from .processes import (  # noqa: F401
 )
 from .reporting import (  # noqa: F401
     ReportAnatMriqc,
+    ReportCO2inhalCvr,
     ReportFuncMriqc,
     ReportGroupMriqc,
 )
