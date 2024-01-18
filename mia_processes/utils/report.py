@@ -937,8 +937,8 @@ class Report:
             self.anat,
             self.anat_fig_rows,
             self.anat_fig_cols,
-            inf_slice_start=self.anat_inf_slice_start,
-            slices_gap=self.anat_slices_gap,
+            slice_start=self.anat_inf_slice_start,
+            slice_step=self.anat_slices_gap,
             cmap="Greys_r",
             out_dir=tmpdir.name,
         )
@@ -986,8 +986,8 @@ class Report:
             self.norm_anat,
             self.norm_anat_fig_rows,
             self.norm_anat_fig_cols,
-            inf_slice_start=self.norm_anat_inf_slice_start,
-            slices_gap=self.norm_anat_slices_gap,
+            slice_start=self.norm_anat_inf_slice_start,
+            slice_step=self.norm_anat_slices_gap,
             cmap="Greys_r",
             out_dir=tmpdir.name,
         )
@@ -1036,8 +1036,8 @@ class Report:
             self.anat,
             self.anat_fig_rows,
             self.anat_fig_cols,
-            inf_slice_start=self.anat_inf_slice_start,
-            slices_gap=self.anat_slices_gap,
+            slice_start=self.anat_inf_slice_start,
+            slice_step=self.anat_slices_gap,
             cmap="viridis_r",
             out_dir=tmpdir.name,
             only_noise=True,
@@ -1622,8 +1622,8 @@ class Report:
             self.func,
             self.func_fig_rows,
             self.func_fig_cols,
-            inf_slice_start=self.func_inf_slice_start,
-            slices_gap=self.func_slices_gap,
+            slice_start=self.func_inf_slice_start,
+            slice_step=self.func_slices_gap,
             cmap="Greys_r",
             out_dir=tmpdir.name,
         )
@@ -1671,8 +1671,8 @@ class Report:
             self.norm_func,
             self.norm_func_fig_rows,
             self.norm_func_fig_cols,
-            inf_slice_start=self.norm_func_inf_slice_start,
-            slices_gap=self.norm_func_slices_gap,
+            slice_start=self.norm_func_inf_slice_start,
+            slice_step=self.norm_func_slices_gap,
             cmap="Greys_r",
             out_dir=tmpdir.name,
         )
@@ -1720,8 +1720,8 @@ class Report:
             self.stddev,
             self.func_fig_rows,
             self.func_fig_cols,
-            inf_slice_start=self.func_inf_slice_start,
-            slices_gap=self.func_slices_gap,
+            slice_start=self.func_inf_slice_start,
+            slice_step=self.func_slices_gap,
             cmap="viridis",
             out_dir=tmpdir.name,
         )
@@ -1770,8 +1770,8 @@ class Report:
             self.func_mean,
             self.func_fig_rows,
             self.func_fig_cols,
-            inf_slice_start=self.func_inf_slice_start,
-            slices_gap=self.func_slices_gap,
+            slice_start=self.func_inf_slice_start,
+            slice_step=self.func_slices_gap,
             cmap="viridis_r",
             out_dir=tmpdir.name,
             only_noise=True,
@@ -1784,7 +1784,7 @@ class Report:
         self.report.append(slices_image)
         self.report.append(PageBreak())
 
-        # Nineth page - slice planes display - Segmentation #####
+        # Ninth page - slice planes display - Segmentation #####
         #######################################################################
         self.report.append(
             Paragraph(
