@@ -872,9 +872,10 @@ class BoldIQMs(ProcessMIA):
                 print("\nError with in_mask file: ", e)
             else:
                 # nibabel: get_data() is deprecated in favour of get_fdata().
-                # We only keep here get_data() to achieve reproducibility
-                # with native mriqc results (which use get_data() in V22.06)
-                tsnr_data = tsnr_nii.get_data()
+                # To achieve reproducibility with native mriqc results
+                # (which use get_data() in V22.06), we can use
+                # numpy.asanyarray(img.dataobj).
+                tsnr_data = tsnr_nii.get_fdata()
         else:
             has_in_tsnr = False
 
