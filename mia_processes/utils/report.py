@@ -166,8 +166,10 @@ class Report:
                 "norm_func": self.norm_func,
             }
             self.title = (
-                "<font size=18><b>Functional Image-Quality "
-                "Metrics summary report</b></font>"
+                "<font size=18><b>{0} report: </b>{1}"
+                "</font>".format(
+                    self.dict4runtime["PatientName"], today_date.split(" ")[0]
+                )
             )
 
             self.header_title = (
@@ -176,7 +178,8 @@ class Report:
                 "<font size=30><b>V</b></font>"
                 "<font size=11>ascular</font>"
                 "<font size=30><b> R</b></font>"
-                "<font size=11>reactivity with CO2 inhalation "
+                "<font size=11>reactivity <br/></font>"
+                "<font size=7>with CO<sub>2</sub> inhalation "
                 "as a physiological challenge</font>"
             )
             infos = [
@@ -199,7 +202,7 @@ class Report:
                 "MRI SCANNER",
                 "STUDY NAME",
                 "EXAMINATION DATE",
-                "MRIQC CALCULATION DATE",
+                "CVR CALCULATION DATE",
                 "NAME OF THE INPUT DATA",
                 "PATIENT REFERENCE",
                 "PATIENT SEX",
@@ -288,6 +291,9 @@ class Report:
         cover_data = [[0, 0]]
 
         for header, info in zip(headers, infos):
+            if isinstance(info, dict):
+                info = " AND ".join(str(val) for val in info.values())
+
             if cover_data == [[0, 0]]:
                 if header == " ":
                     cover_data[0][0] = Paragraph(
@@ -486,30 +492,69 @@ class Report:
         self.report.append(Paragraph(self.title, self.styles["Center"]))
         self.report.append(Spacer(0 * mm, 10 * mm))
         self.report.append(self.cover_data)
-        self.report.append(Spacer(0 * mm, 6 * mm))
+        self.report.append(Spacer(0 * mm, 4 * mm))
         self.report.append(
             Paragraph(self.textDisclaimer, self.styles["Justify"])
         )
-        self.report.append(Spacer(0 * mm, 6 * mm))
-        # Footnote
-        line = ReportLine(500)
-        line.hAlign = "CENTER"
-        self.report.append(line)
-        self.report.append(Spacer(0 * mm, 2.5 * mm))
+        # self.report.append(Spacer(0 * mm, 6 * mm))
+        self.report.append(PageBreak())
+
+        # Second page - Anatomical MRI Acqu & Post-pro parameters##############
+        #######################################################################
         self.report.append(
             Paragraph(
-                "<font size = 8><sup>$</sup>Esteban O et "
-                "al., <i>MRIQC: Advancing the Automatic "
-                "Prediction of Image Quality in MRI from"
-                " Unseen Sites</i>, PLOS ONE 12(9)"
-                ":e0184661.</font>",
+                "<font size = 18 ><b> Anatomical MRI <br/></b></font>",
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        line = ReportLine(150)
+        line.hAlign = "CENTER"
+        self.report.append(line)
+        self.report.append(Spacer(0 * mm, 20 * mm))
+
+        self.report.append(PageBreak())
+
+        # Third page - Anatomical MRI #########################################
+        #######################################################################
+        self.report.append(
+            Paragraph(
+                "<font size = 15 > <b>MNI normalized axial anatomical "
+                "images:</b> </font>",
                 self.styles["Left"],
             )
         )
-        self.report.append(PageBreak())
+
+        self.report.append(Spacer(0 * mm, 20 * mm))  # (width, height)
+        self.report.append(
+            Paragraph(
+                '<font size = 9 > <i> "Neurological" '
+                "convention, the left side of the "
+                "image corresponds to the left side of "
+                "the brain. </i> <br/> </font>",
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        tmpdir = tempfile.TemporaryDirectory()
+        slices_image = plot_slice_planes(
+            self.norm_anat,
+            self.norm_anat_fig_rows,
+            self.norm_anat_fig_cols,
+            slice_start=self.norm_anat_inf_slice_start,
+            slice_step=self.norm_anat_slices_gap,
+            cmap="Greys_r",
+            out_dir=tmpdir.name,
+        )
+        # reminder: A4 == 210mmx297mm
+        slices_image = Image(
+            slices_image, width=7.4803 * inch, height=9.0551 * inch
+        )
+        slices_image.hAlign = "CENTER"
+        self.report.append(slices_image)
 
         self.page.build(self.report, canvasmaker=PageNumCanvas)
-        # tmpdir.cleanup()
+        tmpdir.cleanup()
 
     def mriqc_anat_make_report(
         self,
