@@ -576,296 +576,362 @@ def plot_slice_planes(
         ind_non_zero.max(0) + 1,
     )
     brain_data = brain_data[ystart:ystop, xstart:xstop, zstart:zstop]
-    disp_slices = fig_rows * fig_cols
+    rowsxcols = disp_slices = fig_rows * fig_cols
 
-    # if slice_start and slice_step are unknown, we try to make a
-    # display of slices covering the entire volume, with equal spacing.
-    if slice_start in (None, Undefined) and slice_step in (
-        None,
-        Undefined,
-    ):
-        slice_step = brain_data.shape[2] // disp_slices
-        memory = set()
-        ind_slices = None
+    # The following part seems clearer and lighter than the part I'm just
+    # commenting on just below. The commented part is too heavy and can
+    # give unexpected results.
+    # TODO: if this new part don't make issue we could delete the commented
+    #      section completely.
+    lst = np.arange(start=0, stop=brain_data.shape[2], step=1)
 
-        while (
-            len(np.arange(start=0, stop=brain_data.shape[2], step=slice_step))
-            != disp_slices
-        ):
-            if (
-                len(
-                    np.arange(
-                        start=0, stop=brain_data.shape[2], step=slice_step
-                    )
-                )
-                in memory
-            ):
-                ind_slices = np.arange(
-                    start=0, stop=brain_data.shape[2], step=slice_step
-                )
-
-                if len(ind_slices) > disp_slices:
-                    while len(ind_slices) != disp_slices:
-                        ind_slices = ind_slices[:-1]
-
-                    ind_slices = ind_slices[:-1]
-                    ind_slices = np.append(
-                        ind_slices,
-                        ind_slices[-1]
-                        + (brain_data.shape[2] - ind_slices[-1]) // 2,
-                    )
-                    break
-
-                if len(ind_slices) < disp_slices:
-                    slice_step -= 1
-
-            elif (
-                len(
-                    np.arange(
-                        start=0, stop=brain_data.shape[2], step=slice_step
-                    )
-                )
-                > disp_slices
-            ):
-                memory.add(
-                    len(
-                        np.arange(
-                            start=0, stop=brain_data.shape[2], step=slice_step
-                        )
-                    )
-                )
-                slice_step += 1
-
-            elif (
-                len(
-                    np.arange(
-                        start=0, stop=brain_data.shape[2], step=slice_step
-                    )
-                )
-                < disp_slices
-            ):
-                memory.add(
-                    len(
-                        np.arange(
-                            start=0, stop=brain_data.shape[2], step=slice_step
-                        )
-                    )
-                )
-                slice_step -= 1
-
-        if ind_slices is None:
-            slice_start = (
-                brain_data.shape[2]
-                - np.arange(
-                    start=0, stop=brain_data.shape[2], step=slice_step
-                )[
-                    len(
-                        np.arange(
-                            start=0, stop=brain_data.shape[2], step=slice_step
-                        )
-                    )
-                    - 1
-                ]
-            ) // 2
-            ind_slices = np.arange(
-                start=slice_start,
-                stop=brain_data.shape[2],
-                step=slice_step,
-            )
-
-    # if slice_start is known and slice_step is unknown, we try to make a
-    # display of slices covering the volume from slice_start to the end,
-    # with equal spacing.
-    elif slice_start not in (None, Undefined) and slice_step in (
-        None,
-        Undefined,
-    ):
-        slice_step = (brain_data.shape[2] - slice_start) // disp_slices
-
-        if slice_step == 0:
-            slice_step = 1
-
-        memory = set()
-        ind_slices = None
-
-        while (
-            len(
-                np.arange(
-                    start=slice_start,
-                    stop=brain_data.shape[2],
-                    step=slice_step,
-                )
-            )
-            != disp_slices
-        ):
-            if (
-                len(
-                    np.arange(
-                        start=slice_start,
-                        stop=brain_data.shape[2],
-                        step=slice_step,
-                    )
-                )
-                in memory
-            ):
-                ind_slices = np.arange(
-                    start=slice_start,
-                    stop=brain_data.shape[2],
-                    step=slice_step,
-                )
-
-                if len(ind_slices) > disp_slices:
-                    while len(ind_slices) != disp_slices:
-                        ind_slices = ind_slices[:-1]
-
-                    ind_slices = ind_slices[:-1]
-                    ind_slices = np.append(
-                        ind_slices,
-                        ind_slices[-1]
-                        + (brain_data.shape[2] - ind_slices[-1]) // 2,
-                    )
-                    break
-
-                if len(ind_slices) < disp_slices:
-                    slice_step -= 1
-
-            elif (
-                len(
-                    np.arange(
-                        start=slice_start,
-                        stop=brain_data.shape[2],
-                        step=slice_step,
-                    )
-                )
-                > disp_slices
-            ):
-                memory.add(
-                    len(
-                        np.arange(
-                            start=slice_start,
-                            stop=brain_data.shape[2],
-                            step=slice_step,
-                        )
-                    )
-                )
-                slice_step += 1
-
-            elif (
-                len(
-                    np.arange(
-                        start=slice_start,
-                        stop=brain_data.shape[2],
-                        step=slice_step,
-                    )
-                )
-                < disp_slices
-            ):
-                memory.add(
-                    len(
-                        np.arange(
-                            start=slice_start,
-                            stop=brain_data.shape[2],
-                            step=slice_step,
-                        )
-                    )
-                )
-                slice_step -= 1
-
-                if slice_step == 0:
-                    slice_step = 1
-                    break
-
-        if ind_slices is None:
-            ind_slices = np.arange(
-                start=slice_start,
-                stop=brain_data.shape[2],
-                step=slice_step,
-            )
-
-        slice_step_bis = slice_step + 1
-
-        if (
-            len(
-                np.arange(
-                    start=slice_start,
-                    stop=brain_data.shape[2],
-                    step=slice_step_bis,
-                )
-            )
-            == disp_slices
-        ):
-            while (
-                len(
-                    np.arange(
-                        start=slice_start,
-                        stop=brain_data.shape[2],
-                        step=slice_step_bis,
-                    )
-                )
-                == disp_slices
-            ):
-                ind_slices_bis = np.arange(
-                    start=slice_start,
-                    stop=brain_data.shape[2],
-                    step=slice_step_bis,
-                )
-
-                if ind_slices_bis[-1] > ind_slices[-1]:
-                    ind_slices = ind_slices_bis
-
-                slice_step_bis += 1
-
-        slice_step_bis = slice_step - 1
-
-        if slice_step_bis == 0:
-            slice_step_bis = 1
-
-        if (
-            len(
-                np.arange(
-                    start=slice_start,
-                    stop=brain_data.shape[2],
-                    step=slice_step_bis,
-                )
-            )
-            == disp_slices
-        ):
-            while (
-                len(
-                    np.arange(
-                        start=slice_start,
-                        stop=brain_data.shape[2],
-                        step=slice_step_bis,
-                    )
-                )
-                == disp_slices
-            ):
-                ind_slices_bis = np.arange(
-                    start=slice_start,
-                    stop=brain_data.shape[2],
-                    step=slice_step_bis,
-                )
-
-                if ind_slices_bis[-1] > ind_slices[-1]:
-                    ind_slices = ind_slices_bis
-
-                slice_step_bis -= 1
-
-    # if slice_start and slice_step are known
-    elif (
-        slice_start not in (None, Undefined)
-        and slice_step not in (None, Undefined)
-    ) and (len(np.array(list(range(0, brain_data.shape[2])))) > disp_slices):
+    if slice_start not in (None, Undefined):
         # fmt: off
-        ind_slices = np.array(list(range(0, brain_data.shape[2])))[
-            slice_start:
-            slice_start + (slice_step * disp_slices):
-            slice_step
-        ]
+        lst = lst[slice_start - 1 if slice_start != 0 else 0:]
         # fmt: on
 
+    start = 0
+    ind_slices = []
+
+    if disp_slices > len(lst):
+        disp_slices = len(lst)
+
+    if slice_step in (None, Undefined):
+        avg = len(lst) // disp_slices
+        remainder = len(lst) % disp_slices
+
     else:
-        ind_slices = np.array(list(range(0, brain_data.shape[2])))
+        avg = slice_step
+        remainder = -1
+
+    for i in range(disp_slices):
+        end = start + avg + (1 if i < remainder else 0)
+
+        if start >= len(lst):
+            break
+
+        ind_slices.append(lst[start:end])
+        start = end
+
+    if all(
+        (isinstance(element, np.ndarray) and len(element) == 1)
+        for element in ind_slices
+    ):
+        ind_slices = [element[0] for element in ind_slices]
+
+    else:
+        middle_idx = [(len(element) - 1) // 2 for element in ind_slices]
+        ind_slices = [
+            element[idx] for element, idx in zip(ind_slices, middle_idx)
+        ]
+
+    # # if slice_start and slice_step are unknown, we try to make a
+    # # display of slices covering the entire volume, with equal spacing.
+    # if slice_start in (None, Undefined) and slice_step in (
+    #     None,
+    #     Undefined,
+    # ):
+    #     slice_step = brain_data.shape[2] // disp_slices
+    #
+    #     if slice_step == 0:
+    #         slice_step = 1
+    #
+    #     memory = set()
+    #     ind_slices = None
+    #
+    #     while (
+    #         len(np.arange(start=0,
+    #                       stop=brain_data.shape[2], step=slice_step))
+    #         != disp_slices
+    #     ):
+    #         if (
+    #             len(
+    #                 np.arange(
+    #                     start=0, stop=brain_data.shape[2], step=slice_step
+    #                 )
+    #             )
+    #             in memory
+    #         ):
+    #             ind_slices = np.arange(
+    #                 start=0, stop=brain_data.shape[2], step=slice_step
+    #             )
+    #
+    #             if len(ind_slices) > disp_slices:
+    #                 while len(ind_slices) != disp_slices:
+    #                     ind_slices = ind_slices[:-1]
+    #
+    #                 ind_slices = ind_slices[:-1]
+    #                 ind_slices = np.append(
+    #                     ind_slices,
+    #                     ind_slices[-1]
+    #                     + (brain_data.shape[2] - ind_slices[-1]) // 2,
+    #                 )
+    #                 break
+    #
+    #             if len(ind_slices) < disp_slices:
+    #                 slice_step -= 1
+    #
+    #                 if len(np.arange(start=0,
+    #                                  stop=brain_data.shape[2],
+    #                                  step=1)) < disp_slices:
+    #                     ind_slices = np.arange(start=0,
+    #                                            stop=brain_data.shape[2],
+    #                                            step=1)
+    #                     break
+    #
+    #         elif (
+    #             len(
+    #                 np.arange(
+    #                     start=0, stop=brain_data.shape[2], step=slice_step
+    #                 )
+    #             )
+    #             > disp_slices
+    #         ):
+    #             memory.add(
+    #                 len(
+    #                     np.arange(
+    #                         start=0,
+    #                         stop=brain_data.shape[2], step=slice_step
+    #                     )
+    #                 )
+    #             )
+    #             slice_step += 1
+    #
+    #         elif (
+    #             len(
+    #                 np.arange(
+    #                     start=0, stop=brain_data.shape[2], step=slice_step
+    #                 )
+    #             )
+    #             < disp_slices
+    #         ):
+    #             memory.add(
+    #                 len(
+    #                     np.arange(
+    #                         start=0,
+    #                         stop=brain_data.shape[2], step=slice_step
+    #                     )
+    #                 )
+    #             )
+    #             slice_step -= 1
+    #
+    #             if slice_step == 0:
+    #                 slice_step =1
+    #
+    #     if ind_slices is None:
+    #         slice_start = (
+    #             brain_data.shape[2]
+    #             - np.arange(
+    #                 start=0, stop=brain_data.shape[2], step=slice_step
+    #             )[
+    #                 len(
+    #                     np.arange(
+    #                         start=0,
+    #                         stop=brain_data.shape[2], step=slice_step
+    #                     )
+    #                 )
+    #                 - 1
+    #             ]
+    #         ) // 2
+    #         ind_slices = np.arange(
+    #             start=slice_start,
+    #             stop=brain_data.shape[2],
+    #             step=slice_step,
+    #         )
+    #
+    # # if slice_start is known and slice_step is unknown, we try to make a
+    # # display of slices covering the volume from slice_start to the end,
+    # # with equal spacing.
+    # elif slice_start not in (None, Undefined) and slice_step in (
+    #     None,
+    #     Undefined,
+    # ):
+    #     slice_step = (brain_data.shape[2] - slice_start) // disp_slices
+    #
+    #     if slice_step == 0:
+    #         slice_step = 1
+    #
+    #     memory = set()
+    #     ind_slices = None
+    #
+    #     while (
+    #         len(
+    #             np.arange(
+    #                 start=slice_start,
+    #                 stop=brain_data.shape[2],
+    #                 step=slice_step,
+    #             )
+    #         )
+    #         != disp_slices
+    #     ):
+    #         if (
+    #             len(
+    #                 np.arange(
+    #                     start=slice_start,
+    #                     stop=brain_data.shape[2],
+    #                     step=slice_step,
+    #                 )
+    #             )
+    #             in memory
+    #         ):
+    #             ind_slices = np.arange(
+    #                 start=slice_start,
+    #                 stop=brain_data.shape[2],
+    #                 step=slice_step,
+    #             )
+    #
+    #             if len(ind_slices) > disp_slices:
+    #                 while len(ind_slices) != disp_slices:
+    #                     ind_slices = ind_slices[:-1]
+    #
+    #                 ind_slices = ind_slices[:-1]
+    #                 ind_slices = np.append(
+    #                     ind_slices,
+    #                     ind_slices[-1]
+    #                     + (brain_data.shape[2] - ind_slices[-1]) // 2,
+    #                 )
+    #                 break
+    #
+    #             if len(ind_slices) < disp_slices:
+    #                 slice_step -= 1
+    #
+    #         elif (
+    #             len(
+    #                 np.arange(
+    #                     start=slice_start,
+    #                     stop=brain_data.shape[2],
+    #                     step=slice_step,
+    #                 )
+    #             )
+    #             > disp_slices
+    #         ):
+    #             memory.add(
+    #                 len(
+    #                     np.arange(
+    #                         start=slice_start,
+    #                         stop=brain_data.shape[2],
+    #                         step=slice_step,
+    #                     )
+    #                 )
+    #             )
+    #             slice_step += 1
+    #
+    #         elif (
+    #             len(
+    #                 np.arange(
+    #                     start=slice_start,
+    #                     stop=brain_data.shape[2],
+    #                     step=slice_step,
+    #                 )
+    #             )
+    #             < disp_slices
+    #         ):
+    #             memory.add(
+    #                 len(
+    #                     np.arange(
+    #                         start=slice_start,
+    #                         stop=brain_data.shape[2],
+    #                         step=slice_step,
+    #                     )
+    #                 )
+    #             )
+    #             slice_step -= 1
+    #
+    #             if slice_step == 0:
+    #                 slice_step = 1
+    #                 break
+    #
+    #     if ind_slices is None:
+    #         ind_slices = np.arange(
+    #             start=slice_start,
+    #             stop=brain_data.shape[2],
+    #             step=slice_step,
+    #         )
+    #
+    #     slice_step_bis = slice_step + 1
+    #
+    #     if (
+    #         len(
+    #             np.arange(
+    #                 start=slice_start,
+    #                 stop=brain_data.shape[2],
+    #                 step=slice_step_bis,
+    #             )
+    #         )
+    #         == disp_slices
+    #     ):
+    #         while (
+    #             len(
+    #                 np.arange(
+    #                     start=slice_start,
+    #                     stop=brain_data.shape[2],
+    #                     step=slice_step_bis,
+    #                 )
+    #             )
+    #             == disp_slices
+    #         ):
+    #             ind_slices_bis = np.arange(
+    #                 start=slice_start,
+    #                 stop=brain_data.shape[2],
+    #                 step=slice_step_bis,
+    #             )
+    #
+    #             if ind_slices_bis[-1] > ind_slices[-1]:
+    #                 ind_slices = ind_slices_bis
+    #
+    #             slice_step_bis += 1
+    #
+    #     slice_step_bis = slice_step - 1
+    #
+    #     if slice_step_bis == 0:
+    #         slice_step_bis = 1
+    #
+    #     if (
+    #         len(
+    #             np.arange(
+    #                 start=slice_start,
+    #                 stop=brain_data.shape[2],
+    #                 step=slice_step_bis,
+    #             )
+    #         )
+    #         == disp_slices
+    #     ):
+    #         while (
+    #             len(
+    #                 np.arange(
+    #                     start=slice_start,
+    #                     stop=brain_data.shape[2],
+    #                     step=slice_step_bis,
+    #                 )
+    #             )
+    #             == disp_slices
+    #         ):
+    #             ind_slices_bis = np.arange(
+    #                 start=slice_start,
+    #                 stop=brain_data.shape[2],
+    #                 step=slice_step_bis,
+    #             )
+    #
+    #             if ind_slices_bis[-1] > ind_slices[-1]:
+    #                 ind_slices = ind_slices_bis
+    #
+    #             slice_step_bis -= 1
+
+    # if slice_start and slice_step are known
+    # elif (
+    #     slice_start not in (None, Undefined)
+    #     and slice_step not in (None, Undefined)
+    # ) and (len(np.array(list(range(0, brain_data.shape[2])))) > disp_slices):
+    #     # fmt: off
+    #     ind_slices = np.array(list(range(0, brain_data.shape[2])))[
+    #         slice_start:
+    #         slice_start + (slice_step * disp_slices):
+    #         slice_step
+    #     ]
+    #     # fmt: on
+    #
+    # else:
+    #     ind_slices = np.array(list(range(0, brain_data.shape[2])))
 
     # Reminder: 19cm == 7.4803inch; 23cm == 9.0551
     fig = plt.figure(figsize=(7.4803, 9.0551))  # Width, height in inches.
@@ -907,16 +973,16 @@ def plot_slice_planes(
     else:
         fontsize = 4
 
-    disp_slices_array = np.arange(0, disp_slices, 1)
+    rowsxcols_array = np.arange(0, rowsxcols, 1)
 
-    for ax, slice_numb in zip(grid, disp_slices_array):
-        if slice_numb + 1 <= len(ind_slices):
-            ind_slice = ind_slices[slice_numb]
-            displ = brain_data
-
-        else:
+    for ax, slice_numb in zip(grid, rowsxcols_array):
+        if slice_numb >= len(ind_slices):
             displ = np.zeros((2, 2, 2))
             ind_slice = 1
+
+        else:
+            displ = brain_data
+            ind_slice = ind_slices[slice_numb]
 
         phys_sp = np.array(zooms[:2]) * brain_data[:, :, ind_slice].shape
         ax.imshow(
