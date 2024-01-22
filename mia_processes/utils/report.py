@@ -168,7 +168,7 @@ class Report:
             self.title = (
                 "<font size=18><b>{0} report: </b>{1}"
                 "</font>".format(
-                    self.dict4runtime["PatientName"], today_date.split(" ")[0]
+                    self.dict4runtime["PatientRef"], today_date.split(" ")[0]
                 )
             )
 
@@ -189,7 +189,7 @@ class Report:
                     "Spectro",
                     "StudyName",
                     "AcquisitionDate",
-                    "PatientName",
+                    "PatientRef",
                     "Sex",
                     "Age",
                 )
@@ -477,8 +477,8 @@ class Report:
     def co2_inhal_cvr_make_report(self):
         """Make CVR under CO2 challenge report"""
 
-        # First page - cover ##################################################
-        #######################################################################
+        # page 1 - cover ##################################################
+        ###################################################################
 
         self.report.append(self.image_cov)
         # width, height
@@ -499,8 +499,8 @@ class Report:
         # self.report.append(Spacer(0 * mm, 6 * mm))
         self.report.append(PageBreak())
 
-        # Second page - Anatomical MRI Acqu & Post-pro parameters##############
-        #######################################################################
+        # page 2 - Anatomical MRI Acq & Post-pro parameters##############
+        #################################################################
         self.report.append(
             Paragraph(
                 "<font size = 18 ><b> Anatomical MRI <br/></b></font>",
@@ -515,8 +515,8 @@ class Report:
 
         self.report.append(PageBreak())
 
-        # Third page - Anatomical MRI #########################################
-        #######################################################################
+        # page 3 - Anatomical MRI #########################################
+        ###################################################################
         self.report.append(
             Paragraph(
                 "<font size = 15 > <b>MNI normalized axial anatomical "
@@ -546,12 +546,34 @@ class Report:
             cmap="Greys_r",
             out_dir=tmpdir.name,
         )
-        # reminder: A4 == 210mmx297mm
+        # remainder: A4 == 210mmx297mm
         slices_image = Image(
             slices_image, width=7.4803 * inch, height=9.0551 * inch
         )
         slices_image.hAlign = "CENTER"
         self.report.append(slices_image)
+
+        self.report.append(PageBreak())
+
+        # page 4 - fmri-cvr MRI Acq & Post-pro parameters##############
+        ###############################################################
+        self.report.append(
+            Paragraph(
+                "<font size = 18 ><b> fMRI under a vasoactive stimulus "
+                "(hypercapnia)<br/></b></font>",
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 4 * mm))
+        line = ReportLine(150)
+        line.hAlign = "CENTER"
+        self.report.append(line)
+        self.report.append(Spacer(0 * mm, 20 * mm))
+
+        self.report.append(PageBreak())
+
+        # page 5 - fmri-cvr MRI quality check movements & EtCO2 regressor #####
+        #######################################################################
 
         self.page.build(self.report, canvasmaker=PageNumCanvas)
         tmpdir.cleanup()

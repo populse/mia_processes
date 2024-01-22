@@ -852,6 +852,10 @@ class ReportCO2inhalCvr(ProcessMIA):
         self.requirement = []
 
         # Inputs description
+        anat_desc = (
+            "An existing, uncompressed raw anatomical "
+            "image file (valid extensions: .nii)"
+        )
         norm_anat_desc = (
             "An existing, uncompressed normalised anatomical "
             "image file (valid extensions: .nii)"
@@ -909,10 +913,28 @@ class ReportCO2inhalCvr(ProcessMIA):
             "representing a file)"
         )
 
+        patient_info_desc = (
+            "Optional dictionary with information about the patient "
+            "(e.g. {"
+            "'PatientName': 'ablair', 'Pathology': 'ACMD', "
+            "'Age': 64, 'Sex': 'M', 'MR': '3T', "
+            "'Gas': 'BACTAL', 'GasAdmin': 'MASK'}"
+        )
+
         # Outputs description
         report_desc = "The generated report (pdf)"
 
         # Inputs traits
+        self.add_trait(
+            "anat",
+            ImageFileSPM(
+                copyfile=False,
+                output=False,
+                optional=False,
+                desc=anat_desc,
+            ),
+        )
+
         self.add_trait(
             "norm_anat",
             ImageFileSPM(
@@ -1016,6 +1038,20 @@ class ReportCO2inhalCvr(ProcessMIA):
             ),
         )
 
+        self.add_trait(
+            "patient_info",
+            traits.Dict(output=False, optional=True, desc=patient_info_desc),
+        )
+        self.patient_info = dict(
+            PatientRef=Undefined,
+            Pathology=Undefined,
+            Age=Undefined,
+            Sex=Undefined,
+            MR=Undefined,
+            Gas=Undefined,
+            GasAdmin=Undefined,
+        )
+
         # Outputs traits
         self.add_trait(
             "report",
@@ -1059,14 +1095,110 @@ class ReportCO2inhalCvr(ProcessMIA):
             self.dict4runtime,
             self.project.session,
             database_filename,
-            "PatientName",
-            "StudyName",
             "AcquisitionDate",
+            "Age",
+            "Gas",
+            "GasAdmin",
+            "Pathology",
+            "PatientName",
+            "PatientRef",
             "Sex",
             "Site",
             "Spectro",
-            "Age",
+            "StudyName",
         )
+
+        if (
+            self.patient_info.get("Age") is None
+            or self.patient_info["Age"] == Undefined
+        ):
+            if self.dict4runtime["Age"] != "Undefined":
+                self.patient_info["Age"] = self.dict4runtime["Age"]
+
+        else:
+            self.dict4runtime["Age"] = self.patient_info.get("Age")
+
+        if (
+            self.patient_info.get("Pathology") is None
+            or self.patient_info["Pathology"] == Undefined
+        ):
+            if self.dict4runtime["Pathology"] != "Undefined":
+                self.patient_info["Pathology"] = self.dict4runtime["Pathology"]
+
+        else:
+            self.dict4runtime["Pathology"] = self.patient_info.get("Pathology")
+
+        # FIXME: the data should be anonymized and we should use PatientRef
+        #        instead of PatientName !
+        if self.dict4runtime["PatientName"] == "Undefined":
+            print(
+                "\nReportCO2inhalCvr brick:\nThe tags PatientName was not "
+                "found in the database for the {} file...\n The "
+                "initialization is aborted...".format(database_filename)
+            )
+            return self.make_initResult()
+
+        if (
+            self.patient_info.get("PatientRef") is None
+            or self.patient_info["PatientRef"] == Undefined
+        ):
+            if self.dict4runtime["PatientRef"] == "Undefined":
+                self.dict4runtime["PatientRef"] = self.dict4runtime[
+                    "PatientName"
+                ]
+                self.patient_info["PatientRef"] = self.dict4runtime[
+                    "PatientName"
+                ]
+
+            else:
+                self.patient_info["PatientRef"] = self.dict4runtime[
+                    "PatientRef"
+                ]
+
+        else:
+            self.dict4runtime["PatientRef"] = self.patient_info.get(
+                "PatientRef"
+            )
+
+        if (
+            self.patient_info.get("Sex") is None
+            or self.patient_info["Sex"] == Undefined
+        ):
+            if self.dict4runtime["Sex"] != "Undefined":
+                self.patient_info["Sex"] = self.dict4runtime["Sex"]
+
+        else:
+            self.dict4runtime["Sex"] = self.patient_info.get("Sex")
+
+        if (
+            self.patient_info.get("MR") is None
+            or self.patient_info["MR"] == Undefined
+        ):
+            if self.dict4runtime["Spectro"] != "Undefined":
+                self.patient_info["MR"] = self.dict4runtime["Spectro"]
+
+        else:
+            self.dict4runtime["Spectro"] = self.patient_info.get("MR")
+
+        if (
+            self.patient_info.get("Gas") is None
+            or self.patient_info["Gas"] == Undefined
+        ):
+            if self.dict4runtime["Gas"] != "Undefined":
+                self.patient_info["Gas"] == self.dict4runtime["Gas"]
+
+        else:
+            self.dict4runtime["Gas"] = self.patient_info.get("Gas")
+
+        if (
+            self.patient_info.get("GasAdmin") is None
+            or self.patient_info["GasAdmin"] == Undefined
+        ):
+            if self.dict4runtime["GasAdmin"] != "Undefined":
+                self.patient_info["GasAdmin"] == self.dict4runtime["GasAdmin"]
+
+        else:
+            self.dict4runtime["GasAdmin"] = self.patient_info.get("GasAdmin")
 
         # FIXME: Currently, Site and Spectro data are hard-coded. A solution
         #        should be found to retrieve them automatically or to put them
@@ -1090,9 +1222,7 @@ class ReportCO2inhalCvr(ProcessMIA):
             self.outputs["report"] = os.path.join(
                 self.output_directory,
                 "{0}_CO2_inhal_CVR_Report_{1}.pdf".format(
-                    self.dict4runtime["PatientName"]
-                    if self.dict4runtime["PatientName"] != "Undefined"
-                    else "Undefined_name_ref",
+                    self.dict4runtime["PatientRef"],
                     datetime.now().strftime("%Y_%m_%d_%H_%M_%S_%f")[:22],
                 ),
             )

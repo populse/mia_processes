@@ -2257,7 +2257,7 @@ class Result_collector(ProcessMIA):
             "A dictionary whose keys/values correspond to "
             "information about the patient "
             "(e.g. {"
-            "'PatientName': 'ablair','Pathology': 'ACMD', "
+            "'PatientRef': 'sub_1','Pathology': 'ACMD', "
             "'Age': 64, 'Sex': 'M', 'MR': '3T', "
             "'Gas': 'BACTAL', 'GasAdmin': 'MASK'}"
         )
@@ -2294,7 +2294,7 @@ class Result_collector(ProcessMIA):
             traits.Dict(output=False, optional=True, desc=patient_info_desc),
         )
         self.patient_info = dict(
-            PatientName=Undefined,
+            PatientRef=Undefined,
             Pathology=Undefined,
             Age=Undefined,
             Sex=Undefined,
@@ -2450,20 +2450,19 @@ class Result_collector(ProcessMIA):
 
             # FIXME: the data should be anonymized and we should use PatientRef
             #        instead of PatientName !
-
             if (
-                self.patient_info.get("PatientName") is None
-                or self.patient_info["PatientName"] == Undefined
+                self.patient_info.get("PatientRef") is None
+                or self.patient_info["PatientRef"] == Undefined
             ):
                 patient_ref = get_dbFieldValue(
                     self.project, self.parameter_files[0], "PatientRef"
                 )
 
                 if patient_ref is None:
-                    self.patient_info["PatientName"] = patient_name
+                    self.patient_info["PatientRef"] = patient_name
 
                 else:
-                    self.patient_info["PatientName"] = patient_ref
+                    self.patient_info["PatientRef"] = patient_ref
 
             if (
                 self.patient_info.get("Pathology") is None
@@ -2677,7 +2676,7 @@ class Result_collector(ProcessMIA):
                                 f.write("{0}_{1}\t".format(param, roi))
 
                         f.write(
-                            "\n{0}\t".format(self.patient_info["PatientName"])
+                            "\n{0}\t".format(self.patient_info["PatientRef"])
                         )
                         f.write("{0}\t".format(self.patient_info["Pathology"]))
                         f.write("{0}\t".format(self.patient_info["Age"]))
