@@ -86,34 +86,79 @@ class Bold_spatial_preprocessing1(Pipeline):
         self.nodes["coregister"].process.apply_to_files = traits.Undefined
 
         # links
-        self.export_parameter("list_duplicate", "file_name", "anat_file")
-        self.export_parameter("realign", "in_files", "func_files")
-        self.export_parameter("newsegment", "bias_corrected_images")
-        self.export_parameter("newsegment", "bias_field_images")
-        self.export_parameter("newsegment", "native_class_images")
-        self.export_parameter("newsegment", "forward_deformation_field")
-        self.add_link(
-            "newsegment.forward_deformation_field->"
-            "normalize12_2.deformation_file"
+        self.export_parameter(
+            "list_duplicate", "file_name", "anat_file", is_optional=False
+        )
+        self.export_parameter(
+            "realign", "in_files", "func_files", is_optional=False
+        )
+        self.export_parameter(
+            "newsegment", "bias_corrected_images", is_optional=True
+        )
+        self.export_parameter(
+            "newsegment", "bias_field_images", is_optional=True
+        )
+        self.export_parameter(
+            "newsegment", "native_class_images", is_optional=True
         )
         self.add_link(
             "newsegment.forward_deformation_field->"
             "normalize12_1.deformation_file"
         )
+        self.export_parameter(
+            "newsegment", "forward_deformation_field", is_optional=True
+        )
+        self.add_link(
+            "newsegment.forward_deformation_field->"
+            "normalize12_2.deformation_file"
+        )
         self.add_link("realign.realigned_files->coregister.apply_to_files")
         self.add_link("realign.mean_image->coregister.source")
-        self.export_parameter("realign", "realignment_parameters")
-        self.add_link("list_duplicate.out_file->coregister.target")
-        self.add_link("list_duplicate.out_list->normalize12_1.apply_to_files")
-        self.add_link("list_duplicate.out_list->newsegment.channel_files")
         self.export_parameter(
-            "normalize12_1", "normalized_files", "normalized_anat"
+            "realign", "realignment_parameters", is_optional=True
+        )
+        self.add_link("list_duplicate.out_file->coregister.target")
+        self.add_link("list_duplicate.out_list->newsegment.channel_files")
+        self.add_link("list_duplicate.out_list->normalize12_1.apply_to_files")
+        self.export_parameter(
+            "normalize12_1",
+            "normalized_files",
+            "normalized_anat",
+            is_optional=True,
         )
         self.add_link("normalize12_2.normalized_files->smooth.in_files")
-        self.export_parameter("smooth", "smoothed_files", "smoothed_func")
-        self.export_parameter("coregister", "coregistered_source")
+        self.export_parameter(
+            "normalize12_2",
+            "normalized_files",
+            "normalized_func",
+            is_optional=True,
+        )
+        self.export_parameter(
+            "smooth", "smoothed_files", "smoothed_func", is_optional=False
+        )
+        self.export_parameter(
+            "coregister", "coregistered_source", is_optional=False
+        )
         self.add_link(
-            "coregister.coregistered_files->normalize12_2.apply_to_files"
+            "coregister.coregistered_files->" "normalize12_2.apply_to_files"
+        )
+
+        # parameters order
+
+        self.reorder_traits(
+            (
+                "anat_file",
+                "func_files",
+                "bias_corrected_images",
+                "bias_field_images",
+                "native_class_images",
+                "forward_deformation_field",
+                "realignment_parameters",
+                "normalized_anat",
+                "smoothed_func",
+                "coregistered_source",
+                "normalized_func",
+            )
         )
 
         # nodes positions

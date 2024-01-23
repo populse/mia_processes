@@ -90,11 +90,16 @@ class CO2_inhalation(Pipeline):
         self.add_process(
             "files_to_list", "mia_processes.bricks.tools.tools.Files_To_List"
         )
+        self.add_process(
+            "reportco2inhalcvr",
+            "mia_processes.bricks.reports.reporting.ReportCO2inhalCvr",
+        )
 
         # links
         self.export_parameter(
             "1_spatial_preprocessing", "anat_file", is_optional=False
         )
+        self.add_link("anat_file->reportco2inhalcvr.anat")
         self.export_parameter(
             "1_spatial_preprocessing", "func_files", is_optional=False
         )
@@ -102,8 +107,9 @@ class CO2_inhalation(Pipeline):
             "files_to_list", "file1", "regressor_physio", is_optional=False
         )
         self.export_parameter(
-            "4_extract_roi_param", "patient_info", is_optional=True
+            "reportco2inhalcvr", "patient_info", is_optional=True
         )
+        self.add_link("patient_info->4_extract_roi_param.patient_info")
         self.export_parameter(
             "1_spatial_preprocessing", "bias_field_images", is_optional=True
         )
@@ -119,8 +125,13 @@ class CO2_inhalation(Pipeline):
             "1_spatial_preprocessing.realignment_parameters->"
             "files_to_list.file2"
         )
-        self.export_parameter(
-            "1_spatial_preprocessing", "normalized_anat", is_optional=True
+        self.add_link(
+            "1_spatial_preprocessing.realignment_parameters->"
+            "reportco2inhalcvr.realignment_parameters"
+        )
+        self.add_link(
+            "1_spatial_preprocessing.normalized_anat->"
+            "reportco2inhalcvr.norm_anat"
         )
         self.add_link(
             "1_spatial_preprocessing.smoothed_func->3_boldStat.smoothed_func"
@@ -131,6 +142,10 @@ class CO2_inhalation(Pipeline):
         )
         self.export_parameter(
             "1_spatial_preprocessing", "coregistered_source", is_optional=False
+        )
+        self.add_link(
+            "1_spatial_preprocessing.normalized_func->"
+            "reportco2inhalcvr.norm_func"
         )
         self.add_link("2_spatial_mask.mask_002->4_extract_roi_param.mask_002")
         self.add_link("2_spatial_mask.mask_002->3_boldStat.mask_002")
@@ -154,6 +169,7 @@ class CO2_inhalation(Pipeline):
             "4_extract_roi_param", "conv_roi_masks", is_optional=False
         )
         self.add_link("files_to_list.file_list->3_boldStat.regressors")
+        self.export_parameter("reportco2inhalcvr", "report", is_optional=True)
 
         # parameters order
 
@@ -164,39 +180,41 @@ class CO2_inhalation(Pipeline):
                 "regressor_physio",
                 "out_spm_mat_file",
                 "bias_field_images",
-                "normalized_anat",
                 "coregistered_source",
                 "mask_003",
                 "conv_roi_masks",
                 "patient_info",
                 "resample2_masks",
                 "xls_files",
+                "report",
             )
         )
 
         # nodes positions
         self.node_position = {
-            "inputs": (-275.0790595529901, 183.49872617882536),
+            "inputs": (-261.5363166564018, 251.21244066176695),
             "1_spatial_preprocessing": (
-                -164.59507406061374,
-                -222.31943258070515,
+                -221.77554406843106,
+                -205.76719126265274,
             ),
-            "2_spatial_mask": (183.75989123102062, -212.8388047341995),
-            "3_boldStat": (120.47624500640808, 271.95641405347675),
-            "4_extract_roi_param": (528.7543856377755, -56.221297992058865),
-            "files_to_list": (-52.58039247862696, 250.55123446892662),
-            "outputs": (805.7712478465897, -179.76368248093885),
+            "2_spatial_mask": (123.5699228017393, -98.47786471856485),
+            "3_boldStat": (382.3026076737819, 162.10972167003825),
+            "4_extract_roi_param": (581.4206080133966, -206.69621906526237),
+            "files_to_list": (198.71272571362283, 330.3029426377244),
+            "reportco2inhalcvr": (748.1071959262655, 258.2245925859173),
+            "outputs": (971.2936610271133, -146.65919984483403),
         }
 
         # nodes dimensions
         self.node_dimension = {
-            "inputs": (138.46938723929543, 180.0),
-            "1_spatial_preprocessing": (236.515625, 320.0),
+            "inputs": (141.46938723929543, 180.0),
+            "1_spatial_preprocessing": (236.515625, 355.0),
             "2_spatial_mask": (200.15625, 145.0),
             "3_boldStat": (215.375, 145.0),
             "4_extract_roi_param": (206.875, 180.0),
             "files_to_list": (97.640625, 145.0),
             "outputs": (138.83679503946317, 320.0),
+            "reportco2inhalcvr": (212.484375, 495.0),
         }
 
         self.do_autoexport_nodes_parameters = False
