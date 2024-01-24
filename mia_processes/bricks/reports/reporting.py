@@ -916,7 +916,7 @@ class ReportCO2inhalCvr(ProcessMIA):
         patient_info_desc = (
             "Optional dictionary with information about the patient "
             "(e.g. {"
-            "'PatientName': 'ablair', 'Pathology': 'ACMD', "
+            "'PatientName': 'sub-1', 'Pathology': 'ACMD', "
             "'Age': 64, 'Sex': 'M', 'MR': '3T', "
             "'Gas': 'BACTAL', 'GasAdmin': 'MASK'}"
         )

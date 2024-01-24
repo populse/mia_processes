@@ -68,14 +68,14 @@ Generates the report for anatomical data in mriqc pipeline
 **Optional inputs with default value parameters:**
 
 - *anat_fig_cols* (an integer, optional, default value is 5)
-    The number of lines for the anatomical slice planes plot.
+    The number of columns for the anatomical slice planes plot.
 
     ::
 
       ex. 5
 
 - *anat_fig_rows* (an integer, optional, default value is 5)
-    The number of columns for the anatomical slice planes plot.
+    The number of lines for the anatomical slice planes plot.
 
     ::
 
@@ -96,14 +96,14 @@ Generates the report for anatomical data in mriqc pipeline
       ex. '/home/username/data/raw_data/T1w.nii'
 
 - *norm_anat_fig_cols* (an integer, optional, default value is 5)
-    The number of lines for the normalised anatomical slice planes plot.
+    The number of columns for the normalised anatomical slice planes plot.
 
     ::
 
       ex. 5
 
 - *norm_anat_fig_rows* (an integer, optional, default value is 5)
-    The number of columns for the normalised anatomical slice planes plot.
+    The number of lines for the normalised anatomical slice planes plot.
 
     ::
 

@@ -60,7 +60,7 @@ An example of fMRI data pre-processing
 **Inputs parameters**
 
 - *anat_file*
-    An anatomical image (ex. 3D T1 sequence sush as T1 turbo field echo). An existing, uncompressed file (valid extensions: [.img, .nii,
+    An anatomical image (ex. 3D T1 sequence such as T1 turbo field echo). An existing, uncompressed file (valid extensions: [.img, .nii,
     .hdr]).
 
     ::
@@ -68,7 +68,7 @@ An example of fMRI data pre-processing
       ex. /home/username/data/raw_data/Anat.nii
 
 - *func_files*
-    Functional images (ex. 3D T2* sequence sush as echo planar imaging). A list of items which are an
+    Functional images (ex. 3D T2* sequence such as echo planar imaging). A list of items which are an
     existing, uncompressed file (valid extensions: [.img, .nii, .hdr]).
 
     ::
@@ -128,7 +128,7 @@ An example of fMRI data pre-processing
       ex. /home/username/data/derived_data/wAnat.nii
 
 - *smoothed_func*
-    The final, realigned then coregistered then normalised then smoothed, functional images (a list of items which are an existing file
+    The final, realigned then registered with the anatomical image, then normalised then smoothed, functional images (a list of items which are an existing file
     name).
 
     ::
@@ -141,3 +141,10 @@ An example of fMRI data pre-processing
     ::
 
       ex. /home/username/data/derived_data/meanFunc.nii
+
+- *normalized_func*
+    Functional images, realigned, registered with the anatomical image and normalized (a list of items which are an existing file name).
+
+    ::
+
+      ex. /home/username/data/derived_data/wrFunc.nii

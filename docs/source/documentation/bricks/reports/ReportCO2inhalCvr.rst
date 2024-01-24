@@ -21,92 +21,97 @@ Generates the report for CVR evaluation using hypercapnia challenge pipeline
 
     ::
 
-      ex. '/home/username/data/raw_data/T1w.nii'
+      ex. '/home/username/data/raw_data/Anat.nii'
 
 - *norm_anat* (a string representing an existing file)
     Normalised anatomical image (valid extensions: [.nii, .nii.gz]).
 
     ::
 
-      ex. '/home/username/data/raw_data/wT1w.nii'
+      ex. '/home/username/data/raw_data/wAnat.nii'
 
 - *norm_anat_fig_rows* (an integer, optional, default value is 5)
-    The number of columns for the normalised anatomical slice planes plot.
-
-    ::
-
-      ex. '/home/username/data/derived_data/art_T1w_mask.nii'
-
-- *norm_anat_fig_cols* (a pathlike object or string representing a file)
-    Air mask ("hat" mask without artifacts) image.
-
-    ::
-
-      ex. '/home/username/data/derived_data/air_T1w_mask.nii'
-
-
-- *norm_anat_inf_slice_start* (a string representing an existing file)
-    Mask image.
-
-    ::
-
-      ex. '/home/username/data/derived_data/pre_n4c_T1W_clipped_desc-brain.nii'
-
-- *norm_anat_slices_gap* (a pathlike object or string representing a file)
-    Outskin mask (extensions: [.nii, .nii.gz])
-
-    ::
-
-      ex. '/home/username/data/derived_data/T1w_brain_outskin_mask.nii'
-
-- *norm_func* (a string representing an existing file)
-    Segmentation mask (valid extensions: [.nii, .nii.gz]).
-
-    ::
-
-      ex. '/home/username/data/derived_data/ss_n4c_T1w_clippep_seg.nii'
-
-- *norm_func_fig_rows* (an integer, optional, default value is 5)
-    The number of lines for the anatomical slice planes plot.
-
-    ::
-
-      ex. 5
-
-- *norm_func_fig_cols* (an integer, optional, default value is 5)
-    The number of columns for the anatomical slice planes plot.
-
-    ::
-
-      ex. 5
-
-- *norm_func_inf_slice_start* (a string, optional, default value is 'spikes')
-    Prefix of the output image.
-
-    ::
-
-      ex. 'spikes_'
-
-- *norm_func_slices_gap* (a string representing an existing file)
-    An existing, uncompressed normalised anatomical image file (valid extensions: [.nii, .nii.gz]).
-
-    ::
-
-      ex. '/home/username/data/raw_data/T1w.nii'
-
-- *realignment_parameters_desc* (an integer, optional, default value is 5)
     The number of lines for the normalised anatomical slice planes plot.
 
     ::
 
       ex. 5
 
-- *patient_info* (an integer, optional, default value is 5)
+- *norm_anat_fig_cols* (an integer, optional, default value is 5)
     The number of columns for the normalised anatomical slice planes plot.
 
     ::
 
       ex. 5
+
+
+- *norm_anat_inf_slice_start* (an integer, optional)
+    The first index displayed in the normalised anatomical slice planes plot.
+    Default is `Undefined` (ie automatically determined).
+
+    ::
+
+      ex. 10
+
+- *norm_anat_slices_gap* (an integer, optional)
+    Gap between slices in normalised anatomical slice planes plot.
+    Default is `Undefined` (ie automatically determined).
+
+    ::
+
+      ex. 13
+
+- *norm_func* (a string representing an existing file)
+    Normalised functional image (valid extensions: [.nii, .nii.gz]).
+
+    ::
+
+      ex. '/home/username/data/derived_data/wrFunc.nii'
+
+- *norm_func_fig_rows* (an integer, optional, default value is 5)
+    The number of lines for the normalised functional slice planes plot.
+
+    ::
+
+      ex. 5
+
+- *norm_func_fig_cols* (an integer, optional, default value is 5)
+    The number of columns for the normalised functional slice planes plot.
+
+    ::
+
+      ex. 5
+
+- *norm_func_inf_slice_start* (an integer, optional)
+    The first index displayed in the normalised functional slice planes plot.
+    Default is `Undefined` (ie automatically determined).
+
+    ::
+
+      ex. <undefined>
+
+- *norm_func_slices_gap* (an integer, optional)
+    Gap between slices in normalised functional slice planes plot.
+    Default is `Undefined` (ie automatically determined).
+
+
+    ::
+
+      ex. <undefined>
+
+- *realignment_parameters_desc* (a string representing an existing file)
+    Estimated translation and rotation parameters (valid extensions: .txt).
+
+    ::
+
+      ex. 5
+
+- *patient_info* (a dictionary with keys in ['PatientRef', 'Pathology', 'Age', 'Sex', MR', 'Gas', 'GasAdmin'])
+    Optional dictionary with information about the patient.
+
+    ::
+
+      ex. {'PatientRef': 'sub-1', 'Pathology': 'ACMD', 'Age': '56', 'Sex': 'M', 'MR': '3T', 'Gas': 'Bactal', 'GasAdmin': 'Mask'}
 
 
 **Outputs parameters:**
@@ -116,11 +121,4 @@ Generates the report for CVR evaluation using hypercapnia challenge pipeline
 
     ::
 
-      ex. '/home/username/data/derived_data/T1w_ref_anatomical_mriqcReport_2023_03_31_11_42_10_75.pdf'
-
-
--------------
-
-Usefull links:
-
-`mriqc v22.06 <https://mriqc.readthedocs.io/en/22.0.6/>`_
+      ex. '/home/username/data/derived_data/sub-1_CO2_inhal_CVR_Report_2024_01_24_09_34_58_08.pdf'
