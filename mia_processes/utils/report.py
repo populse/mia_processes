@@ -515,7 +515,15 @@ class Report:
         line = ReportLine(150)
         line.hAlign = "CENTER"
         self.report.append(line)
-        self.report.append(Spacer(0 * mm, 20 * mm))
+        self.report.append(Spacer(0 * mm, 10 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size = 15 ><b>Acquisition parameters:<br/></b></font>",
+                self.styles["Left"],
+            )
+        )
+
+        self.report.append(Spacer(0 * mm, 5 * mm))
 
         self.report.append(PageBreak())
 
