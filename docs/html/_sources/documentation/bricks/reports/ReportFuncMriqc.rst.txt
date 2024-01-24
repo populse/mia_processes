@@ -10,8 +10,8 @@
 ReportFuncMriqc brick
 =====================
 
-Generates the report for functionnal data in mriqc pipeline
------------------------------------------------------------
+Generates the report for functional data in mriqc pipeline
+----------------------------------------------------------
 
 **Mandatory inputs parameters:**
 
@@ -32,14 +32,14 @@ Generates the report for functionnal data in mriqc pipeline
 **Optional inputs with default value parameters:**
 
 - *func_fig_cols* (an integer, optional, default value is 5)
-    The number of lines for the functional slice planes plot.
+    The number of columns for the functional slice planes plot.
 
     ::
 
       ex. 5
 
 - *func_fig_rows* (an integer, optional, default value is 5)
-    The number of columns for the functional slice planes plot.
+    The number of lines for the functional slice planes plot.
 
     ::
 
@@ -53,14 +53,14 @@ Generates the report for functionnal data in mriqc pipeline
       ex. 'spikes_'
 
 - *norm_func_fig_cols* (an integer, optional, default value is 5)
-    The number of lines for the normalised functional slice planes plot.
+    The number of columns for the normalised functional slice planes plot.
 
     ::
 
       ex. 5
 
 - *norm_func_fig_rows* (an integer, optional, default value is 5)
-    The number of columns for the normalised functional slice planes plot.
+    The number of lines for the normalised functional slice planes plot.
 
     ::
 

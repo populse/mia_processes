@@ -4,17 +4,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.utils.report &#8212; mia_processes 2.5.1-dev+d2eab655 documentation</title>
+    <title>mia_processes.utils.report &#8212; mia_processes 2.5.1-dev+2cd9c3a4 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=f63d8bfa" />
     <link rel="stylesheet" type="text/css" href="../../../_static/haiku.css?v=e491ac2d" />
-    <script src="../../../_static/documentation_options.js?v=667fb608"></script>
+    <script src="../../../_static/documentation_options.js?v=eb72fdf9"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
-          <span>mia_processes 2.5.1-dev+d2eab655 documentation</span></a></h1>
+          <span>mia_processes 2.5.1-dev+2cd9c3a4 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.utils.report</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -114,6 +114,7 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">report_file</span><span class="p">,</span> <span class="n">dict4runtime</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create Canvas , create cover and make report&quot;&quot;&quot;</span>
 
+        <span class="n">today_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span> <span class="o">=</span> <span class="n">dict4runtime</span>
         <span class="n">ref_exp</span> <span class="o">=</span> <span class="s2">&quot;Undefined&quot;</span>
 
@@ -147,6 +148,33 @@
                 <span class="s2">&quot;&lt;font size=30&gt;&lt;b&gt;C&lt;/b&gt;&lt;/font&gt;&quot;</span>
                 <span class="s2">&quot;&lt;font size=11&gt;ontrol&lt;/font&gt;&quot;</span>
             <span class="p">)</span>
+            <span class="n">infos</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">(</span>
+                    <span class="s2">&quot;Site&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;Spectro&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;StudyName&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;AcquisitionDate&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;PatientName&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;Sex&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;Age&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">]</span>
+            <span class="n">infos</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">today_date</span><span class="p">)</span>
+            <span class="n">infos</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">ref_exp</span><span class="p">)</span>
+
+            <span class="n">headers</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s2">&quot;SITE&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;MRI SCANNER&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;STUDY NAME&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;EXAMINATION DATE&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;MRIQC CALCULATION DATE&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;NAME OF THE INPUT DATA&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;PATIENT REFERENCE&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;PATIENT SEX&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;PATIENT AGE&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;SOFTWARES&quot;</span><span class="p">,</span>
+            <span class="p">]</span>
 
         <span class="k">elif</span> <span class="s2">&quot;mriqc_group&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">make_report</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mriqc_group_make_report</span>
@@ -159,7 +187,62 @@
                 <span class="s2">&quot;&lt;font size=30&gt;&lt;b&gt;C&lt;/b&gt;&lt;/font&gt;&quot;</span>
                 <span class="s2">&quot;&lt;font size=11&gt;ontrol&lt;/font&gt;&quot;</span>
             <span class="p">)</span>
+            <span class="n">infos</span> <span class="o">=</span> <span class="p">[</span><span class="n">today_date</span><span class="p">]</span>
+            <span class="n">headers</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s2">&quot;MRIQC GROUPS CALCULATION DATE&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;SOFTWARES&quot;</span><span class="p">,</span>
+            <span class="p">]</span>
 
+        <span class="k">elif</span> <span class="s2">&quot;CVR&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">make_report</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">co2_inhal_cvr_make_report</span>
+            <span class="n">ref_exp</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;norm_anat&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm_anat</span><span class="p">,</span>
+                <span class="s2">&quot;norm_func&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm_func</span><span class="p">,</span>
+            <span class="p">}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;&lt;font size=18&gt;&lt;b&gt;</span><span class="si">{0}</span><span class="s2"> report: &lt;/b&gt;</span><span class="si">{1}</span><span class="s2">&quot;</span>
+                <span class="s2">&quot;&lt;/font&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;PatientRef&quot;</span><span class="p">],</span> <span class="n">today_date</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">header_title</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;&lt;font size=30&gt;&lt;b&gt;C&lt;/b&gt;&lt;/font&gt;&quot;</span>
+                <span class="s2">&quot;&lt;font size=11&gt;erebro&lt;/font&gt;&quot;</span>
+                <span class="s2">&quot;&lt;font size=30&gt;&lt;b&gt;V&lt;/b&gt;&lt;/font&gt;&quot;</span>
+                <span class="s2">&quot;&lt;font size=11&gt;ascular&lt;/font&gt;&quot;</span>
+                <span class="s2">&quot;&lt;font size=30&gt;&lt;b&gt; R&lt;/b&gt;&lt;/font&gt;&quot;</span>
+                <span class="s2">&quot;&lt;font size=11&gt;reactivity &lt;br/&gt;&lt;/font&gt;&quot;</span>
+                <span class="s2">&quot;&lt;font size=7&gt;with CO&lt;sub&gt;2&lt;/sub&gt; inhalation &quot;</span>
+                <span class="s2">&quot;as a physiological challenge&lt;/font&gt;&quot;</span>
+            <span class="p">)</span>
+            <span class="n">infos</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">(</span>
+                    <span class="s2">&quot;Site&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;Spectro&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;StudyName&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;AcquisitionDate&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;PatientRef&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;Sex&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;Age&quot;</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="p">]</span>
+            <span class="n">infos</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">today_date</span><span class="p">)</span>
+            <span class="n">infos</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">ref_exp</span><span class="p">)</span>
+
+            <span class="n">headers</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s2">&quot;SITE&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;MRI SCANNER&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;STUDY NAME&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;EXAMINATION DATE&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;CVR CALCULATION DATE&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;NAME OF THE INPUT DATA&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;PATIENT REFERENCE&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;PATIENT SEX&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;PATIENT AGE&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;SOFTWARES&quot;</span><span class="p">,</span>
+            <span class="p">]</span>
         <span class="c1"># Initialises stylesheet with few basic heading and text styles,</span>
         <span class="c1"># return a stylesheet object</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">styles</span> <span class="o">=</span> <span class="n">getSampleStyleSheet</span><span class="p">()</span>
@@ -221,43 +304,6 @@
                 <span class="p">]</span>
             <span class="p">)</span>
         <span class="p">)</span>
-
-        <span class="n">today_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="s2">&quot;IQMs_file&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-            <span class="n">infos</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">(</span>
-                    <span class="s2">&quot;Site&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;Spectro&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;StudyName&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;AcquisitionDate&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;PatientName&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;Sex&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;Age&quot;</span><span class="p">,</span>
-                <span class="p">)</span>
-            <span class="p">]</span>
-            <span class="n">infos</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">today_date</span><span class="p">)</span>
-            <span class="n">infos</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">ref_exp</span><span class="p">)</span>
-
-            <span class="n">headers</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="s2">&quot;SITE&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;MRI SCANNER&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;STUDY NAME&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;EXAMINATION DATE&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;MRIQC CALCULATION DATE&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;NAME OF THE INPUT DATA&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;PATIENT REFERENCE&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;PATIENT SEX&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;PATIENT AGE&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;SOFTWARES&quot;</span><span class="p">,</span>
-            <span class="p">]</span>
-        <span class="k">elif</span> <span class="s2">&quot;mriqc_group&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-            <span class="n">infos</span> <span class="o">=</span> <span class="p">[</span><span class="n">today_date</span><span class="p">]</span>
-            <span class="n">headers</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="s2">&quot;MRIQC GROUPS CALCULATION DATE&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;SOFTWARES&quot;</span><span class="p">,</span>
-            <span class="p">]</span>
         <span class="n">infos</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
             <span class="p">(</span>
                 <span class="s2">&quot;Python &quot;</span> <span class="o">+</span> <span class="n">version</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span>
@@ -279,6 +325,9 @@
         <span class="n">cover_data</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]</span>
 
         <span class="k">for</span> <span class="n">header</span><span class="p">,</span> <span class="n">info</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">headers</span><span class="p">,</span> <span class="n">infos</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="n">info</span> <span class="o">=</span> <span class="s2">&quot; AND &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">info</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
             <span class="k">if</span> <span class="n">cover_data</span> <span class="o">==</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]:</span>
                 <span class="k">if</span> <span class="n">header</span> <span class="o">==</span> <span class="s2">&quot; &quot;</span><span class="p">:</span>
                     <span class="n">cover_data</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">Paragraph</span><span class="p">(</span>
@@ -461,6 +510,113 @@
                     <span class="p">),</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Bullet2&quot;</span><span class="p">],</span>
                 <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Report.co2_inhal_cvr_make_report">
+<a class="viewcode-back" href="../../../mia_processes.utils.html#mia_processes.utils.report.Report.co2_inhal_cvr_make_report">[docs]</a>
+    <span class="k">def</span> <span class="nf">co2_inhal_cvr_make_report</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Make CVR under CO2 challenge report&quot;&quot;&quot;</span>
+
+        <span class="c1"># page 1 - cover ##################################################</span>
+        <span class="c1">###################################################################</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image_cov</span><span class="p">)</span>
+        <span class="c1"># width, height</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">8</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Paragraph</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">header_title</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">ReportLine</span><span class="p">(</span><span class="mi">150</span><span class="p">)</span>
+        <span class="n">line</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;CENTER&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Paragraph</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cover_data</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">textDisclaimer</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Justify&quot;</span><span class="p">])</span>
+        <span class="p">)</span>
+        <span class="c1"># self.report.append(Spacer(0 * mm, 6 * mm))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PageBreak</span><span class="p">())</span>
+
+        <span class="c1"># page 2 - Anatomical MRI Acq &amp; Post-pro parameters##############</span>
+        <span class="c1">#################################################################</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size = 18 &gt;&lt;b&gt; Anatomical MRI &lt;br/&gt;&lt;/b&gt;&lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">ReportLine</span><span class="p">(</span><span class="mi">150</span><span class="p">)</span>
+        <span class="n">line</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;CENTER&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PageBreak</span><span class="p">())</span>
+
+        <span class="c1"># page 3 - Anatomical MRI #########################################</span>
+        <span class="c1">###################################################################</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size = 15 &gt; &lt;b&gt;MNI normalized axial anatomical &quot;</span>
+                <span class="s2">&quot;images:&lt;/b&gt; &lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Left&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>  <span class="c1"># (width, height)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s1">&#39;&lt;font size = 9 &gt; &lt;i&gt; &quot;Neurological&quot; &#39;</span>
+                <span class="s2">&quot;convention, the left side of the &quot;</span>
+                <span class="s2">&quot;image corresponds to the left side of &quot;</span>
+                <span class="s2">&quot;the brain. &lt;/i&gt; &lt;br/&gt; &lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">1</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="n">tmpdir</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span>
+        <span class="n">slices_image</span> <span class="o">=</span> <span class="n">plot_slice_planes</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">norm_anat</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">norm_anat_fig_rows</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">norm_anat_fig_cols</span><span class="p">,</span>
+            <span class="n">slice_start</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_anat_inf_slice_start</span><span class="p">,</span>
+            <span class="n">slice_step</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">norm_anat_slices_gap</span><span class="p">,</span>
+            <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Greys_r&quot;</span><span class="p">,</span>
+            <span class="n">out_dir</span><span class="o">=</span><span class="n">tmpdir</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="c1"># remainder: A4 == 210mmx297mm</span>
+        <span class="n">slices_image</span> <span class="o">=</span> <span class="n">Image</span><span class="p">(</span>
+            <span class="n">slices_image</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">7.4803</span> <span class="o">*</span> <span class="n">inch</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">9.0551</span> <span class="o">*</span> <span class="n">inch</span>
+        <span class="p">)</span>
+        <span class="n">slices_image</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;CENTER&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">slices_image</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PageBreak</span><span class="p">())</span>
+
+        <span class="c1"># page 4 - fmri-cvr MRI Acq &amp; Post-pro parameters##############</span>
+        <span class="c1">###############################################################</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">Paragraph</span><span class="p">(</span>
+                <span class="s2">&quot;&lt;font size = 18 &gt;&lt;b&gt; fMRI under a vasoactive stimulus &quot;</span>
+                <span class="s2">&quot;(hypercapnia)&lt;br/&gt;&lt;/b&gt;&lt;/font&gt;&quot;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">styles</span><span class="p">[</span><span class="s2">&quot;Center&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">ReportLine</span><span class="p">(</span><span class="mi">150</span><span class="p">)</span>
+        <span class="n">line</span><span class="o">.</span><span class="n">hAlign</span> <span class="o">=</span> <span class="s2">&quot;CENTER&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Spacer</span><span class="p">(</span><span class="mi">0</span> <span class="o">*</span> <span class="n">mm</span><span class="p">,</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">mm</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PageBreak</span><span class="p">())</span>
+
+        <span class="c1"># page 5 - fmri-cvr MRI quality check movements &amp; EtCO2 regressor #####</span>
+        <span class="c1">#######################################################################</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">report</span><span class="p">,</span> <span class="n">canvasmaker</span><span class="o">=</span><span class="n">PageNumCanvas</span><span class="p">)</span>
+        <span class="n">tmpdir</span><span class="o">.</span><span class="n">cleanup</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="Report.mriqc_anat_make_report">
