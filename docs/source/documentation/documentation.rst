@@ -124,6 +124,7 @@ To use certain mia_processes bricks (atomic processes), `third-party softwares u
     - `FramewiseDisplacement <bricks/reports/FramewiseDisplacement.html>`_
     - `Mean_stdDev_calc <bricks/reports/Mean_stdDev_calc.html>`_
     - `ReportAnatMriqc <bricks/reports/ReportAnatMriqc.html>`_
+    - `ReportCO2inhalCvr <bricks/reports/ReportCO2inhalCvr.html>`_
     - `ReportFuncMriqc <bricks/reports/ReportFuncMriqc.html>`_
     - `ReportGroupMriqc <bricks/reports/ReportGroupMriqc.html>`_
     - `Result_collector <bricks/reports/Result_collector.html>`_
