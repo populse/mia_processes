@@ -192,10 +192,12 @@ class Report:
                     "PatientRef",
                     "Sex",
                     "Age",
+                    "Pathology",
                 )
             ]
             infos.insert(4, today_date)
             infos.insert(5, ref_exp)
+            infos.insert(10, "Undefined")
 
             headers = [
                 "SITE",
@@ -207,6 +209,8 @@ class Report:
                 "PATIENT REFERENCE",
                 "PATIENT SEX",
                 "PATIENT AGE",
+                "PATHOLOGY",
+                "REFERENCE GROUP",
                 "SOFTWARES",
             ]
         # Initialises stylesheet with few basic heading and text styles,
@@ -337,7 +341,7 @@ class Report:
                             self.styles["BodyText"],
                         ),
                         Paragraph(
-                            "<para align=justify><font size = 7>"
+                            "<para align=justify><font size = 5>"
                             + info
                             + "</font></para>"
                             if header == "NAME OF THE INPUT DATA"
