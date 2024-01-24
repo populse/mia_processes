@@ -104,7 +104,7 @@ Generates the report for CVR evaluation using hypercapnia challenge pipeline
 
     ::
 
-      ex. 5
+      ex. '/home/username/data/derived_data/rp_Func.txt
 
 - *patient_info* (a dictionary with keys in ['PatientRef', 'Pathology', 'Age', 'Sex', MR', 'Gas', 'GasAdmin'])
     Optional dictionary with information about the patient.
