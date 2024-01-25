@@ -213,6 +213,24 @@ class Report:
                 "REFERENCE GROUP",
                 "SOFTWARES",
             ]
+
+        infos.extend(
+            (
+                "Python " + version.split()[0],
+                "Populse_mia " + mia_info.__version__,
+                "Capsul " + capsul_info.__version__,
+                "Nipype " + nipype_info.__version__,
+                "Mia_processes " + mia_processes_info.__version__,
+                "Operating System {0} {1}".format(
+                    "Mac OS X"
+                    if platform.system() == "Darwin"
+                    else platform.system(),
+                    platform.release(),
+                ),
+            )
+        )
+
+        headers.extend([" "] * 5)
         # Initialises stylesheet with few basic heading and text styles,
         # return a stylesheet object
         self.styles = getSampleStyleSheet()
@@ -274,24 +292,6 @@ class Report:
                 ]
             )
         )
-        infos.extend(
-            (
-                "Python " + version.split()[0],
-                "Populse_mia " + mia_info.__version__,
-                "Capsul " + capsul_info.__version__,
-                "Nipype " + nipype_info.__version__,
-                "Mia_processes " + mia_processes_info.__version__,
-                "Operating System {0} {1}".format(
-                    "Mac OS X"
-                    if platform.system() == "Darwin"
-                    else platform.system(),
-                    platform.release(),
-                ),
-            )
-        )
-
-        headers.extend([" "] * 5)
-
         cover_data = [[0, 0]]
 
         for header, info in zip(headers, infos):
@@ -522,8 +522,176 @@ class Report:
                 self.styles["Left"],
             )
         )
-
         self.report.append(Spacer(0 * mm, 5 * mm))
+        self.report.append(
+            Paragraph(
+                f"<font size = 11> <b> Protocol name / Acquisition nr: "
+                f"</b> </font> {self.dict4runtime['anat']['ProtocolName']} / "
+                f"{self.dict4runtime['anat']['Acquisition nbr']}",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 2 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size = 11> <b>Acquisition mode</b> </font>",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        self.report.append(
+            Paragraph(
+                f"<font size = 11> <b> Sequence name: "
+                f"</b> </font> {self.dict4runtime['anat']['SequenceName']}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 2 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size = 11> <b>Geometry parameters</b> </font>",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        d_dim = self.dict4runtime["anat"][
+            "Dataset dimensions (Count, X,Y,Z,T...)"
+        ]
+        self.report.append(
+            Paragraph(
+                f"<font size = 11> <b> Dataset dimension:</b> "
+                f"</font> {d_dim[1:]}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        sl_thick = self.dict4runtime["anat"]["SliceThickness"]
+
+        if not sl_thick == "Undefined":
+            sl_thick = sl_thick[0]
+
+        st_end_sl = self.dict4runtime["anat"]["Start/end slice"]
+
+        if not st_end_sl == "Undefined" and st_end_sl == [0, 0]:
+            st_end_sl = 0.0
+
+        self.report.append(
+            Paragraph(
+                f"<font size = 11> <b> Slice thickness "
+                f"/ Slice gap [mm]:</b> "
+                f"</font> {sl_thick} / {st_end_sl}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        fov = self.dict4runtime["anat"]["FOV"]
+
+        if fov == "Undefined":
+            fov = ["Undefined"] * 3
+
+        if all(isinstance(elt, (int, float)) for elt in fov):
+            fov = [round(elt, 1) for elt in fov]
+
+        self.report.append(
+            Paragraph(
+                f"<font size = 11> <b> FOV (ap / fh / rl) [mm]:</b> </font> "
+                f"{fov[0]} / {fov[1]} / {fov[2]}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # TODO: I don't know how to obtain the scan resolution parameter yet
+        self.report.append(
+            Paragraph(
+                "<font size = 11> <b> Scan resolution  "
+                "(x / y):</b> </font> Undefined",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        vox_size = self.dict4runtime["anat"]["Grid spacings (X,Y,Z,T,...)"]
+
+        if vox_size == "Undefined":
+            vox_size = ["Undefined"] * 3
+
+        if all(isinstance(elt, (int, float)) for elt in vox_size):
+            vox_size = [round(elt, 1) for elt in vox_size]
+
+        self.report.append(
+            Paragraph(
+                f"<font size = 11> <b> Voxel size (x / z / y) [mm]:"
+                f"</b> </font> {vox_size[0]} / {vox_size[1]} / {vox_size[2]}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 2 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size = 11> <b>Other parameters" "</b> </font>",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        tr = self.dict4runtime["anat"]["RepetitionTime"]
+        te = self.dict4runtime["anat"]["EchoTime"]
+        flipang = self.dict4runtime["anat"]["FlipAngle"]
+
+        if flipang != "Undefined":
+            flipang = round(flipang[0], 1)
+
+        if te != "Undefined":
+            te = round(te[0], 1)
+
+        if tr != "Undefined":
+            tr = round(tr[0], 1)
+
+        self.report.append(
+            Paragraph(
+                f"<font size = 11> <b> TR [ms] / TE [ms] / Image flip angle"
+                f" [deg]:</b> </font> {tr} / {te} / {flipang}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+
+        if len(d_dim) == 4:
+            dyn_nb = 1
+
+        elif len(d_dim) == 5:
+            dyn_nb = d_dim[-1]
+
+        self.report.append(
+            Paragraph(
+                f"<font size = 11> <b> Number of dynamics:</b> "
+                f"</font> {dyn_nb}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # TODO: I don't know how to obtain the acquisition duration
+        #       parameter yet
+        self.report.append(
+            Paragraph(
+                "<font size = 11> <b> Acquisition duration [s]:"
+                "</b> </font> Undefined",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 10 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size = 15 > <b> Post-processing:<br /> </b> </font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 5 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size = 11> <b>Spatial processing</b> </font>",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
 
         self.report.append(PageBreak())
 

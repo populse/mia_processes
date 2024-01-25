@@ -1086,7 +1086,8 @@ class ReportCO2inhalCvr(ProcessMIA):
             + len(self.project.getName())
             + 1
         )
-        database_filename = self.norm_anat[file_position:]
+        db_file_norm_anat = self.norm_anat[file_position:]
+        db_file_anat = self.anat[file_position:]
 
         # As we do not have access to the database at the runtime (see #272),
         # we prepare here the data that the run_process_mia method will need
@@ -1094,7 +1095,7 @@ class ReportCO2inhalCvr(ProcessMIA):
         dict4runtime_update(
             self.dict4runtime,
             self.project.session,
-            database_filename,
+            db_file_norm_anat,
             "AcquisitionDate",
             "Age",
             "Gas",
@@ -1107,34 +1108,30 @@ class ReportCO2inhalCvr(ProcessMIA):
             "Spectro",
             "StudyName",
         )
-
-        if (
-            self.patient_info.get("Age") is None
-            or self.patient_info["Age"] == Undefined
-        ):
-            if self.dict4runtime["Age"] != "Undefined":
-                self.patient_info["Age"] = self.dict4runtime["Age"]
-
-        else:
-            self.dict4runtime["Age"] = self.patient_info.get("Age")
-
-        if (
-            self.patient_info.get("Pathology") is None
-            or self.patient_info["Pathology"] == Undefined
-        ):
-            if self.dict4runtime["Pathology"] != "Undefined":
-                self.patient_info["Pathology"] = self.dict4runtime["Pathology"]
-
-        else:
-            self.dict4runtime["Pathology"] = self.patient_info.get("Pathology")
-
+        self.dict4runtime["anat"] = {}
+        dict4runtime_update(
+            self.dict4runtime["anat"],
+            self.project.session,
+            db_file_anat,
+            "ProtocolName",
+            "Acquisition nbr",
+            "SequenceName",
+            "Dataset dimensions (Count, X,Y,Z,T...)",
+            "SliceThickness",
+            "Start/end slice",
+            "FOV",
+            "Grid spacings (X,Y,Z,T,...)",
+            "FlipAngle",
+            "EchoTime",
+            "RepetitionTime",
+        )
         # FIXME: the data should be anonymized and we should use PatientRef
         #        instead of PatientName !
         if self.dict4runtime["PatientName"] == "Undefined":
             print(
                 "\nReportCO2inhalCvr brick:\nThe tags PatientName was not "
                 "found in the database for the {} file...\n The "
-                "initialization is aborted...".format(database_filename)
+                "initialization is aborted...".format(db_file_norm_anat)
             )
             return self.make_initResult()
 
@@ -1159,6 +1156,26 @@ class ReportCO2inhalCvr(ProcessMIA):
             self.dict4runtime["PatientRef"] = self.patient_info.get(
                 "PatientRef"
             )
+
+        if (
+            self.patient_info.get("Pathology") is None
+            or self.patient_info["Pathology"] == Undefined
+        ):
+            if self.dict4runtime["Pathology"] != "Undefined":
+                self.patient_info["Pathology"] = self.dict4runtime["Pathology"]
+
+        else:
+            self.dict4runtime["Pathology"] = self.patient_info.get("Pathology")
+
+        if (
+            self.patient_info.get("Age") is None
+            or self.patient_info["Age"] == Undefined
+        ):
+            if self.dict4runtime["Age"] != "Undefined":
+                self.patient_info["Age"] = self.dict4runtime["Age"]
+
+        else:
+            self.dict4runtime["Age"] = self.patient_info.get("Age")
 
         if (
             self.patient_info.get("Sex") is None
