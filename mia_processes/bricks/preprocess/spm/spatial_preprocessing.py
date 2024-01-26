@@ -1873,9 +1873,41 @@ class Normalize12(ProcessMIA):
                         # fmt: on
 
                         if fileOvalNoPref == fileIval:
+                            all_tags_to_add = []
+                            # Add the voxel sizes after normalization,
+                            # in database
+                            tag_to_add = dict()
+                            tag_to_add["name"] = "Voxel sizes"
+                            tag_to_add["field_type"] = "list_float"
+                            tag_to_add["description"] = (
+                                "The voxel sizes (x, y & "
+                                "z, in mm) of the written "
+                                "normalised images"
+                            )
+                            tag_to_add["visibility"] = True
+                            tag_to_add["origin"] = "user"
+                            tag_to_add["unit"] = "mm"
+                            tag_to_add["default_value"] = None
+                            tag_to_add["value"] = self.write_voxel_sizes
+                            all_tags_to_add.append(tag_to_add)
+                            # Add the voxel sizes after normalization,
+                            # in database
+                            tag_to_add = dict()
+                            tag_to_add["name"] = "Affine regularization type"
+                            tag_to_add["field_type"] = "string"
+                            tag_to_add["description"] = (
+                                "Standard space for affine " "registration"
+                            )
+                            tag_to_add["visibility"] = True
+                            tag_to_add["origin"] = "user"
+                            tag_to_add["unit"] = None
+                            tag_to_add["default_value"] = None
+                            tag_to_add["value"] = (
+                                self.affine_regularization_type
+                            ).upper()
+                            all_tags_to_add.append(tag_to_add)
                             self.tags_inheritance(
-                                in_val,
-                                out_val,
+                                in_val, out_val, own_tags=all_tags_to_add
                             )
 
                 if (key == "deformation_field") and (val != Undefined):

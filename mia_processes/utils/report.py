@@ -503,7 +503,7 @@ class Report:
         # self.report.append(Spacer(0 * mm, 6 * mm))
         self.report.append(PageBreak())
 
-        # page 2 - Anatomical MRI Acq & Post-pro parameters##############
+        # page 2 - Anatomical MRI - Acq & Post-pro parameters############
         #################################################################
         self.report.append(
             Paragraph(
@@ -549,7 +549,7 @@ class Report:
         self.report.append(Spacer(0 * mm, 2 * mm))
         self.report.append(
             Paragraph(
-                "<font size = 11> <b>Geometry parameters</b> </font>",
+                "<font size = 11> <b>Raw geometry parameters</b> </font>",
                 self.styles["Bullet1"],
             )
         )
@@ -692,10 +692,55 @@ class Report:
             )
         )
         self.report.append(Spacer(0 * mm, 1 * mm))
+        # Hard-coded, we know the state of the normalization in the
+        # CVR CO2 pipeline:
+        self.report.append(
+            Paragraph(
+                "<font size = 11> <b> Spatial "
+                "normalization:</b> </font> Yes",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        brain_templ = self.dict4runtime["anat"]["Affine regularization type"]
+        self.report.append(
+            Paragraph(
+                f"<font size = 11> <b> Brain template:"
+                f"</b> </font> {brain_templ}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        vox_size = self.dict4runtime["anat"]["Voxel sizes"]
 
+        if vox_size == "Undefined":
+            vox_size = ["Undefined"] * 3
+
+        if all(isinstance(elt, (int, float)) for elt in vox_size):
+            vox_size = [round(elt, 1) for elt in vox_size]
+
+        self.report.append(
+            Paragraph(
+                f"<font size = 11> <b> Final voxel size "
+                f"(x / z / y) [mm]:</b> "
+                f"</font> {vox_size[0]} / {vox_size[1]} / {vox_size[2]}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # Hard-coded, we know the state of the segmentation in the
+        # CVR CO2 pipeline:
+        self.report.append(
+            Paragraph(
+                "<font size = 11> <b> Segmentation:</b>"
+                " </font> Grey matter, white matter, "
+                "cerebrospinal fluid, bone, soft tissues",
+                self.styles["Bullet2"],
+            )
+        )
         self.report.append(PageBreak())
 
-        # page 3 - Anatomical MRI #########################################
+        # page 3 - Anatomical MRI - slice planes mosaic display ###########
         ###################################################################
         self.report.append(
             Paragraph(

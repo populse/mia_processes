@@ -1124,6 +1124,8 @@ class ReportCO2inhalCvr(ProcessMIA):
             "FlipAngle",
             "EchoTime",
             "RepetitionTime",
+            "Voxel sizes",
+            "Affine regularization type",
         )
         # FIXME: the data should be anonymized and we should use PatientRef
         #        instead of PatientName !
