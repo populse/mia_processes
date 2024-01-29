@@ -168,7 +168,8 @@ class Report:
             self.title = (
                 "<font size=18><b>{0} report: </b>{1}"
                 "</font>".format(
-                    self.dict4runtime["PatientRef"], today_date.split(" ")[0]
+                    self.dict4runtime["anat"]["PatientRef"],
+                    today_date.split(" ")[0],
                 )
             )
 
@@ -183,7 +184,7 @@ class Report:
                 "as a physiological challenge</font>"
             )
             infos = [
-                self.dict4runtime[i]
+                self.dict4runtime["anat"][i]
                 for i in (
                     "Site",
                     "Spectro",
@@ -523,6 +524,8 @@ class Report:
             )
         )
         self.report.append(Spacer(0 * mm, 5 * mm))
+        # TODO: We don't currently have the "Acquisition nbr" tag in the raw
+        #       anat data. Would you like this to come from mri_conv?
         self.report.append(
             Paragraph(
                 f"<font size = 11> <b> Protocol name / Acquisition nr: "
@@ -702,7 +705,9 @@ class Report:
             )
         )
         self.report.append(Spacer(0 * mm, 1 * mm))
-        brain_templ = self.dict4runtime["anat"]["Affine regularization type"]
+        brain_templ = self.dict4runtime["norm_anat"][
+            "Affine regularization type"
+        ]
         self.report.append(
             Paragraph(
                 f"<font size = 11> <b> Brain template:"
@@ -711,7 +716,7 @@ class Report:
             )
         )
         self.report.append(Spacer(0 * mm, 1 * mm))
-        vox_size = self.dict4runtime["anat"]["Voxel sizes"]
+        vox_size = self.dict4runtime["norm_anat"]["Voxel sizes"]
 
         if vox_size == "Undefined":
             vox_size = ["Undefined"] * 3
@@ -794,7 +799,305 @@ class Report:
         line.hAlign = "CENTER"
         self.report.append(line)
         self.report.append(Spacer(0 * mm, 20 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size = 15 ><b>Acquisition parameters:<br/></b></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 5 * mm))
+        # TODO: We don't currently have the "Acquisition nbr" tag in the raw
+        #       anat data. Would you like this to come from mri_conv?
+        self.report.append(
+            Paragraph(
+                f"<font size = 11> <b> Protocol name / Acquisition nr: "
+                f"</b> </font> "
+                f"{self.dict4runtime['norm_func']['ProtocolName']} / "
+                f"{self.dict4runtime['norm_func']['Acquisition nbr']}",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 2 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size = 11> <b>Acquisition mode</b> </font>",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        self.report.append(
+            Paragraph(
+                f"<font size = 11> <b> Sequence name: </b> </font> "
+                f"{self.dict4runtime['norm_func']['SequenceName']}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 2 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size = 11> <b>Raw geometry parameters</b> </font>",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        d_dim = self.dict4runtime["norm_func"][
+            "Dataset dimensions (Count, X,Y,Z,T...)"
+        ]
+        self.report.append(
+            Paragraph(
+                f"<font size = 11> <b> Dataset dimension:</b> "
+                f"</font> {d_dim[1:-1]}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        sl_thick = self.dict4runtime["norm_func"]["SliceThickness"]
 
+        if not sl_thick == "Undefined":
+            sl_thick = sl_thick[0]
+
+        st_end_sl = self.dict4runtime["norm_func"]["Start/end slice"]
+
+        if not st_end_sl == "Undefined" and st_end_sl == [0, 0]:
+            st_end_sl = 0.0
+
+        self.report.append(
+            Paragraph(
+                f"<font size = 11> <b> Slice thickness "
+                f"/ Slice gap [mm]:</b> "
+                f"</font> {sl_thick} / {st_end_sl}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        fov = self.dict4runtime["norm_func"]["FOV"]
+
+        if fov == "Undefined":
+            fov = ["Undefined"] * 3
+
+        if all(isinstance(elt, (int, float)) for elt in fov):
+            fov = [round(elt, 1) for elt in fov]
+
+        self.report.append(
+            Paragraph(
+                f"<font size = 11> <b> FOV (ap / fh / rl) [mm]:</b> </font> "
+                f"{fov[0]} / {fov[1]} / {fov[2]}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # TODO: I don't know how to obtain the scan resolution parameter yet
+        self.report.append(
+            Paragraph(
+                "<font size = 11> <b> Scan resolution  "
+                "(x / y):</b> </font> Undefined",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        vox_size = self.dict4runtime["norm_func"][
+            "Grid spacings (X,Y,Z,T,...)"
+        ]
+
+        if vox_size == "Undefined":
+            vox_size = ["Undefined"] * 3
+
+        if all(isinstance(elt, (int, float)) for elt in vox_size):
+            vox_size = [round(elt, 1) for elt in vox_size]
+
+        self.report.append(
+            Paragraph(
+                f"<font size = 11> <b> Voxel size (x / z / y) [mm]:"
+                f"</b> </font> {vox_size[0]} / {vox_size[1]} / {vox_size[2]}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 2 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size = 11> <b>Other parameters" "</b> </font>",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        tr = self.dict4runtime["norm_func"]["RepetitionTime"]
+        te = self.dict4runtime["norm_func"]["EchoTime"]
+        flipang = self.dict4runtime["norm_func"]["FlipAngle"]
+
+        if flipang != "Undefined":
+            flipang = round(flipang[0], 1)
+
+        if te != "Undefined":
+            te = round(te[0], 1)
+
+        if tr != "Undefined":
+            tr = round(tr[0], 1)
+
+        self.report.append(
+            Paragraph(
+                f"<font size = 11> <b> TR [ms] / TE [ms] / Image flip angle"
+                f" [deg]:</b> </font> {tr} / {te} / {flipang}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+
+        if len(d_dim) == 4:
+            dyn_nb = 1
+
+        elif len(d_dim) == 5:
+            dyn_nb = d_dim[-1]
+
+        self.report.append(
+            Paragraph(
+                f"<font size = 11> <b> Number of dynamics:</b> "
+                f"</font> {dyn_nb}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # TODO: I don't know how to obtain the acquisition duration
+        #       parameter yet
+        self.report.append(
+            Paragraph(
+                "<font size = 11> <b> Acquisition duration [s]:"
+                "</b> </font> Undefined",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 2 * mm))
+        # TODO: I don't know how to obtain the CVR regressor (Individual or
+        #       Standard) parameter yet
+        self.report.append(
+            Paragraph(
+                "<font size = 11> <b>Stimulus and performance</b> </font>",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))  # (width, height)
+        self.report.append(
+            Paragraph(
+                "<font size = 11> <b>CVR regressor:</b> </font>"
+                + "<font size = 9>Undefined</font>",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        self.report.append(
+            Paragraph(
+                f"<font size = 11> <b>Stimulation device / Gas name:"
+                f"</b> </font> {self.dict4runtime['norm_func']['GasAdmin']} "
+                f"/ {self.dict4runtime['norm_func']['Gas']}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # TODO: Stimulus is currently hard-coded at 8%. Should we take the
+        #       value from the patient_info dictionary?
+        self.report.append(
+            Paragraph(
+                "<font size = 11> <b>Stimulus:</b> </font> 8% CO<sub>2</sub>",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 10 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size = 15 > <b> Post-processing:<br /> </b> </font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 5 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size = 11> <b>Spatial processing</b> </font>",
+                self.styles["Bullet1"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # Hard-coded, we know the state of the normalization in the
+        # CVR CO2 pipeline:
+        self.report.append(
+            Paragraph(
+                "<font size = 11> <b> Spatial "
+                "normalization:</b> </font> Yes",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        brain_templ = self.dict4runtime["norm_func"][
+            "Affine regularization type"
+        ]
+        self.report.append(
+            Paragraph(
+                f"<font size = 11> <b> Brain template:"
+                f"</b> </font> {brain_templ}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        vox_size = self.dict4runtime["norm_func"]["Voxel sizes"]
+
+        if vox_size == "Undefined":
+            vox_size = ["Undefined"] * 3
+
+        if all(isinstance(elt, (int, float)) for elt in vox_size):
+            vox_size = [round(elt, 1) for elt in vox_size]
+
+        self.report.append(
+            Paragraph(
+                f"<font size = 11> <b> Voxel size after normalization "
+                f"(x / z / y) [mm]:</b> "
+                f"</font> {vox_size[0]} / {vox_size[1]} / {vox_size[2]}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        fwhm = self.dict4runtime["smooth_norm_func"][
+            "FWHM (X, Y, Z) for Smooth"
+        ]
+
+        if fwhm == "Undefined":
+            fwhm = ["Undefined"] * 3
+
+        if all(isinstance(elt, (int, float)) for elt in fwhm):
+            fwhm = [round(elt, 1) for elt in fwhm]
+
+        self.report.append(
+            Paragraph(
+                f"<font size = 11> <b>Spatial smoothing "
+                f"(fwhm) [mm]:</b> </font> {fwhm[0]} "
+                f"/ {fwhm[1]} / {fwhm[2]}",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size = 11> <b>Head motion as "
+                "nuisance regressor in GLM:"
+                "</b> </font> Yes",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # TODO: The pipeline doesn't currently use ART. Should we implement it?
+        self.report.append(
+            Paragraph(
+                "<font size = 11> <b>Artifact detection "
+                "tools (ART):</b> </font> No",
+                self.styles["Bullet2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        # Hard-coded, we know the state of the mask for the func in the
+        # CVR CO2 pipeline:
+        self.report.append(
+            Paragraph(
+                "<font size = 11> <b> Mask:</b> </font> " "Grey matter",
+                self.styles["Bullet2"],
+            )
+        )
         self.report.append(PageBreak())
 
         # page 5 - fmri-cvr MRI quality check movements & EtCO2 regressor #####

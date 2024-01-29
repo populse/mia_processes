@@ -983,6 +983,9 @@ class ReportCO2inhalCvr(ProcessMIA):
             ),
         )
 
+        # TODO: We use the normalized functional. It seems that it's the
+        #       normalized - smothed functional that's used in Amigo. We'll
+        #       have to check and decide what we'll use here finally?
         self.add_trait(
             "norm_func",
             ImageFileSPM(
@@ -1086,50 +1089,81 @@ class ReportCO2inhalCvr(ProcessMIA):
             + len(self.project.getName())
             + 1
         )
-        db_file_norm_anat = self.norm_anat[file_position:]
         db_file_anat = self.anat[file_position:]
+        db_file_norm_anat = self.norm_anat[file_position:]
+        db_file_norm_func = self.norm_func[file_position:]
+        # TODO: Do we need to explicitly take the smoothed func as input,
+        #       or can we simply add the prefix 's' to the normalized func?
+        db_file_smooth_norm_func = "s" + db_file_norm_func
 
         # As we do not have access to the database at the runtime (see #272),
         # we prepare here the data that the run_process_mia method will need
         # via dict4runtime parameter:
-        dict4runtime_update(
-            self.dict4runtime,
-            self.project.session,
-            db_file_norm_anat,
-            "AcquisitionDate",
-            "Age",
-            "Gas",
-            "GasAdmin",
-            "Pathology",
-            "PatientName",
-            "PatientRef",
-            "Sex",
-            "Site",
-            "Spectro",
-            "StudyName",
-        )
         self.dict4runtime["anat"] = {}
         dict4runtime_update(
             self.dict4runtime["anat"],
             self.project.session,
             db_file_anat,
-            "ProtocolName",
+            "AcquisitionDate",
             "Acquisition nbr",
-            "SequenceName",
+            "Age",
             "Dataset dimensions (Count, X,Y,Z,T...)",
-            "SliceThickness",
-            "Start/end slice",
+            "EchoTime",
+            "FlipAngle",
             "FOV",
             "Grid spacings (X,Y,Z,T,...)",
-            "FlipAngle",
-            "EchoTime",
+            "Pathology",
+            "PatientName",
+            "PatientRef",
+            "ProtocolName",
             "RepetitionTime",
-            "Voxel sizes",
+            "SequenceName",
+            "Sex",
+            "Site",
+            "SliceThickness",
+            "Spectro",
+            "Start/end slice",
+            "StudyName",
+        )
+        self.dict4runtime["norm_anat"] = {}
+        dict4runtime_update(
+            self.dict4runtime["norm_anat"],
+            self.project.session,
+            db_file_norm_anat,
             "Affine regularization type",
+            "Voxel sizes",
+        )
+        self.dict4runtime["norm_func"] = {}
+        dict4runtime_update(
+            self.dict4runtime["norm_func"],
+            self.project.session,
+            db_file_norm_func,
+            "Acquisition nbr",
+            "Affine regularization type",
+            "Dataset dimensions (Count, X,Y,Z,T...)",
+            "EchoTime",
+            "FlipAngle",
+            "FOV",
+            "Gas",
+            "GasAdmin",
+            "Grid spacings (X,Y,Z,T,...)",
+            "ProtocolName",
+            "RepetitionTime",
+            "SequenceName",
+            "SliceThickness",
+            "Start/end slice",
+            "Voxel sizes",
+        )
+        self.dict4runtime["smooth_norm_func"] = {}
+        dict4runtime_update(
+            self.dict4runtime["smooth_norm_func"],
+            self.project.session,
+            db_file_smooth_norm_func,
+            "FWHM (X, Y, Z) for Smooth",
         )
         # FIXME: the data should be anonymized and we should use PatientRef
         #        instead of PatientName !
-        if self.dict4runtime["PatientName"] == "Undefined":
+        if self.dict4runtime["anat"]["PatientName"] == "Undefined":
             print(
                 "\nReportCO2inhalCvr brick:\nThe tags PatientName was not "
                 "found in the database for the {} file...\n The "
@@ -1141,21 +1175,21 @@ class ReportCO2inhalCvr(ProcessMIA):
             self.patient_info.get("PatientRef") is None
             or self.patient_info["PatientRef"] == Undefined
         ):
-            if self.dict4runtime["PatientRef"] == "Undefined":
-                self.dict4runtime["PatientRef"] = self.dict4runtime[
-                    "PatientName"
-                ]
-                self.patient_info["PatientRef"] = self.dict4runtime[
+            if self.dict4runtime["anat"]["PatientRef"] == "Undefined":
+                self.dict4runtime["anat"]["PatientRef"] = self.dict4runtime[
+                    "anat"
+                ]["PatientName"]
+                self.patient_info["PatientRef"] = self.dict4runtime["anat"][
                     "PatientName"
                 ]
 
             else:
-                self.patient_info["PatientRef"] = self.dict4runtime[
+                self.patient_info["PatientRef"] = self.dict4runtime["anat"][
                     "PatientRef"
                 ]
 
         else:
-            self.dict4runtime["PatientRef"] = self.patient_info.get(
+            self.dict4runtime["anat"]["PatientRef"] = self.patient_info.get(
                 "PatientRef"
             )
 
@@ -1163,72 +1197,86 @@ class ReportCO2inhalCvr(ProcessMIA):
             self.patient_info.get("Pathology") is None
             or self.patient_info["Pathology"] == Undefined
         ):
-            if self.dict4runtime["Pathology"] != "Undefined":
-                self.patient_info["Pathology"] = self.dict4runtime["Pathology"]
+            if self.dict4runtime["anat"]["Pathology"] != "Undefined":
+                self.patient_info["Pathology"] = self.dict4runtime["anat"][
+                    "Pathology"
+                ]
 
         else:
-            self.dict4runtime["Pathology"] = self.patient_info.get("Pathology")
+            self.dict4runtime["anat"]["Pathology"] = self.patient_info.get(
+                "Pathology"
+            )
 
         if (
             self.patient_info.get("Age") is None
             or self.patient_info["Age"] == Undefined
         ):
-            if self.dict4runtime["Age"] != "Undefined":
-                self.patient_info["Age"] = self.dict4runtime["Age"]
+            if self.dict4runtime["anat"]["Age"] != "Undefined":
+                self.patient_info["Age"] = self.dict4runtime["anat"]["Age"]
 
         else:
-            self.dict4runtime["Age"] = self.patient_info.get("Age")
+            self.dict4runtime["anat"]["Age"] = self.patient_info.get("Age")
 
         if (
             self.patient_info.get("Sex") is None
             or self.patient_info["Sex"] == Undefined
         ):
-            if self.dict4runtime["Sex"] != "Undefined":
-                self.patient_info["Sex"] = self.dict4runtime["Sex"]
+            if self.dict4runtime["anat"]["Sex"] != "Undefined":
+                self.patient_info["Sex"] = self.dict4runtime["anat"]["Sex"]
 
         else:
-            self.dict4runtime["Sex"] = self.patient_info.get("Sex")
+            self.dict4runtime["anat"]["Sex"] = self.patient_info.get("Sex")
 
         if (
             self.patient_info.get("MR") is None
             or self.patient_info["MR"] == Undefined
         ):
-            if self.dict4runtime["Spectro"] != "Undefined":
-                self.patient_info["MR"] = self.dict4runtime["Spectro"]
+            if self.dict4runtime["anat"]["Spectro"] != "Undefined":
+                self.patient_info["MR"] = self.dict4runtime["anat"]["Spectro"]
 
         else:
-            self.dict4runtime["Spectro"] = self.patient_info.get("MR")
+            self.dict4runtime["anat"]["Spectro"] = self.patient_info.get("MR")
 
         if (
             self.patient_info.get("Gas") is None
             or self.patient_info["Gas"] == Undefined
         ):
-            if self.dict4runtime["Gas"] != "Undefined":
-                self.patient_info["Gas"] == self.dict4runtime["Gas"]
+            if self.dict4runtime["norm_func"]["Gas"] != "Undefined":
+                self.patient_info["Gas"] == self.dict4runtime["norm_func"][
+                    "Gas"
+                ]
 
         else:
-            self.dict4runtime["Gas"] = self.patient_info.get("Gas")
+            self.dict4runtime["norm_func"]["Gas"] = self.patient_info.get(
+                "Gas"
+            )
 
         if (
             self.patient_info.get("GasAdmin") is None
             or self.patient_info["GasAdmin"] == Undefined
         ):
-            if self.dict4runtime["GasAdmin"] != "Undefined":
-                self.patient_info["GasAdmin"] == self.dict4runtime["GasAdmin"]
+            if self.dict4runtime["norm_func"]["GasAdmin"] != "Undefined":
+                self.patient_info["GasAdmin"] == self.dict4runtime[
+                    "norm_func"
+                ]["GasAdmin"]
 
         else:
-            self.dict4runtime["GasAdmin"] = self.patient_info.get("GasAdmin")
+            self.dict4runtime["norm_func"]["GasAdmin"] = self.patient_info.get(
+                "GasAdmin"
+            )
 
         # FIXME: Currently, Site and Spectro data are hard-coded. A solution
         #        should be found to retrieve them automatically or to put them
         #        in the input parameters of the brick:
         # Site
-        if self.dict4runtime["Site"] in ("", "Undefined"):
-            self.dict4runtime["Site"] = "Grenoble University Hospital - CLUNI"
+        if self.dict4runtime["anat"]["Site"] in ("", "Undefined"):
+            self.dict4runtime["anat"][
+                "Site"
+            ] = "Grenoble University Hospital - CLUNI"
 
         # MriScanner
-        if self.dict4runtime["Spectro"] in ("", "Undefined"):
-            self.dict4runtime["Spectro"] = "Philips Achieva 3.0T TX"
+        if self.dict4runtime["anat"]["Spectro"] in ("", "Undefined"):
+            self.dict4runtime["anat"]["Spectro"] = "Philips Achieva 3.0T TX"
 
         # Generate an output name
         if (
@@ -1241,7 +1289,7 @@ class ReportCO2inhalCvr(ProcessMIA):
             self.outputs["report"] = os.path.join(
                 self.output_directory,
                 "{0}_CO2_inhal_CVR_Report_{1}.pdf".format(
-                    self.dict4runtime["PatientRef"],
+                    self.dict4runtime["anat"]["PatientRef"],
                     datetime.now().strftime("%Y_%m_%d_%H_%M_%S_%f")[:22],
                 ),
             )

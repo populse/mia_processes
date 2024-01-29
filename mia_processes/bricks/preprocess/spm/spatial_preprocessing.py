@@ -1890,8 +1890,8 @@ class Normalize12(ProcessMIA):
                             tag_to_add["default_value"] = None
                             tag_to_add["value"] = self.write_voxel_sizes
                             all_tags_to_add.append(tag_to_add)
-                            # Add the voxel sizes after normalization,
-                            # in database
+                            # Add the Affine regularization type for
+                            # normalization, in database
                             tag_to_add = dict()
                             tag_to_add["name"] = "Affine regularization type"
                             tag_to_add["field_type"] = "string"
@@ -3193,9 +3193,23 @@ class Smooth(ProcessMIA):
                             # fmt : on
 
                         if fileOvalNoPref == fileIval:
+                            all_tags_to_add = []
+                            # Add the fwhm parameter for smooth, in database
+                            tag_to_add = dict()
+                            tag_to_add["name"] = "FWHM (X, Y, Z) for Smooth"
+                            tag_to_add["field_type"] = "list_float"
+                            tag_to_add["description"] = (
+                                "Full width at half maximum (FWHM) of the "
+                                "Gaussian smoothing kernel in mm"
+                            )
+                            tag_to_add["visibility"] = True
+                            tag_to_add["origin"] = "user"
+                            tag_to_add["unit"] = "mm"
+                            tag_to_add["default_value"] = None
+                            tag_to_add["value"] = self.fwhm
+                            all_tags_to_add.append(tag_to_add)
                             self.tags_inheritance(
-                                in_val,
-                                out_val,
+                                in_val, out_val, own_tags=all_tags_to_add
                             )
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
