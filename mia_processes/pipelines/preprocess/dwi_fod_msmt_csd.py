@@ -15,7 +15,6 @@ from capsul.api import Pipeline
 
 
 class Dwi_fod_msmt_csd(Pipeline):
-
     """
     *DWI fiber orientation distribution*
 

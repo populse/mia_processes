@@ -55,9 +55,9 @@ class Anat_spatial_norm(Pipeline):
             1e-08,
         ]
         self.nodes["registration"].process.convergence_window_size = [15, 5, 3]
-        self.nodes[
-            "registration"
-        ].process.interpolation = "LanczosWindowedSinc"
+        self.nodes["registration"].process.interpolation = (
+            "LanczosWindowedSinc"
+        )
         self.nodes["registration"].process.metric = ["Mattes", "Mattes"]
         self.nodes["registration"].process.metric_weight = [1.0, 1.0]
         self.nodes["registration"].process.number_of_iterations = [[20], [15]]

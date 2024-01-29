@@ -283,9 +283,11 @@ class EstimateContrast(ProcessMIA):
                 ]
             else:
                 contrasts_T = [
-                    (cont_name, "T", condition, cont_weight, sess)
-                    if sess is not Undefined
-                    else (cont_name, "T", condition, cont_weight)
+                    (
+                        (cont_name, "T", condition, cont_weight, sess)
+                        if sess is not Undefined
+                        else (cont_name, "T", condition, cont_weight)
+                    )
                     for cont_name, condition, cont_weight, sess in zip(
                         self.T_contrast_names,
                         self.T_condition_names,
@@ -2186,9 +2188,9 @@ class Level1Design(ProcessMIA):
                 tag_to_add = dict()
                 tag_to_add["name"] = "Dynamic Number"
                 tag_to_add["field_type"] = FIELD_TYPE_INTEGER
-                tag_to_add[
-                    "description"
-                ] = "Total number of dynamics in the functionals"
+                tag_to_add["description"] = (
+                    "Total number of dynamics in the functionals"
+                )
                 tag_to_add["visibility"] = True
                 tag_to_add["origin"] = TAG_ORIGIN_USER
                 tag_to_add["unit"] = None
@@ -2255,9 +2257,9 @@ class Level1Design(ProcessMIA):
         self.process.factor_info = self.factor_info
         self.process.bases = self.bases
         self.process.volterra_expansion_order = self.volterra_expansion_order
-        (
-            self.process.global_intensity_normalization
-        ) = self.global_intensity_normalization
+        (self.process.global_intensity_normalization) = (
+            self.global_intensity_normalization
+        )
         self.process.mask_threshold = self.mask_threshold
 
         # Only one mask can be defined in spm. If more than one is given, only

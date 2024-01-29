@@ -366,12 +366,12 @@ class Coregister(ProcessMIA):
             else:
                 print("No output_directory was found...!\n")
 
-            self.outputs[
-                "coregistered_source"
-            ] = self.process._coregistered_source
-            self.outputs[
-                "coregistered_files"
-            ] = self.process._coregistered_files
+            self.outputs["coregistered_source"] = (
+                self.process._coregistered_source
+            )
+            self.outputs["coregistered_files"] = (
+                self.process._coregistered_files
+            )
 
         if self.outputs:
             out_coregsource = []
@@ -1277,9 +1277,9 @@ class NewSegment(ProcessMIA):
         ):
             self.process.channel_files = self.channel_files
             self.process.channel_info = self.channel_info
-            (
-                self.process.write_deformation_fields
-            ) = self.write_deformation_fields
+            (self.process.write_deformation_fields) = (
+                self.write_deformation_fields
+            )
             self.process.tissues = self.tissues
 
             # The management of self.process.output_directory could be
@@ -1958,9 +1958,9 @@ class Normalize12(ProcessMIA):
         if self.jobtype.startswith("est"):
             self.process.tpm = self.tpm
 
-        (
-            self.process.affine_regularization_type
-        ) = self.affine_regularization_type
+        (self.process.affine_regularization_type) = (
+            self.affine_regularization_type
+        )
         self.process.warping_regularization = self.warping_regularization
         self.process.smoothness = self.smoothness
         self.process.sampling_distance = self.sampling_distance

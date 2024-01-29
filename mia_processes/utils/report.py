@@ -222,9 +222,11 @@ class Report:
                 "Nipype " + nipype_info.__version__,
                 "Mia_processes " + mia_processes_info.__version__,
                 "Operating System {0} {1}".format(
-                    "Mac OS X"
-                    if platform.system() == "Darwin"
-                    else platform.system(),
+                    (
+                        "Mac OS X"
+                        if platform.system() == "Darwin"
+                        else platform.system()
+                    ),
                     platform.release(),
                 ),
             )
@@ -341,13 +343,15 @@ class Report:
                             self.styles["BodyText"],
                         ),
                         Paragraph(
-                            "<para align=justify><font size = 5>"
-                            + info
-                            + "</font></para>"
-                            if header == "NAME OF THE INPUT DATA"
-                            else "<para align=justify>"
-                            + str(info)
-                            + "</para>",
+                            (
+                                "<para align=justify><font size = 5>"
+                                + info
+                                + "</font></para>"
+                                if header == "NAME OF THE INPUT DATA"
+                                else "<para align=justify>"
+                                + str(info)
+                                + "</para>"
+                            ),
                             self.styles["Normal"],
                         ),
                     ]
@@ -440,17 +444,19 @@ class Report:
                 return Paragraph(
                     "<font size = 11> <b>{0}</b> </font>: {1}".format(
                         self.dict4runtime["extra_info"][param][0],
-                        str(
-                            round(
-                                self.iqms_data.get(param),
-                                self.dict4runtime["extra_info"][param][1],
+                        (
+                            str(
+                                round(
+                                    self.iqms_data.get(param),
+                                    self.dict4runtime["extra_info"][param][1],
+                                )
                             )
-                        )
-                        if isinstance(
-                            self.dict4runtime["extra_info"][param][1], int
-                        )
-                        else self.dict4runtime["extra_info"][param][1].format(
-                            self.iqms_data[param]
+                            if isinstance(
+                                self.dict4runtime["extra_info"][param][1], int
+                            )
+                            else self.dict4runtime["extra_info"][param][
+                                1
+                            ].format(self.iqms_data[param])
                         ),
                     ),
                     self.styles["Bullet2"],
@@ -462,17 +468,19 @@ class Report:
                     "{1}</b></font>: {2}".format(
                         self.dict4runtime["extra_info"][param][2],
                         self.dict4runtime["extra_info"][param][0],
-                        str(
-                            round(
-                                self.iqms_data.get(param),
-                                self.dict4runtime["extra_info"][param][1],
+                        (
+                            str(
+                                round(
+                                    self.iqms_data.get(param),
+                                    self.dict4runtime["extra_info"][param][1],
+                                )
                             )
-                        )
-                        if isinstance(
-                            self.dict4runtime["extra_info"][param][1], int
-                        )
-                        else self.dict4runtime["extra_info"][param][1].format(
-                            self.iqms_data[param]
+                            if isinstance(
+                                self.dict4runtime["extra_info"][param][1], int
+                            )
+                            else self.dict4runtime["extra_info"][param][
+                                1
+                            ].format(self.iqms_data[param])
                         ),
                     ),
                     self.styles["Bullet2"],

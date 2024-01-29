@@ -57,9 +57,9 @@ class Bold_mni_align(Pipeline):
             20,
             10,
         ]
-        self.nodes[
-            "registration"
-        ].process.interpolation = "LanczosWindowedSinc"
+        self.nodes["registration"].process.interpolation = (
+            "LanczosWindowedSinc"
+        )
         self.nodes["registration"].process.metric = ["Mattes", "Mattes", "CC"]
         self.nodes["registration"].process.metric_weight = [1, 1, 1]
         self.nodes["registration"].process.number_of_iterations = [
