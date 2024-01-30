@@ -14,7 +14,6 @@ from capsul.api import Pipeline
 
 
 class Dwi_tissue_boundaries(Pipeline):
-
     """
     *DWI create tissue boudadiries with a T1w*
 

@@ -354,9 +354,11 @@ class ReportAnatMriqc(ProcessMIA):
             self.outputs["report"] = os.path.join(
                 self.output_directory,
                 "{0}_anatomical_mriqcReport_{1}.pdf".format(
-                    self.dict4runtime["PatientName"]
-                    if self.dict4runtime["PatientName"] != "Undefined"
-                    else "Undefined_name_ref",
+                    (
+                        self.dict4runtime["PatientName"]
+                        if self.dict4runtime["PatientName"] != "Undefined"
+                        else "Undefined_name_ref"
+                    ),
                     datetime.now().strftime("%Y_%m_%d_%H_%M_%S_%f")[:22],
                 ),
             )
@@ -1621,9 +1623,11 @@ class ReportFuncMriqc(ProcessMIA):
             self.outputs["report"] = os.path.join(
                 self.output_directory,
                 "{0}_functional_mriqcReport_{1}.pdf".format(
-                    self.dict4runtime["PatientName"]
-                    if self.dict4runtime["PatientName"] != "Undefined"
-                    else "Undefined_name_ref",
+                    (
+                        self.dict4runtime["PatientName"]
+                        if self.dict4runtime["PatientName"] != "Undefined"
+                        else "Undefined_name_ref"
+                    ),
                     datetime.now().strftime("%Y_%m_%d_%H_%M_%S_%f")[:22],
                 ),
             )
@@ -2048,9 +2052,9 @@ class ReportGroupMriqc(ProcessMIA):
             #        or to put them in the input parameters of the brick:
             # Site
             if dict4runtime_file["Site"] in ("", "Undefined"):
-                dict4runtime_file[
-                    "Site"
-                ] = "Grenoble University Hospital - CLUNI"
+                dict4runtime_file["Site"] = (
+                    "Grenoble University Hospital - CLUNI"
+                )
 
             # MriScanner
             if dict4runtime_file["Spectro"] in ("", "Undefined"):

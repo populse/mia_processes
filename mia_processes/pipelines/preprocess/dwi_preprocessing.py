@@ -14,7 +14,6 @@ from capsul.api import Pipeline
 
 
 class Dwi_preprocessing(Pipeline):
-
     """
     *DWI preprocessing with reverse b0*
 
@@ -47,12 +46,12 @@ class Dwi_preprocessing(Pipeline):
             "MotionDistortionCorrection",
             "mia_processes.bricks.preprocess.mrtrix.processes.DWIPreproc",
         )
-        self.nodes[
-            "MotionDistortionCorrection"
-        ].process.rpe_options = "rpe_pair"
-        self.nodes[
-            "MotionDistortionCorrection"
-        ].process.eddy_options = " --slm=linear --data_is_shelled"
+        self.nodes["MotionDistortionCorrection"].process.rpe_options = (
+            "rpe_pair"
+        )
+        self.nodes["MotionDistortionCorrection"].process.eddy_options = (
+            " --slm=linear --data_is_shelled"
+        )
         self.add_process(
             "Extractb0",
             "mia_processes.bricks.preprocess.mrtrix.processes.DWIExtract",

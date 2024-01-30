@@ -42,9 +42,9 @@ class Bold_spatial_preprocessing2(Pipeline):
             "Normalize12",
         )
         self.nodes["normalize12_T1_estwrite"].process.jobtype = "estwrite"
-        self.nodes[
-            "normalize12_T1_estwrite"
-        ].process.bias_regularization = 0.0001
+        self.nodes["normalize12_T1_estwrite"].process.bias_regularization = (
+            0.0001
+        )
         self.nodes["normalize12_T1_estwrite"].process.bias_fwhm = 30
         self.nodes["normalize12_T1_estwrite"].process.write_interp = 4
 

@@ -76,9 +76,9 @@ class Extract_roi_param(Pipeline):
         self.nodes["mean_stddev_calc"].set_plug_value(
             "parametric_maps", traits.Undefined
         )
-        self.nodes[
-            "mean_stddev_calc"
-        ].process.parametric_maps = traits.Undefined
+        self.nodes["mean_stddev_calc"].process.parametric_maps = (
+            traits.Undefined
+        )
         self.add_process(
             "concat_to_list",
             "mia_processes.bricks.tools.tools.Concat_to_list",
@@ -90,9 +90,9 @@ class Extract_roi_param(Pipeline):
         self.nodes["result_collector"].set_plug_value(
             "parameter_files", traits.Undefined
         )
-        self.nodes[
-            "result_collector"
-        ].process.parameter_files = traits.Undefined
+        self.nodes["result_collector"].process.parameter_files = (
+            traits.Undefined
+        )
         self.nodes["result_collector"].set_plug_value("laterality_index", True)
 
         # links
