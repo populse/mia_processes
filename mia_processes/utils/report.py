@@ -23,6 +23,7 @@ import tempfile
 
 # Other import
 from datetime import datetime
+from math import pi, sqrt
 from sys import version
 
 # nibabel import
@@ -630,7 +631,7 @@ class Report:
 
         self.report.append(
             Paragraph(
-                f"<font size = 11> <b> Voxel size (x / z / y) [mm]:"
+                f"<font size = 11> <b> Voxel size (x / y / z) [mm]:"
                 f"</b> </font> {vox_size[0]} / {vox_size[1]} / {vox_size[2]}",
                 self.styles["Bullet2"],
             )
@@ -735,7 +736,7 @@ class Report:
         self.report.append(
             Paragraph(
                 f"<font size = 11> <b> Final voxel size "
-                f"(x / z / y) [mm]:</b> "
+                f"(x / y / z) [mm]:</b> "
                 f"</font> {vox_size[0]} / {vox_size[1]} / {vox_size[2]}",
                 self.styles["Bullet2"],
             )
@@ -762,8 +763,7 @@ class Report:
                 self.styles["Left"],
             )
         )
-
-        self.report.append(Spacer(0 * mm, 20 * mm))  # (width, height)
+        self.report.append(Spacer(0 * mm, 20 * mm))
         self.report.append(
             Paragraph(
                 '<font size = 9 > <i> "Neurological" '
@@ -903,20 +903,22 @@ class Report:
             )
         )
         self.report.append(Spacer(0 * mm, 1 * mm))
-        vox_size = self.dict4runtime["norm_func"][
+        raw_func_vox_size = self.dict4runtime["norm_func"][
             "Grid spacings (X,Y,Z,T,...)"
         ]
 
-        if vox_size == "Undefined":
-            vox_size = ["Undefined"] * 3
+        if raw_func_vox_size == "Undefined":
+            raw_func_vox_size = ["Undefined"] * 3
 
-        if all(isinstance(elt, (int, float)) for elt in vox_size):
-            vox_size = [round(elt, 1) for elt in vox_size]
+        if all(isinstance(elt, (int, float)) for elt in raw_func_vox_size):
+            raw_func_vox_size = [round(elt, 1) for elt in raw_func_vox_size]
 
         self.report.append(
             Paragraph(
-                f"<font size = 11> <b> Voxel size (x / z / y) [mm]:"
-                f"</b> </font> {vox_size[0]} / {vox_size[1]} / {vox_size[2]}",
+                f"<font size = 11> <b> Voxel size (x / y / z) [mm]:</b> "
+                f"</font> {raw_func_vox_size[0]} "
+                f"/ {raw_func_vox_size[1]} "
+                f"/ {raw_func_vox_size[2]}",
                 self.styles["Bullet2"],
             )
         )
@@ -1108,9 +1110,209 @@ class Report:
         )
         self.report.append(PageBreak())
 
-        # page 5 - fmri-cvr MRI quality check movements & EtCO2 regressor #####
+        # page 5 - fmri-cvr MRI quality check: movements & EtCO2 regressor ####
         #######################################################################
+        sources_images_dir = os.path.join(
+            os.path.dirname(os.path.dirname(__file__)), "sources_images"
+        )
+        (
+            rmsdTra,
+            maxRmsdTra,
+            maxTra,
+            maxTraCheck,
+            minTra,
+            rmsdRot,
+            maxRmsdRot,
+            maxRot,
+            maxRotCheck,
+            minRot,
+        ) = np.zeros(10)
 
+        try:
+            data = np.loadtxt(self.realignment_parameters)
+            data[:, 3:] = data[:, 3:] * 180 / pi  # Rad to deg conversion
+
+        except IOError:
+            print(
+                "\n==> The "
+                + self.realignment_parameters
+                + " was not found ! <==\n"
+            )
+            data = None
+
+        if data is not None:
+
+            for i in range(3):
+
+                for n in data[:, i]:
+                    rmsdTra = rmsdTra + n**2
+
+                rmsdTra = sqrt(rmsdTra / len(data[:, i]))
+
+                if rmsdTra > maxRmsdTra:
+                    # maxRmsdTra: Maximum root-mean-square deviation for
+                    # x, y, z linear motion
+                    maxRmsdTra = rmsdTra
+
+                rmsdTra = 0
+
+                if max(data[:, i]) > maxTra:
+                    # maxTra: Maximum x, y, z linear motion in
+                    # POSITIVE direction
+                    maxTra = max(data[:, i])
+
+                if min(data[:, i]) < minTra:
+                    # minTra: Maximum x, y, z linear motion in
+                    # NEGATIVE direction
+                    minTra = min(data[:, i])
+
+            maxTraCheck = maxTra
+
+            if abs(minTra) > maxTra:
+                maxTraCheck = abs(minTra)
+
+            for i in range(3, 6):
+
+                for n in data[:, i]:
+                    rmsdRot = rmsdRot + n**2
+
+                rmsdRot = sqrt(rmsdRot / len(data[:, i]))
+
+                if rmsdRot > maxRmsdRot:
+                    # maxRmsdRot: Maximum root-mean-square deviation for
+                    # roll, pitch, yaw rotational motion
+                    maxRmsdRot = rmsdRot
+
+                rmsdRot = 0
+
+                if max(data[:, i]) > maxRot:
+                    # maxRot: Maximum roll, pitch, yaw rotational motion in
+                    # POSITIVE direction
+                    maxRot = max(data[:, i])
+
+                if min(data[:, i]) < minRot:
+                    # minRot: Maximum roll, pitch, yaw rotational motion in
+                    # NEGATIVE direction
+                    minRot = min(data[:, i])
+
+            maxRotCheck = maxRot
+
+            if abs(minRot) > maxRot:
+                maxRotCheck = abs(minRot)
+
+            # xLim = len(data)
+
+            if "Undefined" not in raw_func_vox_size:
+                # Mean x,y,z voxel dimension calculation.
+                traLim = (
+                    (
+                        raw_func_vox_size[0]
+                        + raw_func_vox_size[1]
+                        + raw_func_vox_size[2]
+                    )
+                    * 1
+                    / 3
+                )
+
+                # maxRot for quality fixed to 2deg
+                # maxTra(nslation) for quality fixed to
+                # mean x,y,z voxel dim (traLim)
+                if (maxTraCheck >= traLim) or (maxRotCheck >= 2):
+                    # 912px × 892px
+                    im_qualCheck = Image(
+                        os.path.join(sources_images_dir, "No-check-mark.png"),
+                        13.0 * mm,
+                        12.7 * mm,
+                    )
+
+                else:
+                    # 940px × 893px
+                    im_qualCheck = Image(
+                        os.path.join(sources_images_dir, "OK-check-mark.png"),
+                        13.0 * mm,
+                        12.4 * mm,
+                    )
+
+            else:
+                im_qualCheck = Paragraph(
+                    "<font size = 8 > Automatic "
+                    "evaluation not available </font>",
+                    self.styles["Center"],
+                )
+
+        else:
+            im_qualCheck = Paragraph(
+                "<font size = 8 > Automatic "
+                "evaluation not available </font>",
+                self.styles["Center"],
+            )
+
+        qualCheckMess = Paragraph(
+            "<font size = 14 > <b> fMRI quality "
+            "check: movements </b> </font>",
+            self.styles["Left"],
+        )
+        im_qualCheck.hAlign = "CENTER"
+        tit = [[qualCheckMess, im_qualCheck]]
+        t = Table(tit, [110 * mm, 50 * mm])  # colWidths, rowHeight
+        t.setStyle(TableStyle([("VALIGN", (0, 0), (-1, -1), "MIDDLE")]))
+        t.hAlign = "LEFT"
+        self.report.append(t)
+
+        self.report.append(PageBreak())
+
+        # page 6 - fmri-cvr MRI quality check: BOLD signal timecourse Vs EtCO2
+        ######################################################################
+        self.report.append(Spacer(0 * mm, 5 * mm))
+        self.report.append(
+            Paragraph(
+                "<font size = 14 > <b> fMRI quality "
+                "check: BOLD signal timecourse Vs "
+                "EtCO<sub>2</sub> model </b> </font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 28 * mm))
+
+        self.report.append(PageBreak())
+
+        # page 7 - BOLD: MNI normalized axial images, 1st dyn ################
+        ######################################################################
+        self.report.append(
+            Paragraph(
+                "<font size = 14 > <b> BOLD: MNI "
+                "normalized axial images (1<sup>st</sup> "
+                "dynamic)</b> </font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 20 * mm))
+        self.report.append(
+            Paragraph(
+                '<font size = 9 > <i> "Neurological" '
+                "convention, the left side of the "
+                "image corresponds to the left side of "
+                "the brain. </i> <br/> </font>",
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        slices_image = plot_slice_planes(
+            self.norm_func,
+            self.norm_func_fig_rows,
+            self.norm_func_fig_cols,
+            slice_start=self.norm_func_inf_slice_start,
+            slice_step=self.norm_func_slices_gap,
+            cmap="Greys_r",
+            out_dir=tmpdir.name,
+        )
+        # remainder: A4 == 210mmx297mm
+        slices_image = Image(
+            slices_image, width=7.4803 * inch, height=9.0551 * inch
+        )
+        slices_image.hAlign = "CENTER"
+        self.report.append(slices_image)
+        self.report.append(PageBreak())
         self.page.build(self.report, canvasmaker=PageNumCanvas)
         tmpdir.cleanup()
 
