@@ -94,7 +94,9 @@ class CO2_inhalation(Pipeline):
             "reportco2inhalcvr",
             "mia_processes.bricks.reports.reporting.ReportCO2inhalCvr",
         )
-
+        self.add_process(
+            "list_to_file_1", "mia_processes.bricks.tools.tools.List_To_File"
+        )
         # links
         self.export_parameter(
             "1_spatial_preprocessing", "anat_file", is_optional=False
@@ -156,9 +158,11 @@ class CO2_inhalation(Pipeline):
         self.export_parameter(
             "3_boldStat", "out_spm_mat_file", is_optional=False
         )
+        self.add_link("3_boldStat.beta_images->list_to_file_1.file_list")
         self.add_link(
             "3_boldStat.beta_images->4_extract_roi_param.beta_images"
         )
+        self.add_link("3_boldStat.spmT_images->reportco2inhalcvr.spmT_image")
         self.export_parameter(
             "4_extract_roi_param", "resample2_masks", is_optional=False
         )
@@ -170,6 +174,7 @@ class CO2_inhalation(Pipeline):
         )
         self.add_link("files_to_list.file_list->3_boldStat.regressors")
         self.export_parameter("reportco2inhalcvr", "report", is_optional=True)
+        self.add_link("list_to_file_1.file->reportco2inhalcvr.beta_image")
 
         # parameters order
 
@@ -203,6 +208,7 @@ class CO2_inhalation(Pipeline):
             "files_to_list": (198.71272571362283, 330.3029426377244),
             "reportco2inhalcvr": (748.1071959262655, 258.2245925859173),
             "outputs": (971.2936610271133, -146.65919984483403),
+            "list_to_file_1": (455.4447133457113, 554.0646315898613),
         }
 
         # nodes dimensions
@@ -215,6 +221,7 @@ class CO2_inhalation(Pipeline):
             "files_to_list": (97.640625, 145.0),
             "outputs": (138.83679503946317, 320.0),
             "reportco2inhalcvr": (212.484375, 495.0),
+            "list_to_file_1": (117.75, 110.0),
         }
 
         self.do_autoexport_nodes_parameters = False

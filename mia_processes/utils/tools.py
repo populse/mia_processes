@@ -526,13 +526,15 @@ def set_dbFieldValue(project, document, tag_to_add):
 
 
 def plot_slice_planes(
-    data,
+    data_1,
+    data_2=None,
     fig_rows=4,
     fig_cols=4,
     slice_start=None,
     slice_step=None,
     dyn=1,
-    cmap="Greys_r",
+    cmap_1="Greys_r",
+    cmap_2="gist_rainbow",
     out_dir=None,
     only_noise=False,
     out_name=None,
@@ -544,38 +546,48 @@ def plot_slice_planes(
     an acceptable display. The default values for fig_rows and
     fig_cols are `4` and for dyn it is '1'.
 
-    :param data: an existing, image file (valid extensions: .nii).
+    :param data_1: an existing, image file (valid extensions: .nii).
+    :param data_2: an existing, image file (valid extensions: .nii).
     :param fig_rows: the number of rows in the images panel (integer).
     :param fig_cols: the number of columns in the images panel (integer).
     :param slice_start: starting slice number to be displayed (integer).
     :param slice_step: the gap between each slice to be displayed (integer).
     :param dyn: the volume number in the space-time, for 4D (integer).
-    :param cmap: the color map name (string).
+    :param cmap_1: the color map name (string) for data_1.
+    :param cmap_2: the color map name (string) for data_2.
     :param out_dir: the output directory where the mosaic images will be saved.
     :param only_noise: if True, shows the noise (boolean).
     :param out_name: the suffix added to form the output name (string).
+
+    Note: cmap for parametric display can be, gist_rainbow, RdYlBu, Spectral,
     """
 
-    brain_img = nib.as_closest_canonical(nib.load(data))
-    brain_data = brain_img.get_fdata()
-    brain_data = np.squeeze(brain_data)
+    brain_img_1 = nib.as_closest_canonical(nib.load(data_1))
+    brain_data_1 = brain_img_1.get_fdata()
+    brain_data_1 = np.squeeze(brain_data_1)
+    brain_data_2 = None
 
-    if len(brain_data.shape) == 4:
-        brain_data = brain_data[:, :, :, dyn]
+    if data_2 is not None:
+        brain_img_2 = nib.as_closest_canonical(nib.load(data_2))
+        brain_data_2 = brain_img_2.get_fdata()
+        brain_data_2 = np.squeeze(brain_data_2)
 
-    elif len(brain_data.shape) > 4:
+    if len(brain_data_1.shape) == 4:
+        brain_data_1 = brain_data_1[:, :, :, dyn]
+
+    elif len(brain_data_1.shape) > 4:
         # TODO: what we do in this case?
         pass
 
-    min_thres = np.percentile(brain_data, 5)
-    mask_data = np.ones_like(brain_data)
-    mask_data[brain_data <= min_thres] = 0
-    ind_non_zero = np.argwhere(mask_data)
+    min_thres = np.percentile(brain_data_1, 5)
+    mask_data_1 = np.ones_like(brain_data_1)
+    mask_data_1[brain_data_1 <= min_thres] = 0
+    ind_non_zero = np.argwhere(mask_data_1)
     (ystart, xstart, zstart), (ystop, xstop, zstop) = (
         ind_non_zero.min(0),
         ind_non_zero.max(0) + 1,
     )
-    brain_data = brain_data[ystart:ystop, xstart:xstop, zstart:zstop]
+    brain_data_1 = brain_data_1[ystart:ystop, xstart:xstop, zstart:zstop]
     rowsxcols = disp_slices = fig_rows * fig_cols
 
     # The following part seems clearer and lighter than the part I'm just
@@ -583,7 +595,7 @@ def plot_slice_planes(
     # give unexpected results.
     # TODO: if this new part don't make issue we could delete the commented
     #      section completely.
-    lst = np.arange(start=0, stop=brain_data.shape[2], step=1)
+    lst = np.arange(start=0, stop=brain_data_1.shape[2], step=1)
 
     if slice_start not in (None, Undefined):
         # fmt: off
@@ -631,7 +643,7 @@ def plot_slice_planes(
     #     None,
     #     Undefined,
     # ):
-    #     slice_step = brain_data.shape[2] // disp_slices
+    #     slice_step = brain_data_1.shape[2] // disp_slices
     #
     #     if slice_step == 0:
     #         slice_step = 1
@@ -641,19 +653,19 @@ def plot_slice_planes(
     #
     #     while (
     #         len(np.arange(start=0,
-    #                       stop=brain_data.shape[2], step=slice_step))
+    #                       stop=brain_data_1.shape[2], step=slice_step))
     #         != disp_slices
     #     ):
     #         if (
     #             len(
     #                 np.arange(
-    #                     start=0, stop=brain_data.shape[2], step=slice_step
+    #                     start=0, stop=brain_data_1.shape[2], step=slice_step
     #                 )
     #             )
     #             in memory
     #         ):
     #             ind_slices = np.arange(
-    #                 start=0, stop=brain_data.shape[2], step=slice_step
+    #                 start=0, stop=brain_data_1.shape[2], step=slice_step
     #             )
     #
     #             if len(ind_slices) > disp_slices:
@@ -664,7 +676,7 @@ def plot_slice_planes(
     #                 ind_slices = np.append(
     #                     ind_slices,
     #                     ind_slices[-1]
-    #                     + (brain_data.shape[2] - ind_slices[-1]) // 2,
+    #                     + (brain_data_1.shape[2] - ind_slices[-1]) // 2,
     #                 )
     #                 break
     #
@@ -672,17 +684,17 @@ def plot_slice_planes(
     #                 slice_step -= 1
     #
     #                 if len(np.arange(start=0,
-    #                                  stop=brain_data.shape[2],
+    #                                  stop=brain_data_1.shape[2],
     #                                  step=1)) < disp_slices:
     #                     ind_slices = np.arange(start=0,
-    #                                            stop=brain_data.shape[2],
+    #                                            stop=brain_data_1.shape[2],
     #                                            step=1)
     #                     break
     #
     #         elif (
     #             len(
     #                 np.arange(
-    #                     start=0, stop=brain_data.shape[2], step=slice_step
+    #                     start=0, stop=brain_data_1.shape[2], step=slice_step
     #                 )
     #             )
     #             > disp_slices
@@ -691,7 +703,7 @@ def plot_slice_planes(
     #                 len(
     #                     np.arange(
     #                         start=0,
-    #                         stop=brain_data.shape[2], step=slice_step
+    #                         stop=brain_data_1.shape[2], step=slice_step
     #                     )
     #                 )
     #             )
@@ -700,7 +712,7 @@ def plot_slice_planes(
     #         elif (
     #             len(
     #                 np.arange(
-    #                     start=0, stop=brain_data.shape[2], step=slice_step
+    #                     start=0, stop=brain_data_1.shape[2], step=slice_step
     #                 )
     #             )
     #             < disp_slices
@@ -709,7 +721,7 @@ def plot_slice_planes(
     #                 len(
     #                     np.arange(
     #                         start=0,
-    #                         stop=brain_data.shape[2], step=slice_step
+    #                         stop=brain_data_1.shape[2], step=slice_step
     #                     )
     #                 )
     #             )
@@ -720,14 +732,14 @@ def plot_slice_planes(
     #
     #     if ind_slices is None:
     #         slice_start = (
-    #             brain_data.shape[2]
+    #             brain_data_1.shape[2]
     #             - np.arange(
-    #                 start=0, stop=brain_data.shape[2], step=slice_step
+    #                 start=0, stop=brain_data_1.shape[2], step=slice_step
     #             )[
     #                 len(
     #                     np.arange(
     #                         start=0,
-    #                         stop=brain_data.shape[2], step=slice_step
+    #                         stop=brain_data_1.shape[2], step=slice_step
     #                     )
     #                 )
     #                 - 1
@@ -735,7 +747,7 @@ def plot_slice_planes(
     #         ) // 2
     #         ind_slices = np.arange(
     #             start=slice_start,
-    #             stop=brain_data.shape[2],
+    #             stop=brain_data_1.shape[2],
     #             step=slice_step,
     #         )
     #
@@ -746,7 +758,7 @@ def plot_slice_planes(
     #     None,
     #     Undefined,
     # ):
-    #     slice_step = (brain_data.shape[2] - slice_start) // disp_slices
+    #     slice_step = (brain_data_1.shape[2] - slice_start) // disp_slices
     #
     #     if slice_step == 0:
     #         slice_step = 1
@@ -758,7 +770,7 @@ def plot_slice_planes(
     #         len(
     #             np.arange(
     #                 start=slice_start,
-    #                 stop=brain_data.shape[2],
+    #                 stop=brain_data_1.shape[2],
     #                 step=slice_step,
     #             )
     #         )
@@ -768,7 +780,7 @@ def plot_slice_planes(
     #             len(
     #                 np.arange(
     #                     start=slice_start,
-    #                     stop=brain_data.shape[2],
+    #                     stop=brain_data_1.shape[2],
     #                     step=slice_step,
     #                 )
     #             )
@@ -776,7 +788,7 @@ def plot_slice_planes(
     #         ):
     #             ind_slices = np.arange(
     #                 start=slice_start,
-    #                 stop=brain_data.shape[2],
+    #                 stop=brain_data_1.shape[2],
     #                 step=slice_step,
     #             )
     #
@@ -788,7 +800,7 @@ def plot_slice_planes(
     #                 ind_slices = np.append(
     #                     ind_slices,
     #                     ind_slices[-1]
-    #                     + (brain_data.shape[2] - ind_slices[-1]) // 2,
+    #                     + (brain_data_1.shape[2] - ind_slices[-1]) // 2,
     #                 )
     #                 break
     #
@@ -799,7 +811,7 @@ def plot_slice_planes(
     #             len(
     #                 np.arange(
     #                     start=slice_start,
-    #                     stop=brain_data.shape[2],
+    #                     stop=brain_data_1.shape[2],
     #                     step=slice_step,
     #                 )
     #             )
@@ -809,7 +821,7 @@ def plot_slice_planes(
     #                 len(
     #                     np.arange(
     #                         start=slice_start,
-    #                         stop=brain_data.shape[2],
+    #                         stop=brain_data_1.shape[2],
     #                         step=slice_step,
     #                     )
     #                 )
@@ -820,7 +832,7 @@ def plot_slice_planes(
     #             len(
     #                 np.arange(
     #                     start=slice_start,
-    #                     stop=brain_data.shape[2],
+    #                     stop=brain_data_1.shape[2],
     #                     step=slice_step,
     #                 )
     #             )
@@ -830,7 +842,7 @@ def plot_slice_planes(
     #                 len(
     #                     np.arange(
     #                         start=slice_start,
-    #                         stop=brain_data.shape[2],
+    #                         stop=brain_data_1.shape[2],
     #                         step=slice_step,
     #                     )
     #                 )
@@ -844,7 +856,7 @@ def plot_slice_planes(
     #     if ind_slices is None:
     #         ind_slices = np.arange(
     #             start=slice_start,
-    #             stop=brain_data.shape[2],
+    #             stop=brain_data_1.shape[2],
     #             step=slice_step,
     #         )
     #
@@ -854,7 +866,7 @@ def plot_slice_planes(
     #         len(
     #             np.arange(
     #                 start=slice_start,
-    #                 stop=brain_data.shape[2],
+    #                 stop=brain_data_1.shape[2],
     #                 step=slice_step_bis,
     #             )
     #         )
@@ -864,7 +876,7 @@ def plot_slice_planes(
     #             len(
     #                 np.arange(
     #                     start=slice_start,
-    #                     stop=brain_data.shape[2],
+    #                     stop=brain_data_1.shape[2],
     #                     step=slice_step_bis,
     #                 )
     #             )
@@ -872,7 +884,7 @@ def plot_slice_planes(
     #         ):
     #             ind_slices_bis = np.arange(
     #                 start=slice_start,
-    #                 stop=brain_data.shape[2],
+    #                 stop=brain_data_1.shape[2],
     #                 step=slice_step_bis,
     #             )
     #
@@ -890,7 +902,7 @@ def plot_slice_planes(
     #         len(
     #             np.arange(
     #                 start=slice_start,
-    #                 stop=brain_data.shape[2],
+    #                 stop=brain_data_1.shape[2],
     #                 step=slice_step_bis,
     #             )
     #         )
@@ -900,7 +912,7 @@ def plot_slice_planes(
     #             len(
     #                 np.arange(
     #                     start=slice_start,
-    #                     stop=brain_data.shape[2],
+    #                     stop=brain_data_1.shape[2],
     #                     step=slice_step_bis,
     #                 )
     #             )
@@ -908,7 +920,7 @@ def plot_slice_planes(
     #         ):
     #             ind_slices_bis = np.arange(
     #                 start=slice_start,
-    #                 stop=brain_data.shape[2],
+    #                 stop=brain_data_1.shape[2],
     #                 step=slice_step_bis,
     #             )
     #
@@ -918,12 +930,11 @@ def plot_slice_planes(
     #             slice_step_bis -= 1
 
     # if slice_start and slice_step are known
-    # elif (
-    #     slice_start not in (None, Undefined)
-    #     and slice_step not in (None, Undefined)
-    # ) and (len(np.array(list(range(0, brain_data.shape[2])))) > disp_slices):
+    # elif (slice_start not in (None, Undefined) and
+    #    slice_step not in (None, Undefined) and
+    #    (len(np.array(list(range(0, brain_data_1.shape[2])))) > disp_slices)):
     #     # fmt: off
-    #     ind_slices = np.array(list(range(0, brain_data.shape[2])))[
+    #     ind_slices = np.array(list(range(0, brain_data_1.shape[2])))[
     #         slice_start:
     #         slice_start + (slice_step * disp_slices):
     #         slice_step
@@ -931,23 +942,26 @@ def plot_slice_planes(
     #     # fmt: on
     #
     # else:
-    #     ind_slices = np.array(list(range(0, brain_data.shape[2])))
+    #     ind_slices = np.array(list(range(0, brain_data_1.shape[2])))
 
     # Reminder: 19cm == 7.4803inch; 23cm == 9.0551
     fig = plt.figure(figsize=(7.4803, 9.0551))  # Width, height in inches.
-    mask_data = np.logical_not(np.isnan(brain_data))
+    mask_data_1 = np.logical_not(np.isnan(brain_data_1))
 
     if only_noise:
-        vmin = np.percentile(brain_data[mask_data], 0)
-        vmax = np.percentile(brain_data[mask_data], 61)
+        vmin = np.percentile(brain_data_1[mask_data_1], 0)
+        vmax = np.percentile(brain_data_1[mask_data_1], 61)
 
     else:
-        vmin = np.percentile(brain_data[mask_data], 0.5)
-        vmax = np.percentile(brain_data[mask_data], 99.5)
+        vmin = np.percentile(brain_data_1[mask_data_1], 0.5)
+        vmax = np.percentile(brain_data_1[mask_data_1], 99.5)
 
-    zooms = brain_img.header.get_zooms()
+    zooms = brain_img_1.header.get_zooms()
     grid = ImageGrid(fig, 111, nrows_ncols=(fig_rows, fig_cols), axes_pad=0)
-    cmap = get_cmap(cmap)
+    cmap_1 = get_cmap(cmap_1)
+    # cmap.set_bad(color='red')  # Nan are red
+    cmap_1.set_bad(color="black")  # Nan are black
+    cmap_2 = get_cmap(cmap_2)
 
     if disp_slices < 5:
         fontsize = 18
@@ -977,29 +991,42 @@ def plot_slice_planes(
 
     for ax, slice_numb in zip(grid, rowsxcols_array):
         if slice_numb >= len(ind_slices):
-            displ = np.zeros((2, 2, 2))
+            displ_1 = np.zeros((2, 2, 2))
             ind_slice = 1
+            displ_2 = np.zeros((2, 2, 2))
 
         else:
-            displ = brain_data
+            displ_1 = brain_data_1
             ind_slice = ind_slices[slice_numb]
+            displ_2 = brain_data_2
 
-        phys_sp = np.array(zooms[:2]) * brain_data[:, :, ind_slice].shape
+        phys_sp = np.array(zooms[:2]) * brain_data_1[:, :, ind_slice].shape
         ax.imshow(
-            np.swapaxes(displ[:, :, ind_slice], 0, 1),
+            np.swapaxes(displ_1[:, :, ind_slice], 0, 1),
             vmin=vmin,
             vmax=vmax,
-            cmap=cmap,
+            cmap=cmap_1,
             interpolation="nearest",
             origin="lower",
             extent=[0, phys_sp[0], 0, phys_sp[1]],
         )
+
+        if displ_2 is not None:
+            ax.imshow(
+                np.swapaxes(displ_2[:, :, ind_slice], 0, 1),
+                vmin=vmin,
+                vmax=vmax,
+                cmap=cmap_2,
+                interpolation="nearest",
+                origin="lower",
+                extent=[0, phys_sp[0], 0, phys_sp[1]],
+            )
         ax.set_xticklabels([])
         ax.set_yticklabels([])
         ax.grid(False)
         ax.axis("off")
-        bgcolor = cmap(min(vmin, 0.0))
-        fgcolor = cmap(vmax)
+        bgcolor = cmap_1(min(vmin, 0.0))
+        fgcolor = cmap_1(vmax)
 
         if slice_numb + 1 > len(ind_slices):
             ind_slice = ""
@@ -1018,13 +1045,13 @@ def plot_slice_planes(
             ),
         )
 
-    fname, _ = os.path.splitext(os.path.basename(data))
+    fname, _ = os.path.splitext(os.path.basename(data_1))
 
     if out_name:
         fname += "_" + out_name
 
     if out_dir is None:
-        out_dir = os.path.dirname(data)
+        out_dir = os.path.dirname(data_1)
 
     out_file = os.path.join(out_dir, fname + "_slice_planes_plot.png")
     fig.savefig(out_file, format="png", dpi=300, bbox_inches="tight")

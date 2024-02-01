@@ -776,12 +776,12 @@ class Report:
         self.report.append(Spacer(0 * mm, 1 * mm))
         tmpdir = tempfile.TemporaryDirectory()
         slices_image = plot_slice_planes(
-            self.norm_anat,
-            self.norm_anat_fig_rows,
-            self.norm_anat_fig_cols,
+            data_1=self.norm_anat,
+            fig_rows=self.norm_anat_fig_rows,
+            fig_cols=self.norm_anat_fig_cols,
             slice_start=self.norm_anat_inf_slice_start,
             slice_step=self.norm_anat_slices_gap,
-            cmap="Greys_r",
+            cmap_1="Greys_r",
             out_dir=tmpdir.name,
         )
         # remainder: A4 == 210mmx297mm
@@ -1298,12 +1298,12 @@ class Report:
         )
         self.report.append(Spacer(0 * mm, 1 * mm))
         slices_image = plot_slice_planes(
-            self.norm_func,
-            self.norm_func_fig_rows,
-            self.norm_func_fig_cols,
+            data_1=self.norm_func,
+            fig_rows=self.norm_func_fig_rows,
+            fig_cols=self.norm_func_fig_cols,
             slice_start=self.norm_func_inf_slice_start,
             slice_step=self.norm_func_slices_gap,
-            cmap="Greys_r",
+            cmap_1="Greys_r",
             out_dir=tmpdir.name,
         )
         # remainder: A4 == 210mmx297mm
@@ -1313,6 +1313,23 @@ class Report:
         slices_image.hAlign = "CENTER"
         self.report.append(slices_image)
         self.report.append(PageBreak())
+
+        # page 8 - parametric maps: beta / etco2 #############################
+        ######################################################################
+        self.report.append(
+            Paragraph(
+                '<font size = 14><b> Parametric maps: "'
+                '"&beta; weight values in &Delta;"'
+                '"(%BOLD) / EtCO<sub>2</sub> (mmHg) "'
+                '"</b></font>',
+                self.styles["Left"],
+            )
+        )
+
+        self.report.append(Spacer(0 * mm, 20 * mm))
+
+        self.report.append(PageBreak())
+
         self.page.build(self.report, canvasmaker=PageNumCanvas)
         tmpdir.cleanup()
 
@@ -1825,12 +1842,12 @@ class Report:
         self.report.append(Spacer(0 * mm, 1 * mm))
         tmpdir = tempfile.TemporaryDirectory()
         slices_image = plot_slice_planes(
-            self.anat,
-            self.anat_fig_rows,
-            self.anat_fig_cols,
+            data_1=self.anat,
+            fig_rows=self.anat_fig_rows,
+            fig_cols=self.anat_fig_cols,
             slice_start=self.anat_inf_slice_start,
             slice_step=self.anat_slices_gap,
-            cmap="Greys_r",
+            cmap_1="Greys_r",
             out_dir=tmpdir.name,
         )
         # reminder: A4 == 210mmx297mm
@@ -1874,12 +1891,12 @@ class Report:
         )
         self.report.append(Spacer(0 * mm, 1 * mm))
         slices_image = plot_slice_planes(
-            self.norm_anat,
-            self.norm_anat_fig_rows,
-            self.norm_anat_fig_cols,
+            data_1=self.norm_anat,
+            fig_rows=self.norm_anat_fig_rows,
+            fig_cols=self.norm_anat_fig_cols,
             slice_start=self.norm_anat_inf_slice_start,
             slice_step=self.norm_anat_slices_gap,
-            cmap="Greys_r",
+            cmap_1="Greys_r",
             out_dir=tmpdir.name,
         )
         # reminder: A4 == 210mmx297mm
@@ -1924,12 +1941,12 @@ class Report:
         )
         self.report.append(Spacer(0 * mm, 1 * mm))
         slices_image = plot_slice_planes(
-            self.anat,
-            self.anat_fig_rows,
-            self.anat_fig_cols,
+            data_1=self.anat,
+            fig_rows=self.anat_fig_rows,
+            fig_cols=self.anat_fig_cols,
             slice_start=self.anat_inf_slice_start,
             slice_step=self.anat_slices_gap,
-            cmap="viridis_r",
+            cmap_1="viridis_r",
             out_dir=tmpdir.name,
             only_noise=True,
             out_name="background",
@@ -2510,12 +2527,12 @@ class Report:
         self.report.append(Spacer(0 * mm, 1 * mm))
         tmpdir = tempfile.TemporaryDirectory()
         slices_image = plot_slice_planes(
-            self.func,
-            self.func_fig_rows,
-            self.func_fig_cols,
+            data_1=self.func,
+            fig_rows=self.func_fig_rows,
+            fig_cols=self.func_fig_cols,
             slice_start=self.func_inf_slice_start,
             slice_step=self.func_slices_gap,
-            cmap="Greys_r",
+            cmap_1="Greys_r",
             out_dir=tmpdir.name,
         )
         # reminder: A4 == 210mmx297mm
@@ -2559,12 +2576,12 @@ class Report:
         )
         self.report.append(Spacer(0 * mm, 1 * mm))
         slices_image = plot_slice_planes(
-            self.norm_func,
-            self.norm_func_fig_rows,
-            self.norm_func_fig_cols,
+            data_1=self.norm_func,
+            fig_rows=self.norm_func_fig_rows,
+            fig_cols=self.norm_func_fig_cols,
             slice_start=self.norm_func_inf_slice_start,
             slice_step=self.norm_func_slices_gap,
-            cmap="Greys_r",
+            cmap_1="Greys_r",
             out_dir=tmpdir.name,
         )
         # reminder: A4 == 210mmx297mm
@@ -2608,12 +2625,12 @@ class Report:
         )
         self.report.append(Spacer(0 * mm, 1 * mm))
         slices_image = plot_slice_planes(
-            self.stddev,
-            self.func_fig_rows,
-            self.func_fig_cols,
+            data_1=self.stddev,
+            fig_rows=self.func_fig_rows,
+            fig_cols=self.func_fig_cols,
             slice_start=self.func_inf_slice_start,
             slice_step=self.func_slices_gap,
-            cmap="viridis",
+            cmap_1="viridis",
             out_dir=tmpdir.name,
         )
         # reminder: A4 == 210mmx297mm
@@ -2658,12 +2675,12 @@ class Report:
         )
         self.report.append(Spacer(0 * mm, 1 * mm))
         slices_image = plot_slice_planes(
-            self.func_mean,
-            self.func_fig_rows,
-            self.func_fig_cols,
+            data_1=self.func_mean,
+            fig_rows=self.func_fig_rows,
+            fig_cols=self.func_fig_cols,
             slice_start=self.func_inf_slice_start,
             slice_step=self.func_slices_gap,
-            cmap="viridis_r",
+            cmap_1="viridis_r",
             out_dir=tmpdir.name,
             only_noise=True,
         )

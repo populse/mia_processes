@@ -915,6 +915,12 @@ class ReportCO2inhalCvr(ProcessMIA):
             "representing a file)"
         )
 
+        beta_image_desc = (
+            "The 1st estimated parameter of the" "model (i.e. beta_0001.nii)"
+        )
+
+        spmT_image_desc = "Stat images from a t-contrast (i.e. spmT_0001.nii)"
+
         patient_info_desc = (
             "Optional dictionary with information about the patient "
             "(e.g. {"
@@ -1041,6 +1047,16 @@ class ReportCO2inhalCvr(ProcessMIA):
             File(
                 output=False, optional=False, desc=realignment_parameters_desc
             ),
+        )
+
+        self.add_trait(
+            "beta_image",
+            File(output=False, optional=False, desc=beta_image_desc),
+        )
+
+        self.add_trait(
+            "spmT_image",
+            File(output=False, optional=False, desc=spmT_image_desc),
         )
 
         self.add_trait(
