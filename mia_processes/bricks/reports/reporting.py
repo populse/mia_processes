@@ -1340,6 +1340,8 @@ class ReportCO2inhalCvr(ProcessMIA):
             norm_func_inf_slice_start=self.norm_func_inf_slice_start,
             norm_func_slices_gap=self.norm_func_slices_gap,
             realignment_parameters=self.realignment_parameters,
+            beta_image=self.beta_image,
+            spmT_image=self.spmT_image,
         )
 
         report.make_report()

@@ -264,7 +264,7 @@ class ExtractROI(ProcessMIA):
 
     Please, see the complete documentation for the `ExtractROI brick
     in the mia_processes website
-    <https://populse.github.io/mia_processes/htmldocumentation/bricks/preprocess/fsl/ExtractROI.html>`_
+    <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/fsl/ExtractROI.html>`_
 
     """
 

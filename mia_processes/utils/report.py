@@ -72,6 +72,7 @@ class Report:
 
     Methods:
       - get_iqms_data
+      - co2_inhal_cvr_make_report
       - mriqc_anat_make_report
       - mriqc_func_make_report
       - mriqc_group_make_report
@@ -1318,15 +1319,35 @@ class Report:
         ######################################################################
         self.report.append(
             Paragraph(
-                '<font size = 14><b> Parametric maps: "'
-                '"&beta; weight values in &Delta;"'
-                '"(%BOLD) / EtCO<sub>2</sub> (mmHg) "'
-                '"</b></font>',
+                "<font size = 14><b> Parametric maps: <greek>b</greek> "
+                "weight values in <greek>d</greek>(%BOLD / EtCO<sub>2</sub> "
+                "(mmHg))</b></font>",
                 self.styles["Left"],
             )
         )
 
         self.report.append(Spacer(0 * mm, 20 * mm))
+
+        slices_image = plot_slice_planes(
+            data_1=self.norm_anat,
+            data_2=self.beta_image,
+            fig_rows=self.norm_anat_fig_rows,
+            fig_cols=self.norm_anat_fig_cols,
+            slice_start=self.norm_anat_inf_slice_start,
+            slice_step=self.norm_anat_slices_gap,
+            cmap_1="Greys_r",
+            cmap_2="gist_rainbow",
+            out_dir=tmpdir.name,
+            vmin_2=0.01,
+            vmax_2=0.25,
+        )
+
+        # remainder: A4 == 210mmx297mm
+        slices_image = Image(
+            slices_image, width=7.4803 * inch, height=9.0551 * inch
+        )
+        slices_image.hAlign = "CENTER"
+        self.report.append(slices_image)
 
         self.report.append(PageBreak())
 

@@ -538,6 +538,8 @@ def plot_slice_planes(
     out_dir=None,
     only_noise=False,
     out_name=None,
+    vmin_2=None,
+    vmax_2=None,
 ):
     """Create a png file with a mosaic display of volume slices.
 
@@ -558,8 +560,11 @@ def plot_slice_planes(
     :param out_dir: the output directory where the mosaic images will be saved.
     :param only_noise: if True, shows the noise (boolean).
     :param out_name: the suffix added to form the output name (string).
+    :param vmin_2: the low value of the range used for data_2 display(float).
+    :param vmax_2: the high value of the range used for data_2 display(float).
 
     Note: cmap for parametric display can be, gist_rainbow, RdYlBu, Spectral,
+          rainbow_r, jet_r, seismic_r, bwr_r
     """
 
     brain_img_1 = nib.as_closest_canonical(nib.load(data_1))
@@ -571,6 +576,25 @@ def plot_slice_planes(
         brain_img_2 = nib.as_closest_canonical(nib.load(data_2))
         brain_data_2 = brain_img_2.get_fdata()
         brain_data_2 = np.squeeze(brain_data_2)
+        tmp_array = None
+
+        if vmin_2 is None:
+            tmp_array = brain_data_2.copy()
+            nan_indexes = np.isnan(tmp_array)
+            tmp_array = tmp_array[~nan_indexes]
+            vmin_2 = np.min(tmp_array)
+
+            if vmin_2 < 0:
+                vmin_2 = 0.01
+
+        if vmax_2 is None:
+
+            if tmp_array is None:
+                tmp_array = brain_data_2.copy()
+                nan_indexes = np.isnan(tmp_array)
+                tmp_array = tmp_array[~nan_indexes]
+
+            vmax_2 = np.amax(tmp_array)
 
     if len(brain_data_1.shape) == 4:
         brain_data_1 = brain_data_1[:, :, :, dyn]
@@ -949,12 +973,12 @@ def plot_slice_planes(
     mask_data_1 = np.logical_not(np.isnan(brain_data_1))
 
     if only_noise:
-        vmin = np.percentile(brain_data_1[mask_data_1], 0)
-        vmax = np.percentile(brain_data_1[mask_data_1], 61)
+        vmin_1 = np.percentile(brain_data_1[mask_data_1], 0)
+        vmax_1 = np.percentile(brain_data_1[mask_data_1], 61)
 
     else:
-        vmin = np.percentile(brain_data_1[mask_data_1], 0.5)
-        vmax = np.percentile(brain_data_1[mask_data_1], 99.5)
+        vmin_1 = np.percentile(brain_data_1[mask_data_1], 0.5)
+        vmax_1 = np.percentile(brain_data_1[mask_data_1], 99.5)
 
     zooms = brain_img_1.header.get_zooms()
     grid = ImageGrid(fig, 111, nrows_ncols=(fig_rows, fig_cols), axes_pad=0)
@@ -990,6 +1014,7 @@ def plot_slice_planes(
     rowsxcols_array = np.arange(0, rowsxcols, 1)
 
     for ax, slice_numb in zip(grid, rowsxcols_array):
+
         if slice_numb >= len(ind_slices):
             displ_1 = np.zeros((2, 2, 2))
             ind_slice = 1
@@ -1003,8 +1028,8 @@ def plot_slice_planes(
         phys_sp = np.array(zooms[:2]) * brain_data_1[:, :, ind_slice].shape
         ax.imshow(
             np.swapaxes(displ_1[:, :, ind_slice], 0, 1),
-            vmin=vmin,
-            vmax=vmax,
+            vmin=vmin_1,
+            vmax=vmax_1,
             cmap=cmap_1,
             interpolation="nearest",
             origin="lower",
@@ -1012,21 +1037,23 @@ def plot_slice_planes(
         )
 
         if displ_2 is not None:
-            ax.imshow(
+            c = ax.imshow(
                 np.swapaxes(displ_2[:, :, ind_slice], 0, 1),
-                vmin=vmin,
-                vmax=vmax,
+                vmin=vmin_2,
+                vmax=vmax_2,
                 cmap=cmap_2,
+                alpha=0.5,
                 interpolation="nearest",
                 origin="lower",
                 extent=[0, phys_sp[0], 0, phys_sp[1]],
             )
+
         ax.set_xticklabels([])
         ax.set_yticklabels([])
         ax.grid(False)
         ax.axis("off")
-        bgcolor = cmap_1(min(vmin, 0.0))
-        fgcolor = cmap_1(vmax)
+        bgcolor = cmap_1(min(vmin_1, 0.0))
+        fgcolor = cmap_1(vmax_1)
 
         if slice_numb + 1 > len(ind_slices):
             ind_slice = ""
@@ -1045,14 +1072,30 @@ def plot_slice_planes(
             ),
         )
 
-    fname, _ = os.path.splitext(os.path.basename(data_1))
+    if brain_data_2 is not None:
+        plt.subplots_adjust(bottom=0.1, right=1, top=1)
+        cax = plt.axes((0.95, 0.1, 0.035, 0.3))
+        plt.colorbar(c, cax=cax)
+
+    if data_2 is None:
+        fname, _ = os.path.splitext(os.path.basename(data_1))
+
+    else:
+        fname, _ = os.path.splitext(os.path.basename(data_2))
 
     if out_name:
         fname += "_" + out_name
 
     if out_dir is None:
-        out_dir = os.path.dirname(data_1)
+        out_dir = os.path.dirname(data_2)
 
     out_file = os.path.join(out_dir, fname + "_slice_planes_plot.png")
+    counter = 1
+
+    while os.path.exists(out_file):
+        b_name, ext = os.path.splitext(out_file)
+        out_file = f"{b_name}_{counter:03d}{ext}"
+        counter += 1
+
     fig.savefig(out_file, format="png", dpi=300, bbox_inches="tight")
     return out_file
