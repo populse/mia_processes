@@ -4,17 +4,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.pipelines.preprocess.anat_spatial_norm &#8212; mia_processes 2.5.1-dev+753b3f76 documentation</title>
+    <title>mia_processes.pipelines.preprocess.anat_spatial_norm &#8212; mia_processes 2.5.1-dev+94e7e24a documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=f63d8bfa" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css?v=e491ac2d" />
-    <script src="../../../../_static/documentation_options.js?v=7be2cb86"></script>
+    <script src="../../../../_static/documentation_options.js?v=6f08eabc"></script>
     <script src="../../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.5.1-dev+753b3f76 documentation</span></a></h1>
+          <span>mia_processes 2.5.1-dev+94e7e24a documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.pipelines.preprocess.anat_spatial_norm</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -89,9 +89,9 @@
             <span class="mf">1e-08</span><span class="p">,</span>
         <span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;registration&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">convergence_window_size</span> <span class="o">=</span> <span class="p">[</span><span class="mi">15</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span>
-            <span class="s2">&quot;registration&quot;</span>
-        <span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">interpolation</span> <span class="o">=</span> <span class="s2">&quot;LanczosWindowedSinc&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;registration&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">interpolation</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;LanczosWindowedSinc&quot;</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;registration&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">metric</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Mattes&quot;</span><span class="p">,</span> <span class="s2">&quot;Mattes&quot;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;registration&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">metric_weight</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="s2">&quot;registration&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">number_of_iterations</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">20</span><span class="p">],</span> <span class="p">[</span><span class="mi">15</span><span class="p">]]</span>

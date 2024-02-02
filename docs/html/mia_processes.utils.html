@@ -5,17 +5,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>mia_processes.utils package &#8212; mia_processes 2.5.1-dev+e9eb91e0 documentation</title>
+    <title>mia_processes.utils package &#8212; mia_processes 2.5.1-dev+94e7e24a documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=f63d8bfa" />
     <link rel="stylesheet" type="text/css" href="_static/haiku.css?v=e491ac2d" />
-    <script src="_static/documentation_options.js?v=3bacb0d4"></script>
+    <script src="_static/documentation_options.js?v=6f08eabc"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="index.html">
-          <span>mia_processes 2.5.1-dev+e9eb91e0 documentation</span></a></h1>
+          <span>mia_processes 2.5.1-dev+94e7e24a documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.utils package</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -351,7 +351,7 @@ and for one modality and put them together in one tsv file.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="mia_processes.utils.tools.plot_slice_planes">
-<span class="sig-prename descclassname"><span class="pre">mia_processes.utils.tools.</span></span><span class="sig-name descname"><span class="pre">plot_slice_planes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig_rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig_cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slice_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slice_step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dyn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Greys_r'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">only_noise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/utils/tools.html#plot_slice_planes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.utils.tools.plot_slice_planes" title="Link to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">mia_processes.utils.tools.</span></span><span class="sig-name descname"><span class="pre">plot_slice_planes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig_rows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig_cols</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slice_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slice_step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dyn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap_1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Greys_r'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap_2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gist_rainbow'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">only_noise</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/utils/tools.html#plot_slice_planes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.utils.tools.plot_slice_planes" title="Link to this definition">¶</a></dt>
 <dd><p>Create a png file with a mosaic display of volume slices.</p>
 <p>fig_rows, fig_cols, slice_start and slice_step are optional. If they are
 not known, plot_slice_planes will try to adapt as best it can to obtain
@@ -360,19 +360,22 @@ fig_cols are <cite>4</cite> and for dyn it is ‘1’.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> – an existing, image file (valid extensions: .nii).</p></li>
+<li><p><strong>data_1</strong> – an existing, image file (valid extensions: .nii).</p></li>
+<li><p><strong>data_2</strong> – an existing, image file (valid extensions: .nii).</p></li>
 <li><p><strong>fig_rows</strong> – the number of rows in the images panel (integer).</p></li>
 <li><p><strong>fig_cols</strong> – the number of columns in the images panel (integer).</p></li>
 <li><p><strong>slice_start</strong> – starting slice number to be displayed (integer).</p></li>
 <li><p><strong>slice_step</strong> – the gap between each slice to be displayed (integer).</p></li>
 <li><p><strong>dyn</strong> – the volume number in the space-time, for 4D (integer).</p></li>
-<li><p><strong>cmap</strong> – the color map name (string).</p></li>
+<li><p><strong>cmap_1</strong> – the color map name (string) for data_1.</p></li>
+<li><p><strong>cmap_2</strong> – the color map name (string) for data_2.</p></li>
 <li><p><strong>out_dir</strong> – the output directory where the mosaic images will be saved.</p></li>
 <li><p><strong>only_noise</strong> – if True, shows the noise (boolean).</p></li>
 <li><p><strong>out_name</strong> – the suffix added to form the output name (string).</p></li>
 </ul>
 </dd>
 </dl>
+<p>Note: cmap for parametric display can be, gist_rainbow, RdYlBu, Spectral,</p>
 </dd></dl>
 
 <dl class="py function">

@@ -4,17 +4,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.pipelines.CerebVascularReact.co2_inhalation &#8212; mia_processes 2.5.1-dev+2cd9c3a4 documentation</title>
+    <title>mia_processes.pipelines.CerebVascularReact.co2_inhalation &#8212; mia_processes 2.5.1-dev+94e7e24a documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=f63d8bfa" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css?v=e491ac2d" />
-    <script src="../../../../_static/documentation_options.js?v=eb72fdf9"></script>
+    <script src="../../../../_static/documentation_options.js?v=6f08eabc"></script>
     <script src="../../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.5.1-dev+2cd9c3a4 documentation</span></a></h1>
+          <span>mia_processes 2.5.1-dev+94e7e24a documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.pipelines.CerebVascularReact.co2_inhalation</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -128,7 +128,9 @@
             <span class="s2">&quot;reportco2inhalcvr&quot;</span><span class="p">,</span>
             <span class="s2">&quot;mia_processes.bricks.reports.reporting.ReportCO2inhalCvr&quot;</span><span class="p">,</span>
         <span class="p">)</span>
-
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_process</span><span class="p">(</span>
+            <span class="s2">&quot;list_to_file_1&quot;</span><span class="p">,</span> <span class="s2">&quot;mia_processes.bricks.tools.tools.List_To_File&quot;</span>
+        <span class="p">)</span>
         <span class="c1"># links</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
             <span class="s2">&quot;1_spatial_preprocessing&quot;</span><span class="p">,</span> <span class="s2">&quot;anat_file&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
@@ -190,9 +192,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
             <span class="s2">&quot;3_boldStat&quot;</span><span class="p">,</span> <span class="s2">&quot;out_spm_mat_file&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
         <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;3_boldStat.beta_images-&gt;list_to_file_1.file_list&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span>
             <span class="s2">&quot;3_boldStat.beta_images-&gt;4_extract_roi_param.beta_images&quot;</span>
         <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;3_boldStat.spmT_images-&gt;reportco2inhalcvr.spmT_image&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span>
             <span class="s2">&quot;4_extract_roi_param&quot;</span><span class="p">,</span> <span class="s2">&quot;resample2_masks&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">False</span>
         <span class="p">)</span>
@@ -204,6 +208,7 @@
         <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;files_to_list.file_list-&gt;3_boldStat.regressors&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">export_parameter</span><span class="p">(</span><span class="s2">&quot;reportco2inhalcvr&quot;</span><span class="p">,</span> <span class="s2">&quot;report&quot;</span><span class="p">,</span> <span class="n">is_optional</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_link</span><span class="p">(</span><span class="s2">&quot;list_to_file_1.file-&gt;reportco2inhalcvr.beta_image&quot;</span><span class="p">)</span>
 
         <span class="c1"># parameters order</span>
 
@@ -237,6 +242,7 @@
             <span class="s2">&quot;files_to_list&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">198.71272571362283</span><span class="p">,</span> <span class="mf">330.3029426377244</span><span class="p">),</span>
             <span class="s2">&quot;reportco2inhalcvr&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">748.1071959262655</span><span class="p">,</span> <span class="mf">258.2245925859173</span><span class="p">),</span>
             <span class="s2">&quot;outputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">971.2936610271133</span><span class="p">,</span> <span class="o">-</span><span class="mf">146.65919984483403</span><span class="p">),</span>
+            <span class="s2">&quot;list_to_file_1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">455.4447133457113</span><span class="p">,</span> <span class="mf">554.0646315898613</span><span class="p">),</span>
         <span class="p">}</span>
 
         <span class="c1"># nodes dimensions</span>
@@ -249,6 +255,7 @@
             <span class="s2">&quot;files_to_list&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">97.640625</span><span class="p">,</span> <span class="mf">145.0</span><span class="p">),</span>
             <span class="s2">&quot;outputs&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">138.83679503946317</span><span class="p">,</span> <span class="mf">320.0</span><span class="p">),</span>
             <span class="s2">&quot;reportco2inhalcvr&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">212.484375</span><span class="p">,</span> <span class="mf">495.0</span><span class="p">),</span>
+            <span class="s2">&quot;list_to_file_1&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">117.75</span><span class="p">,</span> <span class="mf">110.0</span><span class="p">),</span>
         <span class="p">}</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">do_autoexport_nodes_parameters</span> <span class="o">=</span> <span class="kc">False</span></div>

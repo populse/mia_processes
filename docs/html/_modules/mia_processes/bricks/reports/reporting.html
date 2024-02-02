@@ -4,17 +4,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.reports.reporting &#8212; mia_processes 2.5.1-dev+2cd9c3a4 documentation</title>
+    <title>mia_processes.bricks.reports.reporting &#8212; mia_processes 2.5.1-dev+94e7e24a documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=f63d8bfa" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css?v=e491ac2d" />
-    <script src="../../../../_static/documentation_options.js?v=eb72fdf9"></script>
+    <script src="../../../../_static/documentation_options.js?v=6f08eabc"></script>
     <script src="../../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.5.1-dev+2cd9c3a4 documentation</span></a></h1>
+          <span>mia_processes 2.5.1-dev+94e7e24a documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.reports.reporting</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -391,9 +391,11 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;report&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
                 <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">_anatomical_mriqcReport_</span><span class="si">{1}</span><span class="s2">.pdf&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;PatientName&quot;</span><span class="p">]</span>
-                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;PatientName&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;Undefined&quot;</span>
-                    <span class="k">else</span> <span class="s2">&quot;Undefined_name_ref&quot;</span><span class="p">,</span>
+                    <span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;PatientName&quot;</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;PatientName&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;Undefined&quot;</span>
+                        <span class="k">else</span> <span class="s2">&quot;Undefined_name_ref&quot;</span>
+                    <span class="p">),</span>
                     <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y_%m_</span><span class="si">%d</span><span class="s2">_%H_%M_%S_</span><span class="si">%f</span><span class="s2">&quot;</span><span class="p">)[:</span><span class="mi">22</span><span class="p">],</span>
                 <span class="p">),</span>
             <span class="p">)</span>
@@ -959,6 +961,12 @@
             <span class="s2">&quot;representing a file)&quot;</span>
         <span class="p">)</span>
 
+        <span class="n">beta_image_desc</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;The 1st estimated parameter of the&quot;</span> <span class="s2">&quot;model (i.e. beta_0001.nii)&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">spmT_image_desc</span> <span class="o">=</span> <span class="s2">&quot;Stat images from a t-contrast (i.e. spmT_0001.nii)&quot;</span>
+
         <span class="n">patient_info_desc</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s2">&quot;Optional dictionary with information about the patient &quot;</span>
             <span class="s2">&quot;(e.g. {&quot;</span>
@@ -1029,6 +1037,9 @@
             <span class="p">),</span>
         <span class="p">)</span>
 
+        <span class="c1"># TODO: We use the normalized functional. It seems that it&#39;s the</span>
+        <span class="c1">#       normalized - smothed functional that&#39;s used in Amigo. We&#39;ll</span>
+        <span class="c1">#       have to check and decide what we&#39;ll use here finally?</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;norm_func&quot;</span><span class="p">,</span>
             <span class="n">ImageFileSPM</span><span class="p">(</span>
@@ -1085,6 +1096,16 @@
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;beta_image&quot;</span><span class="p">,</span>
+            <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">beta_image_desc</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
+            <span class="s2">&quot;spmT_image&quot;</span><span class="p">,</span>
+            <span class="n">File</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">spmT_image_desc</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_trait</span><span class="p">(</span>
             <span class="s2">&quot;patient_info&quot;</span><span class="p">,</span>
             <span class="n">traits</span><span class="o">.</span><span class="n">Dict</span><span class="p">(</span><span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">patient_info_desc</span><span class="p">),</span>
         <span class="p">)</span>
@@ -1135,55 +1156,85 @@
             <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">getName</span><span class="p">())</span>
             <span class="o">+</span> <span class="mi">1</span>
         <span class="p">)</span>
-        <span class="n">database_filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm_anat</span><span class="p">[</span><span class="n">file_position</span><span class="p">:]</span>
+        <span class="n">db_file_anat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">anat</span><span class="p">[</span><span class="n">file_position</span><span class="p">:]</span>
+        <span class="n">db_file_norm_anat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm_anat</span><span class="p">[</span><span class="n">file_position</span><span class="p">:]</span>
+        <span class="n">db_file_norm_func</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm_func</span><span class="p">[</span><span class="n">file_position</span><span class="p">:]</span>
+        <span class="c1"># TODO: Do we need to explicitly take the smoothed func as input,</span>
+        <span class="c1">#       or can we simply add the prefix &#39;s&#39; to the normalized func?</span>
+        <span class="n">db_file_smooth_norm_func</span> <span class="o">=</span> <span class="s2">&quot;s&quot;</span> <span class="o">+</span> <span class="n">db_file_norm_func</span>
 
         <span class="c1"># As we do not have access to the database at the runtime (see #272),</span>
         <span class="c1"># we prepare here the data that the run_process_mia method will need</span>
         <span class="c1"># via dict4runtime parameter:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">dict4runtime_update</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">],</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">session</span><span class="p">,</span>
-            <span class="n">database_filename</span><span class="p">,</span>
+            <span class="n">db_file_anat</span><span class="p">,</span>
             <span class="s2">&quot;AcquisitionDate&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Acquisition nbr&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Age&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Gas&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;GasAdmin&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Dataset dimensions (Count, X,Y,Z,T...)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;EchoTime&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;FlipAngle&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;FOV&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Grid spacings (X,Y,Z,T,...)&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Pathology&quot;</span><span class="p">,</span>
             <span class="s2">&quot;PatientName&quot;</span><span class="p">,</span>
             <span class="s2">&quot;PatientRef&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;ProtocolName&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;RepetitionTime&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;SequenceName&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Sex&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Site&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;SliceThickness&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Spectro&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Start/end slice&quot;</span><span class="p">,</span>
             <span class="s2">&quot;StudyName&quot;</span><span class="p">,</span>
         <span class="p">)</span>
-
-        <span class="k">if</span> <span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Age&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
-            <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;Age&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">Undefined</span>
-        <span class="p">):</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;Age&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;Age&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;Age&quot;</span><span class="p">]</span>
-
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;Age&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Age&quot;</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Pathology&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
-            <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;Pathology&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">Undefined</span>
-        <span class="p">):</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;Pathology&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;Pathology&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;Pathology&quot;</span><span class="p">]</span>
-
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;Pathology&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Pathology&quot;</span><span class="p">)</span>
-
+        <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">dict4runtime_update</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_anat&quot;</span><span class="p">],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">session</span><span class="p">,</span>
+            <span class="n">db_file_norm_anat</span><span class="p">,</span>
+            <span class="s2">&quot;Affine regularization type&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Voxel sizes&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_func&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">dict4runtime_update</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_func&quot;</span><span class="p">],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">session</span><span class="p">,</span>
+            <span class="n">db_file_norm_func</span><span class="p">,</span>
+            <span class="s2">&quot;Acquisition nbr&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Affine regularization type&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Dataset dimensions (Count, X,Y,Z,T...)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;EchoTime&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;FlipAngle&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;FOV&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Gas&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;GasAdmin&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Grid spacings (X,Y,Z,T,...)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;ProtocolName&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;RepetitionTime&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;SequenceName&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;SliceThickness&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Start/end slice&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Voxel sizes&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;smooth_norm_func&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">dict4runtime_update</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;smooth_norm_func&quot;</span><span class="p">],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">session</span><span class="p">,</span>
+            <span class="n">db_file_smooth_norm_func</span><span class="p">,</span>
+            <span class="s2">&quot;FWHM (X, Y, Z) for Smooth&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="c1"># FIXME: the data should be anonymized and we should use PatientRef</span>
         <span class="c1">#        instead of PatientName !</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;PatientName&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">][</span><span class="s2">&quot;PatientName&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span>
                 <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">ReportCO2inhalCvr brick:</span><span class="se">\n</span><span class="s2">The tags PatientName was not &quot;</span>
                 <span class="s2">&quot;found in the database for the </span><span class="si">{}</span><span class="s2"> file...</span><span class="se">\n</span><span class="s2"> The &quot;</span>
-                <span class="s2">&quot;initialization is aborted...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">database_filename</span><span class="p">)</span>
+                <span class="s2">&quot;initialization is aborted...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">db_file_norm_anat</span><span class="p">)</span>
             <span class="p">)</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_initResult</span><span class="p">()</span>
 
@@ -1191,74 +1242,108 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PatientRef&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
             <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;PatientRef&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">Undefined</span>
         <span class="p">):</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;PatientRef&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;PatientRef&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span>
-                    <span class="s2">&quot;PatientName&quot;</span>
-                <span class="p">]</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;PatientRef&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">][</span><span class="s2">&quot;PatientRef&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">][</span><span class="s2">&quot;PatientRef&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span>
+                    <span class="s2">&quot;anat&quot;</span>
+                <span class="p">][</span><span class="s2">&quot;PatientName&quot;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;PatientRef&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">][</span>
                     <span class="s2">&quot;PatientName&quot;</span>
                 <span class="p">]</span>
 
             <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;PatientRef&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;PatientRef&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">][</span>
                     <span class="s2">&quot;PatientRef&quot;</span>
                 <span class="p">]</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;PatientRef&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">][</span><span class="s2">&quot;PatientRef&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
                 <span class="s2">&quot;PatientRef&quot;</span>
             <span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Pathology&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
+            <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;Pathology&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">Undefined</span>
+        <span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">][</span><span class="s2">&quot;Pathology&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;Pathology&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">][</span>
+                    <span class="s2">&quot;Pathology&quot;</span>
+                <span class="p">]</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">][</span><span class="s2">&quot;Pathology&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="s2">&quot;Pathology&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Age&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
+            <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;Age&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">Undefined</span>
+        <span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">][</span><span class="s2">&quot;Age&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;Age&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">][</span><span class="s2">&quot;Age&quot;</span><span class="p">]</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">][</span><span class="s2">&quot;Age&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Age&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Sex&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
             <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;Sex&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">Undefined</span>
         <span class="p">):</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;Sex&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;Sex&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;Sex&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">][</span><span class="s2">&quot;Sex&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;Sex&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">][</span><span class="s2">&quot;Sex&quot;</span><span class="p">]</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;Sex&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Sex&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">][</span><span class="s2">&quot;Sex&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Sex&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;MR&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
             <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;MR&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">Undefined</span>
         <span class="p">):</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;Spectro&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;MR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;Spectro&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">][</span><span class="s2">&quot;Spectro&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;MR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">][</span><span class="s2">&quot;Spectro&quot;</span><span class="p">]</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;Spectro&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;MR&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">][</span><span class="s2">&quot;Spectro&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;MR&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Gas&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
             <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;Gas&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">Undefined</span>
         <span class="p">):</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;Gas&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;Gas&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;Gas&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_func&quot;</span><span class="p">][</span><span class="s2">&quot;Gas&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;Gas&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_func&quot;</span><span class="p">][</span>
+                    <span class="s2">&quot;Gas&quot;</span>
+                <span class="p">]</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;Gas&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Gas&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_func&quot;</span><span class="p">][</span><span class="s2">&quot;Gas&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="s2">&quot;Gas&quot;</span>
+            <span class="p">)</span>
 
         <span class="k">if</span> <span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;GasAdmin&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span>
             <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;GasAdmin&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">Undefined</span>
         <span class="p">):</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;GasAdmin&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;GasAdmin&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;GasAdmin&quot;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_func&quot;</span><span class="p">][</span><span class="s2">&quot;GasAdmin&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="p">[</span><span class="s2">&quot;GasAdmin&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span>
+                    <span class="s2">&quot;norm_func&quot;</span>
+                <span class="p">][</span><span class="s2">&quot;GasAdmin&quot;</span><span class="p">]</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;GasAdmin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;GasAdmin&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;norm_func&quot;</span><span class="p">][</span><span class="s2">&quot;GasAdmin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patient_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="s2">&quot;GasAdmin&quot;</span>
+            <span class="p">)</span>
 
         <span class="c1"># FIXME: Currently, Site and Spectro data are hard-coded. A solution</span>
         <span class="c1">#        should be found to retrieve them automatically or to put them</span>
         <span class="c1">#        in the input parameters of the brick:</span>
         <span class="c1"># Site</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;Site&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;Site&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Grenoble University Hospital - CLUNI&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">][</span><span class="s2">&quot;Site&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">][</span>
+                <span class="s2">&quot;Site&quot;</span>
+            <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Grenoble University Hospital - CLUNI&quot;</span>
 
         <span class="c1"># MriScanner</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;Spectro&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;Spectro&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Philips Achieva 3.0T TX&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">][</span><span class="s2">&quot;Spectro&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">][</span><span class="s2">&quot;Spectro&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Philips Achieva 3.0T TX&quot;</span>
 
         <span class="c1"># Generate an output name</span>
         <span class="k">if</span> <span class="p">(</span>
@@ -1271,7 +1356,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;report&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
                 <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">_CO2_inhal_CVR_Report_</span><span class="si">{1}</span><span class="s2">.pdf&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;PatientRef&quot;</span><span class="p">],</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;anat&quot;</span><span class="p">][</span><span class="s2">&quot;PatientRef&quot;</span><span class="p">],</span>
                     <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y_%m_</span><span class="si">%d</span><span class="s2">_%H_%M_%S_</span><span class="si">%f</span><span class="s2">&quot;</span><span class="p">)[:</span><span class="mi">22</span><span class="p">],</span>
                 <span class="p">),</span>
             <span class="p">)</span>
@@ -1615,9 +1700,11 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;report&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">output_directory</span><span class="p">,</span>
                 <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">_functional_mriqcReport_</span><span class="si">{1}</span><span class="s2">.pdf&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;PatientName&quot;</span><span class="p">]</span>
-                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;PatientName&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;Undefined&quot;</span>
-                    <span class="k">else</span> <span class="s2">&quot;Undefined_name_ref&quot;</span><span class="p">,</span>
+                    <span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;PatientName&quot;</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict4runtime</span><span class="p">[</span><span class="s2">&quot;PatientName&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;Undefined&quot;</span>
+                        <span class="k">else</span> <span class="s2">&quot;Undefined_name_ref&quot;</span>
+                    <span class="p">),</span>
                     <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y_%m_</span><span class="si">%d</span><span class="s2">_%H_%M_%S_</span><span class="si">%f</span><span class="s2">&quot;</span><span class="p">)[:</span><span class="mi">22</span><span class="p">],</span>
                 <span class="p">),</span>
             <span class="p">)</span>
@@ -2054,9 +2141,9 @@
             <span class="c1">#        or to put them in the input parameters of the brick:</span>
             <span class="c1"># Site</span>
             <span class="k">if</span> <span class="n">dict4runtime_file</span><span class="p">[</span><span class="s2">&quot;Site&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">):</span>
-                <span class="n">dict4runtime_file</span><span class="p">[</span>
-                    <span class="s2">&quot;Site&quot;</span>
-                <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Grenoble University Hospital - CLUNI&quot;</span>
+                <span class="n">dict4runtime_file</span><span class="p">[</span><span class="s2">&quot;Site&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="s2">&quot;Grenoble University Hospital - CLUNI&quot;</span>
+                <span class="p">)</span>
 
             <span class="c1"># MriScanner</span>
             <span class="k">if</span> <span class="n">dict4runtime_file</span><span class="p">[</span><span class="s2">&quot;Spectro&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;Undefined&quot;</span><span class="p">):</span>

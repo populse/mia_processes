@@ -4,17 +4,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mia_processes.bricks.stat.spm.model &#8212; mia_processes 2.5.1-dev+753b3f76 documentation</title>
+    <title>mia_processes.bricks.stat.spm.model &#8212; mia_processes 2.5.1-dev+94e7e24a documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=f63d8bfa" />
     <link rel="stylesheet" type="text/css" href="../../../../../_static/haiku.css?v=e491ac2d" />
-    <script src="../../../../../_static/documentation_options.js?v=7be2cb86"></script>
+    <script src="../../../../../_static/documentation_options.js?v=6f08eabc"></script>
     <script src="../../../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../../index.html">
-          <span>mia_processes 2.5.1-dev+753b3f76 documentation</span></a></h1>
+          <span>mia_processes 2.5.1-dev+94e7e24a documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.stat.spm.model</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -318,9 +318,11 @@
                 <span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">contrasts_T</span> <span class="o">=</span> <span class="p">[</span>
-                    <span class="p">(</span><span class="n">cont_name</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="n">condition</span><span class="p">,</span> <span class="n">cont_weight</span><span class="p">,</span> <span class="n">sess</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="n">sess</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">Undefined</span>
-                    <span class="k">else</span> <span class="p">(</span><span class="n">cont_name</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="n">condition</span><span class="p">,</span> <span class="n">cont_weight</span><span class="p">)</span>
+                    <span class="p">(</span>
+                        <span class="p">(</span><span class="n">cont_name</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="n">condition</span><span class="p">,</span> <span class="n">cont_weight</span><span class="p">,</span> <span class="n">sess</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">sess</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">Undefined</span>
+                        <span class="k">else</span> <span class="p">(</span><span class="n">cont_name</span><span class="p">,</span> <span class="s2">&quot;T&quot;</span><span class="p">,</span> <span class="n">condition</span><span class="p">,</span> <span class="n">cont_weight</span><span class="p">)</span>
+                    <span class="p">)</span>
                     <span class="k">for</span> <span class="n">cont_name</span><span class="p">,</span> <span class="n">condition</span><span class="p">,</span> <span class="n">cont_weight</span><span class="p">,</span> <span class="n">sess</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">T_contrast_names</span><span class="p">,</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">T_condition_names</span><span class="p">,</span>
@@ -2247,9 +2249,9 @@
                 <span class="n">tag_to_add</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
                 <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Dynamic Number&quot;</span>
                 <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;field_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">FIELD_TYPE_INTEGER</span>
-                <span class="n">tag_to_add</span><span class="p">[</span>
-                    <span class="s2">&quot;description&quot;</span>
-                <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Total number of dynamics in the functionals&quot;</span>
+                <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="s2">&quot;Total number of dynamics in the functionals&quot;</span>
+                <span class="p">)</span>
                 <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;visibility&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
                 <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;origin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TAG_ORIGIN_USER</span>
                 <span class="n">tag_to_add</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
@@ -2319,9 +2321,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">factor_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">factor_info</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">bases</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bases</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">volterra_expansion_order</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">volterra_expansion_order</span>
-        <span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">global_intensity_normalization</span>
-        <span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">global_intensity_normalization</span>
+        <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">global_intensity_normalization</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">global_intensity_normalization</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">mask_threshold</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask_threshold</span>
 
         <span class="c1"># Only one mask can be defined in spm. If more than one is given, only</span>

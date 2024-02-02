@@ -18,6 +18,10 @@ i.e. estimate the value of the β associated with each conditions.
 
 Bayesian methods are not currently implemented in this brick. If you need to use Bayesian procedures, please open a `ticket <https://github.com/populse/mia_processes/issues>`_.
 
+.. warning::
+    In some cases, this brick is not compatible with the Mia V2 controller (risk of Mia crash).
+    It is strongly recommended to use the Mia V1 controller with this brick (see: File > Mia Preferences, to change the controller version).
+
 --------------------------------------
 
 **Mandatory inputs parameters:**

@@ -5,17 +5,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>EstimateModel brick &#8212; mia_processes 2.5.1-dev+e9eb91e0 documentation</title>
+    <title>EstimateModel brick &#8212; mia_processes 2.5.1-dev+94e7e24a documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=f63d8bfa" />
     <link rel="stylesheet" type="text/css" href="../../../../_static/haiku.css?v=e491ac2d" />
-    <script src="../../../../_static/documentation_options.js?v=3bacb0d4"></script>
+    <script src="../../../../_static/documentation_options.js?v=6f08eabc"></script>
     <script src="../../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../../index.html">
-          <span>mia_processes 2.5.1-dev+e9eb91e0 documentation</span></a></h1>
+          <span>mia_processes 2.5.1-dev+94e7e24a documentation</span></a></h1>
         <h2 class="heading"><span>EstimateModel brick</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -45,6 +45,11 @@
 <p>This step will estimate on fitted data the parameters of the model created during the model specification stage,
 i.e. estimate the value of the β associated with each conditions.</p>
 <p>Bayesian methods are not currently implemented in this brick. If you need to use Bayesian procedures, please open a <a class="reference external" href="https://github.com/populse/mia_processes/issues">ticket</a>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>In some cases, this brick is not compatible with the Mia V2 controller (risk of Mia crash).
+It is strongly recommended to use the Mia V1 controller with this brick (see: File &gt; Mia Preferences, to change the controller version).</p>
+</div>
 <hr class="docutils" />
 <p><strong>Mandatory inputs parameters:</strong></p>
 <ul>
