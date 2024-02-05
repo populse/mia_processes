@@ -1327,7 +1327,16 @@ class Report:
         )
 
         self.report.append(Spacer(0 * mm, 20 * mm))
-
+        self.report.append(
+            Paragraph(
+                '<font size = 9 > <i> "Neurological" '
+                "convention, the left side of the "
+                "image corresponds to the left side of "
+                "the brain. </i> <br/> </font>",
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
         slices_image = plot_slice_planes(
             data_1=self.norm_anat,
             data_2=self.beta_image,
@@ -1336,7 +1345,7 @@ class Report:
             slice_start=self.norm_anat_inf_slice_start,
             slice_step=self.norm_anat_slices_gap,
             cmap_1="Greys_r",
-            cmap_2="gist_rainbow",
+            cmap_2="rainbow",
             out_dir=tmpdir.name,
             vmin_2=0.01,
             vmax_2=0.25,

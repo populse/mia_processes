@@ -576,25 +576,16 @@ def plot_slice_planes(
         brain_img_2 = nib.as_closest_canonical(nib.load(data_2))
         brain_data_2 = brain_img_2.get_fdata()
         brain_data_2 = np.squeeze(brain_data_2)
-        tmp_array = None
+        nan_indexes = np.isnan(brain_data_2)
 
         if vmin_2 is None:
-            tmp_array = brain_data_2.copy()
-            nan_indexes = np.isnan(tmp_array)
-            tmp_array = tmp_array[~nan_indexes]
-            vmin_2 = np.min(tmp_array)
+            vmin_2 = np.min(brain_data_2[~nan_indexes])
 
             if vmin_2 < 0:
-                vmin_2 = 0.01
+                vmin_2 = 0.00
 
         if vmax_2 is None:
-
-            if tmp_array is None:
-                tmp_array = brain_data_2.copy()
-                nan_indexes = np.isnan(tmp_array)
-                tmp_array = tmp_array[~nan_indexes]
-
-            vmax_2 = np.amax(tmp_array)
+            vmax_2 = np.amax(brain_data_2[~nan_indexes])
 
     if len(brain_data_1.shape) == 4:
         brain_data_1 = brain_data_1[:, :, :, dyn]
@@ -981,9 +972,26 @@ def plot_slice_planes(
         vmax_1 = np.percentile(brain_data_1[mask_data_1], 99.5)
 
     zooms = brain_img_1.header.get_zooms()
-    grid = ImageGrid(fig, 111, nrows_ncols=(fig_rows, fig_cols), axes_pad=0)
+
+    if brain_data_2 is None:
+        grid = ImageGrid(
+            fig,
+            111,
+            nrows_ncols=(fig_rows, fig_cols),
+            axes_pad=0,
+        )
+    else:
+        grid = ImageGrid(
+            fig,
+            111,
+            nrows_ncols=(fig_rows, fig_cols),
+            axes_pad=0,
+            cbar_mode="single",
+            cbar_location="bottom",
+            cbar_pad=0,
+            cbar_size="2%",
+        )
     cmap_1 = get_cmap(cmap_1)
-    # cmap.set_bad(color='red')  # Nan are red
     cmap_1.set_bad(color="black")  # Nan are black
     cmap_2 = get_cmap(cmap_2)
 
@@ -1037,7 +1045,7 @@ def plot_slice_planes(
         )
 
         if displ_2 is not None:
-            c = ax.imshow(
+            im2 = ax.imshow(
                 np.swapaxes(displ_2[:, :, ind_slice], 0, 1),
                 vmin=vmin_2,
                 vmax=vmax_2,
@@ -1073,9 +1081,11 @@ def plot_slice_planes(
         )
 
     if brain_data_2 is not None:
-        plt.subplots_adjust(bottom=0.1, right=1, top=1)
-        cax = plt.axes((0.95, 0.1, 0.035, 0.3))
-        plt.colorbar(c, cax=cax)
+        cbar = grid.cbar_axes[0].colorbar(
+            im2, orientation="horizontal", label="Intensity"
+        )
+        cbar.ax.tick_params(labelsize=6)
+        cbar.set_label("Intensity", size=10)
 
     if data_2 is None:
         fname, _ = os.path.splitext(os.path.basename(data_1))
