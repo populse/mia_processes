@@ -782,7 +782,9 @@ class Report:
             fig_cols=self.norm_anat_fig_cols,
             slice_start=self.norm_anat_inf_slice_start,
             slice_step=self.norm_anat_slices_gap,
-            cmap_1="Greys_r",
+            cmap_1=self.norm_anat_cmap,
+            vmin_1=self.norm_anat_vmin,
+            vmax_1=self.norm_anat_vmax,
             out_dir=tmpdir.name,
         )
         # remainder: A4 == 210mmx297mm
@@ -1304,7 +1306,9 @@ class Report:
             fig_cols=self.norm_func_fig_cols,
             slice_start=self.norm_func_inf_slice_start,
             slice_step=self.norm_func_slices_gap,
-            cmap_1="Greys_r",
+            cmap_1=self.norm_func_cmap,
+            vmin_1=self.norm_func_vmin,
+            vmax_1=self.norm_func_vmax,
             out_dir=tmpdir.name,
         )
         # remainder: A4 == 210mmx297mm
@@ -1315,7 +1319,7 @@ class Report:
         self.report.append(slices_image)
         self.report.append(PageBreak())
 
-        # page 8 - parametric maps: beta / etco2 #############################
+        # page 8 - parametric maps: beta / EtCO2 #############################
         ######################################################################
         self.report.append(
             Paragraph(
@@ -1344,11 +1348,57 @@ class Report:
             fig_cols=self.norm_anat_fig_cols,
             slice_start=self.norm_anat_inf_slice_start,
             slice_step=self.norm_anat_slices_gap,
-            cmap_1="Greys_r",
-            cmap_2="rainbow",
+            cmap_1=self.norm_anat_cmap,
+            vmin_1=self.norm_anat_vmin,
+            vmax_1=self.norm_anat_vmax,
+            cmap_2=self.beta_cmap,
+            vmin_2=self.beta_vmin,
+            vmax_2=self.beta_vmax,
             out_dir=tmpdir.name,
-            vmin_2=0.01,
-            vmax_2=0.25,
+        )
+
+        # remainder: A4 == 210mmx297mm
+        slices_image = Image(
+            slices_image, width=7.4803 * inch, height=9.0551 * inch
+        )
+        slices_image.hAlign = "CENTER"
+        self.report.append(slices_image)
+        self.report.append(PageBreak())
+
+        # page 9 - parametric maps: SPMt #####################################
+        ######################################################################
+        self.report.append(
+            Paragraph(
+                "<font size = 14><b> Parametric maps: statistic parametric "
+                "t-Map (SPMt) </b></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 20 * mm))
+        self.report.append(
+            Paragraph(
+                '<font size = 9 > <i> "Neurological" '
+                "convention, the left side of the "
+                "image corresponds to the left side of "
+                "the brain. </i> <br/> </font>",
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        slices_image = plot_slice_planes(
+            data_1=self.norm_anat,
+            data_2=self.spmT_image,
+            fig_rows=self.norm_anat_fig_rows,
+            fig_cols=self.norm_anat_fig_cols,
+            slice_start=self.norm_anat_inf_slice_start,
+            slice_step=self.norm_anat_slices_gap,
+            cmap_1=self.norm_anat_cmap,
+            vmin_1=self.norm_anat_vmin,
+            vmax_1=self.norm_anat_vmax,
+            cmap_2=self.spmT_cmap,
+            vmin_2=self.spmT_vmin,
+            vmax_2=self.spmT_vmax,
+            out_dir=tmpdir.name,
         )
 
         # remainder: A4 == 210mmx297mm

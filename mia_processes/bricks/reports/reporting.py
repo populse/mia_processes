@@ -33,9 +33,6 @@ from nipype.interfaces.spm.base import ImageFileSPM
 # populse_mia import
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 
-# traits import
-from traits.api import Enum
-
 # mia_processes import:
 from mia_processes.utils import (
     Report,
@@ -883,6 +880,19 @@ class ReportCO2inhalCvr(ProcessMIA):
             "Gap between slices in normalised anatomical slice planes plot"
         )
 
+        norm_anat_cmap_desc = (
+            "Colormap name used for the normalised anatomical plot "
+            "(a string, default: 'Greys_r')"
+        )
+
+        norm_anat_vmin_desc = (
+            "Minimum value in the data range covered by the color map ("
+        )
+
+        norm_anat_vmax_desc = (
+            "Maximum value in the data range covered by the color map"
+        )
+
         norm_func_desc = (
             "An existing, uncompressed normalised functional image file "
             "(valid extensions: .nii, .nii.gz)"
@@ -907,6 +917,19 @@ class ReportCO2inhalCvr(ProcessMIA):
             "Gap between slices in the normalised functional slice planes plot"
         )
 
+        norm_func_cmap_desc = (
+            "Colormap name used for the normalised functional plot "
+            "(a string, default: 'Greys_r')"
+        )
+
+        norm_func_vmin_desc = (
+            "Minimum value in the data range covered by the color map ("
+        )
+
+        norm_func_vmax_desc = (
+            "Maximum value in the data range covered by the color map"
+        )
+
         realignment_parameters_desc = (
             "Estimation of translation and rotation parameters when "
             "realigning functional data (a pathlike object or a"
@@ -916,10 +939,40 @@ class ReportCO2inhalCvr(ProcessMIA):
         )
 
         beta_image_desc = (
-            "The 1st estimated parameter of the" "model (i.e. beta_0001.nii)"
+            "The 1st estimated parameter of the model, i.e. beta_0001.nii "
+            "(valid extensions:.nii)"
         )
 
-        spmT_image_desc = "Stat images from a t-contrast (i.e. spmT_0001.nii)"
+        beta_cmap_desc = (
+            "Colormap name used for the first beta parameter plot "
+            "(a string, default: 'rainbow')"
+        )
+
+        beta_vmin_desc = (
+            "Minimum value in the data range covered by the color map ("
+        )
+
+        beta_vmax_desc = (
+            "Maximum value in the data range covered by the color map"
+        )
+
+        spmT_image_desc = (
+            "Stat images from a t-contrast, i.e. spmT_0001.nii, "
+            "(valid extensions:.nii)"
+        )
+
+        spmT_cmap_desc = (
+            "Colormap name used for the stat images plot "
+            "(a string, default: 'rainbow')"
+        )
+
+        spmT_vmin_desc = (
+            "Minimum value in the data range covered by the color map"
+        )
+
+        spmT_vmax_desc = (
+            "Maximum value in the data range covered by the color map"
+        )
 
         patient_info_desc = (
             "Optional dictionary with information about the patient "
@@ -991,6 +1044,40 @@ class ReportCO2inhalCvr(ProcessMIA):
             ),
         )
 
+        self.add_trait(
+            "norm_anat_cmap",
+            traits.String(
+                "Greys_r",
+                output=False,
+                optional=True,
+                desc=norm_anat_cmap_desc,
+            ),
+        )
+
+        self.add_trait(
+            "norm_anat_vmin",
+            traits.Either(
+                Undefined,
+                traits.Float(),
+                output=False,
+                optional=True,
+                desc=norm_anat_vmin_desc,
+            ),
+        )
+        self.norm_anat_vmin = Undefined
+
+        self.add_trait(
+            "norm_anat_vmax",
+            traits.Either(
+                Undefined,
+                traits.Float(),
+                output=False,
+                optional=True,
+                desc=norm_anat_vmax_desc,
+            ),
+        )
+        self.norm_anat_vmax = Undefined
+
         # TODO: We use the normalized functional. It seems that it's the
         #       normalized - smothed functional that's used in Amigo. We'll
         #       have to check and decide what we'll use here finally?
@@ -1043,6 +1130,40 @@ class ReportCO2inhalCvr(ProcessMIA):
         )
 
         self.add_trait(
+            "norm_func_cmap",
+            traits.String(
+                "Greys_r",
+                output=False,
+                optional=True,
+                desc=norm_func_cmap_desc,
+            ),
+        )
+
+        self.add_trait(
+            "norm_func_vmin",
+            traits.Either(
+                Undefined,
+                traits.Float(),
+                output=False,
+                optional=True,
+                desc=norm_func_vmin_desc,
+            ),
+        )
+        self.norm_func_vmin = Undefined
+
+        self.add_trait(
+            "norm_func_vmax",
+            traits.Either(
+                Undefined,
+                traits.Float(),
+                output=False,
+                optional=True,
+                desc=norm_func_vmax_desc,
+            ),
+        )
+        self.norm_func_vmax = Undefined
+
+        self.add_trait(
             "realignment_parameters",
             File(
                 output=False, optional=False, desc=realignment_parameters_desc
@@ -1055,9 +1176,71 @@ class ReportCO2inhalCvr(ProcessMIA):
         )
 
         self.add_trait(
+            "beta_cmap",
+            traits.String(
+                "rainbow", output=False, optional=True, desc=beta_cmap_desc
+            ),
+        )
+
+        self.add_trait(
+            "beta_vmin",
+            traits.Either(
+                Undefined,
+                traits.Float(),
+                output=False,
+                optional=True,
+                desc=beta_vmin_desc,
+            ),
+        )
+        self.beta_vmin = Undefined
+
+        self.add_trait(
+            "beta_vmax",
+            traits.Either(
+                Undefined,
+                traits.Float(),
+                output=False,
+                optional=True,
+                desc=beta_vmax_desc,
+            ),
+        )
+        self.beta_vmax = Undefined
+
+        self.add_trait(
             "spmT_image",
             File(output=False, optional=False, desc=spmT_image_desc),
         )
+
+        self.add_trait(
+            "spmT_cmap",
+            traits.String(
+                "rainbow", output=False, optional=True, desc=spmT_cmap_desc
+            ),
+        )
+
+        self.add_trait(
+            "spmT_vmin",
+            traits.Either(
+                Undefined,
+                traits.Float(),
+                output=False,
+                optional=True,
+                desc=spmT_vmin_desc,
+            ),
+        )
+        self.spmT_vmin = Undefined
+
+        self.add_trait(
+            "spmT_vmax",
+            traits.Either(
+                Undefined,
+                traits.Float(),
+                output=False,
+                optional=True,
+                desc=spmT_vmax_desc,
+            ),
+        )
+        self.spmT_vmax = Undefined
 
         self.add_trait(
             "patient_info",
@@ -1334,14 +1517,26 @@ class ReportCO2inhalCvr(ProcessMIA):
             norm_anat_fig_cols=self.norm_anat_fig_cols,
             norm_anat_inf_slice_start=self.norm_anat_inf_slice_start,
             norm_anat_slices_gap=self.norm_anat_slices_gap,
+            norm_anat_cmap=self.norm_anat_cmap,
+            norm_anat_vmin=self.norm_anat_vmin,
+            norm_anat_vmax=self.norm_anat_vmax,
             norm_func=self.norm_func,
             norm_func_fig_rows=self.norm_func_fig_rows,
             norm_func_fig_cols=self.norm_func_fig_cols,
             norm_func_inf_slice_start=self.norm_func_inf_slice_start,
             norm_func_slices_gap=self.norm_func_slices_gap,
+            norm_func_cmap=self.norm_func_cmap,
+            norm_func_vmin=self.norm_func_vmin,
+            norm_func_vmax=self.norm_func_vmax,
             realignment_parameters=self.realignment_parameters,
             beta_image=self.beta_image,
+            beta_cmap=self.beta_cmap,
+            beta_vmin=self.beta_vmin,
+            beta_vmax=self.beta_vmax,
             spmT_image=self.spmT_image,
+            spmT_cmap=self.spmT_cmap,
+            spmT_vmin=self.spmT_vmin,
+            spmT_vmax=self.spmT_vmax,
         )
 
         report.make_report()
@@ -1996,7 +2191,7 @@ class ReportGroupMriqc(ProcessMIA):
         # Inputs traits
         self.add_trait(
             "modality",
-            Enum(
+            traits.Enum(
                 "anat", "bold", output=False, optional=True, desc=modality_desc
             ),
         )

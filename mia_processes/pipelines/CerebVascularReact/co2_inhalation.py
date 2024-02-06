@@ -94,6 +94,10 @@ class CO2_inhalation(Pipeline):
             "reportco2inhalcvr",
             "mia_processes.bricks.reports.reporting.ReportCO2inhalCvr",
         )
+        self.nodes["reportco2inhalcvr"].process.beta_vmin = 0.01
+        self.nodes["reportco2inhalcvr"].process.beta_vmax = 0.25
+        self.nodes["reportco2inhalcvr"].process.spmT_vmin = 0.01
+        self.nodes["reportco2inhalcvr"].process.spmT_vmax = 16
         self.add_process(
             "list_to_file_1", "mia_processes.bricks.tools.tools.List_To_File"
         )

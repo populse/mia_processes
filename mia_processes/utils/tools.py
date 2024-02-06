@@ -534,12 +534,14 @@ def plot_slice_planes(
     slice_step=None,
     dyn=1,
     cmap_1="Greys_r",
-    cmap_2="gist_rainbow",
+    vmin_1=None,
+    vmax_1=None,
+    cmap_2="rainbow",
+    vmin_2=None,
+    vmax_2=None,
     out_dir=None,
     only_noise=False,
     out_name=None,
-    vmin_2=None,
-    vmax_2=None,
 ):
     """Create a png file with a mosaic display of volume slices.
 
@@ -556,12 +558,14 @@ def plot_slice_planes(
     :param slice_step: the gap between each slice to be displayed (integer).
     :param dyn: the volume number in the space-time, for 4D (integer).
     :param cmap_1: the color map name (string) for data_1.
+    :param vmin_1: the low value of the range used for data_1 display(float).
+    :param vmax_1: the high value of the range used for data_1 display(float).
     :param cmap_2: the color map name (string) for data_2.
+    :param vmin_2: the low value of the range used for data_2 display(float).
+    :param vmax_2: the high value of the range used for data_2 display(float).
     :param out_dir: the output directory where the mosaic images will be saved.
     :param only_noise: if True, shows the noise (boolean).
     :param out_name: the suffix added to form the output name (string).
-    :param vmin_2: the low value of the range used for data_2 display(float).
-    :param vmax_2: the high value of the range used for data_2 display(float).
 
     Note: cmap for parametric display can be, gist_rainbow, RdYlBu, Spectral,
           rainbow_r, jet_r, seismic_r, bwr_r
@@ -570,6 +574,12 @@ def plot_slice_planes(
     brain_img_1 = nib.as_closest_canonical(nib.load(data_1))
     brain_data_1 = brain_img_1.get_fdata()
     brain_data_1 = np.squeeze(brain_data_1)
+
+    if cmap_1 in (None, Undefined):
+        cmap_1 = "Greys_r"
+
+    cmap_1 = get_cmap(cmap_1)
+    cmap_1.set_bad(color="black")  # Nan are black
     brain_data_2 = None
 
     if data_2 is not None:
@@ -578,14 +588,23 @@ def plot_slice_planes(
         brain_data_2 = np.squeeze(brain_data_2)
         nan_indexes = np.isnan(brain_data_2)
 
-        if vmin_2 is None:
+        if cmap_2 in (None, Undefined):
+            cmap_2 = "rainbow"
+
+        cmap_2 = get_cmap(cmap_2)
+        cmap_2.set_bad(color="black")
+        # Remainder:
+        # Amigo beta cmap vmin - vmax:0.01 - 0.25
+        # Amigo SPMt cmap vmin - vmax:3 - 16
+
+        if vmin_2 in (None, Undefined):
             vmin_2 = np.min(brain_data_2[~nan_indexes])
 
             if vmin_2 < 0:
-                vmin_2 = 0.00
+                vmin_2 = 0.1
 
-        if vmax_2 is None:
-            vmax_2 = np.amax(brain_data_2[~nan_indexes])
+        if vmax_2 in (None, Undefined):
+            vmax_2 = np.max(brain_data_2[~nan_indexes])
 
     if len(brain_data_1.shape) == 4:
         brain_data_1 = brain_data_1[:, :, :, dyn]
@@ -603,6 +622,18 @@ def plot_slice_planes(
         ind_non_zero.max(0) + 1,
     )
     brain_data_1 = brain_data_1[ystart:ystop, xstart:xstop, zstart:zstop]
+    mask_data_1 = np.logical_not(np.isnan(brain_data_1))
+
+    if only_noise:
+        vmin_1 = np.percentile(brain_data_1[mask_data_1], 0)
+        vmax_1 = np.percentile(brain_data_1[mask_data_1], 61)
+
+    if vmin_1 in (None, Undefined):
+        vmin_1 = np.percentile(brain_data_1[mask_data_1], 0.5)
+
+    if vmax_1 in (None, Undefined):
+        vmax_1 = np.percentile(brain_data_1[mask_data_1], 99.5)
+
     rowsxcols = disp_slices = fig_rows * fig_cols
 
     # The following part seems clearer and lighter than the part I'm just
@@ -961,16 +992,6 @@ def plot_slice_planes(
 
     # Reminder: 19cm == 7.4803inch; 23cm == 9.0551
     fig = plt.figure(figsize=(7.4803, 9.0551))  # Width, height in inches.
-    mask_data_1 = np.logical_not(np.isnan(brain_data_1))
-
-    if only_noise:
-        vmin_1 = np.percentile(brain_data_1[mask_data_1], 0)
-        vmax_1 = np.percentile(brain_data_1[mask_data_1], 61)
-
-    else:
-        vmin_1 = np.percentile(brain_data_1[mask_data_1], 0.5)
-        vmax_1 = np.percentile(brain_data_1[mask_data_1], 99.5)
-
     zooms = brain_img_1.header.get_zooms()
 
     if brain_data_2 is None:
@@ -991,9 +1012,6 @@ def plot_slice_planes(
             cbar_pad=0,
             cbar_size="2%",
         )
-    cmap_1 = get_cmap(cmap_1)
-    cmap_1.set_bad(color="black")  # Nan are black
-    cmap_2 = get_cmap(cmap_2)
 
     if disp_slices < 5:
         fontsize = 18
