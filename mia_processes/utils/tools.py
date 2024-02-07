@@ -592,7 +592,7 @@ def plot_slice_planes(
             cmap_2 = "rainbow"
 
         cmap_2 = get_cmap(cmap_2)
-        cmap_2.set_bad(color="black")
+        cmap_2.set_bad(alpha=0)
         # Remainder:
         # Amigo beta cmap vmin - vmax:0.01 - 0.25
         # Amigo SPMt cmap vmin - vmax:3 - 16
@@ -1063,12 +1063,13 @@ def plot_slice_planes(
         )
 
         if displ_2 is not None:
+            data = np.swapaxes(displ_2[:, :, ind_slice], 0, 1)
             im2 = ax.imshow(
-                np.swapaxes(displ_2[:, :, ind_slice], 0, 1),
+                data,
                 vmin=vmin_2,
                 vmax=vmax_2,
                 cmap=cmap_2,
-                alpha=0.5,
+                alpha=np.where(data < vmin_2, 0, 0.5),
                 interpolation="nearest",
                 origin="lower",
                 extent=[0, phys_sp[0], 0, phys_sp[1]],
@@ -1103,7 +1104,7 @@ def plot_slice_planes(
             im2, orientation="horizontal", label="Intensity"
         )
         cbar.ax.tick_params(labelsize=6)
-        cbar.set_label("Intensity", size=10)
+        cbar.set_label("Intensity", size=8)
 
     if data_2 is None:
         fname, _ = os.path.splitext(os.path.basename(data_1))

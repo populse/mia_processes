@@ -170,7 +170,7 @@ class Report:
             self.title = (
                 "<font size=18><b>{0} report: </b>{1}"
                 "</font>".format(
-                    self.dict4runtime["anat"]["PatientRef"],
+                    self.dict4runtime["norm_anat"]["PatientRef"],
                     today_date.split(" ")[0],
                 )
             )
@@ -186,7 +186,7 @@ class Report:
                 "as a physiological challenge</font>"
             )
             infos = [
-                self.dict4runtime["anat"][i]
+                self.dict4runtime["norm_anat"][i]
                 for i in (
                     "Site",
                     "Spectro",
@@ -538,9 +538,9 @@ class Report:
         #       anat data. Would you like this to come from mri_conv?
         self.report.append(
             Paragraph(
-                f"<font size = 11> <b> Protocol name / Acquisition nr: "
-                f"</b> </font> {self.dict4runtime['anat']['ProtocolName']} / "
-                f"{self.dict4runtime['anat']['Acquisition nbr']}",
+                f"<font size = 11> <b> Protocol name / Acquisition nr: </b> "
+                "</font> {self.dict4runtime['norm_anat']['ProtocolName']} / "
+                f"{self.dict4runtime['norm_anat']['Acquisition nbr']}",
                 self.styles["Bullet1"],
             )
         )
@@ -554,8 +554,8 @@ class Report:
         self.report.append(Spacer(0 * mm, 1 * mm))
         self.report.append(
             Paragraph(
-                f"<font size = 11> <b> Sequence name: "
-                f"</b> </font> {self.dict4runtime['anat']['SequenceName']}",
+                f"<font size = 11> <b> Sequence name: </b> "
+                f"</font> {self.dict4runtime['norm_anat']['SequenceName']}",
                 self.styles["Bullet2"],
             )
         )
@@ -567,7 +567,7 @@ class Report:
             )
         )
         self.report.append(Spacer(0 * mm, 1 * mm))
-        d_dim = self.dict4runtime["anat"][
+        d_dim = self.dict4runtime["norm_anat"][
             "Dataset dimensions (Count, X,Y,Z,T...)"
         ]
         self.report.append(
@@ -578,12 +578,12 @@ class Report:
             )
         )
         self.report.append(Spacer(0 * mm, 1 * mm))
-        sl_thick = self.dict4runtime["anat"]["SliceThickness"]
+        sl_thick = self.dict4runtime["norm_anat"]["SliceThickness"]
 
         if not sl_thick == "Undefined":
             sl_thick = sl_thick[0]
 
-        st_end_sl = self.dict4runtime["anat"]["Start/end slice"]
+        st_end_sl = self.dict4runtime["norm_anat"]["Start/end slice"]
 
         if not st_end_sl == "Undefined" and st_end_sl == [0, 0]:
             st_end_sl = 0.0
@@ -597,7 +597,7 @@ class Report:
             )
         )
         self.report.append(Spacer(0 * mm, 1 * mm))
-        fov = self.dict4runtime["anat"]["FOV"]
+        fov = self.dict4runtime["norm_anat"]["FOV"]
 
         if fov == "Undefined":
             fov = ["Undefined"] * 3
@@ -622,7 +622,9 @@ class Report:
             )
         )
         self.report.append(Spacer(0 * mm, 1 * mm))
-        vox_size = self.dict4runtime["anat"]["Grid spacings (X,Y,Z,T,...)"]
+        vox_size = self.dict4runtime["norm_anat"][
+            "Grid spacings (X,Y,Z,T,...)"
+        ]
 
         if vox_size == "Undefined":
             vox_size = ["Undefined"] * 3
@@ -645,9 +647,9 @@ class Report:
             )
         )
         self.report.append(Spacer(0 * mm, 1 * mm))
-        tr = self.dict4runtime["anat"]["RepetitionTime"]
-        te = self.dict4runtime["anat"]["EchoTime"]
-        flipang = self.dict4runtime["anat"]["FlipAngle"]
+        tr = self.dict4runtime["norm_anat"]["RepetitionTime"]
+        te = self.dict4runtime["norm_anat"]["EchoTime"]
+        flipang = self.dict4runtime["norm_anat"]["FlipAngle"]
 
         if flipang != "Undefined":
             flipang = round(flipang[0], 1)
