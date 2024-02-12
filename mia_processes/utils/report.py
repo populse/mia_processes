@@ -518,7 +518,7 @@ class Report:
         #################################################################
         self.report.append(
             Paragraph(
-                "<font size = 18 ><b> Anatomical MRI <br/></b></font>",
+                "<font size=18 ><b> Anatomical MRI <br/></b></font>",
                 self.styles["Center"],
             )
         )
@@ -529,7 +529,7 @@ class Report:
         self.report.append(Spacer(0 * mm, 10 * mm))
         self.report.append(
             Paragraph(
-                "<font size = 15 ><b>Acquisition parameters:<br/></b></font>",
+                "<font size=15 ><b>Acquisition parameters:<br/></b></font>",
                 self.styles["Left"],
             )
         )
@@ -538,7 +538,7 @@ class Report:
         #       anat data. Would you like this to come from mri_conv?
         self.report.append(
             Paragraph(
-                f"<font size = 11> <b> Protocol name / Acquisition nr: </b> "
+                f"<font size=11> <b> Protocol name / Acquisition nr: </b> "
                 "</font> {self.dict4runtime['norm_anat']['ProtocolName']} / "
                 f"{self.dict4runtime['norm_anat']['Acquisition nbr']}",
                 self.styles["Bullet1"],
@@ -547,14 +547,14 @@ class Report:
         self.report.append(Spacer(0 * mm, 2 * mm))
         self.report.append(
             Paragraph(
-                "<font size = 11> <b>Acquisition mode</b> </font>",
+                "<font size=11> <b>Acquisition mode</b> </font>",
                 self.styles["Bullet1"],
             )
         )
         self.report.append(Spacer(0 * mm, 1 * mm))
         self.report.append(
             Paragraph(
-                f"<font size = 11> <b> Sequence name: </b> "
+                f"<font size=11> <b> Sequence name: </b> "
                 f"</font> {self.dict4runtime['norm_anat']['SequenceName']}",
                 self.styles["Bullet2"],
             )
@@ -562,7 +562,7 @@ class Report:
         self.report.append(Spacer(0 * mm, 2 * mm))
         self.report.append(
             Paragraph(
-                "<font size = 11> <b>Raw geometry parameters</b> </font>",
+                "<font size=11> <b>Raw geometry parameters</b> </font>",
                 self.styles["Bullet1"],
             )
         )
@@ -572,7 +572,7 @@ class Report:
         ]
         self.report.append(
             Paragraph(
-                f"<font size = 11> <b> Dataset dimension:</b> "
+                f"<font size=11> <b> Dataset dimension:</b> "
                 f"</font> {d_dim[1:]}",
                 self.styles["Bullet2"],
             )
@@ -590,7 +590,7 @@ class Report:
 
         self.report.append(
             Paragraph(
-                f"<font size = 11> <b> Slice thickness "
+                f"<font size=11> <b> Slice thickness "
                 f"/ Slice gap [mm]:</b> "
                 f"</font> {sl_thick} / {st_end_sl}",
                 self.styles["Bullet2"],
@@ -607,7 +607,7 @@ class Report:
 
         self.report.append(
             Paragraph(
-                f"<font size = 11> <b> FOV (ap / fh / rl) [mm]:</b> </font> "
+                f"<font size=11> <b> FOV (ap / fh / rl) [mm]:</b> </font> "
                 f"{fov[0]} / {fov[1]} / {fov[2]}",
                 self.styles["Bullet2"],
             )
@@ -616,7 +616,7 @@ class Report:
         # TODO: I don't know how to obtain the scan resolution parameter yet
         self.report.append(
             Paragraph(
-                "<font size = 11> <b> Scan resolution  "
+                "<font size=11> <b> Scan resolution  "
                 "(x / y):</b> </font> Undefined",
                 self.styles["Bullet2"],
             )
@@ -634,7 +634,7 @@ class Report:
 
         self.report.append(
             Paragraph(
-                f"<font size = 11> <b> Voxel size (x / y / z) [mm]:"
+                f"<font size=11> <b> Voxel size (x / y / z) [mm]:"
                 f"</b> </font> {vox_size[0]} / {vox_size[1]} / {vox_size[2]}",
                 self.styles["Bullet2"],
             )
@@ -642,7 +642,7 @@ class Report:
         self.report.append(Spacer(0 * mm, 2 * mm))
         self.report.append(
             Paragraph(
-                "<font size = 11> <b>Other parameters" "</b> </font>",
+                "<font size=11> <b>Other parameters" "</b> </font>",
                 self.styles["Bullet1"],
             )
         )
@@ -662,7 +662,7 @@ class Report:
 
         self.report.append(
             Paragraph(
-                f"<font size = 11> <b> TR [ms] / TE [ms] / Image flip angle"
+                f"<font size=11> <b> TR [ms] / TE [ms] / Image flip angle"
                 f" [deg]:</b> </font> {tr} / {te} / {flipang}",
                 self.styles["Bullet2"],
             )
@@ -677,7 +677,7 @@ class Report:
 
         self.report.append(
             Paragraph(
-                f"<font size = 11> <b> Number of dynamics:</b> "
+                f"<font size=11> <b> Number of dynamics:</b> "
                 f"</font> {dyn_nb}",
                 self.styles["Bullet2"],
             )
@@ -687,7 +687,7 @@ class Report:
         #       parameter yet
         self.report.append(
             Paragraph(
-                "<font size = 11> <b> Acquisition duration [s]:"
+                "<font size=11> <b> Acquisition duration [s]:"
                 "</b> </font> Undefined",
                 self.styles["Bullet2"],
             )
@@ -695,14 +695,14 @@ class Report:
         self.report.append(Spacer(0 * mm, 10 * mm))
         self.report.append(
             Paragraph(
-                "<font size = 15 > <b> Post-processing:<br /> </b> </font>",
+                "<font size=15 > <b> Post-processing:<br /> </b> </font>",
                 self.styles["Left"],
             )
         )
         self.report.append(Spacer(0 * mm, 5 * mm))
         self.report.append(
             Paragraph(
-                "<font size = 11> <b>Spatial processing</b> </font>",
+                "<font size=11> <b>Spatial processing</b> </font>",
                 self.styles["Bullet1"],
             )
         )
@@ -711,8 +711,7 @@ class Report:
         # CVR CO2 pipeline:
         self.report.append(
             Paragraph(
-                "<font size = 11> <b> Spatial "
-                "normalization:</b> </font> Yes",
+                "<font size=11> <b> Spatial " "normalization:</b> </font> Yes",
                 self.styles["Bullet2"],
             )
         )
@@ -722,7 +721,7 @@ class Report:
         ]
         self.report.append(
             Paragraph(
-                f"<font size = 11> <b> Brain template:"
+                f"<font size=11> <b> Brain template:"
                 f"</b> </font> {brain_templ}",
                 self.styles["Bullet2"],
             )
@@ -738,7 +737,7 @@ class Report:
 
         self.report.append(
             Paragraph(
-                f"<font size = 11> <b> Final voxel size "
+                f"<font size=11> <b> Final voxel size "
                 f"(x / y / z) [mm]:</b> "
                 f"</font> {vox_size[0]} / {vox_size[1]} / {vox_size[2]}",
                 self.styles["Bullet2"],
@@ -749,7 +748,7 @@ class Report:
         # CVR CO2 pipeline:
         self.report.append(
             Paragraph(
-                "<font size = 11> <b> Segmentation:</b>"
+                "<font size=11> <b> Segmentation:</b>"
                 " </font> Grey matter, white matter, "
                 "cerebrospinal fluid, bone, soft tissues",
                 self.styles["Bullet2"],
@@ -761,7 +760,7 @@ class Report:
         ###################################################################
         self.report.append(
             Paragraph(
-                "<font size = 15 > <b>MNI normalized axial anatomical "
+                "<font size=15 > <b>MNI normalized axial anatomical "
                 "images:</b> </font>",
                 self.styles["Left"],
             )
@@ -769,7 +768,7 @@ class Report:
         self.report.append(Spacer(0 * mm, 20 * mm))
         self.report.append(
             Paragraph(
-                '<font size = 9 > <i> "Neurological" '
+                '<font size=9 > <i> "Neurological" '
                 "convention, the left side of the "
                 "image corresponds to the left side of "
                 "the brain. </i> <br/> </font>",
@@ -802,7 +801,7 @@ class Report:
         ###############################################################
         self.report.append(
             Paragraph(
-                "<font size = 18 ><b> fMRI under a vasoactive stimulus "
+                "<font size=18 ><b> fMRI under a vasoactive stimulus "
                 "(hypercapnia)<br/></b></font>",
                 self.styles["Center"],
             )
@@ -814,7 +813,7 @@ class Report:
         self.report.append(Spacer(0 * mm, 20 * mm))
         self.report.append(
             Paragraph(
-                "<font size = 15 ><b>Acquisition parameters:<br/></b></font>",
+                "<font size=15 ><b>Acquisition parameters:<br/></b></font>",
                 self.styles["Left"],
             )
         )
@@ -823,7 +822,7 @@ class Report:
         #       anat data. Would you like this to come from mri_conv?
         self.report.append(
             Paragraph(
-                f"<font size = 11> <b> Protocol name / Acquisition nr: "
+                f"<font size=11> <b> Protocol name / Acquisition nr: "
                 f"</b> </font> "
                 f"{self.dict4runtime['norm_func']['ProtocolName']} / "
                 f"{self.dict4runtime['norm_func']['Acquisition nbr']}",
@@ -833,14 +832,14 @@ class Report:
         self.report.append(Spacer(0 * mm, 2 * mm))
         self.report.append(
             Paragraph(
-                "<font size = 11> <b>Acquisition mode</b> </font>",
+                "<font size=11> <b>Acquisition mode</b> </font>",
                 self.styles["Bullet1"],
             )
         )
         self.report.append(Spacer(0 * mm, 1 * mm))
         self.report.append(
             Paragraph(
-                f"<font size = 11> <b> Sequence name: </b> </font> "
+                f"<font size=11> <b> Sequence name: </b> </font> "
                 f"{self.dict4runtime['norm_func']['SequenceName']}",
                 self.styles["Bullet2"],
             )
@@ -848,7 +847,7 @@ class Report:
         self.report.append(Spacer(0 * mm, 2 * mm))
         self.report.append(
             Paragraph(
-                "<font size = 11> <b>Raw geometry parameters</b> </font>",
+                "<font size=11> <b>Raw geometry parameters</b> </font>",
                 self.styles["Bullet1"],
             )
         )
@@ -858,7 +857,7 @@ class Report:
         ]
         self.report.append(
             Paragraph(
-                f"<font size = 11> <b> Dataset dimension:</b> "
+                f"<font size=11> <b> Dataset dimension:</b> "
                 f"</font> {d_dim[1:-1]}",
                 self.styles["Bullet2"],
             )
@@ -876,7 +875,7 @@ class Report:
 
         self.report.append(
             Paragraph(
-                f"<font size = 11> <b> Slice thickness "
+                f"<font size=11> <b> Slice thickness "
                 f"/ Slice gap [mm]:</b> "
                 f"</font> {sl_thick} / {st_end_sl}",
                 self.styles["Bullet2"],
@@ -893,7 +892,7 @@ class Report:
 
         self.report.append(
             Paragraph(
-                f"<font size = 11> <b> FOV (ap / fh / rl) [mm]:</b> </font> "
+                f"<font size=11> <b> FOV (ap / fh / rl) [mm]:</b> </font> "
                 f"{fov[0]} / {fov[1]} / {fov[2]}",
                 self.styles["Bullet2"],
             )
@@ -902,7 +901,7 @@ class Report:
         # TODO: I don't know how to obtain the scan resolution parameter yet
         self.report.append(
             Paragraph(
-                "<font size = 11> <b> Scan resolution  "
+                "<font size=11> <b> Scan resolution  "
                 "(x / y):</b> </font> Undefined",
                 self.styles["Bullet2"],
             )
@@ -920,7 +919,7 @@ class Report:
 
         self.report.append(
             Paragraph(
-                f"<font size = 11> <b> Voxel size (x / y / z) [mm]:</b> "
+                f"<font size=11> <b> Voxel size (x / y / z) [mm]:</b> "
                 f"</font> {raw_func_vox_size[0]} "
                 f"/ {raw_func_vox_size[1]} "
                 f"/ {raw_func_vox_size[2]}",
@@ -930,7 +929,7 @@ class Report:
         self.report.append(Spacer(0 * mm, 2 * mm))
         self.report.append(
             Paragraph(
-                "<font size = 11> <b>Other parameters" "</b> </font>",
+                "<font size=11> <b>Other parameters" "</b> </font>",
                 self.styles["Bullet1"],
             )
         )
@@ -950,7 +949,7 @@ class Report:
 
         self.report.append(
             Paragraph(
-                f"<font size = 11> <b> TR [ms] / TE [ms] / Image flip angle"
+                f"<font size=11> <b> TR [ms] / TE [ms] / Image flip angle"
                 f" [deg]:</b> </font> {tr} / {te} / {flipang}",
                 self.styles["Bullet2"],
             )
@@ -965,7 +964,7 @@ class Report:
 
         self.report.append(
             Paragraph(
-                f"<font size = 11> <b> Number of dynamics:</b> "
+                f"<font size=11> <b> Number of dynamics:</b> "
                 f"</font> {dyn_nb}",
                 self.styles["Bullet2"],
             )
@@ -975,7 +974,7 @@ class Report:
         #       parameter yet
         self.report.append(
             Paragraph(
-                "<font size = 11> <b> Acquisition duration [s]:"
+                "<font size=11> <b> Acquisition duration [s]:"
                 "</b> </font> Undefined",
                 self.styles["Bullet2"],
             )
@@ -985,14 +984,14 @@ class Report:
         #       Standard) parameter yet
         self.report.append(
             Paragraph(
-                "<font size = 11> <b>Stimulus and performance</b> </font>",
+                "<font size=11> <b>Stimulus and performance</b> </font>",
                 self.styles["Bullet1"],
             )
         )
         self.report.append(Spacer(0 * mm, 1 * mm))  # (width, height)
         self.report.append(
             Paragraph(
-                "<font size = 11> <b>CVR regressor:</b> </font>"
+                "<font size=11> <b>CVR regressor:</b> </font>"
                 + "<font size = 9>Undefined</font>",
                 self.styles["Bullet2"],
             )
@@ -1000,7 +999,7 @@ class Report:
         self.report.append(Spacer(0 * mm, 1 * mm))
         self.report.append(
             Paragraph(
-                f"<font size = 11> <b>Stimulation device / Gas name:"
+                f"<font size=11> <b>Stimulation device / Gas name:"
                 f"</b> </font> {self.dict4runtime['norm_func']['GasAdmin']} "
                 f"/ {self.dict4runtime['norm_func']['Gas']}",
                 self.styles["Bullet2"],
@@ -1011,21 +1010,21 @@ class Report:
         #       value from the patient_info dictionary?
         self.report.append(
             Paragraph(
-                "<font size = 11> <b>Stimulus:</b> </font> 8% CO<sub>2</sub>",
+                "<font size=11> <b>Stimulus:</b> </font> 8% CO<sub>2</sub>",
                 self.styles["Bullet2"],
             )
         )
         self.report.append(Spacer(0 * mm, 10 * mm))
         self.report.append(
             Paragraph(
-                "<font size = 15 > <b> Post-processing:<br /> </b> </font>",
+                "<font size=15 > <b> Post-processing:<br /> </b> </font>",
                 self.styles["Left"],
             )
         )
         self.report.append(Spacer(0 * mm, 5 * mm))
         self.report.append(
             Paragraph(
-                "<font size = 11> <b>Spatial processing</b> </font>",
+                "<font size=11> <b>Spatial processing</b> </font>",
                 self.styles["Bullet1"],
             )
         )
@@ -1034,8 +1033,7 @@ class Report:
         # CVR CO2 pipeline:
         self.report.append(
             Paragraph(
-                "<font size = 11> <b> Spatial "
-                "normalization:</b> </font> Yes",
+                "<font size=11> <b> Spatial " "normalization:</b> </font> Yes",
                 self.styles["Bullet2"],
             )
         )
@@ -1045,7 +1043,7 @@ class Report:
         ]
         self.report.append(
             Paragraph(
-                f"<font size = 11> <b> Brain template:"
+                f"<font size=11> <b> Brain template:"
                 f"</b> </font> {brain_templ}",
                 self.styles["Bullet2"],
             )
@@ -1061,7 +1059,7 @@ class Report:
 
         self.report.append(
             Paragraph(
-                f"<font size = 11> <b> Voxel size after normalization "
+                f"<font size=11> <b> Voxel size after normalization "
                 f"(x / z / y) [mm]:</b> "
                 f"</font> {vox_size[0]} / {vox_size[1]} / {vox_size[2]}",
                 self.styles["Bullet2"],
@@ -1080,7 +1078,7 @@ class Report:
 
         self.report.append(
             Paragraph(
-                f"<font size = 11> <b>Spatial smoothing "
+                f"<font size=11> <b>Spatial smoothing "
                 f"(fwhm) [mm]:</b> </font> {fwhm[0]} "
                 f"/ {fwhm[1]} / {fwhm[2]}",
                 self.styles["Bullet2"],
@@ -1089,7 +1087,7 @@ class Report:
         self.report.append(Spacer(0 * mm, 1 * mm))
         self.report.append(
             Paragraph(
-                "<font size = 11> <b>Head motion as "
+                "<font size=11> <b>Head motion as "
                 "nuisance regressor in GLM:"
                 "</b> </font> Yes",
                 self.styles["Bullet2"],
@@ -1099,7 +1097,7 @@ class Report:
         # TODO: The pipeline doesn't currently use ART. Should we implement it?
         self.report.append(
             Paragraph(
-                "<font size = 11> <b>Artifact detection "
+                "<font size=11> <b>Artifact detection "
                 "tools (ART):</b> </font> No",
                 self.styles["Bullet2"],
             )
@@ -1109,7 +1107,7 @@ class Report:
         # CVR CO2 pipeline:
         self.report.append(
             Paragraph(
-                "<font size = 11> <b> Mask:</b> </font> " "Grey matter",
+                "<font size=11> <b> Mask:</b> </font> " "Grey matter",
                 self.styles["Bullet2"],
             )
         )
@@ -1240,20 +1238,19 @@ class Report:
 
             else:
                 im_qualCheck = Paragraph(
-                    "<font size = 8 > Automatic "
+                    "<font size=8 > Automatic "
                     "evaluation not available </font>",
                     self.styles["Center"],
                 )
 
         else:
             im_qualCheck = Paragraph(
-                "<font size = 8 > Automatic "
-                "evaluation not available </font>",
+                "<font size=8 > Automatic " "evaluation not available </font>",
                 self.styles["Center"],
             )
 
         qualCheckMess = Paragraph(
-            "<font size = 14 > <b> fMRI quality "
+            "<font size=14 > <b> fMRI quality "
             "check: movements </b> </font>",
             self.styles["Left"],
         )
@@ -1271,7 +1268,7 @@ class Report:
         self.report.append(Spacer(0 * mm, 5 * mm))
         self.report.append(
             Paragraph(
-                "<font size = 14 > <b> fMRI quality "
+                "<font size=14 > <b> fMRI quality "
                 "check: BOLD signal timecourse Vs "
                 "EtCO<sub>2</sub> model </b> </font>",
                 self.styles["Left"],
@@ -1285,7 +1282,7 @@ class Report:
         ######################################################################
         self.report.append(
             Paragraph(
-                "<font size = 14 > <b> BOLD: MNI "
+                "<font size=14 > <b> BOLD: MNI "
                 "normalized axial images (1<sup>st</sup> "
                 "dynamic)</b> </font>",
                 self.styles["Left"],
@@ -1294,7 +1291,7 @@ class Report:
         self.report.append(Spacer(0 * mm, 20 * mm))
         self.report.append(
             Paragraph(
-                '<font size = 9 > <i> "Neurological" '
+                '<font size=9 > <i> "Neurological" '
                 "convention, the left side of the "
                 "image corresponds to the left side of "
                 "the brain. </i> <br/> </font>",
@@ -1325,9 +1322,12 @@ class Report:
         ######################################################################
         self.report.append(
             Paragraph(
-                "<font size = 14><b> Parametric maps: <greek>b</greek> "
-                "weight values in <greek>d</greek>(%BOLD / EtCO<sub>2</sub> "
-                "(mmHg))</b></font>",
+                "<font size=14><b> Parametric maps: </b></font>"
+                "<font name='Symbol' size=14><b><greek>b</greek></b></font>"
+                "<font size=14><b> weight values in </b></font>"
+                "<font name='Symbol' size=14><b><greek>D</greek></b></font>"
+                "<font size=14><b>(%BOLD) / EtCO<sub>2</sub> "
+                "(mmHg)</b></font>",
                 self.styles["Left"],
             )
         )
@@ -1335,7 +1335,7 @@ class Report:
         self.report.append(Spacer(0 * mm, 20 * mm))
         self.report.append(
             Paragraph(
-                '<font size = 9 > <i> "Neurological" '
+                '<font size=9 > <i> "Neurological" '
                 "convention, the left side of the "
                 "image corresponds to the left side of "
                 "the brain. </i> <br/> </font>",
@@ -1371,7 +1371,7 @@ class Report:
         ######################################################################
         self.report.append(
             Paragraph(
-                "<font size = 14><b> Parametric maps: statistic parametric "
+                "<font size=14><b> Parametric maps: statistic parametric "
                 "t-Map (SPMt) </b></font>",
                 self.styles["Left"],
             )
@@ -1379,7 +1379,7 @@ class Report:
         self.report.append(Spacer(0 * mm, 20 * mm))
         self.report.append(
             Paragraph(
-                '<font size = 9 > <i> "Neurological" '
+                '<font size=9 > <i> "Neurological" '
                 "convention, the left side of the "
                 "image corresponds to the left side of "
                 "the brain. </i> <br/> </font>",
@@ -1411,6 +1411,114 @@ class Report:
         self.report.append(slices_image)
 
         self.report.append(PageBreak())
+
+        # page 10 - Laterality indexes #######################################
+        ######################################################################
+        self.report.append(
+            Paragraph(
+                f"<font size=16> <b> Laterality index values for "
+                f"{self.dict4runtime['norm_anat']['PatientRef']} "
+                f"against the box and whisker plot for a reference "
+                f"population <br/> </b> </font>",
+                self.styles["Center2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 0 * mm))
+        line = ReportLine(150)
+        line.hAlign = "CENTER"
+        self.report.append(line)
+
+        self.report.append(PageBreak())
+
+        # page 11 - Vascular territories used for IL #########################
+        ######################################################################
+        self.report.append(
+            Paragraph(
+                "<font size=16><b> Vascular territories of the cerebral "
+                "arteries used for IL determination </b></font>",
+                self.styles["Center2"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 20 * mm))
+        self.report.append(
+            Paragraph(
+                '<font size=9 > <i> "Neurological" '
+                "convention, the left side of the "
+                "image corresponds to the left side of "
+                "the brain. </i> <br/> </font>",
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        conv_roi_dir = os.path.join(
+            self.output_directory,
+            self.dict4runtime["norm_anat"]["PatientName"] + "_data",
+            "ROI_data",
+            "convROI_BOLD2",
+        )
+        # rois = ["convACA", "convACM", "convACP", "convPICA", "convSCA",
+        #        "convROI-CING", "convROI-FRON", "convROI-INSULA",
+        #        "convROI-OCC", "convROI-PAR", "convROI-STR", "convROI-TEMP",
+        #        "convROI-THA",
+        #        ]
+        arter_terr = ["convACA", "convACM", "convACP", "convPICA", "convSCA"]
+        arter_terr_files = [
+            os.path.join(conv_roi_dir, f"{a_t}_{l_r}_2.nii")
+            for a_t in arter_terr
+            for l_r in ["L", "R"]
+        ]
+
+        slices_image = plot_slice_planes(
+            data_1=self.norm_anat,
+            data_2=arter_terr_files,
+            fig_rows=self.norm_anat_fig_rows,
+            fig_cols=self.norm_anat_fig_cols,
+            slice_start=self.norm_anat_inf_slice_start,
+            slice_step=self.norm_anat_slices_gap,
+            cmap_1=self.norm_anat_cmap,
+            vmin_1=self.norm_anat_vmin,
+            vmax_1=self.norm_anat_vmax,
+            # cmap_2=[
+            #     (0, 0, 255),     # blue
+            #     (255, 0, 0),     # red
+            #     (0, 255, 0),     # lime (green)
+            #     (210, 105, 30),  # chocolate
+            #     (255, 255, 0),   # yellow
+            #     (0, 255, 255),   # cyan (aqua)
+            #     (255, 0, 255),   # magenta (fuschia)
+            #     (255, 228, 181)  # mocassin
+            #     ],
+            cmap_2=[
+                (255, 0, 0),  # red
+                (0, 255, 0),  # lime (green)
+                (0, 0, 255),  # blue
+                (210, 105, 30),  # chocolate
+                (255, 255, 0),  # yellow
+            ],
+            vmin_2=None,
+            vmax_2=None,
+            out_dir=tmpdir.name,
+            out_name="arterialTerritories_axial",
+        )
+
+        # remainder: A4 == 210mmx297mm
+        slices_image = Image(
+            slices_image, width=7.4803 * inch, height=9.0551 * inch
+        )
+        slices_image.hAlign = "CENTER"
+        self.report.append(slices_image)
+        self.report.append(PageBreak())
+
+        # page 12 -  Lobes of the brain used for IL ##########################
+        ######################################################################
+        self.report.append(
+            Paragraph(
+                "<font size=16><b> Lobes of the brain used for IL "
+                "determination </b></font>",
+                self.styles["Left"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 20 * mm))
 
         self.page.build(self.report, canvasmaker=PageNumCanvas)
         tmpdir.cleanup()

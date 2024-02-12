@@ -1530,6 +1530,7 @@ class ReportCO2inhalCvr(ProcessMIA):
             spmT_cmap=self.spmT_cmap,
             spmT_vmin=self.spmT_vmin,
             spmT_vmax=self.spmT_vmax,
+            output_directory=self.output_directory,
         )
 
         report.make_report()
