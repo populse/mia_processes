@@ -1434,12 +1434,12 @@ class Report:
         ######################################################################
         self.report.append(
             Paragraph(
-                "<font size=16><b> Vascular territories of the cerebral "
+                "<font size=14><b> Vascular territories of the cerebral "
                 "arteries used for IL determination </b></font>",
-                self.styles["Center2"],
+                self.styles["Left"],
             )
         )
-        self.report.append(Spacer(0 * mm, 20 * mm))
+        self.report.append(Spacer(0 * mm, 15 * mm))
         self.report.append(
             Paragraph(
                 '<font size=9 > <i> "Neurological" '
@@ -1456,18 +1456,12 @@ class Report:
             "ROI_data",
             "convROI_BOLD2",
         )
-        # rois = ["convACA", "convACM", "convACP", "convPICA", "convSCA",
-        #        "convROI-CING", "convROI-FRON", "convROI-INSULA",
-        #        "convROI-OCC", "convROI-PAR", "convROI-STR", "convROI-TEMP",
-        #        "convROI-THA",
-        #        ]
         arter_terr = ["convACA", "convACM", "convACP", "convPICA", "convSCA"]
         arter_terr_files = [
             os.path.join(conv_roi_dir, f"{a_t}_{l_r}_2.nii")
             for a_t in arter_terr
             for l_r in ["L", "R"]
         ]
-
         slices_image = plot_slice_planes(
             data_1=self.norm_anat,
             data_2=arter_terr_files,
@@ -1478,16 +1472,6 @@ class Report:
             cmap_1=self.norm_anat_cmap,
             vmin_1=self.norm_anat_vmin,
             vmax_1=self.norm_anat_vmax,
-            # cmap_2=[
-            #     (0, 0, 255),     # blue
-            #     (255, 0, 0),     # red
-            #     (0, 255, 0),     # lime (green)
-            #     (210, 105, 30),  # chocolate
-            #     (255, 255, 0),   # yellow
-            #     (0, 255, 255),   # cyan (aqua)
-            #     (255, 0, 255),   # magenta (fuschia)
-            #     (255, 228, 181)  # mocassin
-            #     ],
             cmap_2=[
                 (255, 0, 0),  # red
                 (0, 255, 0),  # lime (green)
@@ -1507,6 +1491,35 @@ class Report:
         )
         slices_image.hAlign = "CENTER"
         self.report.append(slices_image)
+        footnote_artery = [
+            [
+                Paragraph(
+                    "<b> "
+                    '<font size = 12 color = "rgb(0, 64, 255)"> '
+                    "Posterior cerebral artery </font> "
+                    '<font size = 12 color = "grey"> - </font>'
+                    '<font size = 12 color = "rgb(255, 64, 64)"> '
+                    "Anterior cerebral artery </font> "
+                    '<font size = 12 color = "grey"> - </font>'
+                    '<font size = 12 color = "rgb(0, 255, 64)"> '
+                    "Middle cerebral artery </font> <br/>"
+                    '<font size = 12 color = "rgb(210, 105, 30)"> '
+                    "Posterior inferior cerebellar artery </font> "
+                    '<font size = 12 color = "grey"> - </font>'
+                    '<font size = 12 color = "rgb(228, 228, 28)"> '
+                    "Superior cerebellar artery </font> "
+                    "</b>",
+                    self.styles["Center"],
+                )
+            ]
+        ]
+        data = Table(footnote_artery, [7.4803 * inch])
+        data.setStyle(
+            TableStyle([("BACKGROUND", (0, 0), (-1, -1), colors.black)])
+        )
+        data.hAlign = "CENTER"
+        self.report.append(data)
+
         self.report.append(PageBreak())
 
         # page 12 -  Lobes of the brain used for IL ##########################
@@ -1518,7 +1531,113 @@ class Report:
                 self.styles["Left"],
             )
         )
-        self.report.append(Spacer(0 * mm, 20 * mm))
+        self.report.append(Spacer(0 * mm, 15 * mm))
+        self.report.append(
+            Paragraph(
+                '<font size=9 > <i> "Neurological" '
+                "convention, the left side of the "
+                "image corresponds to the left side of "
+                "the brain. </i> <br/> </font>",
+                self.styles["Center"],
+            )
+        )
+        self.report.append(Spacer(0 * mm, 1 * mm))
+        brain_lobes = [
+            "convROI-CING",
+            "convROI-FRON",
+            "convROI-INSULA",
+            "convROI-OCC",
+            "convROI-PAR",
+            "convROI-STR",
+            "convROI-TEMP",
+            "convROI-THA",
+        ]
+        brain_lobes_files = [
+            os.path.join(conv_roi_dir, f"{b_l}_{l_r}_2.nii")
+            for b_l in brain_lobes
+            for l_r in ["L", "R"]
+        ]
+        slices_image = plot_slice_planes(
+            data_1=self.norm_anat,
+            data_2=brain_lobes_files,
+            fig_rows=self.norm_anat_fig_rows,
+            fig_cols=self.norm_anat_fig_cols,
+            slice_start=self.norm_anat_inf_slice_start,
+            slice_step=self.norm_anat_slices_gap,
+            cmap_1=self.norm_anat_cmap,
+            vmin_1=self.norm_anat_vmin,
+            vmax_1=self.norm_anat_vmax,
+            # cmap_2=[
+            #     (0, 255, 255),    # cyan (aqua)
+            #     (255, 255, 0),    # yellow
+            #     (210, 105, 30),   # chocolate
+            #     (0, 0, 255),      # blue
+            #     (255, 0, 0),      # red
+            #     (255, 228, 181),  # moccasin
+            #     (0, 255, 0),      # lime (green)
+            #     (255, 0, 255),   # magenta (fuschia)
+            # ],
+            cmap_2=[
+                (0, 255, 255),  # cyan (aqua)
+                (255, 255, 0),  # yellow
+                # (210, 105, 30),   # chocolate
+                (128, 0, 128),  # purple
+                (0, 0, 255),  # blue
+                (255, 0, 0),  # red
+                # (255, 228, 181),  # moccasin
+                (255, 140, 0),  # orange
+                (0, 255, 0),  # lime (green)
+                (255, 0, 255),  # magenta (fuschia)
+            ],
+            vmin_2=None,
+            vmax_2=None,
+            out_dir=tmpdir.name,
+            out_name="roisTerritories_axial",
+        )
+
+        # remainder: A4 == 210mmx297mm
+        slices_image = Image(
+            slices_image, width=7.4803 * inch, height=9.0551 * inch
+        )
+        slices_image.hAlign = "CENTER"
+        self.report.append(slices_image)
+        footnote_artery = [
+            [
+                Paragraph(
+                    "<b> "
+                    '<font size = 12 color = "rgb(0, 64, 255)"> '
+                    "Occipital lobe </font> "
+                    '<font size = 12 color = "grey"> - </font>'
+                    '<font size = 12 color = "rgb(255, 64, 64)"> '
+                    "Parietal lobe </font> "
+                    '<font size = 12 color = "grey"> - </font>'
+                    '<font size = 12 color = "rgb(0, 255, 64)"> '
+                    "Temporal lobe </font> "
+                    '<font size = 12 color = "grey"> - </font>'
+                    '<font size = 12 color = "rgb(128, 0, 128)"> '
+                    "Insular lobe </font> <br/>"
+                    '<font size = 12 color = "rgb(228, 228, 28)"> '
+                    "Frontal lobe </font> "
+                    '<font size = 12 color = "grey"> - </font>'
+                    '<font size = 12 color = "rgb(0, 255, 255)"> '
+                    "Cingulate cortex </font> "
+                    '<font size = 12 color = "grey"> - </font>'
+                    '<font size = 12 color = "rgb(255, 64, 255)"> '
+                    "Thalamus </font> "
+                    '<font size = 12 color = "grey"> - </font>'
+                    '<font size = 12 color = "rgb(255, 140, 0)"> '
+                    "Striatum </font> "
+                    "</b>",
+                    self.styles["Center"],
+                )
+            ]
+        ]
+        data = Table(footnote_artery, [7.4803 * inch])
+        data.setStyle(
+            TableStyle([("BACKGROUND", (0, 0), (-1, -1), colors.black)])
+        )
+        data.hAlign = "CENTER"
+        self.report.append(data)
 
         self.page.build(self.report, canvasmaker=PageNumCanvas)
         tmpdir.cleanup()

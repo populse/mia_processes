@@ -587,7 +587,7 @@ def plot_slice_planes(
         cmap_1 = "Greys_r"
 
     cmap_1 = get_cmap(cmap_1)
-    cmap_1.set_bad(color="black")  # Nan are black
+    cmap_1.set_bad(color="black")
     brain_data_2 = None
 
     if data_2 is not None:
@@ -649,31 +649,6 @@ def plot_slice_planes(
         cmap_2 = cmap_2_tmp
         vmin_2 = vmin_2_tmp
         vmax_2 = vmax_2_tmp
-
-        # brain_img_2 = nib.as_closest_canonical(nib.load(data_2))
-        # brain_data_2 = brain_img_2.get_fdata()
-        # brain_data_2 = np.squeeze(brain_data_2)
-        # nan_indexes = np.isnan(brain_data_2)
-        #
-        # if cmap_2 in (None, Undefined):
-        #     cmap_2 = "rainbow"
-        #
-        # cmap_2 = get_cmap(cmap_2)
-        # cmap_2.set_bad(alpha=0)
-        # # Remainder:
-        # # Amigo beta cmap vmin - vmax:0.01 - 0.25
-        # # Amigo SPMt cmap vmin - vmax:3 - 16
-        #
-        #
-        #
-        # if vmin_2 in (None, Undefined):
-        #     vmin_2 = np.min(brain_data_2[~nan_indexes])
-        #
-        #     if vmin_2 < 0:
-        #         vmin_2 = 0.1
-        #
-        # if vmax_2 in (None, Undefined):
-        #     vmax_2 = np.max(brain_data_2[~nan_indexes])
 
     if len(brain_data_1.shape) == 4:
         brain_data_1 = brain_data_1[:, :, :, dyn]
@@ -748,7 +723,7 @@ def plot_slice_planes(
 
     # Reminder: 19cm == 7.4803inch; 23cm == 9.0551
     fig = plt.figure(figsize=(7.4803, 9.0551))  # Width, height in inches
-    # fig.patch.set_facecolor('black')
+    fig.patch.set_facecolor("black")
     zooms = brain_img_1.header.get_zooms()
 
     if brain_data_2 is None or len(brain_data_2) > 1:
@@ -859,52 +834,52 @@ def plot_slice_planes(
 
     if brain_data_2 is not None and len(brain_data_2) == 1:
         cbar = grid.cbar_axes[0].colorbar(im2)
-        cbar.ax.tick_params(labelsize=6)
-        cbar.set_label("Intensity", size=6)
+        cbar.ax.tick_params(labelsize=6, colors="white")
+        cbar.set_label("Intensity", size=6, color="white")
 
-    elif brain_data_2 is not None:
-        test_list = ["convACA", "convACM", "convACP", "convPICA", "convSCA"]
-        test_list = sum(([element] * 2 for element in test_list), [])
-
-        if all(test_list[i] in data_2[i] for i in range(len(test_list))):
-            words = [
-                "Posterior cerebral artery",
-                "Anterior cerebral artery",
-                "Middle cerebral artery",
-                "Posterior inferior cerebellar artery",
-                "Superior cerebellar artery",
-            ]
-            colors = [
-                (255, 0, 0),  # red
-                (0, 255, 0),  # lime (green)
-                (0, 0, 255),  # blue
-                (210, 105, 30),  # chocolate
-                (255, 255, 0),  # yellow
-            ]
-            colors_normalized = [
-                (r / 255, g / 255, b / 255) for r, g, b in colors
-            ]
-            x_position = 0.3
-            y_position = 0.3
-            bbox_props = dict(
-                boxstyle="square,pad=0.3",
-                fc="black",
-                ec="black",
-                lw=0.5,
-                alpha=1,
-            )
-
-            for word, color in zip(words, colors_normalized):
-                plt.figtext(
-                    x_position,
-                    y_position,
-                    word,
-                    color=color,
-                    ha="center",
-                    bbox=bbox_props,
-                    # transform=fig.transFigure
-                )
-                x_position += 0.011 * len(word)
+    # elif brain_data_2 is not None:
+    #     test_list = ["convACA", "convACM", "convACP", "convPICA", "convSCA"]
+    #     test_list = sum(([element] * 2 for element in test_list), [])
+    #
+    #     if all(test_list[i] in data_2[i] for i in range(len(test_list))):
+    #         words = [
+    #             "Posterior cerebral artery",
+    #             "Anterior cerebral artery",
+    #             "Middle cerebral artery",
+    #             "Posterior inferior cerebellar artery",
+    #             "Superior cerebellar artery",
+    #         ]
+    #         colors = [
+    #             (255, 0, 0),  # red
+    #             (0, 255, 0),  # lime (green)
+    #             (0, 0, 255),  # blue
+    #             (210, 105, 30),  # chocolate
+    #             (255, 255, 0),  # yellow
+    #         ]
+    #         colors_normalized = [
+    #             (r / 255, g / 255, b / 255) for r, g, b in colors
+    #         ]
+    #         x_position = 0.3
+    #         y_position = 0.3
+    #         bbox_props = dict(
+    #             boxstyle="square,pad=0.3",
+    #             fc="black",
+    #             ec="black",
+    #             lw=0.5,
+    #             alpha=1,
+    #         )
+    #
+    #         for word, color in zip(words, colors_normalized):
+    #             plt.figtext(
+    #                 x_position,
+    #                 y_position,
+    #                 word,
+    #                 color=color,
+    #                 ha="center",
+    #                 bbox=bbox_props,
+    #                 transform=fig.transFigure
+    #             )
+    #             x_position += 0.011 * len(word)
 
     if data_2 is None:
         fname, _ = os.path.splitext(os.path.basename(data_1))
