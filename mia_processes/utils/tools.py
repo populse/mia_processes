@@ -802,6 +802,7 @@ def plot_slice_planes(
                     vmax=vmax_2[i],
                     cmap=cmap_2[i],
                     alpha=np.where(data <= vmin_2[i], 0, 0.5),
+                    # alpha=np.where(data <= vmin_2[i], 0, 1.0),
                     interpolation="nearest",
                     origin="lower",
                     extent=[0, phys_sp[0], 0, phys_sp[1]],

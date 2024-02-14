@@ -26,6 +26,8 @@ from datetime import datetime
 from math import pi, sqrt
 from sys import version
 
+import matplotlib.pyplot as plt
+
 # nibabel import
 import numpy as np
 
@@ -1203,7 +1205,7 @@ class Report:
             if abs(minRot) > maxRot:
                 maxRotCheck = abs(minRot)
 
-            # xLim = len(data)
+            xLim = len(data)
 
             if "Undefined" not in raw_func_vox_size:
                 # Mean x,y,z voxel dimension calculation.
@@ -1243,9 +1245,47 @@ class Report:
                     self.styles["Center"],
                 )
 
+            # figsize = width, height. tuple in inches
+            fig = plt.figure(1, figsize=(15, 5))
+            # number of rows, columns and the number of the plot
+            ax = fig.add_subplot(111)
+            # Title of the window 1
+            fig.canvas.manager.set_window_title(
+                self.dict4runtime["norm_anat"]["PatientRef"]
+                + " quality check: translation motion. "
+            )  # Title of the window 1
+            ax.set_title("Linear head motion parameters", fontsize=20, y=1.03)
+            ax.set_xlabel("Dynamic scans", fontsize=14)
+            ax.set_ylabel("Linear motion -X, Y, Z- (mm)", fontsize=14)
+            (
+                x,
+                y,
+                z,
+            ) = ax.plot(data[:, :3])
+            ax.legend((x, y, z), ("X", "Y", "Z"), loc="best")
+            ax.set_xlim(0, xLim)
+            ax.set_ylim(minTra * 1.1, maxTra * 1.1)
+            ax.yaxis.grid(
+                True, linestyle="-", which="major", color="grey", alpha=0.5
+            )
+            ax.xaxis.grid(
+                True, linestyle="-", which="major", color="grey", alpha=0.5
+            )
+            ax.get_yaxis().set_tick_params(direction="out")
+            ax.get_xaxis().set_tick_params(direction="out")
+            # fig = plt.gcf()
+            # width, height. in inches
+            fig.set_size_inches(254 / 25.4, 142 / 25.4)
+            out_file_tra = os.path.join(
+                tmpdir.name,
+                self.dict4runtime["norm_anat"]["PatientRef"]
+                + "_CVR_QualityControlMeasure_translation.png",
+            )
+            fig.savefig(out_file_tra, format="png", dpi=200)
+
         else:
             im_qualCheck = Paragraph(
-                "<font size=8 > Automatic " "evaluation not available </font>",
+                "<font size=8 > Automatic evaluation not available </font>",
                 self.styles["Center"],
             )
 
@@ -1260,6 +1300,11 @@ class Report:
         t.setStyle(TableStyle([("VALIGN", (0, 0), (-1, -1), "MIDDLE")]))
         t.hAlign = "LEFT"
         self.report.append(t)
+        # High resolution: 2000px × 1118px.
+        im_qualCheckTra = Image(out_file_tra, 160 * mm, 89.4 * mm)
+        im_qualCheckTra.hAlign = "CENTER"
+        self.report.append(im_qualCheckTra)
+        self.report.append(Spacer(0 * mm, 25 * mm))  # (width, height)
 
         self.report.append(PageBreak())
 
@@ -1567,34 +1612,33 @@ class Report:
             cmap_1=self.norm_anat_cmap,
             vmin_1=self.norm_anat_vmin,
             vmax_1=self.norm_anat_vmax,
-            # cmap_2=[
-            #     (0, 255, 255),    # cyan (aqua)
-            #     (255, 255, 0),    # yellow
-            #     (210, 105, 30),   # chocolate
-            #     (0, 0, 255),      # blue
-            #     (255, 0, 0),      # red
-            #     (255, 228, 181),  # moccasin
-            #     (0, 255, 0),      # lime (green)
-            #     (255, 0, 255),   # magenta (fuschia)
-            # ],
             cmap_2=[
                 (0, 255, 255),  # cyan (aqua)
                 (255, 255, 0),  # yellow
-                # (210, 105, 30),   # chocolate
-                (128, 0, 128),  # purple
+                (210, 105, 30),  # chocolate
                 (0, 0, 255),  # blue
                 (255, 0, 0),  # red
-                # (255, 228, 181),  # moccasin
-                (255, 140, 0),  # orange
+                (255, 228, 181),  # moccasin
                 (0, 255, 0),  # lime (green)
                 (255, 0, 255),  # magenta (fuschia)
             ],
+            # cmap_2=[
+            #     (0, 255, 255),  # cyan (aqua)
+            #     (255, 255, 0),  # yellow
+            #     # (210, 105, 30),   # chocolate
+            #     (128, 0, 128),  # purple
+            #     (0, 0, 255),  # blue
+            #     (255, 0, 0),  # red
+            #     # (255, 228, 181),  # moccasin
+            #     (255, 140, 0),  # orange
+            #     (0, 255, 0),  # lime (green)
+            #     (255, 0, 255),  # magenta (fuschia)
+            # ],
             vmin_2=None,
             vmax_2=None,
             out_dir=tmpdir.name,
             out_name="roisTerritories_axial",
         )
-
         # remainder: A4 == 210mmx297mm
         slices_image = Image(
             slices_image, width=7.4803 * inch, height=9.0551 * inch
@@ -1614,7 +1658,7 @@ class Report:
                     '<font size = 12 color = "rgb(0, 255, 64)"> '
                     "Temporal lobe </font> "
                     '<font size = 12 color = "grey"> - </font>'
-                    '<font size = 12 color = "rgb(128, 0, 128)"> '
+                    '<font size = 12 color = "rgb(210, 105, 30)"> '
                     "Insular lobe </font> <br/>"
                     '<font size = 12 color = "rgb(228, 228, 28)"> '
                     "Frontal lobe </font> "
@@ -1625,7 +1669,7 @@ class Report:
                     '<font size = 12 color = "rgb(255, 64, 255)"> '
                     "Thalamus </font> "
                     '<font size = 12 color = "grey"> - </font>'
-                    '<font size = 12 color = "rgb(255, 140, 0)"> '
+                    '<font size = 12 color = "rgb(255, 228, 181)"> '
                     "Striatum </font> "
                     "</b>",
                     self.styles["Center"],
