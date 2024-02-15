@@ -31,11 +31,13 @@ needed to run other higher-level bricks.
 # for details.
 ##########################################################################
 
-# Other imports
 import os
 import re
 import shutil
 import tempfile
+
+# Other imports
+from ast import literal_eval
 
 import pandas as pd
 
@@ -1632,13 +1634,29 @@ class Make_A_List(ProcessMIA):
             self.outputs = {}
 
         if self.obj1 and self.obj1 not in ["<undefined>", traits.Undefined]:
+
+            try:
+                objt1 = literal_eval(self.obj1)
+
+            except Exception:
+                #  TODO: is it enough to do just that?
+                objt1 = self.obj1
+
             if (not self.obj2) or (
                 self.obj2 in ["<undefined>", traits.Undefined]
             ):
-                self.outputs["obj_list"] = [self.obj1]
+                self.outputs["obj_list"] = [objt1]
 
             else:
-                self.outputs["obj_list"] = [self.obj1, self.obj2]
+
+                try:
+                    objt2 = literal_eval(self.obj2)
+
+                except Exception:
+                    #  TODO: is it enough to do just that?
+                    objt2 = self.obj2
+
+                self.outputs["obj_list"] = [objt1, objt2]
 
             self.outputs["notInDb"] = ["obj_list"]
 

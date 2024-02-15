@@ -16,12 +16,12 @@ Module dedicated to report generation
 # for details.
 ##########################################################################
 
+# Other import
 import json
 import os
 import platform
 import tempfile
-
-# Other import
+import time
 from datetime import datetime
 from math import pi, sqrt
 from sys import version
@@ -54,6 +54,7 @@ from reportlab.platypus import (
     Table,
     TableStyle,
 )
+from scipy.io import loadmat
 
 # mia_processes import:
 from mia_processes import info as mia_processes_info
@@ -1145,6 +1146,37 @@ class Report:
             )
             data = None
 
+        try:
+            matDataReg = loadmat(self.regressor_physio)
+
+        except IOError:
+            print(
+                "\n==> The "
+                + self.realignment_parameters
+                + " was not found ! <==\n"
+            )
+            matDataReg = None
+
+        im_qualCheck = Paragraph(
+            "<font size=8 > Automatic evaluation not available </font>",
+            self.styles["Center"],
+        )
+        im_qualCheckTra = Paragraph(
+            "<font size=14 > Linear head motion parameters "
+            "not available </font>",
+            self.styles["Center"],
+        )
+        im_qualCheckRot = Paragraph(
+            "<font size=14 > Rotational head motion parameters "
+            "not available </font>",
+            self.styles["Center"],
+        )
+        # im_qualCheckReg = Paragraph(
+        #     "<font size=14 > $\mathsf{EtCO_2}$ variation regressor "
+        #     "parameters not available </font>",
+        #     self.styles["Center"],
+        # )
+
         if data is not None:
 
             for i in range(3):
@@ -1238,31 +1270,13 @@ class Report:
                         12.4 * mm,
                     )
 
-            else:
-                im_qualCheck = Paragraph(
-                    "<font size=8 > Automatic "
-                    "evaluation not available </font>",
-                    self.styles["Center"],
-                )
-
-            # figsize = width, height. tuple in inches
-            fig = plt.figure(1, figsize=(15, 5))
-            # number of rows, columns and the number of the plot
+            fig = plt.figure(figsize=(15, 5), facecolor="white")
             ax = fig.add_subplot(111)
-            # Title of the window 1
-            fig.canvas.manager.set_window_title(
-                self.dict4runtime["norm_anat"]["PatientRef"]
-                + " quality check: translation motion. "
-            )  # Title of the window 1
             ax.set_title("Linear head motion parameters", fontsize=20, y=1.03)
             ax.set_xlabel("Dynamic scans", fontsize=14)
             ax.set_ylabel("Linear motion -X, Y, Z- (mm)", fontsize=14)
-            (
-                x,
-                y,
-                z,
-            ) = ax.plot(data[:, :3])
-            ax.legend((x, y, z), ("X", "Y", "Z"), loc="best")
+            ax.plot(data[:, :3], label=("X", "Y", "Z"))
+            ax.legend(loc="best")
             ax.set_xlim(0, xLim)
             ax.set_ylim(minTra * 1.1, maxTra * 1.1)
             ax.yaxis.grid(
@@ -1273,21 +1287,75 @@ class Report:
             )
             ax.get_yaxis().set_tick_params(direction="out")
             ax.get_xaxis().set_tick_params(direction="out")
-            # fig = plt.gcf()
-            # width, height. in inches
             fig.set_size_inches(254 / 25.4, 142 / 25.4)
             out_file_tra = os.path.join(
                 tmpdir.name,
                 self.dict4runtime["norm_anat"]["PatientRef"]
                 + "_CVR_QualityControlMeasure_translation.png",
             )
+            # High resolution: 2000px × 1118px.
             fig.savefig(out_file_tra, format="png", dpi=200)
-
-        else:
-            im_qualCheck = Paragraph(
-                "<font size=8 > Automatic evaluation not available </font>",
-                self.styles["Center"],
+            im_qualCheckTra = Image(out_file_tra, 160 * mm, 89.4 * mm)
+            ax.clear()
+            ax.set_title(
+                "Rotational head motion parameters", fontsize=20, y=1.03
             )
+            ax.set_xlabel("Dynamic scans", fontsize=14)
+            ax.set_ylabel(
+                "Rotational motion -Roll, Pitch, Yaw- (°)", fontsize=14
+            )
+            ax.plot(data[:, 3:], label=("Roll", "Pitch", "Yaw"))
+            ax.legend(loc="best")
+            ax.set_xlim(0, xLim)
+            ax.set_ylim(minRot * 1.1, maxRot * 1.1)
+            ax.yaxis.grid(
+                True, linestyle="-", which="major", color="grey", alpha=0.5
+            )
+            ax.xaxis.grid(
+                True, linestyle="-", which="major", color="grey", alpha=0.5
+            )
+            out_file_rot = os.path.join(
+                tmpdir.name,
+                self.dict4runtime["norm_anat"]["PatientRef"]
+                + "_CVR_QualityControlMeasure_Rotation.png",
+            )
+            # High resolution: 2000px × 1118px.
+            fig.savefig(out_file_rot, format="png", dpi=200)
+            im_qualCheckRot = Image(out_file_rot, 160 * mm, 89.4 * mm)
+
+        if matDataReg is not None:
+
+            if data is None:
+                xLim = len(matDataReg["R"])
+
+            ax.clear()
+            ax.set_title(
+                r"$\mathsf{EtCO_2}$ variation regressor (Standard)",
+                fontsize=20,
+                y=1.03,
+            )
+            ax.set_xlabel("Dynamic scans", fontsize=14)
+            ax.set_ylabel(r"$\mathsf{\Delta EtCO_2}$ ( mmHg)", fontsize=14)
+            ax.plot(matDataReg["R"], label=r"$\mathsf{EtCO_2}$")
+            # ax.legend(loc='best')
+            ax.set_xlim(0, xLim)
+            ax.set_ylim(
+                matDataReg["R"].min() * 1.1, matDataReg["R"].max() * +1.1
+            )
+            ax.yaxis.grid(
+                True, linestyle="-", which="major", color="grey", alpha=0.5
+            )
+            ax.xaxis.grid(
+                True, linestyle="-", which="major", color="grey", alpha=0.5
+            )
+            out_file_reg = os.path.join(
+                tmpdir.name,
+                self.dict4runtime["norm_anat"]["PatientRef"]
+                + "CVR_QualityControlMeasure_EtCO2.png",
+            )
+            # High resolution: 2000px × 1118px.
+            fig.savefig(out_file_reg, format="png", dpi=200)
+            im_qualCheckReg = Image(out_file_reg, 160 * mm, 89.4 * mm)
 
         qualCheckMess = Paragraph(
             "<font size=14 > <b> fMRI quality "
@@ -1296,15 +1364,17 @@ class Report:
         )
         im_qualCheck.hAlign = "CENTER"
         tit = [[qualCheckMess, im_qualCheck]]
-        t = Table(tit, [110 * mm, 50 * mm])  # colWidths, rowHeight
+        t = Table(tit, [110 * mm, 30 * mm])  # colWidths, rowHeight
         t.setStyle(TableStyle([("VALIGN", (0, 0), (-1, -1), "MIDDLE")]))
         t.hAlign = "LEFT"
         self.report.append(t)
-        # High resolution: 2000px × 1118px.
-        im_qualCheckTra = Image(out_file_tra, 160 * mm, 89.4 * mm)
         im_qualCheckTra.hAlign = "CENTER"
         self.report.append(im_qualCheckTra)
-        self.report.append(Spacer(0 * mm, 25 * mm))  # (width, height)
+        im_qualCheckRot.hAlign = "CENTER"
+        self.report.append(im_qualCheckRot)
+        im_qualCheckReg.hAlign = "CENTER"
+        self.report.append(im_qualCheckReg)
+        # self.report.append(Spacer(0 * mm, 25 * mm))  # (width, height)
 
         self.report.append(PageBreak())
 
@@ -1507,6 +1577,34 @@ class Report:
             for a_t in arter_terr
             for l_r in ["L", "R"]
         ]
+
+        max_timeout = 60  # Max timeout in seconds
+        start_time = time.time()
+
+        # TODO: This is a 2-ct hack in case arter_terr_files doesn't already
+        #       exist. You can also add this data as input. In this case,
+        #       the brick will wait until the files exist.
+        #       This would be cleaner
+        for elmt in arter_terr_files:
+            i = 0
+
+            while not os.path.exists(elmt):
+
+                if time.time() - start_time > max_timeout:
+                    print(
+                        f"CVR make report: Max timeout "
+                        f"reached ({max_timeout}s). The "
+                        f"file does not exist."
+                    )
+                    break
+
+                print(
+                    f"{elmt} file does not exist yet. "
+                    f"Waiting...{i} {time.time() - start_time}s"
+                )
+                time.sleep(1)
+                i += 1
+
         slices_image = plot_slice_planes(
             data_1=self.norm_anat,
             data_2=arter_terr_files,

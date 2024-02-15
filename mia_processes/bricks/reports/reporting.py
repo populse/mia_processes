@@ -933,7 +933,14 @@ class ReportCO2inhalCvr(ProcessMIA):
             "of pathlike objects or strings "
             "representing a file)"
         )
-
+        regressor_physio_desc = (
+            "Time series data that represent the "
+            "physiological processes thought to "
+            "contribute to the CVR in the fMRI signal "
+            "(a pathlike object or a string representing "
+            "a file, or a list of pathlike objects or "
+            "strings representing a file)"
+        )
         beta_image_desc = (
             "The 1st estimated parameter of the model, i.e. beta_0001.nii "
             "(valid extensions:.nii)"
@@ -1154,6 +1161,11 @@ class ReportCO2inhalCvr(ProcessMIA):
             File(
                 output=False, optional=False, desc=realignment_parameters_desc
             ),
+        )
+
+        self.add_trait(
+            "regressor_physio",
+            File(output=False, optional=False, desc=regressor_physio_desc),
         )
 
         self.add_trait(
@@ -1522,6 +1534,7 @@ class ReportCO2inhalCvr(ProcessMIA):
             norm_func_vmin=self.norm_func_vmin,
             norm_func_vmax=self.norm_func_vmax,
             realignment_parameters=self.realignment_parameters,
+            regressor_physio=self.regressor_physio,
             beta_image=self.beta_image,
             beta_cmap=self.beta_cmap,
             beta_vmin=self.beta_vmin,

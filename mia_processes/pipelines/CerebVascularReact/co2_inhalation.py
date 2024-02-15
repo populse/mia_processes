@@ -109,8 +109,9 @@ class CO2_inhalation(Pipeline):
             "1_spatial_preprocessing", "func_files", is_optional=False
         )
         self.export_parameter(
-            "files_to_list", "file1", "regressor_physio", is_optional=False
+            "reportco2inhalcvr", "regressor_physio", is_optional=False
         )
+        self.add_link("regressor_physio->files_to_list.file1")
         self.export_parameter(
             "reportco2inhalcvr", "patient_info", is_optional=True
         )

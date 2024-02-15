@@ -722,8 +722,9 @@ def plot_slice_planes(
         ]
 
     # Reminder: 19cm == 7.4803inch; 23cm == 9.0551
-    fig = plt.figure(figsize=(7.4803, 9.0551))  # Width, height in inches
-    fig.patch.set_facecolor("black")
+    # Width, height in inches
+    fig = plt.figure(figsize=(7.4803, 9.0551), facecolor="black")
+    # fig.patch.set_facecolor("black")
     zooms = brain_img_1.header.get_zooms()
 
     if brain_data_2 is None or len(brain_data_2) > 1:
