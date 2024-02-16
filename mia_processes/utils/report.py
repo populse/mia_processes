@@ -27,8 +27,7 @@ from math import pi, sqrt
 from sys import version
 
 import matplotlib.pyplot as plt
-
-# nibabel import
+import nibabel as nib
 import numpy as np
 
 # capsul import
@@ -41,6 +40,8 @@ from nipype import info as nipype_info
 from populse_mia import info as mia_info
 from populse_mia import sources_images
 from reportlab.lib import colors
+
+# reportlab import
 from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY, TA_LEFT, TA_RIGHT
 from reportlab.lib.pagesizes import A4, portrait
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
@@ -54,6 +55,7 @@ from reportlab.platypus import (
     Table,
     TableStyle,
 )
+from scipy.interpolate import splev, splrep
 from scipy.io import loadmat
 
 # mia_processes import:
@@ -1157,6 +1159,35 @@ class Report:
             )
             matDataReg = None
 
+        try:
+            # TODO: We state that the file to take is "s" + self.norm_func.
+            #       1- Since we want the BOLD time course in bold, perhaps
+            #          we could take only the self.norm_func?
+            #       2- Should we simply add "s" to self.norm_fun or add the
+            #          data as an input to the brick?
+            folder, file = os.path.split(self.norm_func)
+            snorm_func = os.path.join(folder, "s" + file)
+            brain_img_snorm_func = nib.load(snorm_func)
+            # n_dyn = brain_img_snorm_func.shape[3]
+            snorm_func_data = brain_img_snorm_func.get_fdata()
+            # I = np.zeros(brain_img_snorm_func.shape)
+            # TODO: We make the mask name from the self.norm_anat.
+            #       Should we simply add the data as an input to the brick?
+            folder, file = os.path.split(self.norm_anat)
+            file, ext = os.path.splitext(file)
+            grey_mat_mask = os.path.join(
+                folder, "mask_swc1" + file[1:] + "_003" + ext
+            )
+            brain_img_grey_mat_mask = nib.load(grey_mat_mask)
+            mask_data = brain_img_grey_mat_mask.get_fdata()
+            binary_mask = np.where(mask_data > 0.1, 1, 0)
+            masked_data = snorm_func_data * binary_mask[..., np.newaxis]
+            # mask_data = np.where(mask_data != 0)
+            # HRF = np.zeros(n_dyn)
+            bold_signal_tc = np.mean(masked_data, axis=(0, 1, 2))
+        except Exception:
+            bold_signal_tc = None
+
         im_qualCheck = Paragraph(
             "<font size=8 > Automatic evaluation not available </font>",
             self.styles["Center"],
@@ -1176,7 +1207,15 @@ class Report:
         #     "parameters not available </font>",
         #     self.styles["Center"],
         # )
-
+        im_qualCheckReg = Paragraph(
+            "<font size=14 > EtCO<sub>2</sub> variation regressor "
+            "parameters not available </font>",
+            self.styles["Center"],
+        )
+        im_qualCheckBoldTC = Paragraph(
+            "<font size=14 > BOLD signal time course not available </font>",
+            self.styles["Center"],
+        )
         if data is not None:
 
             for i in range(3):
@@ -1271,7 +1310,20 @@ class Report:
                     )
 
             fig = plt.figure(figsize=(15, 5), facecolor="white")
+            # fig = plt.figure(figsize=(15, 5), facecolor="black")
+
             ax = fig.add_subplot(111)
+            # fig.subplots_adjust(left=None, bottom=0.18, right=None,
+            #                     top=0.88, wspace=None, hspace=None)
+            fig.subplots_adjust(
+                left=None,
+                bottom=None,
+                right=None,
+                top=None,
+                wspace=None,
+                hspace=None,
+            )
+            fig.set_size_inches(254 / 25.4, 142 / 25.4)
             ax.set_title("Linear head motion parameters", fontsize=20, y=1.03)
             ax.set_xlabel("Dynamic scans", fontsize=14)
             ax.set_ylabel("Linear motion -X, Y, Z- (mm)", fontsize=14)
@@ -1287,7 +1339,7 @@ class Report:
             )
             ax.get_yaxis().set_tick_params(direction="out")
             ax.get_xaxis().set_tick_params(direction="out")
-            fig.set_size_inches(254 / 25.4, 142 / 25.4)
+
             out_file_tra = os.path.join(
                 tmpdir.name,
                 self.dict4runtime["norm_anat"]["PatientRef"]
@@ -1295,7 +1347,7 @@ class Report:
             )
             # High resolution: 2000px × 1118px.
             fig.savefig(out_file_tra, format="png", dpi=200)
-            im_qualCheckTra = Image(out_file_tra, 160 * mm, 89.4 * mm)
+            im_qualCheckTra = Image(out_file_tra, 153.91 * mm, 86 * mm)
             ax.clear()
             ax.set_title(
                 "Rotational head motion parameters", fontsize=20, y=1.03
@@ -1321,7 +1373,7 @@ class Report:
             )
             # High resolution: 2000px × 1118px.
             fig.savefig(out_file_rot, format="png", dpi=200)
-            im_qualCheckRot = Image(out_file_rot, 160 * mm, 89.4 * mm)
+            im_qualCheckRot = Image(out_file_rot, 153.91 * mm, 86 * mm)
 
         if matDataReg is not None:
 
@@ -1355,7 +1407,57 @@ class Report:
             )
             # High resolution: 2000px × 1118px.
             fig.savefig(out_file_reg, format="png", dpi=200)
-            im_qualCheckReg = Image(out_file_reg, 160 * mm, 89.4 * mm)
+            # im_qualCheckReg = Image(out_file_reg, 160 * mm, 89.4 * mm)
+            im_qualCheckReg = Image(out_file_reg, 153.91 * mm, 86 * mm)
+
+        if bold_signal_tc is not None:
+            ax.clear()
+            ax.set_title(
+                "BOLD signal timecourse (smoothed)", fontsize=20, y=1.03
+            )
+            ax.set_xlabel("Dynamic scans", fontsize=14)
+            ax.set_ylabel("BOLD response (A. U.)", fontsize=14)
+            # With smoothing
+            x_sparse = np.linspace(
+                0, len(bold_signal_tc) - 1, len(bold_signal_tc)
+            )
+            x_dense = np.linspace(
+                0, len(bold_signal_tc) - 1, len(bold_signal_tc) * 10
+            )
+
+            ix = np.mean(bold_signal_tc)
+            #  Lagrange polynomial interpolation coefficient determined using
+            #  the experimental average bold_signal_tc (ix) and the best s (y)
+            #  giving a good visual result when smoothing the bold_signal_tc.
+            s = (
+                (1.64e-24) * ix**5
+                - (6.729e-17) * ix**4
+                + (2.49e-10) * ix**3
+                + (6.301e-05) * ix**2
+                + (0.03408) * ix
+                - 1.249
+            )
+            tck = splrep(x_sparse, bold_signal_tc, s=s)
+            ax.plot(x_dense, splev(x_dense, tck, der=0), label="BOLD response")
+            # ax.legend(loc="best")
+            ax.set_xlim(0, xLim)
+            ax.set_ylim(
+                bold_signal_tc.min() * 0.997, bold_signal_tc.max() * +1.003
+            )
+            ax.yaxis.grid(
+                True, linestyle="-", which="major", color="grey", alpha=0.5
+            )
+            ax.xaxis.grid(
+                True, linestyle="-", which="major", color="grey", alpha=0.5
+            )
+            out_file_rot = os.path.join(
+                tmpdir.name,
+                self.dict4runtime["norm_anat"]["PatientRef"]
+                + "_CVR_QualityControlMeasure_BOLDtimeCourse.png",
+            )
+            # High resolution: 2000px × 1118px.
+            fig.savefig(out_file_rot, format="png", dpi=200)
+            im_qualCheckBoldTC = Image(out_file_rot, 153.91 * mm, 86 * mm)
 
         qualCheckMess = Paragraph(
             "<font size=14 > <b> fMRI quality "
@@ -1389,6 +1491,8 @@ class Report:
                 self.styles["Left"],
             )
         )
+        im_qualCheckBoldTC.hAlign = "CENTER"
+        self.report.append(im_qualCheckBoldTC)
         self.report.append(Spacer(0 * mm, 28 * mm))
 
         self.report.append(PageBreak())

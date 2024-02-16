@@ -1638,7 +1638,7 @@ class Make_A_List(ProcessMIA):
             try:
                 objt1 = literal_eval(self.obj1)
 
-            except Exception:
+            except (SyntaxError, ValueError):
                 #  TODO: is it enough to do just that?
                 objt1 = self.obj1
 
@@ -1652,7 +1652,7 @@ class Make_A_List(ProcessMIA):
                 try:
                     objt2 = literal_eval(self.obj2)
 
-                except Exception:
+                except (SyntaxError, ValueError):
                     #  TODO: is it enough to do just that?
                     objt2 = self.obj2
 
