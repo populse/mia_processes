@@ -1137,8 +1137,8 @@ class Report:
         ) = np.zeros(10)
 
         try:
-            data = np.loadtxt(self.realignment_parameters)
-            data[:, 3:] = data[:, 3:] * 180 / pi  # Rad to deg conversion
+            data_rp = np.loadtxt(self.realignment_parameters)
+            data_rp[:, 3:] = data_rp[:, 3:] * 180 / pi  # Rad to deg conversion
 
         except IOError:
             print(
@@ -1146,16 +1146,14 @@ class Report:
                 + self.realignment_parameters
                 + " was not found ! <==\n"
             )
-            data = None
+            data_rp = None
 
         try:
             matDataReg = loadmat(self.regressor_physio)
 
         except IOError:
             print(
-                "\n==> The "
-                + self.realignment_parameters
-                + " was not found ! <==\n"
+                "\n==> The " + self.regressor_physio + " was not found ! <==\n"
             )
             matDataReg = None
 
@@ -1168,9 +1166,7 @@ class Report:
             folder, file = os.path.split(self.norm_func)
             snorm_func = os.path.join(folder, "s" + file)
             brain_img_snorm_func = nib.load(snorm_func)
-            # n_dyn = brain_img_snorm_func.shape[3]
             snorm_func_data = brain_img_snorm_func.get_fdata()
-            # I = np.zeros(brain_img_snorm_func.shape)
             # TODO: We make the mask name from the self.norm_anat.
             #       Should we simply add the data as an input to the brick?
             folder, file = os.path.split(self.norm_anat)
@@ -1182,48 +1178,40 @@ class Report:
             mask_data = brain_img_grey_mat_mask.get_fdata()
             binary_mask = np.where(mask_data > 0.1, 1, 0)
             masked_data = snorm_func_data * binary_mask[..., np.newaxis]
-            # mask_data = np.where(mask_data != 0)
-            # HRF = np.zeros(n_dyn)
             bold_signal_tc = np.mean(masked_data, axis=(0, 1, 2))
+
         except Exception:
+            print("\n==> The " + grey_mat_mask + " was not found ! <==\n")
             bold_signal_tc = None
 
-        im_qualCheck = Paragraph(
-            "<font size=8 > Automatic evaluation not available </font>",
-            self.styles["Center"],
+        im_qualCheck = None
+        im_qualCheckTra = None
+        im_qualCheckRot = None
+        im_qualCheckReg = None
+        im_qualCheckBoldTC = None
+        # figsize in inches
+        fig = plt.figure(figsize=(12, 5.6), facecolor="white")
+        # fig.set_size_inches(254 / 25.4, 142 / 25.4)
+        ax = fig.add_subplot(111)
+        fig.subplots_adjust(
+            left=None,
+            bottom=None,
+            right=None,
+            top=None,
+            wspace=None,
+            hspace=None,
         )
-        im_qualCheckTra = Paragraph(
-            "<font size=14 > Linear head motion parameters "
-            "not available </font>",
-            self.styles["Center"],
-        )
-        im_qualCheckRot = Paragraph(
-            "<font size=14 > Rotational head motion parameters "
-            "not available </font>",
-            self.styles["Center"],
-        )
-        # im_qualCheckReg = Paragraph(
-        #     "<font size=14 > $\mathsf{EtCO_2}$ variation regressor "
-        #     "parameters not available </font>",
-        #     self.styles["Center"],
-        # )
-        im_qualCheckReg = Paragraph(
-            "<font size=14 > EtCO<sub>2</sub> variation regressor "
-            "parameters not available </font>",
-            self.styles["Center"],
-        )
-        im_qualCheckBoldTC = Paragraph(
-            "<font size=14 > BOLD signal time course not available </font>",
-            self.styles["Center"],
-        )
-        if data is not None:
+        xLim = None
+
+        if data_rp is not None:
+            xLim = len(data_rp)
 
             for i in range(3):
 
-                for n in data[:, i]:
+                for n in data_rp[:, i]:
                     rmsdTra = rmsdTra + n**2
 
-                rmsdTra = sqrt(rmsdTra / len(data[:, i]))
+                rmsdTra = sqrt(rmsdTra / len(data_rp[:, i]))
 
                 if rmsdTra > maxRmsdTra:
                     # maxRmsdTra: Maximum root-mean-square deviation for
@@ -1232,15 +1220,15 @@ class Report:
 
                 rmsdTra = 0
 
-                if max(data[:, i]) > maxTra:
+                if max(data_rp[:, i]) > maxTra:
                     # maxTra: Maximum x, y, z linear motion in
                     # POSITIVE direction
-                    maxTra = max(data[:, i])
+                    maxTra = max(data_rp[:, i])
 
-                if min(data[:, i]) < minTra:
+                if min(data_rp[:, i]) < minTra:
                     # minTra: Maximum x, y, z linear motion in
                     # NEGATIVE direction
-                    minTra = min(data[:, i])
+                    minTra = min(data_rp[:, i])
 
             maxTraCheck = maxTra
 
@@ -1249,10 +1237,10 @@ class Report:
 
             for i in range(3, 6):
 
-                for n in data[:, i]:
+                for n in data_rp[:, i]:
                     rmsdRot = rmsdRot + n**2
 
-                rmsdRot = sqrt(rmsdRot / len(data[:, i]))
+                rmsdRot = sqrt(rmsdRot / len(data_rp[:, i]))
 
                 if rmsdRot > maxRmsdRot:
                     # maxRmsdRot: Maximum root-mean-square deviation for
@@ -1261,22 +1249,20 @@ class Report:
 
                 rmsdRot = 0
 
-                if max(data[:, i]) > maxRot:
+                if max(data_rp[:, i]) > maxRot:
                     # maxRot: Maximum roll, pitch, yaw rotational motion in
                     # POSITIVE direction
-                    maxRot = max(data[:, i])
+                    maxRot = max(data_rp[:, i])
 
-                if min(data[:, i]) < minRot:
+                if min(data_rp[:, i]) < minRot:
                     # minRot: Maximum roll, pitch, yaw rotational motion in
                     # NEGATIVE direction
-                    minRot = min(data[:, i])
+                    minRot = min(data_rp[:, i])
 
             maxRotCheck = maxRot
 
             if abs(minRot) > maxRot:
                 maxRotCheck = abs(minRot)
-
-            xLim = len(data)
 
             if "Undefined" not in raw_func_vox_size:
                 # Mean x,y,z voxel dimension calculation.
@@ -1309,25 +1295,10 @@ class Report:
                         12.4 * mm,
                     )
 
-            fig = plt.figure(figsize=(15, 5), facecolor="white")
-            # fig = plt.figure(figsize=(15, 5), facecolor="black")
-
-            ax = fig.add_subplot(111)
-            # fig.subplots_adjust(left=None, bottom=0.18, right=None,
-            #                     top=0.88, wspace=None, hspace=None)
-            fig.subplots_adjust(
-                left=None,
-                bottom=None,
-                right=None,
-                top=None,
-                wspace=None,
-                hspace=None,
-            )
-            fig.set_size_inches(254 / 25.4, 142 / 25.4)
             ax.set_title("Linear head motion parameters", fontsize=20, y=1.03)
             ax.set_xlabel("Dynamic scans", fontsize=14)
             ax.set_ylabel("Linear motion -X, Y, Z- (mm)", fontsize=14)
-            ax.plot(data[:, :3], label=("X", "Y", "Z"))
+            ax.plot(data_rp[:, :3], label=("X", "Y", "Z"))
             ax.legend(loc="best")
             ax.set_xlim(0, xLim)
             ax.set_ylim(minTra * 1.1, maxTra * 1.1)
@@ -1347,7 +1318,8 @@ class Report:
             )
             # High resolution: 2000px × 1118px.
             fig.savefig(out_file_tra, format="png", dpi=200)
-            im_qualCheckTra = Image(out_file_tra, 153.91 * mm, 86 * mm)
+            # im_qualCheckTra = Image(out_file_tra, 153.91 * mm, 86 * mm)
+            im_qualCheckTra = Image(out_file_tra, 7.187 * inch, 3.354 * inch)
             ax.clear()
             ax.set_title(
                 "Rotational head motion parameters", fontsize=20, y=1.03
@@ -1356,7 +1328,7 @@ class Report:
             ax.set_ylabel(
                 "Rotational motion -Roll, Pitch, Yaw- (°)", fontsize=14
             )
-            ax.plot(data[:, 3:], label=("Roll", "Pitch", "Yaw"))
+            ax.plot(data_rp[:, 3:], label=("Roll", "Pitch", "Yaw"))
             ax.legend(loc="best")
             ax.set_xlim(0, xLim)
             ax.set_ylim(minRot * 1.1, maxRot * 1.1)
@@ -1373,11 +1345,11 @@ class Report:
             )
             # High resolution: 2000px × 1118px.
             fig.savefig(out_file_rot, format="png", dpi=200)
-            im_qualCheckRot = Image(out_file_rot, 153.91 * mm, 86 * mm)
+            im_qualCheckRot = Image(out_file_rot, 7.187 * inch, 3.354 * inch)
 
         if matDataReg is not None:
 
-            if data is None:
+            if xLim is None:
                 xLim = len(matDataReg["R"])
 
             ax.clear()
@@ -1403,14 +1375,17 @@ class Report:
             out_file_reg = os.path.join(
                 tmpdir.name,
                 self.dict4runtime["norm_anat"]["PatientRef"]
-                + "CVR_QualityControlMeasure_EtCO2.png",
+                + "_CVR_QualityControlMeasure_EtCO2.png",
             )
             # High resolution: 2000px × 1118px.
             fig.savefig(out_file_reg, format="png", dpi=200)
-            # im_qualCheckReg = Image(out_file_reg, 160 * mm, 89.4 * mm)
-            im_qualCheckReg = Image(out_file_reg, 153.91 * mm, 86 * mm)
+            im_qualCheckReg = Image(out_file_reg, 7.187 * inch, 3.354 * inch)
 
         if bold_signal_tc is not None:
+
+            if xLim is None:
+                xLim = brain_img_snorm_func.shape[3]
+
             ax.clear()
             ax.set_title(
                 "BOLD signal timecourse (smoothed)", fontsize=20, y=1.03
@@ -1457,32 +1432,70 @@ class Report:
             )
             # High resolution: 2000px × 1118px.
             fig.savefig(out_file_rot, format="png", dpi=200)
-            im_qualCheckBoldTC = Image(out_file_rot, 153.91 * mm, 86 * mm)
+            im_qualCheckBoldTC = Image(
+                out_file_rot, 7.187 * inch, 3.354 * inch
+            )
 
         qualCheckMess = Paragraph(
             "<font size=14 > <b> fMRI quality "
             "check: movements </b> </font>",
             self.styles["Left"],
         )
+
+        if im_qualCheck is None:
+            im_qualCheck = Paragraph(
+                "<font size=8 > Automatic evaluation not available </font>",
+                self.styles["Center"],
+            )
+
         im_qualCheck.hAlign = "CENTER"
-        tit = [[qualCheckMess, im_qualCheck]]
-        t = Table(tit, [110 * mm, 30 * mm])  # colWidths, rowHeight
+        title = [[qualCheckMess, im_qualCheck]]
+        t = Table(title, [110 * mm, 30 * mm])  # colWidths, rowHeight
         t.setStyle(TableStyle([("VALIGN", (0, 0), (-1, -1), "MIDDLE")]))
         t.hAlign = "LEFT"
         self.report.append(t)
+
+        if im_qualCheckTra is None:
+            im_qualCheckTra = Paragraph(
+                "<font size=14 > Linear head motion parameters not "
+                "available </font>",
+                self.styles["Center"],
+            )
+            self.report.append(Spacer(0 * mm, 45 * mm))
+
         im_qualCheckTra.hAlign = "CENTER"
         self.report.append(im_qualCheckTra)
+
+        if im_qualCheckRot is None:
+            im_qualCheckRot = Paragraph(
+                "<font size=14 > Rotational head motion parameters "
+                "not available </font>",
+                self.styles["Center"],
+            )
+            self.report.append(Spacer(0 * mm, 45 * mm))
+
         im_qualCheckRot.hAlign = "CENTER"
         self.report.append(im_qualCheckRot)
+
+        if data_rp is None:
+            self.report.append(Spacer(0 * mm, 45 * mm))
+
+        if im_qualCheckReg is None:
+            im_qualCheckReg = Paragraph(
+                "<font size=14 > EtCO<sub>2</sub> variation regressor "
+                "parameters not available </font>",
+                self.styles["Center"],
+            )
+
+            if data_rp is not None:
+                self.report.append(Spacer(0 * mm, 35 * mm))
+
         im_qualCheckReg.hAlign = "CENTER"
         self.report.append(im_qualCheckReg)
-        # self.report.append(Spacer(0 * mm, 25 * mm))  # (width, height)
-
         self.report.append(PageBreak())
 
         # page 6 - fmri-cvr MRI quality check: BOLD signal timecourse Vs EtCO2
         ######################################################################
-        self.report.append(Spacer(0 * mm, 5 * mm))
         self.report.append(
             Paragraph(
                 "<font size=14 > <b> fMRI quality "
@@ -1491,10 +1504,24 @@ class Report:
                 self.styles["Left"],
             )
         )
+        self.report.append(Spacer(0 * mm, 30 * mm))
+
+        if im_qualCheckBoldTC is None:
+            im_qualCheckBoldTC = Paragraph(
+                "<font size=14 > BOLD signal time course not "
+                "available </font>",
+                self.styles["Center"],
+            )
+            self.report.append(Spacer(0 * mm, 20 * mm))
+
         im_qualCheckBoldTC.hAlign = "CENTER"
         self.report.append(im_qualCheckBoldTC)
-        self.report.append(Spacer(0 * mm, 28 * mm))
+        self.report.append(Spacer(0 * mm, 30 * mm))
 
+        if matDataReg is None:
+            self.report.append(Spacer(0 * mm, 20 * mm))
+
+        self.report.append(im_qualCheckReg)
         self.report.append(PageBreak())
 
         # page 7 - BOLD: MNI normalized axial images, 1st dyn ################
@@ -1685,8 +1712,8 @@ class Report:
         max_timeout = 60  # Max timeout in seconds
         start_time = time.time()
 
-        # TODO: This is a 2-ct hack in case arter_terr_files doesn't already
-        #       exist. You can also add this data as input. In this case,
+        # TODO: This is a 2-cts hack in case arter_terr_files doesn't already
+        #       exist. We can also add this data as input. In this case,
         #       the brick will wait until the files exist.
         #       This would be cleaner
         for elmt in arter_terr_files:
