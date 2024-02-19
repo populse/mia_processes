@@ -68,6 +68,8 @@ from mia_processes.utils import (
     plot_slice_planes,
 )
 
+# import openpyxl
+
 
 class Report:
     """Create pdf report
@@ -544,7 +546,7 @@ class Report:
         self.report.append(
             Paragraph(
                 f"<font size=11> <b> Protocol name / Acquisition nr: </b> "
-                "</font> {self.dict4runtime['norm_anat']['ProtocolName']} / "
+                f"</font> {self.dict4runtime['norm_anat']['ProtocolName']} / "
                 f"{self.dict4runtime['norm_anat']['Acquisition nbr']}",
                 self.styles["Bullet1"],
             )
@@ -1669,6 +1671,14 @@ class Report:
                 self.styles["Center2"],
             )
         )
+        # res_anal_data = os.path.join(
+        #    self.output_directory,
+        #    self.dict4runtime["norm_anat"]["PatientName"] + "_data",
+        #    "results_aggregation",
+        #    "BOLD_IL_mean_beta.xls",
+        # )
+        # CVR_ref_data = self.dict4runtime["CVR_ref_data"]
+
         self.report.append(Spacer(0 * mm, 0 * mm))
         line = ReportLine(150)
         line.hAlign = "CENTER"

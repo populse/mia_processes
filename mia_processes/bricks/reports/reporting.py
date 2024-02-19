@@ -31,6 +31,7 @@ from nipype.interfaces.base import File, OutputMultiPath, Undefined, traits
 from nipype.interfaces.spm.base import ImageFileSPM
 
 # populse_mia import
+from populse_mia.software_properties import Config
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
 
 # mia_processes import:
@@ -1483,6 +1484,14 @@ class ReportCO2inhalCvr(ProcessMIA):
             self.dict4runtime["norm_anat"][
                 "Spectro"
             ] = "Philips Achieva 3.0T TX"
+
+        # Reference population file for result stat anal
+        config = Config()
+        self.dict4runtime["CVR_ref_data"] = os.path.join(
+            config.get_resources_path(),
+            "reference_population_data",
+            "CVR_ref_pop_SEMVIE-16.xlsx",
+        )
 
         # Generate an output name
         if (
