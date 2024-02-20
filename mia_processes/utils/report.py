@@ -29,6 +29,7 @@ from sys import version
 import matplotlib.pyplot as plt
 import nibabel as nib
 import numpy as np
+import openpyxl
 
 # capsul import
 from capsul import info as capsul_info
@@ -67,8 +68,6 @@ from mia_processes.utils import (
     plot_segmentation,
     plot_slice_planes,
 )
-
-# import openpyxl
 
 
 class Report:
@@ -1671,13 +1670,73 @@ class Report:
                 self.styles["Center2"],
             )
         )
+        CVR_ref_data = self.dict4runtime["CVR_ref_data"]
+        # Sheets used in the CVR_ref_data file for boxplot
+        sheetsRef = ["CVR_temoins_IL"]
+        bookRef = openpyxl.load_workbook(CVR_ref_data)
+        sheet = bookRef[sheetsRef[0]]
+        # Number of the first column used for ROI data (in sheet)
+        colStart = 8
+        xticklab = []
+
+        for col_index in range(colStart, sheet.max_column + 1):
+            value = sheet.cell(row=1, column=col_index).value
+            # List of ROIs in the CVR_temoins_IL sheet order of the
+            # CVR_ref_pop_SEMVIE-16.xlsx file
+            xticklab.append(value)
+
+        # Dictionary of Laterality indexes for each ROI
+        # {u'ROI_STR': [-0.0079, -0.01, ...], u'ACA': ...}
+        IL_Ref = {}
+        col_index = colStart - 1
+
+        for roi in xticklab:
+            col_index += 1  # a verifier si c'est bon
+            val_list = []
+
+            for row_index in range(1, sheet.max_row + 1):
+
+                if row_index == 1:
+                    continue
+
+                value = sheet.cell(row=row_index, column=col_index).value
+
+                if not isinstance(value, (int, float)):
+                    continue
+
+                else:
+                    val_list.append(value)
+
+            IL_Ref[roi] = val_list
+
+        # Laterality index for each ROI of the patient
         # res_anal_data = os.path.join(
-        #    self.output_directory,
-        #    self.dict4runtime["norm_anat"]["PatientName"] + "_data",
-        #    "results_aggregation",
-        #    "BOLD_IL_mean_beta.xls",
+        #     self.output_directory,
+        #     self.dict4runtime["norm_anat"]["PatientName"] + "_data",
+        #     "results_aggregation",
+        #     "BOLD_IL_mean_beta.xls",
         # )
-        # CVR_ref_data = self.dict4runtime["CVR_ref_data"]
+        # with open(res_anal_data, "r") as data:
+        #     r_data = [elt.replace("beta_", "") for elt in data.readlines()]
+
+        # IL in ROIs, uses \t for split() to deal with space
+        # IL_Pat = {
+        #     il: float(val)
+        #     for il, val in zip(
+        #         r_data[0].split("\t")[colStart - 1:-1],
+        #         r_data[1].split("\t")[colStart - 1:-1],
+        #     )
+        # }
+        # Data on patient and experiment
+        # dat_Pat = {
+        #     dat: val
+        #     for dat, val in zip(
+        #         r_data[0].split("\t")[0:colStart - 1],
+        #         r_data[1].split("\t")[0:colStart - 1],
+        #     )
+        # }
+        # Number of ROI, for x coordinate.
+        # x = np.linspace(1, len(IL_Pat), len(IL_Pat), endpoint=True)
 
         self.report.append(Spacer(0 * mm, 0 * mm))
         line = ReportLine(150)
