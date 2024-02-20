@@ -38,8 +38,11 @@ The mean of the kurtosis tensor (mKT) and the kurtosis fractional anisotropy (kF
 
       ex. '/home/username/data/raw_data/dwi.nii'
 
+  **Optional inputs parameters:**
+
 - *dwi_bvec* (a string representing an existing file)
     Bvec file (valid extensions: [.bvec]).
+    If no file is supplied, the file with the same name as "in_dwi" but wil ".bvec" extension will be automatically used.
 
     ::
 
@@ -47,13 +50,14 @@ The mean of the kurtosis tensor (mKT) and the kurtosis fractional anisotropy (kF
 
 - *dwi_bval* (a string representing an existing file)
     Bval file (valid extensions: [.bval]).
+    If no file is supplied, the file with the same name as "in_dwi" but wil ".bval" extension will be automatically used.
 
     ::
 
       ex. '/home/username/data/raw_data/dwi.bval'
 
 - *in_mask* (a string representing an existing file)
-    Brain mask file (valid extensions: [.nii, .nii.gz]).
+    Brain mask file (valid extensions: [.nii, .nii.gz]). If you want to fit the model within a mask.
 
     ::
 
@@ -129,6 +133,6 @@ The mean of the kurtosis tensor (mKT) and the kurtosis fractional anisotropy (kF
 
 Usefull links:
 
-`Dipy Reconstruction of the diffusion signal with the kurtosis tensor model <https://dipy.org/documentation/1.7.0/examples_built/07_reconstruction/reconst_dki/#sphx-glr-examples-built-07-reconstruction-reconst-dki-py>`_
+`Dipy Reconstruction of the diffusion signal with the kurtosis tensor model <https://docs.dipy.org/stable/examples_built/reconstruction/reconst_dki.html#sphx-glr-examples-built-reconstruction-reconst-dki-py>`_
 
 `Jensen JH 2005 <https://pubmed.ncbi.nlm.nih.gov/15906300/>`_

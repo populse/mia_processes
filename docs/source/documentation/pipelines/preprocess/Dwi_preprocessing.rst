@@ -24,12 +24,14 @@ In this pipeline, an image with b=0 volumes with opposite phase encoding should 
 
 A binary mask of the brain is also estimated.
 
+The outputs are in ".mif" format.
+
 --------------------------------------
 
 **Pipeline insight**
 
 | Dwi_preprocessing pipeline combines the following bricks:
-|   - `Conversion into MIF format <../../bricks/preprocess/mrtrix/MRConvert.html>`_
+|   - `Conversion into MIF format <../../bricks/preprocess/mrtrix/MRConvert.html>`_ (if NIfTI provided)
 |   - `b0 extraction <../../bricks/preprocess/mrtrix/DWIExtract.html>`_
 |   - `b0 averaging <../../bricks/preprocess/mrtrix/MRMath.html>`_
 |   - `b0 concatenation <../../bricks/preprocess/mrtrix/MRCat.html>`_
@@ -47,25 +49,13 @@ A binary mask of the brain is also estimated.
 **Mandatory inputs parameters**
 
 - *in_dwi* (a string representing an existing file)
-    Diffusion image to preprocess (valid extensions: [.nii, .nii.gz]).
+    Diffusion image to preprocess (valid extensions: [.nii, .nii.gz, '.mif']).
+    If a NIfTI is supplied, bvec and bval files will be found automatically.
 
     ::
 
       ex. '/home/username/data/raw_data/DWI.nii'
 
-- *in_bvec* (a string representing an existing file)
-    Direction of the gradient (b-vectors) of the in_dwi image (bvec file, valid extensions: [.bvec]).
-
-    ::
-
-      ex. '/home/username/data/raw_data/DWI.bvec'
-
-- *in_bval* (a string representing an existing file)
-    b values of the in_dwi image (bval file, valid extensions: [.bval]).
-
-    ::
-
-      ex. '/home/username/data/raw_data/DWI.bval'
 
 - *in_dwi_pe_dir* (ap, pa, lr, rl, default value is ap, optional)
     | Phase encoding direction of the in_diw image:
@@ -87,7 +77,7 @@ A binary mask of the brain is also estimated.
 
 - *in_b0_reverse* (a string representing an existing file)
     b=0 volumes with opposing phase-direction which is to be used exclusively by topup for estimating the inhomogeneity field
-    (valid extensions: [.nii, .nii.gz]).
+    (valid extensions: [.nii, .nii.gz, '.mif']).
 
     ::
 

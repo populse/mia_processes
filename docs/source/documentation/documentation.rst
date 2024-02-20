@@ -57,6 +57,10 @@ To use certain mia_processes bricks (atomic processes), `third-party softwares u
       - `Flirt <bricks/preprocess/fsl/Flirt.html>`_
       - `Smooth <bricks/preprocess/fsl/Smooth.html>`__
 
+    - **matlab_wrap**
+
+      - `ComputeBrainVolume <bricks/preprocess/matlab_wrap/ComputeBrainVolume.html>`__
+
     - **mrtrix**
 
       - `ConstrainedSphericalDeconvolution <bricks/preprocess/mrtrix/ConstrainedSphericalDeconvolution.html>`_

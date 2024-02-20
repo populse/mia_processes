@@ -1,21 +1,23 @@
+
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="./">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>mia_processes.bricks.stat.spm package &#8212; mia_processes 2.5.1-dev+94e7e24a documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=f63d8bfa" />
-    <link rel="stylesheet" type="text/css" href="_static/haiku.css?v=e491ac2d" />
-    <script src="_static/documentation_options.js?v=6f08eabc"></script>
-    <script src="_static/doctools.js?v=888ff710"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <title>mia_processes.bricks.stat.spm package &#8212; mia_processes 2.5.1-dev+1b04ffd2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/haiku.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="index.html">
-          <span>mia_processes 2.5.1-dev+94e7e24a documentation</span></a></h1>
+          <span>mia_processes 2.5.1-dev+1b04ffd2 documentation</span></a></h1>
         <h2 class="heading"><span>mia_processes.bricks.stat.spm package</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -28,409 +30,13 @@
       <div class="content" role="main">
         
         
-  <section id="module-mia_processes.bricks.stat.spm">
-<span id="mia-processes-bricks-stat-spm-package"></span><h1>mia_processes.bricks.stat.spm package<a class="headerlink" href="#module-mia_processes.bricks.stat.spm" title="Link to this heading">¶</a></h1>
-<p>Statistical calculations from spm.</p>
+  <section id="mia-processes-bricks-stat-spm-package">
+<h1>mia_processes.bricks.stat.spm package<a class="headerlink" href="#mia-processes-bricks-stat-spm-package" title="Permalink to this headline">¶</a></h1>
 <section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
 </section>
-<section id="module-mia_processes.bricks.stat.spm.model">
-<span id="mia-processes-bricks-stat-spm-model-module"></span><h2>mia_processes.bricks.stat.spm.model module<a class="headerlink" href="#module-mia_processes.bricks.stat.spm.model" title="Link to this heading">¶</a></h2>
-<p>The library for the SPM fMRI statistical analysis of the mia_processes
-package.</p>
-<p>The purpose of this module is to customise the main spm statistical analysis
-bricks provided by nipype and to correct some things that do not work directly
-in populse_mia.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Contains<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="field-list simple">
-<dt class="field-odd">Class<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p>EstimateContrast</p></li>
-<li><p>EstimateModel</p></li>
-<li><p>Level1Design</p></li>
-<li><p>MultipleRegressionDesign</p></li>
-<li><p>OneSampleTTestDesign</p></li>
-<li><p>PairedTTestDesign</p></li>
-<li><p>TwoSampleTTestDesign</p></li>
-</ul>
-</dd>
-</dl>
-</dd>
-</dl>
-<dl class="py class">
-<dt class="sig sig-object py" id="mia_processes.bricks.stat.spm.model.EstimateContrast">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.stat.spm.model.</span></span><span class="sig-name descname"><span class="pre">EstimateContrast</span></span><a class="reference internal" href="_modules/mia_processes/bricks/stat/spm/model.html#EstimateContrast"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.stat.spm.model.EstimateContrast" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ProcessMIA</span></code></p>
-<p><em>Estimate contrasts of interest</em></p>
-<p>Please, see the complete documentation for the <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/bricks/stats/spm/EstimateContrast.html">EstimateContrast brick in
-the mia_processes website</a></p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<ul class="simple">
-<li><p>Type ‘EstimateContrast.help()’ for a full description of this process parameters.</p></li>
-<li><p>Type ‘&lt;EstimateContrast&gt;.get_input_spec()’ for a full description of this process input trait types.</p></li>
-<li><p>Type ‘&lt;EstimateContrast&gt;.get_output_spec()’ for a full description of this process output trait types.</p></li>
-</ul>
-</div>
-<dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.stat.spm.model.EstimateContrast.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/stat/spm/model.html#EstimateContrast.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.stat.spm.model.EstimateContrast.__init__" title="Link to this definition">¶</a></dt>
-<dd><p>Dedicated to the attributes initialisation / instantiation.</p>
-<p>The input and output plugs are defined here. The special
-‘self.requirement’ attribute (optional) is used to define the
-third-party products necessary for the running of the brick.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.stat.spm.model.EstimateContrast.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/stat/spm/model.html#EstimateContrast.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.stat.spm.model.EstimateContrast.list_outputs" title="Link to this definition">¶</a></dt>
-<dd><p>Dedicated to the initialisation step of the brick.</p>
-<p>The main objective of this method is to produce the outputs of the
-bricks (self.outputs) and the associated tags (self.inheritance_dic),
-if defined here. In order not to include an output in the database,
-this output must be a value of the optional key ‘notInDb’ of the
-self.outputs dictionary. To work properly this method must return
-self.make_initResult() object.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.stat.spm.model.EstimateContrast.run_process_mia">
-<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/stat/spm/model.html#EstimateContrast.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.stat.spm.model.EstimateContrast.run_process_mia" title="Link to this definition">¶</a></dt>
-<dd><p>Dedicated to the process launch step of the brick.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="mia_processes.bricks.stat.spm.model.EstimateModel">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.stat.spm.model.</span></span><span class="sig-name descname"><span class="pre">EstimateModel</span></span><a class="reference internal" href="_modules/mia_processes/bricks/stat/spm/model.html#EstimateModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.stat.spm.model.EstimateModel" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ProcessMIA</span></code></p>
-<p><em>Estimation of model parameters using classical method (ReML - Restricted
-Maximum Likelihood)</em></p>
-<p>Please, see the complete documentation for the <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/bricks/stats/spm/EstimateModel.html">EstimateModel brick
-in the mia_processes website</a></p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<ul class="simple">
-<li><p>Type ‘EstimateModel.help()’ for a full description of this process parameters.</p></li>
-<li><p>Type ‘&lt;EstimateModel&gt;.get_input_spec()’ for a full description of this process input trait types.</p></li>
-<li><p>Type ‘&lt;EstimateModel&gt;.get_output_spec()’ for a full description of this process output trait types.</p></li>
-</ul>
-</div>
-<dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.stat.spm.model.EstimateModel.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/stat/spm/model.html#EstimateModel.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.stat.spm.model.EstimateModel.__init__" title="Link to this definition">¶</a></dt>
-<dd><p>Dedicated to the attributes initialisation / instantiation.</p>
-<p>The input and output plugs are defined here. The special
-‘self.requirement’ attribute (optional) is used to define the
-third-party products necessary for the running of the brick.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.stat.spm.model.EstimateModel.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/stat/spm/model.html#EstimateModel.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.stat.spm.model.EstimateModel.list_outputs" title="Link to this definition">¶</a></dt>
-<dd><p>Dedicated to the initialisation step of the brick.</p>
-<p>The main objective of this method is to produce the outputs of the
-bricks (self.outputs) and the associated tags (self.inheritance_dict),
-if defined here. In order not to include an output in the database,
-this output must be a value of the optional key ‘notInDb’ of the
-self.outputs dictionary. To work properly this method must return
-self.make_initResult() object.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.stat.spm.model.EstimateModel.run_process_mia">
-<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/stat/spm/model.html#EstimateModel.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.stat.spm.model.EstimateModel.run_process_mia" title="Link to this definition">¶</a></dt>
-<dd><p>Dedicated to the process launch step of the brick.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="mia_processes.bricks.stat.spm.model.Level1Design">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.stat.spm.model.</span></span><span class="sig-name descname"><span class="pre">Level1Design</span></span><a class="reference internal" href="_modules/mia_processes/bricks/stat/spm/model.html#Level1Design"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.stat.spm.model.Level1Design" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ProcessMIA</span></code></p>
-<p><em>Specification of the GLM design matrix, fMRI data files and filtering</em></p>
-<p>Please, see the complete documentation for the <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/bricks/stats/spm/LevelDesign.html">Level1Design brick
-in the mia_processes website</a></p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<ul class="simple">
-<li><p>Type ‘Level1Design.help()’ for a full description of this process parameters.</p></li>
-<li><p>Type ‘&lt;Level1Design&gt;.get_input_spec()’ for a full description of this process input trait types.</p></li>
-<li><p>Type ‘&lt;Level1Design&gt;.get_output_spec()’ for a full description of this process output trait types.</p></li>
-</ul>
-</div>
-<dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.stat.spm.model.Level1Design.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/stat/spm/model.html#Level1Design.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.stat.spm.model.Level1Design.__init__" title="Link to this definition">¶</a></dt>
-<dd><p>Dedicated to the attributes initialisation / instantiation.</p>
-<p>The input and output plugs are defined here. The special
-‘self.requirement’ attribute (optional) is used to define the
-third-party products necessary for the running of the brick.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.stat.spm.model.Level1Design.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/stat/spm/model.html#Level1Design.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.stat.spm.model.Level1Design.list_outputs" title="Link to this definition">¶</a></dt>
-<dd><p>Dedicated to the initialisation step of the brick.</p>
-<p>The main objective of this method is to produce the outputs of the
-bricks (self.outputs) and the associated tags. In order not to include
-an output in the database, the name of the plug related to this output
-must be an element of the list corresponding to the value of the
-optional key “notInDb” of the self.outputs dictionary. To work
-properly this method must return self.make_initResult() object.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.stat.spm.model.Level1Design.run_process_mia">
-<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/stat/spm/model.html#Level1Design.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.stat.spm.model.Level1Design.run_process_mia" title="Link to this definition">¶</a></dt>
-<dd><p>Dedicated to the process launch step of the brick.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="mia_processes.bricks.stat.spm.model.MultipleRegressionDesign">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.stat.spm.model.</span></span><span class="sig-name descname"><span class="pre">MultipleRegressionDesign</span></span><a class="reference internal" href="_modules/mia_processes/bricks/stat/spm/model.html#MultipleRegressionDesign"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.stat.spm.model.MultipleRegressionDesign" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ProcessMIA</span></code></p>
-<p><em>Create SPM design for multiple regression</em></p>
-<p>Please, see the complete documentation for the <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/bricks/stats/spm/MultipleRegressionDesign.html">MultipleRegressionDesign
-brick in the mia_processes website</a></p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<ul class="simple">
-<li><p>Type ‘MultipleRegressionDesign.help()’ for a full description of this process parameters.</p></li>
-<li><p>Type ‘&lt;MultipleRegressionDesign&gt;.get_input_spec()’ for a full description of this process input trait types.</p></li>
-<li><p>Type ‘&lt;MultipleRegressionDesign&gt;.get_output_spec()’ for a full description of this process output trait types.</p></li>
-</ul>
-</div>
-<dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.stat.spm.model.MultipleRegressionDesign.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/stat/spm/model.html#MultipleRegressionDesign.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.stat.spm.model.MultipleRegressionDesign.__init__" title="Link to this definition">¶</a></dt>
-<dd><p>Dedicated to the attributes initialisation / instantiation.</p>
-<p>The input and output plugs are defined here. The special
-‘self.requirement’ attribute (optional) is used to define the
-third-party products necessary for the running of the brick.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.stat.spm.model.MultipleRegressionDesign.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/stat/spm/model.html#MultipleRegressionDesign.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.stat.spm.model.MultipleRegressionDesign.list_outputs" title="Link to this definition">¶</a></dt>
-<dd><p>Dedicated to the initialisation step of the brick.</p>
-<p>The main objective of this method is to produce the outputs of the
-bricks (self.outputs) and the associated tags. In order not to include
-an output in the database, the name of the plug related to this output
-must be an element of the list corresponding to the value of the
-optional key “notInDb” of the self.outputs dictionary. To work
-properly this method must return self.make_initResult() object.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.stat.spm.model.MultipleRegressionDesign.run_process_mia">
-<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/stat/spm/model.html#MultipleRegressionDesign.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.stat.spm.model.MultipleRegressionDesign.run_process_mia" title="Link to this definition">¶</a></dt>
-<dd><p>Dedicated to the process launch step of the brick.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="mia_processes.bricks.stat.spm.model.OneSampleTTestDesign">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.stat.spm.model.</span></span><span class="sig-name descname"><span class="pre">OneSampleTTestDesign</span></span><a class="reference internal" href="_modules/mia_processes/bricks/stat/spm/model.html#OneSampleTTestDesign"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.stat.spm.model.OneSampleTTestDesign" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ProcessMIA</span></code></p>
-<p><em>Create SPM design for one sample t-test</em></p>
-<p>Please, see the complete documentation for the <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/bricks/stats/spm/OneSampleTTestDesign.html">OneSampleTTestDesign brick
-in the mia_processes website</a></p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<ul class="simple">
-<li><p>Type ‘OneSampleTTestDesign.help()’ for a full description of this process parameters.</p></li>
-<li><p>Type ‘&lt;OneSampleTTestDesign&gt;.get_input_spec()’ for a full description of this process input trait types.</p></li>
-<li><p>Type ‘&lt;OneSampleTTestDesign&gt;.get_output_spec()’ for a full description of this process output trait types.</p></li>
-</ul>
-</div>
-<dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.stat.spm.model.OneSampleTTestDesign.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/stat/spm/model.html#OneSampleTTestDesign.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.stat.spm.model.OneSampleTTestDesign.__init__" title="Link to this definition">¶</a></dt>
-<dd><p>Dedicated to the attributes initialisation / instantiation.</p>
-<p>The input and output plugs are defined here. The special
-‘self.requirement’ attribute (optional) is used to define the
-third-party products necessary for the running of the brick.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.stat.spm.model.OneSampleTTestDesign.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/stat/spm/model.html#OneSampleTTestDesign.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.stat.spm.model.OneSampleTTestDesign.list_outputs" title="Link to this definition">¶</a></dt>
-<dd><p>Dedicated to the initialisation step of the brick.</p>
-<p>The main objective of this method is to produce the outputs of the
-bricks (self.outputs) and the associated tags. In order not to include
-an output in the database, the name of the plug related to this output
-must be an element of the list corresponding to the value of the
-optional key “notInDb” of the self.outputs dictionary. To work
-properly this method must return self.make_initResult() object.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.stat.spm.model.OneSampleTTestDesign.run_process_mia">
-<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/stat/spm/model.html#OneSampleTTestDesign.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.stat.spm.model.OneSampleTTestDesign.run_process_mia" title="Link to this definition">¶</a></dt>
-<dd><p>Dedicated to the process launch step of the brick.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="mia_processes.bricks.stat.spm.model.PairedTTestDesign">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.stat.spm.model.</span></span><span class="sig-name descname"><span class="pre">PairedTTestDesign</span></span><a class="reference internal" href="_modules/mia_processes/bricks/stat/spm/model.html#PairedTTestDesign"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.stat.spm.model.PairedTTestDesign" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ProcessMIA</span></code></p>
-<p><em>Create SPM design for one sample t-test</em></p>
-<p>Please, see the complete documentation for the <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/bricks/stats/spm/OneSampleTTestDesign.html">OneSampleTTestDesign brick
-in the mia_processes website</a></p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<ul class="simple">
-<li><p>Type ‘PairedTTestDesign.help()’ for a full description of this process parameters.</p></li>
-<li><p>Type ‘&lt;PairedTTestDesign&gt;.get_input_spec()’ for a full description of this process input trait types.</p></li>
-<li><p>Type ‘&lt;PairedTTestDesign&gt;.get_output_spec()’ for a full description of this process output trait types.</p></li>
-</ul>
-</div>
-<dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.stat.spm.model.PairedTTestDesign.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/stat/spm/model.html#PairedTTestDesign.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.stat.spm.model.PairedTTestDesign.__init__" title="Link to this definition">¶</a></dt>
-<dd><p>Dedicated to the attributes initialisation / instantiation.</p>
-<p>The input and output plugs are defined here. The special
-‘self.requirement’ attribute (optional) is used to define the
-third-party products necessary for the running of the brick.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.stat.spm.model.PairedTTestDesign.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/stat/spm/model.html#PairedTTestDesign.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.stat.spm.model.PairedTTestDesign.list_outputs" title="Link to this definition">¶</a></dt>
-<dd><p>Dedicated to the initialisation step of the brick.</p>
-<p>The main objective of this method is to produce the outputs of the
-bricks (self.outputs) and the associated tags. In order not to include
-an output in the database, the name of the plug related to this output
-must be an element of the list corresponding to the value of the
-optional key “notInDb” of the self.outputs dictionary. To work
-properly this method must return self.make_initResult() object.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.stat.spm.model.PairedTTestDesign.run_process_mia">
-<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/stat/spm/model.html#PairedTTestDesign.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.stat.spm.model.PairedTTestDesign.run_process_mia" title="Link to this definition">¶</a></dt>
-<dd><p>Dedicated to the process launch step of the brick.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="mia_processes.bricks.stat.spm.model.TwoSampleTTestDesign">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.stat.spm.model.</span></span><span class="sig-name descname"><span class="pre">TwoSampleTTestDesign</span></span><a class="reference internal" href="_modules/mia_processes/bricks/stat/spm/model.html#TwoSampleTTestDesign"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.stat.spm.model.TwoSampleTTestDesign" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ProcessMIA</span></code></p>
-<p><em>Create SPM design for two sample t-test</em></p>
-<p>Please, see the complete documentation for the <a class="reference external" href="https://populse.github.io/mia_processes/html/documentation/bricks/stats/spm/TwoSampleTTestDesign.html">TwoSampleTTestDesign brick
-in the mia_processes website</a></p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<ul class="simple">
-<li><p>Type ‘TwoSampleTTestDesign.help()’ for a full description of this process parameters.</p></li>
-<li><p>Type ‘&lt;TwoSampleTTestDesign&gt;.get_input_spec()’ for a full description of this process input trait types.</p></li>
-<li><p>Type ‘&lt;TwoSampleTTestDesign&gt;.get_output_spec()’ for a full description of this process output trait types.</p></li>
-</ul>
-</div>
-<dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.stat.spm.model.TwoSampleTTestDesign.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/stat/spm/model.html#TwoSampleTTestDesign.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.stat.spm.model.TwoSampleTTestDesign.__init__" title="Link to this definition">¶</a></dt>
-<dd><p>Dedicated to the attributes initialisation / instantiation.</p>
-<p>The input and output plugs are defined here. The special
-‘self.requirement’ attribute (optional) is used to define the
-third-party products necessary for the running of the brick.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.stat.spm.model.TwoSampleTTestDesign.list_outputs">
-<span class="sig-name descname"><span class="pre">list_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_plugged</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/stat/spm/model.html#TwoSampleTTestDesign.list_outputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.stat.spm.model.TwoSampleTTestDesign.list_outputs" title="Link to this definition">¶</a></dt>
-<dd><p>Dedicated to the initialisation step of the brick.</p>
-<p>The main objective of this method is to produce the outputs of the
-bricks (self.outputs) and the associated tags. In order not to include
-an output in the database, the name of the plug related to this output
-must be an element of the list corresponding to the value of the
-optional key “notInDb” of the self.outputs dictionary. To work
-properly this method must return self.make_initResult() object.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>is_plugged</strong> – the state, linked or not, of the plugs.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>a dictionary with requirement, outputs and inheritance_dict.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="mia_processes.bricks.stat.spm.model.TwoSampleTTestDesign.run_process_mia">
-<span class="sig-name descname"><span class="pre">run_process_mia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/stat/spm/model.html#TwoSampleTTestDesign.run_process_mia"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.stat.spm.model.TwoSampleTTestDesign.run_process_mia" title="Link to this definition">¶</a></dt>
-<dd><p>Dedicated to the process launch step of the brick.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="mia_processes.bricks.stat.spm.model.get_covariates">
-<span class="sig-prename descclassname"><span class="pre">mia_processes.bricks.stat.spm.model.</span></span><span class="sig-name descname"><span class="pre">get_covariates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vectors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">centerings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interactions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mia_processes/bricks/stat/spm/model.html#get_covariates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mia_processes.bricks.stat.spm.model.get_covariates" title="Link to this definition">¶</a></dt>
-<dd><p>Generate the covariates list containing dictionaries
-with the following key :
-name, vector, interaction, centering</p>
-</dd></dl>
-
+<section id="mia-processes-bricks-stat-spm-model-module">
+<h2>mia_processes.bricks.stat.spm.model module<a class="headerlink" href="#mia-processes-bricks-stat-spm-model-module" title="Permalink to this headline">¶</a></h2>
 </section>
 </section>
 
@@ -445,8 +51,8 @@ name, vector, interaction, centering</p>
       </div>
 
     <div class="footer" role="contentinfo">
-    &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
     </div>
   </body>
 </html>

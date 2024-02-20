@@ -312,10 +312,26 @@ class ComputeDKI(ProcessMIA):
             "in_dwi", File(output=False, optional=False, desc=in_dwi_desc)
         )
         self.add_trait(
-            "dwi_bvec", File(output=False, optional=False, desc=dwi_bvec_desc)
+            "dwi_bvec",
+            Either(
+                Undefined,
+                File(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=dwi_bvec_desc,
+            ),
         )
         self.add_trait(
-            "dwi_bval", File(output=False, optional=False, desc=dwi_bval_desc)
+            "dwi_bval",
+            Either(
+                Undefined,
+                File(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=dwi_bval_desc,
+            ),
         )
         self.add_trait(
             "in_mask", File(output=False, optional=True, desc=in_mask_desc)
@@ -359,6 +375,16 @@ class ComputeDKI(ProcessMIA):
                     print("\nThe input image format is not recognized...!")
                     return
                 else:
+                    if self.dwi_bvec is Undefined:
+                        self.dwi_bvec = self.in_dwi.replace(in_ext, "bvec")
+                    if self.dwi_bval is Undefined:
+                        self.dwi_bval = self.in_dwi.replace(in_ext, "bval")
+                    if (
+                        self.dwi_bvec is Undefined
+                        or self.dwi_bval is Undefined
+                    ):
+                        print("No bvec or bval found")
+                        return
                     self.outputs["out_FA"] = os.path.join(
                         self.output_directory,
                         fileName + "_dki_FA." + in_ext,
@@ -425,8 +451,12 @@ class ComputeDKI(ProcessMIA):
         bvals, bvecs = read_bvals_bvecs(self.dwi_bval, self.dwi_bvec)
         gtab = gradient_table(bvals, bvecs)
         dkimodel = dki.DiffusionKurtosisModel(gtab)
-        mask, affine_mask = load_nifti(self.in_mask)
-        dkifit = dkimodel.fit(data, mask=mask)
+        if self.in_mask:
+            mask, affine_mask = load_nifti(self.in_mask)
+            dkifit = dkimodel.fit(data, mask=mask)
+        else:
+            dkifit = dkimodel.fit(data)
+
         dki_metrics = {
             "FA": dkifit.fa,
             "MD": dkifit.md,

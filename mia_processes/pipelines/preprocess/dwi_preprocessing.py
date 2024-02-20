@@ -83,8 +83,6 @@ class Dwi_preprocessing(Pipeline):
         self.export_parameter(
             "Convert_dwi", "in_file", "in_dwi", is_optional=False
         )
-        self.export_parameter("Convert_dwi", "in_bvec", is_optional=False)
-        self.export_parameter("Convert_dwi", "in_bval", is_optional=False)
         self.export_parameter(
             "MotionDistortionCorrection",
             "pe_dir",
@@ -131,8 +129,6 @@ class Dwi_preprocessing(Pipeline):
         self.reorder_traits(
             (
                 "in_dwi",
-                "in_bvec",
-                "in_bval",
                 "in_dwi_pe_dir",
                 "in_dwi_ro_time",
                 "in_b0_reverse",
