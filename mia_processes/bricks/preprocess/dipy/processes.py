@@ -312,7 +312,7 @@ class ComputeDKI(ProcessMIA):
             "in_dwi", File(output=False, optional=False, desc=in_dwi_desc)
         )
         self.add_trait(
-            "dwi_bvec", 
+            "dwi_bvec",
             Either(
                 Undefined,
                 File(),
@@ -320,7 +320,7 @@ class ComputeDKI(ProcessMIA):
                 output=False,
                 optional=True,
                 desc=dwi_bvec_desc,
-            )
+            ),
         )
         self.add_trait(
             "dwi_bval",
@@ -331,7 +331,7 @@ class ComputeDKI(ProcessMIA):
                 output=False,
                 optional=True,
                 desc=dwi_bval_desc,
-            )
+            ),
         )
         self.add_trait(
             "in_mask", File(output=False, optional=True, desc=in_mask_desc)
@@ -379,7 +379,10 @@ class ComputeDKI(ProcessMIA):
                         self.dwi_bvec = self.in_dwi.replace(in_ext, "bvec")
                     if self.dwi_bval is Undefined:
                         self.dwi_bval = self.in_dwi.replace(in_ext, "bval")
-                    if self.dwi_bvec is Undefined or self.dwi_bval is Undefined:
+                    if (
+                        self.dwi_bvec is Undefined
+                        or self.dwi_bval is Undefined
+                    ):
                         print("No bvec or bval found")
                         return
                     self.outputs["out_FA"] = os.path.join(

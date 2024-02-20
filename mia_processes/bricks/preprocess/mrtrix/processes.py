@@ -2890,7 +2890,6 @@ class MRConvert(ProcessMIA):
                 print("\n Missing bvec or bval")
                 return self.make_initResult()
 
-
             if self.output_directory:
                 if self.suffix:
                     fileName += "_" + self.suffix
