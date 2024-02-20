@@ -2861,12 +2861,6 @@ class MRConvert(ProcessMIA):
         # Using the inheritance to ProcessMIA class, list_outputs method
         super(MRConvert, self).list_outputs()
 
-        if (self.in_bval and not self.in_bvec) or (
-            not self.in_bval and self.in_bvec
-        ):
-            print("\nIf grad_file used, do not provied bvec or bval")
-            return self.make_initResult()
-
         if self.grad_file and self.in_bvec:
             print("\nIf grad_file used, do not provied bvec or bval")
             return self.make_initResult()
@@ -2878,6 +2872,24 @@ class MRConvert(ProcessMIA):
             if not valid_ext:
                 print("\nThe input image format is not recognized...!")
                 return self.make_initResult()
+
+            # Find automatically bvec/bval if it is a diffusion
+            if not self.in_bvec:
+                bvec = self.in_file.replace(in_ext, "bvec")
+                if os.path.exists(bvec):
+                    self.in_bvec = bvec
+
+            if not self.in_bval:
+                bval = self.in_file.replace(in_ext, "bval")
+                if os.path.exists(bval):
+                    self.in_bval = bval
+
+            if (self.in_bval and not self.in_bvec) or (
+                not self.in_bval and self.in_bvec
+            ):
+                print("\n Missing bvec or bval")
+                return self.make_initResult()
+
 
             if self.output_directory:
                 if self.suffix:

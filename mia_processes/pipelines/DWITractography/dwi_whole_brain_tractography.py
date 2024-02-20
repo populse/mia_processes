@@ -120,12 +120,6 @@ class Dwi_whole_brain_tractography(Pipeline):
         # links
         self.export_parameter("dwi_preprocessing", "in_dwi", is_optional=False)
         self.export_parameter(
-            "dwi_preprocessing", "in_bvec", is_optional=False
-        )
-        self.export_parameter(
-            "dwi_preprocessing", "in_bval", is_optional=False
-        )
-        self.export_parameter(
             "dwi_preprocessing", "in_dwi_pe_dir", is_optional=True
         )
         self.export_parameter(
@@ -201,8 +195,6 @@ class Dwi_whole_brain_tractography(Pipeline):
         self.reorder_traits(
             (
                 "in_dwi",
-                "in_bvec",
-                "in_bval",
                 "in_dwi_pe_dir",
                 "in_dwi_ro_time",
                 "in_b0_reverse",
