@@ -72,25 +72,12 @@ However it seems to not work perfectly for some data.
 **Mandatory inputs parameters**
 
 - *in_dwi* (a string representing an existing file)
-    Diffusion image to preprocess (valid extensions: [.nii, .nii.gz]).
+    Diffusion image to preprocess (valid extensions: [.nii, .nii.gz, .mif]).
+    If a NIfTI is supplied, bvec and bval files will be found automatically.
 
     ::
 
       ex. '/home/username/data/raw_data/DWI.nii'
-
-- *in_bvec* (a string representing an existing file)
-    Direction of the gradient (b-vectors) of the in_dwi image (bvec file, valid extensions: [.bvec]).
-
-    ::
-
-      ex. '/home/username/data/raw_data/DWI.bvec'
-
-- *in_bval* (a string representing an existing file)
-    b values of the in_dwi image (bval file, valid extensions: [.bval]).
-
-    ::
-
-      ex. '/home/username/data/raw_data/DWI.bval'
 
 - *in_dwi_pe_dir* (ap, pa, lr, rl, default value is ap, optional)
     | Phase encoding direction of the in_diw image:
@@ -112,7 +99,7 @@ However it seems to not work perfectly for some data.
 
 - *in_b0_reverse* (a string representing an existing file)
     b=0 volumes with opposing phase-direction which is to be used exclusively by topup for estimating the inhomogeneity field
-    (valid extensions: [.nii, .nii.gz]).
+    (valid extensions: [.nii, .nii.gz, .mif]).
 
     ::
 

@@ -109,14 +109,16 @@ In this case, bvec and bval file should be specified.*
       ex. '/home/username/data/derived_data/diff_mrtrix_format.txt'
 
 - *in_bvec* (a pathlike object or a string representing an existing file, optional)
-    Provide Bvecs file in FSL format. If data converted into MIF format, bvec will be added in the output
+    Provide Bvecs file in FSL format. If data converted into MIF format, bvec will be added in the output.
+    If no file is supplied and if the file with the same name as "in_dwi" but wil ".bvec" extension exists, it will be automatically used.
 
     ::
 
       ex. '/home/username/data/raw_data/DWI.bvec'
 
 - *in_bval* (a pathlike object or a string representing an existing file, optional)
-    Provide Bvals file in FSL format. If data converted into MIF format, bavl will be added in the output
+    Provide Bvals file in FSL format. If data converted into MIF format, bavl will be added in the output.
+    If no file is supplied and if the file with the same name as "in_dwi" but wil ".bval" extension exists, it will be automatically used.
 
     ::
 

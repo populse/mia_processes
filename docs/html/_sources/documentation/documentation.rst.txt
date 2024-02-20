@@ -56,6 +56,10 @@ To use certain mia_processes bricks (atomic processes), `third-party softwares u
       - `FastSegment <bricks/preprocess/fsl/FastSegment.html>`_
       - `Flirt <bricks/preprocess/fsl/Flirt.html>`_
       - `Smooth <bricks/preprocess/fsl/Smooth.html>`__
+    
+    - **matlab_wrap**
+
+      - `ComputeBrainVolume <bricks/preprocess/matlab_wrap/ComputeBrainVolume.html>`__
 
     - **mrtrix**
 

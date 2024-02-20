@@ -1,21 +1,23 @@
+
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../../../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>DWI_whole_brain_tractograpy pipeline &#8212; mia_processes 2.5.1-dev+94e7e24a documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=f63d8bfa" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/haiku.css?v=e491ac2d" />
-    <script src="../../../_static/documentation_options.js?v=6f08eabc"></script>
-    <script src="../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <title>DWI_whole_brain_tractograpy pipeline &#8212; mia_processes 2.5.1-dev+1b04ffd2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/haiku.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head><body>
       <div class="header" role="banner"><h1 class="heading"><a href="../../../index.html">
-          <span>mia_processes 2.5.1-dev+94e7e24a documentation</span></a></h1>
+          <span>mia_processes 2.5.1-dev+1b04ffd2 documentation</span></a></h1>
         <h2 class="heading"><span>DWI_whole_brain_tractograpy pipeline</span></h2>
       </div>
       <div class="topnav" role="navigation" aria-label="top navigation">
@@ -31,6 +33,11 @@
   <div class="toctree-wrapper compound">
 </div>
 <table class="docutils align-default">
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 35%" />
+<col style="width: 42%" />
+</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference external" href="../../../index.html">Home</a></p></td>
 <td><p><a class="reference external" href="../../documentation.html">Documentation</a></p></td>
@@ -39,9 +46,9 @@
 </tbody>
 </table>
 <section id="dwi-whole-brain-tractograpy-pipeline">
-<h1>DWI_whole_brain_tractograpy pipeline<a class="headerlink" href="#dwi-whole-brain-tractograpy-pipeline" title="Link to this heading">¶</a></h1>
+<h1>DWI_whole_brain_tractograpy pipeline<a class="headerlink" href="#dwi-whole-brain-tractograpy-pipeline" title="Permalink to this headline">¶</a></h1>
 <section id="brain-tractography-with-mrtrix">
-<h2>Brain Tractography with MRTrix<a class="headerlink" href="#brain-tractography-with-mrtrix" title="Link to this heading">¶</a></h2>
+<h2>Brain Tractography with MRTrix<a class="headerlink" href="#brain-tractography-with-mrtrix" title="Permalink to this headline">¶</a></h2>
 <p>The aim of this pipeline is to create a whole-brain tractogram for a multishell DWI using Constrained Spherical Deconvolution (CSD).
 In this pipeline, an image with b=0 volumes with opposite phase encoding should be provided for the purpose of EPI distortion correction.
 An anatomical image is also required.</p>
@@ -100,24 +107,9 @@ However it seems to not work perfectly for some data.</p>
 <p><strong>Mandatory inputs parameters</strong></p>
 <ul>
 <li><dl>
-<dt><em>in_dwi</em> (a string representing an existing file)</dt><dd><p>Diffusion image to preprocess (valid extensions: [.nii, .nii.gz]).</p>
+<dt><em>in_dwi</em> (a string representing an existing file)</dt><dd><p>Diffusion image to preprocess (valid extensions: [.nii, .nii.gz, .mif]).
+If a NIfTI is supplied, bvec and bval files will be found automatically.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/DWI.nii&#39;</span>
-</pre></div>
-</div>
-</dd>
-</dl>
-</li>
-<li><dl>
-<dt><em>in_bvec</em> (a string representing an existing file)</dt><dd><p>Direction of the gradient (b-vectors) of the in_dwi image (bvec file, valid extensions: [.bvec]).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/DWI.bvec&#39;</span>
-</pre></div>
-</div>
-</dd>
-</dl>
-</li>
-<li><dl>
-<dt><em>in_bval</em> (a string representing an existing file)</dt><dd><p>b values of the in_dwi image (bval file, valid extensions: [.bval]).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/DWI.bval&#39;</span>
 </pre></div>
 </div>
 </dd>
@@ -149,7 +141,7 @@ However it seems to not work perfectly for some data.</p>
 </li>
 <li><dl>
 <dt><em>in_b0_reverse</em> (a string representing an existing file)</dt><dd><p>b=0 volumes with opposing phase-direction which is to be used exclusively by topup for estimating the inhomogeneity field
-(valid extensions: [.nii, .nii.gz]).</p>
+(valid extensions: [.nii, .nii.gz, .mif]).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ex</span><span class="o">.</span> <span class="s1">&#39;/home/username/data/raw_data/b0_reverse.nii&#39;</span>
 </pre></div>
 </div>
@@ -244,8 +236,8 @@ Each volume corresponds to the x, y &amp; z component of each peak direction vec
       </div>
 
     <div class="footer" role="contentinfo">
-    &#169; Copyright 2019, populse.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+        &#169; Copyright 2019, populse.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
     </div>
   </body>
 </html>
