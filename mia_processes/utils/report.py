@@ -23,9 +23,10 @@ import platform
 import tempfile
 import time
 from datetime import datetime
-from math import pi, sqrt
+from math import floor, log10, modf, pi, sqrt
 from sys import version
 
+import matplotlib.collections as collections
 import matplotlib.pyplot as plt
 import nibabel as nib
 import numpy as np
@@ -1670,6 +1671,10 @@ class Report:
                 self.styles["Center2"],
             )
         )
+        self.report.append(Spacer(0 * mm, 0 * mm))
+        line = ReportLine(150)
+        line.hAlign = "CENTER"
+        self.report.append(line)
         CVR_ref_data = self.dict4runtime["CVR_ref_data"]
         # Sheets used in the CVR_ref_data file for boxplot
         sheetsRef = ["CVR_temoins_IL"]
@@ -1677,21 +1682,21 @@ class Report:
         sheet = bookRef[sheetsRef[0]]
         # Number of the first column used for ROI data (in sheet)
         colStart = 8
+        # List of ROIs in the CVR_temoins_IL sheet order, of the
+        # CVR_ref_pop_SEMVIE-16.xlsx file
         xticklab = []
 
         for col_index in range(colStart, sheet.max_column + 1):
             value = sheet.cell(row=1, column=col_index).value
-            # List of ROIs in the CVR_temoins_IL sheet order of the
-            # CVR_ref_pop_SEMVIE-16.xlsx file
             xticklab.append(value)
 
-        # Dictionary of Laterality indexes for each ROI
-        # {u'ROI_STR': [-0.0079, -0.01, ...], u'ACA': ...}
+        # Reference dictionary of laterality indexes for each ROI
+        # IL_Ref = {'ROI_STR': [-0.0079, -0.01, ...], 'ACA': ...}
         IL_Ref = {}
         col_index = colStart - 1
 
         for roi in xticklab:
-            col_index += 1  # a verifier si c'est bon
+            col_index += 1
             val_list = []
 
             for row_index in range(1, sheet.max_row + 1):
@@ -1710,39 +1715,215 @@ class Report:
             IL_Ref[roi] = val_list
 
         # Laterality index for each ROI of the patient
-        # res_anal_data = os.path.join(
-        #     self.output_directory,
-        #     self.dict4runtime["norm_anat"]["PatientName"] + "_data",
-        #     "results_aggregation",
-        #     "BOLD_IL_mean_beta.xls",
-        # )
-        # with open(res_anal_data, "r") as data:
-        #     r_data = [elt.replace("beta_", "") for elt in data.readlines()]
+        # Patient dictionary of laterality index for each ROI
+        # IL_Pat = {'ACA': -0.0041, 'ACM': ...}
+        res_anal_data = os.path.join(
+            self.output_directory,
+            self.dict4runtime["norm_anat"]["PatientName"] + "_data",
+            "results_aggregation",
+            "BOLD_IL_mean_beta.xls",
+        )
+
+        max_timeout = 60  # Max timeout in seconds
+        start_time = time.time()
+
+        # TODO: This is a 2-cts hack in case res_anal_data doesn't already
+        #       exist. We can also add this data as input. In this case,
+        #       the brick will wait until the files exist.
+        #       This would be cleaner.
+        while not os.path.exists(res_anal_data):
+
+            if time.time() - start_time > max_timeout:
+                print(
+                    f"CVR make report: Max timeout "
+                    f"reached ({max_timeout}s). The "
+                    f"file does not exist."
+                )
+                break
+
+            print(
+                f"{res_anal_data} file does not exist yet. "
+                f"Waiting...{i} {time.time() - start_time}s"
+            )
+            time.sleep(1)
+            i += 1
+
+        with open(res_anal_data, "r") as data:
+            r_data = [elt.replace("beta_", "") for elt in data.readlines()]
 
         # IL in ROIs, uses \t for split() to deal with space
-        # IL_Pat = {
-        #     il: float(val)
-        #     for il, val in zip(
-        #         r_data[0].split("\t")[colStart - 1:-1],
-        #         r_data[1].split("\t")[colStart - 1:-1],
-        #     )
-        # }
+        # fmt: off
+        IL_Pat = {
+            il: float(val)
+            for il, val in zip(
+                r_data[0].split("\t")[colStart - 1:-1],
+                r_data[1].split("\t")[colStart - 1:-1],
+            )
+        }
         # Data on patient and experiment
-        # dat_Pat = {
-        #     dat: val
-        #     for dat, val in zip(
-        #         r_data[0].split("\t")[0:colStart - 1],
-        #         r_data[1].split("\t")[0:colStart - 1],
-        #     )
-        # }
-        # Number of ROI, for x coordinate.
-        # x = np.linspace(1, len(IL_Pat), len(IL_Pat), endpoint=True)
+        # dat_Pat = {'subjects': 'alej170316', 'patho': ...}
+        dat_Pat = {
+            dat: val
+            for dat, val in zip(
+                r_data[0].split("\t")[0:colStart - 1],
+                r_data[1].split("\t")[0:colStart - 1],
+            )
+        }
+        # fmt: on
+        fig.set_size_inches(15, 15)
+        ax.clear()
+        ax.yaxis.grid(
+            True, linestyle="-", which="major", color="grey", alpha=0.5
+        )
+        ax.xaxis.grid(
+            True, linestyle="-", which="major", color="grey", alpha=0.5
+        )
+        ax.set_axisbelow(True)
+        ax.set_title(
+            "Laterality Index from BOLD functional MRI study of the "
+            "\n cerebral vasoreactivity to hypercapnia",
+            fontsize=23,
+            y=1.01,
+        )
+        ax.set_xlabel("Regions Of Interest", fontsize=18)
+        ax.set_ylabel(
+            r"$ \mathsf{Laterality \hspace{0.5} Index \hspace{0.5} "
+            r"= \hspace{0.5} ( \beta_{left} \hspace{0.5} - "
+            r"\hspace{0.5} \beta_{right} ) \hspace{0.5} / "
+            r"\hspace{0.5} ( \beta_{left} \hspace{0.5} + "
+            r"\hspace{0.5} \beta_{right})} $",
+            fontsize=20,
+        )
+        roi_index = 0
 
-        self.report.append(Spacer(0 * mm, 0 * mm))
-        line = ReportLine(150)
-        line.hAlign = "CENTER"
-        self.report.append(line)
+        for roi in xticklab:
+            roi_index += 1
+            ax.boxplot(
+                IL_Ref[roi],
+                positions=[roi_index] * len(sheetsRef),
+                widths=0.6,
+                showfliers=False,
+            )
 
+        # TODO: this is a quick patch to correct the nomenclature difference
+        #       between ref and pat.
+        #       The change must be made in the brick producing the results:
+        #       Ex. Currently beta_ROI-FRON, whereas beta_ROI_FRON is
+        #       necessary to synchronize with the reference nomenclature.
+        IL_Pat_list = {k.replace("-", "_"): v for k, v in IL_Pat.items()}
+        IL_Pat_list = [IL_Pat_list[c] for c in xticklab if c in IL_Pat_list]
+
+        if len(IL_Pat_list) != len(xticklab):
+            print(
+                "\nReportCO2inhalCvr brick warning: the number of values is "
+                "not the same for patient and reference when automatically "
+                "generating the graph comparing patient and reference...\n"
+            )
+
+        ax.plot(
+            np.linspace(1, len(IL_Pat_list), len(IL_Pat_list), endpoint=True),
+            IL_Pat_list,
+            "bo-",
+        )
+
+        for label in ax.yaxis.get_majorticklabels():
+            label.set_fontsize(14)
+
+        ax.set_ylim(auto=1)
+        ax.set_xticklabels(xticklab, rotation=45, fontsize=14)
+        # ax.tick_params(axis='x', rotation=45, fontsize=14)
+        ax.set_xticks(range(1, len(xticklab) + 1))
+        ax.set_xlim(0, len(xticklab) + 1)
+        ax.get_yaxis().set_tick_params(direction="out")
+        ax.get_xaxis().set_tick_params(direction="out")
+        xlim = ax.get_xlim()
+        ylim = ax.get_ylim()
+        # RGB color chartreuse
+        c1 = collections.BrokenBarHCollection(
+            [xlim],
+            (0, ylim[0]),
+            facecolor=(127.0 / 255.0, 255.0 / 255.0, 0),
+            alpha=0.2,
+        )
+        # RGB color lavender
+        c2 = collections.BrokenBarHCollection(
+            [xlim],
+            (0, ylim[1]),
+            facecolor=(230.0 / 255.0, 230.0 / 255.0, 250.0 / 255.0),
+            alpha=0.5,
+        )
+        ax.add_collection(c1)
+        ax.add_collection(c2)
+        ax.set_ylim(ylim)
+
+        for i, j in enumerate(IL_Pat_list, start=1):
+
+            try:
+                j = round(j, -int(floor(log10(abs(modf(j)[0])))) + 1)
+
+            except ValueError:
+                pass
+
+            if (j - (0.02 * abs(ylim[0] - ylim[1])) > ylim[0]) and (
+                j - (0.02 * abs(ylim[0] - ylim[1])) < ylim[1]
+            ):
+                ax.annotate(
+                    str(j),
+                    xy=(
+                        i + (0.02 * (xlim[1] - xlim[0])),
+                        j - (0.02 * abs(ylim[0] - ylim[1])),
+                    ),
+                )
+            else:
+                ax.annotate(str(j), xy=(i + 0.1, j))
+
+        ax.text(
+            0.01,
+            0.99,
+            "Right impairment",
+            fontsize=26,
+            color="red",
+            backgroundcolor="none",
+            horizontalalignment="left",
+            verticalalignment="top",
+            transform=ax.transAxes,
+        )
+
+        ax.text(
+            0.01,
+            0.01,
+            "Left impairment",
+            fontsize=26,
+            color="red",
+            backgroundcolor="none",
+            horizontalalignment="left",
+            verticalalignment="bottom",
+            transform=ax.transAxes,
+        )
+
+        (leg_bp,) = ax.plot([0, 0], "k-")
+        (leg_curv,) = ax.plot([0, 0], "bo-")
+        ax.legend(
+            (leg_bp, leg_curv),
+            (
+                sheetsRef[0],
+                dat_Pat["subjects"] + " (" + dat_Pat["patho"] + ")",
+            ),
+        )
+        leg_bp.set_visible(False)
+        leg_curv.set_visible(False)
+        ax.plot([0, len(xticklab) + 1], [0, 0], "k-")
+        # width, height. in inches
+        fig.set_size_inches(400 / 25.4, 260 / 25.4)  # width, height. in inches
+        out_file_reg = os.path.join(
+            tmpdir.name,
+            dat_Pat["subjects"] + "_ILvaso-Patient.png",
+        )
+        fig.savefig(out_file_reg, dpi=200, format="png", bbox_inches="tight")
+        im_PatVsBoxPlot = Image(out_file_reg, 175.0 * mm, 138.5 * mm)
+        im_PatVsBoxPlot.hAlign = "CENTER"
+        self.report.append(Spacer(0 * mm, 40 * mm))
+        self.report.append(im_PatVsBoxPlot)
         self.report.append(PageBreak())
 
         # page 11 - Vascular territories used for IL #########################
