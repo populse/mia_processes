@@ -226,7 +226,7 @@ class Denoise(ProcessMIA):
         self.process.in_file = self.in_file
         self.process.block_radius = self.block_radius
         self.process.noise_model = self.noise_model
-        self.process._out_file = self.out_file
+        self.process.out_file = self.out_file
         self.process.patch_radius = self.patch_radius
         if self.in_mask:
             self.process.in_mask = self.in_mask
