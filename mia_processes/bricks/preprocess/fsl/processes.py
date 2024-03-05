@@ -9,6 +9,8 @@ populse_mia.
 :Contains:
     :Class:
         - BetSurfacesExtraction
+        - ConvertXFM
+        - EpiReg
         - ExtractROI
         - FastSegment
         - Smooth
@@ -26,7 +28,7 @@ populse_mia.
 # Other import
 import os
 
-from nipype.interfaces.base import File
+from nipype.interfaces.base import File, isdefined
 
 # populse_mia import
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
@@ -35,15 +37,16 @@ from traits.api import Bool, Either, Enum, Float, Int, List, String, Undefined
 from mia_processes.utils import checkFileExt
 
 EXT = {"NIFTI_GZ": "nii.gz", "NIFTI": "nii"}
+EXT_MATRICE = {"FSL_MATRICE": "mat"}
 
 
 class BetSurfacesExtraction(ProcessMIA):
     """
     *Surfaces (skull, inskull, outskull, outskin) extraction using BET (FSL)*
 
-    Please, see the complete documentation for the `SurfacesExtraction brick
+    Please, see the complete documentation for the `BetSurfacesExtraction brick
     in the mia_processes website
-    <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/fsl/SurfacesExtraction.html>`_
+    <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/fsl/BetSurfacesExtraction.html>`_
     """
 
     def __init__(self):
@@ -254,6 +257,611 @@ class BetSurfacesExtraction(ProcessMIA):
 
         # default inputs
         self.process.surfaces = True
+
+        return self.process.run(configuration_dict={})
+
+
+class ConvertXFM(ProcessMIA):
+    """
+    *Modify transformation matrice using convert_xfm (FSL)*
+
+    Please, see the complete documentation for the `ConvertXFM brick
+    in the mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/fsl/ConvertXFM.html>`_
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instantiation.
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(ConvertXFM, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = ["fsl", "nipype"]
+
+        # Mandatory inputs description
+        in_transfo_desc = (
+            "Input transformation matrix (a pathlike object"
+            "string representing an existing file)"
+        )
+        # Optional inputs with default value description
+        output_type_desc = (
+            "Typecodes of the output NIfTI image formats (one "
+            "of NIFTI, NIFTI_GZ)."
+        )
+        invert_xfm_desc = (
+            "Invert input transformation "
+            "(exclusive with fix_scale_skew, concat_xfm)"
+        )
+        concat_xfm_desc = (
+            "Write joint transformation of two input matrices "
+            "(exclusive with invert_xfm, fix_scale_skew, require in_transfo_2)"
+        )
+        fix_scale_skew_desc = (
+            "Use secondary matrix to fix scale and skew.  "
+            "(exclusive with invert_xfm, convert_xfm, require in_transfo_2)"
+        )
+
+        # Optional inputs
+        in_transfo_2_desc = (
+            "Second input transformation matrix (a pathlike object"
+            "string representing an existing file)"
+        )
+        # Outputs description
+        out_file_desc = (
+            "Final transformation matrix (a pathlike object "
+            "or string representing a file)"
+        )
+
+        # Mandatory inputs traits
+        self.add_trait(
+            "in_transfo",
+            File(output=False, optional=False, desc=in_transfo_desc),
+        )
+
+        # Optional inputs
+        self.add_trait(
+            "invert_xfm",
+            Bool(False, output=False, optional=True, desc=invert_xfm_desc),
+        )
+        self.add_trait(
+            "concat_xfm",
+            Bool(False, output=False, optional=True, desc=concat_xfm_desc),
+        )
+
+        self.add_trait(
+            "fix_scale_skew",
+            Bool(False, output=False, optional=True, desc=fix_scale_skew_desc),
+        )
+
+        self.add_trait(
+            "in_transfo_2",
+            File(output=False, optional=True, desc=in_transfo_2_desc),
+        )
+
+        self.add_trait(
+            "output_type",
+            Enum(
+                "NIFTI",
+                "NIFTI_GZ",
+                output=False,
+                optional=True,
+                desc=output_type_desc,
+            ),
+        )
+        # Outputs traits
+        self.add_trait(
+            "out_file", File(output=True, optional=False, desc=out_file_desc)
+        )
+
+        self.init_default_traits()
+
+        # To suppress the "FSLOUTPUTTYPE environment
+        # variable is not set" nipype warning:
+        if "FSLOUTPUTTYPE" not in os.environ:
+            os.environ["FSLOUTPUTTYPE"] = self.output_type
+
+        self.init_process("nipype.interfaces.fsl.ConvertXFM")
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(ConvertXFM, self).list_outputs()
+
+        # Outputs definition and tags inheritance
+        if self.in_transfo:
+            if (
+                (self.fix_scale_skew and self.concat_xfm)
+                or (self.fix_scale_skew and self.invert_xfm)
+                or (self.concat_xfm and self.invert_xfm)
+            ):
+                print(
+                    "Initisalisation failed.."
+                    "fix_scale_skew, concat_xfm, invert_xfm parameters are "
+                    "mutually esclusive"
+                )
+                return
+            if (self.fix_scale_skew or self.concat_xfm) and (
+                not self.in_transfo_2
+            ):
+                print(
+                    "Initisalisation failed.."
+                    "fix_scale_skew or concat_xfm require in_transfo_2 "
+                )
+                return
+
+            valid_ext, in_ext, file_name = checkFileExt(
+                self.in_transfo, EXT_MATRICE
+            )
+            if not valid_ext:
+                print("\nThe input matrice format is not recognized...!")
+                return
+            if self.output_directory:
+                if self.in_transfo_2:
+                    valid_ext, in_ext, file_name_2 = checkFileExt(
+                        self.in_transfo_2, EXT_MATRICE
+                    )
+                    if not valid_ext:
+                        print(
+                            "\nThe second input matrice format "
+                            "is not recognized...!"
+                        )
+                        return
+                    if self.fix_scale_skew:
+                        out_file_name = (
+                            file_name + "_fix_scale_skew_" + file_name_2
+                        )
+                    elif self.concat_xfm:
+                        out_file_name = file_name + "_concate_" + file_name_2
+                if self.invert_xfm:
+                    out_file_name = file_name + "_inverse"
+                self.outputs["out_file"] = os.path.join(
+                    self.output_directory, out_file_name + ".mat"
+                )
+
+        if self.outputs:
+            self.tags_inheritance(
+                in_file=self.in_transfo,
+                out_file=self.outputs["out_file"],
+            )
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(ConvertXFM, self).run_process_mia()
+        self.process.output_type = self.output_type
+        self.process.in_file = self.in_transfo
+        self.process.out_file = self.out_file
+        if self.in_transfo_2:
+            self.process.in_file2 = self.in_transfo_2
+        if self.concat_xfm:
+            self.process.concat_xfm = self.concat_xfm
+        if self.fix_scale_skew:
+            self.process.fix_scale_skew = self.fix_scale_skew
+        if self.invert_xfm:
+            self.process.invert_xfm = self.invert_xfm
+
+        return self.process.run(configuration_dict={})
+
+
+class EpiReg(ProcessMIA):
+    """
+    *Run epi_reg script (FSL) to register EPI images to structural images*
+
+    Please, see the complete documentation for the `EpiReg brick
+    in the mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/fsl/EpiReg.html>`_
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation/instantiation.
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(EpiReg, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = ["fsl", "nipype"]
+
+        # Mandatory inputs description
+        in_epi_desc = (
+            "Input EPI image(a pathlike object"
+            "string representing an existing file)"
+        )
+        in_t1_desc = (
+            "Input T1 image(a pathlike object"
+            "string representing an existing file)"
+        )
+        in_t1_brain_desc = (
+            "Input brain extracted T1image(a pathlike object"
+            "string representing an existing file)"
+        )
+        # Optional inputs with default value description
+        output_type_desc = (
+            "Typecodes of the output NIfTI image formats (one "
+            "of NIFTI, NIFTI_GZ)."
+        )
+        no_clean_desc = "Do not clean up intermediate files "
+        no_fmapreg_desc = "Do not perform registration of fmap to T1 "
+        out_base_desc = "Output base name. "
+
+        # Optional inputs
+        weight_image_desc = (
+            "Weighting image (in T1 space)(a pathlike object"
+            "string representing an existing file)"
+        )
+        wmseg_desc = (
+            "White matter segmentation of T1 image (a pathlike object"
+            "string representing an existing file)"
+        )
+        fmap_desc = (
+            "Fieldmap image (in rad/s)(a pathlike object"
+            "string representing an existing file)"
+        )
+        fmapmag_desc = (
+            "Fieldmap magnitude image - wholehead (a pathlike object"
+            "string representing an existing file)"
+        )
+        fmapmagbrain_desc = (
+            "Fieldmap magnitude image - brain extracted (a pathlike object"
+            "string representing an existing file)"
+        )
+        pedir_desc = "Phase encoding direction, dir = x/y/z/-x/-y/-z"
+        echospacing_desc = "Effective EPI echo spacing (a float)"
+        # Outputs description
+        out_file_desc = (
+            "Unwarped and coregistered epi input. (a pathlike object "
+            "or string representing a file)"
+        )
+        out_1vol_desc = (
+            "Unwarped and coregistered epi single volume. (a pathlike object "
+            "or string representing a file)"
+        )
+        epi2str_mat_desc = (
+            "Rigid epi-to-structural transform.(a pathlike object "
+            "or string representing a file)"
+        )
+        epi2str_inv_desc = (
+            "Rigid structural-to-epi transform.(a pathlike object "
+            "or string representing a file)"
+        )
+        fmap2epi_mat_desc = (
+            "Rigid fieldmap-to-epi transform.(a pathlike object "
+            "or string representing a file)"
+        )
+        fmap2str_mat_desc = (
+            "Rigid fieldmap-to-structural transform.(a pathlike object "
+            "or string representing a file)"
+        )
+        fmap_epi_desc = (
+            "Fieldmap in epi space. (a pathlike object "
+            "or string representing a file)"
+        )
+        fmap_str_desc = (
+            "Fieldmap in structural space..(a pathlike object "
+            "or string representing a file)"
+        )
+        fmapmag_str_desc = (
+            "Fieldmap magnitude image in structural space.(a pathlike object "
+            "or string representing a file)"
+        )
+        fullwarp_desc = (
+            "Warpfield to unwarp epi and transform into structural space."
+            "(a pathlike object or string representing a file)"
+        )
+        seg_desc = (
+            "White matter, gray matter, csf segmentation.(a pathlike object "
+            "or string representing a file)"
+        )
+        shiftmap_desc = (
+            "Shiftmap in epi space.(a pathlike object "
+            "or string representing a file)"
+        )
+        wmedge_desc = (
+            "White matter edges for visualization.(a pathlike object "
+            "or string representing a file)"
+        )
+        wmseg_out_desc = (
+            "White matter segmentation used in flirt bbr.(a pathlike object "
+            "or string representing a file)"
+        )
+
+        # Mandatory inputs traits
+        self.add_trait(
+            "in_epi", File(output=False, optional=False, desc=in_epi_desc)
+        )
+        self.add_trait(
+            "in_t1", File(output=False, optional=False, desc=in_t1_desc)
+        )
+        self.add_trait(
+            "in_t1_brain",
+            File(output=False, optional=False, desc=in_t1_brain_desc),
+        )
+
+        # Optional inputs
+        self.add_trait(
+            "no_clean",
+            Bool(False, output=False, optional=True, desc=no_clean_desc),
+        )
+        self.add_trait(
+            "out_base",
+            String(
+                "epi2struct", output=False, optional=True, desc=out_base_desc
+            ),
+        )
+        self.add_trait(
+            "weight_image",
+            File(output=False, optional=True, desc=weight_image_desc),
+        )
+        self.add_trait(
+            "wmseg", File(output=False, optional=True, desc=wmseg_desc)
+        )
+        self.add_trait(
+            "no_fmapreg",
+            Bool(False, output=False, optional=True, desc=no_fmapreg_desc),
+        )
+        self.add_trait(
+            "fmap", File(output=False, optional=True, desc=fmap_desc)
+        )
+        self.add_trait(
+            "fmapmag", File(output=False, optional=True, desc=fmapmag_desc)
+        )
+        self.add_trait(
+            "fmapmagbrain",
+            File(output=False, optional=True, desc=fmapmagbrain_desc),
+        )
+        self.add_trait(
+            "echospacing",
+            Either(
+                Undefined,
+                Float(),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=echospacing_desc,
+            ),
+        )
+        self.add_trait(
+            "pedir",
+            Either(
+                Undefined,
+                Enum("x", "y", "z", "-x", "-y", "-z"),
+                default=Undefined,
+                output=False,
+                optional=True,
+                desc=pedir_desc,
+            ),
+        )
+        self.add_trait(
+            "output_type",
+            Enum(
+                "NIFTI",
+                "NIFTI_GZ",
+                output=False,
+                optional=True,
+                desc=output_type_desc,
+            ),
+        )
+        # Outputs traits
+        self.add_trait(
+            "out_file", File(output=True, optional=False, desc=out_file_desc)
+        )
+        self.add_trait(
+            "epi2str_mat",
+            File(output=True, optional=False, desc=epi2str_mat_desc),
+        )
+        self.add_trait("seg", File(output=True, optional=True, desc=seg_desc))
+        self.add_trait(
+            "wmedge", File(output=True, optional=True, desc=wmedge_desc)
+        )
+        self.add_trait(
+            "wmseg_out", File(output=True, optional=True, desc=wmseg_out_desc)
+        )
+        self.add_trait(
+            "out_1vol", File(output=True, optional=True, desc=out_1vol_desc)
+        )
+        self.add_trait(
+            "epi2str_inv",
+            File(output=True, optional=True, desc=epi2str_inv_desc),
+        )
+        self.add_trait(
+            "fmap2epi_mat",
+            File(output=True, optional=True, desc=fmap2epi_mat_desc),
+        )
+        self.add_trait(
+            "fmap2str_mat",
+            File(output=True, optional=True, desc=fmap2str_mat_desc),
+        )
+        self.add_trait(
+            "fmap_epi", File(output=True, optional=True, desc=fmap_epi_desc)
+        )
+        self.add_trait(
+            "fmap_str", File(output=True, optional=True, desc=fmap_str_desc)
+        )
+        self.add_trait(
+            "fmapmag_str",
+            File(output=True, optional=True, desc=fmapmag_str_desc),
+        )
+        self.add_trait(
+            "fullwarp", File(output=True, optional=True, desc=fullwarp_desc)
+        )
+        self.add_trait(
+            "shiftmap", File(output=True, optional=True, desc=shiftmap_desc)
+        )
+
+        self.init_default_traits()
+
+        # To suppress the "FSLOUTPUTTYPE environment
+        # variable is not set" nipype warning:
+        if "FSLOUTPUTTYPE" not in os.environ:
+            os.environ["FSLOUTPUTTYPE"] = self.output_type
+
+        self.init_process("nipype.interfaces.fsl.EpiReg")
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(EpiReg, self).list_outputs()
+
+        # Outputs definition and tags inheritance
+        if self.in_epi:
+
+            valid_ext, in_ext, file_name = checkFileExt(self.in_epi, EXT)
+            valid_ext_2, in_ext_2, file_name_2 = checkFileExt(self.in_t1, EXT)
+            valid_ext_3, in_ext_3, file_name_3 = checkFileExt(
+                self.in_t1_brain, EXT
+            )
+            if not valid_ext or not valid_ext_2 or not valid_ext_3:
+                print("\nInput format is not recognized...!")
+                return
+            if self.output_directory:
+                if self.in_epi:
+                    self.outputs["out_file"] = os.path.join(
+                        self.output_directory, self.out_base + ".nii.gz"
+                    )
+                    self.outputs["epi2str_mat"] = os.path.join(
+                        self.output_directory, self.out_base + ".mat"
+                    )
+
+                    if not self.no_fmapreg and isdefined(self.fmap):
+                        self.outputs["out_1vol"] = os.path.join(
+                            self.output_directory,
+                            self.out_base + "_1vol.nii.gz",
+                        )
+                        self.outputs["fmap2str_mat"] = os.path.join(
+                            self.output_directory,
+                            self.out_base + "_fieldmap2str.mat",
+                        )
+                        self.outputs["fmap2epi_mat"] = os.path.join(
+                            self.output_directory,
+                            self.out_base + "_fieldmaprads2epi.mat",
+                        )
+                        self.outputs["fmap_epi"] = os.path.join(
+                            self.output_directory,
+                            self.out_base + "_fieldmaprads2epi.nii.gz",
+                        )
+                        self.outputs["fmap_str"] = os.path.join(
+                            self.output_directory,
+                            self.out_base + "_fieldmaprads2str.nii.gz",
+                        )
+                        self.outputs["fmapmag_str"] = os.path.join(
+                            self.output_directory,
+                            self.out_base + "_fieldmap2str.nii.gz",
+                        )
+                        self.outputs["shiftmap"] = os.path.join(
+                            self.output_directory,
+                            self.out_base + "_fieldmaprads2epi_shift.nii.gz",
+                        )
+                        self.outputs["fullwarp"] = os.path.join(
+                            self.output_directory,
+                            self.out_base + "_warp.nii.gz",
+                        )
+                        self.outputs["epi2str_inv"] = os.path.join(
+                            self.output_directory, self.out_base + "_inv.mat"
+                        )
+                    if not isdefined(self.wmseg):
+                        self.outputs["wmedge"] = os.path.join(
+                            self.output_directory,
+                            self.out_base + "_fast_wmedge.nii.gz",
+                        )
+                        self.outputs["wmseg_out"] = os.path.join(
+                            self.output_directory,
+                            self.out_base + "_fast_wmseg.nii.gz",
+                        )
+                        self.outputs["seg"] = os.path.join(
+                            self.output_directory,
+                            self.out_base + "_fast_seg.nii.gz",
+                        )
+
+                if self.outputs:
+                    # FIXME: not sure about inheritance for matrice
+                    for k in (
+                        "out_file",
+                        "epi2str_mat",
+                    ):
+                        self.tags_inheritance(
+                            in_file=self.in_epi,
+                            out_file=self.outputs[k],
+                        )
+
+                    if not self.no_fmapreg and isdefined(self.fmap):
+                        for k in (
+                            "out_1vol",
+                            "fullwarp",
+                            "epi2str_inv",
+                            "fmap2str_mat",
+                            "fmap2epi_mat",
+                        ):
+                            self.tags_inheritance(
+                                in_file=self.in_epi,
+                                out_file=self.outputs[k],
+                            )
+                        for k in (
+                            "fmapmag_str",
+                            "fmap_epi",
+                            "fmap_str",
+                            "shiftmap",
+                        ):
+                            self.tags_inheritance(
+                                in_file=self.fmap,
+                                out_file=self.outputs[k],
+                            )
+
+                    if not isdefined(self.wmseg):
+                        for k in ("wmedge", "wmseg_out", "seg"):
+                            self.tags_inheritance(
+                                in_file=self.in_t1,
+                                out_file=self.outputs[k],
+                            )
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(EpiReg, self).run_process_mia()
+        self.process.output_type = self.output_type
+        self.process.epi = self.in_epi
+        self.process.t1_head = self.in_t1
+        self.process.t1_brain = self.in_t1_brain
+        self.process.out_base = self.out_base
+        self.process.fmap = self.fmap
+        self.process.fmapmag = self.fmapmag
+        self.process.fmapmagbrain = self.fmapmagbrain
+        self.process.no_clean = self.no_clean
+        self.process.no_fmapreg = self.no_fmapreg
+        self.process.weight_image = self.weight_image
+        self.process.wmseg = self.wmseg
+
+        if self.pedir:
+            self.process.pedir = self.pedir
+        if self.echospacing:
+            self.process.echospacing = self.echospacing
 
         return self.process.run(configuration_dict={})
 

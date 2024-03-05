@@ -14,6 +14,8 @@ The atomic calculations from fsl.
 
 from .processes import (  # noqa: F401
     BetSurfacesExtraction,
+    ConvertXFM,
+    EpiReg,
     ExtractROI,
     FastSegment,
     Flirt,
