@@ -20,6 +20,7 @@ needed to run other higher-level bricks.
         - List_Duplicate
         - List_To_File
         - Make_A_List
+        - Make_CVR_reg_physio
 
 """
 
@@ -31,12 +32,11 @@ needed to run other higher-level bricks.
 # for details.
 ##########################################################################
 
+# Other imports
 import os
 import re
 import shutil
 import tempfile
-
-# Other imports
 from ast import literal_eval
 
 import pandas as pd
@@ -59,7 +59,9 @@ from populse_mia.data_manager.filter import Filter
 from populse_mia.data_manager.project import BRICK_OUTPUTS, COLLECTION_CURRENT
 from populse_mia.software_properties import Config
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
+from traits.api import Either, Undefined
 
+# mia_processes imports
 from mia_processes.utils import checkFileExt, get_dbFieldValue
 
 
@@ -1053,7 +1055,7 @@ class Import_Data(ProcessMIA):
 
         # Inputs description
         rois_list_desc = (
-            "A list or a list of lists of strings, defining the"
+            "A list or a list of lists of strings, defining the "
             "data to import."
         )
         lib_dir_desc = (
@@ -1659,6 +1661,184 @@ class Make_A_List(ProcessMIA):
                 self.outputs["obj_list"] = [objt1, objt2]
 
             self.outputs["notInDb"] = ["obj_list"]
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        return
+
+
+class Make_CVR_reg_physio(ProcessMIA):
+    """
+    *Generate the physiological regressor for CVR*
+
+    Please, see the complete documentation for the
+    `Make_CVR_reg_physio in the mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/tools/Make_CVR_reg_physio.html>`_
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation / instantiation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # initialisation of the objects needed for the launch of the brick
+        super(Make_CVR_reg_physio, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = []  # no need of third party software!
+
+        # Inputs description
+        trigger_data_desc = "The trigger data (a file)"
+        physio_data_desc = "The physiological data (a file)"
+        func_file_desc = "The fMRI scan under hypercapnia (a file)"
+
+        # Outputs description
+        cvr_reg_desc = "The physiological regressor for CVR (a file)"
+
+        # Inputs traits
+        self.add_trait(
+            "trigger_data",
+            traits.List(
+                File(), output=False, optional=True, desc=trigger_data_desc
+            ),
+        )
+        self.trigger_data = traits.Undefined
+
+        self.add_trait(
+            "physio_data",
+            traits.List(
+                File(), output=False, optional=True, desc=physio_data_desc
+            ),
+        )
+        self.physio_data = traits.Undefined
+
+        self.add_trait(
+            "func_file",
+            InputMultiPath(
+                Either(ImageFileSPM(), Undefined),
+                copyfile=False,
+                output=False,
+                optional=False,
+                desc=func_file_desc,
+            ),
+        )
+        self.func_file = traits.Undefined
+
+        # Outputs traits
+        self.add_trait("cvr_reg", File(output=True, desc=cvr_reg_desc))
+        self.cvr_reg = traits.Undefined
+
+        # Special parameter used as a messenger for the run_process_mia method
+        self.add_trait(
+            "dict4runtime",
+            traits.Dict(output=False, optional=True, userlevel=1),
+        )
+
+        self.init_default_traits()
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. In order not to include an output in the database,
+        this output must be a value of the optional key 'notInDb' of the
+        self.outputs dictionary. To work properly this method must return
+        self.make_initResult() object.
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(Make_CVR_reg_physio, self).list_outputs()
+
+        # Outputs definition and tags inheritance (optional)
+        if self.outputs:
+            self.outputs = {}
+
+        if self.func_file not in ["<undefined>", traits.Undefined]:
+            patient_name = get_dbFieldValue(
+                self.project, self.func_file, "PatientName"
+            )
+
+        else:
+            print(
+                "Make_CVR_reg_physio brick: The mandatory 'func_file' input "
+                "parameter is not defined ..."
+            )
+            return self.make_initResult()
+
+        if patient_name is None:
+            print(
+                "Make_CVR_reg_physio brick: Please, fill 'PatientName' "
+                "tag in the database for {} ...".format(self.func_file)
+            )
+            return self.make_initResult()
+
+        if self.output_directory:
+            # Create a data directory for this patient
+            out_directory = os.path.join(
+                self.output_directory, patient_name + "_data"
+            )
+            self.dict4runtime["patient_name"] = patient_name
+
+            if not os.path.exists(out_directory):
+                os.mkdir(out_directory)
+
+        else:
+            print(
+                "Make_CVR_reg_physio brick: No output_directory was "
+                "found...!\n"
+            )
+            return self.make_initResult()
+
+        fname_reg = os.path.join(out_directory, "CVR_physio_reg.mat")
+        self.outputs["cvr_reg"] = fname_reg
+
+        all_tags_to_add = []
+        # Add the reg state (individual or standard), in database
+        tag_to_add = dict()
+        tag_to_add["name"] = "Regressor state"
+        tag_to_add["field_type"] = "string"
+        tag_to_add["description"] = (
+            "Indicates the state of the physiological regressor for CVR "
+            "(Individual or Standard)"
+        )
+        tag_to_add["visibility"] = True
+        tag_to_add["origin"] = "user"
+        tag_to_add["unit"] = None
+        tag_to_add["default_value"] = None
+
+        if self.trigger_data and self.physio_data not in [
+            "<undefined>",
+            traits.Undefined,
+        ]:
+            tag_to_add["value"] = "Individual"
+
+        else:
+            tag_to_add["value"] = "Standard"
+
+        all_tags_to_add.append(tag_to_add)
+        self.tags_inheritance(
+            self.func_file, fname_reg, own_tags=all_tags_to_add
+        )
+
+        # if self.trigger_data and self.physio_data not in ["<undefined>",
+        #                                                   traits.Undefined]:
+        #     self.outputs["cvr_reg"] = "toto"
+        #
+        # else:
+        #     # if we do not have the physiological and trigger data, we
+        #     # propose a standard regressor
+        #     origin_reg = os.path.join(ressourceDir,
+        #                               "reference_population_data",
+        #                               "regressor_physio_EtCO2_standard.mat")
+        #     fname_reg = os.path.join(out_directory, "CVR_physio_reg.mat")
+        #     shutil.copy(origin_reg, fname_reg)
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
