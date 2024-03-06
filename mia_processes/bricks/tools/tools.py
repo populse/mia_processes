@@ -1833,25 +1833,62 @@ class Make_CVR_reg_physio(ProcessMIA):
             "<undefined>",
             traits.Undefined,
         ]:
+            # 8 frames (4 ctl/tag pairs) in the current data (s)
+            # exclude_period = 32
+            # in case we do not have a physio regressor
+            # hc_etco2 = 1
+            # the number of last dyns to be deleted
+            # end_dyn_sup = 0
+            # delay between respiration and EtCO2 variation (s)
+            # delay_for_etco2 = 4.8
+            # tr = (
+            #     get_dbFieldValue(
+            #         self.project, self.func_file, "RepetitionTime"
+            #     )[0]
+            #     / 1000
+            # )
+            # n_slices = get_dbFieldValue(
+            #     self.project,
+            #     self.func_file,
+            #     "Dataset dimensions (Count, X,Y,Z,T...)",
+            # )[3]
+            # from nilearn.glm.first_level.hemodynamic_models import glover_hrf
+
+            # hrf = glover_hrf(tr)
+            # nb_dyn = (
+            #     get_dbFieldValue(
+            #         self.project,
+            #         self.func_file,
+            #         "Dataset dimensions (Count, X,Y,Z,T...)",
+            #     )[4]
+            #     - end_dyn_sup
+            # )
+
             print(
                 "The Make_CVR_reg_physio brick does not yet generate the "
                 "individual regressor. Currently, only the standard "
                 "regressor is provided in all cases."
             )
-
+            config = Config()
+            shutil.copy(
+                os.path.join(
+                    config.get_resources_path(),
+                    "reference_population_data",
+                    "regressor_physio_EtCO2_standard.mat",
+                ),
+                fname_reg,
+            )
         else:
-            # to do...
+            config = Config()
+            shutil.copy(
+                os.path.join(
+                    config.get_resources_path(),
+                    "reference_population_data",
+                    "regressor_physio_EtCO2_standard.mat",
+                ),
+                fname_reg,
+            )
             pass
-
-        config = Config()
-        shutil.copy(
-            os.path.join(
-                config.get_resources_path(),
-                "reference_population_data",
-                "regressor_physio_EtCO2_standard.mat",
-            ),
-            fname_reg,
-        )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
