@@ -1704,24 +1704,21 @@ class Make_CVR_reg_physio(ProcessMIA):
         # Inputs traits
         self.add_trait(
             "trigger_data",
-            traits.List(
-                File(), output=False, optional=True, desc=trigger_data_desc
-            ),
+            File(output=False, optional=True, desc=trigger_data_desc),
         )
         self.trigger_data = traits.Undefined
 
         self.add_trait(
             "physio_data",
-            traits.List(
-                File(), output=False, optional=True, desc=physio_data_desc
-            ),
+            File(output=False, optional=True, desc=physio_data_desc),
         )
         self.physio_data = traits.Undefined
 
         self.add_trait(
             "func_file",
-            InputMultiPath(
-                Either(ImageFileSPM(), Undefined),
+            Either(
+                ImageFileSPM(),
+                Undefined,
                 copyfile=False,
                 output=False,
                 optional=False,
@@ -1735,10 +1732,10 @@ class Make_CVR_reg_physio(ProcessMIA):
         self.cvr_reg = traits.Undefined
 
         # Special parameter used as a messenger for the run_process_mia method
-        self.add_trait(
-            "dict4runtime",
-            traits.Dict(output=False, optional=True, userlevel=1),
-        )
+        # self.add_trait(
+        #     "dict4runtime",
+        #     traits.Dict(output=False, optional=True, userlevel=1),
+        # )
 
         self.init_default_traits()
 
@@ -1784,7 +1781,7 @@ class Make_CVR_reg_physio(ProcessMIA):
             out_directory = os.path.join(
                 self.output_directory, patient_name + "_data"
             )
-            self.dict4runtime["patient_name"] = patient_name
+            # self.dict4runtime["patient_name"] = patient_name
 
             if not os.path.exists(out_directory):
                 os.mkdir(out_directory)
@@ -1823,26 +1820,45 @@ class Make_CVR_reg_physio(ProcessMIA):
             tag_to_add["value"] = "Standard"
 
         all_tags_to_add.append(tag_to_add)
+        # TODO: Can we simply add new tags without inheritance (I'm not sure
+        #       this possibility was considered when we coded the
+        #       tags_inheritance function)? As in this case, it might be
+        #       preferable not to inherit from the functional but simply to
+        #       add new tags.
         self.tags_inheritance(
             self.func_file, fname_reg, own_tags=all_tags_to_add
         )
 
-        # if self.trigger_data and self.physio_data not in ["<undefined>",
-        #                                                   traits.Undefined]:
-        #     self.outputs["cvr_reg"] = "toto"
-        #
-        # else:
-        #     # if we do not have the physiological and trigger data, we
-        #     # propose a standard regressor
-        #     origin_reg = os.path.join(ressourceDir,
-        #                               "reference_population_data",
-        #                               "regressor_physio_EtCO2_standard.mat")
-        #     fname_reg = os.path.join(out_directory, "CVR_physio_reg.mat")
-        #     shutil.copy(origin_reg, fname_reg)
+        if self.trigger_data and self.physio_data not in [
+            "<undefined>",
+            traits.Undefined,
+        ]:
+            print(
+                "The Make_CVR_reg_physio brick does not yet generate the "
+                "individual regressor. Currently, only the standard "
+                "regressor is provided in all cases."
+            )
+
+        else:
+            # to do...
+            pass
+
+        config = Config()
+        shutil.copy(
+            os.path.join(
+                config.get_resources_path(),
+                "reference_population_data",
+                "regressor_physio_EtCO2_standard.mat",
+            ),
+            fname_reg,
+        )
 
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
+        # The regressor is created at initialisation time rather than at
+        # runtime because some bricks that use this regressor need to consult
+        # it at initialisation time (e.g. Level1Design)!
         return

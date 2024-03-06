@@ -33,6 +33,7 @@ class CO2_inhalation(Pipeline):
 
     def pipeline_definition(self):
         """Building the pipeline"""
+
         # nodes
         self.add_process(
             "1_spatial_preprocessing",
@@ -101,6 +102,11 @@ class CO2_inhalation(Pipeline):
         self.add_process(
             "list_to_file_1", "mia_processes.bricks.tools.tools.List_To_File"
         )
+        self.add_process(
+            "make_cvr_reg_physio_1",
+            "mia_processes.bricks.tools.tools." "Make_CVR_reg_physio",
+        )
+
         # links
         self.export_parameter(
             "1_spatial_preprocessing", "anat_file", is_optional=False
@@ -108,14 +114,17 @@ class CO2_inhalation(Pipeline):
         self.export_parameter(
             "1_spatial_preprocessing", "func_files", is_optional=False
         )
-        self.export_parameter(
-            "reportco2inhalcvr", "regressor_physio", is_optional=False
-        )
-        self.add_link("regressor_physio->files_to_list.file1")
+        self.add_link("func_files->make_cvr_reg_physio_1.func_file")
         self.export_parameter(
             "reportco2inhalcvr", "patient_info", is_optional=True
         )
         self.add_link("patient_info->4_extract_roi_param.patient_info")
+        self.export_parameter(
+            "make_cvr_reg_physio_1", "trigger_data", is_optional=True
+        )
+        self.export_parameter(
+            "make_cvr_reg_physio_1", "physio_data", is_optional=True
+        )
         self.export_parameter(
             "1_spatial_preprocessing", "bias_field_images", is_optional=True
         )
@@ -179,14 +188,19 @@ class CO2_inhalation(Pipeline):
         self.add_link("files_to_list.file_list->3_boldStat.regressors")
         self.export_parameter("reportco2inhalcvr", "report", is_optional=True)
         self.add_link("list_to_file_1.file->reportco2inhalcvr.beta_image")
+        self.add_link("make_cvr_reg_physio_1.cvr_reg->files_to_list.file1")
+        self.add_link(
+            "make_cvr_reg_physio_1.cvr_reg->"
+            "reportco2inhalcvr.regressor_physio"
+        )
 
         # parameters order
-
         self.reorder_traits(
             (
                 "anat_file",
                 "func_files",
-                "regressor_physio",
+                "trigger_data",
+                "physio_data",
                 "out_spm_mat_file",
                 "bias_field_images",
                 "coregistered_source",
@@ -213,6 +227,7 @@ class CO2_inhalation(Pipeline):
             "reportco2inhalcvr": (748.1071959262655, 258.2245925859173),
             "outputs": (971.2936610271133, -146.65919984483403),
             "list_to_file_1": (455.4447133457113, 554.0646315898613),
+            "make_cvr_reg_physio_1": (-61.59780851025405, 457.28542588968276),
         }
 
         # nodes dimensions
@@ -226,6 +241,7 @@ class CO2_inhalation(Pipeline):
             "outputs": (138.83679503946317, 320.0),
             "reportco2inhalcvr": (212.484375, 495.0),
             "list_to_file_1": (117.75, 110.0),
+            "make_cvr_reg_physio_1": (174.125, 145.0),
         }
 
         self.do_autoexport_nodes_parameters = False
