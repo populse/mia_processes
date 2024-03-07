@@ -999,7 +999,9 @@ class Report:
         self.report.append(
             Paragraph(
                 "<font size=11> <b>CVR regressor:</b> </font>"
-                + "<font size = 9>Undefined</font>",
+                "<font size = 9> "
+                f"{self.dict4runtime['regressor_physio']['Regressor state']}"
+                "</font>",
                 self.styles["Bullet2"],
             )
         )
@@ -1356,7 +1358,10 @@ class Report:
 
             ax.clear()
             ax.set_title(
-                r"$\mathsf{EtCO_2}$ variation regressor (Standard)",
+                r"$\mathsf{EtCO_2}$ variation regressor "
+                f"("
+                f"{self.dict4runtime['regressor_physio']['Regressor state']}"
+                f")",
                 fontsize=20,
                 y=1.03,
             )

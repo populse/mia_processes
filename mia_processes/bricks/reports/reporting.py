@@ -1294,6 +1294,7 @@ class ReportCO2inhalCvr(ProcessMIA):
         # TODO: Do we need to explicitly take the smoothed func as input,
         #       or can we simply add the prefix 's' to the normalized func?
         db_file_smooth_norm_func = "s" + db_file_norm_func
+        db_file_regressor_physio = self.regressor_physio[file_position:]
 
         # As we do not have access to the database at the runtime (see #272),
         # we prepare here the data that the run_process_mia method will need
@@ -1353,6 +1354,13 @@ class ReportCO2inhalCvr(ProcessMIA):
             self.project.session,
             db_file_smooth_norm_func,
             "FWHM (X, Y, Z) for Smooth",
+        )
+        self.dict4runtime["regressor_physio"] = {}
+        dict4runtime_update(
+            self.dict4runtime["regressor_physio"],
+            self.project.session,
+            db_file_regressor_physio,
+            "Regressor state",
         )
         # FIXME: the data should be anonymized and we should use PatientRef
         #        instead of PatientName !
