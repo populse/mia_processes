@@ -999,9 +999,7 @@ class Report:
         self.report.append(
             Paragraph(
                 "<font size=11> <b>CVR regressor:</b> </font>"
-                "<font size = 9> "
-                f"{self.dict4runtime['regressor_physio']['Regressor state']}"
-                "</font>",
+                f"{self.dict4runtime['regressor_physio']['Regressor state']}",
                 self.styles["Bullet2"],
             )
         )
