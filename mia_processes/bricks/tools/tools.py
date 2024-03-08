@@ -40,9 +40,8 @@ import tempfile
 # Other imports
 from ast import literal_eval
 
-import numpy as np
+# import numpy as np
 import pandas as pd
-import scipy.signal as signal
 
 # nipype import
 from nipype.interfaces.base import (
@@ -62,10 +61,14 @@ from populse_mia.data_manager.filter import Filter
 from populse_mia.data_manager.project import BRICK_OUTPUTS, COLLECTION_CURRENT
 from populse_mia.software_properties import Config
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
+
+# from scipy.interpolate import interp1d
 from traits.api import Either, Undefined
 
 # mia_processes imports
 from mia_processes.utils import checkFileExt, get_dbFieldValue
+
+# import scipy.signal as signal
 
 
 class Concat_to_list(ProcessMIA):
@@ -1784,7 +1787,6 @@ class Make_CVR_reg_physio(ProcessMIA):
             out_directory = os.path.join(
                 self.output_directory, patient_name + "_data"
             )
-            # self.dict4runtime["patient_name"] = patient_name
 
             if not os.path.exists(out_directory):
                 os.mkdir(out_directory)
@@ -1836,158 +1838,144 @@ class Make_CVR_reg_physio(ProcessMIA):
             "<undefined>",
             traits.Undefined,
         ]:
-            # TODO: The following attributes are currently hard-coded, but
-            #       we could add them as input of the brick if necessary?
-            # 8 frames (4 ctl/tag pairs) in the current data (s)
-            # exclude_period = 32
-            # in case we do not have a physio regressor
-            # hc_etco2 = 1
-            # the number of last dyns to be deleted
-            end_dyn_sup = 0
-            # delay between respiration and EtCO2 variation (s)
-            delay_for_etco2 = 4.8
-            tr = (
-                get_dbFieldValue(
-                    self.project, self.func_file, "RepetitionTime"
-                )[0]
-                / 1000
-            )
-            # n_slices = get_dbFieldValue(
-            #     self.project,
-            #     self.func_file,
-            #     "Dataset dimensions (Count, X,Y,Z,T...)",
-            # )[3]
-            from nilearn.glm.first_level.hemodynamic_models import glover_hrf
-
-            hrf = glover_hrf(tr)
-            nb_dyn = (
-                get_dbFieldValue(
-                    self.project,
-                    self.func_file,
-                    "Dataset dimensions (Count, X,Y,Z,T...)",
-                )[4]
-                - end_dyn_sup
-            )
-            # TODO: make read_phys_trig_data(). phys_trig_data is object with
-            #       data from trigger and physiological parameters
-            # phys_trig_data = read_phys_trig_data(self.physio_data,
-            #                                      self.physio_data)
-            from scipy.io import loadmat
-
-            phys_trig_data = loadmat("/home/econdami/Desktop/data.mat")
-            # performed for all odd frames
-            triggers = phys_trig_data["trigger"]["time"]
-            trig_TR = np.mean(np.diff(triggers))
-            # acq of center of volume wrt triggers
-            # mid_volume_delay = tr / 2
-            etco2data = phys_trig_data["ETCO2"]["data"]
-            etco2time = phys_trig_data["ETCO2"]["time"] - delay_for_etco2
-            # etco2indx = phys_trig_data['ETCO2']['indx']
-            outliers_etco2 = np.logical_or(etco2data > 100, etco2data < 10)
-            valid_etco2 = ~outliers_etco2
-
-            if not np.all(np.diff(etco2time[valid_etco2]) > 0):
-                print(
-                    "\nMake_CVR_reg_physio brick: The time relative to the "
-                    "EtCO2 recording does not seem to be strictly monotonic "
-                    "and increasing !!!\n"
-                    "This makes no physical sense and the calculation of "
-                    "the hypercapnic regressor will certainly fail.\n"
-                    "If this is the case, please restart the calculations "
-                    "after checking the physiological data or use the "
-                    "non-individual regressor.\n\n"
-                )
-                print(
-                    "\nMake_CVR_reg_physio brick: Trying to fix the "
-                    "issue!!!\nPlease check the result carefully, this "
-                    "is an automatic process ....\n\n"
-                )
-
-                x = etco2time[valid_etco2]
-                x2, index = np.unique(x, return_index=True)
-                etco2data[outliers_etco2[index]] = np.interp(
-                    etco2time[outliers_etco2], x2, etco2data[index], "cubic"
-                )
-
-            else:
-                etco2data[outliers_etco2] = np.interp(
-                    etco2time[outliers_etco2],
-                    etco2time[valid_etco2],
-                    etco2data[valid_etco2],
-                    "cubic",
-                )
-
-            for iter in range(1, 3):
-                # clean the etco2 data
-                # second derivative to get local outliers
-                etco2data_pp = np.diff(etco2data, n=2)
-                # detect outliers (very crude)
-                outliers = np.abs(etco2data_pp) > 15
-                # a single outlier creates three points of high curvature.
-                # retain central point only
-                outliers = (
-                    np.convolve(
-                        outliers.astype(int), np.array([1, 1, 1]), mode="same"
-                    )
-                    == 3
-                )
-                # correct shift due to derivative above
-                outliers = np.where(outliers)[0] + 1
-                etco2data = np.delete(etco2data, outliers)
-                etco2time = np.delete(etco2time, outliers)
-
-            # sort data and combine data from identical timepoints
-            etco2time, sort_idx = np.sort(etco2time), np.argsort(etco2time)
-            etco2data = etco2data[sort_idx]
-            step_points = np.where(np.diff(etco2time) == 0)[0]
-            step_points = np.union1d(step_points, step_points + 1)
-            step_times = np.unique(etco2time[step_points])
-
-            for k in range(len(step_times) - 1, -1, -1):
-                this_points = np.where(etco2time == step_times[k])[0]
-                etco2data[this_points[0]] = np.mean(etco2data[this_points])
-                etco2data = np.delete(etco2data, this_points[1:])
-                etco2time = np.delete(etco2time, this_points[1:])
-
-            # add artificial triggers before and after scan (while we have
-            # data) to help with convolution of regressors w/ hrf
-            num_init_trigs = int(
-                np.floor((min(triggers) - min(etco2time)) / trig_TR)
-            )
-            num_post_trigs = int(
-                np.floor((max(etco2time) - max(triggers)) / trig_TR)
-            )
-            triggers = np.concatenate(
-                (
-                    trig_TR * (-np.arange(1, num_init_trigs + 1))
-                    + min(triggers),
-                    triggers,
-                    max(triggers) + trig_TR * np.arange(1, num_post_trigs + 1),
-                )
-            )
-            etco2data = np.interp(triggers, etco2time, etco2data, "cubic")
-            # value separating 'hypercapnia' from 'normocapnia'
-            median_etco2 = np.median(etco2data)
-            # cmax_etco2 = np.max(etco2data)
-            # average of 'normocapnia'
-            baseline_etco2 = np.mean(etco2data[etco2data < median_etco2])
-            # average of 'hypercapnia', with a threshold mid-way between
-            # median and max
-            # hc_etco2 = np.mean(
-            #     etco2data[
-            #         etco2data > (median_etco2 + max_etco2) / 2
-            #     ]) - baseline_etco2
-            # shift baseline hc to zero, approximately
-            etco2data_shift = etco2data - baseline_etco2
-            # etco2data_perf = signal.convolve(etco2data_shift,
+            # # TODO: The following attributes are currently hard-coded, but
+            # #       we could add them as input of the brick if necessary?
+            # # the number of last dyns to be deleted
+            # end_dyn_sup = 0
+            # # delay between respiration and EtCO2 variation (s)
+            # delay_for_etco2 = 4.8
+            # tr = (
+            #     get_dbFieldValue(
+            #         self.project, self.func_file, "RepetitionTime"
+            #     )[0]
+            #     / 1000
+            # )
+            #
+            # from nilearn.glm.first_level.hemodynamic_models import glover_hrf
+            # hrf = glover_hrf(tr)
+            #
+            # nb_dyn = (
+            #     get_dbFieldValue(
+            #         self.project,
+            #         self.func_file,
+            #         "Dataset dimensions (Count, X,Y,Z,T...)",
+            #     )[4]
+            #     - end_dyn_sup
+            # )
+            # # TODO: make read_phys_trig_data(). phys_trig_data is an object
+            # #       with data from trigger and physiological parameters
+            # # phys_trig_data = read_phys_trig_data(self.physio_data,
+            # #                                      self.physio_data)
+            # # While we wait for the read_phys_trig_data() function to be
+            # # coded we use phys_trig_data from amigo!
+            # from scipy.io import loadmat
+            # phys_trig_data = loadmat("/home/econdami/Desktop/physdata.mat",
+            #                          simplify_cells=True)['physdata']
+            # # performed for all odd frames
+            # triggers = phys_trig_data["trigger"]["time"]
+            # trig_TR = np.mean(np.diff(triggers))
+            # etco2data = phys_trig_data["ETCO2"]["data"]
+            # etco2time = phys_trig_data["ETCO2"]["time"] - delay_for_etco2
+            # outliers_etco2 = np.logical_or(etco2data > 100, etco2data < 10)
+            # valid_etco2 = ~outliers_etco2
+            #
+            # if not np.all(np.diff(etco2time[valid_etco2]) > 0):
+            #     print(
+            #         "\nMake_CVR_reg_physio brick: The time relative to the "
+            #         "EtCO2 recording does not seem to be strictly monotonic "
+            #         "and increasing !!!\n"
+            #         "This makes no physical sense and the calculation of "
+            #         "the hypercapnic regressor will certainly fail.\n"
+            #         "If this is the case, please restart the calculations "
+            #         "after checking the physiological data or use the "
+            #         "non-individual regressor.\n\n"
+            #     )
+            #     print(
+            #         "\nMake_CVR_reg_physio brick: Trying to fix the "
+            #         "issue!!!\nPlease check the result carefully, this "
+            #         "is an automatic process ....\n\n"
+            #     )
+            #
+            #     x = etco2time[valid_etco2]
+            #     x2, index = np.unique(x, return_index=True)
+            #     etco2data[outliers_etco2[index]] = interp1d(
+            #         etco2time[outliers_etco2],
+            #         x2,
+            #         kind='cubic')(etco2data[index])
+            #
+            # else:
+            #     etco2data[outliers_etco2] = interp1d(
+            #         etco2time[valid_etco2],
+            #         etco2data[valid_etco2],
+            #         kind='cubic')(etco2time[outliers_etco2])
+            #
+            # for iter in range(1, 3):
+            #     # clean the etco2 data:
+            #     # second derivative to get local outliers
+            #     etco2data_pp = np.diff(etco2data.astype(np.int16), n=2)
+            #     # detect outliers (very crude)
+            #     outliers = np.abs(etco2data_pp) > 15
+            #     # a single outlier creates three points of high curvature.
+            #     # retain central point only:
+            #     outliers = (
+            #         np.convolve(
+            #             outliers.astype(int),
+            #             np.array([1, 1, 1]),
+            #             mode="same"
+            #         )
+            #         == 3
+            #     )
+            #     # correct shift due to derivative above
+            #     outliers = np.where(outliers)[0] + 1
+            #     etco2data = np.delete(etco2data, outliers)
+            #     etco2time = np.delete(etco2time, outliers)
+            #
+            # # sort data and combine data from identical timepoints
+            # etco2time, sort_idx = np.sort(etco2time), np.argsort(etco2time)
+            # etco2data = etco2data[sort_idx]
+            # step_points = np.where(np.diff(etco2time) == 0)[0]
+            # step_points = np.union1d(step_points, step_points + 1)
+            # step_times = np.unique(etco2time[step_points])
+            #
+            # for k in range(len(step_times) - 1, -1, -1):
+            #     this_points = np.where(etco2time == step_times[k])[0]
+            #     etco2data[this_points[0]] = np.mean(etco2data[this_points])
+            #     etco2data = np.delete(etco2data, this_points[1:])
+            #     etco2time = np.delete(etco2time, this_points[1:])
+            #
+            # # add artificial triggers before and after scan (while we have
+            # # data) to help with convolution of regressors with hrf
+            # num_init_trigs = int(
+            #     np.floor((min(triggers) - min(etco2time)) / trig_TR)
+            # )
+            # num_post_trigs = int(
+            #     np.floor((max(etco2time) - max(triggers)) / trig_TR)
+            # )
+            # triggers = np.concatenate(
+            #     (
+            #         trig_TR * (-np.arange(num_init_trigs, 0, -1))
+            #         + min(triggers),
+            #         triggers,
+            #         max(triggers) +
+            #         trig_TR * np.arange(1, num_post_trigs + 1),
+            #     )
+            # )
+            # etco2data = interp1d(etco2time,
+            #                      etco2data,
+            #                      kind='cubic')(triggers)
+            # # value separating 'hypercapnia' from 'normocapnia'
+            # median_etco2 = np.median(etco2data)
+            # # average of 'normocapnia'
+            # baseline_etco2 = np.mean(etco2data[etco2data < median_etco2])
+            # # shift baseline hc to zero, approximately
+            # etco2data_shift = etco2data - baseline_etco2
+            # etco2data_bold = signal.convolve(etco2data_shift,
             #                                  hrf,
-            #                                  mode='full')
-            etco2data_bold = signal.convolve(etco2data_shift, hrf, mode="full")
-            # fmt: off
-            r = etco2data_bold[num_init_trigs: num_init_trigs + nb_dyn]
-            # fmt: on
-            np.save(fname_reg, r)
-
+            #                                  mode="full")
+            # # fmt: off
+            # r = etco2data_bold[num_init_trigs:num_init_trigs + nb_dyn]
+            # # fmt: on
+            # np.save(fname_reg, r)
             print(
                 "The Make_CVR_reg_physio brick does not yet generate the "
                 "individual regressor. Currently, only the standard "
