@@ -21,6 +21,8 @@ from .processing import (  # noqa: F401
     ConvROI,
     Enhance,
     EstimateSNR,
+    ExtractROIbyLabel,
+    ExtractSignalROI,
     GradientThreshold,
     Harmonize,
     IntensityClip,

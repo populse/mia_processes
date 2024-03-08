@@ -13,6 +13,7 @@ compute necessary values for reporting.
         - CarpetParcellation
         - ComputeDVARS
         - FramewiseDisplacement
+        - PlotSignalROI
         - Mean_stdDev_calc
         - Result_collector
         - Spikes
@@ -96,10 +97,12 @@ import shutil
 import tempfile
 from math import sqrt
 
+import matplotlib.pyplot as plt
 import nibabel as nb
 import numpy as np
 import pandas as pd
 import scipy.ndimage as nd
+from nilearn import plotting
 from nilearn.signal import clean
 from nipy.algorithms.registration import aff2euler, to_matrix44
 
@@ -108,6 +111,7 @@ from nipype.interfaces.base import (
     File,
     InputMultiPath,
     OutputMultiPath,
+    TraitListObject,
     Undefined,
     traits,
 )
@@ -2206,6 +2210,277 @@ class Mean_stdDev_calc(ProcessMIA):
 
                         else:
                             f.write("%.3f" % std_result)
+
+
+class PlotSignalROI(ProcessMIA):
+    """
+    *Plot signals from ROI using a segmentation file with label*
+
+    Please, see the complete documentation for the `PlotSignalROI brick
+    in the mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/PlotSignalROI.html>`_
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation / instantiation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(PlotSignalROI, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = []
+
+        # Inputs description
+        in_file_desc = (
+            "Input image from which the signal has been extracted(a 3D image)"
+            "(a pathlike object or string representing a file)."
+        )
+        signals_whole_brain_desc = (
+            " Signal of the in_file in a csv file "
+            "(a pathlike object or string representing a file)"
+        )
+        labels_desc = (
+            "The label list of the ROI to extract the signal (a list of int)"
+        )
+        rois_files_desc = (
+            "List of the image with each ROI segmented (a list of file)"
+        )
+        signals_desc = (
+            "Extracted signal for each ROI in a csv file "
+            "(a pathlike object or string representing a file)"
+        )
+
+        # Outputs description
+        out_png_desc = (
+            "Out file (a pathlike object or string representing a file)"
+        )
+
+        # Inputs traits
+        self.add_trait(
+            "in_file", File(output=False, optional=False, desc=in_file_desc)
+        )
+        self.add_trait(
+            "labels",
+            traits.List(
+                traits.Int(), output=False, optional=False, desc=labels_desc
+            ),
+        )
+        self.add_trait(
+            "rois_files",
+            InputMultiPath(
+                File(),
+                output=False,
+                optional=False,
+                desc=rois_files_desc,
+            ),
+        )
+        self.add_trait(
+            "signals", File(output=False, optional=False, desc=signals_desc)
+        )
+        self.add_trait(
+            "signals_whole_brain",
+            traits.File(
+                output=False, optional=True, desc=signals_whole_brain_desc
+            ),
+        )
+
+        # Outputs traits
+        self.add_trait(
+            "out_png", File(output=True, optional=False, desc=out_png_desc)
+        )
+
+        self.init_default_traits()
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(PlotSignalROI, self).list_outputs()
+
+        # Outputs definition
+        if self.in_file:
+            if self.output_directory:
+                valid_ext, in_ext, file_name = checkFileExt(self.in_file, EXT)
+                if not valid_ext:
+                    print(
+                        "PlotSignalROI brick: "
+                        "The input image format is not recognized...!"
+                    )
+                    return
+                labels = ""
+                for label in self.labels:
+                    labels += "_" + str(label)
+                self.outputs["out_png"] = os.path.join(
+                    self.output_directory,
+                    file_name + "_extracted_signals" + labels + ".png",
+                )
+
+                if self.outputs:
+                    self.tags_inheritance(
+                        in_file=self.in_file,
+                        out_file=self.outputs["out_png"],
+                    )
+            else:
+                print(
+                    "PlotSignalROI brick: "
+                    "No output_directory was found...!\n"
+                )
+                return
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(PlotSignalROI, self).run_process_mia()
+        color = [
+            "r",
+            "g",
+            "b",
+            "c",
+            "m",
+            "y",
+            "fuchsia",
+            "salmon",
+            "yellowgreen",
+            "teal",
+            "darkorange",
+            "magenta",
+            "navy",
+            "olive",
+            "gold",
+            "turquoise",
+        ]
+        while len(self.labels) > len(color):
+            color += color
+        # Create fig
+        fig = plt.figure(figsize=(20, 16))
+        ax1 = plt.subplot2grid((2, 3), (0, 0), colspan=3, rowspan=1)
+        ax2 = plt.subplot2grid((2, 3), (1, 0), colspan=2, rowspan=1)
+        ax3 = plt.subplot2grid((2, 3), (1, 2), colspan=1, rowspan=1)
+
+        # Create image with all the roi and plot it
+        concate_roi = None
+        if isinstance(self.rois_files, TraitListObject):
+            for roi in self.rois_files:
+                roi_volume = np.asarray(nb.load(roi).dataobj)
+                if concate_roi is None:
+                    concate_roi = roi_volume > 0
+                concate_roi = np.where(roi_volume > 0, roi_volume, concate_roi)
+                affine = nb.load(roi).affine
+                header = nb.load(roi).header
+            concate_roi_image = nb.Nifti1Image(
+                concate_roi, affine, header=header
+            )
+        else:
+            concate_roi = self.rois_files
+        valid_ext, in_ext, file_name = checkFileExt(self.in_file, EXT)
+
+        image = nb.load(self.in_file)
+        if len(image.shape) == 3:
+            # 3D image
+            bg_image = self.in_file
+        elif len(image.shape) == 4:
+            # 4D image
+            volume = np.asarray(image.dataobj)
+            first_volume = volume.copy()[:, :, :, 0]
+            bg_image = nb.Nifti1Image(first_volume, image.affine)
+
+        plotting.plot_roi(
+            roi_img=concate_roi_image,
+            bg_img=bg_image,
+            title=f"ROI in {file_name} space",
+            axes=ax1,
+        )
+        txt = ""
+        # Plot all signals
+        # And create txt with average signal for each roi
+        if self.signals_whole_brain:
+            signals_whole_brain_df = pd.read_csv(
+                self.signals_whole_brain, index_col=0
+            )
+            signals_whole_brain = signals_whole_brain_df.to_numpy()
+            average_signal_whole_brain = np.mean(signals_whole_brain)
+            txt = f"\nMean signal : {round(average_signal_whole_brain, 2)} "
+        signals_roi_df = pd.read_csv(self.signals, index_col=0)
+        signals_roi = signals_roi_df.to_numpy()
+        if signals_roi.shape[0] == 1:
+            if signals_roi.shape[1] == 1:
+                # 3D image
+                print(signals_roi)
+                ax2.plot(
+                    0,
+                    signals_roi,
+                    marker="o",
+                    markersize=5,
+                    markeredgecolor=color[0],
+                    markerfacecolor=color[0],
+                    label=self.labels[0],
+                )
+            else:
+                # 4D image
+                ax2.plot(
+                    signals_roi[0],
+                    linewidth=2,
+                    color=color[0],
+                    label=self.labels[0],
+                )
+            average = np.mean(signals_roi)
+            txt += (
+                f"\n \nMean signal ROI {self.labels[0]} : {round(average, 2)}"
+            )
+        elif signals_roi.shape[0] > 1:
+            for indice, signals in enumerate(signals_roi):
+                label = self.labels[indice]
+                if signals_roi.shape[1] == 1:
+                    # 3D image
+                    ax2.plot(
+                        [0],
+                        [signals],
+                        marker="o",
+                        markersize=5,
+                        markeredgecolor=color[indice],
+                        markerfacecolor=color[indice],
+                        label=self.labels[indice],
+                    )
+                else:
+                    # 4D image
+                    ax2.plot(
+                        signals, linewidth=2, color=color[indice], label=label
+                    )
+                average = np.mean(signals)
+                txt += f"\n \nMean signal ROI {label} : {round(average, 2)}"
+
+        fig.suptitle("Average signal")
+        txt = ax3.text(
+            0,
+            0.9,
+            txt,
+            ha="left",
+            va="top",
+            wrap=True,
+            transform=ax3.transAxes,
+        )
+        txt._get_wrap_line_width = lambda: ax3.bbox.width
+        ax2.legend(loc=2)
+        ax3.set_xticks([])
+        ax3.set_yticks([])
+        ax3.axis("off")
+
+        plt.savefig(self.out_png)
 
 
 class Result_collector(ProcessMIA):
