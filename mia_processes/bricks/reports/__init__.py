@@ -21,6 +21,7 @@ from .processes import (  # noqa: F401
     ComputeDVARS,
     FramewiseDisplacement,
     Mean_stdDev_calc,
+    PlotSignalROI,
     Result_collector,
     Spikes,
 )

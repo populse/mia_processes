@@ -97,6 +97,8 @@ To use certain mia_processes bricks (atomic processes), `third-party softwares u
       - `ConvROI <bricks/preprocess/others/ConvROI.html>`_
       - `Enhance <bricks/preprocess/others/Enhance.html>`_
       - `EstimateSNR <bricks/preprocess/others/EstimateSNR.html>`_
+      - `ExtractROIbyLabel <bricks/preprocess/others/ExtractROIbyLabel.html>`_
+      - `ExtractSignalROI <bricks/preprocess/others/ExtractSignalROI.html>`_
       - `GradientThreshold <bricks/preprocess/others/GradientThreshold.html>`_
       - `Harmonize <bricks/preprocess/others/Harmonize.html>`_
       - `IntensityClip <bricks/preprocess/others/IntensityClip.html>`_
@@ -129,6 +131,7 @@ To use certain mia_processes bricks (atomic processes), `third-party softwares u
     - `ComputeDVARS <bricks/reports/ComputeDVARS.html>`_
     - `FramewiseDisplacement <bricks/reports/FramewiseDisplacement.html>`_
     - `Mean_stdDev_calc <bricks/reports/Mean_stdDev_calc.html>`_
+    - `PlotSignalROI <bricks/reports/PlotSignalROI.html>`_
     - `ReportAnatMriqc <bricks/reports/ReportAnatMriqc.html>`_
     - `ReportCO2inhalCvr <bricks/reports/ReportCO2inhalCvr.html>`_
     - `ReportFuncMriqc <bricks/reports/ReportFuncMriqc.html>`_

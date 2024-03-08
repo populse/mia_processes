@@ -13,6 +13,8 @@ pre-processing steps, which are not found in nipype.
         - ConvROI
         - Enhance
         - EstimateSNR
+        - ExtractROIbyLabel
+        - ExtractSignalROI
         - GradientThreshold
         - Harmonize
         - IntensityClip
@@ -44,10 +46,11 @@ import os
 import shutil
 import tempfile
 
-# nibabel import
 import nibabel as nib
 import nibabel.processing as nibp
 import numpy as np
+import pandas as pd
+from nilearn.maskers import NiftiLabelsMasker
 
 # nipype import
 from nipype.interfaces.base import (
@@ -1621,6 +1624,335 @@ class EstimateSNR(ProcessMIA):
             np.mean(data[mask])
             / (data[mask].std() * np.sqrt(mask.sum() / (mask.sum() - 1)))
         )
+
+
+class ExtractROIbyLabel(ProcessMIA):
+    """
+    *Extract a specific ROI from a segmentation file using a label*
+
+    Please, see the complete documentation for the `ExtractROIbyLabel brick
+    in the mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/ExtractROIbyLabel.html>`_
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation / instantiation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(ExtractROIbyLabel, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = []
+
+        # Inputs description
+        in_file_desc = (
+            "Input segmented file with label "
+            "(a pathlike object or string representing a file)."
+        )
+        labels_desc = "List of the label of the ROI to extract (a list of int)"
+        save_each_roi_desc = "Save a each regions as a NIfTI file (a boolean)"
+        save_concate_roi_desc = (
+            "Save a concatenation of regions as a NIfTI file (a boolean)"
+        )
+        # Outputs description
+        # out_nibabel_desc = (
+        #     "Extracted ROI (nibabel Nifti1Image format)"
+        # )
+
+        out_files_desc = (
+            "Extracted ROI files(list of pathlike object or string "
+            "representing a file)"
+        )
+        out_concate_desc = (
+            "Image with all ROI in labels parameter(list of pathlike "
+            "object or string representing a file)"
+        )
+
+        # Inputs traits
+        self.add_trait(
+            "in_file", File(output=False, optional=False, desc=in_file_desc)
+        )
+        self.add_trait(
+            "labels",
+            traits.List(
+                traits.Int(), output=False, optional=False, desc=labels_desc
+            ),
+        )
+        self.add_trait(
+            "save_each_roi",
+            traits.Bool(False, optional=True, desc=save_each_roi_desc),
+        )
+        self.add_trait(
+            "save_concate_roi",
+            traits.Bool(False, optional=True, desc=save_concate_roi_desc),
+        )
+
+        # Outputs traits
+        # FIXME: what traits used for nibabel Nifti1Image format?
+        # self.add_trait(
+        #     "out_nibabel",
+        #     traits.(output=True, desc=roi_nibabel_desc)
+        #     )
+        self.add_trait(
+            "out_files",
+            OutputMultiPath(
+                File(), output=True, optional=True, desc=out_files_desc
+            ),
+        )
+        self.add_trait(
+            "out_concate",
+            File(output=True, optional=True, desc=out_concate_desc),
+        )
+
+        self.init_default_traits()
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(ExtractROIbyLabel, self).list_outputs()
+
+        # Outputs definition
+        if self.in_file:
+            if self.output_directory:
+                valid_ext, in_ext, file_name = checkFileExt(self.in_file, EXT)
+                if not valid_ext:
+                    print(
+                        "ExtractROIbyLabel brick: "
+                        "The input image format is not recognized...!"
+                    )
+                    return
+                labels = ""
+                out_files = []
+                for label in self.labels:
+                    labels += "_" + str(label)
+                    if self.save_each_roi:
+                        out_files.append(
+                            os.path.join(
+                                self.output_directory,
+                                file_name + "_" + str(label) + "." + in_ext,
+                            )
+                        )
+
+                if self.save_each_roi and out_files:
+                    self.outputs["out_files"] = out_files
+
+                if self.save_concate_roi:
+                    self.outputs["out_concate"] = os.path.join(
+                        self.output_directory,
+                        file_name + "_concate" + str(labels) + "." + in_ext,
+                    )
+
+                if self.outputs:
+                    if self.save_each_roi:
+                        for out_val in self.outputs["out_files"]:
+                            self.tags_inheritance(
+                                in_file=self.in_file,
+                                out_file=out_val,
+                            )
+                    if self.save_concate_roi:
+                        self.tags_inheritance(
+                            in_file=self.in_file,
+                            out_file=self.outputs["out_concate"],
+                        )
+            else:
+                print(
+                    "ExtractROIbyLabel brick: "
+                    "No output_directory was found...!\n"
+                )
+                return
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(ExtractROIbyLabel, self).run_process_mia()
+
+        seg_volume = np.asarray(nib.load(self.in_file).dataobj)
+        concate_roi = None
+        i = 0
+        for label in self.labels:
+            if isinstance(self.out_files, TraitListObject):
+                out_file = self.out_files[i]
+
+            else:
+                out_file = self.out_files
+            label_seg_volume = np.where(
+                seg_volume == int(label), int(label), 0
+            )
+            label_seg_image = nib.Nifti1Image(
+                label_seg_volume, nib.load(self.in_file).affine
+            )
+            if self.save_each_roi:
+                if os.path.exists(out_file):
+                    os.remove(out_file)
+                label_seg_image.to_filename(out_file)
+            if concate_roi is None:
+                concate_roi = label_seg_volume > 0
+            concate_roi = np.where(
+                label_seg_volume > 0, label_seg_volume, concate_roi
+            )
+
+            i += 1
+
+        if self.save_concate_roi:
+            concate_roi_image = nib.Nifti1Image(
+                concate_roi,
+                nib.load(self.in_file).affine,
+                header=nib.load(self.in_file).header,
+            )
+            if os.path.exists(self.out_concate):
+                os.remove(self.out_concate)
+            concate_roi_image.to_filename(self.out_concate)
+
+
+class ExtractSignalROI(ProcessMIA):
+    """
+    *Extract signal from ROI using a segmentation file with label*
+
+    Please, see the complete documentation for the `ExtractSignalROI brick
+    in the mia_processes website
+    <https://populse.github.io/mia_processes/html/documentation/bricks/preprocess/other/ExtractSignalROI.html>`_
+
+    """
+
+    def __init__(self):
+        """Dedicated to the attributes initialisation / instantiation.
+
+        The input and output plugs are defined here. The special
+        'self.requirement' attribute (optional) is used to define the
+        third-party products necessary for the running of the brick.
+        """
+        # Initialisation of the objects needed for the launch of the brick
+        super(ExtractSignalROI, self).__init__()
+
+        # Third party softwares required for the execution of the brick
+        self.requirement = []
+
+        # Inputs description
+        in_file_desc = (
+            "Input image from which to extract the signal"
+            "(a pathlike object or string representing a file)."
+        )
+        in_seg_desc = (
+            "Input segmented file with label (in in-file space) "
+            "(a pathlike object or string representing a file)."
+        )
+        labels_desc = (
+            "The label list of the ROI to extract the signal (a list of int)"
+        )
+
+        # Outputs description
+        # roi_nibabel_desc = (
+        #     "Extracted ROI (nibabel Nifti1Image format)"
+        # )
+
+        signals_desc = (
+            "Extracted signal for each ROI in a csv file "
+            "(a pathlike object or string representing a file)"
+        )
+
+        # Inputs traits
+        self.add_trait(
+            "in_file", File(output=False, optional=False, desc=in_file_desc)
+        )
+        self.add_trait(
+            "in_seg", File(output=False, optional=False, desc=in_seg_desc)
+        )
+        self.add_trait(
+            "labels",
+            traits.List(
+                [1],
+                traits.Int(),
+                output=False,
+                optional=True,
+                desc=labels_desc,
+            ),
+        )
+
+        # Outputs traits
+        self.add_trait(
+            "signals", File(output=True, optional=False, desc=signals_desc)
+        )
+
+        self.init_default_traits()
+
+    def list_outputs(self, is_plugged=None):
+        """Dedicated to the initialisation step of the brick.
+
+        The main objective of this method is to produce the outputs of the
+        bricks (self.outputs) and the associated tags (self.inheritance_dic),
+        if defined here. To work properly this method must return
+        self.make_initResult() object.
+
+        :param is_plugged: the state, linked or not, of the plugs.
+        :returns: a dictionary with requirement, outputs and inheritance_dict.
+        """
+        # Using the inheritance to ProcessMIA class, list_outputs method
+        super(ExtractSignalROI, self).list_outputs()
+
+        # Outputs definition
+        if self.in_file:
+            if self.output_directory:
+                valid_ext, in_ext, file_name = checkFileExt(self.in_file, EXT)
+                if not valid_ext:
+                    print(
+                        "ExtractROIbyLabel brick: "
+                        "The input image format is not recognized...!"
+                    )
+                    return
+                labels = ""
+                for label in self.labels:
+                    labels += "_" + str(label)
+                self.outputs["signals"] = os.path.join(
+                    self.output_directory,
+                    file_name + "_extracted_signals" + labels + ".csv",
+                )
+
+                if self.outputs:
+                    self.tags_inheritance(
+                        in_file=self.in_file,
+                        out_file=self.outputs["signals"],
+                    )
+            else:
+                print(
+                    "ExtractROIbyLabel brick: "
+                    "No output_directory was found...!\n"
+                )
+                return
+
+        # Return the requirement, outputs and inheritance_dict
+        return self.make_initResult()
+
+    def run_process_mia(self):
+        """Dedicated to the process launch step of the brick."""
+        super(ExtractSignalROI, self).run_process_mia()
+
+        masker = NiftiLabelsMasker(
+            labels_img=self.in_seg, labels=self.labels, standardize=False
+        )
+        masker.fit()
+        signals = masker.fit_transform(self.in_file)
+
+        # Reorganise signals array
+        signals = signals.T
+        print("aaaaaaaaaaaaaaa", signals.shape)
+        df = pd.DataFrame(data=signals, index=self.labels)
+        df.to_csv(self.signals)
 
 
 class GradientThreshold(ProcessMIA):
