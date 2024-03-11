@@ -40,8 +40,9 @@ import tempfile
 # Other imports
 from ast import literal_eval
 
-# import numpy as np
+import numpy as np
 import pandas as pd
+import scipy.signal as signal
 
 # nipype import
 from nipype.interfaces.base import (
@@ -61,14 +62,11 @@ from populse_mia.data_manager.filter import Filter
 from populse_mia.data_manager.project import BRICK_OUTPUTS, COLLECTION_CURRENT
 from populse_mia.software_properties import Config
 from populse_mia.user_interface.pipeline_manager.process_mia import ProcessMIA
-
-# from scipy.interpolate import interp1d
+from scipy.interpolate import interp1d
 from traits.api import Either, Undefined
 
 # mia_processes imports
 from mia_processes.utils import checkFileExt, get_dbFieldValue
-
-# import scipy.signal as signal
 
 
 class Concat_to_list(ProcessMIA):
@@ -1838,144 +1836,406 @@ class Make_CVR_reg_physio(ProcessMIA):
             "<undefined>",
             traits.Undefined,
         ]:
-            # # TODO: The following attributes are currently hard-coded, but
-            # #       we could add them as input of the brick if necessary?
-            # # the number of last dyns to be deleted
-            # end_dyn_sup = 0
-            # # delay between respiration and EtCO2 variation (s)
-            # delay_for_etco2 = 4.8
+            # TODO: The following attributes are currently hard-coded, but
+            #       we could add them as input of the brick if necessary?
+            # the number of last dyns to be deleted
+            end_dyn_sup = 0
+            # delay between respiration and EtCO2 variation (s)
+            delay_for_etco2 = 4.8
             # tr = (
             #     get_dbFieldValue(
             #         self.project, self.func_file, "RepetitionTime"
             #     )[0]
             #     / 1000
             # )
-            #
+            # TODO: glover_hrf(tr) don't give good result yet. While waiting
+            #       to make a good hrf, we use the hrf calculated in Amigo,
+            #       !! valid only for a TR of 3s !!
             # from nilearn.glm.first_level.hemodynamic_models import glover_hrf
             # hrf = glover_hrf(tr)
-            #
-            # nb_dyn = (
-            #     get_dbFieldValue(
-            #         self.project,
-            #         self.func_file,
-            #         "Dataset dimensions (Count, X,Y,Z,T...)",
-            #     )[4]
-            #     - end_dyn_sup
-            # )
-            # # TODO: make read_phys_trig_data(). phys_trig_data is an object
-            # #       with data from trigger and physiological parameters
-            # # phys_trig_data = read_phys_trig_data(self.physio_data,
-            # #                                      self.physio_data)
-            # # While we wait for the read_phys_trig_data() function to be
-            # # coded we use phys_trig_data from amigo!
+            hrf = np.array(
+                [
+                    0,
+                    0.383336774751345,
+                    0.342135983764201,
+                    0.171766927912155,
+                    0.0681357904590986,
+                    0.0237549216202789,
+                    0.00763263283024258,
+                    0.00231806829729287,
+                    0.000675566955637493,
+                    0.000190779506299889,
+                    5.25539034490526e-05,
+                ]
+            )
+            nb_dyn = (
+                get_dbFieldValue(
+                    self.project,
+                    self.func_file,
+                    "Dataset dimensions (Count, X,Y,Z,T...)",
+                )[4]
+                - end_dyn_sup
+            )
+            # TODO: make read_phys_trig_data(). phys_trig_data is an object
+            #       with data from trigger and physiological parameters
+            # phys_trig_data = read_phys_trig_data(self.physio_data,
+            #                                      self.physio_data)
+            # While we wait for the read_phys_trig_data() function to be
+            # coded we use phys_trig_data from amigo!
             # from scipy.io import loadmat
             # phys_trig_data = loadmat("/home/econdami/Desktop/physdata.mat",
             #                          simplify_cells=True)['physdata']
-            # # performed for all odd frames
-            # triggers = phys_trig_data["trigger"]["time"]
-            # trig_TR = np.mean(np.diff(triggers))
-            # etco2data = phys_trig_data["ETCO2"]["data"]
-            # etco2time = phys_trig_data["ETCO2"]["time"] - delay_for_etco2
-            # outliers_etco2 = np.logical_or(etco2data > 100, etco2data < 10)
-            # valid_etco2 = ~outliers_etco2
-            #
-            # if not np.all(np.diff(etco2time[valid_etco2]) > 0):
-            #     print(
-            #         "\nMake_CVR_reg_physio brick: The time relative to the "
-            #         "EtCO2 recording does not seem to be strictly monotonic "
-            #         "and increasing !!!\n"
-            #         "This makes no physical sense and the calculation of "
-            #         "the hypercapnic regressor will certainly fail.\n"
-            #         "If this is the case, please restart the calculations "
-            #         "after checking the physiological data or use the "
-            #         "non-individual regressor.\n\n"
-            #     )
-            #     print(
-            #         "\nMake_CVR_reg_physio brick: Trying to fix the "
-            #         "issue!!!\nPlease check the result carefully, this "
-            #         "is an automatic process ....\n\n"
-            #     )
-            #
-            #     x = etco2time[valid_etco2]
-            #     x2, index = np.unique(x, return_index=True)
-            #     etco2data[outliers_etco2[index]] = interp1d(
-            #         etco2time[outliers_etco2],
-            #         x2,
-            #         kind='cubic')(etco2data[index])
-            #
-            # else:
-            #     etco2data[outliers_etco2] = interp1d(
-            #         etco2time[valid_etco2],
-            #         etco2data[valid_etco2],
-            #         kind='cubic')(etco2time[outliers_etco2])
-            #
-            # for iter in range(1, 3):
-            #     # clean the etco2 data:
-            #     # second derivative to get local outliers
-            #     etco2data_pp = np.diff(etco2data.astype(np.int16), n=2)
-            #     # detect outliers (very crude)
-            #     outliers = np.abs(etco2data_pp) > 15
-            #     # a single outlier creates three points of high curvature.
-            #     # retain central point only:
-            #     outliers = (
-            #         np.convolve(
-            #             outliers.astype(int),
-            #             np.array([1, 1, 1]),
-            #             mode="same"
-            #         )
-            #         == 3
-            #     )
-            #     # correct shift due to derivative above
-            #     outliers = np.where(outliers)[0] + 1
-            #     etco2data = np.delete(etco2data, outliers)
-            #     etco2time = np.delete(etco2time, outliers)
-            #
-            # # sort data and combine data from identical timepoints
-            # etco2time, sort_idx = np.sort(etco2time), np.argsort(etco2time)
-            # etco2data = etco2data[sort_idx]
-            # step_points = np.where(np.diff(etco2time) == 0)[0]
-            # step_points = np.union1d(step_points, step_points + 1)
-            # step_times = np.unique(etco2time[step_points])
-            #
-            # for k in range(len(step_times) - 1, -1, -1):
-            #     this_points = np.where(etco2time == step_times[k])[0]
-            #     etco2data[this_points[0]] = np.mean(etco2data[this_points])
-            #     etco2data = np.delete(etco2data, this_points[1:])
-            #     etco2time = np.delete(etco2time, this_points[1:])
-            #
-            # # add artificial triggers before and after scan (while we have
-            # # data) to help with convolution of regressors with hrf
-            # num_init_trigs = int(
-            #     np.floor((min(triggers) - min(etco2time)) / trig_TR)
-            # )
-            # num_post_trigs = int(
-            #     np.floor((max(etco2time) - max(triggers)) / trig_TR)
-            # )
-            # triggers = np.concatenate(
-            #     (
-            #         trig_TR * (-np.arange(num_init_trigs, 0, -1))
-            #         + min(triggers),
-            #         triggers,
-            #         max(triggers) +
-            #         trig_TR * np.arange(1, num_post_trigs + 1),
-            #     )
-            # )
-            # etco2data = interp1d(etco2time,
-            #                      etco2data,
-            #                      kind='cubic')(triggers)
-            # # value separating 'hypercapnia' from 'normocapnia'
-            # median_etco2 = np.median(etco2data)
-            # # average of 'normocapnia'
-            # baseline_etco2 = np.mean(etco2data[etco2data < median_etco2])
-            # # shift baseline hc to zero, approximately
-            # etco2data_shift = etco2data - baseline_etco2
-            # etco2data_bold = signal.convolve(etco2data_shift,
-            #                                  hrf,
-            #                                  mode="full")
-            # # fmt: off
-            # r = etco2data_bold[num_init_trigs:num_init_trigs + nb_dyn]
-            # # fmt: on
-            # np.save(fname_reg, r)
+            # ---- Start of making phys_trig_data ----
+            starttime = 0
+            endtime = np.inf
+            n_pulses = 0
+            time_margin = 30  # seconds
+            status_sample_freq = 37.127
+
+            # ---- Start of making trigdata ----
+            trigdata = {}
+            starttime = np.nan
+            endtime = np.inf
+            n_pulses = 0
+
+            # Check if file exists
+            if not os.path.isfile(self.trigger_data):
+                raise FileNotFoundError(
+                    f"Make_CVR_reg_physio brick: Input "
+                    f"file {self.trigger_data} not found!"
+                )
+
+            # Read data from different types of files
+            file_extension = self.trigger_data.lower().split(".")[-1]
+
+            if file_extension == "txt":
+                # TODO: Not yet tested
+
+                with open(self.trigger_data, "r") as fil:
+                    lines = fil.readlines()
+
+                    for line in lines:
+
+                        if np.isnan(starttime):
+                            colonidxs = [
+                                i for i, c in enumerate(line) if c == ":"
+                            ]
+
+                            if len(colonidxs) == 2:
+                                # fmt: off
+                                this_time_s = (
+                                    3600
+                                    * int(
+                                        line[colonidxs[0] - 2:colonidxs[0]]
+                                    )
+                                    + 60
+                                    * int(
+                                        line[
+                                            colonidxs[0] + 1:colonidxs[1] - 1
+                                        ]
+                                    )
+                                    + int(
+                                        line[
+                                            colonidxs[1] + 1:colonidxs[1] + 2
+                                        ]
+                                    )
+                                )
+                                # fmt: on
+                                starttime = this_time_s
+
+                        if line.startswith("E11"):
+                            this_data = line.split(",")
+                            dt_ms = float(this_data[5])
+                            dt_s = dt_ms / 1000
+                            next_line = lines[lines.index(line) + 1]
+                            trig_times_ms = [
+                                int(x) for x in next_line.split(",")
+                            ]
+                            trig_times_s = np.array(trig_times_ms) / 1000
+                            endtime = starttime + len(trig_times_s) * dt_s
+                            break
+
+                TR = np.median(np.diff(trig_times_s))
+
+            elif file_extension == "log":
+                # tested: OK
+                with open(self.trigger_data, "r") as fil:
+                    lines = fil.readlines()[5:]  # Skip header lines
+                    trig_times = []
+
+                    for line in lines:
+
+                        if np.isnan(starttime):
+                            colonidxs = [
+                                i for i, c in enumerate(line) if c == ":"
+                            ]
+
+                            if len(colonidxs) == 2:
+                                # fmt: off
+                                this_time_s = (
+                                    3600
+                                    * int(
+                                        line[colonidxs[0] - 2:colonidxs[0]]
+                                    )
+                                    + 60
+                                    * int(
+                                        line[colonidxs[0] + 1:colonidxs[1]]
+                                    )
+                                    + float(
+                                        line[
+                                            colonidxs[1] + 1:colonidxs[1] + 5
+                                        ]
+                                    )
+                                )
+                                # fmt: on
+                                starttime_abs = this_time_s
+                                tab_pos = line.split("\t")
+                                starttime_rel = float(tab_pos[3]) / 10000
+                                starttime = starttime_abs - starttime_rel
+
+                        if "Pulse" in line:
+                            tab_pos = line.split("\t")
+                            trig_times.append(float(tab_pos[3]))
+
+                trig_times_s = np.array(trig_times) / 10000
+                starttime = starttime + trig_times_s[0]
+                dt_s = np.diff(trig_times_s)
+                TR = np.median(dt_s)
+                endtime = starttime + trig_times_s[-1] - trig_times_s[0] + TR
+                trig_times_s = trig_times_s - trig_times_s[0]
+                n_pulses = int((endtime - starttime) / TR)
+                # look for missing triggers
+                dn = np.round(np.diff(trig_times_s) / TR) - 1
+                dn_pos = np.where(dn != 0)[0]
+
+                if dn_pos.size != 0:
+
+                    for pos in dn_pos[::-1]:
+                        # fmt: off
+                        trig_times_s = np.concatenate(
+                            [
+                                trig_times_s[:pos + 1],
+                                [TR + trig_times_s[pos]],
+                                trig_times_s[pos + 1:],
+                            ]
+                        )
+                        # fmt: on
+
+            elif file_extension == "csv":
+                # TODO: Not yet tested
+                # Extract start time from file name
+                short_fname = os.path.splitext(
+                    os.path.basename(self.trigger_data)
+                )[0]
+                starttime = int(short_fname.split("_")[1])
+
+                with open(self.trigger_data, "r") as fil:
+                    lines = fil.readlines()[2:]  # Skip header lines
+                    trig_times = []
+
+                    for line in lines:
+                        data = line.split(";")
+                        trig_times.append(float(data[0]))
+
+                trig_times_s = np.array(trig_times)
+                starttime = starttime + trig_times_s[0]
+                TR = np.median(np.diff(trig_times_s))
+                endtime = starttime + trig_times_s[-1] + TR
+                trig_times_s = trig_times_s - trig_times_s[0]
+                n_pulses = len(trig_times_s)
+
+            trigdata["starttime"] = float(starttime)
+            trigdata["endtime"] = float(endtime)
+            trigdata["triggers"] = trig_times_s
+            trigdata["n_pulses"] = n_pulses
+            trigdata["TR"] = TR
+            # ---- End of making trigdata ----
+
+            starttime = trigdata["starttime"]
+            endtime = trigdata["endtime"]
+            trig_times_s = trigdata["triggers"]
+            n_pulses = trigdata["n_pulses"]
+
+            if self.physio_data.lower().endswith(".csv"):
+                print("Data from Magdata software detected ...")
+                data = np.loadtxt(
+                    self.physio_data, delimiter=",", skiprows=1, dtype=str
+                )
+                times = data[:, 0]
+                data_s = data[:, 1:]
+                nlines = len(times)
+                phys_trig_data = {}
+                data_matrix = np.full((nlines, len(data_s[0])), np.nan)
+                time_matrix = np.zeros(nlines)
+                datapoint = 0
+                # have_format = False
+
+                for line in range(nlines):
+                    this_times = times[line]
+                    # convert to seconds since midnight
+                    this_time_s = sum(map(int, this_times.split(":")))
+
+                    if starttime == 0:
+                        starttime = this_time_s
+                        this_time_s = 0
+
+                    else:
+
+                        if this_time_s < starttime - time_margin:
+                            continue
+
+                        elif this_time_s > endtime + time_margin:
+                            break
+
+                        this_time_s -= starttime
+
+                    this_data = data_s[line].astype(float)
+                    this_nvalues = len(this_data)
+                    datapoint += 1
+                    data_matrix[datapoint - 1, :this_nvalues] = this_data
+                    time_matrix[datapoint - 1] = this_time_s
+
+                n_datapoints = datapoint
+                data_matrix = data_matrix[:n_datapoints, :]
+                time_matrix = time_matrix[:n_datapoints]
+                # Correct time data
+                time_stat = time_matrix
+                time_extrap = np.concatenate(
+                    np.linspace(
+                        time_stat[0] - time_margin,
+                        time_stat[0],
+                        int(25 * status_sample_freq),
+                    ),
+                    time_stat,
+                    np.linspace(
+                        time_stat[-1],
+                        time_stat[-1] + time_margin,
+                        int(25 * status_sample_freq),
+                    ),
+                )
+                print(time_extrap)
+                # time_stat = np.convolve(
+                #     time_extrap,
+                #     gaussfir(0.3, 2, 2 * int(status_sample_freq)),
+                #     mode="valid",
+                # )
+                # Further processing to correct time data
+                # ...
+                # Construct phys_trig_data dictionary with corrected time data
+                # ...
+
+            elif self.physio_data.lower().endswith(".txt"):
+                print("Data from CoolTerm application detected ...")
+                data = np.loadtxt(
+                    self.physio_data, delimiter=",", skiprows=1, dtype=str
+                )
+                # Process data and construct phys_trig_data dictionary
+                # ...
+
+            else:
+                print(
+                    "The format of the physiological data was not detected ..."
+                )
+            # ---- End of making phys_trig_data ----
+
+            # performed for all odd frames
+            triggers = phys_trig_data["trigger"]["time"]
+            trig_TR = np.mean(np.diff(triggers))
+            etco2data = phys_trig_data["ETCO2"]["data"]
+            etco2time = phys_trig_data["ETCO2"]["time"] - delay_for_etco2
+            outliers_etco2 = np.logical_or(etco2data > 100, etco2data < 10)
+            valid_etco2 = ~outliers_etco2
+
+            if not np.all(np.diff(etco2time[valid_etco2]) > 0):
+                print(
+                    "\nMake_CVR_reg_physio brick: The time relative to the "
+                    "EtCO2 recording does not seem to be strictly monotonic "
+                    "and increasing !!!\n"
+                    "This makes no physical sense and the calculation of "
+                    "the hypercapnic regressor will certainly fail.\n"
+                    "If this is the case, please restart the calculations "
+                    "after checking the physiological data or use the "
+                    "non-individual regressor.\n\n"
+                )
+                print(
+                    "\nMake_CVR_reg_physio brick: Trying to fix the "
+                    "issue!!!\nPlease check the result carefully, this "
+                    "is an automatic process ....\n\n"
+                )
+
+                x = etco2time[valid_etco2]
+                x2, index = np.unique(x, return_index=True)
+                etco2data[outliers_etco2[index]] = interp1d(
+                    etco2time[outliers_etco2], x2, kind="cubic"
+                )(etco2data[index])
+
+            else:
+                etco2data[outliers_etco2] = interp1d(
+                    etco2time[valid_etco2],
+                    etco2data[valid_etco2],
+                    kind="cubic",
+                )(etco2time[outliers_etco2])
+
+            for iter in range(1, 3):
+                # clean the etco2 data:
+                # second derivative to get local outliers
+                etco2data_pp = np.diff(etco2data.astype(np.int16), n=2)
+                # detect outliers (very crude)
+                outliers = np.abs(etco2data_pp) > 15
+                # a single outlier creates three points of high curvature.
+                # retain central point only:
+                outliers = (
+                    np.convolve(
+                        outliers.astype(int), np.array([1, 1, 1]), mode="same"
+                    )
+                    == 3
+                )
+                # correct shift due to derivative above
+                outliers = np.where(outliers)[0] + 1
+                etco2data = np.delete(etco2data, outliers)
+                etco2time = np.delete(etco2time, outliers)
+
+            # sort data and combine data from identical timepoints
+            etco2time, sort_idx = np.sort(etco2time), np.argsort(etco2time)
+            etco2data = etco2data[sort_idx]
+            step_points = np.where(np.diff(etco2time) == 0)[0]
+            step_points = np.union1d(step_points, step_points + 1)
+            step_times = np.unique(etco2time[step_points])
+
+            for k in range(len(step_times) - 1, -1, -1):
+                this_points = np.where(etco2time == step_times[k])[0]
+                etco2data[this_points[0]] = np.mean(etco2data[this_points])
+                etco2data = np.delete(etco2data, this_points[1:])
+                etco2time = np.delete(etco2time, this_points[1:])
+
+            # add artificial triggers before and after scan (while we have
+            # data) to help with convolution of regressors with hrf
+            num_init_trigs = int(
+                np.floor((min(triggers) - min(etco2time)) / trig_TR)
+            )
+            num_post_trigs = int(
+                np.floor((max(etco2time) - max(triggers)) / trig_TR)
+            )
+            triggers = np.concatenate(
+                (
+                    trig_TR * (-np.arange(num_init_trigs, 0, -1))
+                    + min(triggers),
+                    triggers,
+                    max(triggers) + trig_TR * np.arange(1, num_post_trigs + 1),
+                )
+            )
+            etco2data = interp1d(etco2time, etco2data, kind="cubic")(triggers)
+            # value separating 'hypercapnia' from 'normocapnia'
+            median_etco2 = np.median(etco2data)
+            # average of 'normocapnia'
+            baseline_etco2 = np.mean(etco2data[etco2data < median_etco2])
+            # shift baseline hc to zero, approximately
+            etco2data_shift = etco2data - baseline_etco2
+            etco2data_bold = signal.convolve(etco2data_shift, hrf, mode="full")
+            # fmt: off
+            r = etco2data_bold[num_init_trigs:num_init_trigs + nb_dyn]
+            # fmt: on
+            np.save(fname_reg, r)
             print(
                 "The Make_CVR_reg_physio brick does not yet generate the "
                 "individual regressor. Currently, only the standard "
