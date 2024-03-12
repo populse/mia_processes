@@ -32,6 +32,8 @@ needed to run other higher-level bricks.
 # for details.
 ##########################################################################
 
+# flake8: noqa
+
 import os
 import re
 import shutil
@@ -1832,10 +1834,18 @@ class Make_CVR_reg_physio(ProcessMIA):
             self.func_file, fname_reg, own_tags=all_tags_to_add
         )
 
-        if self.trigger_data and self.physio_data not in [
-            "<undefined>",
-            traits.Undefined,
-        ]:
+        if (
+            (
+                self.trigger_data
+                and self.physio_data
+                not in [
+                    "<undefined>",
+                    traits.Undefined,
+                ]
+            )
+            and os.path.isfile(self.trigger_data)
+            and os.path.isfile(self.physio_data)
+        ):
             # TODO: The following attributes are currently hard-coded, but
             #       we could add them as input of the brick if necessary?
             # the number of last dyns to be deleted
@@ -1889,6 +1899,8 @@ class Make_CVR_reg_physio(ProcessMIA):
             starttime = 0
             endtime = np.inf
             n_pulses = 0
+            # record some data prior to start and after end of scan,
+            # typically the duration of one hrf
             time_margin = 30  # seconds
             status_sample_freq = 37.127
 
@@ -1897,13 +1909,6 @@ class Make_CVR_reg_physio(ProcessMIA):
             starttime = np.nan
             endtime = np.inf
             n_pulses = 0
-
-            # Check if file exists
-            if not os.path.isfile(self.trigger_data):
-                raise FileNotFoundError(
-                    f"Make_CVR_reg_physio brick: Input "
-                    f"file {self.trigger_data} not found!"
-                )
 
             # Read data from different types of files
             file_extension = self.trigger_data.lower().split(".")[-1]
@@ -2044,85 +2049,420 @@ class Make_CVR_reg_physio(ProcessMIA):
                 trig_times_s = trig_times_s - trig_times_s[0]
                 n_pulses = len(trig_times_s)
 
-            trigdata["starttime"] = float(starttime)
-            trigdata["endtime"] = float(endtime)
-            trigdata["triggers"] = trig_times_s
-            trigdata["n_pulses"] = n_pulses
-            trigdata["TR"] = TR
-            # ---- End of making trigdata ----
-
-            starttime = trigdata["starttime"]
-            endtime = trigdata["endtime"]
-            trig_times_s = trigdata["triggers"]
-            n_pulses = trigdata["n_pulses"]
+            # trigdata["starttime"] = float(starttime)
+            # trigdata["endtime"] = float(endtime)
+            # trigdata["triggers"] = trig_times_s
+            # trigdata["n_pulses"] = n_pulses
+            # trigdata["TR"] = TR
+            # # ---- End of making trigdata ----
+            #
+            # starttime = trigdata["starttime"]
+            # endtime = trigdata["endtime"]
+            # n_pulses = trigdata["n_pulses"]
+            starttime = float(starttime)
+            endtime = float(endtime)
 
             if self.physio_data.lower().endswith(".csv"):
                 print("Data from Magdata software detected ...")
-                data = np.loadtxt(
-                    self.physio_data, delimiter=",", skiprows=1, dtype=str
-                )
-                times = data[:, 0]
-                data_s = data[:, 1:]
+                times = []
+                data_s = []
+
+                with open(self.physio_data, "r") as fid:
+
+                    for line in fid:
+                        times.append(line[:9])
+
+                        if line[9:].endswith("\n"):
+                            data_s.append(line[9:-2])
+
+                        else:
+                            data_s.append(line[9:])
+
                 nlines = len(times)
                 phys_trig_data = {}
-                data_matrix = np.full((nlines, len(data_s[0])), np.nan)
+                # data_matrix = np.full((nlines, len(data_s[0])), np.nan)
                 time_matrix = np.zeros(nlines)
                 datapoint = 0
-                # have_format = False
+                have_format = False
 
                 for line in range(nlines):
                     this_times = times[line]
-                    # convert to seconds since midnight
-                    this_time_s = sum(map(int, this_times.split(":")))
 
-                    if starttime == 0:
-                        starttime = this_time_s
-                        this_time_s = 0
+                    try:
+                        # convert to seconds since midnight
+                        this_time_s = sum(
+                            [
+                                time * factor
+                                for time, factor in zip(
+                                    map(int, this_times.split(":")),
+                                    [3600, 60, 1],
+                                )
+                            ]
+                        )
+
+                    except ValueError:
+
+                        if have_format is False:
+                            formatline = this_times + data_s[line]
+
+                            paramnames = formatline.split(",")
+
+                            # We're not interested in the 'Time' field
+                            # at the beginning
+                            paramnames = paramnames[1:]
+
+                            # Replace spaces with underscores and
+                            # '%' with 'perc'
+                            paramnames = [
+                                name.strip()
+                                .replace(" ", "_")
+                                .replace("%", "perc")
+                                for name in paramnames
+                            ]
+
+                            # If 'IBP2_wm2' is not present,
+                            # insert the missing field right after 'IBP2_wm1'
+                            if "IBP2_wm2" not in paramnames:
+                                position = paramnames.index("IBP2_wm1")
+                                paramnames.insert(position + 1, "IBP2_wm2")
+
+                            # Fix typos in magdata-provided field names
+                            paramnames = [
+                                name.replace("Satus", "Status")
+                                for name in paramnames
+                            ]
+
+                            n_params = len(paramnames)
+                            # Mark data as unread
+                            data_matrix = np.full((nlines, n_params), np.nan)
+                            have_format = True
 
                     else:
 
-                        if this_time_s < starttime - time_margin:
-                            continue
+                        if starttime == 0:
+                            starttime = this_time_s
+                            this_time_s = 0
 
-                        elif this_time_s > endtime + time_margin:
-                            break
+                        else:
 
-                        this_time_s -= starttime
+                            if this_time_s < starttime - time_margin:
+                                continue  # discard this line
 
-                    this_data = data_s[line].astype(float)
-                    this_nvalues = len(this_data)
-                    datapoint += 1
-                    data_matrix[datapoint - 1, :this_nvalues] = this_data
-                    time_matrix[datapoint - 1] = this_time_s
+                            elif this_time_s > endtime + time_margin:
+                                # don't expect to find any interesting
+                                # data after this point
+                                break
+
+                            this_time_s = this_time_s - starttime
+
+                        this_data = [
+                            int(val) if val.strip() else np.nan
+                            for val in data_s[line].split(",")
+                        ]
+                        this_nvalues = len(this_data) - 1
+                        datapoint += 1
+                        data_matrix[datapoint - 1, :this_nvalues] = this_data[
+                            1:
+                        ]
+                        time_matrix[datapoint - 1] = this_time_s
 
                 n_datapoints = datapoint
                 data_matrix = data_matrix[:n_datapoints, :]
                 time_matrix = time_matrix[:n_datapoints]
-                # Correct time data
-                time_stat = time_matrix
-                time_extrap = np.concatenate(
-                    np.linspace(
-                        time_stat[0] - time_margin,
-                        time_stat[0],
-                        int(25 * status_sample_freq),
+
+                # Correcting time data
+                status_idx = np.where(~np.isnan(data_matrix[:, -1]))[0]
+                time_stat = time_matrix[status_idx]
+                n_timepoints = len(time_stat)
+
+                # Smoothing time data
+                n_interp = min(round(25 * status_sample_freq), n_timepoints)
+                coeff_beg = np.linalg.lstsq(
+                    np.vstack(
+                        [(np.arange(n_interp) + 1), np.ones(n_interp)]
+                    ).T,
+                    time_stat[:n_interp],
+                    rcond=None,
+                )[0]
+                coeff_end = np.linalg.lstsq(
+                    np.vstack(
+                        [
+                            (
+                                np.arange(
+                                    n_timepoints - n_interp, n_timepoints
+                                )
+                                + 1
+                            ),
+                            np.ones(n_interp),
+                        ]
+                    ).T,
+                    time_stat[-n_interp:],
+                    rcond=None,
+                )[0]
+                # TODO: define / replace gaussfir
+                h = gaussfir(0.3, 2, 2 * round(status_sample_freq))
+                n_extrap_beg = int(np.ceil((len(h) - 1) / 2))
+                n_extrap_end = len(h) - 1 - n_extrap_beg
+                time_extrap_beg = np.dot(
+                    np.vstack(
+                        [
+                            np.arange(-n_extrap_beg + 1, 1),
+                            np.ones(n_extrap_beg),
+                        ]
                     ),
-                    time_stat,
-                    np.linspace(
-                        time_stat[-1],
-                        time_stat[-1] + time_margin,
-                        int(25 * status_sample_freq),
-                    ),
+                    coeff_beg,
                 )
-                print(time_extrap)
-                # time_stat = np.convolve(
-                #     time_extrap,
-                #     gaussfir(0.3, 2, 2 * int(status_sample_freq)),
-                #     mode="valid",
-                # )
-                # Further processing to correct time data
-                # ...
-                # Construct phys_trig_data dictionary with corrected time data
-                # ...
+                time_extrap_end = np.dot(
+                    np.vstack(
+                        [
+                            np.arange(
+                                n_timepoints + 1,
+                                n_timepoints + n_extrap_end + 1,
+                            ),
+                            np.ones(n_extrap_end),
+                        ]
+                    ),
+                    coeff_end,
+                )
+                time_extrap = np.concatenate(
+                    (time_extrap_beg, time_stat, time_extrap_end)
+                )
+                # TODO: define / replace GFB_conv
+                time_stat = GFB_conv(time_extrap, h, "valid")
+
+                # Check for points where time stands still
+                time_stat_d = np.diff(time_stat)
+                stall_points = time_stat_d < 0.75 * (1 / status_sample_freq)
+                stall_end = (
+                    np.where(stall_points)[0][-1]
+                    if np.any(stall_points)
+                    else 0
+                )
+                regress_valid = np.vstack(
+                    [
+                        (np.arange(stall_end, n_timepoints) + 1),
+                        np.ones(n_timepoints - stall_end + 1),
+                    ]
+                ).T
+                time_stat[stall_end:] = np.dot(
+                    regress_valid,
+                    np.linalg.lstsq(
+                        regress_valid, time_stat[stall_end:], rcond=None
+                    )[0],
+                )
+                while stall_end > 0:
+                    stall_start = (
+                        np.where(
+                            time_stat_d[:stall_end] > 1 / status_sample_freq
+                        )[0][-1]
+                        if np.any(
+                            time_stat_d[:stall_end] > 1 / status_sample_freq
+                        )
+                        else 0
+                    )
+                    sample_interv_ok = (
+                        time_stat_d[: stall_start + 1]
+                        <= 1 / status_sample_freq
+                    )
+                    avg_sample_interv_ok = (
+                        time_stat[stall_end] - time_stat[: stall_start + 1]
+                    ) / (
+                        stall_end - np.arange(stall_start + 1)
+                    ) >= 1 / status_sample_freq
+                    drift_start = (
+                        np.where(sample_interv_ok & avg_sample_interv_ok)[0][
+                            -1
+                        ]
+                        if np.any(sample_interv_ok & avg_sample_interv_ok)
+                        else 0
+                    )
+                    old_stall_end = stall_end
+                    time_stat_d = np.diff(time_stat[: drift_start + 1])
+                    stall_points = time_stat_d < 0.75 * (
+                        1 / status_sample_freq
+                    )
+                    stall_end = (
+                        np.where(stall_points)[0][-1]
+                        if np.any(stall_points)
+                        else 0
+                    )
+                    regress_valid = np.vstack(
+                        [
+                            (np.arange(stall_end, drift_start + 1) + 1),
+                            np.ones(drift_start - stall_end + 1),
+                        ]
+                    ).T
+                    time_stat[stall_end : drift_start + 1] = np.dot(
+                        regress_valid,
+                        np.linalg.lstsq(
+                            regress_valid,
+                            time_stat[stall_end : drift_start + 1],
+                            rcond=None,
+                        )[0],
+                    )
+                    time_stat[drift_start : old_stall_end + 1] = np.linspace(
+                        time_stat[drift_start],
+                        time_stat[old_stall_end],
+                        old_stall_end - drift_start + 1,
+                    )
+
+                # Transfer data to a structure
+                physdata = {}
+                for field in range(n_fields):
+                    this_fieldname = paramnames[field]
+                    this_field_datapoints = ~np.isnan(data_matrix[:, field])
+                    this_field_datapoints[: min(status_idx)] = False
+                    this_field_datapoints[max(status_idx) + 1 :] = False
+                    if np.any(this_field_datapoints):
+                        indx = np.where(this_field_datapoints)[0]
+                        time = np.interp(indx, status_idx, time_stat)
+                        data = data_matrix[this_field_datapoints, field]
+                        physdata[this_fieldname] = {
+                            "indx": indx,
+                            "time": time,
+                            "data": data,
+                        }
+
+                # Correct other bugs in magdata software
+                problem_timepoints = physdata["Waveform_Status3"]["data"] != 0
+                if data_matrix.shape[0] == n_timepoints:
+                    problem_timepoints = np.logical_or(
+                        problem_timepoints,
+                        physdata["Pleth_wm2"]["data"] == 103,
+                    )
+                if np.any(problem_timepoints):
+                    valid_timepoints = np.where(~problem_timepoints)[0]
+                    if (
+                        data_matrix["Resp_wm"]["data"].shape[0]
+                        == physdata["Capno_wm1"]["data"].shape[0]
+                    ):
+                        physdata["Capno_wm1"]["data"][problem_timepoints] = (
+                            physdata["Resp_wm"]["data"][problem_timepoints]
+                        )
+                        problem_problem_timepoints = np.logical_and(
+                            problem_timepoints,
+                            physdata["Resp_wm"]["data"] == 0,
+                        )
+                        physdata["Capno_wm1"]["data"][
+                            problem_problem_timepoints
+                        ] = physdata["Waveform_Status1"]["data"][
+                            problem_problem_timepoints
+                        ]
+                        physdata["Resp_wm"]["data"][problem_timepoints] = (
+                            physdata["Pleth_wm2"]["data"][problem_timepoints]
+                        )
+                        physdata["Pleth_wm2"]["data"][problem_timepoints] = (
+                            physdata["Pleth_wm1"]["data"][problem_timepoints]
+                        )
+                        problem_timepoints = np.where(problem_timepoints)[0]
+                        physdata["Waveform_Status1"]["data"][
+                            problem_timepoints
+                        ] = np.maximum(
+                            physdata["Waveform_Status1"]["data"][
+                                np.maximum(problem_timepoints - 1, 0)
+                            ],
+                            physdata["Waveform_Status1"]["data"][
+                                np.minimum(
+                                    problem_timepoints + 1,
+                                    physdata["Waveform_Status1"]["data"].shape[
+                                        0
+                                    ],
+                                )
+                            ],
+                        )
+                        physdata["Waveform_Status4"]["data"][
+                            problem_timepoints
+                        ] = 128 * (
+                            physdata["Waveform_Status4"]["data"][
+                                np.maximum(problem_timepoints - 1, 0)
+                            ]
+                            > 64
+                            or physdata["Waveform_Status4"]["data"][
+                                np.minimum(
+                                    problem_timepoints + 1,
+                                    physdata["Waveform_Status4"]["data"].shape[
+                                        0
+                                    ],
+                                )
+                            ]
+                            > 64
+                        )
+                    else:
+                        physdata["Capno_wm1"]["data"][problem_timepoints] = (
+                            interp1d(
+                                physdata["Capno_wm1"]["time"][
+                                    valid_timepoints
+                                ],
+                                physdata["Capno_wm1"]["data"][
+                                    valid_timepoints
+                                ],
+                                fill_value="extrapolate",
+                            )(
+                                physdata["Capno_wm1"]["time"][
+                                    problem_timepoints
+                                ]
+                            )
+                        )
+                        if (
+                            data_matrix["Pleth_wm2"]["data"].shape[0]
+                            == n_timepoints
+                        ):
+                            physdata["Pleth_wm2"]["data"][
+                                problem_timepoints
+                            ] = interp1d(
+                                physdata["Pleth_wm2"]["time"][
+                                    valid_timepoints
+                                ],
+                                physdata["Pleth_wm2"]["data"][
+                                    valid_timepoints
+                                ],
+                                fill_value="extrapolate",
+                            )(
+                                physdata["Pleth_wm2"]["time"][
+                                    problem_timepoints
+                                ]
+                            )
+                        problem_timepoints = np.where(problem_timepoints)[0]
+                        physdata["Waveform_Status1"]["data"][
+                            problem_timepoints
+                        ] = np.maximum(
+                            physdata["Waveform_Status1"]["data"][
+                                np.maximum(problem_timepoints - 1, 0)
+                            ],
+                            physdata["Waveform_Status1"]["data"][
+                                np.minimum(
+                                    problem_timepoints + 1,
+                                    physdata["Waveform_Status1"]["data"].shape[
+                                        0
+                                    ],
+                                )
+                            ],
+                        )
+                        physdata["Waveform_Status4"]["data"][
+                            problem_timepoints
+                        ] = 128 * (
+                            physdata["Waveform_Status4"]["data"][
+                                np.maximum(problem_timepoints - 1, 0)
+                            ]
+                            > 64
+                            or physdata["Waveform_Status4"]["data"][
+                                np.minimum(
+                                    problem_timepoints + 1,
+                                    physdata["Waveform_Status4"]["data"].shape[
+                                        0
+                                    ],
+                                )
+                            ]
+                            > 64
+                        )
+
+                if n_pulses > 0:
+                    physdata["trigger"] = {
+                        "time": trig_times_s,
+                        "data": np.ones_like(trig_times_s),
+                    }
+
+                physdata["starttime"] = starttime
 
             elif self.physio_data.lower().endswith(".txt"):
                 print("Data from CoolTerm application detected ...")
