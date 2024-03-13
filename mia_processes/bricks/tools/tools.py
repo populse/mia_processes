@@ -1799,8 +1799,6 @@ class Make_CVR_reg_physio(ProcessMIA):
             return self.make_initResult()
 
         fname_reg = os.path.join(out_directory, "CVR_physio_reg.mat")
-        self.outputs["cvr_reg"] = fname_reg
-
         all_tags_to_add = []
         # Add the reg state (individual or standard), in database
         tag_to_add = dict()
@@ -1815,25 +1813,6 @@ class Make_CVR_reg_physio(ProcessMIA):
         tag_to_add["unit"] = None
         tag_to_add["default_value"] = None
 
-        if self.trigger_data and self.physio_data not in [
-            "<undefined>",
-            traits.Undefined,
-        ]:
-            tag_to_add["value"] = "Individual"
-
-        else:
-            tag_to_add["value"] = "Standard"
-
-        all_tags_to_add.append(tag_to_add)
-        # TODO: Can we simply add new tags without inheritance (I'm not sure
-        #       this possibility was considered when we coded the
-        #       tags_inheritance function)? As in this case, it might be
-        #       preferable not to inherit from the functional but simply to
-        #       add new tags.
-        self.tags_inheritance(
-            self.func_file, fname_reg, own_tags=all_tags_to_add
-        )
-
         if (
             (
                 self.trigger_data
@@ -1846,6 +1825,7 @@ class Make_CVR_reg_physio(ProcessMIA):
             and os.path.isfile(self.trigger_data)
             and os.path.isfile(self.physio_data)
         ):
+            tag_to_add["value"] = "Individual"
             # TODO: The following attributes are currently hard-coded, but
             #       we could add them as input of the brick if necessary?
             # the number of last dyns to be deleted
@@ -1905,7 +1885,6 @@ class Make_CVR_reg_physio(ProcessMIA):
             status_sample_freq = 37.127
 
             # ---- Start of making trigdata ----
-            trigdata = {}
             starttime = np.nan
             endtime = np.inf
             n_pulses = 0
@@ -2066,6 +2045,7 @@ class Make_CVR_reg_physio(ProcessMIA):
                 print("Data from Magdata software detected ...")
                 times = []
                 data_s = []
+                paramnames = None
 
                 with open(self.physio_data, "r") as fid:
 
@@ -2199,39 +2179,42 @@ class Make_CVR_reg_physio(ProcessMIA):
                     time_stat[-n_interp:],
                     rcond=None,
                 )[0]
-                # TODO: define / replace gaussfir
-                h = gaussfir(0.3, 2, 2 * round(status_sample_freq))
+                h = self.gaussfir(0.3, 2, 2 * round(status_sample_freq))
                 n_extrap_beg = int(np.ceil((len(h) - 1) / 2))
                 n_extrap_end = len(h) - 1 - n_extrap_beg
                 time_extrap_beg = np.dot(
-                    np.vstack(
-                        [
-                            np.arange(-n_extrap_beg + 1, 1),
-                            np.ones(n_extrap_beg),
-                        ]
+                    np.hstack(
+                        (
+                            np.arange(-n_extrap_beg + 1, 1).reshape(-1, 1),
+                            np.ones((n_extrap_beg, 1)),
+                        )
                     ),
                     coeff_beg,
                 )
                 time_extrap_end = np.dot(
-                    np.vstack(
-                        [
+                    np.hstack(
+                        (
                             np.arange(
                                 n_timepoints + 1,
                                 n_timepoints + n_extrap_end + 1,
-                            ),
-                            np.ones(n_extrap_end),
-                        ]
+                            ).reshape(-1, 1),
+                            np.ones((n_extrap_end, 1)),
+                        )
                     ),
                     coeff_end,
                 )
                 time_extrap = np.concatenate(
                     (time_extrap_beg, time_stat, time_extrap_end)
                 )
-                # TODO: define / replace GFB_conv
-                time_stat = GFB_conv(time_extrap, h, "valid")
+                time_stat = self.gfb_conv(time_extrap, h, "valid")
+                # We can also use np.convolve()!
+                # time_stat = np.convolve(
+                #     time_extrap.astype(int), h, mode="valid"
+                # )
 
                 # Check for points where time stands still
-                time_stat_d = np.diff(time_stat)
+                time_stat_d = np.concatenate(([0], np.diff(time_stat)))
+                # time_stat_d = np.diff(time_stat, prepend=0)
                 stall_points = time_stat_d < 0.75 * (1 / status_sample_freq)
                 stall_end = (
                     np.where(stall_points)[0][-1]
@@ -2239,16 +2222,15 @@ class Make_CVR_reg_physio(ProcessMIA):
                     else 0
                 )
                 regress_valid = np.vstack(
-                    [
-                        (np.arange(stall_end, n_timepoints) + 1),
-                        np.ones(n_timepoints - stall_end + 1),
-                    ]
-                ).T
-                time_stat[stall_end:] = np.dot(
-                    regress_valid,
+                    (
+                        (np.arange(stall_end + 1, n_timepoints + 1)),
+                        np.ones((n_timepoints - stall_end,)),
+                    )
+                )
+                time_stat[stall_end:] = regress_valid.T.dot(
                     np.linalg.lstsq(
-                        regress_valid, time_stat[stall_end:], rcond=None
-                    )[0],
+                        regress_valid.T, time_stat[stall_end:], rcond=None
+                    )[0]
                 )
                 while stall_end > 0:
                     stall_start = (
@@ -2306,9 +2288,11 @@ class Make_CVR_reg_physio(ProcessMIA):
                         old_stall_end - drift_start + 1,
                     )
 
-                # Transfer data to a structure
-                physdata = {}
-                for field in range(n_fields):
+                if paramnames is None:
+                    return self.make_initResult()
+
+                # Transfer data to the phys_trig_data dictionary
+                for field in range(len(paramnames)):
                     this_fieldname = paramnames[field]
                     this_field_datapoints = ~np.isnan(data_matrix[:, field])
                     this_field_datapoints[: min(status_idx)] = False
@@ -2317,152 +2301,160 @@ class Make_CVR_reg_physio(ProcessMIA):
                         indx = np.where(this_field_datapoints)[0]
                         time = np.interp(indx, status_idx, time_stat)
                         data = data_matrix[this_field_datapoints, field]
-                        physdata[this_fieldname] = {
+                        phys_trig_data[this_fieldname] = {
                             "indx": indx,
                             "time": time,
                             "data": data,
                         }
 
                 # Correct other bugs in magdata software
-                problem_timepoints = physdata["Waveform_Status3"]["data"] != 0
+                problem_timepoints = (
+                    phys_trig_data["Waveform_Status3"]["data"] != 0
+                )
                 if data_matrix.shape[0] == n_timepoints:
                     problem_timepoints = np.logical_or(
                         problem_timepoints,
-                        physdata["Pleth_wm2"]["data"] == 103,
+                        phys_trig_data["Pleth_wm2"]["data"] == 103,
                     )
                 if np.any(problem_timepoints):
                     valid_timepoints = np.where(~problem_timepoints)[0]
                     if (
                         data_matrix["Resp_wm"]["data"].shape[0]
-                        == physdata["Capno_wm1"]["data"].shape[0]
+                        == phys_trig_data["Capno_wm1"]["data"].shape[0]
                     ):
-                        physdata["Capno_wm1"]["data"][problem_timepoints] = (
-                            physdata["Resp_wm"]["data"][problem_timepoints]
-                        )
+                        phys_trig_data["Capno_wm1"]["data"][
+                            problem_timepoints
+                        ] = phys_trig_data["Resp_wm"]["data"][
+                            problem_timepoints
+                        ]
                         problem_problem_timepoints = np.logical_and(
                             problem_timepoints,
-                            physdata["Resp_wm"]["data"] == 0,
+                            phys_trig_data["Resp_wm"]["data"] == 0,
                         )
-                        physdata["Capno_wm1"]["data"][
+                        phys_trig_data["Capno_wm1"]["data"][
                             problem_problem_timepoints
-                        ] = physdata["Waveform_Status1"]["data"][
+                        ] = phys_trig_data["Waveform_Status1"]["data"][
                             problem_problem_timepoints
                         ]
-                        physdata["Resp_wm"]["data"][problem_timepoints] = (
-                            physdata["Pleth_wm2"]["data"][problem_timepoints]
-                        )
-                        physdata["Pleth_wm2"]["data"][problem_timepoints] = (
-                            physdata["Pleth_wm1"]["data"][problem_timepoints]
-                        )
+                        phys_trig_data["Resp_wm"]["data"][
+                            problem_timepoints
+                        ] = phys_trig_data["Pleth_wm2"]["data"][
+                            problem_timepoints
+                        ]
+                        phys_trig_data["Pleth_wm2"]["data"][
+                            problem_timepoints
+                        ] = phys_trig_data["Pleth_wm1"]["data"][
+                            problem_timepoints
+                        ]
                         problem_timepoints = np.where(problem_timepoints)[0]
-                        physdata["Waveform_Status1"]["data"][
+                        phys_trig_data["Waveform_Status1"]["data"][
                             problem_timepoints
                         ] = np.maximum(
-                            physdata["Waveform_Status1"]["data"][
+                            phys_trig_data["Waveform_Status1"]["data"][
                                 np.maximum(problem_timepoints - 1, 0)
                             ],
-                            physdata["Waveform_Status1"]["data"][
+                            phys_trig_data["Waveform_Status1"]["data"][
                                 np.minimum(
                                     problem_timepoints + 1,
-                                    physdata["Waveform_Status1"]["data"].shape[
-                                        0
-                                    ],
+                                    phys_trig_data["Waveform_Status1"][
+                                        "data"
+                                    ].shape[0],
                                 )
                             ],
                         )
-                        physdata["Waveform_Status4"]["data"][
+                        phys_trig_data["Waveform_Status4"]["data"][
                             problem_timepoints
                         ] = 128 * (
-                            physdata["Waveform_Status4"]["data"][
+                            phys_trig_data["Waveform_Status4"]["data"][
                                 np.maximum(problem_timepoints - 1, 0)
                             ]
                             > 64
-                            or physdata["Waveform_Status4"]["data"][
+                            or phys_trig_data["Waveform_Status4"]["data"][
                                 np.minimum(
                                     problem_timepoints + 1,
-                                    physdata["Waveform_Status4"]["data"].shape[
-                                        0
-                                    ],
+                                    phys_trig_data["Waveform_Status4"][
+                                        "data"
+                                    ].shape[0],
                                 )
                             ]
                             > 64
                         )
                     else:
-                        physdata["Capno_wm1"]["data"][problem_timepoints] = (
-                            interp1d(
-                                physdata["Capno_wm1"]["time"][
-                                    valid_timepoints
-                                ],
-                                physdata["Capno_wm1"]["data"][
-                                    valid_timepoints
-                                ],
-                                fill_value="extrapolate",
-                            )(
-                                physdata["Capno_wm1"]["time"][
-                                    problem_timepoints
-                                ]
-                            )
+                        phys_trig_data["Capno_wm1"]["data"][
+                            problem_timepoints
+                        ] = interp1d(
+                            phys_trig_data["Capno_wm1"]["time"][
+                                valid_timepoints
+                            ],
+                            phys_trig_data["Capno_wm1"]["data"][
+                                valid_timepoints
+                            ],
+                            fill_value="extrapolate",
+                        )(
+                            phys_trig_data["Capno_wm1"]["time"][
+                                problem_timepoints
+                            ]
                         )
                         if (
                             data_matrix["Pleth_wm2"]["data"].shape[0]
                             == n_timepoints
                         ):
-                            physdata["Pleth_wm2"]["data"][
+                            phys_trig_data["Pleth_wm2"]["data"][
                                 problem_timepoints
                             ] = interp1d(
-                                physdata["Pleth_wm2"]["time"][
+                                phys_trig_data["Pleth_wm2"]["time"][
                                     valid_timepoints
                                 ],
-                                physdata["Pleth_wm2"]["data"][
+                                phys_trig_data["Pleth_wm2"]["data"][
                                     valid_timepoints
                                 ],
                                 fill_value="extrapolate",
                             )(
-                                physdata["Pleth_wm2"]["time"][
+                                phys_trig_data["Pleth_wm2"]["time"][
                                     problem_timepoints
                                 ]
                             )
                         problem_timepoints = np.where(problem_timepoints)[0]
-                        physdata["Waveform_Status1"]["data"][
+                        phys_trig_data["Waveform_Status1"]["data"][
                             problem_timepoints
                         ] = np.maximum(
-                            physdata["Waveform_Status1"]["data"][
+                            phys_trig_data["Waveform_Status1"]["data"][
                                 np.maximum(problem_timepoints - 1, 0)
                             ],
-                            physdata["Waveform_Status1"]["data"][
+                            phys_trig_data["Waveform_Status1"]["data"][
                                 np.minimum(
                                     problem_timepoints + 1,
-                                    physdata["Waveform_Status1"]["data"].shape[
-                                        0
-                                    ],
+                                    phys_trig_data["Waveform_Status1"][
+                                        "data"
+                                    ].shape[0],
                                 )
                             ],
                         )
-                        physdata["Waveform_Status4"]["data"][
+                        phys_trig_data["Waveform_Status4"]["data"][
                             problem_timepoints
                         ] = 128 * (
-                            physdata["Waveform_Status4"]["data"][
+                            phys_trig_data["Waveform_Status4"]["data"][
                                 np.maximum(problem_timepoints - 1, 0)
                             ]
                             > 64
-                            or physdata["Waveform_Status4"]["data"][
+                            or phys_trig_data["Waveform_Status4"]["data"][
                                 np.minimum(
                                     problem_timepoints + 1,
-                                    physdata["Waveform_Status4"]["data"].shape[
-                                        0
-                                    ],
+                                    phys_trig_data["Waveform_Status4"][
+                                        "data"
+                                    ].shape[0],
                                 )
                             ]
                             > 64
                         )
 
                 if n_pulses > 0:
-                    physdata["trigger"] = {
+                    phys_trig_data["trigger"] = {
                         "time": trig_times_s,
                         "data": np.ones_like(trig_times_s),
                     }
 
-                physdata["starttime"] = starttime
+                phys_trig_data["starttime"] = starttime
 
             elif self.physio_data.lower().endswith(".txt"):
                 print("Data from CoolTerm application detected ...")
@@ -2524,6 +2516,7 @@ class Make_CVR_reg_physio(ProcessMIA):
                 outliers = np.abs(etco2data_pp) > 15
                 # a single outlier creates three points of high curvature.
                 # retain central point only:
+                # TODO: Here, we can also use gfb_conv(). Test it out!
                 outliers = (
                     np.convolve(
                         outliers.astype(int), np.array([1, 1, 1]), mode="same"
@@ -2591,6 +2584,7 @@ class Make_CVR_reg_physio(ProcessMIA):
                 fname_reg,
             )
         else:
+            tag_to_add["value"] = "Standard"
             config = Config()
             shutil.copy(
                 os.path.join(
@@ -2600,10 +2594,86 @@ class Make_CVR_reg_physio(ProcessMIA):
                 ),
                 fname_reg,
             )
-            pass
 
+        all_tags_to_add.append(tag_to_add)
+        # TODO: Can we simply add new tags without inheritance (I'm not sure
+        #       this possibility was considered when we coded the
+        #       tags_inheritance function)? As in this case, it might be
+        #       preferable not to inherit from the functional but simply to
+        #       add new tags.
+        self.tags_inheritance(
+            self.func_file, fname_reg, own_tags=all_tags_to_add
+        )
+        self.outputs["cvr_reg"] = fname_reg
         # Return the requirement, outputs and inheritance_dict
         return self.make_initResult()
+
+    def gaussfir(self, bt, nt=3, of=2):
+        """Generate a Gaussian FIR filter
+
+        with a specified bandwidth-time product (bt),
+        number of taps (nt), and oversampling factor (of)
+        """
+
+        def convert_to_t(of, nt):
+            """Convert to t in which to compute the filter coefficients."""
+            # Filter Length
+            filt_len = 2 * of * nt + 1
+            t = np.linspace(-nt, nt, filt_len)
+            return t
+
+        t = convert_to_t(of, nt)
+        alpha = np.sqrt(np.log(2) / 2) / (bt)
+        h = (np.sqrt(np.pi) / alpha) * np.exp(-((t * np.pi / alpha) ** 2))
+        # Normalize coefficients
+        h = h / np.sum(h)
+        return h
+
+    def gfb_conv(self, a, b, shape="full"):
+        """Return a subsection of the convolution, as specified by the
+        shape parameter.
+
+        :param a: a vector (a ndarray numpy object)
+        :param b: a vector (a ndarray numpy object)
+        :param shape: sub-section of the convolution (a string in
+                      ['full', 'same', 'valid'])
+        """
+        if shape not in ["full", "same", "valid"]:
+            raise ValueError(
+                "Make_CVR_reg_physio brick: Invalid value for 'shape'. "
+                "It must be 'full', 'same', or 'valid'."
+            )
+
+        na = np.prod(a.shape)
+        nb = np.prod(b.shape)
+        # Check if a is a column vector
+        iscolumn = np.size(np.shape(a)) == 1
+        # Reshape a and b into column vectors
+        a = a.flatten()
+        b = b.flatten()
+
+        # Determine the size of the output convolution array
+        if shape == "full":
+            k_max = max(na + nb - 1, 0)
+            ia = np.arange(1, k_max + 1)
+
+        elif shape == "same":
+            k_max = na
+            ia = np.arange(1, k_max + 1) + np.floor(nb / 2)
+
+        elif shape == "valid":
+            k_max = max(na - max(nb - 1, 0), 0)
+            ia = np.arange(1, k_max + 1) + max(nb - 1, 0)
+
+        ia = np.repeat(ia.reshape(-1, 1), nb, axis=1)
+        j = np.repeat(np.arange(1, nb + 1).reshape(1, -1), k_max, axis=0)
+        ia = ia + 1 - j
+        valid = np.logical_and(ia > 0, ia <= na)
+        ia[~valid] = na + 1
+        a = np.append(a, 0)  # Add zero to end of a
+        c = np.sum(a[ia - 1] * b, axis=1)
+
+        return c if iscolumn else c.reshape(1, -1)
 
     def run_process_mia(self):
         """Dedicated to the process launch step of the brick."""
